@@ -14,6 +14,11 @@
     :total-count="beneficiaryCount"
     :stats="citiesStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.City
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -27,8 +32,9 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { STATS_NULL_LABEL } from '~/client/options'
+  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const trpcClient = useTrpcClient()
 

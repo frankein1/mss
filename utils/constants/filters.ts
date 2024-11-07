@@ -3,5 +3,19 @@ export enum FilterType {
   SelectOne = 'selectOne',
   SelectMultiple = 'selectMultiple',
   Search = 'search',
-  Radio = 'radio'
+  Radio = 'radio',
+  NotFilled = 'notFilled'
+}
+
+export enum FilterBeneficiaryNotFilled {
+  Gender = 'gender',
+  AgeGroup = 'birthDate',
+  BeneficiaryFamilySituation = 'familySituation',
+  City = 'city',
+  Department = 'department',
+  Region = 'region',
+  BeneficiaryAccommodationZone = 'accommodationZone',
+  BeneficiaryAccommodationMode = 'accommodationMode',
+  BeneficiaryMobility = 'mobility',
+  BeneficiarySocioProfessionalCategory = 'socioProfessionalCategory'
 }

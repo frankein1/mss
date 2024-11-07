@@ -20,7 +20,12 @@
             :path="picto"
             length="3rem"
           />
-          <span>{{ label }}</span>
+          <NuxtLink
+            v-if="label === STATS_NULL_LABEL"
+            :to="notFilledRoute"
+            >{{ label }}</NuxtLink
+          >
+          <span v-else>{{ label }}</span>
         </div>
         <span
           class="fr-text--bold"
@@ -91,7 +96,10 @@
 
 <script lang="ts" setup>
   import { StatsListPropType } from '~/types/stat'
-  import { STATS_COLLAPSED_LIMIT } from '~/utils/constants/stats'
+  import {
+    STATS_COLLAPSED_LIMIT,
+    STATS_NULL_LABEL
+  } from '~/utils/constants/stats'
   import { getRandId } from '~/utils/random'
   import { getPercentage } from '~/utils/stats'
 
@@ -105,6 +113,7 @@
       unit?: string
       toFixed?: number
       withSum?: boolean
+      notFilledRoute?: string
     }>(),
     {
       statsBar: false,
@@ -113,7 +122,8 @@
       totalCount: 0,
       unit: '',
       toFixed: undefined,
-      withSum: true
+      withSum: true,
+      notFilledRoute: undefined
     }
   )
 

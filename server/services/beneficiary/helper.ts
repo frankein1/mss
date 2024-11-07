@@ -65,5 +65,9 @@ export function prepareBeneficiaryFilters(
     formattedFilters.vulnerablePerson = filters.vulnerablePerson
   }
 
+  if (filters.notFilled) {
+    formattedFilters[filters.notFilled] = null
+  }
+
   return formattedFilters
 }

@@ -9,7 +9,6 @@ import {
   beneficiarySocioProfessionalCategoryKeys,
   familySituationKeys,
   ageGroupKeys,
-  STATS_NULL_LABEL,
   ministereCategorieKeys,
   ministereDepartmentServiceAcKeys,
   ministereStructureKeys
@@ -33,7 +32,7 @@ import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
-import { STATS_NULL_KEY } from '~/utils/constants/stats'
+import { STATS_NULL_KEY, STATS_NULL_LABEL } from '~/utils/constants/stats'
 import {
   SecurityRuleContext,
   getAppContextPermissions

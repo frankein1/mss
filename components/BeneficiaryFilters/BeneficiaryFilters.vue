@@ -22,6 +22,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import {
     beneficiaryStatusKeys,
+    beneficiaryNotFilledKeys,
     ageGroupKeys,
     yesNoOptions
   } from '~/client/options'
@@ -152,6 +153,19 @@
         matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
       })
     }
+
+    filters.push({
+      name: 'notFilled',
+      label: 'non renseigné',
+      options: withEmptyValue(
+        beneficiaryNotFilledKeys.options,
+        'Pas de sélection'
+      ),
+      type: FilterType.NotFilled,
+      alwaysExpanded: false,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.NotFilled
+    })
 
     return filters
   })

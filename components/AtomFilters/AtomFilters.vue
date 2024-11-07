@@ -112,6 +112,9 @@
        * i.e for initial values from application state
        */
       initialSelectedValues?: FilterValues
+      /**
+       * Label for the collapsed values selected
+       */
       resultsLabel?: string
       noMargin?: boolean
       /**
@@ -181,11 +184,18 @@
           return _collapsedSelectedFilters
         }
 
-        const selectedFilter: SelectedFilter = {
-          filterLabel: filter.label,
-          value: getFilterValue(filter, value),
-          valueLabel: getFilterValueLabel(filter, value)
-        }
+        const selectedFilter: SelectedFilter =
+          filter.type === FilterType.NotFilled
+            ? {
+                filterLabel: getFilterValueLabel(filter, value),
+                value: getFilterValue(filter, value),
+                valueLabel: filter.label
+              }
+            : {
+                filterLabel: filter.label,
+                value: getFilterValue(filter, value),
+                valueLabel: getFilterValueLabel(filter, value)
+              }
 
         return { ..._collapsedSelectedFilters, [name]: selectedFilter }
       },
@@ -283,7 +293,8 @@
     } else if (
       filter.type === FilterType.SelectMultiple ||
       filter.type === FilterType.SelectOne ||
-      filter.type === FilterType.Radio
+      filter.type === FilterType.Radio ||
+      filter.type === FilterType.NotFilled
     ) {
       valueLabel = getSelectedOptionsLabel(filter, value as string | string[])
     } else {

@@ -14,6 +14,11 @@
     :total-count="beneficiaryCount"
     :stats="departmentsStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.Department
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -28,7 +33,8 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
-  import { STATS_NULL_LABEL } from '~/client/options'
+  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const trpcClient = useTrpcClient()
 

@@ -13,6 +13,8 @@ import {
   RelativeRelationship
 } from '@prisma/client'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
+import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+import { beneficiaryFieldLabels } from '../labels'
 
 export const pensionOrganisationKeys = buildKeys({
   AgircArrco: 'AGIRC ARRCO',
@@ -233,3 +235,21 @@ export const HostedAccommodationMode: BeneficiaryAccommodationMode[] = [
   ...OrganisationAccommodationModes,
   ...ThirdPartyAccommodationModes
 ]
+
+export const beneficiaryNotFilledKeys = buildKeys({
+  [FilterBeneficiaryNotFilled.Gender]: beneficiaryFieldLabels['gender'],
+  [FilterBeneficiaryNotFilled.AgeGroup]: beneficiaryFieldLabels['birthDate'],
+  [FilterBeneficiaryNotFilled.BeneficiaryFamilySituation]:
+    beneficiaryFieldLabels['familySituation'],
+  [FilterBeneficiaryNotFilled.City]: beneficiaryFieldLabels['city'],
+  [FilterBeneficiaryNotFilled.Department]: beneficiaryFieldLabels['department'],
+  [FilterBeneficiaryNotFilled.Region]: beneficiaryFieldLabels['region'],
+  [FilterBeneficiaryNotFilled.BeneficiaryAccommodationZone]:
+    beneficiaryFieldLabels['accommodationZone'],
+  [FilterBeneficiaryNotFilled.BeneficiaryAccommodationMode]:
+    beneficiaryFieldLabels['accommodationMode'],
+  [FilterBeneficiaryNotFilled.BeneficiaryMobility]:
+    beneficiaryFieldLabels['mobility'],
+  [FilterBeneficiaryNotFilled.BeneficiarySocioProfessionalCategory]:
+    beneficiaryFieldLabels['socioProfessionalCategory']
+})
