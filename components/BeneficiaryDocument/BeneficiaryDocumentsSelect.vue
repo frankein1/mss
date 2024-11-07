@@ -60,11 +60,11 @@
         snackbar.success(props.snackbarSuccessMessage)
       })
       .catch(e => {
-        console.error(e)
         snackbar.error(
           props.snackbarFailureMessage,
           snackbar.focus('form', '.force-focus-visible' as FocusHTMLTag)
         )
+        throw e
       })
   }
 </script>
