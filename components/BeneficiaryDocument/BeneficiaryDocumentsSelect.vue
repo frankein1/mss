@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryDocumentAddButton
-    class="fr-mb-3w"
+    class="fr-mb-3w force-focus-visible"
     :family-file-id="familyFileId"
     :beneficiary-id="beneficiaryId"
     label="Ajouter un nouveau document"
@@ -29,10 +29,13 @@
       beneficiaryId: string
       name: string
       snackbarSuccessMessage?: string
+      snackbarFailureMessage?: string
     }>(),
     {
       snackbarSuccessMessage:
-        'Le document a été ajouté à la fiche bénéficiaire.'
+        'Le document a été ajouté à la fiche bénéficiaire.',
+      snackbarFailureMessage:
+        "L'ajout du document à la fiche bénéficiaire a échoué."
     }
   )
 
@@ -51,10 +54,18 @@
   )
 
   function onNewDocument(key: string) {
-    refresh().then(() => {
-      selectDocInput.value?.selectValue(key)
-      snackbar.success(props.snackbarSuccessMessage)
-    })
+    refresh()
+      .then(() => {
+        selectDocInput.value?.triggerSelectValue(key)
+        snackbar.success(props.snackbarSuccessMessage)
+      })
+      .catch(e => {
+        snackbar.error(
+          props.snackbarFailureMessage,
+          snackbar.focus('form', '.force-focus-visible' as FocusHTMLTag)
+        )
+        throw e
+      })
   }
 </script>
 
