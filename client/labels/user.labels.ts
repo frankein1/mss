@@ -9,6 +9,7 @@ export const userFieldLabels: FieldLabels<User> = {
   role: 'Rôle',
   status: 'Accès',
   aidantConnectAuthorisation: 'Aidants Connect',
+  firstAccess: 'Premier accès',
   lastAccess: 'Dernier accès',
   created: 'Date de création',
   updated: 'Date de mise à jour',

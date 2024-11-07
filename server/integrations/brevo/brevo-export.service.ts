@@ -95,6 +95,7 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
       role,
       structure,
       created,
+      firstAccess,
       lastAccess
     }) => ({
       email,
@@ -111,6 +112,7 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
           'DD-MM-YYYY'
         ),
         CREATION_DATE: formatDate(created, 'DD-MM-YYYY'),
+        PREMIERE_CONNEXION: formatDate(firstAccess, 'DD-MM-YYYY'),
         DERNIERE_CONNEXION: formatDate(lastAccess, 'DD-MM-YYYY')
       }
     })
