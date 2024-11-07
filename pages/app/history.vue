@@ -35,13 +35,13 @@
       tabId: HistoryTab.Followups,
       panelId: panelId(HistoryTab.Followups),
       title: 'Entretiens',
-      icon: 'fr-icon-draft-fill'
+      icon: 'fr-icon-draft-line'
     },
     {
       tabId: HistoryTab.FileInstructions,
       panelId: panelId(HistoryTab.FileInstructions),
       title: "Dossiers d'instruction",
-      icon: 'fr-icon-questionnaire-fill'
+      icon: 'fr-icon-questionnaire-line'
     }
   ]
 </script>

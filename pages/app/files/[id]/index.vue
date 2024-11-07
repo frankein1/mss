@@ -131,7 +131,7 @@
       tabId: FamilyFileTab.Details,
       panelId: panelId(FamilyFileTab.Details),
       title: 'Informations',
-      icon: 'fr-icon-information-fill'
+      icon: 'fr-icon-information-line'
     },
     {
       tabId: FamilyFileTab.Documents,

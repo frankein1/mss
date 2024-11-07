@@ -2,7 +2,7 @@
   <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
     <!-- Filters -->
     <!-- TODO: help request filters must be disabled -->
-    <section class="fr-col-12">
+    <div class="fr-col-12">
       <h3 class="fr-sr-only">Filtres</h3>
       <StatsFilters
         v-model:filters="filters"
@@ -12,124 +12,115 @@
         :is-help-request="false"
         :is-history="true"
       />
-    </section>
-    <section>
-      <!-- Title + Export buttons -->
-      <div class="fr-col-12 results-container fr-mb-2w fr-p-2w">
-        <h3 class="stats-main-title results-count">
-          {{ followupCountLabel }}
-          <span
-            v-if="
-              historyCounts?.firstFollowups && historyCounts.firstFollowups > 0
-            "
-            class="fr-text--sm"
-          >
-            dont {{ firstFollowupCountLabel }}</span
-          >
-        </h3>
-        <AtomDropdown
-          label="Exporter les statistiques"
-          icon="fr-icon-download-fill"
-          :menus="menus"
-          class="topbar__menu"
-          dropdown-btn-class="fr-btn--tertiary-no-outline"
-          align-right
-        />
-        <StatsExportAlert
-          v-if="!alertClose"
-          @close-alert="alertClose = true"
-        />
-      </div>
+    </div>
 
-      <!-- Alert + Loader -->
-      <AtomAlert
-        v-if="error"
-        :alert-type="AlertType.Error"
-        message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
-      />
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-
-      <!-- Cards -->
-      <template v-else-if="followupCount">
-        <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-          <!-- ROW -->
-          <div class="fr-col-12">
-            <StatsFollowupBeneficiaryNumber
-              hystory-type="followup"
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-
-          <!-- ROW -->
-          <StatsCard
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.subject.id"
-            :card-name="followupCardsConfig.subject.name"
-          >
-            <StatsFollowupSubject
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </StatsCard>
-          <StatsCard
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.medium.id"
-            :card-name="followupCardsConfig.medium.name"
-          >
-            <StatsFollowupMedium
-              :total-count="followupCount"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            v-if="application.module.ministere"
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.ministre.id"
-            :card-name="followupCardsConfig.ministre.name"
-          >
-            <StatsFollowupMinistre
-              :total-count="followupCount"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.status.id"
-            :card-name="followupCardsConfig.status.name"
-          >
-            <StatsFollowupStatus
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.actions.id"
-            :card-name="followupCardsConfig.actions.name"
-          >
-            <StatsFollowupActionsEntreprises
-              :total-count="followupCount"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-            :card-id="followupCardsConfig.prescribingOrganizations.id"
-            :card-name="followupCardsConfig.prescribingOrganizations.name"
-          >
-            <StatsFollowupPrescribingOrganizations
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </StatsCard>
-        </div>
+    <StatsHeader
+      :menus="menus"
+      class="fr-mb-1w"
+    >
+      <template #icon>
+        <AtomIconFollowup :is-big="true" />
       </template>
-    </section>
+      <template #title>
+        {{ followupCountLabel }}
+        <span
+          v-if="
+            historyCounts?.firstFollowups && historyCounts.firstFollowups > 0
+          "
+          class="fr-text--sm"
+        >
+          dont {{ firstFollowupCountLabel }}</span
+        >
+      </template>
+    </StatsHeader>
+
+    <AtomAlert
+      v-if="error"
+      :alert-type="AlertType.Error"
+      message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
+    />
+    <AtomLoader
+      v-if="pending"
+      class="fr-mx-auto"
+    />
+
+    <!-- Cards -->
+    <template v-else-if="followupCount">
+      <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+        <!-- ROW -->
+        <div class="fr-col-12">
+          <StatsFollowupBeneficiaryNumber
+            hystory-type="followup"
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </div>
+
+        <!-- ROW -->
+        <StatsCard
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.subject.id"
+          :card-name="followupCardsConfig.subject.name"
+        >
+          <StatsFollowupSubject
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.medium.id"
+          :card-name="followupCardsConfig.medium.name"
+        >
+          <StatsFollowupMedium
+            :total-count="followupCount"
+            :filters="filters"
+        /></StatsCard>
+
+        <StatsCard
+          v-if="application.module.ministere"
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.ministre.id"
+          :card-name="followupCardsConfig.ministre.name"
+        >
+          <StatsFollowupMinistre
+            :total-count="followupCount"
+            :filters="filters"
+        /></StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.status.id"
+          :card-name="followupCardsConfig.status.name"
+        >
+          <StatsFollowupStatus
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.actions.id"
+          :card-name="followupCardsConfig.actions.name"
+        >
+          <StatsFollowupActionsEntreprises
+            :total-count="followupCount"
+            :filters="filters"
+        /></StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          :card-id="followupCardsConfig.prescribingOrganizations.id"
+          :card-name="followupCardsConfig.prescribingOrganizations.name"
+        >
+          <StatsFollowupPrescribingOrganizations
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
+      </div>
+    </template>
   </div>
 </template>
 

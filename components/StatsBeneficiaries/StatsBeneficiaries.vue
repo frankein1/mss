@@ -11,24 +11,14 @@
         />
       </div>
 
-      <!-- Title + Export buttons -->
-      <div class="fr-col-12 results-container">
-        <h3 class="stats-main-title results-count">
+      <StatsHeader :menus="menus">
+        <template #icon>
+          <AtomPictogram path="/pictograms/avatar.svg" />
+        </template>
+        <template #title>
           {{ beneficiaryCountLabel }}
-        </h3>
-        <AtomDropdown
-          label="Exporter les statistiques"
-          icon="fr-icon-download-fill"
-          :menus="menus"
-          class="topbar__menu"
-          dropdown-btn-class="fr-btn--tertiary-no-outline"
-          align-right
-        />
-        <StatsExportAlert
-          v-if="!alertClose"
-          @close-alert="alertClose = true"
-        />
-      </div>
+        </template>
+      </StatsHeader>
 
       <!-- Alert + Loader -->
       <AtomAlert

@@ -81,17 +81,20 @@
     {
       tabId: 'Beneficiaires',
       panelId: panelId('Beneficiaires'),
-      title: 'Bénéficiaires'
+      title: 'Bénéficiaires',
+      icon: 'fr-icon-user-line'
     },
     {
       tabId: 'Entretiens',
       panelId: panelId('Entretients'),
-      title: "Synthèses d'entretiens"
+      title: "Synthèses d'entretiens",
+      icon: 'fr-icon-draft-line'
     },
     {
       tabId: 'Instructions',
       panelId: panelId('Instructions'),
-      title: 'Instructions de dossiers'
+      title: 'Instructions de dossiers',
+      icon: 'fr-icon-questionnaire-line'
     }
   ]
 
