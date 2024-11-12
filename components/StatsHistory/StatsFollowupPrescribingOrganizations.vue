@@ -27,6 +27,12 @@
     <StatsList
       :total-count="totalCount"
       :stats="prescribingOrganizationStats"
+      :not-filled-route="
+        routes.file.AppHistory.path({
+          notFilled: FilterFollowupNotFilled.PrescribingOrganization,
+          tab: HistoryTab.Followups
+        })
+      "
     />
   </template>
   <p v-else>
@@ -41,6 +47,9 @@
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
   import { StatsListPropType } from '~/types/stat'
+  import { FilterFollowupNotFilled } from '~/utils/constants/filters'
+  import { HistoryTab } from '~/utils/constants/history'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 

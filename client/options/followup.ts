@@ -4,6 +4,8 @@ import {
   FollowupDuration
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
+import { FilterFollowupNotFilled } from '~/utils/constants/filters'
+import { followupFieldLabels } from '../labels'
 
 export const followupMediumKeys = buildKeys({
   [FollowupMedium.UnplannedInPerson]: 'Accueil physique spontané',
@@ -29,4 +31,10 @@ export const followupDurationKeys = buildKeys({
   [FollowupDuration.ThreeQuarter]: '45 min',
   [FollowupDuration.Hour]: '1 heure',
   [FollowupDuration.MoreThanHour]: '+ de 1 heure'
+})
+
+export const followupNotFilledKeys = buildKeys({
+  [FilterFollowupNotFilled.ActionsEntreprises]: 'Actions entreprises',
+  [FilterFollowupNotFilled.PrescribingOrganization]:
+    followupFieldLabels['prescribingOrganizationId']
 })

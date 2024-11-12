@@ -24,7 +24,8 @@
     followupStatusKeys,
     followupMediumKeys,
     ministerKeys,
-    periodKeys
+    periodKeys,
+    followupNotFilledKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -159,6 +160,19 @@
         matomoEventAction: FollowupFilterEventAction.Ministre
       })
     }
+
+    filters.push({
+      name: 'notFilled',
+      label: 'non renseigné',
+      options: withEmptyValue(
+        followupNotFilledKeys.options,
+        'Pas de sélection'
+      ),
+      type: FilterType.NotFilled,
+      alwaysExpanded: false,
+      matomoEventCategory: EventCategory.FollowupFilter,
+      matomoEventAction: FollowupFilterEventAction.NotFilled
+    })
 
     return filters
   })
