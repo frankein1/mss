@@ -223,7 +223,7 @@
       ),
       type: FilterType.NotFilled,
       alwaysExpanded: false,
-      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventCategory: EventCategory.HelpRequestFilter,
       matomoEventAction: HelpRequestFilterEventAction.NotFilled
     })
 

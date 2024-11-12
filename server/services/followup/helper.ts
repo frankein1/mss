@@ -3,6 +3,7 @@ import { SocialSupportSubject, Prisma } from '@prisma/client'
 import { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
 import { FollowupPeriodFilter } from '~/types/followup'
 import { SortOrder } from '~/types/table'
+import { FilterFollowupNotFilled } from '~/utils/constants/filters'
 
 export function prepareSocialSupportSubjectsMutations(
   inputSubjects: string[],
@@ -25,7 +26,8 @@ export function prepareFilters(filters: FollowupFilterInput) {
     ministre,
     period,
     fromDate,
-    toDate
+    toDate,
+    notFilled
   } = filters
 
   const formattedFilters: Prisma.FollowupWhereInput = {}
@@ -67,6 +69,18 @@ export function prepareFilters(filters: FollowupFilterInput) {
     ) {
       formattedFilters.socialSupport.date = prepareDateFilters(filters)
     }
+  }
+
+  switch (notFilled) {
+    case FilterFollowupNotFilled.ActionsEntreprises:
+      formattedFilters.redirected = null
+      formattedFilters.helpRequested = null
+      break
+    case FilterFollowupNotFilled.PrescribingOrganization:
+      formattedFilters.prescribingOrganization = null
+      break
+    default:
+      break
   }
 
   return formattedFilters

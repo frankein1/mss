@@ -50,7 +50,8 @@ export enum FollowupFilterEventAction {
   SocialSupportSubject = "Objet de l'entretien",
   Agent = 'Agent',
   Period = 'Période',
-  Ministre = 'Ministre'
+  Ministre = 'Ministre',
+  NotFilled = 'Champ non renseigné'
 }
 
 export enum HelpRequestFilterEventAction {

@@ -59,9 +59,20 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
+  import { FilterFollowupNotFilled } from '~/utils/constants/filters'
 
+  const route = useRoute()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
+
+  const notFilled = route.query['not-filled'] as FilterFollowupNotFilled
+  if (notFilled) {
+    if (filtersState.followup.value) {
+      filtersState.followup.value.notFilled = notFilled
+    } else {
+      filtersState.followup.value = { notFilled }
+    }
+  }
 
   const filters = ref<FollowupFilterInput>(filtersState.followup.value || {})
   const orderBy = ref<FollowupSort>({ socialSupport: { date: SortOrder.Desc } })

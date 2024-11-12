@@ -2,6 +2,7 @@ import { prepareSocialSupportStatFilters } from '../helpers'
 import { FollowupRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 
 export async function getFollowupActionsEntreprisesStatsQuery(
   user: SecurityRuleGrantee,
@@ -32,7 +33,7 @@ export async function getFollowupActionsEntreprisesStatsQuery(
     },
     noAction: {
       actionEntrepriseId: 'noAction',
-      actionEntreprise: 'Aucune action renseignée',
+      actionEntreprise: STATS_NULL_LABEL,
       _count: 0
     }
   }
