@@ -38,7 +38,7 @@
     margin-top: 0.25rem;
 
     > * {
-      background: v-bind(color);
+      background-color: v-bind(color);
       height: 100%;
       border-radius: $bar-border-radius;
     }
