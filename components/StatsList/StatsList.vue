@@ -3,10 +3,9 @@
     <ul
       :id="STATS_ID"
       class="stats-list"
-      :class="{ 'fr-text--xl fr-text--bold': bigText }"
     >
       <li
-        v-for="{ key, label, count, color, picto } in displayedStats"
+        v-for="{ key, label, count, color, picto, emphasis } in displayedStats"
         :key="key"
         class="stats-entry"
         :class="{
@@ -26,10 +25,15 @@
             :to="notFilledRoute"
             >{{ label }}</NuxtLink
           >
-          <span v-else>{{ label }}</span>
+          <span
+            v-else
+            :class="{ 'fr-text--bold': emphasis }"
+            >{{ label }}</span
+          >
         </div>
         <span
           class="fr-text--bold"
+          :class="{ 'fr-h5 fr-mb-0': emphasis }"
           :style="{ color: !statsPercentage ? color : undefined }"
         >
           {{ toFixed ? count.toFixed(toFixed) : count
@@ -116,7 +120,6 @@
       withSum?: boolean
       notFilledRoute?: string
       displayTotal?: boolean
-      bigText?: boolean
     }>(),
     {
       statsBar: false,
@@ -127,11 +130,9 @@
       toFixed: undefined,
       withSum: true,
       notFilledRoute: undefined,
-      displayTotal: true,
-      bigText: false
+      displayTotal: true
     }
   )
-
   const STATS_ID = getRandId('stats-')
   const expandStats = ref<boolean>(false)
 
