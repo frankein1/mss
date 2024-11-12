@@ -2,7 +2,8 @@
   <div
     class="multiselect"
     :class="{
-      'fr-select-group--error': error
+      'fr-select-group--error': error,
+      'fr-select-group--disabled': disabled
     }"
   >
     <label
@@ -35,6 +36,7 @@
       readonly
       :aria-describedby="ariaDescribedby"
       :aria-labelledby="ariaLabelledBy"
+      :disabled="disabled"
       @click="isOpen = !isOpen"
       @keydown.prevent.space="isOpen = !isOpen"
       @keydown.prevent.down="isOpen = !isOpen"
@@ -96,7 +98,9 @@
                     :id="option.value"
                     :option="option"
                     :checked="isOptionChecked(multiselectValue, option)"
-                    :disabled="isDisabled(disabledOptions, option)"
+                    :disabled="
+                      disabled ? true : isDisabled(disabledOptions, option)
+                    "
                     @change-value="handleOptionToggle(option)"
                   />
                 </div>
@@ -142,6 +146,7 @@
       required?: boolean
       hint?: string
       dropdownOver?: boolean
+      disabled?: boolean
     }>(),
     {
       optionsClass: '',
@@ -154,7 +159,8 @@
       isSearchable: true,
       required: false,
       hint: '',
-      dropdownOver: true
+      dropdownOver: true,
+      disabled: false
     }
   )
 
