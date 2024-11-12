@@ -13,6 +13,12 @@
     v-if="prescribingOrganizationStats.length"
     :total-count="totalCount"
     :stats="prescribingOrganizationStats"
+    :not-filled-route="
+      routes.file.AppHistory.path({
+        notFilled: FilterFollowupNotFilled.PrescribingOrganization,
+        tab: HistoryTab.Followups
+      })
+    "
   />
   <p v-else>
     Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
@@ -25,6 +31,9 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
+  import { FilterFollowupNotFilled } from '~/utils/constants/filters'
+  import { HistoryTab } from '~/utils/constants/history'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 

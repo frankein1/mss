@@ -4,7 +4,10 @@ import { HistoryTab } from '~/utils/constants/history'
 import { BeneficiaryNames } from '~/types/beneficiary'
 import { formatFamilyFileName } from '~/utils/familyFile/formatFamilyFileName'
 import { TypeSuivi } from '~/client/options'
-import { FilterFileInstructionNotFilled } from '../constants/filters'
+import {
+  FilterFileInstructionNotFilled,
+  FilterFollowupNotFilled
+} from '../constants/filters'
 
 type OriginPage =
   | 'AppOverview'
@@ -53,10 +56,14 @@ export const routes = {
   AppHistory: {
     name: 'AppHistory',
     title: 'Accompagnements',
-    path: (options?: {
-      notFilled?: FilterFileInstructionNotFilled
-      tab?: HistoryTab
-    }) => {
+    path: (
+      options?:
+        | {
+            notFilled?: FilterFileInstructionNotFilled
+            tab?: HistoryTab.FileInstructions
+          }
+        | { notFilled?: FilterFollowupNotFilled; tab?: HistoryTab.Followups }
+    ) => {
       const notFilled = options?.notFilled
         ? `?not-filled=${options.notFilled}`
         : ''

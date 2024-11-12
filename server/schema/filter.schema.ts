@@ -20,7 +20,10 @@ import { maxStringLengthMessage } from '~/utils/zod'
 import { TypeSuivi, AgeGroup } from '~/client/options'
 import { StatPeriodFilter } from '~/types/stat'
 import { FollowupPeriodFilter } from '~/types/followup'
-import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+import {
+  FilterBeneficiaryNotFilled,
+  FilterFollowupNotFilled
+} from '~/utils/constants/filters'
 
 const statFilterSchema = z.object({
   helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
@@ -96,7 +99,8 @@ const followupFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  ministre: z.array(z.nativeEnum(Minister)).nullish()
+  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  notFilled: z.nativeEnum(FilterFollowupNotFilled).nullish()
 })
 
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>

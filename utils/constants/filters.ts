@@ -21,8 +21,13 @@ export enum FilterBeneficiaryNotFilled {
 }
 
 export enum FilterFileInstructionNotFilled {
-  PrescribingOrganization = 'prescribingOrganization,',
+  PrescribingOrganization = 'prescribingOrganization',
   InstructorOrganization = 'instructorOrganization',
   HousingIsFirst = 'isFirst',
   HousingReason = 'reason'
+}
+
+export enum FilterFollowupNotFilled {
+  ActionsEntreprises = 'actionsEntreprises',
+  PrescribingOrganization = 'prescribingOrganization'
 }
