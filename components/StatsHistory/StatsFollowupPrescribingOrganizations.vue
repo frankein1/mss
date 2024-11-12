@@ -8,12 +8,24 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
   />
-  <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
-  <StatsList
-    v-if="prescribingOrganizationStats.length"
-    :total-count="totalCount"
-    :stats="prescribingOrganizationStats"
-  />
+  <template v-if="prescribingOrganizationStats.length">
+    <StatsList
+      :total-count="totalCount"
+      :stats="followupWithInstruction"
+      :display-total="false"
+      :big-text="true"
+      stats-bar
+    />
+
+    <hr />
+    <p class="fr-text--xs fr-text--grey">
+      Pourcentage calculé sur le nombre total de synthèses d'entretien
+    </p>
+    <StatsList
+      :total-count="totalCount"
+      :stats="prescribingOrganizationStats"
+    />
+  </template>
   <p v-else>
     Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
     pour voir apparaître les statistiques de la répartition des organismes
@@ -25,6 +37,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
+  import { StatsListPropType } from '~/types/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -51,5 +64,22 @@
           count: _count
         })
       ) || []
+  )
+
+  const followupWithInstruction: ComputedRef<StatsListPropType> = computed(
+    () => {
+      const noOrganization = prescribingOrganizationCounts.value?.find(
+        followup => followup.prescribingOrganizationId == 'null'
+      )
+      const noOrganizationCount = noOrganization?._count || 0
+      return [
+        {
+          key: 'followupWithInstruction',
+          label: 'Entretiens avec prescripteur',
+          color: SupportColor.followups,
+          count: props.totalCount - noOrganizationCount
+        }
+      ]
+    }
   )
 </script>

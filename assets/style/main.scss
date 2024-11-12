@@ -317,3 +317,8 @@ select:focus:not(:focus-visible) {
 .euro-symbol::after {
   content: '\00a0€';
 }
+
+.fr-text--grey,
+.fr-text--muted {
+  color: var(--text-default-grey);
+}

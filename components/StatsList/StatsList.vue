@@ -3,6 +3,7 @@
     <ul
       :id="STATS_ID"
       class="stats-list"
+      :class="{ 'fr-text--xl fr-text--bold': bigText }"
     >
       <li
         v-for="{ key, label, count, color, picto } in displayedStats"
@@ -36,7 +37,9 @@
         </span>
         <span
           v-if="statsPercentage"
-          :style="{ color: !statsColorDot ? color : undefined }"
+          :style="{
+            color: !statsColorDot ? color : undefined
+          }"
         >
           {{ getPercentage(count, totalCount) }}%
         </span>
@@ -45,22 +48,20 @@
           class="color-dot"
           :style="{ backgroundColor: color }"
         ></span>
-        <div
+        <StatsBar
           v-if="statsBar"
-          class="stats-bar"
-        >
-          <div
-            role="progressbar"
-            :style="`width:${getPercentage(count, totalCount)}%;`"
-            :aria-valuenow="getPercentage(count, totalCount)"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
-        </div>
+          :count="count"
+          :total-count="totalCount"
+          :color="color"
+        />
       </li>
 
       <li
-        v-if="withSum && (stats.length < STATS_COLLAPSED_LIMIT || expandStats)"
+        v-if="
+          displayTotal &&
+          withSum &&
+          (stats.length < STATS_COLLAPSED_LIMIT || expandStats)
+        "
         class="stats-entry fr-text--bold fr-mt-1w"
         :class="{
           'with-percentage': statsPercentage,
@@ -114,6 +115,8 @@
       toFixed?: number
       withSum?: boolean
       notFilledRoute?: string
+      displayTotal?: boolean
+      bigText?: boolean
     }>(),
     {
       statsBar: false,
@@ -123,7 +126,9 @@
       unit: '',
       toFixed: undefined,
       withSum: true,
-      notFilledRoute: undefined
+      notFilledRoute: undefined,
+      displayTotal: true,
+      bigText: false
     }
   )
 
@@ -200,22 +205,6 @@
       > :last-child {
         grid-area: bar;
       }
-    }
-  }
-
-  .stats-bar {
-    $bar-border-radius: 0.25rem;
-
-    background-color: var(--background-alt-grey);
-    width: 100%;
-    height: 0.5rem;
-    border-radius: $bar-border-radius;
-    margin-top: 0.25rem;
-
-    > * {
-      background: $primary;
-      height: 100%;
-      border-radius: $bar-border-radius;
     }
   }
 

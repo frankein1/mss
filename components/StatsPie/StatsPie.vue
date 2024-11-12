@@ -48,3 +48,11 @@
     })
   }
 </script>
+
+<style lang="scss" scoped>
+  canvas {
+    max-width: 200px;
+    max-height: 200px;
+    margin: 0 auto;
+  }
+</style>
