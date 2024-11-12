@@ -88,9 +88,6 @@ export const exportStats = async (
         exportedFile = await client.stat.exportBeneficiaryStats.query(filters)
         break
     }
-    // const exportedFile = isFollowUp
-    //   ? await client.stat.exportFollowupStats.query(filters)
-    //   : await client.stat.exportHelpRequestStats.query(filters)
     if (!exportedFile?.data) {
       throw new Error('no data')
     }

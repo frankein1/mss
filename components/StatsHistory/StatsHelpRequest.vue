@@ -51,7 +51,7 @@
         <!-- ROW -->
         <StatsCard
           v-if="!filters.helpRequestSubject"
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.instructionType.id"
           :card-name="helpRequestCardsConfig.instructionType.name"
         >
@@ -63,7 +63,7 @@
 
         <StatsCard
           v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
-          class="ffr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="ffr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.subjects.id"
           :card-name="helpRequestCardsConfig.subjects.name"
         >
@@ -74,7 +74,7 @@
         </StatsCard>
 
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.status.id"
           :card-name="helpRequestCardsConfig.status.name"
         >
@@ -87,7 +87,7 @@
         <!-- ROW -->
         <StatsCard
           v-if="application.module.ministere"
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.ministres.id"
           :card-name="helpRequestCardsConfig.ministres.name"
         >
@@ -98,7 +98,7 @@
         </StatsCard>
 
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
           :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
         >
@@ -107,24 +107,13 @@
             :filters="filters"
         /></StatsCard>
 
-        <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-          :card-id="helpRequestCardsConfig.instructorOrganizations.id"
-          :card-name="helpRequestCardsConfig.instructorOrganizations.name"
-        >
-          <StatsHistoryInstructorOrganizations
-            :total-count="externalHelpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
         <!-- ROW -->
         <StatsCard
           v-if="
             !filters.helpRequestSubject ||
             filters.helpRequestSubject === FileInstructionType.Financial
           "
-          class="fr-col-12 fr-col-sm-6"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.financialHelpRequest.id"
           :card-name="helpRequestCardsConfig.financialHelpRequest.name"
         >
@@ -137,7 +126,7 @@
             (!filters.helpRequestSubject ||
               filters.helpRequestSubject === FileInstructionType.Housing)
           "
-          class="fr-col-12 fr-col-sm-6"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.housingHelpRequest.id"
           :card-name="helpRequestCardsConfig.housingHelpRequest.name"
         >
@@ -196,10 +185,6 @@
     () => historyCounts.value?.helpRequests.Other || 0
   )
 
-  const externalHelpRequestCount = computed(
-    () => historyCounts.value?.helpRequests.external || 0
-  )
-
   const helpRequestCountLabel = computed(
     () =>
       `${helpRequestCount.value} ${
@@ -229,10 +214,6 @@
     prescribingOrganizations: {
       id: 'stats-helprequest-prescribing-organization',
       name: 'Organismes prescripteurs'
-    },
-    instructorOrganizations: {
-      id: 'stats-helprequest-instructor-organization',
-      name: 'Organismes instructeurs'
     },
     financialHelpRequest: {
       id: 'stats-helprequest-financial-helprequest',

@@ -58,7 +58,7 @@
 
         <!-- ROW -->
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.subject.id"
           :card-name="followupCardsConfig.subject.name"
         >
@@ -68,7 +68,7 @@
           />
         </StatsCard>
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.medium.id"
           :card-name="followupCardsConfig.medium.name"
         >
@@ -79,7 +79,7 @@
 
         <StatsCard
           v-if="application.module.ministere"
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.ministre.id"
           :card-name="followupCardsConfig.ministre.name"
         >
@@ -89,7 +89,7 @@
         /></StatsCard>
 
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.status.id"
           :card-name="followupCardsConfig.status.name"
         >
@@ -100,7 +100,7 @@
         </StatsCard>
 
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.actions.id"
           :card-name="followupCardsConfig.actions.name"
         >
@@ -110,7 +110,7 @@
         /></StatsCard>
 
         <StatsCard
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.prescribingOrganizations.id"
           :card-name="followupCardsConfig.prescribingOrganizations.name"
         >
