@@ -100,16 +100,14 @@
       )
     }
 
-    if (
-      props.filters.helpRequestSubject !== 'Housing' &&
-      props.socialSupportSubjectOptions.length
-    ) {
+    if (props.socialSupportSubjectOptions.length) {
       statsFilters.push({
         name: 'socialSupportSubjects',
         label: "Objet de l'accompagnement",
         options: props.socialSupportSubjectOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        disabled: props.filters.helpRequestSubject === 'Housing'
       })
     }
     if (props.beneficiariesCitiesOptions.length) {
