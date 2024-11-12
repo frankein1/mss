@@ -4,7 +4,7 @@ import { HistoryTab } from '~/utils/constants/history'
 import { BeneficiaryNames } from '~/types/beneficiary'
 import { formatFamilyFileName } from '~/utils/familyFile/formatFamilyFileName'
 import { TypeSuivi } from '~/client/options'
-import { FilterSocialSupportNotFilled } from '../constants/filters'
+import { FilterFileInstructionNotFilled } from '../constants/filters'
 
 type OriginPage =
   | 'AppOverview'
@@ -54,7 +54,7 @@ export const routes = {
     name: 'AppHistory',
     title: 'Accompagnements',
     path: (options?: {
-      notFilled?: FilterSocialSupportNotFilled
+      notFilled?: FilterFileInstructionNotFilled
       tab?: HistoryTab
     }) => {
       const notFilled = options?.notFilled

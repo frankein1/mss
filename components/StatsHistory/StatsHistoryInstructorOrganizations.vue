@@ -15,6 +15,12 @@
     v-if="instructorOrganizationStats.length"
     :total-count="totalCount"
     :stats="instructorOrganizationStats"
+    :not-filled-route="
+      routes.file.AppHistory.path({
+        notFilled: FilterFileInstructionNotFilled.InstructorOrganization,
+        tab: HistoryTab.FileInstructions
+      })
+    "
   />
   <p v-else>
     Commencez à créer des instructions de dossier instruites en externe dans les
@@ -27,6 +33,9 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
+  import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
+  import { HistoryTab } from '~/utils/constants/history'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     totalCount: number

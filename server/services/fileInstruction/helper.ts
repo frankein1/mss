@@ -83,6 +83,30 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
         }
       }
     }
+
+    // InstructorOrganization
+    if (notFilled === FilterFileInstructionNotFilled.InstructorOrganization) {
+      formattedFilters.instructorOrganization = null
+      formattedFilters.externalStructure = true
+    }
+
+    // Renewal
+    if (notFilled === FilterFileInstructionNotFilled.HousingIsFirst) {
+      if (formattedFilters.housingHelpRequest) {
+        formattedFilters.housingHelpRequest.isFirst = null
+      } else {
+        formattedFilters.housingHelpRequest = { isFirst: null }
+      }
+    }
+
+    // Reason
+    if (notFilled === FilterFileInstructionNotFilled.HousingReason) {
+      if (formattedFilters.housingHelpRequest) {
+        formattedFilters.housingHelpRequest.reason = null
+      } else {
+        formattedFilters.housingHelpRequest = { reason: null }
+      }
+    }
   }
 
   return formattedFilters
