@@ -61,7 +61,8 @@ export enum HelpRequestFilterEventAction {
   Agent = 'Agent',
   Ministre = 'Ministre',
   RoomCount = 'Nombre de pièces',
-  LowIncomeHousingType = 'Logement à loyer modéré'
+  LowIncomeHousingType = 'Logement à loyer modéré',
+  NotFilled = 'Champ non renseigné'
 }
 
 export enum DocumentEventAction {

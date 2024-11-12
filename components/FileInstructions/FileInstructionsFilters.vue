@@ -35,7 +35,8 @@
     fileInstructionTypeFilterKeys,
     roomCountKeys,
     lowIncomeHousingKeys,
-    fileInstructionTypePictos
+    fileInstructionTypePictos,
+    fileInstructionNotFilledKeys
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
@@ -212,6 +213,19 @@
         matomoEventAction: HelpRequestFilterEventAction.Ministre
       })
     }
+
+    fileInstructionsFilters.push({
+      name: 'notFilled',
+      label: 'non renseigné',
+      options: withEmptyValue(
+        fileInstructionNotFilledKeys.options,
+        'Pas de sélection'
+      ),
+      type: FilterType.NotFilled,
+      alwaysExpanded: false,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: HelpRequestFilterEventAction.NotFilled
+    })
 
     return fileInstructionsFilters
   })

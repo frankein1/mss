@@ -37,7 +37,7 @@
         :key="status"
       >
         <NuxtLink
-          :to="routes.file.AppHistory.path(tab)"
+          :to="routes.file.AppHistory.path({ tab })"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
           @click="onNavigate(status)"
         >

@@ -3,6 +3,11 @@ import {
   FileInstructionType
 } from '@prisma/client'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
+import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
+import {
+  helpRequestFieldLabels,
+  housingHelpRequestFieldLabels
+} from '../labels'
 
 export const baseRefusalReasonKeys = buildKeys({
   [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
@@ -53,3 +58,13 @@ export const fileInstructionTypePictos = {
   [FileInstructionType.Financial]: '/pictograms/tax-stamp.svg',
   [FileInstructionType.Other]: '/pictograms/document.svg'
 }
+
+export const fileInstructionNotFilledKeys = buildKeys({
+  [FilterFileInstructionNotFilled.PrescribingOrganization]:
+    helpRequestFieldLabels['prescribingOrganizationId'],
+  [FilterFileInstructionNotFilled.InstructorOrganization]:
+    helpRequestFieldLabels['instructorOrganizationId'],
+  [FilterFileInstructionNotFilled.HousingIsFirst]: 'Renouvellement',
+  [FilterFileInstructionNotFilled.HousingReason]:
+    housingHelpRequestFieldLabels['reason']
+})

@@ -12,6 +12,12 @@
     v-if="prescribingOrganizationStats.length"
     :total-count="totalCount"
     :stats="prescribingOrganizationStats"
+    :not-filled-route="
+      routes.file.AppHistory.path({
+        notFilled: FilterFileInstructionNotFilled.PrescribingOrganization,
+        tab: HistoryTab.FileInstructions
+      })
+    "
   />
   <p v-else>
     Commencez à créer des instructions de dossier dans les fiches de
@@ -24,6 +30,9 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
+  import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
+  import { HistoryTab } from '~/utils/constants/history'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 
