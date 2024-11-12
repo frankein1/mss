@@ -13,10 +13,9 @@
           alt="Copier l'image"
           @click="copyToCliboard"
         >
-          <Icon
-            :icon="imageCopied ? 'ri-check-line' : 'ri-file-copy-line'"
-            height="24px"
-            :ssr="true"
+          <VIcon
+            :name="imageCopied ? 'ri-check-line' : 'ri-file-copy-line'"
+            :scale="1.25"
           />
         </button>
       </div>
@@ -27,7 +26,6 @@
 
 <script lang="ts" setup>
   import domtoimage from 'dom-to-image-more'
-  import { Icon } from '@iconify/vue'
 
   const props = defineProps<{
     cardName: string
