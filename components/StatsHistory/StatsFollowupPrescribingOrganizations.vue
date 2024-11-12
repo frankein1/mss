@@ -13,13 +13,16 @@
       :total-count="totalCount"
       :stats="followupWithInstruction"
       :display-total="false"
-      :big-text="true"
       stats-bar
     />
 
     <hr />
-    <p class="fr-text--xs fr-text--grey">
-      Pourcentage calculé sur le nombre total de synthèses d'entretien
+    <p class="fr-text--xs text--muted">
+      <span class="fr-text--bold"
+        >RÉPARTITION DES ORGANISMES PRESCRIPTEURS</span
+      >
+      <br />
+      Pourcentage calculé sur le nombre total de synthèses d'entretien.
     </p>
     <StatsList
       :total-count="totalCount"
@@ -75,8 +78,9 @@
       return [
         {
           key: 'followupWithInstruction',
-          label: 'Entretiens avec prescripteur',
+          label: 'Entretiens avec prescripteur renseigné',
           color: SupportColor.followups,
+          emphasis: true,
           count: props.totalCount - noOrganizationCount
         }
       ]

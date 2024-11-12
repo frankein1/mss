@@ -218,34 +218,6 @@ const handler = async ({
     rows: financialRows
   })
 
-  // Instructor organisations
-  const helpRequestInstructorOrganizationData =
-    await getHelpRequestInstructorOrganizationStatsQuery(user, input)
-  const helpRequestInstructorOrganizationColumns =
-    helpRequestInstructorOrganizationData.map(
-      ({ instructorOrganizationId, instructorOrganization }) => ({
-        key: instructorOrganizationId,
-        header: instructorOrganization
-      })
-    )
-  const helpRequestInstructorOrganizationRows = getRowsFromData(
-    helpRequestInstructorOrganizationData,
-    'instructorOrganizationId',
-    helpRequestCount.external
-  )
-  exportData.push({
-    name: 'Organismes instructeurs',
-    columns: getTransposedColumns(
-      'instructorOrganizationId',
-      'Organismes instructeurs'
-    ),
-    rows: transposeRows(
-      helpRequestInstructorOrganizationColumns,
-      helpRequestInstructorOrganizationRows,
-      'instructorOrganizationId'
-    )
-  })
-
   return await createExport(user.id, exportData)
 }
 

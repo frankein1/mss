@@ -318,7 +318,10 @@ select:focus:not(:focus-visible) {
   content: '\00a0€';
 }
 
-.fr-text--grey,
-.fr-text--muted {
+.text--grey {
   color: var(--text-default-grey);
+}
+
+.text--muted {
+  color: var(--grey-425-625);
 }
