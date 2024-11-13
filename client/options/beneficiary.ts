@@ -251,5 +251,11 @@ export const beneficiaryNotFilledKeys = buildKeys({
   [FilterBeneficiaryNotFilled.BeneficiaryMobility]:
     beneficiaryFieldLabels['mobility'],
   [FilterBeneficiaryNotFilled.BeneficiarySocioProfessionalCategory]:
-    beneficiaryFieldLabels['socioProfessionalCategory']
+    beneficiaryFieldLabels['socioProfessionalCategory'],
+  [FilterBeneficiaryNotFilled.BeneficiaryMinistereCategorie]:
+    beneficiaryFieldLabels['ministereCategorie'],
+  [FilterBeneficiaryNotFilled.BeneficiaryMinistereDepartementServiceAc]:
+    beneficiaryFieldLabels['ministereDepartementServiceAc'],
+  [FilterBeneficiaryNotFilled.BeneficiaryMinistereStructure]:
+    beneficiaryFieldLabels['ministereStructure']
 })

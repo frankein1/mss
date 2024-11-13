@@ -14,6 +14,11 @@
     :total-count="beneficiaryCount"
     :stats="accommodationZoneStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.BeneficiaryAccommodationZone
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -33,6 +38,7 @@
     getStatLabel,
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const props = defineProps<{
     beneficiaryCount: number

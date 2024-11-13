@@ -17,7 +17,10 @@ export enum FilterBeneficiaryNotFilled {
   BeneficiaryAccommodationZone = 'accommodationZone',
   BeneficiaryAccommodationMode = 'accommodationMode',
   BeneficiaryMobility = 'mobility',
-  BeneficiarySocioProfessionalCategory = 'socioProfessionalCategory'
+  BeneficiarySocioProfessionalCategory = 'socioProfessionalCategory',
+  BeneficiaryMinistereCategorie = 'ministereCategorie',
+  BeneficiaryMinistereDepartementServiceAc = 'ministereDepartementServiceAc',
+  BeneficiaryMinistereStructure = 'ministereStructure'
 }
 
 export enum FilterFileInstructionNotFilled {

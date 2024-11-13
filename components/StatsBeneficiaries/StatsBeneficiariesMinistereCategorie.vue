@@ -13,6 +13,11 @@
     :total-count="beneficiaryCount"
     :stats="ministereCategorieStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.BeneficiaryMinistereCategorie
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -28,6 +33,7 @@
   import { routes } from '~/utils/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereCategorieKeys } from '~/client/options'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const props = defineProps<{
     beneficiaryCount: number

@@ -13,6 +13,11 @@
     :total-count="beneficiaryCount"
     :stats="accommodationModesStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.BeneficiaryAccommodationMode
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -32,6 +37,7 @@
     getStatLabel,
     beneficiaryAccommodationModeKeys
   } from '~/client/options'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const trpcClient = useTrpcClient()
 
