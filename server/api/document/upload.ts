@@ -8,6 +8,7 @@ import { DocumentRepo, NotificationRepo } from '~/server/database'
 import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
+import { validateDocumentType } from '~/server/security/document/validate-document-type'
 
 export interface MultiPartData {
   data: Buffer
@@ -91,6 +92,13 @@ export default defineEventHandler(async event => {
   }
 
   const file = multipartFormData[0]
+
+  if (!validateDocumentType(file.data)) {
+    throw createError({
+      statusCode: 400,
+      message: 'Format de fichier invalide'
+    })
+  }
 
   const document = await addDocument(input, user, file)
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
