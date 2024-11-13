@@ -8,15 +8,15 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
   />
-  <p v-if="!filters.helpRequestSubject">
-    Pourcentage calculé sur le nombre total d'instructions de dossier dans les
-    thématiques "Aide financière" et "Autre"
-  </p>
-  <StatsList
-    v-if="subjectStats.length"
-    :total-count="totalCount"
-    :stats="subjectStats"
-  />
+  <template v-else-if="subjectStats.length">
+    <p class="fr-text--xs text--muted">
+      Pourcentage calculé sur le nombre total d'instructions de dossier.
+    </p>
+    <StatsList
+      :total-count="totalCount"
+      :stats="subjectStats"
+    />
+  </template>
   <p v-else>
     Commencez à créer des instructions de dossier dans les fiches de
     bénéficiaires pour voir apparaître les statistiques de la répartition des

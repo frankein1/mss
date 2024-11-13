@@ -54,6 +54,7 @@
         ></span>
         <StatsBar
           v-if="statsBar"
+          :class="{ 'fr-mt-1w': emphasis }"
           :count="count"
           :total-count="totalCount"
           :color="color"

@@ -8,16 +8,17 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des thématiques d'instruction n'ont pas pu être chargées."
   />
-  <p>
-    Les instructions de dossiers de demande de logement réalisées avant le 15
-    février 2024 sont comptabilisées dans la thématique "Autre".
-  </p>
-  <StatsPie
-    v-if="subjectStats.length"
-    pie-label="Répartion des thématiques d'instruction"
-    :stats="subjectStats"
-    :total-count="totalCount"
-  />
+  <template v-else-if="subjectStats.length">
+    <p class="fr-text--xs text--muted">
+      Les instructions de dossiers de demande de logement réalisées avant le 15
+      février 2024 sont comptabilisées dans la thématique "Autre".
+    </p>
+    <StatsPie
+      pie-label="Répartion des thématiques d'instruction"
+      :stats="subjectStats"
+      :total-count="totalCount"
+    />
+  </template>
   <p v-else>
     Commencez à créer des instructions de dossier dans les fiches de
     bénéficiaires pour voir apparaître les statistiques de la répartition des

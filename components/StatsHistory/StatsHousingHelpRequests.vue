@@ -8,8 +8,8 @@
     :alert-type="AlertType.Error"
     message="Les statistiques des demandes de logement n'ont pas pu être chargées."
   />
-  <template v-else-if="data">
-    <p>
+  <template v-else-if="housingHelpRequestContextStats.length">
+    <p class="fr-text--xs text--muted">
       Ces données prennent en compte uniquement les instructions de dossiers
       réalisées après le 15 février 2024 via le formulaire de demande de
       logement.
