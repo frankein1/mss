@@ -70,43 +70,35 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     }
   }
 
-  if (notFilled) {
-    // PrescribingOrganization
-    if (notFilled === FilterFileInstructionNotFilled.PrescribingOrganization) {
-      formattedFilters.helpRequest = { prescribingOrganization: null }
-
-      if (formattedFilters.housingHelpRequest) {
-        formattedFilters.housingHelpRequest.prescribingOrganization = null
-      } else {
-        formattedFilters.housingHelpRequest = {
-          prescribingOrganization: null
-        }
+  switch (notFilled) {
+    case FilterFileInstructionNotFilled.PrescribingOrganization:
+      formattedFilters.AND = {
+        OR: [
+          { helpRequest: { prescribingOrganization: null } },
+          { housingHelpRequest: { prescribingOrganization: null } }
+        ]
       }
-    }
-
-    // InstructorOrganization
-    if (notFilled === FilterFileInstructionNotFilled.InstructorOrganization) {
+      break
+    case FilterFileInstructionNotFilled.InstructorOrganization:
       formattedFilters.instructorOrganization = null
       formattedFilters.externalStructure = true
-    }
-
-    // Renewal
-    if (notFilled === FilterFileInstructionNotFilled.HousingIsFirst) {
+      break
+    case FilterFileInstructionNotFilled.HousingIsFirst:
       if (formattedFilters.housingHelpRequest) {
         formattedFilters.housingHelpRequest.isFirst = null
       } else {
         formattedFilters.housingHelpRequest = { isFirst: null }
       }
-    }
-
-    // Reason
-    if (notFilled === FilterFileInstructionNotFilled.HousingReason) {
+      break
+    case FilterFileInstructionNotFilled.HousingReason:
       if (formattedFilters.housingHelpRequest) {
         formattedFilters.housingHelpRequest.reason = null
       } else {
         formattedFilters.housingHelpRequest = { reason: null }
       }
-    }
+      break
+    default:
+      break
   }
 
   return formattedFilters
