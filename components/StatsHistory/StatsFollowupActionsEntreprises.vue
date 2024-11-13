@@ -8,22 +8,28 @@
     :alert-type="AlertType.Error"
     message="Les statistiques des actions entreprises n'ont pas pu être chargées."
   />
-  <p>
-    Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
-    synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme des
-    pourcentages peut être supérieure à 100%.
+  <template v-else-if="followupActionsEntreprisesStats.length">
+    <p class="fr-text--xs text--muted">
+      Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
+      synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme des
+      pourcentages peut être supérieure à 100&thinsp;%.
+    </p>
+    <StatsList
+      :total-count="totalCount"
+      :stats="followupActionsEntreprisesStats"
+      :with-sum="false"
+      :not-filled-route="
+        routes.file.AppHistory.path({
+          notFilled: FilterFollowupNotFilled.ActionsEntreprises,
+          tab: HistoryTab.Followups
+        })
+      "
+    />
+  </template>
+  <p v-else>
+    Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
+    pour voir apparaître les statistiques de la répartition des ministres.
   </p>
-  <StatsList
-    :total-count="totalCount"
-    :stats="followupActionsEntreprisesStats"
-    :with-sum="false"
-    :not-filled-route="
-      routes.file.AppHistory.path({
-        notFilled: FilterFollowupNotFilled.ActionsEntreprises,
-        tab: HistoryTab.Followups
-      })
-    "
-  />
 </template>
 
 <script lang="ts" setup>

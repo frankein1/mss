@@ -1,7 +1,11 @@
-import { prepareHelpRequestStatFilters } from '../helpers'
+import {
+  prepareHelpRequestStatFilters,
+  prepareSocialSupportStatFilters
+} from '../helpers'
 import {
   SocialSupportConstraints,
-  SocialSupportSubjectRepo
+  SocialSupportSubjectRepo,
+  HousingHelpRequestRepo
 } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -16,7 +20,7 @@ export async function getHelpRequestSubjectsStatsQuery(
   }
   appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
 
-  const res = await SocialSupportSubjectRepo.findMany(user, {
+  const getSocialSuportSubjects = SocialSupportSubjectRepo.findMany(user, {
     select: {
       id: true,
       name: true,
@@ -32,5 +36,46 @@ export async function getHelpRequestSubjectsStatsQuery(
       }
     }
   })
-  return res.sort((a, b) => b._count.socialSupports - a._count.socialSupports)
+  const getHousingCount = HousingHelpRequestRepo.count(user, {
+    where: {
+      fileInstruction: {
+        socialSupport: prepareSocialSupportStatFilters(input)
+      }
+    }
+  })
+
+  if (
+    input.helpRequestSubject != null &&
+    input.helpRequestSubject != 'Housing'
+  ) {
+    const socialSupports = await getSocialSuportSubjects
+    return socialSupports.sort(
+      (a, b) => b._count.socialSupports - a._count.socialSupports
+    )
+  }
+  if (input.helpRequestSubject === 'Housing') {
+    const housingCount = await getHousingCount
+    return [
+      {
+        id: 'housingHelpRequest',
+        name: 'Demande de logement',
+        _count: { socialSupports: housingCount }
+      }
+    ]
+  }
+  const socialSupports = await getSocialSuportSubjects
+  const housingCount = await getHousingCount
+
+  const totalSocialSupportsSubjects = [
+    ...socialSupports,
+    {
+      id: 'housingHelpRequest',
+      name: 'Demande de logement',
+      _count: { socialSupports: housingCount }
+    }
+  ]
+
+  return totalSocialSupportsSubjects.sort(
+    (a, b) => b._count.socialSupports - a._count.socialSupports
+  )
 }

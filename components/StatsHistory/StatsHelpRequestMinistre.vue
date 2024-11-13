@@ -8,12 +8,16 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des ministres n'ont pas pu être chargées."
   />
-  <p>Pourcentage calculé sur le nombre total d'instructions de dossier</p>
-  <StatsList
-    v-if="ministreStats.length"
-    :total-count="totalCount"
-    :stats="ministreStats"
-  />
+  <template v-else-if="ministreStats.length">
+    <p class="fr-text--xs text--muted">
+      Pourcentage calculé sur le nombre total d'instructions de dossier
+    </p>
+    <StatsList
+      :total-count="totalCount"
+      :stats="ministreStats"
+    />
+  </template>
+
   <p v-else>
     Commencez à créer des instructions de dossier dans les fiches de
     bénéficiaires pour voir apparaître les statistiques de la répartition des
