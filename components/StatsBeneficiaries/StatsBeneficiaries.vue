@@ -19,6 +19,10 @@
           {{ beneficiaryCountLabel }}
         </template>
       </StatsHeader>
+      <StatsExportAlert
+        v-if="!alertClose"
+        @close-alert="alertClose = true"
+      />
 
       <!-- Alert + Loader -->
       <AtomAlert
@@ -195,7 +199,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { Menu } from '~/types/menu'
   import { StatsCardConfig } from '~/types/stat'
-  import { saveAsPngs, exportStats } from '~/utils/stats/exportStats'
+  import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
 
   const alertClose = ref<boolean>(true)
 
@@ -268,14 +272,6 @@
       id: 'stats-beneficiaries-region',
       name: 'Régions'
     },
-    accomodationZone: {
-      id: 'stats-beneficiaries-accomodation-zone',
-      name: "Zones d'hébergement"
-    },
-    accomodationMode: {
-      id: 'stats-beneficiaries-accomodation-mode',
-      name: "Modes d'hébergement"
-    },
     mobility: {
       id: 'stats-beneficiaries-mobility',
       name: 'Données mobilité'
@@ -284,39 +280,66 @@
       id: 'stats-beneficiaries-csp',
       name: 'Catégories socio-professionnelles'
     },
-    ministereStructures: {
-      id: 'stats-beneficiaries-ministere-structures',
-      name: 'Structures de rattachement'
-    },
-    ministereDepartementServices: {
-      id: 'stats-beneficiaries-departement-services',
-      name: "Départements ou services de l'administration centrale"
-    },
-    ministereCategorie: {
-      id: 'stats-beneficiaries-categories',
-      name: 'Catégories'
-    },
-    ministereInterpellation: {
-      id: 'stats-beneficiaries-interpellation',
-      name: 'Bénéficiaires ayant interpellé chaque ministre'
-    }
+    // application.module.ministere
+    ...(application.value.module.ministere && {
+      accomodationZone: {
+        id: 'stats-beneficiaries-accomodation-zone',
+        name: "Zone d'hébergement"
+      }
+    }),
+    ...(application.value.module.ministere && {
+      accomodationMode: {
+        id: 'stats-beneficiaries-accomodation-mode',
+        name: "Modes d'hébergement"
+      }
+    }),
+    ...(application.value.module.ministere && {
+      ministereStructures: {
+        id: 'stats-beneficiaries-ministere-structures',
+        name: 'Structures de rattachement'
+      }
+    }),
+    ...(application.value.module.ministere && {
+      ministereDepartementServices: {
+        id: 'stats-beneficiaries-departement-services',
+        name: "Départements ou services de l'administration centrale"
+      }
+    }),
+    ...(application.value.module.ministere && {
+      ministereCategorie: {
+        id: 'stats-beneficiaries-categories',
+        name: 'Catégories'
+      }
+    }),
+    ...(application.value.module.ministere && {
+      ministereInterpellation: {
+        id: 'stats-beneficiaries-interpellation',
+        name: 'Bénéficiaires ayant interpellé chaque ministre'
+      }
+    })
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
     // TODO: revamp dropdown menu with new design + use <VIcon />
-    const menus: Menu[] = [
-      {
-        label: 'En images (.png)',
+    const menus: Menu[] = []
+
+    if (beneficiaryCount.value != 0) {
+      menus.push({
+        label: 'En images (.zip)',
         callback: async () => {
           alertClose.value = false
           setTimeout(() => {
-            handleSaveAsPngs()
-          }, 1000)
+            zipAndDownloadImages(
+              beneficiariesCardConfig,
+              buttonFilter,
+              closeAlert
+            )
+          }, 200)
         }
-      }
-    ]
+      })
+    }
 
-    if (application.value.export.stats) {
+    if (beneficiaryCount.value != 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
         callback: () => handleExportExcel()
@@ -331,9 +354,5 @@
 
   const closeAlert = () => {
     alertClose.value = true
-  }
-
-  const handleSaveAsPngs = () => {
-    saveAsPngs(beneficiariesCardConfig, buttonFilter, closeAlert)
   }
 </script>

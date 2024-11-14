@@ -4,6 +4,7 @@ import { StatFilterInput } from '~/server/schema'
 import { getExportUrl } from '~/utils/export/getExportUrl'
 import { getExportFilename } from '~/utils/export/getExportFilename'
 import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
+import { BlobWriter, BlobReader, ZipWriter } from '@zip.js/zip.js'
 
 // Export Cards as image
 const extractIds = (config: StatsCardConfig) => {
@@ -15,11 +16,12 @@ const extractNames = (config: StatsCardConfig) => {
 
 type Filter = (node: HTMLElement | Node) => boolean
 
-export const saveAsPngs = (
+export const zipAndDownloadImages = async (
   statsCardConfig: StatsCardConfig,
   filter: Filter,
   finallyFn: () => void
 ) => {
+  const scale = 1
   const configIds = extractIds(statsCardConfig)
   const configNames = extractNames(statsCardConfig)
   const nodes = configIds
@@ -30,35 +32,35 @@ export const saveAsPngs = (
       }
     })
     .filter(node => node != null)
-  if (nodes.length && nodes.length > 0) {
-    nodes.forEach(async (node, i) => {
-      try {
-        const scale = 1
-        domtoimage
-          .toPng(node, {
-            quality: 0.9,
-            filter: filter,
-            width: node.clientWidth * scale,
-            height: node.clientHeight * scale,
-            style: {
-              transform: 'scale(' + scale + ')',
-              transformOrigin: 'top left'
-            }
-          })
-          .then(function (dataUrl) {
-            const link = document.createElement('a')
-            link.download = configNames[i] + '.png'
-            link.href = dataUrl
-            link.click()
-            document.body.removeChild(link)
-          })
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        useSnackbar().error("Les images n'ont pas pu être exportées.")
-      } finally {
-        finallyFn()
-      }
+
+  const zipWriter = new ZipWriter(new BlobWriter('application/zip'))
+
+  const promises = nodes.map(async (node, i) => {
+    const blob = await domtoimage.toBlob(node, {
+      width: node.clientWidth * scale,
+      height: node.clientHeight * scale,
+      style: {
+        transform: 'scale(' + scale + ')',
+        transformOrigin: 'top left'
+      },
+      quality: 0.9,
+      filter: filter
     })
+    return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
+  })
+  try {
+    await Promise.all(promises)
+    const finalBlob = await zipWriter.close()
+    const link = document.createElement('a')
+    link.download = 'images-statistiques.zip'
+    link.href = URL.createObjectURL(finalBlob)
+    link.click()
+    link.remove()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    useSnackbar().error("Les images n'ont pas pu être exportées.")
+  } finally {
+    finallyFn()
   }
 }
 
