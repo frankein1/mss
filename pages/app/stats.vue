@@ -146,4 +146,12 @@
   :deep(.main-container) {
     min-height: 100%;
   }
+
+  /* Tab height computing does not take into account multiselect dropdown height
+  A min height is necessary to fully display the multiselect in all cases.
+  This is overloaded from tab.scss to take into account the position of the multiselect in
+  the stat panel */
+  :deep(.fr-tabs__panel) {
+    min-height: 36.5rem;
+  }
 </style>

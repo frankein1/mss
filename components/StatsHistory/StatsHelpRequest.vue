@@ -54,7 +54,7 @@
 
         <!-- ROW -->
         <StatsCard
-          v-if="!filters.helpRequestSubject"
+          v-if="displayed.instructionType"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.instructionType.id"
           :card-name="helpRequestCardsConfig.instructionType.name"
@@ -66,6 +66,7 @@
         </StatsCard>
 
         <StatsCard
+          v-if="displayed.socialSupportSubjects"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.subjects.id"
           :card-name="helpRequestCardsConfig.subjects.name"
@@ -88,7 +89,7 @@
         </StatsCard>
 
         <StatsCard
-          v-if="application.module.ministere"
+          v-if="displayed.ministere"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.ministres.id"
           :card-name="helpRequestCardsConfig.ministres.name"
@@ -109,11 +110,17 @@
             :filters="filters"
         /></StatsCard>
 
+        <!-- <StatsCard
+          v-if="displayed.financial"
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.amountAllocated.id"
+          :card-name="helpRequestCardsConfig.amountAllocated.name"
+        >
+          <StatsHelpRequestAmountsAllocated :filters />
+        </StatsCard> -->
+
         <StatsCard
-          v-if="
-            !filters.helpRequestSubject ||
-            filters.helpRequestSubject === FileInstructionType.Financial
-          "
+          v-if="displayed.financial"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.financialHelpRequest.id"
           :card-name="helpRequestCardsConfig.financialHelpRequest.name"
@@ -122,11 +129,7 @@
         </StatsCard>
 
         <StatsCard
-          v-if="
-            !filters.socialSupportSubjects &&
-            (!filters.helpRequestSubject ||
-              filters.helpRequestSubject === FileInstructionType.Housing)
-          "
+          v-if="displayed.housing"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.housingHelpRequest.id"
           :card-name="helpRequestCardsConfig.housingHelpRequest.name"
@@ -187,34 +190,45 @@
       }`
   )
 
+  const displayed = computed(() => ({
+    instructionType: !filters.value.helpRequestSubject,
+    socialSupportSubjects:
+      filters.value.helpRequestSubject !== FileInstructionType.Housing,
+    housing:
+      !filters.value.socialSupportSubjects &&
+      (!filters.value.helpRequestSubject ||
+        filters.value.helpRequestSubject === FileInstructionType.Housing),
+    financial:
+      !filters.value.helpRequestSubject ||
+      filters.value.helpRequestSubject === FileInstructionType.Financial,
+    ministere: application.value.module.ministere
+  }))
+
   const helpRequestCardsConfig: ComputedRef<StatsCardConfig> = computed(() => {
     return {
-      ...(!filters.value.helpRequestSubject && {
+      ...(displayed.value.instructionType && {
         instructionType: {
           id: 'stats-helprequest-instruction-type',
           name: "Thématique d'instruction"
         }
       }),
-      ...(filters.value.helpRequestSubject !== FileInstructionType.Housing && {
+      ...(displayed.value.socialSupportSubjects && {
         subjects: {
           id: 'stats-helprequest-subjects',
           name: "Objets d'accompagnement"
         }
       }),
-      ...(!filters.value.socialSupportSubjects &&
-        (!filters.value.helpRequestSubject ||
-          filters.value.helpRequestSubject === FileInstructionType.Housing) && {
-          housingHelpRequest: {
-            id: 'stats-helprequest-housing-helprequest',
-            name: 'Demandes de logement'
-          }
-        }),
-
+      ...(displayed.value.housing && {
+        housingHelpRequest: {
+          id: 'stats-helprequest-housing-helprequest',
+          name: 'Demandes de logement'
+        }
+      }),
       status: {
         id: 'stats-helprequest-status',
         name: 'Statuts'
       },
-      ...(application.value.module.ministere && {
+      ...(displayed.value.ministere && {
         ministres: {
           id: 'stats-helprequest-ministres',
           name: 'Ministres'
@@ -224,10 +238,16 @@
         id: 'stats-helprequest-prescribing-organization',
         name: 'Organismes prescripteurs'
       },
-      financialHelpRequest: {
-        id: 'stats-helprequest-financial-helprequest',
-        name: 'Aides financières'
-      }
+      ...(displayed.value.financial && {
+        amountAllocated: {
+          id: 'stats-helprequest-amount-allocated',
+          name: 'Montants des aides délivrées'
+        },
+        financialHelpRequest: {
+          id: 'stats-helprequest-financial-helprequest',
+          name: 'Aides financières'
+        }
+      })
     }
   })
 
