@@ -10,7 +10,7 @@ import { appendConstraints } from '~/server/database/repository/helper/appendCon
 import { prismaDecimalToNumber } from '~/utils/prisma'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 
-export async function getHelpRequestAmountsByInstructingOrganizationQuery(
+export async function getHelpRequestAmountsByInstructorOrganizationQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {

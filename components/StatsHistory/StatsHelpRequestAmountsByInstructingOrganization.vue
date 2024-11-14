@@ -51,7 +51,7 @@
     data: amounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestAmountsByInstructingOrganization.useQuery(
+  } = await trpcClient.stat.getHelpRequestAmountsByInstructorOrganization.useQuery(
     props.filters
   )
 
