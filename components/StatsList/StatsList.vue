@@ -5,7 +5,15 @@
       class="stats-list"
     >
       <li
-        v-for="{ key, label, count, color, picto, emphasis } in displayedStats"
+        v-for="{
+          key,
+          label,
+          count,
+          subCount,
+          color,
+          picto,
+          emphasis
+        } in displayedStats"
         :key="key"
         class="stats-entry"
         :class="{
@@ -52,11 +60,30 @@
           class="color-dot"
           :style="{ backgroundColor: color }"
         ></span>
+        <div v-if="subCount">
+          <span :class="{ 'fr-text--bold': emphasis }">{{
+            subCountLabel
+          }}</span>
+          <span
+            class="fr-text--bold"
+            :class="{ 'fr-h5 fr-mb-0': emphasis }"
+            :style="{ color: !statsPercentage ? color : undefined }"
+          >
+            {{ toFixed ? subCount.toFixed(toFixed) : subCount
+            }}<template v-if="unit">{{ unit }}</template>
+          </span>
+          <span
+            class="fr-text--bold"
+            :class="{ 'fr-h5 fr-mb-0': emphasis }"
+          >
+            {{ getPercentage(count, subCount) }}%
+          </span>
+        </div>
         <StatsBar
           v-if="statsBar"
           :class="{ 'fr-mt-1w': emphasis }"
           :count="count"
-          :total-count="totalCount"
+          :total-count="withSubCount ? subCount || 0 : totalCount"
           :color="color"
         />
       </li>
@@ -115,6 +142,8 @@
       statsBar?: boolean
       statsPercentage?: boolean
       statsColorDot?: boolean
+      withSubCount?: boolean
+      subCountLabel?: string
       totalCount?: number
       unit?: string
       toFixed?: number
@@ -126,6 +155,7 @@
       statsBar: false,
       statsPercentage: true,
       statsColorDot: false,
+      subCountLabel: undefined,
       totalCount: 0,
       unit: '',
       toFixed: undefined,
