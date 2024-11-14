@@ -20,27 +20,26 @@ export async function getHelpRequestAmountsByInstructorOrganizationQuery(
 
   // Cannot retrieve organization name from this query so perform in 2 steps
   // https://github.com/prisma/prisma/issues/16243#issue-1445823500
-  const amountsByOrganizationId = await HelpRequestRepo.prisma.groupBy({
-    by: ['prescribingOrganizationId'],
-    where: {
-      financialSupport: true,
-      askedAmount: { gt: 0 },
-      fileInstruction: {
-        externalStructure: true,
-        socialSupport: {
-          ...socialSupport.where
+  const [amountsByOrganizationId, orgs] = await Promise.all([
+    HelpRequestRepo.prisma.groupBy({
+      by: ['prescribingOrganizationId'],
+      where: {
+        financialSupport: true,
+        askedAmount: { gt: 0 },
+        fileInstruction: {
+          externalStructure: true,
+          socialSupport: {
+            ...socialSupport.where
+          }
         }
+      },
+      _sum: {
+        allocatedAmount: true,
+        askedAmount: true
       }
-    },
-    _sum: {
-      allocatedAmount: true,
-      askedAmount: true
-    }
-  })
-
-  const orgs = await PartnerOrganizationRepo.findMany(user, {
-    select: { id: true, name: true }
-  })
+    }),
+    PartnerOrganizationRepo.findMany(user, { select: { id: true, name: true } })
+  ])
 
   const organizationNames = orgs.reduce<Record<string, string>>(
     (acc, cur) => ({ ...acc, [cur.id]: cur.name }),
