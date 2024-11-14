@@ -53,11 +53,11 @@ export const statRouter = router({
   getHelpRequestStatusStats: protectedProcedure
     .input(routes.getHelpRequestStatusStatsQ.inputValidation)
     .query(routes.getHelpRequestStatusStatsQ.execute),
-  getHelpRequestAmountsByInstructingOrganization: protectedProcedure
+  getHelpRequestAmountsByInstructorOrganization: protectedProcedure
     .input(
-      routes.getHelpRequestAmountsByInstructingOrganizationQ.inputValidation
+      routes.getHelpRequestAmountsByInstructorOrganizationQ.inputValidation
     )
-    .query(routes.getHelpRequestAmountsByInstructingOrganizationQ.execute),
+    .query(routes.getHelpRequestAmountsByInstructorOrganizationQ.execute),
   getFileInstructionTypeStats: protectedProcedure
     .input(routes.getFileInstructionTypeStatsQ.inputValidation)
     .query(routes.getFileInstructionTypeStatsQ.execute),

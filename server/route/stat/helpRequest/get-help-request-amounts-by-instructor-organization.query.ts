@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { getHelpRequestAmountsByInstructingOrganizationQuery } from '~/server/query/stats'
+import { getHelpRequestAmountsByInstructorOrganizationQuery } from '~/server/query/stats'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import {
@@ -17,10 +17,10 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestAmountsByInstructingOrganizationQuery(user, input)
+  return await getHelpRequestAmountsByInstructorOrganizationQuery(user, input)
 }
 
-export const getHelpRequestAmountsByInstructingOrganizationQ = createQuery({
+export const getHelpRequestAmountsByInstructorOrganizationQ = createQuery({
   inputValidation: statFilterSchema,
   securityCheck,
   handler

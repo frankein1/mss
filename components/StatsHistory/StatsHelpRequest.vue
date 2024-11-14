@@ -139,12 +139,12 @@
 
         <StatsCard
           class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountByInstructingOrganization.id"
+          :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
           :card-name="
-            helpRequestCardsConfig.amountByInstructingOrganization.name
+            helpRequestCardsConfig.amountByInstructorOrganization.name
           "
         >
-          <StatsHelpRequestAmountsByInstructingOrganization :filters />
+          <StatsHelpRequestAmountsByInstructorOrganization :filters />
         </StatsCard>
       </div>
     </template>
@@ -258,8 +258,8 @@
           name: 'Aides financières'
         }
       }),
-      amountByInstructingOrganization: {
-        id: 'stats-helprequest-amount-by-instructing-organization',
+      amountByInstructorOrganization: {
+        id: 'stats-helprequest-amount-by-instructor-organization',
         name: 'Répartition des montants accordés par organisme instructeur'
       }
     }
