@@ -9,6 +9,7 @@ type StatBase = {
 export type StatList = StatBase & {
   color?: string
   count: number
+  subCount?: number
   emphasis?: boolean
 }
 
