@@ -8,16 +8,13 @@
       </h3>
     </div>
     <AtomDropdown
+      v-if="menus.length > 0"
       label="Exporter les statistiques"
       icon="fr-icon-download-fill"
       :menus="menus"
       class="stats-dropdown"
       dropdown-btn-class="fr-btn--tertiary-no-outline"
       align-right
-    />
-    <StatsExportAlert
-      v-if="!alertClose"
-      @close-alert="alertClose = true"
     />
   </div>
 </template>
@@ -27,8 +24,6 @@
   defineProps<{
     menus: Menu[]
   }>()
-
-  const alertClose = ref<boolean>(true)
 </script>
 
 <style lang="scss" scoped>
