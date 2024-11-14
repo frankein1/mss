@@ -8,12 +8,18 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
   />
+  <template v-else-if="subjectsStats.length">
+    <p class="fr-text--xs text--muted">
+      Pourcentage calculé sur le nombre total de synthèses d’entretien. Les
+      synthèses d'entretiens pouvant avoir plusieurs accompagnements associés,
+      le total des pourcentages peut être supérieur à 100&thinsp;%.
+    </p>
 
-  <StatsList
-    v-if="subjectsStats.length"
-    :total-count="totalCount"
-    :stats="subjectsStats"
-  />
+    <StatsList
+      :total-count="totalCount"
+      :stats="subjectsStats"
+    />
+  </template>
   <p v-else>
     Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
     pour voir apparaître les statistiques de la répartition des objets

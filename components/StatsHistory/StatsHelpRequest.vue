@@ -62,13 +62,12 @@
         </StatsCard>
 
         <StatsCard
-          v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
-          class="ffr-col-12 fr-col-md-6"
+          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.subjects.id"
           :card-name="helpRequestCardsConfig.subjects.name"
         >
           <StatsHelpRequestSubject
-            :total-count="financialHelpRequestCount + otherHelpRequestCount"
+            :total-count="helpRequestCount"
             :filters="filters"
           />
         </StatsCard>
@@ -84,7 +83,6 @@
           />
         </StatsCard>
 
-        <!-- ROW -->
         <StatsCard
           v-if="application.module.ministere"
           class="fr-col-12 fr-col-md-6"
@@ -107,7 +105,6 @@
             :filters="filters"
         /></StatsCard>
 
-        <!-- ROW -->
         <StatsCard
           v-if="
             !filters.helpRequestSubject ||
@@ -175,14 +172,6 @@
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests.total || 0
-  )
-
-  const financialHelpRequestCount = computed(
-    () => historyCounts.value?.helpRequests.Financial || 0
-  )
-
-  const otherHelpRequestCount = computed(
-    () => historyCounts.value?.helpRequests.Other || 0
   )
 
   const helpRequestCountLabel = computed(

@@ -7,7 +7,6 @@ import {
   getHelpRequestCountQuery,
   getHelpRequestFinancialStatsQuery,
   getHelpRequestSubjectsStatsQuery,
-  getHelpRequestInstructorOrganizationStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
   getHelpRequestStatusStatsQuery
@@ -58,7 +57,7 @@ const handler = async ({
     subjectsData.reduce((row: RowType, { _count, id }) => {
       if (_count.socialSupports > 0) {
         row[id] =
-          `${getPercentage(_count.socialSupports, helpRequestCount.Financial + helpRequestCount.Other)}%`
+          `${getPercentage(_count.socialSupports, helpRequestCount.total)}%`
       }
       return row
     }, {})
@@ -80,8 +79,8 @@ const handler = async ({
       Percent: ''
     },
     {
-      subject: `${helpRequestCount.total} entretiens menés`,
-      Number: '',
+      subject: `TOTAL`,
+      Number: `${helpRequestCount.total}`,
       Percent: ''
     }
   )
@@ -89,6 +88,29 @@ const handler = async ({
     name: "Objet d'accompagnement",
     columns: getTransposedColumns('subject', "Objet d'accompagnement"),
     rows: transposedSubjectRows
+  })
+
+  // Status
+  const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
+    user,
+    input
+  )
+  const helpRequestStatusColumns = getColumnsFromLabels(
+    socialSupportStatusKeys.byKey
+  )
+  const helpRequestStatusRows = getRowsFromData(
+    helpRequestStatusData,
+    'status',
+    helpRequestCount.total
+  )
+  exportData.push({
+    name: 'Statuts',
+    columns: getTransposedColumns('status', 'Statuts'),
+    rows: transposeRows(
+      helpRequestStatusColumns,
+      helpRequestStatusRows,
+      'status'
+    )
   })
 
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {
@@ -117,29 +139,6 @@ const handler = async ({
       )
     })
   }
-
-  // Status
-  const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
-    user,
-    input
-  )
-  const helpRequestStatusColumns = getColumnsFromLabels(
-    socialSupportStatusKeys.byKey
-  )
-  const helpRequestStatusRows = getRowsFromData(
-    helpRequestStatusData,
-    'status',
-    helpRequestCount.total
-  )
-  exportData.push({
-    name: 'Statuts',
-    columns: getTransposedColumns('status', 'Statuts'),
-    rows: transposeRows(
-      helpRequestStatusColumns,
-      helpRequestStatusRows,
-      'status'
-    )
-  })
 
   // Help request prescribing organizations
   const helpRequestPrescribingOrganizationData =
