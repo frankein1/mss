@@ -33,6 +33,10 @@
         >
       </template>
     </StatsHeader>
+    <StatsExportAlert
+      v-if="!alertClose"
+      @close-alert="alertClose = true"
+    />
 
     <AtomAlert
       v-if="error"
@@ -130,7 +134,7 @@
   import { Options } from '~/utils/options'
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
-  import { exportStats, saveAsPngs } from '~/utils/stats/exportStats'
+  import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -186,10 +190,6 @@
       id: 'stats-followup-medium',
       name: "Types d'entretien"
     },
-    ministre: {
-      id: 'stats-followup-ministre',
-      name: 'Ministres'
-    },
     status: {
       id: 'stats-followup-status',
       name: 'Statuts'
@@ -201,24 +201,32 @@
     prescribingOrganizations: {
       id: 'stats-followup-prescribing-organizations',
       name: 'Organismes prescripteurs'
-    }
+    },
+    ...(application.value.module.ministere && {
+      ministre: {
+        id: 'stats-followup-ministre',
+        name: 'Ministres'
+      }
+    })
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
     // TODO: revamp dropdown menu with new design + use <VIcon />
-    const menus: Menu[] = [
-      {
-        label: 'En images (.png)',
+    const menus: Menu[] = []
+
+    if (followupCount.value != 0) {
+      menus.push({
+        label: 'En images (.zip)',
         callback: async () => {
           alertClose.value = false
           setTimeout(() => {
-            handleSaveAsPngs()
-          }, 1000)
+            zipAndDownloadImages(followupCardsConfig, buttonFilter, closeAlert)
+          }, 200)
         }
-      }
-    ]
+      })
+    }
 
-    if (application.value.export.stats) {
+    if (followupCount.value != 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
         callback: () => handleExportExcel()
@@ -244,8 +252,5 @@
   }
   const closeAlert = () => {
     alertClose.value = true
-  }
-  const handleSaveAsPngs = () => {
-    saveAsPngs(followupCardsConfig, buttonFilter, closeAlert)
   }
 </script>

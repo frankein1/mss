@@ -24,6 +24,10 @@
         {{ helpRequestCountLabel }}
       </template>
     </StatsHeader>
+    <StatsExportAlert
+      v-if="!alertClose"
+      @close-alert="alertClose = true"
+    />
 
     <!-- Alert + Loader -->
     <AtomAlert
@@ -141,7 +145,7 @@
   import { Options } from '~/utils/options'
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
-  import { exportStats, saveAsPngs } from '~/utils/stats/exportStats'
+  import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -183,52 +187,71 @@
       }`
   )
 
-  const helpRequestCardsConfig: StatsCardConfig = {
-    instructionType: {
-      id: 'stats-helprequest-instruction-type',
-      name: "Thématique d'instruction"
-    },
-    subjects: {
-      id: 'stats-helprequest-subjects',
-      name: "Objets d'accompagnement"
-    },
-    status: {
-      id: 'stats-helprequest-status',
-      name: 'Statuts'
-    },
-    ministres: {
-      id: 'stats-helprequest-ministres',
-      name: 'Ministres'
-    },
-    prescribingOrganizations: {
-      id: 'stats-helprequest-prescribing-organization',
-      name: 'Organismes prescripteurs'
-    },
-    financialHelpRequest: {
-      id: 'stats-helprequest-financial-helprequest',
-      name: 'Aides financières'
-    },
-    housingHelpRequest: {
-      id: 'stats-helprequest-housing-helprequest',
-      name: 'Demandes de logement'
+  const helpRequestCardsConfig: ComputedRef<StatsCardConfig> = computed(() => {
+    return {
+      ...(!filters.value.helpRequestSubject && {
+        instructionType: {
+          id: 'stats-helprequest-instruction-type',
+          name: "Thématique d'instruction"
+        }
+      }),
+      ...(filters.value.helpRequestSubject !== FileInstructionType.Housing && {
+        subjects: {
+          id: 'stats-helprequest-subjects',
+          name: "Objets d'accompagnement"
+        }
+      }),
+      ...(!filters.value.socialSupportSubjects &&
+        (!filters.value.helpRequestSubject ||
+          filters.value.helpRequestSubject === FileInstructionType.Housing) && {
+          housingHelpRequest: {
+            id: 'stats-helprequest-housing-helprequest',
+            name: 'Demandes de logement'
+          }
+        }),
+
+      status: {
+        id: 'stats-helprequest-status',
+        name: 'Statuts'
+      },
+      ...(application.value.module.ministere && {
+        ministres: {
+          id: 'stats-helprequest-ministres',
+          name: 'Ministres'
+        }
+      }),
+      prescribingOrganizations: {
+        id: 'stats-helprequest-prescribing-organization',
+        name: 'Organismes prescripteurs'
+      },
+      financialHelpRequest: {
+        id: 'stats-helprequest-financial-helprequest',
+        name: 'Aides financières'
+      }
     }
-  }
+  })
 
   const menus: ComputedRef<Menu[]> = computed(() => {
     // TODO: revamp dropdown menu with new design + use <VIcon />
-    const menus: Menu[] = [
-      {
-        label: 'En images (.png)',
+    const menus: Menu[] = []
+
+    if (helpRequestCount.value !== 0) {
+      menus.push({
+        label: 'En images (.zip)',
         callback: async () => {
           alertClose.value = false
           setTimeout(() => {
-            handleSaveAsPngs()
-          }, 1000)
+            zipAndDownloadImages(
+              helpRequestCardsConfig.value,
+              buttonFilter,
+              closeAlert
+            )
+          }, 200)
         }
-      }
-    ]
+      })
+    }
 
-    if (application.value.export.stats) {
+    if (helpRequestCount.value !== 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
         callback: () => handleExportExcel()
@@ -254,8 +277,5 @@
   }
   const closeAlert = () => {
     alertClose.value = true
-  }
-  const handleSaveAsPngs = () => {
-    saveAsPngs(helpRequestCardsConfig, buttonFilter, closeAlert)
   }
 </script>

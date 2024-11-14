@@ -67,7 +67,11 @@
       alignRight?: boolean
       icon?: string
     }>(),
-    { dropdownBtnClass: '', alignRight: false, icon: undefined }
+    {
+      dropdownBtnClass: '',
+      alignRight: false,
+      icon: undefined
+    }
   )
 
   const MENU_ID = getRandId('dropdown-menu-')
