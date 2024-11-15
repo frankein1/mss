@@ -1,1 +1,15 @@
 npx lint-staged
+
+# talisman
+if ! command -v talisman 2>&1 >/dev/null
+then
+    echo "Secret detection could not be performed because talisman could not be found"
+    echo "Install with the following commands"
+    echo "> mkdir -p \$HOME/.talisman"
+    echo "> INSTALL_LOCATION=\$HOME/.talisman bash -c \"\$(curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/main/install.sh)\""
+    echo "Then add talisman to your path in your shell config file"
+    echo "> export PATH=\"\$HOME/.talisman:\$PATH\""
+    exit 1
+fi
+
+talisman --githook pre-commit
