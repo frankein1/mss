@@ -110,14 +110,14 @@
             :filters="filters"
         /></StatsCard>
 
-        <!-- <StatsCard
+        <StatsCard
           v-if="displayed.financial"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.amountAllocated.id"
           :card-name="helpRequestCardsConfig.amountAllocated.name"
         >
           <StatsHelpRequestAmountsAllocated :filters />
-        </StatsCard> -->
+        </StatsCard>
 
         <StatsCard
           v-if="displayed.financial"
