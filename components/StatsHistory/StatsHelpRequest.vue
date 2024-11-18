@@ -129,6 +129,15 @@
         </StatsCard>
 
         <StatsCard
+          v-if="displayed.financial"
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.amountsBySubject.id"
+          :card-name="helpRequestCardsConfig.amountsBySubject.name"
+        >
+          <StatsHelpRequestAmountsBySubjects :filters="filters" />
+        </StatsCard>
+
+        <StatsCard
           v-if="displayed.housing"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.housingHelpRequest.id"
@@ -246,6 +255,10 @@
         financialHelpRequest: {
           id: 'stats-helprequest-financial-helprequest',
           name: 'Aides financières'
+        },
+        amountsBySubject: {
+          id: 'stats-helprequest-amounts-by-subject',
+          name: 'Répartition des montants accordés par objet d’accompagnement'
         }
       })
     }

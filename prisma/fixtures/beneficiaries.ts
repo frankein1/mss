@@ -45,7 +45,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Táng',
     deathDate: new Date('2017-08-29'),
     gender: 'Female',
-    email: 'jwedderburn7@businesswire.com'
+    email: 'jwedderburn7@businesswire.com',
+    mobility: 'PublicTransport'
   },
   {
     id: '5a055c3b-9e39-493d-bc4d-c59a0de8947d',

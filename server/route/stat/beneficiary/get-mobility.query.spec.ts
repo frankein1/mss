@@ -26,8 +26,9 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 10,
-      'BikeOrEquivalent': 1
+      'Non renseigné': 9,
+      'BikeOrEquivalent': 1,
+      'PublicTransport': 1
     })
   })
 })
