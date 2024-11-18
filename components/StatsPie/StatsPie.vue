@@ -1,8 +1,10 @@
 <template>
   <div>
-    <canvas ref="chart">
-      <p>{{ pieLabel }}</p>
-    </canvas>
+    <div class="pie-container">
+      <canvas ref="chart">
+        <p>{{ pieLabel }}</p>
+      </canvas>
+    </div>
     <StatsList
       :total-count="totalCount"
       :stats="stats"
@@ -50,7 +52,7 @@
 </script>
 
 <style lang="scss" scoped>
-  canvas {
+  .pie-container {
     max-width: 200px;
     max-height: 200px;
     margin: 0 auto;

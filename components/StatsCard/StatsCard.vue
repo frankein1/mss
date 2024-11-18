@@ -82,7 +82,7 @@
         ])
 
         imageCopied.value = true
-        useSnackbar().success("L'image est copiée dans votre presse papier.")
+        useSnackbar().success("L'image est copiée dans votre presse-papier.")
         setTimeout(() => {
           imageCopied.value = false
         }, 2000)
