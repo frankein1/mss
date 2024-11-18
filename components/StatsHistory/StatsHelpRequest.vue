@@ -256,12 +256,12 @@
         financialHelpRequest: {
           id: 'stats-helprequest-financial-helprequest',
           name: 'Aides financières'
+        },
+        amountByInstructorOrganization: {
+          id: 'stats-helprequest-amount-by-instructor-organization',
+          name: 'Répartition des montants accordés par organisme instructeur'
         }
-      }),
-      amountByInstructorOrganization: {
-        id: 'stats-helprequest-amount-by-instructor-organization',
-        name: 'Répartition des montants accordés par organisme instructeur'
-      }
+      })
     }
   })
 
