@@ -201,3 +201,13 @@
     }
   }
 </style>
+
+<style lang="scss">
+  fieldset[disabled] {
+    .fr-radio-rich__img {
+      svg {
+        filter: grayscale(1) opacity(0.5);
+      }
+    }
+  }
+</style>

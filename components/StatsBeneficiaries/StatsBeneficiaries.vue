@@ -13,7 +13,10 @@
 
       <StatsHeader :menus="menus">
         <template #icon>
-          <AtomPictogram path="/pictograms/avatar.svg" />
+          <img
+            src="~/assets/img/avatar.svg"
+            alt="Bénéficiaire"
+          />
         </template>
         <template #title>
           {{ beneficiaryCountLabel }}
