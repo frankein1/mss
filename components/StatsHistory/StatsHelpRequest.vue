@@ -110,14 +110,15 @@
             :filters="filters"
         /></StatsCard>
 
-        <!-- <StatsCard
-          v-if="displayed.financial"
+        <StatsCard
           class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountAllocated.id"
-          :card-name="helpRequestCardsConfig.amountAllocated.name"
+          :card-id="helpRequestCardsConfig.instructors.id"
+          :card-name="helpRequestCardsConfig.instructors.name"
         >
-          <StatsHelpRequestAmountsAllocated :filters />
-        </StatsCard> -->
+          <StatsHelpRequestInstructions
+            :total-count="helpRequestCount"
+            :filters="filters"
+        /></StatsCard>
 
         <StatsCard
           v-if="displayed.financial"
@@ -247,6 +248,10 @@
       prescribingOrganizations: {
         id: 'stats-helprequest-prescribing-organization',
         name: 'Organismes prescripteurs'
+      },
+      instructors: {
+        id: 'stats-helprequest-instructors',
+        name: 'Instructions'
       },
       ...(displayed.value.financial && {
         amountAllocated: {
