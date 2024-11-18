@@ -8,9 +8,10 @@
         <h4 class="fr-h5 card-title-text fr-mb-0">{{ cardName }}</h4>
         <button
           ref="copyButton"
+          type="button"
           class="fr-btn fr-btn--tertiary-no-outline"
           name="Copier l'image"
-          alt="Copier l'image"
+          title="Copier l'image"
           @click="copyToCliboard"
         >
           <svg
@@ -61,6 +62,13 @@
 
   const copyToCliboard = async () => {
     const node = document.getElementById(props.cardId)
+    const expandButton = node?.getElementsByClassName(
+      'btn-unexpanded'
+    )[0] as HTMLElement
+    if (expandButton) {
+      expandButton.click()
+    }
+
     if (node) {
       try {
         const scale = 1
@@ -82,7 +90,7 @@
         ])
 
         imageCopied.value = true
-        useSnackbar().success("L'image est copiée dans votre presse papier.")
+        useSnackbar().success("L'image est copiée dans votre presse-papier.")
         setTimeout(() => {
           imageCopied.value = false
         }, 2000)
