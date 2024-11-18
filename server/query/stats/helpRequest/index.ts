@@ -10,3 +10,4 @@ export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQue
 export { getHelpRequestBeneficiaryNumberQuery } from './getHelpRequestBeneficiaryNumberQuery'
 export { getHelpRequestAmountsByInstructorOrganizationQuery } from './getHelpRequestAmountsByInstructorOrganizationQuery'
 export { getHelpRequestAmountsAllocatedQuery } from './getHelpRequestAmountsAllocatedQuery'
+export { getHelpRequestAmountsBySubjectQuery } from './getHelpRequestAmountsBySubjectQuery'
