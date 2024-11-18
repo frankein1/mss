@@ -211,7 +211,6 @@
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
-    // TODO: revamp dropdown menu with new design + use <VIcon />
     const menus: Menu[] = []
 
     if (followupCount.value != 0) {
@@ -219,8 +218,15 @@
         label: 'En images (.zip)',
         callback: async () => {
           alertClose.value = false
+          const date = new Date()
           setTimeout(() => {
-            zipAndDownloadImages(followupCardsConfig, buttonFilter, closeAlert)
+            zipAndDownloadImages(
+              "Statistiques - Synthèses d'entretiens - " +
+                date.toLocaleDateString(),
+              followupCardsConfig,
+              buttonFilter,
+              closeAlert
+            )
           }, 200)
         }
       })

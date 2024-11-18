@@ -17,6 +17,7 @@ const extractNames = (config: StatsCardConfig) => {
 type Filter = (node: HTMLElement | Node) => boolean
 
 export const zipAndDownloadImages = async (
+  zipname: string,
   statsCardConfig: StatsCardConfig,
   filter: Filter,
   finallyFn: () => void
@@ -36,6 +37,12 @@ export const zipAndDownloadImages = async (
   const zipWriter = new ZipWriter(new BlobWriter('application/zip'))
 
   const promises = nodes.map(async (node, i) => {
+    const expandButton = node?.getElementsByClassName(
+      'btn-unexpanded'
+    )[0] as HTMLElement
+    if (expandButton) {
+      expandButton.click()
+    }
     const blob = await domtoimage.toBlob(node, {
       width: node.clientWidth * scale,
       height: node.clientHeight * scale,
@@ -52,7 +59,7 @@ export const zipAndDownloadImages = async (
     await Promise.all(promises)
     const finalBlob = await zipWriter.close()
     const link = document.createElement('a')
-    link.download = 'images-statistiques.zip'
+    link.download = zipname + '.zip'
     link.href = URL.createObjectURL(finalBlob)
     link.click()
     link.remove()

@@ -91,6 +91,7 @@
         stats.length > STATS_COLLAPSED_LIMIT
       "
       class="fr-btn fr-btn--secondary"
+      :class="expandStats ? 'btn-expanded' : 'btn-unexpanded'"
       :aria-expanded="expandStats"
       :aria-controls="STATS_ID"
       @click="expandStats = !expandStats"

@@ -252,7 +252,6 @@
   })
 
   const menus: ComputedRef<Menu[]> = computed(() => {
-    // TODO: revamp dropdown menu with new design + use <VIcon />
     const menus: Menu[] = []
 
     if (helpRequestCount.value !== 0) {
@@ -260,8 +259,11 @@
         label: 'En images (.zip)',
         callback: async () => {
           alertClose.value = false
+          const date = new Date()
           setTimeout(() => {
             zipAndDownloadImages(
+              'Statistiques - Instructions de dossiers - ' +
+                date.toLocaleDateString(),
               helpRequestCardsConfig.value,
               buttonFilter,
               closeAlert
