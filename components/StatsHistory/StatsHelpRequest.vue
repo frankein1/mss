@@ -134,7 +134,7 @@
           :card-id="helpRequestCardsConfig.amountsBySubject.id"
           :card-name="helpRequestCardsConfig.amountsBySubject.name"
         >
-          <StatsHelpRequestAmountsBySubjects :filters="filters" />
+          <StatsHelpRequestAmountsBySubject :filters="filters" />
         </StatsCard>
 
         <StatsCard

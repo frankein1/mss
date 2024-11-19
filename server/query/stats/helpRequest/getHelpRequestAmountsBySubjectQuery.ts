@@ -9,6 +9,7 @@ import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
+import { SocialSupportStatus } from '@prisma/client'
 
 export async function getHelpRequestAmountsBySubjectQuery(
   user: SecurityRuleGrantee,
@@ -25,9 +26,9 @@ export async function getHelpRequestAmountsBySubjectQuery(
       by: ['subjectId'],
       where: {
         financialSupport: true,
-        allocatedAmount: { gt: 0 },
         fileInstruction: {
           socialSupport: {
+            status: SocialSupportStatus.Accepted,
             ...socialSupport.where
           }
         }
