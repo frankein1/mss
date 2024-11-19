@@ -12,7 +12,7 @@
           class="fr-btn fr-btn--tertiary-no-outline"
           name="Copier l'image"
           title="Copier l'image"
-          @click="copyToCliboard"
+          @click="handleOnCopy"
         >
           <svg
             v-if="imageCopied"
@@ -60,21 +60,40 @@
     return (node as HTMLElement).tagName !== 'BUTTON'
   }
 
-  const copyToCliboard = async () => {
-    const node = document.getElementById(props.cardId)
-    const expandButton = node?.getElementsByClassName(
+  const handleOnCopy = () => {
+    const card = document.getElementById(props.cardId)
+    const expandButton = card?.getElementsByClassName(
       'btn-unexpanded'
     )[0] as HTMLElement
     if (expandButton) {
       expandButton.click()
+      setTimeout(() => {
+        const width = document?.getElementById(props.cardId)?.clientWidth || 100
+        const height =
+          document?.getElementById(props.cardId)?.clientHeight || 100
+        copyToCliboard({ width, height })
+      }, 300)
+    } else {
+      const width = document?.getElementById(props.cardId)?.clientWidth || 100
+      const height = document?.getElementById(props.cardId)?.clientHeight || 100
+      copyToCliboard({ width, height })
     }
+  }
 
+  const copyToCliboard = async ({
+    width,
+    height
+  }: {
+    width: number
+    height: number
+  }) => {
+    const node = document.getElementById(props.cardId)
     if (node) {
       try {
         const scale = 1
         const blob = await domtoimage.toBlob(node, {
-          width: node.clientWidth * scale,
-          height: node.clientHeight * scale,
+          width: width,
+          height: height,
           style: {
             transform: 'scale(' + scale + ')',
             transformOrigin: 'top left'

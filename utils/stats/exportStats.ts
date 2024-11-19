@@ -16,13 +16,34 @@ const extractNames = (config: StatsCardConfig) => {
 
 type Filter = (node: HTMLElement | Node) => boolean
 
+const createBlob = async (
+  node: HTMLElement,
+  size: {
+    width: number
+    height: number
+  },
+  filter: Filter
+) => {
+  const scale = 1
+  const blob = await domtoimage.toBlob(node, {
+    width: size.width * scale,
+    height: size.height * scale,
+    style: {
+      transform: 'scale(' + scale + ')',
+      transformOrigin: 'top left'
+    },
+    quality: 0.9,
+    filter: filter
+  })
+  return blob
+}
+
 export const zipAndDownloadImages = async (
   zipname: string,
   statsCardConfig: StatsCardConfig,
   filter: Filter,
   finallyFn: () => void
 ) => {
-  const scale = 1
   const configIds = extractIds(statsCardConfig)
   const configNames = extractNames(statsCardConfig)
   const nodes = configIds
@@ -42,18 +63,26 @@ export const zipAndDownloadImages = async (
     )[0] as HTMLElement
     if (expandButton) {
       expandButton.click()
+      setTimeout(async () => {
+        const width = node.clientWidth
+        const height = node.clientHeight
+        try {
+          const blob = await createBlob(node, { width, height }, filter)
+          return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
+        } catch (error) {
+          useSnackbar().error("Les images n'ont pas pu être exportées.")
+        }
+      }, 300)
+    } else {
+      const width = node.clientWidth
+      const height = node.clientHeight
+      try {
+        const blob = await createBlob(node, { width, height }, filter)
+        return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
+      } catch (error) {
+        useSnackbar().error("Les images n'ont pas pu être exportées.")
+      }
     }
-    const blob = await domtoimage.toBlob(node, {
-      width: node.clientWidth * scale,
-      height: node.clientHeight * scale,
-      style: {
-        transform: 'scale(' + scale + ')',
-        transformOrigin: 'top left'
-      },
-      quality: 0.9,
-      filter: filter
-    })
-    return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
   })
   try {
     await Promise.all(promises)
