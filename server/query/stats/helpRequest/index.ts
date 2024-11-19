@@ -9,3 +9,4 @@ export { getFileInstructionTypeStatsQuery } from './getFileInstructionTypeStatsQ
 export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQuery'
 export { getHelpRequestBeneficiaryNumberQuery } from './getHelpRequestBeneficiaryNumberQuery'
 export { getHelpRequestAmountsByInstructorOrganizationQuery } from './getHelpRequestAmountsByInstructorOrganizationQuery'
+export { getHelpRequestAmountsAllocatedQuery } from './getHelpRequestAmountsAllocatedQuery'
