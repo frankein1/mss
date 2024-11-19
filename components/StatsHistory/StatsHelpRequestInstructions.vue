@@ -15,18 +15,22 @@
       :display-total="false"
       :big-text="true"
     />
-    <hr />
-    <p class="fr-text--xs text--muted">
-      <span class="fr-text--bold">RÉPARTITION DES INSTRUCTIONS EXTERNES</span>
-      <br />
-      Pourcentage calculé sur le nombre de dossiers instruits en externe.
-    </p>
-    <StatsList
-      :total-count="totalCount"
-      :stats="externalInstructions"
-      :display-total="false"
-      :big-text="true"
-    />
+    <template
+      v-if="fileInstructions.fileInstructions.instructorOrganization.length"
+    >
+      <hr />
+      <p class="fr-text--xs text--muted">
+        <span class="fr-text--bold">RÉPARTITION DES INSTRUCTIONS EXTERNES</span>
+        <br />
+        Pourcentage calculé sur le nombre de dossiers instruits en externe.
+      </p>
+      <StatsList
+        :total-count="totalCount"
+        :stats="externalInstructions"
+        :display-total="false"
+        :big-text="true"
+      />
+    </template>
   </template>
   <p v-else>
     Commencez à créer des instructions de dossier dans les fiches de
