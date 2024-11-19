@@ -10,6 +10,7 @@
   />
   <template v-else-if="amounts">
     <StatsList
+      v-if="count"
       :stats="count"
       :display-total="false"
       :big-text="true"
@@ -52,13 +53,17 @@
     props.filters
   )
 
-  const count = computed(() => [
-    {
-      ...(amounts.value?.count || {}),
-      color: SupportColor.helpRequests,
-      emphasis: true
-    }
-  ])
+  const count = computed(() =>
+    amounts.value
+      ? [
+          {
+            ...amounts.value.count,
+            color: SupportColor.helpRequests,
+            emphasis: true
+          }
+        ]
+      : null
+  )
 
   const stats = computed(() =>
     (amounts.value?.breakdown || []).map(amount => ({
