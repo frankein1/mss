@@ -136,6 +136,16 @@
         >
           <StatsHousingHelpRequests :filters="filters" />
         </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
+          :card-name="
+            helpRequestCardsConfig.amountByInstructorOrganization.name
+          "
+        >
+          <StatsHelpRequestAmountsByInstructorOrganization :filters />
+        </StatsCard>
       </div>
     </template>
   </div>
@@ -246,6 +256,10 @@
         financialHelpRequest: {
           id: 'stats-helprequest-financial-helprequest',
           name: 'Aides financières'
+        },
+        amountByInstructorOrganization: {
+          id: 'stats-helprequest-amount-by-instructor-organization',
+          name: 'Répartition des montants accordés par organisme instructeur'
         }
       })
     }

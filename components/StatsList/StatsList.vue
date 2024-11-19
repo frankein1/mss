@@ -5,13 +5,22 @@
       class="stats-list"
     >
       <li
-        v-for="{ key, label, count, color, picto, emphasis } in displayedStats"
+        v-for="{
+          key,
+          label,
+          count,
+          subCount,
+          color,
+          picto,
+          emphasis
+        } in displayedStats"
         :key="key"
         class="stats-entry"
         :class="{
           'with-bar': statsBar,
           'with-percentage': statsPercentage,
-          'with-color-dot': statsColorDot
+          'with-color-dot': statsColorDot,
+          'with-sub-count': withSubCount
         }"
       >
         <div>
@@ -52,13 +61,34 @@
           class="color-dot"
           :style="{ backgroundColor: color }"
         ></span>
+        <template v-if="subCount">
+          <span
+            class="text--muted fr-text--xs fr-mb-0"
+            :class="{ 'fr-text--bold': emphasis }"
+            >{{ subCountLabel }}</span
+          >
+          <span
+            class="text--muted fr-text--xs fr-mb-0"
+            :class="{ 'fr-h5 fr-mb-0': emphasis }"
+          >
+            {{ toFixed ? subCount.toFixed(toFixed) : subCount
+            }}<template v-if="unit">{{ unit }}</template>
+          </span>
+        </template>
         <StatsBar
           v-if="statsBar"
           :class="{ 'fr-mt-1w': emphasis }"
           :count="count"
-          :total-count="totalCount"
+          :total-count="withSubCount ? subCount || 0 : totalCount"
           :color="color"
         />
+        <span
+          v-if="subCount"
+          class="text--muted fr-text--xs fr-mb-0"
+          :class="{ 'fr-h5 fr-mb-0': emphasis }"
+        >
+          {{ getPercentage(count, subCount) }}%
+        </span>
       </li>
 
       <li
@@ -116,6 +146,8 @@
       statsBar?: boolean
       statsPercentage?: boolean
       statsColorDot?: boolean
+      withSubCount?: boolean
+      subCountLabel?: string
       totalCount?: number
       unit?: string
       toFixed?: number
@@ -127,6 +159,7 @@
       statsBar: false,
       statsPercentage: true,
       statsColorDot: false,
+      subCountLabel: undefined,
       totalCount: 0,
       unit: '',
       toFixed: undefined,
@@ -207,6 +240,36 @@
 
       > :last-child {
         grid-area: bar;
+      }
+    }
+
+    &.with-bar.with-sub-count {
+      --li-bottom: 1rem;
+
+      grid-template-columns: auto max-content;
+      grid-template-areas: 'label count' 'sublabel subcount' 'bar percentage';
+      row-gap: 0.5rem;
+
+      > :nth-child(2) {
+        text-align: end;
+      }
+
+      > :nth-child(3) {
+        grid-area: sublabel;
+      }
+
+      > :nth-child(4) {
+        grid-area: subcount;
+        text-align: end;
+      }
+
+      > :nth-child(5) {
+        grid-area: bar;
+      }
+
+      > :last-child {
+        grid-area: percentage;
+        text-align: end;
       }
     }
   }
