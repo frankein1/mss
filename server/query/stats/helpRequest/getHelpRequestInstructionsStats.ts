@@ -1,8 +1,5 @@
-import {
-  preparePrescribingOrganizationStats,
-  prepareHelpRequestStatFilters
-} from '../helpers'
-import { FileInstructionRepo, SocialSupportRepo } from '~/server/database'
+import { prepareHelpRequestStatFilters } from '../helpers'
+import { FileInstructionRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY, STATS_NULL_LABEL } from '~/utils/constants/stats'
@@ -22,12 +19,15 @@ export async function getHelpRequestInstructionsStats(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  // TODO Change filter
-  const preparedFilters = prepareHelpRequestStatFilters(input)
+  const socialSupport = { where: prepareHelpRequestStatFilters(input) }
 
   const instructions: FileInstructionsResponse =
     await FileInstructionRepo.findMany(user, {
-      // TODO: add where
+      where: {
+        socialSupport: {
+          ...socialSupport.where
+        }
+      },
       select: {
         id: true,
         externalStructure: true,
