@@ -118,7 +118,6 @@
         /></StatsCard>
 
         <StatsCard
-          v-if="application.module.ministere"
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
           :card-id="beneficiariesCardConfig.accomodationMode.id"
           :card-name="beneficiariesCardConfig.accomodationMode.name"
@@ -283,38 +282,27 @@
       id: 'stats-beneficiaries-csp',
       name: 'Catégories socio-professionnelles'
     },
-    // application.module.ministere
+    accomodationMode: {
+      id: 'stats-beneficiaries-accomodation-mode',
+      name: "Modes d'hébergement"
+    },
     ...(application.value.module.ministere && {
       accomodationZone: {
         id: 'stats-beneficiaries-accomodation-zone',
         name: "Zone d'hébergement"
-      }
-    }),
-    ...(application.value.module.ministere && {
-      accomodationMode: {
-        id: 'stats-beneficiaries-accomodation-mode',
-        name: "Modes d'hébergement"
-      }
-    }),
-    ...(application.value.module.ministere && {
+      },
       ministereStructures: {
         id: 'stats-beneficiaries-ministere-structures',
         name: 'Structures de rattachement'
-      }
-    }),
-    ...(application.value.module.ministere && {
+      },
       ministereDepartementServices: {
         id: 'stats-beneficiaries-departement-services',
         name: "Départements ou services de l'administration centrale"
-      }
-    }),
-    ...(application.value.module.ministere && {
+      },
       ministereCategorie: {
         id: 'stats-beneficiaries-categories',
         name: 'Catégories'
-      }
-    }),
-    ...(application.value.module.ministere && {
+      },
       ministereInterpellation: {
         id: 'stats-beneficiaries-interpellation',
         name: 'Bénéficiaires ayant interpellé chaque ministre'

@@ -32,7 +32,8 @@ export const fixturesBeneficiaries = [
     department: "Côte-d'Or",
     region: 'Bourgogne-Franche-Comté',
     mobility: 'BikeOrEquivalent',
-    socioProfessionalCategory: 'Employed'
+    socioProfessionalCategory: 'Employed',
+    accommodationMode: 'PrivateRenting'
   },
   {
     id: '31152daf-0fdb-4340-aaf1-cbdab1aa1f1a',
@@ -57,7 +58,8 @@ export const fixturesBeneficiaries = [
     birthName: 'BLANKETT',
     firstName: 'Gisèle',
     birthDate: new Date('1987-08-21'),
-    email: 'cblankett8@histats.com'
+    email: 'cblankett8@histats.com',
+    accommodationMode: 'ThirdPerson'
   },
   {
     id: 'e7b0dbe9-9173-47fb-b953-0468b0e50788',
