@@ -19,7 +19,6 @@
       :stats-percentage="false"
       sub-count-label="Montant Demandé"
       unit="€"
-      :display-total="false"
       :not-filled-route
     />
   </template>
