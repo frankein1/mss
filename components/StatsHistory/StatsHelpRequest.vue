@@ -138,6 +138,7 @@
         </StatsCard>
 
         <StatsCard
+          v-if="displayed.financial"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
           :card-name="
