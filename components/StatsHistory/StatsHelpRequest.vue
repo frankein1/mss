@@ -112,15 +112,6 @@
         </StatsCard>
 
         <StatsCard
-          v-if="displayed.financial"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountAllocated.id"
-          :card-name="helpRequestCardsConfig.amountAllocated.name"
-        >
-          <StatsHelpRequestAmountsAllocated :filters />
-        </StatsCard>
-
-        <StatsCard
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.instructions.id"
           :card-name="helpRequestCardsConfig.instructions.name"
@@ -129,6 +120,15 @@
             :total-count="helpRequestCount"
             :filters="filters"
           />
+        </StatsCard>
+
+        <StatsCard
+          v-if="displayed.financial"
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.amountAllocated.id"
+          :card-name="helpRequestCardsConfig.amountAllocated.name"
+        >
+          <StatsHelpRequestAmountsAllocated :filters />
         </StatsCard>
 
         <StatsCard
