@@ -35,7 +35,8 @@ export async function getHelpRequestAmountsBySubjectQuery(
       },
       _sum: {
         allocatedAmount: true
-      }
+      },
+      orderBy: { _sum: { allocatedAmount: 'desc' } }
     }),
     SocialSupportSubjectRepo.findMany(user, {
       select: { id: true, name: true }
