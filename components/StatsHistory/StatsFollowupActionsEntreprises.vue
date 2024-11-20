@@ -12,7 +12,7 @@
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
       synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme des
-      pourcentages peut être supérieure à 100&thinsp;%.
+      pourcentages peut être supérieure à 100&nbsp;%.
     </p>
     <StatsList
       :total-count="totalCount"

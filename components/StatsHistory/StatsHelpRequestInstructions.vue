@@ -27,11 +27,11 @@
       <StatsList
         :total-count="totalCount"
         :stats="externalInstructions"
-        :display-total="false"
+        :display-total="true"
         :big-text="true"
         :not-filled-route="
           routes.file.AppHistory.path({
-            notFilled: FilterFileInstructionNotFilled.PrescribingOrganization,
+            notFilled: FilterFileInstructionNotFilled.InstructorOrganization,
             tab: HistoryTab.FileInstructions
           })
         "

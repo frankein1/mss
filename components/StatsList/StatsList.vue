@@ -40,40 +40,42 @@
             >{{ label }}</span
           >
         </div>
-        <span
+        <div
           class="fr-text--bold"
           :class="{ 'fr-h5 fr-mb-0': emphasis }"
           :style="{ color: !statsPercentage ? color : undefined }"
         >
           {{ toFixed ? count.toFixed(toFixed) : count
           }}<template v-if="unit">{{ unit }}</template>
-        </span>
-        <span
+        </div>
+        <div
           v-if="statsPercentage"
           :style="{
             color: !statsColorDot ? color : undefined
           }"
         >
           {{ getPercentage(count, totalCount) }}%
-        </span>
-        <span
+        </div>
+        <div
           v-if="statsColorDot"
           class="color-dot"
           :style="{ backgroundColor: color }"
-        ></span>
+        ></div>
+
         <template v-if="withSubCount">
-          <span
+          <div
             class="text--muted fr-text--xs fr-mb-0"
             :class="{ 'fr-text--bold': emphasis }"
-            >{{ subCountLabel }}</span
           >
-          <span
+            {{ subCountLabel }}
+          </div>
+          <div
             class="text--muted fr-text--xs fr-mb-0"
             :class="{ 'fr-h5 fr-mb-0': emphasis }"
           >
             {{ toFixed ? (subCount || 0).toFixed(toFixed) : subCount
             }}<template v-if="unit">{{ unit }}</template>
-          </span>
+          </div>
         </template>
         <StatsBar
           v-if="statsBar"
@@ -228,6 +230,10 @@
     &.with-percentage {
       grid-template-columns: auto max-content max-content;
       grid-template-areas: 'label count percentage';
+
+      &.with-bar {
+        grid-template-areas: 'label count percentage' 'bar bar bar';
+      }
     }
 
     &.with-percentage.with-color-dot {
@@ -236,7 +242,7 @@
     }
 
     &.with-bar {
-      grid-template-areas: 'label count percentage' 'bar bar bar';
+      grid-template-areas: 'label count' 'bar bar';
 
       > :last-child {
         grid-area: bar;
