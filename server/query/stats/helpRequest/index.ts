@@ -4,7 +4,6 @@ export { getHelpRequestMinistreStatsQuery } from './getHelpRequestMinistreStatsQ
 export { getHelpRequestStatusStatsQuery } from './getHelpRequestStatusStatsQuery'
 export { getHelpRequestPrescribingOrganizationStatsQuery } from './getHelpRequestPrescribingOrganizationStatsQuery'
 export { getHelpRequestInstructorOrganizationStatsQuery } from './getHelpRequestInstructorOrganizationStatsQuery'
-export { getHelpRequestFinancialStatsQuery } from './getHelpRequestFinancialStatsQuery'
 export { getFileInstructionTypeStatsQuery } from './getFileInstructionTypeStatsQuery'
 export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQuery'
 export { getHelpRequestBeneficiaryNumberQuery } from './getHelpRequestBeneficiaryNumberQuery'

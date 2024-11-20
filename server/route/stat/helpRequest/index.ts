@@ -1,4 +1,3 @@
-export * from './get-financial-help-requests.query'
 export * from './get-ministre.query'
 export * from './get-prescribing-organization.query'
 export * from './get-status.query'
