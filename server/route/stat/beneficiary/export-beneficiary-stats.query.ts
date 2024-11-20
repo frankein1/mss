@@ -26,7 +26,8 @@ import {
   getCSPStatsQuery,
   getMinistereStructureStatsQuery,
   getMinistereDepartementServiceAcStatsQuery,
-  getMinistereCategorieStatsQuery
+  getMinistereCategorieStatsQuery,
+  getDepartmentStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -105,6 +106,23 @@ const handler = async ({
     name: 'Villes',
     columns: getTransposedColumns('city', 'Villes'),
     rows: transposeRows(cityColumns, cityRows, 'city')
+  })
+
+  // Departments
+  const departmentData = await getDepartmentStatsQuery(user, input)
+  const departmentColumns = departmentData.map(({ department }) => ({
+    key: department || STATS_NULL_KEY,
+    header: department || STATS_NULL_LABEL
+  }))
+  const departmentRows = getRowsFromData(
+    departmentData,
+    'department',
+    beneficiaryCount
+  )
+  exportData.push({
+    name: 'Départements',
+    columns: getTransposedColumns('department', 'Départements'),
+    rows: transposeRows(departmentColumns, departmentRows, 'department')
   })
 
   // Regions
