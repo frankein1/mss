@@ -141,15 +141,6 @@
         </StatsCard>
 
         <StatsCard
-          v-if="displayed.housing"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.housingHelpRequest.id"
-          :card-name="helpRequestCardsConfig.housingHelpRequest.name"
-        >
-          <StatsHousingHelpRequests :filters="filters" />
-        </StatsCard>
-
-        <StatsCard
           v-if="displayed.financial"
           class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
@@ -158,6 +149,15 @@
           "
         >
           <StatsHelpRequestAmountsByInstructorOrganization :filters />
+        </StatsCard>
+
+        <StatsCard
+          v-if="displayed.housing"
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.housingHelpRequest.id"
+          :card-name="helpRequestCardsConfig.housingHelpRequest.name"
+        >
+          <StatsHousingHelpRequests :filters="filters" />
         </StatsCard>
       </div>
     </template>
