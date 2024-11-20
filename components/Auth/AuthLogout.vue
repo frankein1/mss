@@ -40,7 +40,7 @@
   }>()
 
   const auth = useAuth()
-  const { provider, isProConnect } = useAuthProvider()
+  const { provider } = useAuthProvider()
 
   const {
     public: {
@@ -48,9 +48,7 @@
     }
   } = useRuntimeConfig()
 
-  const url = isProConnect.value
-    ? apiRoutes.proConnect.ApiLogout.path()
-    : apiRoutes.inclusionConnect.ApiLogout.path()
+  const url = apiRoutes.proConnect.ApiLogout.path()
 
   const { data, pending, error } = await useFetch<{
     url: string | null

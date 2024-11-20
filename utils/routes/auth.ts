@@ -21,14 +21,14 @@ export const routes = {
   }
 } as const
 
-export const apiInclusionConnectRoutes = {
-  ApiLogout: {
-    path: () => '/api/keycloak/logout'
-  },
-  ApiSsoCallback: {
-    path: () => '/api/keycloak/callback'
-  }
-} as const
+// export const apiInclusionConnectRoutes = {
+//   ApiLogout: {
+//     path: () => '/api/keycloak/logout'
+//   },
+//   ApiSsoCallback: {
+//     path: () => '/api/keycloak/callback'
+//   }
+// } as const
 
 export const apiProConnectRoutes = {
   ApiSignIn: {
