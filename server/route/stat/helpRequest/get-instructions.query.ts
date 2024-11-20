@@ -1,11 +1,11 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { getHelpRequestInstructorOrganizationStatsQuery } from '~/server/query/stats'
 import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
+import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats
@@ -17,10 +17,10 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestInstructorOrganizationStatsQuery(user, input)
+  return await getHelpRequestInstructionsStats(user, input)
 }
 
-export const getInstructorOrganizationStatsQ = createQuery({
+export const getHelpRequestInstructionsStatsQ = createQuery({
   inputValidation: statFilterSchema,
   securityCheck,
   handler

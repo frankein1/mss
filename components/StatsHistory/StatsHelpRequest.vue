@@ -108,7 +108,19 @@
           <StatsHelpRequestPrescribingOrganizations
             :total-count="helpRequestCount"
             :filters="filters"
-        /></StatsCard>
+          />
+        </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.instructions.id"
+          :card-name="helpRequestCardsConfig.instructions.name"
+        >
+          <StatsHelpRequestInstructions
+            :total-count="helpRequestCount"
+            :filters="filters"
+          />
+        </StatsCard>
 
         <StatsCard
           v-if="displayed.financial"
@@ -205,8 +217,8 @@
     () =>
       `${helpRequestCount.value} ${
         helpRequestCount.value > 1
-          ? 'Instructions de dossier'
-          : 'Instruction de dossier'
+          ? 'Instructions de dossiers'
+          : 'Instruction de dossiers'
       }`
   )
 
@@ -257,6 +269,10 @@
       prescribingOrganizations: {
         id: 'stats-helprequest-prescribing-organization',
         name: 'Organismes prescripteurs'
+      },
+      instructions: {
+        id: 'stats-helprequest-instructions',
+        name: 'Instructions'
       },
       ...(displayed.value.financial && {
         amountAllocated: {

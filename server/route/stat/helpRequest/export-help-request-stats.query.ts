@@ -25,6 +25,7 @@ import {
   getTransposedColumns,
   transposeRows
 } from '~/utils/export/transposeRows'
+import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -166,6 +167,71 @@ const handler = async ({
       helpRequestPrescribingOrganizationRows,
       'prescribingOrganizationId'
     )
+  })
+
+  // Instructions
+  const instructions = await getHelpRequestInstructionsStats(user, input)
+
+  const instructionColumns = [
+    {
+      key: 'subject',
+      header: ''
+    },
+    {
+      key: 'Number',
+      header: 'Nombre'
+    },
+    {
+      key: 'Percent',
+      header: 'Pourcentage'
+    }
+  ]
+
+  const instructionsDistributionRows = [
+    {
+      subject: 'Instructions en externe',
+      Number: instructions.fileInstructions.externalStructure._count.toString(),
+      Percent: `${getPercentage(instructions.fileInstructions.externalStructure._count, instructions.fileInstructions._count)}%`
+    },
+    {
+      subject: 'Instructions en interne',
+      Number: instructions.fileInstructions.internalStructure._count.toString(),
+      Percent: `${getPercentage(instructions.fileInstructions.internalStructure._count, instructions.fileInstructions._count)}%`
+    }
+  ]
+
+  const separationRows = [
+    {
+      subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
+      Number: '',
+      Percent: ''
+    },
+    {
+      subject:
+        'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
+      Number: '',
+      Percent: ''
+    }
+  ]
+
+  const externalInstructionsRow = Object.values(
+    instructions.fileInstructions.instructorOrganization
+  ).map(item => {
+    return {
+      subject: item.name,
+      Number: item._count.toString(),
+      Percent: `${getPercentage(item._count, instructions.fileInstructions._count)}%`
+    }
+  })
+
+  exportData.push({
+    name: 'Instructions',
+    columns: instructionColumns,
+    rows: [
+      ...instructionsDistributionRows,
+      ...separationRows,
+      ...externalInstructionsRow
+    ]
   })
 
   // Financial help request
