@@ -6,7 +6,7 @@
   <AtomAlert
     v-else-if="error"
     :alert-type="AlertType.Error"
-    :message="`Les statistiques de la répartition des montants accordés par organisme instructeur n'ont pas pu être chargées.`"
+    :message="`Les statistiques de la répartition des montants accordés par objet d'accompagnement n'ont pas pu être chargées.`"
   />
   <template v-else-if="stats && stats.length">
     <StatsList
