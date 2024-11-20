@@ -134,28 +134,10 @@
         <StatsCard
           v-if="displayed.financial"
           class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.financialHelpRequest.id"
-          :card-name="helpRequestCardsConfig.financialHelpRequest.name"
-        >
-          <StatsFinancialHelpRequests :filters="filters" />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.financial"
-          class="fr-col-12 fr-col-md-6"
           :card-id="helpRequestCardsConfig.amountsBySubject.id"
           :card-name="helpRequestCardsConfig.amountsBySubject.name"
         >
           <StatsHelpRequestAmountsBySubject :filters="filters" />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.housing"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.housingHelpRequest.id"
-          :card-name="helpRequestCardsConfig.housingHelpRequest.name"
-        >
-          <StatsHousingHelpRequests :filters="filters" />
         </StatsCard>
 
         <StatsCard
@@ -167,6 +149,15 @@
           "
         >
           <StatsHelpRequestAmountsByInstructorOrganization :filters />
+        </StatsCard>
+
+        <StatsCard
+          v-if="displayed.housing"
+          class="fr-col-12 fr-col-md-6"
+          :card-id="helpRequestCardsConfig.housingHelpRequest.id"
+          :card-name="helpRequestCardsConfig.housingHelpRequest.name"
+        >
+          <StatsHousingHelpRequests :filters="filters" />
         </StatsCard>
       </div>
     </template>
@@ -278,10 +269,6 @@
         amountAllocated: {
           id: 'stats-helprequest-amount-allocated',
           name: 'Montants des aides délivrées'
-        },
-        financialHelpRequest: {
-          id: 'stats-helprequest-financial-helprequest',
-          name: 'Aides financières'
         },
         amountByInstructorOrganization: {
           id: 'stats-helprequest-amount-by-instructor-organization',

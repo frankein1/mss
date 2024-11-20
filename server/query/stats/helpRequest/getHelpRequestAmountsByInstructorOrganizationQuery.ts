@@ -36,7 +36,8 @@ export async function getHelpRequestAmountsByInstructorOrganizationQuery(
       _sum: {
         allocatedAmount: true,
         askedAmount: true
-      }
+      },
+      orderBy: { _sum: { allocatedAmount: 'desc' } }
     }),
     PartnerOrganizationRepo.findMany(user, { select: { id: true, name: true } })
   ])

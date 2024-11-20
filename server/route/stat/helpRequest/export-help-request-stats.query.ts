@@ -9,12 +9,14 @@ import {
 import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
-  getHelpRequestFinancialStatsQuery,
   getHelpRequestSubjectsStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
   getHelpRequestStatusStatsQuery,
-  getFileInstructionTypeStatsQuery
+  getFileInstructionTypeStatsQuery,
+  getHelpRequestAmountsAllocatedQuery,
+  getHelpRequestAmountsByInstructorOrganizationQuery,
+  getHelpRequestAmountsBySubjectQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -274,53 +276,96 @@ const handler = async ({
     ]
   })
 
-  // Financial help request
-  const helpRequestFinancialData = await getHelpRequestFinancialStatsQuery(
+  // Amounts allocated
+  const amountsAllocated = await getHelpRequestAmountsAllocatedQuery(
     user,
     input
   )
-  const totalInstruction =
-    helpRequestFinancialData.financialHelpRequestCounts.find(
-      item => item.key === 'total'
-    )?.count || 1
 
-  const financialHelpRequestTotalAmount = `${helpRequestFinancialData.financialHelpRequestTotalAmount.toFixed(
-    2
-  )}€`
+  const amountsAllocatedColumns = [
+    { key: 'label', header: '' },
+    { key: 'allocated', header: 'Montant délivré' },
+    { key: 'asked', header: 'Montant demandé' },
+    { key: 'percent', header: 'Pourcentage' }
+  ]
 
-  const columns = getTransposedColumns('financial', 'Aide financière')
-
-  const financialRows: RowType[] =
-    helpRequestFinancialData.financialHelpRequestCounts.map(item => {
-      return {
-        financial: item.label,
-        Number: item.count.toString(),
-        Percent: `${getPercentage(item.count, totalInstruction)}%`
-      }
-    })
-
-  financialRows.push(
-    {
-      financial: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      financial: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      financial: `Montant total des aides délivrées par la structure ${financialHelpRequestTotalAmount}`,
-      Number: '',
-      Percent: ''
-    }
-  )
+  const amountsAllocatedRows = amountsAllocated.breakdown.map(breakdown => ({
+    label: breakdown.label,
+    allocated: breakdown.count.toString(),
+    asked: breakdown.subCount.toString(),
+    percent: `${getPercentage(breakdown.count, breakdown.subCount)}%`
+  }))
 
   exportData.push({
-    name: 'Aides financières',
-    columns: columns,
-    rows: financialRows
+    name: 'Montants des aides délivrées',
+    columns: amountsAllocatedColumns,
+    rows: amountsAllocatedRows
+  })
+
+  // Amounts allocated by instructor organization
+  const amountsByInstructorOrganization =
+    await getHelpRequestAmountsByInstructorOrganizationQuery(user, input)
+
+  const amountsByInstructorColumns = [
+    { key: 'label', header: 'Organisme instructeur' },
+    { key: 'allocated', header: 'Montant délivré' },
+    { key: 'asked', header: 'Montant demandé' },
+    { key: 'percent', header: 'Pourcentage' }
+  ]
+
+  const amountsByInstructorOrganizationRows =
+    amountsByInstructorOrganization.map(amount => ({
+      label: amount.label,
+      allocated: amount.count.toString(),
+      asked: amount.subCount.toString(),
+      percent: `${getPercentage(amount.count, amount.subCount)}%`
+    }))
+  amountsByInstructorOrganizationRows.push({
+    label: 'TOTAL',
+    allocated: amountsByInstructorOrganization
+      .map(amount => amount.count)
+      .reduce((acc, cur) => acc + cur, 0)
+      .toString(),
+    asked: amountsByInstructorOrganization
+      .map(amount => amount.subCount)
+      .reduce((acc, cur) => acc + cur, 0)
+      .toString(),
+    percent: '100%'
+  })
+
+  exportData.push({
+    name: 'Montants organisme instructeur',
+    columns: amountsByInstructorColumns,
+    rows: amountsByInstructorOrganizationRows
+  })
+
+  // Amounts allocated by social support subject
+  const amountsBySubject = await getHelpRequestAmountsBySubjectQuery(
+    user,
+    input
+  )
+
+  const amountsBySubjectColumns = [
+    { key: 'label', header: "Objet d'accompagnement" },
+    { key: 'allocated', header: 'Montant délivré' }
+  ]
+
+  const amountsBySubjectRows = amountsBySubject.map(amount => ({
+    label: amount.label,
+    allocated: amount.count.toString()
+  }))
+  amountsBySubjectRows.push({
+    label: 'TOTAL',
+    allocated: amountsBySubject
+      .map(amount => amount.count)
+      .reduce((acc, cur) => acc + cur, 0)
+      .toString()
+  })
+
+  exportData.push({
+    name: "Montants objet d'accompagnement",
+    columns: amountsBySubjectColumns,
+    rows: amountsBySubjectRows
   })
 
   return await createExport(user.id, exportData)

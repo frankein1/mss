@@ -61,12 +61,12 @@ export async function getHelpRequestAmountsAllocatedQuery(
 
   const count = {
     key: 'count',
-    label: 'Nombre de demandes d’aides financières',
+    label: 'Nombre de demandes d’aides financières acceptées',
     count: acceptedFinancialRequestCount
   }
   const total = {
     key: 'total',
-    label: 'Aides délivrées au total',
+    label: 'Total des aides délivrées',
     count: prismaDecimalToNumber(totalAcceptedAmount._sum.allocatedAmount) || 0,
     subCount: prismaDecimalToNumber(totalAcceptedAmount._sum.askedAmount) || 0
   }
