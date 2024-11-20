@@ -217,8 +217,8 @@
     () =>
       `${helpRequestCount.value} ${
         helpRequestCount.value > 1
-          ? 'Instructions de dossier'
-          : 'Instruction de dossier'
+          ? 'Instructions de dossiers'
+          : 'Instruction de dossiers'
       }`
   )
 
