@@ -18,8 +18,6 @@
     layout: 'landing',
     middleware: 'skip-auth'
   })
-
-  useBrevoChatbot()
 </script>
 
 <style lang="scss" scoped>
