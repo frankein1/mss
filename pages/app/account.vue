@@ -35,9 +35,5 @@
   useHead({ title })
   const trpcClient = useTrpcClient()
 
-  const { isProConnect } = useAuthProvider()
-
-  const data = isProConnect.value
-    ? await trpcClient.config.getEditPasswordUrl.query()
-    : await trpcClient.config.getEditPasswordUrlInclusionConnect.query()
+  const data = await trpcClient.config.getEditPasswordUrl.query()
 </script>
