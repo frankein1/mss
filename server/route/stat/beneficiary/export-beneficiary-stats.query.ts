@@ -26,7 +26,9 @@ import {
   getCSPStatsQuery,
   getMinistereStructureStatsQuery,
   getMinistereDepartementServiceAcStatsQuery,
-  getMinistereCategorieStatsQuery
+  getMinistereCategorieStatsQuery,
+  getDepartmentStatsQuery,
+  getMinistereInterpellationStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -41,6 +43,7 @@ import {
   getTransposedColumns,
   transposeRows
 } from '~/utils/export/transposeRows'
+import { getPercentage } from '~/utils/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -105,6 +108,23 @@ const handler = async ({
     name: 'Villes',
     columns: getTransposedColumns('city', 'Villes'),
     rows: transposeRows(cityColumns, cityRows, 'city')
+  })
+
+  // Departments
+  const departmentData = await getDepartmentStatsQuery(user, input)
+  const departmentColumns = departmentData.map(({ department }) => ({
+    key: department || STATS_NULL_KEY,
+    header: department || STATS_NULL_LABEL
+  }))
+  const departmentRows = getRowsFromData(
+    departmentData,
+    'department',
+    beneficiaryCount
+  )
+  exportData.push({
+    name: 'Départements',
+    columns: getTransposedColumns('department', 'Départements'),
+    rows: transposeRows(departmentColumns, departmentRows, 'department')
   })
 
   // Regions
@@ -277,6 +297,54 @@ const handler = async ({
         ministereCategorieRows,
         'ministereCategorie'
       )
+    })
+
+    // Minister interpellations
+    const ministerInterpelation = await getMinistereInterpellationStatsQuery(
+      user,
+      input
+    )
+
+    const ministerInterpelationColums = [
+      {
+        key: 'subject',
+        header: ''
+      },
+      {
+        key: 'Number',
+        header: 'Nombre'
+      },
+      {
+        key: 'Percent',
+        header: 'Pourcentage'
+      }
+    ]
+
+    const getMinisterTotalCount = () => {
+      let count = 0
+      ministerInterpelation.forEach(item => {
+        count = count + item._count
+      })
+      return count
+    }
+
+    const ministerTotalCount = getMinisterTotalCount()
+
+    const ministerInterpelationRows = ministerInterpelation.map(item => {
+      return {
+        subject: item.ministre,
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, ministerTotalCount)}%`
+      }
+    })
+
+    exportData.push({
+      // FIXME: ExcelJS 31 characters limit for worksheet names
+      // Cf. https://github.com/exceljs/exceljs/issues/398
+      // name: "Bénéficiaires ayant interpellé chaque ministre",
+      name: 'Interpellations de ministre',
+      columns: ministerInterpelationColums,
+      rows: ministerInterpelationRows
     })
   }
 

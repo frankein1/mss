@@ -1,7 +1,11 @@
 import { StructureType } from '@prisma/client'
 import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
-import { socialSupportStatusKeys, ministerKeys } from '~/client/options'
+import {
+  socialSupportStatusKeys,
+  ministerKeys,
+  fileInstructionTypeKeys
+} from '~/client/options'
 import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
@@ -9,7 +13,8 @@ import {
   getHelpRequestSubjectsStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
-  getHelpRequestStatusStatsQuery
+  getHelpRequestStatusStatsQuery,
+  getFileInstructionTypeStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -40,6 +45,41 @@ const handler = async ({
   const exportData = []
 
   const helpRequestCount = await getHelpRequestCountQuery(user, input)
+
+  // Instruction-type
+  const fileInstructionType = await getFileInstructionTypeStatsQuery(
+    user,
+    input
+  )
+
+  const fileInstructionTypeColums = [
+    {
+      key: 'subject',
+      header: ''
+    },
+    {
+      key: 'Number',
+      header: 'Nombre'
+    },
+    {
+      key: 'Percent',
+      header: 'Pourcentage'
+    }
+  ]
+
+  const ministerInterpelationRows = fileInstructionType.map(item => {
+    return {
+      subject: fileInstructionTypeKeys.byKey[item.subject],
+      Number: item._count.toString(),
+      Percent: `${getPercentage(item._count, helpRequestCount.total)}%`
+    }
+  })
+
+  exportData.push({
+    name: "Thématique d'instruction",
+    columns: fileInstructionTypeColums,
+    rows: ministerInterpelationRows
+  })
 
   // Subject
   const subjectsData = await getHelpRequestSubjectsStatsQuery(user, input)
