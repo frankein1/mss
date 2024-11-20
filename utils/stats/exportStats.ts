@@ -38,6 +38,13 @@ const createBlob = async (
   return blob
 }
 
+const findImageName = (statsCardConfig: StatsCardConfig, node: HTMLElement) => {
+  return (
+    Object.values(statsCardConfig).find(el => el.id === node.id)?.name ||
+    'image'
+  )
+}
+
 export const zipAndDownloadImages = async (
   zipname: string,
   statsCardConfig: StatsCardConfig,
@@ -68,7 +75,10 @@ export const zipAndDownloadImages = async (
         const height = node.clientHeight
         try {
           const blob = await createBlob(node, { width, height }, filter)
-          return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
+          return zipWriter.add(
+            findImageName(statsCardConfig, node) + '.png',
+            new BlobReader(blob)
+          )
         } catch (error) {
           useSnackbar().error("Les images n'ont pas pu être exportées.")
         }
@@ -78,7 +88,10 @@ export const zipAndDownloadImages = async (
       const height = node.clientHeight
       try {
         const blob = await createBlob(node, { width, height }, filter)
-        return zipWriter.add(configNames[i] + '.png', new BlobReader(blob))
+        return zipWriter.add(
+          findImageName(statsCardConfig, node) + '.png',
+          new BlobReader(blob)
+        )
       } catch (error) {
         useSnackbar().error("Les images n'ont pas pu être exportées.")
       }
