@@ -50,6 +50,9 @@ export const statRouter = router({
   getHelpRequestPrescribingOrganizationStats: protectedProcedure
     .input(routes.getHelpRequestPrescribingOrganizationStatsQ.inputValidation)
     .query(routes.getHelpRequestPrescribingOrganizationStatsQ.execute),
+  getHelpRequestAmountsBySubject: protectedProcedure
+    .input(routes.getHelpRequestAmountsBySubjectQ.inputValidation)
+    .query(routes.getHelpRequestAmountsBySubjectQ.execute),
   getHelpRequestStatusStats: protectedProcedure
     .input(routes.getHelpRequestStatusStatsQ.inputValidation)
     .query(routes.getHelpRequestStatusStatsQ.execute),

@@ -61,7 +61,7 @@
           class="color-dot"
           :style="{ backgroundColor: color }"
         ></span>
-        <template v-if="subCount">
+        <template v-if="withSubCount">
           <span
             class="text--muted fr-text--xs fr-mb-0"
             :class="{ 'fr-text--bold': emphasis }"
@@ -71,23 +71,23 @@
             class="text--muted fr-text--xs fr-mb-0"
             :class="{ 'fr-h5 fr-mb-0': emphasis }"
           >
-            {{ toFixed ? subCount.toFixed(toFixed) : subCount
+            {{ toFixed ? (subCount || 0).toFixed(toFixed) : subCount
             }}<template v-if="unit">{{ unit }}</template>
           </span>
         </template>
         <StatsBar
           v-if="statsBar"
           :class="{ 'fr-mt-1w': emphasis }"
-          :count="count"
-          :total-count="withSubCount ? subCount || 0 : totalCount"
+          :count="withSubCount ? Math.min(subCount || count, count) : count"
+          :total-count="withSubCount ? subCount || count : totalCount"
           :color="color"
         />
         <span
-          v-if="subCount"
+          v-if="withSubCount"
           class="text--muted fr-text--xs fr-mb-0"
           :class="{ 'fr-h5 fr-mb-0': emphasis }"
         >
-          {{ getPercentage(count, subCount) }}%
+          {{ getPercentage(count, subCount || 0) }}%
         </span>
       </li>
 
@@ -252,6 +252,7 @@
 
       > :nth-child(2) {
         text-align: end;
+        min-width: 47px;
       }
 
       > :nth-child(3) {
@@ -261,6 +262,7 @@
       > :nth-child(4) {
         grid-area: subcount;
         text-align: end;
+        min-width: 47px;
       }
 
       > :nth-child(5) {

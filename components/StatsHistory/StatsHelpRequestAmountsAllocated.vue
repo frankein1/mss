@@ -6,9 +6,9 @@
   <AtomAlert
     v-else-if="error"
     :alert-type="AlertType.Error"
-    :message="`Les statistiques de la répartition des montants accordés par organisme instructeur n'ont pas pu être chargées.`"
+    :message="`Les statistiques de la répartition des montants accordés n'ont pas pu être chargées.`"
   />
-  <template v-else-if="amounts">
+  <template v-else-if="amounts?.count.count">
     <StatsList
       v-if="count"
       :stats="count"
@@ -30,9 +30,8 @@
     />
   </template>
   <p v-else>
-    Commencez à créer des instructions de dossier dans les fiches de
-    bénéficiaires pour voir apparaître les statistiques du nombre de
-    bénéficiaires concernés.
+    Aucune demande d'aide financière accordée n'a été enregistrée pour le
+    moment.
   </p>
 </template>
 
