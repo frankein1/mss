@@ -12,7 +12,7 @@
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total de synthèses d’entretien. Les
       synthèses d'entretiens pouvant avoir plusieurs accompagnements associés,
-      le total des pourcentages peut être supérieur à 100&thinsp;%.
+      le total des pourcentages peut être supérieur à 100&nbsp;%.
     </p>
 
     <StatsList
