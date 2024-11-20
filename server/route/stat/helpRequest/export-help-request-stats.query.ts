@@ -9,7 +9,6 @@ import {
 import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
-  getHelpRequestFinancialStatsQuery,
   getHelpRequestSubjectsStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
@@ -272,55 +271,6 @@ const handler = async ({
       ...separationRows,
       ...externalInstructionsRow
     ]
-  })
-
-  // Financial help request
-  const helpRequestFinancialData = await getHelpRequestFinancialStatsQuery(
-    user,
-    input
-  )
-  const totalInstruction =
-    helpRequestFinancialData.financialHelpRequestCounts.find(
-      item => item.key === 'total'
-    )?.count || 1
-
-  const financialHelpRequestTotalAmount = `${helpRequestFinancialData.financialHelpRequestTotalAmount.toFixed(
-    2
-  )}€`
-
-  const columns = getTransposedColumns('financial', 'Aide financière')
-
-  const financialRows: RowType[] =
-    helpRequestFinancialData.financialHelpRequestCounts.map(item => {
-      return {
-        financial: item.label,
-        Number: item.count.toString(),
-        Percent: `${getPercentage(item.count, totalInstruction)}%`
-      }
-    })
-
-  financialRows.push(
-    {
-      financial: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      financial: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      financial: `Montant total des aides délivrées par la structure ${financialHelpRequestTotalAmount}`,
-      Number: '',
-      Percent: ''
-    }
-  )
-
-  exportData.push({
-    name: 'Aides financières',
-    columns: columns,
-    rows: financialRows
   })
 
   return await createExport(user.id, exportData)
