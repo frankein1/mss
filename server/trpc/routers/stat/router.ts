@@ -100,15 +100,15 @@ export const statRouter = router({
   getMinistereDepartementServiceAc: protectedProcedure
     .input(routes.getMinistereDepartementServiceAcStatsQ.inputValidation)
     .query(routes.getMinistereDepartementServiceAcStatsQ.execute),
-  getInstructorOrganizationStats: protectedProcedure
-    .input(routes.getInstructorOrganizationStatsQ.inputValidation)
-    .query(routes.getInstructorOrganizationStatsQ.execute),
+  // TODO: Delete if unused
   exportBeneficiaryStats: protectedProcedure
     .input(routes.exportBeneficiaryStatsQuery.inputValidation)
     .query(routes.exportBeneficiaryStatsQuery.execute),
+  // TODO: Delete if unused
   exportHelpRequestStats: protectedProcedure
     .input(routes.exportHelpRequestStatsQuery.inputValidation)
     .query(routes.exportHelpRequestStatsQuery.execute),
+  // TODO: Delete if unused
   exportFollowupStats: protectedProcedure
     .input(routes.exportFollowupStatsQuery.inputValidation)
     .query(routes.exportFollowupStatsQuery.execute),
