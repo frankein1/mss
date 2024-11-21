@@ -46,13 +46,14 @@
     >
       <p v-if="resultsLabel">{{ resultsLabel }}</p>
       <ul
-        v-show="!expanded && hasCollapsedSelectedFilters"
+        v-show="showCollapsedFiltersSummary"
         class="fr-tags-group"
       >
         <li
           v-for="(
             { filterLabel, valueLabel }, name
           ) in collapsedSelectedFilters"
+          v-show="!expanded || name === 'notFilled'"
           :key="name"
         >
           <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
@@ -205,6 +206,19 @@
 
   const hasCollapsedSelectedFilters = computed(
     () => !!Object.keys(collapsedSelectedFilters.value).length
+  )
+
+  const hasNotFilledFilterActive = computed(
+    () => !!collapsedSelectedFilters.value['notFilled']
+  )
+
+  /** Collapsed filters summary is shown if the filters are not is the expanded state
+   *  When the not-filled filter is active its summary is always shown even if the expanded state
+   */
+  const showCollapsedFiltersSummary = computed(
+    () =>
+      (!expanded.value || hasNotFilledFilterActive.value) &&
+      hasCollapsedSelectedFilters.value
   )
 
   const emitableSelectedFilters = computed(() =>
