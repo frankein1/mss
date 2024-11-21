@@ -16,7 +16,8 @@ import {
   getFileInstructionTypeStatsQuery,
   getHelpRequestAmountsAllocatedQuery,
   getHelpRequestAmountsByInstructorOrganizationQuery,
-  getHelpRequestAmountsBySubjectQuery
+  getHelpRequestAmountsBySubjectQuery,
+  getHelpRequestHousingStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -57,7 +58,7 @@ const handler = async ({
   const fileInstructionTypeColums = [
     {
       key: 'subject',
-      header: ''
+      header: "Thématique d'instruction"
     },
     {
       key: 'Number',
@@ -186,29 +187,73 @@ const handler = async ({
   // Help request prescribing organizations
   const helpRequestPrescribingOrganizationData =
     await getHelpRequestPrescribingOrganizationStatsQuery(user, input)
-  const helpRequestPrescribingOrganizationColumns =
-    helpRequestPrescribingOrganizationData.map(
-      ({ prescribingOrganizationId, prescribingOrganization }) => ({
-        key: prescribingOrganizationId,
-        header: prescribingOrganization
-      })
-    )
-  const helpRequestPrescribingOrganizationRows = getRowsFromData(
-    helpRequestPrescribingOrganizationData,
-    'prescribingOrganizationId',
-    helpRequestCount.Financial + helpRequestCount.Other
-  )
+  const prescribingOrganizationColumns = [
+    {
+      key: 'subject',
+      header: 'Organismes prescripteurs'
+    },
+    {
+      key: 'Number',
+      header: 'Nombre'
+    },
+    {
+      key: 'Percent',
+      header: 'Pourcentage'
+    }
+  ]
+
+  const getPrescribingOrganizationTotal = () => {
+    let total = 0
+    let subTotal = 0
+    helpRequestPrescribingOrganizationData.forEach(item => {
+      total = total + item._count
+      if (item.prescribingOrganizationId != 'null') {
+        subTotal = subTotal + item._count
+      }
+    })
+    return { total, subTotal }
+  }
+
+  const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
+  const generalPrescribingOrganization = [
+    {
+      subject: "Dossiers d'instruction avec prescripteur renseigné",
+      Number: prescribingOrganizationTotal.subTotal.toString(),
+      Percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
+    }
+  ]
+  const prescribingOrganizationDivider =
+    helpRequestPrescribingOrganizationData.length > 0
+      ? [
+          {
+            subject: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
+            Number: '',
+            Percent: ''
+          },
+          {
+            subject:
+              'Pourcentage calculé sur le nombre total des instructions de dossiers.',
+            Number: '',
+            Percent: ''
+          }
+        ]
+      : []
+  const prescribingOrganizationRows =
+    helpRequestPrescribingOrganizationData.map(item => {
+      return {
+        subject: 'Organismes prescripteurs',
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
+      }
+    })
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: getTransposedColumns(
-      'prescribingOrganizationId',
-      'Organismes prescripteurs'
-    ),
-    rows: transposeRows(
-      helpRequestPrescribingOrganizationColumns,
-      helpRequestPrescribingOrganizationRows,
-      'prescribingOrganizationId'
-    )
+    columns: prescribingOrganizationColumns,
+    rows: [
+      ...generalPrescribingOrganization,
+      ...prescribingOrganizationDivider,
+      ...prescribingOrganizationRows
+    ]
   })
 
   // Instructions
@@ -217,7 +262,7 @@ const handler = async ({
   const instructionColumns = [
     {
       key: 'subject',
-      header: ''
+      header: 'Instructions'
     },
     {
       key: 'Number',
@@ -242,19 +287,31 @@ const handler = async ({
     }
   ]
 
-  const separationRows = [
-    {
-      subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject:
-        'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
-      Number: '',
-      Percent: ''
-    }
-  ]
+  const separationRows =
+    instructions.fileInstructions.instructorOrganization.length > 0
+      ? [
+          {
+            subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
+            Number: '',
+            Percent: ''
+          },
+          {
+            subject:
+              'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
+            Number: '',
+            Percent: ''
+          }
+        ]
+      : []
+
+  const getExternalTotalCount = () => {
+    let total = 0
+    instructions.fileInstructions.instructorOrganization.forEach(item => {
+      total = total + item._count
+    })
+    return total
+  }
+  const externalTotalCount = getExternalTotalCount()
 
   const externalInstructionsRow = Object.values(
     instructions.fileInstructions.instructorOrganization
@@ -262,7 +319,7 @@ const handler = async ({
     return {
       subject: item.name,
       Number: item._count.toString(),
-      Percent: `${getPercentage(item._count, instructions.fileInstructions._count)}%`
+      Percent: `${getPercentage(item._count, externalTotalCount)}%`
     }
   })
 
@@ -366,6 +423,61 @@ const handler = async ({
     name: "Montants objet d'accompagnement",
     columns: amountsBySubjectColumns,
     rows: amountsBySubjectRows
+  })
+
+  // Housing request
+  const housingRequest = await getHelpRequestHousingStatsQuery(user, input)
+
+  const housingRequestColumns = [
+    { key: 'label', header: 'Demandes de logement' },
+    { key: 'Number', header: 'Nombre' },
+    { key: 'Percent', header: 'Pourcentage' }
+  ]
+
+  const contextValue = (value: boolean | null) => {
+    switch (value) {
+      case true:
+        return '1ère demande'
+      case false:
+        return 'Renouvellement'
+      case null:
+        return 'Non renseigné'
+    }
+  }
+
+  const housingRequestContextRow =
+    housingRequest.housingHelpRequestContextCount.map(item => {
+      return {
+        label: contextValue(item.isFirst),
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+      }
+    })
+
+  const housingRequestContextReasonHeader = [
+    {
+      label: 'Motif des demandes de logement',
+      Number: '',
+      Percent: ''
+    }
+  ]
+  const housingRequestContextReason =
+    housingRequest.housingHelpRequestReasonCount.map(item => {
+      return {
+        label: item.reason ? item.reason : 'Non renseigné',
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+      }
+    })
+
+  exportData.push({
+    name: 'Demandes de logement',
+    columns: housingRequestColumns,
+    rows: [
+      ...housingRequestContextRow,
+      ...housingRequestContextReasonHeader,
+      ...housingRequestContextReason
+    ]
   })
 
   return await createExport(user.id, exportData)
