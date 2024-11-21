@@ -140,28 +140,30 @@ const handler = async ({
     rows: transposeRows(regionColumns, regionRows, 'region')
   })
 
-  // Accommodation zone
-  const accommodationZoneData = await getAccommodationZoneStatsQuery(
-    user,
-    input
-  )
-  const accommodationZoneColumns = getColumnsFromLabels(
-    beneficiaryAccommodationZoneKeys.byKey
-  )
-  const accommodationZoneRows = getRowsFromData(
-    accommodationZoneData,
-    'accommodationZone',
-    beneficiaryCount
-  )
-  exportData.push({
-    name: "Zones d'hébergement",
-    columns: getTransposedColumns('accommodationZone', "Zones d'hébergement"),
-    rows: transposeRows(
-      accommodationZoneColumns,
-      accommodationZoneRows,
-      'accommodationZone'
+  if (structure.type === StructureType.Ministere) {
+    // Accommodation zone
+    const accommodationZoneData = await getAccommodationZoneStatsQuery(
+      user,
+      input
     )
-  })
+    const accommodationZoneColumns = getColumnsFromLabels(
+      beneficiaryAccommodationZoneKeys.byKey
+    )
+    const accommodationZoneRows = getRowsFromData(
+      accommodationZoneData,
+      'accommodationZone',
+      beneficiaryCount
+    )
+    exportData.push({
+      name: "Zones d'hébergement",
+      columns: getTransposedColumns('accommodationZone', "Zones d'hébergement"),
+      rows: transposeRows(
+        accommodationZoneColumns,
+        accommodationZoneRows,
+        'accommodationZone'
+      )
+    })
+  }
 
   // Accomodation mode
   const accommodationModeData = await getAccommodationModeStatsQuery(
