@@ -69,7 +69,10 @@
       externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',
-      isFirst: housingHelpRequest.value.isFirst ? 'true' : 'false',
+      isFirst:
+        typeof housingHelpRequest.value.isFirst === 'boolean'
+          ? (housingHelpRequest.value.isFirst.toString() as 'true' | 'false')
+          : undefined,
       fullFile: fileInstruction.value.fullFile || false,
       isPmr: housingHelpRequest.value.isPmr || false,
       maxRent: prismaDecimalToNumber(housingHelpRequest.value.maxRent),
