@@ -242,19 +242,31 @@ const handler = async ({
     }
   ]
 
-  const separationRows = [
-    {
-      subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject:
-        'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
-      Number: '',
-      Percent: ''
-    }
-  ]
+  const separationRows =
+    instructions.fileInstructions.instructorOrganization.length > 0
+      ? [
+          {
+            subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
+            Number: '',
+            Percent: ''
+          },
+          {
+            subject:
+              'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
+            Number: '',
+            Percent: ''
+          }
+        ]
+      : []
+
+  const getExternalTotalCount = () => {
+    let total = 0
+    instructions.fileInstructions.instructorOrganization.forEach(item => {
+      total = total + item._count
+    })
+    return total
+  }
+  const externalTotalCount = getExternalTotalCount()
 
   const externalInstructionsRow = Object.values(
     instructions.fileInstructions.instructorOrganization
@@ -262,7 +274,7 @@ const handler = async ({
     return {
       subject: item.name,
       Number: item._count.toString(),
-      Percent: `${getPercentage(item._count, instructions.fileInstructions._count)}%`
+      Percent: `${getPercentage(item._count, externalTotalCount)}%`
     }
   })
 
