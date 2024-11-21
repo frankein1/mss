@@ -1,7 +1,7 @@
 export const routes = {
   AuthLogin: {
     name: 'AuthLogin',
-    title: 'Se connecter à ma structure',
+    title: 'Se connecter à mon espace de travail',
     path: () => '/auth/login'
   },
   AuthAdmin: {
@@ -18,15 +18,6 @@ export const routes = {
     name: 'AuthLogout',
     title: 'Vous avez été déconnecté·e',
     path: () => '/auth/logout'
-  }
-} as const
-
-export const apiInclusionConnectRoutes = {
-  ApiLogout: {
-    path: () => '/api/keycloak/logout'
-  },
-  ApiSsoCallback: {
-    path: () => '/api/keycloak/callback'
   }
 } as const
 
