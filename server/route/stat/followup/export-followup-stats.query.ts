@@ -189,29 +189,74 @@ const handler = async ({
   // Prescribing Organizations
   const followupPrescribingOrganizationData =
     await getFollowupPrescribingOrganizationStatsQuery(user, input)
-  const followupPrescribingOrganizationColumns =
-    followupPrescribingOrganizationData.map(
-      ({ prescribingOrganizationId, prescribingOrganization }) => ({
-        key: prescribingOrganizationId,
-        header: prescribingOrganization
-      })
-    )
-  const followupPrescribingOrganizationRows = getRowsFromData(
-    followupPrescribingOrganizationData,
-    'prescribingOrganizationId',
-    followupCount
+  const followupPrescribingOrganizationColumns = [
+    {
+      key: 'subject',
+      header: 'Organismes prescripteurs'
+    },
+    {
+      key: 'Number',
+      header: 'Nombre'
+    },
+    {
+      key: 'Percent',
+      header: 'Pourcentage'
+    }
+  ]
+
+  const getPrescribingOrganizationTotal = () => {
+    let total = 0
+    let subTotal = 0
+    followupPrescribingOrganizationData.forEach(item => {
+      total = total + item._count
+      if (item.prescribingOrganizationId != 'null') {
+        subTotal = subTotal + item._count
+      }
+    })
+    return { total, subTotal }
+  }
+  const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
+  const generalPrescribingOrganization = [
+    {
+      subject: 'Entretiens avec prescripteur renseigné',
+      Number: prescribingOrganizationTotal.subTotal.toString(),
+      Percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
+    }
+  ]
+  const prescribingOrganizationDivider =
+    followupPrescribingOrganizationData.length > 0
+      ? [
+          {
+            subject: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
+            Number: '',
+            Percent: ''
+          },
+          {
+            subject:
+              'Pourcentage calculé sur le nombre total des instructions de dossiers.',
+            Number: '',
+            Percent: ''
+          }
+        ]
+      : []
+  const prescribingOrganizationRows = followupPrescribingOrganizationData.map(
+    item => {
+      return {
+        subject: 'Organismes prescripteurs',
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
+      }
+    }
   )
+
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: getTransposedColumns(
-      'prescribingOrganizationId',
-      'Organismes prescripteurs'
-    ),
-    rows: transposeRows(
-      followupPrescribingOrganizationColumns,
-      followupPrescribingOrganizationRows,
-      'prescribingOrganizationId'
-    )
+    columns: followupPrescribingOrganizationColumns,
+    rows: [
+      ...generalPrescribingOrganization,
+      ...prescribingOrganizationDivider,
+      ...prescribingOrganizationRows
+    ]
   })
 
   return await createExport(user.id, exportData)
