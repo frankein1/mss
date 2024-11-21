@@ -18,12 +18,6 @@
       :total-count="totalCount"
       :stats="followupActionsEntreprisesStats"
       :with-sum="false"
-      :not-filled-route="
-        routes.file.AppHistory.path({
-          notFilled: FilterFollowupNotFilled.ActionsEntreprises,
-          tab: HistoryTab.Followups
-        })
-      "
     />
   </template>
   <p v-else>
@@ -36,9 +30,6 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-  import { FilterFollowupNotFilled } from '~/utils/constants/filters'
-  import { HistoryTab } from '~/utils/constants/history'
-  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 
