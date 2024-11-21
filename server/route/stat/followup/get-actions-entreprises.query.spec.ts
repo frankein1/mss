@@ -31,7 +31,7 @@ describe('Statistics - Followup - Actions Entreprises', () => {
       await trpc.structureManager.stat.getFollowupActionsEntreprisesStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 6,
+      'Aucune action renseignée': 6,
       'Instruction': 0,
       'Réorientation': 0
     })
@@ -56,7 +56,7 @@ describe('Statistics - Followup - Actions Entreprises', () => {
       await trpc.referent.stat.getFollowupActionsEntreprisesStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 2,
+      'Aucune action renseignée': 2,
       'Instruction': 0,
       'Réorientation': 0
     })

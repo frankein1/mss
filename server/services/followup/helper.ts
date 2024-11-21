@@ -72,10 +72,6 @@ export function prepareFilters(filters: FollowupFilterInput) {
   }
 
   switch (notFilled) {
-    case FilterFollowupNotFilled.ActionsEntreprises:
-      formattedFilters.redirected = null
-      formattedFilters.helpRequested = null
-      break
     case FilterFollowupNotFilled.PrescribingOrganization:
       formattedFilters.prescribingOrganization = null
       break

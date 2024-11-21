@@ -23,9 +23,8 @@
     />
   </template>
   <p v-else>
-    Commencez à créer des instructions de dossier dans les fiches de
-    bénéficiaires pour voir apparaître les statistiques du nombre de
-    bénéficiaires concernés.
+    Aucune demande d'aide financière accordée n'a été enregistrée pour le
+    moment.
   </p>
 </template>
 
