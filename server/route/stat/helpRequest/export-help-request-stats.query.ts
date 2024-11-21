@@ -16,7 +16,8 @@ import {
   getFileInstructionTypeStatsQuery,
   getHelpRequestAmountsAllocatedQuery,
   getHelpRequestAmountsByInstructorOrganizationQuery,
-  getHelpRequestAmountsBySubjectQuery
+  getHelpRequestAmountsBySubjectQuery,
+  getHelpRequestHousingStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -57,7 +58,7 @@ const handler = async ({
   const fileInstructionTypeColums = [
     {
       key: 'subject',
-      header: ''
+      header: "Thématique d'instruction"
     },
     {
       key: 'Number',
@@ -217,7 +218,7 @@ const handler = async ({
   const instructionColumns = [
     {
       key: 'subject',
-      header: ''
+      header: 'Instructions'
     },
     {
       key: 'Number',
@@ -378,6 +379,61 @@ const handler = async ({
     name: "Montants objet d'accompagnement",
     columns: amountsBySubjectColumns,
     rows: amountsBySubjectRows
+  })
+
+  // Housing request
+  const housingRequest = await getHelpRequestHousingStatsQuery(user, input)
+
+  const housingRequestColumns = [
+    { key: 'label', header: 'Demandes de logement' },
+    { key: 'Number', header: 'Nombre' },
+    { key: 'Percent', header: 'Pourcentage' }
+  ]
+
+  const contextValue = (value: boolean | null) => {
+    switch (value) {
+      case true:
+        return '1ère demande'
+      case false:
+        return 'Renouvellement'
+      case null:
+        return 'Non renseigné'
+    }
+  }
+
+  const housingRequestContextRow =
+    housingRequest.housingHelpRequestContextCount.map(item => {
+      return {
+        label: contextValue(item.isFirst),
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+      }
+    })
+
+  const housingRequestContextReasonHeader = [
+    {
+      label: 'Motif des demandes de logement',
+      Number: '',
+      Percent: ''
+    }
+  ]
+  const housingRequestContextReason =
+    housingRequest.housingHelpRequestReasonCount.map(item => {
+      return {
+        label: item.reason ? item.reason : 'Non renseigné',
+        Number: item._count.toString(),
+        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+      }
+    })
+
+  exportData.push({
+    name: 'Demandes de logement',
+    columns: housingRequestColumns,
+    rows: [
+      ...housingRequestContextRow,
+      ...housingRequestContextReasonHeader,
+      ...housingRequestContextReason
+    ]
   })
 
   return await createExport(user.id, exportData)
