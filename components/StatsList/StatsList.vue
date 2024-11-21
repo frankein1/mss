@@ -24,10 +24,10 @@
         }"
       >
         <div>
-          <AtomPictogram
+          <img
             v-if="picto"
-            :path="picto"
-            length="3rem"
+            :src="picto"
+            width="48px"
           />
           <NuxtLink
             v-if="label === STATS_NULL_LABEL"

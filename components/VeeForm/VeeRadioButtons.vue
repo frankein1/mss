@@ -209,5 +209,15 @@
         filter: grayscale(1) opacity(0.5);
       }
     }
+
+    .fr-radio-rich--only-pictos {
+      .fr-label {
+        background-image: radial-gradient(
+          transparent 6px,
+          var(--text-disabled-grey) 7px,
+          transparent 8px
+        ) !important;
+      }
+    }
   }
 </style>
