@@ -25,7 +25,7 @@
         Pourcentage calculé sur le nombre de dossiers instruits en externe.
       </p>
       <StatsList
-        :total-count="totalCount"
+        :total-count="externalTotalCount"
         :stats="externalInstructions"
         :display-total="true"
         :big-text="true"
@@ -101,4 +101,13 @@
         }
       )
     )
+  const externalTotalCount = computed(() => {
+    let total = 0
+    fileInstructions.value?.fileInstructions.instructorOrganization.forEach(
+      item => {
+        total = total + item._count
+      }
+    )
+    return total
+  })
 </script>

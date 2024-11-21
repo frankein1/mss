@@ -10,9 +10,6 @@ import { BlobWriter, BlobReader, ZipWriter } from '@zip.js/zip.js'
 const extractIds = (config: StatsCardConfig) => {
   return Object.values(config).map(item => item.id)
 }
-const extractNames = (config: StatsCardConfig) => {
-  return Object.values(config).map(item => item.name)
-}
 
 type Filter = (node: HTMLElement | Node) => boolean
 
@@ -52,7 +49,6 @@ export const zipAndDownloadImages = async (
   finallyFn: () => void
 ) => {
   const configIds = extractIds(statsCardConfig)
-  const configNames = extractNames(statsCardConfig)
   const nodes = configIds
     .map(id => {
       const node = document.getElementById(id)
