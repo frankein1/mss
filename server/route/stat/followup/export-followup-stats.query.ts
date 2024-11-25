@@ -15,27 +15,19 @@ import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumnsFromLabels'
-import { StructureRepo } from '~/server/database'
+import { getColumns } from '~/utils/export/getColumns'
 import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-
-const NOT_FILLED = 'Non renseigné'
-
-// TODO after refactoring
-// delete if unused: getRowsFromData function
-// delete if unused: getColumnsFromLabels function
-// delete if unused: getTransposedColumns function
-// delete if unused: transposeRows function
+import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -57,7 +49,7 @@ const handler = async ({
         totalSubjectPercent +
         (subject._count.socialSupports / followupCount) * 100
       return {
-        label: subject.name ? subject.name : NOT_FILLED,
+        label: subject.name || STATS_NULL_LABEL,
         number: subject._count.socialSupports.toString(),
         percent: `${getPercentage(subject._count.socialSupports, followupCount)}%`
       }
@@ -80,7 +72,7 @@ const handler = async ({
 
   const followupMediumRows = followupMediumData.map(item => {
     return {
-      label: item.medium ? item.medium : NOT_FILLED,
+      label: (item.medium || STATS_NULL_LABEL) as string,
       number: item._count.toString(),
       percent: `${getPercentage(item._count, followupCount)}%`
     }
@@ -97,12 +89,7 @@ const handler = async ({
     rows: followupMediumRows
   })
 
-  // Structure check
-  const userStructure = await StructureRepo.findUniqueOrThrow(user, {
-    where: { id: user.structureId || '' }
-  })
-
-  if (userStructure?.type === StructureType.Ministere) {
+  if (structure.type === StructureType.Ministere) {
     // Ministre
     const followupMinistreData = await getFollowupMinistreStatsQuery(
       user,
@@ -110,7 +97,7 @@ const handler = async ({
     )
     const followupMinistreRows = followupMinistreData.map(item => {
       return {
-        label: item.ministre ? item.ministre : NOT_FILLED,
+        label: item.ministre || STATS_NULL_LABEL,
         number: item._count.toString(),
         percent: `${getPercentage(item._count, followupCount)}%`
       }
@@ -134,7 +121,7 @@ const handler = async ({
     return {
       label: item.status
         ? socialSupportStatusKeys.byKey[item.status]
-        : NOT_FILLED,
+        : STATS_NULL_LABEL,
       number: item._count.toString(),
       percent: `${getPercentage(item._count, followupCount)}%`
     }
@@ -158,14 +145,14 @@ const handler = async ({
   const followupActionsEntreprisesRows = followupActionsEntreprisesData.map(
     item => {
       return {
-        label: item.actionEntreprise ? item.actionEntreprise : NOT_FILLED,
+        label: item.actionEntreprise || STATS_NULL_LABEL,
         number: item._count.toString(),
         percent: `${getPercentage(item._count, followupCount)}%`
       }
     }
   )
   followupActionsEntreprisesRows.push({
-    label: 'TOTAL',
+    label: 'Total',
     number: followupCount.toString(),
     percent: '100%'
   })

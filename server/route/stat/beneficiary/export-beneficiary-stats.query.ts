@@ -38,7 +38,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumnsFromLabels'
+import { getColumns } from '~/utils/export/getColumns'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats

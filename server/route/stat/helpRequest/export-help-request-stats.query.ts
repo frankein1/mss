@@ -20,8 +20,7 @@ import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumnsFromLabels'
-import { StructureRepo } from '~/server/database'
+import { getColumns } from '~/utils/export/getColumns'
 import {
   SecurityRuleContext,
   getAppContextPermissions
@@ -34,7 +33,7 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -119,11 +118,7 @@ const handler = async ({
     rows: helpRequestStatusRows
   })
 
-  // Structure check
-  const userStructure = await StructureRepo.findUniqueOrThrow(user, {
-    where: { id: user.structureId || '' }
-  })
-  if (userStructure?.type === StructureType.Ministere) {
+  if (structure.type === StructureType.Ministere) {
     // Ministre
     const helpRequestMinistreData = await getHelpRequestMinistreStatsQuery(
       user,
