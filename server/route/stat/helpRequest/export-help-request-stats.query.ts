@@ -1,12 +1,9 @@
 import { StructureType } from '@prisma/client'
-import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
   socialSupportStatusKeys,
-  ministerKeys,
   fileInstructionTypeKeys
 } from '~/client/options'
-import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
   getHelpRequestSubjectsStatsQuery,
@@ -23,18 +20,15 @@ import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
-import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
+import { getColumns } from '~/utils/export/getColumnsFromLabels'
 import { StructureRepo } from '~/server/database'
 import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import {
-  getTransposedColumns,
-  transposeRows
-} from '~/utils/export/transposeRows'
 import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
 
+const NOT_FILLED = 'Non renseigné'
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
 
@@ -54,84 +48,49 @@ const handler = async ({
     user,
     input
   )
-
-  const fileInstructionTypeColums = [
-    {
-      key: 'subject',
-      header: "Thématique d'instruction"
-    },
-    {
-      key: 'Number',
-      header: 'Nombre'
-    },
-    {
-      key: 'Percent',
-      header: 'Pourcentage'
-    }
-  ]
-
-  const ministerInterpelationRows = fileInstructionType.map(item => {
+  const instructiontypeRows = fileInstructionType.map(item => {
     return {
-      subject: fileInstructionTypeKeys.byKey[item.subject],
-      Number: item._count.toString(),
-      Percent: `${getPercentage(item._count, helpRequestCount.total)}%`
+      label: item.subject
+        ? fileInstructionTypeKeys.byKey[item.subject]
+        : NOT_FILLED,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, helpRequestCount.total)}%`
     }
+  })
+  instructiontypeRows.push({
+    label: 'Total',
+    number: helpRequestCount.total.toString(),
+    percent: '100%'
   })
 
   exportData.push({
     name: "Thématique d'instruction",
-    columns: fileInstructionTypeColums,
-    rows: ministerInterpelationRows
+    columns: getColumns("Thématique d'instruction"),
+    rows: instructiontypeRows
   })
 
   // Subject
   const subjectsData = await getHelpRequestSubjectsStatsQuery(user, input)
-  const subjectsColumns = subjectsData.map(({ id, name }) => ({
-    key: id,
-    header: name
-  }))
-
-  const subjectsRows = [
-    subjectsData.reduce((row: RowType, { _count, id }) => {
-      if (_count.socialSupports > 0) {
-        row[id] = _count.socialSupports.toString()
+  const subjectRows = subjectsData
+    .map(item => {
+      if (item._count.socialSupports > 0) {
+        return {
+          label: item.name ? item.name : NOT_FILLED,
+          number: item._count.socialSupports.toString(),
+          percent: `${getPercentage(item._count.socialSupports, helpRequestCount.total)}%`
+        }
       }
-      return row
-    }, {}),
-    subjectsData.reduce((row: RowType, { _count, id }) => {
-      if (_count.socialSupports > 0) {
-        row[id] =
-          `${getPercentage(_count.socialSupports, helpRequestCount.total)}%`
-      }
-      return row
-    }, {})
-  ]
-  const transposedSubjectRows = transposeRows(
-    subjectsColumns,
-    subjectsRows,
-    'subject'
-  )
-  transposedSubjectRows.push(
-    {
-      subject: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject: `TOTAL`,
-      Number: `${helpRequestCount.total}`,
-      Percent: ''
-    }
-  )
+    })
+    .filter(row => row != null)
+  subjectRows.push({
+    label: 'Total',
+    number: helpRequestCount.total.toString(),
+    percent: '100%'
+  })
   exportData.push({
     name: "Objet d'accompagnement",
-    columns: getTransposedColumns('subject', "Objet d'accompagnement"),
-    rows: transposedSubjectRows
+    columns: getColumns("Objet d'accompagnement"),
+    rows: subjectRows
   })
 
   // Status
@@ -139,69 +98,60 @@ const handler = async ({
     user,
     input
   )
-  const helpRequestStatusColumns = getColumnsFromLabels(
-    socialSupportStatusKeys.byKey
-  )
-  const helpRequestStatusRows = getRowsFromData(
-    helpRequestStatusData,
-    'status',
-    helpRequestCount.total
-  )
-  exportData.push({
-    name: 'Statuts',
-    columns: getTransposedColumns('status', 'Statuts'),
-    rows: transposeRows(
-      helpRequestStatusColumns,
-      helpRequestStatusRows,
-      'status'
-    )
+  const helpRequestStatusRows = helpRequestStatusData.map(item => {
+    return {
+      label: item.status
+        ? socialSupportStatusKeys.byKey[item.status]
+        : NOT_FILLED,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, helpRequestCount.total)}%`
+    }
+  })
+  helpRequestStatusRows.push({
+    label: 'Total',
+    number: helpRequestCount.total.toString(),
+    percent: '100%'
   })
 
+  exportData.push({
+    name: 'Statuts',
+    columns: getColumns('Statuts'),
+    rows: helpRequestStatusRows
+  })
+
+  // Structure check
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {
     where: { id: user.structureId || '' }
   })
-
   if (userStructure?.type === StructureType.Ministere) {
     // Ministre
     const helpRequestMinistreData = await getHelpRequestMinistreStatsQuery(
       user,
       input
     )
-    const helpRequestMinistreColumns = getColumnsFromLabels(ministerKeys.byKey)
-    const helpRequestMinistreRows = getRowsFromData(
-      helpRequestMinistreData,
-      'ministre',
-      helpRequestCount.total
-    )
+    const helpRequestMinistreRows = helpRequestMinistreData.map(item => {
+      return {
+        label: item.ministre ? item.ministre : NOT_FILLED,
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, helpRequestCount.total)}%`
+      }
+    })
+    helpRequestMinistreRows.push({
+      label: 'Total',
+      number: helpRequestCount.total.toString(),
+      percent: `100%`
+    })
+
     exportData.push({
       name: 'Ministres',
-      columns: getTransposedColumns('ministre', 'Ministres'),
-      rows: transposeRows(
-        helpRequestMinistreColumns,
-        helpRequestMinistreRows,
-        'ministre'
-      )
+      columns: getColumns('Ministres'),
+      rows: helpRequestMinistreRows
     })
   }
 
   // Help request prescribing organizations
   const helpRequestPrescribingOrganizationData =
     await getHelpRequestPrescribingOrganizationStatsQuery(user, input)
-  const prescribingOrganizationColumns = [
-    {
-      key: 'subject',
-      header: 'Organismes prescripteurs'
-    },
-    {
-      key: 'Number',
-      header: 'Nombre'
-    },
-    {
-      key: 'Percent',
-      header: 'Pourcentage'
-    }
-  ]
-
   const getPrescribingOrganizationTotal = () => {
     let total = 0
     let subTotal = 0
@@ -213,42 +163,42 @@ const handler = async ({
     })
     return { total, subTotal }
   }
-
   const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
   const generalPrescribingOrganization = [
     {
-      subject: "Dossiers d'instruction avec prescripteur renseigné",
-      Number: prescribingOrganizationTotal.subTotal.toString(),
-      Percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
+      label: "Dossiers d'instruction avec prescripteur renseigné",
+      number: prescribingOrganizationTotal.subTotal.toString(),
+      percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
     }
   ]
   const prescribingOrganizationDivider =
     helpRequestPrescribingOrganizationData.length > 0
       ? [
           {
-            subject: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
-            Number: '',
-            Percent: ''
+            label: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
+            number: '',
+            percent: ''
           },
           {
-            subject:
+            label:
               'Pourcentage calculé sur le nombre total des instructions de dossiers.',
-            Number: '',
-            Percent: ''
+            number: '',
+            percent: ''
           }
         ]
       : []
   const prescribingOrganizationRows =
     helpRequestPrescribingOrganizationData.map(item => {
       return {
-        subject: 'Organismes prescripteurs',
-        Number: item._count.toString(),
-        Percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
+        label: 'Organismes prescripteurs',
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
       }
     })
+
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: prescribingOrganizationColumns,
+    columns: getColumns('Organismes prescripteurs'),
     rows: [
       ...generalPrescribingOrganization,
       ...prescribingOrganizationDivider,
@@ -258,52 +208,34 @@ const handler = async ({
 
   // Instructions
   const instructions = await getHelpRequestInstructionsStats(user, input)
-
-  const instructionColumns = [
-    {
-      key: 'subject',
-      header: 'Instructions'
-    },
-    {
-      key: 'Number',
-      header: 'Nombre'
-    },
-    {
-      key: 'Percent',
-      header: 'Pourcentage'
-    }
-  ]
-
   const instructionsDistributionRows = [
     {
-      subject: 'Instructions en externe',
-      Number: instructions.fileInstructions.externalStructure._count.toString(),
-      Percent: `${getPercentage(instructions.fileInstructions.externalStructure._count, instructions.fileInstructions._count)}%`
+      label: 'Instructions en externe',
+      number: instructions.fileInstructions.externalStructure._count.toString(),
+      percent: `${getPercentage(instructions.fileInstructions.externalStructure._count, instructions.fileInstructions._count)}%`
     },
     {
-      subject: 'Instructions en interne',
-      Number: instructions.fileInstructions.internalStructure._count.toString(),
-      Percent: `${getPercentage(instructions.fileInstructions.internalStructure._count, instructions.fileInstructions._count)}%`
+      label: 'Instructions en interne',
+      number: instructions.fileInstructions.internalStructure._count.toString(),
+      percent: `${getPercentage(instructions.fileInstructions.internalStructure._count, instructions.fileInstructions._count)}%`
     }
   ]
-
   const separationRows =
     instructions.fileInstructions.instructorOrganization.length > 0
       ? [
           {
-            subject: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
-            Number: '',
-            Percent: ''
+            label: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
+            number: '',
+            percent: ''
           },
           {
-            subject:
+            label:
               'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
-            Number: '',
-            Percent: ''
+            number: '',
+            percent: ''
           }
         ]
       : []
-
   const getExternalTotalCount = () => {
     let total = 0
     instructions.fileInstructions.instructorOrganization.forEach(item => {
@@ -312,20 +244,19 @@ const handler = async ({
     return total
   }
   const externalTotalCount = getExternalTotalCount()
-
   const externalInstructionsRow = Object.values(
     instructions.fileInstructions.instructorOrganization
   ).map(item => {
     return {
-      subject: item.name,
-      Number: item._count.toString(),
-      Percent: `${getPercentage(item._count, externalTotalCount)}%`
+      label: item.name,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, externalTotalCount)}%`
     }
   })
 
   exportData.push({
     name: 'Instructions',
-    columns: instructionColumns,
+    columns: getColumns('Instructions'),
     rows: [
       ...instructionsDistributionRows,
       ...separationRows,
@@ -427,13 +358,6 @@ const handler = async ({
 
   // Housing request
   const housingRequest = await getHelpRequestHousingStatsQuery(user, input)
-
-  const housingRequestColumns = [
-    { key: 'label', header: 'Demandes de logement' },
-    { key: 'Number', header: 'Nombre' },
-    { key: 'Percent', header: 'Pourcentage' }
-  ]
-
   const contextValue = (value: boolean | null) => {
     switch (value) {
       case true:
@@ -444,35 +368,33 @@ const handler = async ({
         return 'Non renseigné'
     }
   }
-
   const housingRequestContextRow =
     housingRequest.housingHelpRequestContextCount.map(item => {
       return {
         label: contextValue(item.isFirst),
-        Number: item._count.toString(),
-        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
       }
     })
-
   const housingRequestContextReasonHeader = [
     {
       label: 'Motif des demandes de logement',
-      Number: '',
-      Percent: ''
+      number: '',
+      percent: ''
     }
   ]
   const housingRequestContextReason =
     housingRequest.housingHelpRequestReasonCount.map(item => {
       return {
         label: item.reason ? item.reason : 'Non renseigné',
-        Number: item._count.toString(),
-        Percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
       }
     })
 
   exportData.push({
     name: 'Demandes de logement',
-    columns: housingRequestColumns,
+    columns: getColumns('Demandes de logement'),
     rows: [
       ...housingRequestContextRow,
       ...housingRequestContextReasonHeader,

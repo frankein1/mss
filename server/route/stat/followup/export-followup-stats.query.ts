@@ -92,8 +92,8 @@ const handler = async ({
   })
 
   exportData.push({
-    name: "Types d'entretiens",
-    columns: getColumns("Types d'entretiens"),
+    name: "Types d'entretien",
+    columns: getColumns("Types d'entretien"),
     rows: followupMediumRows
   })
 
@@ -140,7 +140,7 @@ const handler = async ({
     }
   })
   followupStatusRows.push({
-    label: 'TOTAL',
+    label: 'Total',
     number: followupCount.toString(),
     percent: '100%'
   })
@@ -225,13 +225,22 @@ const handler = async ({
     }
   )
 
+  const totalPrescribingOrganizationRow = [
+    {
+      label: 'Total',
+      number: followupCount.toString(),
+      percent: '100%'
+    }
+  ]
+
   exportData.push({
     name: 'Organismes prescripteurs',
     columns: getColumns('Organismes prescripteurs'),
     rows: [
       ...generalPrescribingOrganization,
       ...prescribingOrganizationDivider,
-      ...prescribingOrganizationRows
+      ...prescribingOrganizationRows,
+      ...totalPrescribingOrganizationRow
     ]
   })
 
