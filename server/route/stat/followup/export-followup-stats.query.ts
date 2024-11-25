@@ -1,12 +1,7 @@
 import { StructureType } from '@prisma/client'
-import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
-import {
-  followupMediumKeys,
-  followupStatusKeys,
-  ministerKeys
-} from '~/client/options'
-import { RowType, WorksheetType } from '~/types/export'
+import { socialSupportStatusKeys } from '~/client/options'
+import { WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
@@ -20,16 +15,20 @@ import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
-import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
+import { getColumns } from '~/utils/export/getColumnsFromLabels'
 import { StructureRepo } from '~/server/database'
 import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import {
-  getTransposedColumns,
-  transposeRows
-} from '~/utils/export/transposeRows'
+
+const NOT_FILLED = 'Non renseigné'
+
+// TODO after refactoring
+// delete if unused: getRowsFromData function
+// delete if unused: getColumnsFromLabels function
+// delete if unused: getTransposedColumns function
+// delete if unused: transposeRows function
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -47,80 +46,58 @@ const handler = async ({
 
   // Subjects
   const subjectsData = await getFollowupSubjectsStatsQuery(user, input)
-  const subjectsColumns = subjectsData.map(({ id, name }) => ({
-    key: id,
-    header: name
-  }))
-  subjectsColumns.push({ key: 'total', header: 'Total' })
 
   const subjectCountTotal = subjectsData
     .reduce((total, { _count }) => total + _count.socialSupports, 0)
     .toString()
-
-  const subjectsRows = [
-    subjectsData.reduce(
-      (row: RowType, { _count, id }) => {
-        if (_count.socialSupports > 0) {
-          row[id] = _count.socialSupports.toString()
-        }
-        return row
-      },
-      { total: subjectCountTotal }
-    ),
-    subjectsData.reduce(
-      (row: RowType, { _count, id }) => {
-        if (_count.socialSupports > 0) {
-          row[id] = `${getPercentage(_count.socialSupports, followupCount)}%`
-        }
-        return row
-      },
-      { total: '100%' }
-    )
-  ]
-
-  const transposedSubjecstRows = transposeRows(
-    subjectsColumns,
-    subjectsRows,
-    'subject'
-  )
-  transposedSubjecstRows.push(
-    {
-      subject: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject: '',
-      Number: '',
-      Percent: ''
-    },
-    {
-      subject: `${followupCount} entretiens menés`,
-      Number: '',
-      Percent: ''
+  let totalSubjectPercent = 0
+  const subjectRows = subjectsData.map(subject => {
+    if (subject._count.socialSupports > 0) {
+      totalSubjectPercent =
+        totalSubjectPercent +
+        (subject._count.socialSupports / followupCount) * 100
+      return {
+        label: subject.name ? subject.name : NOT_FILLED,
+        number: subject._count.socialSupports.toString(),
+        percent: `${getPercentage(subject._count.socialSupports, followupCount)}%`
+      }
     }
-  )
+  })
+  subjectRows.push({
+    label: 'Total',
+    number: subjectCountTotal,
+    percent: totalSubjectPercent.toFixed(1) + '%'
+  })
 
   exportData.push({
     name: "Objets d'accompagnement",
-    columns: getTransposedColumns('subject', "Objets d'accompagnement"),
-    rows: transposedSubjecstRows
+    columns: getColumns("Objets d'accompagnement"),
+    rows: subjectRows.filter(row => row != null)
   })
 
   // Followup medium
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)
-  const followupMediumColumns = getColumnsFromLabels(followupMediumKeys.byKey)
-  const followupMediumRows = getRowsFromData(
-    followupMediumData,
-    'medium',
-    followupCount
-  )
-  exportData.push({
-    name: "Types d'entretiens",
-    columns: getTransposedColumns('medium', "Types d'entretiens"),
-    rows: transposeRows(followupMediumColumns, followupMediumRows, 'medium')
+
+  const followupMediumRows = followupMediumData.map(item => {
+    return {
+      label: item.medium ? item.medium : NOT_FILLED,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, followupCount)}%`
+    }
+  })
+  followupMediumRows.push({
+    label: 'Total',
+    number: followupCount.toString(),
+    percent: `100%`
   })
 
+  exportData.push({
+    name: "Types d'entretiens",
+    columns: getColumns("Types d'entretiens"),
+    rows: followupMediumRows
+  })
+
+  // Structure check
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {
     where: { id: user.structureId || '' }
   })
@@ -131,78 +108,77 @@ const handler = async ({
       user,
       input
     )
-    const followupMinistreColumns = getColumnsFromLabels(ministerKeys.byKey)
-    const followupMinistreRows = getRowsFromData(
-      followupMinistreData,
-      'ministre',
-      followupCount
-    )
+    const followupMinistreRows = followupMinistreData.map(item => {
+      return {
+        label: item.ministre ? item.ministre : NOT_FILLED,
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, followupCount)}%`
+      }
+    })
+    followupMinistreRows.push({
+      label: 'Total',
+      number: followupCount.toString(),
+      percent: `100%`
+    })
+
     exportData.push({
       name: 'Ministres',
-      columns: getTransposedColumns('ministre', 'Ministres'),
-      rows: transposeRows(
-        followupMinistreColumns,
-        followupMinistreRows,
-        'ministre'
-      )
+      columns: getColumns('Ministres'),
+      rows: followupMinistreRows
     })
   }
 
   // Status
   const followupStatusData = await getFollowupStatusStatsQuery(user, input)
-  const followupStatusColumns = getColumnsFromLabels(followupStatusKeys.byKey)
-  const followupStatusRows = getRowsFromData(
-    followupStatusData,
-    'status',
-    followupCount
-  )
+  const followupStatusRows = followupStatusData.map(item => {
+    return {
+      label: item.status
+        ? socialSupportStatusKeys.byKey[item.status]
+        : NOT_FILLED,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, followupCount)}%`
+    }
+  })
+  followupStatusRows.push({
+    label: 'TOTAL',
+    number: followupCount.toString(),
+    percent: '100%'
+  })
+
   exportData.push({
     name: 'Statuts',
-    columns: getTransposedColumns('status', 'Statuts'),
-    rows: transposeRows(followupStatusColumns, followupStatusRows, 'status')
+    columns: getColumns('Status'),
+    rows: followupStatusRows
   })
 
   // Actions
   const followupActionsEntreprisesData =
     await getFollowupActionsEntreprisesStatsQuery(user, input)
-  const followupActionsEntreprisesColumns = followupActionsEntreprisesData.map(
-    ({ actionEntrepriseId, actionEntreprise }) => ({
-      key: actionEntrepriseId,
-      header: actionEntreprise
-    })
+
+  const followupActionsEntreprisesRows = followupActionsEntreprisesData.map(
+    item => {
+      return {
+        label: item.actionEntreprise ? item.actionEntreprise : NOT_FILLED,
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, followupCount)}%`
+      }
+    }
   )
-  const followupActionsEntreprisesRows = getRowsFromData(
-    followupActionsEntreprisesData,
-    'actionEntrepriseId',
-    followupCount
-  )
+  followupActionsEntreprisesRows.push({
+    label: 'TOTAL',
+    number: followupCount.toString(),
+    percent: '100%'
+  })
+
   exportData.push({
     name: 'Actions entreprises',
-    columns: getTransposedColumns('actionEntrepriseId', 'Actions entreprises'),
-    rows: transposeRows(
-      followupActionsEntreprisesColumns,
-      followupActionsEntreprisesRows,
-      'actionEntrepriseId'
-    )
+    columns: getColumns('Actions entreprises'),
+    rows: followupActionsEntreprisesRows
   })
 
   // Prescribing Organizations
   const followupPrescribingOrganizationData =
     await getFollowupPrescribingOrganizationStatsQuery(user, input)
-  const followupPrescribingOrganizationColumns = [
-    {
-      key: 'subject',
-      header: 'Organismes prescripteurs'
-    },
-    {
-      key: 'Number',
-      header: 'Nombre'
-    },
-    {
-      key: 'Percent',
-      header: 'Pourcentage'
-    }
-  ]
 
   const getPrescribingOrganizationTotal = () => {
     let total = 0
@@ -218,40 +194,40 @@ const handler = async ({
   const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
   const generalPrescribingOrganization = [
     {
-      subject: 'Entretiens avec prescripteur renseigné',
-      Number: prescribingOrganizationTotal.subTotal.toString(),
-      Percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
+      label: 'Entretiens avec prescripteur renseigné',
+      number: prescribingOrganizationTotal.subTotal.toString(),
+      percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
     }
   ]
   const prescribingOrganizationDivider =
     followupPrescribingOrganizationData.length > 0
       ? [
           {
-            subject: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
-            Number: '',
-            Percent: ''
+            label: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
+            number: '',
+            percent: ''
           },
           {
-            subject:
+            label:
               'Pourcentage calculé sur le nombre total des instructions de dossiers.',
-            Number: '',
-            Percent: ''
+            number: '',
+            percent: ''
           }
         ]
       : []
   const prescribingOrganizationRows = followupPrescribingOrganizationData.map(
     item => {
       return {
-        subject: 'Organismes prescripteurs',
-        Number: item._count.toString(),
-        Percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
+        label: 'Organismes prescripteurs',
+        number: item._count.toString(),
+        percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
       }
     }
   )
 
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: followupPrescribingOrganizationColumns,
+    columns: getColumns('Organismes prescripteurs'),
     rows: [
       ...generalPrescribingOrganization,
       ...prescribingOrganizationDivider,
