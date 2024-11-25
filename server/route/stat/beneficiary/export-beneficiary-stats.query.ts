@@ -1,5 +1,4 @@
 import { StructureType } from '@prisma/client'
-import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
   beneficiaryAccommodationModeKeys,
@@ -33,17 +32,13 @@ import {
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
-import { STATS_NULL_KEY, STATS_NULL_LABEL } from '~/utils/constants/stats'
+import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import {
-  getTransposedColumns,
-  transposeRows
-} from '~/utils/export/transposeRows'
 import { getPercentage } from '~/utils/stats'
+import { getColumns } from '~/utils/export/getColumnsFromLabels'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -60,293 +55,222 @@ const handler = async ({
   const beneficiaryCount = await getBeneficiaryCountQuery(user, input)
 
   // Gender
-  const genderData = await getGenderStatsQuery(user, input)
-  const genderColumns = getColumnsFromLabels(beneficiaryGenderKeys.byKey)
-  const genderRows = getRowsFromData(genderData, 'gender', beneficiaryCount)
-  exportData.push({
-    name: 'Genre',
-    columns: getTransposedColumns('gender', 'Genre'),
-    rows: transposeRows(genderColumns, genderRows, 'gender')
-  })
+  const genders = await getGenderStatsQuery(user, input)
+  const genderColumns = getColumns('Genre')
+  const genderRows = genders.map(({ gender, _count }) => ({
+    label: beneficiaryGenderKeys.value(gender) || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
+  exportData.push({ name: 'Genre', columns: genderColumns, rows: genderRows })
 
   // Age
-  const ageData = await getAgeStatsQuery(user, input)
-  const ageColumns = getColumnsFromLabels(ageGroupKeys.byKey)
-  const ageRows = getRowsFromData(ageData, 'ageGroup', beneficiaryCount)
-
+  const ages = await getAgeStatsQuery(user, input)
+  const ageColumns = getColumns("Tranches d'âge")
+  const ageRows = ages.map(({ ageGroup, _count }) => ({
+    label: ageGroupKeys.value(ageGroup) || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
   exportData.push({
     name: "Tranches d'âge",
-    columns: getTransposedColumns('ageGroup', "Tranches d'âge"),
-    rows: transposeRows(ageColumns, ageRows, 'ageGroup')
+    columns: ageColumns,
+    rows: ageRows
   })
 
   // Family situation
-  const familyData = await getFamilyStatsQuery(user, input)
-  const familyColumns = getColumnsFromLabels(familySituationKeys.byKey)
-  const familyRows = getRowsFromData(
-    familyData,
-    'familySituation',
-    beneficiaryCount
-  )
+  const situations = await getFamilyStatsQuery(user, input)
+  const familyColumns = getColumns('Types de situations familiales')
+  const familyRows = situations.map(({ familySituation, _count }) => ({
+    label: familySituationKeys.value(familySituation) || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
   exportData.push({
     name: 'Types de situations familiales',
-    columns: getTransposedColumns(
-      'familySituation',
-      'Types de situations familiales'
-    ),
-    rows: transposeRows(familyColumns, familyRows, 'familySituation')
+    columns: familyColumns,
+    rows: familyRows
   })
 
   // Cities
-  const cityData = await getCityStatsQuery(user, input)
-  const cityColumns = cityData.map(({ city }) => ({
-    key: city || STATS_NULL_KEY,
-    header: city || STATS_NULL_LABEL
+  const cities = await getCityStatsQuery(user, input)
+  const cityColumns = getColumns('Villes')
+  const cityRows = cities.map(({ city, _count }) => ({
+    label: city || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
   }))
-  const cityRows = getRowsFromData(cityData, 'city', beneficiaryCount)
   exportData.push({
     name: 'Villes',
-    columns: getTransposedColumns('city', 'Villes'),
-    rows: transposeRows(cityColumns, cityRows, 'city')
+    columns: cityColumns,
+    rows: cityRows
   })
 
   // Departments
-  const departmentData = await getDepartmentStatsQuery(user, input)
-  const departmentColumns = departmentData.map(({ department }) => ({
-    key: department || STATS_NULL_KEY,
-    header: department || STATS_NULL_LABEL
+  const departments = await getDepartmentStatsQuery(user, input)
+  const departmentColumns = getColumns('Départements')
+  const departmentRows = departments.map(({ department, _count }) => ({
+    label: department || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
   }))
-  const departmentRows = getRowsFromData(
-    departmentData,
-    'department',
-    beneficiaryCount
-  )
   exportData.push({
     name: 'Départements',
-    columns: getTransposedColumns('department', 'Départements'),
-    rows: transposeRows(departmentColumns, departmentRows, 'department')
+    columns: departmentColumns,
+    rows: departmentRows
   })
 
   // Regions
-  const regionData = await getRegionStatsQuery(user, input)
-  const regionColumns = regionData.map(({ region }) => ({
-    key: region || STATS_NULL_KEY,
-    header: region || STATS_NULL_LABEL
+  const regions = await getRegionStatsQuery(user, input)
+  const regionColumns = getColumns('Régions')
+  const regionRows = regions.map(({ region, _count }) => ({
+    label: region || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
   }))
-  const regionRows = getRowsFromData(regionData, 'region', beneficiaryCount)
-  exportData.push({
-    name: 'Régions',
-    columns: getTransposedColumns('region', 'Régions'),
-    rows: transposeRows(regionColumns, regionRows, 'region')
-  })
+  exportData.push({ name: 'Régions', columns: regionColumns, rows: regionRows })
 
   if (structure.type === StructureType.Ministere) {
     // Accommodation zone
-    const accommodationZoneData = await getAccommodationZoneStatsQuery(
-      user,
-      input
-    )
-    const accommodationZoneColumns = getColumnsFromLabels(
-      beneficiaryAccommodationZoneKeys.byKey
-    )
-    const accommodationZoneRows = getRowsFromData(
-      accommodationZoneData,
-      'accommodationZone',
-      beneficiaryCount
+    const zones = await getAccommodationZoneStatsQuery(user, input)
+    const accommodationZoneColumns = getColumns("Zones d'hébergement")
+    const accommodationZoneRows = zones.map(
+      ({ accommodationZone, _count }) => ({
+        label:
+          beneficiaryAccommodationZoneKeys.value(accommodationZone) ||
+          STATS_NULL_LABEL,
+        number: _count.toString(),
+        percent: `${getPercentage(_count, beneficiaryCount)}%`
+      })
     )
     exportData.push({
       name: "Zones d'hébergement",
-      columns: getTransposedColumns('accommodationZone', "Zones d'hébergement"),
-      rows: transposeRows(
-        accommodationZoneColumns,
-        accommodationZoneRows,
-        'accommodationZone'
-      )
+      columns: accommodationZoneColumns,
+      rows: accommodationZoneRows
     })
   }
 
   // Accomodation mode
-  const accommodationModeData = await getAccommodationModeStatsQuery(
-    user,
-    input
-  )
-  const accommodationModeColumns = getColumnsFromLabels(
-    beneficiaryAccommodationModeKeys.byKey
-  )
-  const accommodationModeRows = getRowsFromData(
-    accommodationModeData,
-    'accommodationMode',
-    beneficiaryCount
-  )
+  const modes = await getAccommodationModeStatsQuery(user, input)
+  const accommodationModeColumns = getColumns("Modes d'hébergement")
+  const accommodationModeRows = modes.map(({ accommodationMode, _count }) => ({
+    label:
+      beneficiaryAccommodationModeKeys.value(accommodationMode) ||
+      STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
   exportData.push({
     name: "Modes d'hébergement",
-    columns: getTransposedColumns('accommodationMode', "Modes d'hébergement"),
-    rows: transposeRows(
-      accommodationModeColumns,
-      accommodationModeRows,
-      'accommodationMode'
-    )
+    columns: accommodationModeColumns,
+    rows: accommodationModeRows
   })
 
   // Mobility data
-  const mobilityData = await getMobilityStatsQuery(user, input)
-  const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityKeys.byKey)
-  const mobilityRows = getRowsFromData(
-    mobilityData,
-    'mobility',
-    beneficiaryCount
-  )
+  const mobilities = await getMobilityStatsQuery(user, input)
+  const mobilityColumns = getColumns('Données mobilité')
+  const mobilityRows = mobilities.map(({ mobility, _count }) => ({
+    label: beneficiaryMobilityKeys.value(mobility) || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
   exportData.push({
     name: 'Données mobilité',
-    columns: getTransposedColumns('mobility', 'Données mobilité'),
-    rows: transposeRows(mobilityColumns, mobilityRows, 'mobility')
+    columns: mobilityColumns,
+    rows: mobilityRows
   })
 
   // CSP
-  const CSPData = await getCSPStatsQuery(user, input)
-  const CSPColumns = getColumnsFromLabels(
-    beneficiarySocioProfessionalCategoryKeys.byKey
-  )
-  const CSPRows = getRowsFromData(
-    CSPData,
-    'socioProfessionalCategory',
-    beneficiaryCount
-  )
-  exportData.push({
-    // FIXME:  ExcelJS 31 characters limit for worksheet names
-    // Cf. https://github.com/exceljs/exceljs/issues/398
-    // name: 'Catégories socio-professionnelles',
-    name: 'CSP',
-    columns: getTransposedColumns(
-      'socioProfessionalCategory',
-      'Catégories socio-professionnelles'
-    ),
-    rows: transposeRows(CSPColumns, CSPRows, 'socioProfessionalCategory')
-  })
+  const csps = await getCSPStatsQuery(user, input)
+  const CSPColumns = getColumns('Catégories socio-professionnelles')
+  const CSPRows = csps.map(({ socioProfessionalCategory, _count }) => ({
+    label:
+      beneficiarySocioProfessionalCategoryKeys.value(
+        socioProfessionalCategory
+      ) || STATS_NULL_LABEL,
+    number: _count.toString(),
+    percent: `${getPercentage(_count, beneficiaryCount)}%`
+  }))
+  exportData.push({ name: 'CSP', columns: CSPColumns, rows: CSPRows })
 
   if (structure.type === StructureType.Ministere) {
     // Ministere structure
-    const ministereStructureData = await getMinistereStructureStatsQuery(
-      user,
-      input
-    )
-    const ministereStructureColumns = getColumnsFromLabels(
-      ministereStructureKeys.byKey
-    )
-    const ministereStructureRows = getRowsFromData(
-      ministereStructureData,
-      'ministereStructure',
-      beneficiaryCount
+    const structures = await getMinistereStructureStatsQuery(user, input)
+    const ministereStructureColumns = getColumns('Structures de rattachement')
+    const ministereStructureRows = structures.map(
+      ({ ministereStructure, _count }) => ({
+        label:
+          ministereStructureKeys.value(ministereStructure) || STATS_NULL_LABEL,
+        number: _count.toString(),
+        percent: `${getPercentage(_count, beneficiaryCount)}%`
+      })
     )
     exportData.push({
       name: 'Structures de rattachement',
-      columns: getTransposedColumns(
-        'ministereStructure',
-        'Structures de rattachement'
-      ),
-      rows: transposeRows(
-        ministereStructureColumns,
-        ministereStructureRows,
-        'ministereStructure'
-      )
+      columns: ministereStructureColumns,
+      rows: ministereStructureRows
     })
 
     // Ministere departement service
-    const ministereDepartementData =
-      await getMinistereDepartementServiceAcStatsQuery(user, input)
-    const ministereDepartementColumns = getColumnsFromLabels(
-      ministereDepartmentServiceAcKeys.byKey
+    const services = await getMinistereDepartementServiceAcStatsQuery(
+      user,
+      input
     )
-    const ministereDepartementRows = getRowsFromData(
-      ministereDepartementData,
-      'ministereDepartementServiceAc',
-      beneficiaryCount
+    const ministereDepartementColumns = getColumns(
+      "Départements ou services de l'administration centrale"
+    )
+    const ministereDepartementRows = services.map(
+      ({ ministereDepartementServiceAc, _count }) => ({
+        label:
+          ministereDepartmentServiceAcKeys.value(
+            ministereDepartementServiceAc
+          ) || STATS_NULL_LABEL,
+        number: _count.toString(),
+        percent: `${getPercentage(_count, beneficiaryCount)}%`
+      })
     )
     exportData.push({
-      // FIXME: ExcelJS 31 characters limit for worksheet names
-      // Cf. https://github.com/exceljs/exceljs/issues/398
-      // name: "Départements ou services de l'administration centrale",
       name: "Départements de l'AC",
-      columns: getTransposedColumns(
-        'ministereDepartementServiceAc',
-        "Départements ou services de l'administration centrale"
-      ),
-      rows: transposeRows(
-        ministereDepartementColumns,
-        ministereDepartementRows,
-        'ministereDepartementServiceAc'
-      )
+      columns: ministereDepartementColumns,
+      rows: ministereDepartementRows
     })
 
     // Ministere category
-    const ministereCategorieData = await getMinistereCategorieStatsQuery(
-      user,
-      input
-    )
-    const ministereCategorieColumns = getColumnsFromLabels(
-      ministereCategorieKeys.byKey
-    )
-    const ministereCategorieRows = getRowsFromData(
-      ministereCategorieData,
-      'ministereCategorie',
-      beneficiaryCount
+    const categories = await getMinistereCategorieStatsQuery(user, input)
+    const ministereCategorieColumns = getColumns('Catégories')
+    const ministereCategorieRows = categories.map(
+      ({ ministereCategorie, _count }) => ({
+        label:
+          ministereCategorieKeys.value(ministereCategorie) || STATS_NULL_LABEL,
+        number: _count.toString(),
+        percent: `${getPercentage(_count, beneficiaryCount)}%`
+      })
     )
     exportData.push({
       name: 'Catégories',
-      columns: getTransposedColumns('ministereCategorie', 'Catégories'),
-      rows: transposeRows(
-        ministereCategorieColumns,
-        ministereCategorieRows,
-        'ministereCategorie'
-      )
+      columns: ministereCategorieColumns,
+      rows: ministereCategorieRows
     })
 
     // Minister interpellations
-    const ministerInterpelation = await getMinistereInterpellationStatsQuery(
+    const interpellations = await getMinistereInterpellationStatsQuery(
       user,
       input
     )
-
-    const ministerInterpelationColums = [
-      {
-        key: 'subject',
-        header: ''
-      },
-      {
-        key: 'Number',
-        header: 'Nombre'
-      },
-      {
-        key: 'Percent',
-        header: 'Pourcentage'
-      }
-    ]
-
-    const getMinisterTotalCount = () => {
-      let count = 0
-      ministerInterpelation.forEach(item => {
-        count = count + item._count
+    const totalCount = interpellations.reduce((acc, cur) => acc + cur._count, 0)
+    const ministerInterpellationColumns = getColumns('Ministre')
+    const ministerInterpellationRows = interpellations.map(
+      ({ ministre, _count }) => ({
+        label: ministre || STATS_NULL_LABEL,
+        number: _count.toString(),
+        percent: `${getPercentage(_count, totalCount)}%`
       })
-      return count
-    }
-
-    const ministerTotalCount = getMinisterTotalCount()
-
-    const ministerInterpelationRows = ministerInterpelation.map(item => {
-      return {
-        subject: item.ministre,
-        Number: item._count.toString(),
-        Percent: `${getPercentage(item._count, ministerTotalCount)}%`
-      }
-    })
+    )
 
     exportData.push({
-      // FIXME: ExcelJS 31 characters limit for worksheet names
-      // Cf. https://github.com/exceljs/exceljs/issues/398
-      // name: "Bénéficiaires ayant interpellé chaque ministre",
       name: 'Interpellations de ministre',
-      columns: ministerInterpelationColums,
-      rows: ministerInterpelationRows
+      columns: ministerInterpellationColumns,
+      rows: ministerInterpellationRows
     })
   }
 
