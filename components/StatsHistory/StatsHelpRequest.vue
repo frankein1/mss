@@ -172,9 +172,11 @@
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
+  import { EventCategory, ExportStatsEventAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
+  const matomo = useMatomo()
 
   const alertClose = ref<boolean>(true)
 
@@ -289,6 +291,10 @@
       menus.push({
         label: 'En images (.zip)',
         callback: async () => {
+          matomo.trackEvent(
+            EventCategory.ExportStats,
+            ExportStatsEventAction.DownloadImages
+          )
           alertClose.value = false
           const date = new Date()
           setTimeout(() => {
@@ -307,7 +313,13 @@
     if (helpRequestCount.value !== 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        callback: () => handleExportExcel()
+        callback: () => {
+          matomo.trackEvent(
+            EventCategory.ExportStats,
+            ExportStatsEventAction.DownloadExcel
+          )
+          handleExportExcel()
+        }
       })
     }
     return menus
