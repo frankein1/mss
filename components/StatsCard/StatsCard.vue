@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-  import domtoimage from 'dom-to-image-more'
+  import { toBlob } from 'html-to-image'
 
   const props = defineProps<{
     cardName: string
@@ -91,7 +91,7 @@
     if (node) {
       try {
         const scale = 1
-        const blob = await domtoimage.toBlob(node, {
+        const blob = await toBlob(node, {
           width: width,
           height: height,
           style: {
@@ -102,14 +102,19 @@
 
           filter: buttonFilter
         })
-        navigator.clipboard.write([
-          new ClipboardItem({
-            'image/png': blob
-          })
-        ])
-
-        imageCopied.value = true
-        useSnackbar().success("L'image est copiée dans votre presse-papier.")
+        if (blob) {
+          navigator.clipboard.write([
+            new ClipboardItem({
+              'image/png': blob
+            })
+          ])
+          imageCopied.value = true
+          useSnackbar().success("L'image est copiée dans votre presse-papier.")
+        } else {
+          useSnackbar().error("L'image n'a pas pu être copié.", () =>
+            copyButton.value?.focus()
+          )
+        }
         setTimeout(() => {
           imageCopied.value = false
         }, 2000)

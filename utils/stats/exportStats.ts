@@ -1,5 +1,5 @@
 import { StatsCardConfig } from '~/types/stat'
-import domtoimage from 'dom-to-image-more'
+import { toBlob } from 'html-to-image'
 import { StatFilterInput } from '~/server/schema'
 import { getExportUrl } from '~/utils/export/getExportUrl'
 import { getExportFilename } from '~/utils/export/getExportFilename'
@@ -22,7 +22,7 @@ const createBlob = async (
   filter: Filter
 ) => {
   const scale = 1
-  const blob = await domtoimage.toBlob(node, {
+  const blob = await toBlob(node, {
     width: size.width * scale,
     height: size.height * scale,
     style: {
@@ -71,6 +71,10 @@ export const zipAndDownloadImages = async (
         const height = node.clientHeight
         try {
           const blob = await createBlob(node, { width, height }, filter)
+          if (blob == null) {
+            console.error("L'image n'a pas pu être exporté", node.id)
+            return
+          }
           return zipWriter.add(
             findImageName(statsCardConfig, node) + '.png',
             new BlobReader(blob)
@@ -84,6 +88,10 @@ export const zipAndDownloadImages = async (
       const height = node.clientHeight
       try {
         const blob = await createBlob(node, { width, height }, filter)
+        if (blob == null) {
+          console.error("L'image n'a pas pu être exporté", node.id)
+          return
+        }
         return zipWriter.add(
           findImageName(statsCardConfig, node) + '.png',
           new BlobReader(blob)
