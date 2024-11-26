@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "github>nuxt/renovate-config-nuxt"],
+  "docker-compose": {
+    "enabled": false
+  },
+  "dockerfile": {
+    "enabled": false
+  },
+  "timezone": "Europe/Paris",
+  "schedule": ["* 22-23,0-4 * * *", "* * * * 0,6"],
+  "updateNotScheduled": false,
+  "prConcurrentLimit": 5
+}
