@@ -1,6 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+  "extends": ["config:recommended", "github>nuxt/renovate-config-nuxt"],
+  "docker-compose": {
+    "enabled": false
+  },
+  "dockerfile": {
+    "enabled": false
+  }
 }
