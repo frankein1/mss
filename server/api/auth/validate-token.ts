@@ -1,4 +1,4 @@
-import { Prisma, UserActivityType } from '@prisma/client'
+import { Prisma, UserActivityType, UserStatus } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
@@ -7,14 +7,17 @@ import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 import { includeOrderedCGUHistory } from '~/server/query'
 
+const config = useRuntimeConfig()
+
+const unauthorized = (message: string) =>
+  createError({ statusCode: 401, message })
+const forbidden = (message: string) => createError({ statusCode: 403, message })
+
 export default defineEventHandler(async event => {
   const { token } = await readBody(event)
 
   if (!token) {
-    throw createError({
-      statusCode: 400,
-      message: 'Aucun jeton fourni. Merci de vous authentifier à nouveau.'
-    })
+    throw unauthorized('No token found')
   }
 
   const user = await UserRepo.prisma.findFirst({
@@ -31,21 +34,16 @@ export default defineEventHandler(async event => {
   })
 
   if (!user) {
-    throw createError({
-      statusCode: 400,
-      message:
-        "Votre jeton n'est plus valide. Merci de vous authentifier à nouveau."
-    })
+    throw unauthorized('Invalid token')
+  }
+
+  if (user.status !== UserStatus.Active) {
+    throw forbidden('Deactivated user')
   }
 
   if (user.structure && user.structure.disabled) {
-    throw createError({
-      statusCode: 400,
-      message: 'Structure désactivée'
-    })
+    throw forbidden('Deactivated structure')
   }
-
-  const config = useRuntimeConfig()
 
   const {
     firstName,
