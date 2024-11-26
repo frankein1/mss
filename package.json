@@ -96,7 +96,7 @@
   },
   "pnpm": {
     "overrides": {
-      "mermaid": "10.9.3",
+      "mermaid": "11.4.0",
       "tough-cookie": "4.1.4",
       "ws": "^8.18.0"
     }
