@@ -12,7 +12,8 @@ export async function getExpenses({
     where: { id },
     include: {
       loans: { orderBy: { created: 'asc' } },
-      debts: { orderBy: { created: 'asc' } }
+      debts: { orderBy: { created: 'asc' } },
+      customs: { orderBy: { created: 'asc' } }
     }
   })
 }

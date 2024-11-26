@@ -144,6 +144,13 @@
         amountTotal: prismaDecimalToNumber(debt.amountTotal),
         amountPerMonth: prismaDecimalToNumber(debt.amountPerMonth),
         dueDate: debt.dueDate
+      })),
+
+      // Dépenses personnalisées
+      customs: (expenses.value?.customs || []).map(custom => ({
+        id: custom.id,
+        type: custom.type,
+        amount: prismaDecimalToNumber(custom.amount)
       }))
     }
   })

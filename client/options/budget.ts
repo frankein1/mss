@@ -43,6 +43,11 @@ export const budgetDebtsKeys = buildKeys({
   dueDate: 'Echéance de la dette'
 })
 
+export const budgetCustomExpensesKeys = buildKeys({
+  type: 'Type de dépense',
+  amount: 'Montant'
+})
+
 export const budgetIncomeKeys = buildKeys({
   // Travail
   salary: 'Salaire',

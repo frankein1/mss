@@ -36,6 +36,12 @@ const updateLoanOrDebtSchema = z.object({
   dueDate: dateOrEmpty
 })
 
+const updateCustomSchema = z.object({
+  id: z.string().uuid(),
+  type: stringConstraint.nullish(),
+  amount: amountNumber.nullish()
+})
+
 export type UpdateLoanOrDebtInput = z.infer<typeof updateLoanOrDebtSchema>
 
 export const updateBudgetExpensesSchema = z.object({
@@ -65,6 +71,9 @@ export const updateBudgetExpensesSchema = z.object({
   schoolFees: amountNumber.nullish(),
   schoolCanteen: amountNumber.nullish(),
   other: amountNumber.nullish(),
+
+  // Charges custom
+  customs: z.array(updateCustomSchema),
 
   // Crédits et dettes
   loans: z.array(updateLoanOrDebtSchema),

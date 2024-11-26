@@ -1424,6 +1424,9 @@ model BudgetExpenses {
   loans BudgetExpensesLoan[]
   debts BudgetExpensesDebt[]
 
+  // Charges personnalisées
+  customs BudgetExpensesCustom[]
+
   @@map("budget_expenses")
 }
 
@@ -1459,6 +1462,21 @@ model BudgetExpensesDebt {
   expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
 
   @@map("budget_expenses_debt")
+}
+
+model BudgetExpensesCustom {
+  id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
+  type   String?
+  amount Decimal? @map("amount")
+
+  expensesId String         @map("expenses_id") @db.Uuid
+  expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
+
+  @@map("budget_expenses_custom")
 }
 
 model Budget {
