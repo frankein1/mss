@@ -16,7 +16,8 @@ export async function getInfo({
       expenses: {
         include: {
           loans: true,
-          debts: true
+          debts: true,
+          customs: true
         }
       }
     }

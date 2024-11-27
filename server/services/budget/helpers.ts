@@ -33,9 +33,17 @@ function getTotalExpenses(expenses: BudgetExpensesWithLoansAndDebts) {
     null
   )
 
-  return main === null && loans === null && debts === null
+  const customExpenses = expenses.customs.reduce<number | null>(
+    (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+    null
+  )
+
+  return main === null &&
+    loans === null &&
+    debts === null &&
+    customExpenses === null
     ? null
-    : (main || 0) + (loans || 0) + (debts || 0)
+    : (main || 0) + (loans || 0) + (debts || 0) + (customExpenses || 0)
 }
 
 export function getDeltaIncomeExpenses(

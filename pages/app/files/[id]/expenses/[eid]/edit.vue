@@ -30,7 +30,7 @@
           />
 
           <BudgetExpensesForm
-            :main-total="mainExpensesTotal"
+            :main-total="mainExpensesTotal + (customExpensesTotal || 0)"
             :loans-total="loansTotal"
             :debts-total="debtsTotal"
           />
@@ -195,6 +195,13 @@
     )
   )
 
+  const customExpensesTotal = computed(() =>
+    expensesValues.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+      null
+    )
+  )
+
   const loansTotal = computed(() =>
     expensesValues.loans.reduce<number | null>(
       (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
@@ -212,6 +219,7 @@
   const total = computed(() => {
     if (
       mainExpensesTotal.value === null &&
+      customExpensesTotal.value === null &&
       loansTotal.value === null &&
       debtsTotal.value === null
     ) {
@@ -220,6 +228,7 @@
 
     return (
       (mainExpensesTotal.value || 0) +
+      (customExpensesTotal.value || 0) +
       (loansTotal.value || 0) +
       (debtsTotal.value || 0)
     )
