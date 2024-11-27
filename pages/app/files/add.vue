@@ -8,19 +8,18 @@
       <RequiredFields />
     </PageTitle>
     <AtomAlert
-      v-if="error || permissionsError"
+      v-if="error"
       class="fr-mb-2w"
       :alert-type="AlertType.Error"
       message="La liste des référents n'a pas pu être chargée."
     />
     <AtomLoader
-      v-else-if="pending || permissionsPending"
+      v-else-if="pending"
       class="fr-mx-auto"
     />
     <BeneficiaryCreationForm
-      v-else-if="agents?.length && permissions"
+      v-else-if="agents?.length"
       :agents="agents"
-      :permissions="permissions"
       :is-submitting="isSubmitting"
       @save-beneficiary="onCreateBeneficiary"
     />
@@ -48,12 +47,6 @@
     pending,
     error
   } = await trpcClient.config.getAgents.useQuery()
-
-  const {
-    data: permissions,
-    pending: permissionsPending,
-    error: permissionsError
-  } = await trpcClient.permissions.getBeneficiaryCreationPermissions.useQuery()
 
   const isSubmitting = ref(false)
 

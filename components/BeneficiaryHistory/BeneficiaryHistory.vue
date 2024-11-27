@@ -5,7 +5,6 @@
       <BeneficiaryHistoryFilters
         v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
-        :family-file-id="familyFileId"
       />
     </section>
     <AtomAlert
@@ -46,10 +45,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { FamilyFilePermissions } from '~/server/security'
 
-  defineProps<{
-    familyFileId: string
-    familyFilePermissions: FamilyFilePermissions
-  }>()
+  defineProps<{ familyFilePermissions: FamilyFilePermissions }>()
 
   const emit = defineEmits<{ refresh: [] }>()
 

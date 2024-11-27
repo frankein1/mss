@@ -46,10 +46,7 @@
           :subject="subject"
         />
 
-        <HelpRequestFormHousingSection
-          v-if="isHousingSupport"
-          :beneficiary-id="beneficiaryId || ''"
-        />
+        <HelpRequestFormHousingSection v-if="isHousingSupport" />
 
         <hr
           v-else

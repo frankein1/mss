@@ -87,10 +87,6 @@
     roomCountKeys,
     lowIncomeHousingKeys
   } from '~/client/options'
-
-  defineProps<{
-    beneficiaryId: string
-  }>()
 </script>
 
 <style scoped lang="scss">

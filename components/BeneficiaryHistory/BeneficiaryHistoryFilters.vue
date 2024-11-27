@@ -40,7 +40,6 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = defineProps<{
-    familyFileId: string
     resultsLabel: string
     values: FamilyFileHistoryFilterInput
   }>()

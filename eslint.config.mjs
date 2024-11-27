@@ -16,6 +16,10 @@ export default withNuxt({
     'no-console': 'warn',
     'import/no-named-as-default-member': 'error',
     'curly': ['error', 'all'],
-    'no-else-return': ['error', { allowElseIf: false }]
+    'no-else-return': ['error', { allowElseIf: false }],
+    'vue/require-default-prop': 'warn',
+    'vue/no-required-prop-with-default': 'error',
+    'vue/no-unused-emit-declarations': 'warn',
+    'vue/no-unused-properties': 'warn'
   }
 })

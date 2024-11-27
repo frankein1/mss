@@ -63,10 +63,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import type { FilterProp } from '~/types/filter'
 
-  defineProps<{
-    filter: FilterProp
-    searchLabelVisible?: boolean
-  }>()
+  defineProps<{ filter: FilterProp }>()
 
   const emit = defineEmits<{
     changeFilter: [value: string | string[]]

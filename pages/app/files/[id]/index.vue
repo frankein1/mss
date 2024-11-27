@@ -11,7 +11,6 @@
     <div>
       <FamilyFileDetailsHeader
         :beneficiaries="familyFileIdentification"
-        :title="title"
         @open-modal="openAddBeneficiaryModal"
       />
       <hr />
@@ -61,7 +60,6 @@
         <template #[tabTitles.at(2)?.panelId]>
           <BeneficiaryHistory
             v-if="selectedPermissions"
-            :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />

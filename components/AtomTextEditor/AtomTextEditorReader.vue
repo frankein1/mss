@@ -11,7 +11,7 @@
 
   const props = withDefaults(
     defineProps<{
-      value: string | null
+      value?: string | null
       rawText?: string | null
     }>(),
     {
