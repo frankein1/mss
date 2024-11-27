@@ -19,7 +19,8 @@
     fileInstructionTypePictos,
     beneficiaryStatusKeys,
     periodKeys,
-    ministerKeys
+    ministerKeys,
+    ageGroupKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
@@ -153,6 +154,17 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
+    statsFilters.push({
+      name: 'ageGroup',
+      label: "Tranche d'âge",
+      options: withEmptyValue(
+        ageGroupKeys.options,
+        "Toutes les tranches d'âge"
+      ),
+      type: FilterType.SelectOne,
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+    })
+
     return statsFilters
   })
 </script>

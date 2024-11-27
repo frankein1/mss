@@ -2,7 +2,7 @@ import { FileInstructionType, SocialSupportType, Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import { StatFilterInput } from '~/server/schema'
-
+import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~/types/stat'
 
 export function preparePrescribingOrganizationStats(
@@ -82,6 +82,18 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
       socialSupport.beneficiary.status = filters.beneficiaryStatus
     } else {
       socialSupport.beneficiary = { status: filters.beneficiaryStatus }
+    }
+  }
+
+  if (filters.ageGroup) {
+    const dateRange = ageGroupToDateRange(filters.ageGroup)
+    const gte = dateRange.lower?.toDate()
+    const lte = dateRange.upper?.toDate()
+
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.birthDate = { gte, lte }
+    } else {
+      socialSupport.beneficiary = { birthDate: { gte, lte } }
     }
   }
 
@@ -166,6 +178,14 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
 
   if (filters.beneficiaryStatus) {
     formattedFilters.status = filters.beneficiaryStatus
+  }
+
+  if (filters.ageGroup) {
+    const dateRange = ageGroupToDateRange(filters.ageGroup)
+    formattedFilters.birthDate = {
+      gte: dateRange.lower?.toDate(),
+      lte: dateRange.upper?.toDate()
+    }
   }
 
   return formattedFilters
