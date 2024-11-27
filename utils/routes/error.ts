@@ -13,5 +13,10 @@ export const routes = {
     name: 'ErrorUnknownUser',
     title: "Votre compte InclusionConnect n'est pas rattaché",
     path: () => '/error/unknown-user-ic'
+  },
+  ErrorInvalidToken: {
+    name: 'ErrorInvalidToken',
+    title: "L'authentification a échoué",
+    path: () => '/error/invalid-token'
   }
 } as const
