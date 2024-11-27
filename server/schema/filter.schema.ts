@@ -45,7 +45,8 @@ const statFilterSchema = z.object({
   referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
-  beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish()
+  beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
+  ageGroup: z.nativeEnum(AgeGroup).nullish()
 })
 
 type StatFilterInput = Omit<
