@@ -16,7 +16,8 @@ export async function getBudget({
       expenses: {
         include: {
           loans: { orderBy: { created: 'asc' } },
-          debts: { orderBy: { created: 'asc' } }
+          debts: { orderBy: { created: 'asc' } },
+          customs: { orderBy: { created: 'asc' } }
         }
       },
       incomes: {

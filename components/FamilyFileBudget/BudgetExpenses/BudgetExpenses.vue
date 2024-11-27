@@ -13,9 +13,7 @@
     color="rust"
     title="Charges principales"
     :total="mainExpensesTotal"
-    :keys="nonZeroExpensesKeys"
-    :label-getter="(key: string) => budgetExpensesKeys.value(key)"
-    :value-getter="(key: string) => expenses[key as ExpensesKey]"
+    :items="expensesItems"
     :edit-route="
       routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
     "
@@ -59,17 +57,33 @@
     expenses: BudgetExpenses
   }>()
 
-  const nonZeroExpensesKeys = computed(() =>
-    budgetExpensesKeys.keys.filter(
+  const getExpenses = () => {
+    const keys = budgetExpensesKeys.keys.filter(
       key =>
         (prismaDecimalToNumber(props.expenses[key as ExpensesKey]) || 0) > 0
     )
-  )
+    const regularExpenses = keys.map(key => {
+      return {
+        key: key,
+        label: budgetExpensesKeys.value(key) || '',
+        amount: (props.expenses[key as ExpensesKey] || 0) as number
+      }
+    })
+    const customExpenses = props.expenses.customs.map(expense => {
+      return {
+        key: expense.expensesId,
+        label: expense.type || '',
+        amount: Number(expense.amount) || 0
+      }
+    })
+    return [...regularExpenses, ...customExpenses]
+  }
+
+  const expensesItems = computed(() => getExpenses())
 
   const mainExpensesTotal = computed(() =>
-    nonZeroExpensesKeys.value.reduce<number | null>(
-      (acc, cur) =>
-        incrementBudgetTotal(acc, props.expenses[cur as ExpensesKey]),
+    expensesItems.value.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
       null
     )
   )
