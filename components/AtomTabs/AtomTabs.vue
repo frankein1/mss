@@ -43,8 +43,7 @@
 
   const props = withDefaults(
     defineProps<{
-      tabListName: string
-      tabTitles: (DsfrTabItemProps & { title: string })[]
+      tabTitles?: (DsfrTabItemProps & { title: string })[]
       headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 | null
     }>(),
     { tabTitles: () => [], headingLevel: null }

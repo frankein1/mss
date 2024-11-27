@@ -24,7 +24,6 @@
       v-show="!pending"
       v-model:sort="orderBy"
       :users="users"
-      :pending="pending"
     />
   </div>
 </template>

@@ -24,7 +24,6 @@
     <StructureTableAdmin
       v-show="!pending"
       :structures="structures"
-      :pending="pending"
     />
   </div>
 </template>

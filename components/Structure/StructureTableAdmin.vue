@@ -59,8 +59,5 @@
   import { structureTypeKeys } from '~/client/options'
   import { routes } from '~/utils/routes'
 
-  defineProps<{
-    structures: Structures
-    pending: boolean
-  }>()
+  defineProps<{ structures: Structures }>()
 </script>

@@ -2,9 +2,8 @@
   <div class="fr-p-3v">
     <h2 class="title-blue fr-mb-6v">Informations générales</h2>
     <BeneficiaryFormFileInformation
-      :agents="agents"
+      :agents
       :beneficiary-referent-ids="beneficiaryReferentIds"
-      :permissions="permissions"
       full
     />
     <BeneficiaryFormIdentity
@@ -25,7 +24,6 @@
     BeneficiaryIdentification,
     BeneficiaryReferent
   } from '~/types/beneficiary'
-  import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
@@ -34,7 +32,6 @@
     defineProps<{
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
-      permissions: FamilyFilePermissions
       initialBeneficiary: BeneficiaryIdentification | null
     }>(),
     {}

@@ -51,7 +51,7 @@
     defineProps<{
       name: string
       label?: string | null
-      initialValue: string | null
+      initialValue?: string | null
       initialRawValue?: string | null
       disabled?: boolean
       labelIcon?: string

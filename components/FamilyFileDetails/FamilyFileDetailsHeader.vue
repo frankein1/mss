@@ -54,7 +54,6 @@
   import { formatFamilyFileLabels } from '~/utils/familyFile'
 
   const props = defineProps<{
-    title: string
     beneficiaries: BeneficiaryFileIdentification[]
   }>()
 

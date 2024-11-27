@@ -49,8 +49,5 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { routes } from '~/utils/routes'
 
-  defineProps<{
-    users: AdminUsersOutput
-    pending: boolean
-  }>()
+  defineProps<{ users: AdminUsersOutput }>()
 </script>

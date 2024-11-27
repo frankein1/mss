@@ -19,7 +19,6 @@
     >
       <BeneficiaryFormGeneralInformation
         v-if="bindedValues && permissions && agents?.length"
-        :permissions="permissions"
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
         :initial-beneficiary="beneficiaryIdentification"

@@ -9,10 +9,7 @@
     class="fr-p-3v"
     @submit.prevent="onSubmit"
   >
-    <BeneficiaryFormFileInformation
-      :agents="agents"
-      :permissions="permissions"
-    />
+    <BeneficiaryFormFileInformation :agents />
 
     <div
       class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
@@ -158,13 +155,11 @@
     createBeneficiarySchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
   import { beneficiaryTitleKeys } from '~/client/options'
 
   defineProps<{
     isSubmitting: boolean
-    permissions: FamilyFilePermissions
     agents: BeneficiaryReferent[]
   }>()
 
