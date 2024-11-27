@@ -54,8 +54,7 @@
         <!-- ROW -->
         <div class="fr-col-12">
           <StatsFollowupBeneficiaryNumber
-            hystory-type="followup"
-            :total-count="followupCount"
+            history-type="followup"
             :filters="filters"
           />
         </div>

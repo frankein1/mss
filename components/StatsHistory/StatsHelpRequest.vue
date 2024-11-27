@@ -46,8 +46,7 @@
         <!-- ROW -->
         <div class="fr-col-12">
           <StatsHelpRequestBeneficiaryNumber
-            hystory-type="helprequest"
-            :total-count="helpRequestCount"
+            history-type="helprequest"
             :filters="filters"
           />
         </div>

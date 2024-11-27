@@ -7,14 +7,13 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées.`"
+      message="Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées."
     />
     <template v-else-if="beneficiaryCounts !== null">
       <StatsBeneficiaryNumber
         v-if="beneficiaryCounts"
-        :beneficiary-counts="beneficiaryCounts"
-        :files-counts="undefined"
-        :hystory-type="hystoryType"
+        :beneficiary-counts
+        :history-type
       />
       <p v-else>
         Commencez à créer des instructions de dossier dans les fiches de
@@ -32,9 +31,8 @@
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    totalCount: number
     filters: StatFilterInput
-    hystoryType?: 'followup' | 'helprequest'
+    historyType?: 'helprequest'
   }>()
 
   const {

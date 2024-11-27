@@ -40,6 +40,14 @@
 
       <!-- Cards -->
       <template v-else-if="beneficiaryCount">
+        <div class="fr-col-12">
+          <StatsBeneficiariesFamilyFileNumber
+            history-type="beneficiary"
+            :total-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
           :card-id="beneficiariesCardConfig.gender.id"
