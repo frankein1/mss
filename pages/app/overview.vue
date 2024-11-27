@@ -46,4 +46,6 @@
       unwatch()
     }
   })
+
+  useBrevoChatbot()
 </script>
