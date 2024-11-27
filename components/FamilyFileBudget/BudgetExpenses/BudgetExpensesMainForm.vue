@@ -167,9 +167,10 @@
       </div>
       <h3 class="fr-h5 fr-m-0 fr-col-12">Charges personnalisées</h3>
       <div class="fr-col-12">
-        <CustomExpenseForm
+        <CustomForm
           v-for="(field, idx) in fields"
           :key="field.key"
+          type="expense"
           :index="idx"
           @remove="remove(idx)"
         />

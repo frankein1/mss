@@ -207,7 +207,14 @@
       // Autre ressources
       dailyAllowance: prismaDecimalToNumber(income.value?.dailyAllowance),
       annuity: prismaDecimalToNumber(income.value?.annuity),
-      other: prismaDecimalToNumber(income.value?.other)
+      other: prismaDecimalToNumber(income.value?.other),
+
+      // Ressources personnalisée
+      customs: (income.value?.customs || []).map(custom => ({
+        id: custom.id,
+        type: custom.type,
+        amount: prismaDecimalToNumber(custom.amount)
+      }))
     }
   })
 
@@ -240,11 +247,22 @@
     })
   })
 
-  const total = computed(() =>
+  const defaultTotal = computed(() =>
     budgetIncomeKeys.keys.reduce<number | null>(
       (acc, cur) => incrementBudgetTotal(acc, incomeValues[cur as IncomeKey]),
       null
     )
+  )
+
+  const customIncomeTotal = computed(() =>
+    incomeValues.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount || 0),
+      null
+    )
+  )
+
+  const total = computed(
+    () => (defaultTotal.value || 0) + (customIncomeTotal.value || 0)
   )
 
   function onCancel() {

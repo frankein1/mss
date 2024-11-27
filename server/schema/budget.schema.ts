@@ -106,7 +106,10 @@ export const updateBudgetIncomeSchema = z.object({
   // Autre ressources
   dailyAllowance: amountNumber.nullish(),
   annuity: amountNumber.nullish(),
-  other: amountNumber.nullish()
+  other: amountNumber.nullish(),
+
+  // Ressouces personnalisées
+  customs: z.array(updateCustomSchema)
 })
 
 export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>

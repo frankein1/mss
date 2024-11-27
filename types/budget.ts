@@ -5,7 +5,8 @@ import type {
   Budget,
   BudgetExpensesDebt,
   BudgetExpensesLoan,
-  BudgetExpensesCustom
+  BudgetExpensesCustom,
+  BudgetIncomeCustom
 } from '@prisma/client'
 import { BeneficiaryFileIdentification } from './beneficiary'
 
@@ -33,6 +34,8 @@ export type GetIncomeHouseholdMemberBudget = BudgetIncome & {
 
 export type GetBudgetIncomeHouseholdMember = BudgetIncome & {
   beneficiary: BeneficiaryFileIdentification | null
+} & {
+  customs: BudgetIncomeCustom[]
 }
 
 export type BudgetExpensesWithLoansAndDebts = BudgetExpenses & {

@@ -11,6 +11,7 @@ export async function getIncome({
   return await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
     include: {
+      customs: { orderBy: { created: 'asc' } },
       beneficiary: {
         select: {
           id: true,

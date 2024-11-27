@@ -47,6 +47,10 @@ export const budgetCustomExpensesKeys = buildKeys({
   type: 'Type de dépense',
   amount: 'Montant'
 })
+export const budgetCustomIncomeKeys = buildKeys({
+  type: 'Type de ressource',
+  amount: 'Montant'
+})
 
 export const budgetIncomeKeys = buildKeys({
   // Travail

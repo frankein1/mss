@@ -1351,6 +1351,9 @@ model BudgetIncome {
   annuity        Decimal?
   other          Decimal?
 
+  // Charges personnalisées
+  customs BudgetIncomeCustom[]
+
   type BudgetIncomeType
 
   beneficiaryId String?      @unique @map("beneficiary_id") @db.Uuid
@@ -1364,6 +1367,21 @@ model BudgetIncome {
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   @@map("budget_income")
+}
+
+model BudgetIncomeCustom {
+  id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
+  type   String?
+  amount Decimal? @map("amount")
+
+  incomeId String       @map("income_id") @db.Uuid
+  income   BudgetIncome @relation(fields: [incomeId], references: [id], onDelete: Cascade)
+
+  @@map("budget_income_custom")
 }
 
 model FamilyFile {

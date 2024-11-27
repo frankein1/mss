@@ -22,6 +22,7 @@ export async function getBudget({
       },
       incomes: {
         include: {
+          customs: { orderBy: { created: 'asc' } },
           beneficiary: {
             select: {
               id: true,

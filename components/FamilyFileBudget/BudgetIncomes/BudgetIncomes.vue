@@ -8,47 +8,21 @@
     >
   </div>
 
-  <section
+  <BudgetCard
     v-for="(income, idxIncome) in incomes"
     :key="idxIncome"
-    class="card-outline card-outline--deep-blue fr-mb-2w"
-  >
-    <div class="budget-income__title">
-      <h4 class="fr-text--lead fr-m-0">{{ memberNames[idxIncome] }}</h4>
-      <span
-        class="fr-h6 fr-m-0"
-        :class="{ 'euro-symbol': memberTotalIncomes[idxIncome] !== null }"
-        >{{
-          memberTotalIncomes[idxIncome] !== null
-            ? euros(memberTotalIncomes[idxIncome])
-            : '-'
-        }}</span
-      >
-    </div>
-
-    <ul class="list-styled">
-      <li
-        v-for="(category, idxCategory) in nonZeroIncomeKeys[idxIncome]"
-        :key="idxCategory"
-      >
-        <span>{{ budgetIncomeKeys.value(category) }}</span>
-        <span class="budget-income__item__value euro-symbol">{{
-          euros(income[category as IncomeKey])
-        }}</span>
-      </li>
-    </ul>
-
-    <div class="budget-income__action">
-      <NuxtLink
-        :to="
-          routes.budget.AppFileBudgetIncomeEdit.path(familyFileId, income.id)
-        "
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
-        title="Modifier"
-      >
-      </NuxtLink>
-    </div>
-  </section>
+    class="fr-mb-2w"
+    color="deep-blue"
+    :title="memberNames[idxIncome]"
+    :total="
+      (memberTotalIncomes[idxIncome] || 0) +
+      (getMemberTotalCustomIncome(income) || 0)
+    "
+    :items="getIncome(income)"
+    :edit-route="
+      routes.budget.AppFileBudgetIncomeEdit.path(familyFileId, income.id)
+    "
+  />
 
   <section>
     <BudgetIncomesAddMember
@@ -74,6 +48,27 @@
     incomes: GetBudgetIncomeHouseholdMember[]
     familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
+
+  const getIncome = (income: GetBudgetIncomeHouseholdMember) => {
+    const keys = budgetIncomeKeys.keys.filter(
+      key => (prismaDecimalToNumber(income[key as IncomeKey]) || 0) > 0
+    )
+    const regularIncome = keys.map(key => {
+      return {
+        key: key,
+        label: budgetIncomeKeys.value(key) || '',
+        amount: (income[key as IncomeKey] || 0) as number
+      }
+    })
+
+    const customIncome = income.customs.map(custom => ({
+      key: custom.id,
+      label: custom.type || '',
+      amount: Number(custom.amount) || 0
+    }))
+
+    return [...regularIncome, ...customIncome]
+  }
 
   const memberNames = computed(() =>
     props.incomes.map(income => {
@@ -105,6 +100,15 @@
     )
   )
 
+  const getMemberTotalCustomIncome = (
+    income: GetBudgetIncomeHouseholdMember
+  ) => {
+    return income.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+      null
+    )
+  }
+
   const total = computed(() =>
     memberTotalIncomes.value.reduce(
       (acc, cur) => incrementBudgetTotal(acc, cur),
@@ -115,23 +119,4 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/card' as *;
-  @use '~/assets/style/list' as *;
-
-  .budget-income__title {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .budget-income__item__value {
-    font-weight: var(--bold);
-  }
-
-  .budget-income__action {
-    display: flex;
-    justify-content: flex-end;
-
-    > .fr-btn {
-      color: var(--deep-blue);
-    }
-  }
 </style>
