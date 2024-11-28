@@ -23,6 +23,7 @@
 <script lang="ts" setup>
   import { SocialSupportStatus } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
+  import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
@@ -51,14 +52,14 @@
 
   function getColor(status: SocialSupportStatus) {
     if (status === SocialSupportStatus.Todo) {
-      return '#3bea7e'
+      return ChartColor.LightBlue
     }
     if (status === SocialSupportStatus.InProgress) {
-      return '#7AB1E8'
+      return ChartColor.Peach
     }
     if (status === SocialSupportStatus.Done) {
-      return '#6f45f7'
+      return ChartColor.Green
     }
-    return ''
+    return ChartColor.Gray
   }
 </script>
