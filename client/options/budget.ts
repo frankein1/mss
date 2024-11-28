@@ -4,7 +4,7 @@ export const budgetExpensesKeys = buildKeys({
   rent: 'Loyer',
   expenses: 'Charges',
   water: 'Eau',
-  electricity: 'Electricité',
+  electricity: 'Électricité',
   gas: 'Gaz',
   fuelOrOther: 'Fuel (ou autre mode de chauffage)',
 
