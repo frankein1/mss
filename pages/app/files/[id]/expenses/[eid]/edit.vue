@@ -30,16 +30,18 @@
           />
 
           <BudgetExpensesForm
-            :main-total="mainExpensesTotal + (customExpensesTotal || 0)"
+            :main-total="mainExpensesTotal"
             :loans-total="loansTotal"
             :debts-total="debtsTotal"
           />
 
           <section class="expenses__total">
             <h2 class="fr-h4 fr-m-0">Total :</h2>
-            <span class="fr-h4 fr-m-0 euro-symbol">{{
-              total !== null ? euros(total) : '-'
-            }}</span>
+            <span
+              class="fr-h4 fr-m-0"
+              :class="{ 'euro-symbol': total !== null }"
+              >{{ total !== null ? euros(total) : '-' }}</span
+            >
           </section>
         </div>
       </main>
@@ -187,7 +189,7 @@
     })
   })
 
-  const mainExpensesTotal = computed(() =>
+  const defaultExpensesTotal = computed(() =>
     budgetExpensesKeys.keys.reduce<number | null>(
       (acc, cur) =>
         incrementBudgetTotal(acc, expensesValues[cur as ExpensesKey]),
@@ -201,6 +203,16 @@
       null
     )
   )
+
+  const mainExpensesTotal = computed(() => {
+    if (
+      defaultExpensesTotal.value === null &&
+      customExpensesTotal.value === null
+    ) {
+      return null
+    }
+    return (defaultExpensesTotal.value || 0) + (customExpensesTotal.value || 0)
+  })
 
   const loansTotal = computed(() =>
     expensesValues.loans.reduce<number | null>(

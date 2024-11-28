@@ -187,7 +187,10 @@
 
     <section class="subtotal fr-h4 fr-mt-5w">
       <span>Sous-total charges principales</span>
-      <span class="primary euro-symbol">
+      <span
+        class="primary"
+        :class="{ 'euro-symbol': total !== null }"
+      >
         {{ total !== null ? euros(total) : '-' }}
       </span>
     </section>

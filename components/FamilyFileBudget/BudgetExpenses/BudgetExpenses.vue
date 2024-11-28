@@ -1,11 +1,7 @@
 <template>
   <div class="card card--rust fr-mb-2w">
     <h3 class="fr-h6 fr-m-0">Charges du foyer fiscal</h3>
-    <span
-      class="fr-h4 fr-m-0"
-      :class="{ 'euro-symbol': total !== null }"
-      >{{ total !== null ? euros(total) : '-' }}</span
-    >
+    <span class="fr-h4 fr-m-0 euro-symbol">{{ euros(total) }}</span>
   </div>
 
   <BudgetCard
@@ -81,36 +77,31 @@
 
   const expensesItems = computed(() => getExpenses())
 
-  const mainExpensesTotal = computed(() =>
-    expensesItems.value.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
-      null
-    )
+  const mainExpensesTotal = computed(
+    () =>
+      expensesItems.value.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+        null
+      ) || 0
   )
 
-  const loansTotal = computed(() =>
-    props.expenses.loans.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
-      null
-    )
+  const loansTotal = computed(
+    () =>
+      props.expenses.loans.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+        null
+      ) || 0
   )
 
-  const debtsTotal = computed(() =>
-    props.expenses.debts.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
-      null
-    )
+  const debtsTotal = computed(
+    () =>
+      props.expenses.debts.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+        null
+      ) || 0
   )
 
   const total = computed(() => {
-    if (
-      mainExpensesTotal.value === null &&
-      loansTotal.value === null &&
-      debtsTotal.value === null
-    ) {
-      return null
-    }
-
     return (
       (mainExpensesTotal.value || 0) +
       (loansTotal.value || 0) +

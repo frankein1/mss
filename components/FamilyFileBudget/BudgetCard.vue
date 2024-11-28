@@ -6,11 +6,8 @@
     <div class="budget-card__title">
       <h4 class="fr-text--lead fr-m-0">{{ title }}</h4>
 
-      <span
-        class="fr-h6 fr-m-0"
-        :class="{ 'euro-symbol': total !== null }"
-      >
-        {{ total !== null ? euros(total) : '-' }}
+      <span class="fr-h6 fr-m-0 euro-symbol">
+        {{ euros(total) }}
       </span>
     </div>
 
@@ -95,7 +92,7 @@
     defineProps<{
       color: 'rust' | 'deep-blue'
       title: string
-      total: number | null
+      total: number
       editRoute: string
       items?: {
         key: string

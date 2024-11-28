@@ -1,11 +1,7 @@
 <template>
   <div class="card card--deep-blue fr-mb-2w">
     <h3 class="fr-h6 fr-m-0">Revenus du foyer fiscal</h3>
-    <span
-      class="fr-h4 fr-m-0"
-      :class="{ 'euro-symbol': total !== null }"
-      >{{ total !== null ? euros(total) : '-' }}</span
-    >
+    <span class="fr-h4 fr-m-0 euro-symbol">{{ euros(total) }}</span>
   </div>
 
   <BudgetCard
@@ -15,8 +11,7 @@
     color="deep-blue"
     :title="memberNames[idxIncome]"
     :total="
-      (memberTotalIncomes[idxIncome] || 0) +
-      (getMemberTotalCustomIncome(income) || 0)
+      memberDefaultIncomes[idxIncome] + getMemberTotalCustomIncome(income)
     "
     :items="getIncome(income)"
     :edit-route="
@@ -91,29 +86,33 @@
     )
   )
 
-  const memberTotalIncomes = computed(() =>
-    props.incomes.map((income, index) =>
-      nonZeroIncomeKeys.value[index].reduce<number | null>(
-        (acc, cur) => incrementBudgetTotal(acc, income[cur as IncomeKey]),
-        null
-      )
+  const memberDefaultIncomes = computed(() =>
+    props.incomes.map(
+      (income, index) =>
+        nonZeroIncomeKeys.value[index].reduce<number | null>(
+          (acc, cur) => incrementBudgetTotal(acc, income[cur as IncomeKey]),
+          null
+        ) || 0
     )
   )
 
   const getMemberTotalCustomIncome = (
     income: GetBudgetIncomeHouseholdMember
   ) => {
-    return income.customs.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
-      null
+    return (
+      income.customs.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+        null
+      ) || 0
     )
   }
 
-  const total = computed(() =>
-    memberTotalIncomes.value.reduce(
-      (acc, cur) => incrementBudgetTotal(acc, cur),
-      null
-    )
+  const total = computed(
+    () =>
+      memberDefaultIncomes.value.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur),
+        null
+      ) || 0
   )
 </script>
 
