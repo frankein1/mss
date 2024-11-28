@@ -36,14 +36,15 @@
   import { getStatColor } from '~/client/colors/stats'
   import { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { ChartColor } from '~/utils/color/chartColors'
 
   const AgeGroupColors = {
-    [AgeGroup.Less25]: '#BABAFF',
-    [AgeGroup.Group25_34]: '#A8A8FF',
-    [AgeGroup.Group35_44]: '#8585f6',
-    [AgeGroup.Group45_54]: '#6a6af4',
-    [AgeGroup.Group55_64]: '#313178',
-    [AgeGroup.More65]: '#272747'
+    [AgeGroup.Less25]: ChartColor.Peach,
+    [AgeGroup.Group25_34]: ChartColor.LightBlue,
+    [AgeGroup.Group35_44]: ChartColor.Yellow,
+    [AgeGroup.Group45_54]: ChartColor.Pink,
+    [AgeGroup.Group55_64]: ChartColor.DeepBlue,
+    [AgeGroup.More65]: ChartColor.Green
   }
 
   const trpcClient = useTrpcClient()

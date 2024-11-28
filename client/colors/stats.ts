@@ -1,4 +1,6 @@
-export const STATS_NULL_COLOR = '#AAA'
+import { ChartColor } from '~/utils/color/chartColors'
+
+export const STATS_NULL_COLOR = ChartColor.Gray
 
 export const getStatColor = <T extends string>(
   colors: Record<T, string>,

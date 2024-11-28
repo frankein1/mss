@@ -37,11 +37,12 @@
   import { getStatLabel, beneficiaryGenderKeys } from '~/client/options'
   import { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { ChartColor } from '~/utils/color/chartColors'
 
   const GenderColor = {
-    [Gender.Female]: '#FF8886',
-    [Gender.Male]: '#8D81E4',
-    [Gender.Other]: '#FFCD56'
+    [Gender.Female]: ChartColor.Peach,
+    [Gender.Male]: ChartColor.LightBlue,
+    [Gender.Other]: ChartColor.Yellow
   }
 
   const trpcClient = useTrpcClient()
