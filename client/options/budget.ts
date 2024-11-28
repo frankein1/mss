@@ -4,7 +4,7 @@ export const budgetExpensesKeys = buildKeys({
   rent: 'Loyer',
   expenses: 'Charges',
   water: 'Eau',
-  electricity: 'Electricité',
+  electricity: 'Électricité',
   gas: 'Gaz',
   fuelOrOther: 'Fuel (ou autre mode de chauffage)',
 
@@ -33,14 +33,14 @@ export const budgetLoansKeys = buildKeys({
   type: 'Type de crédit',
   amountTotal: 'Montant total',
   amountPerMonth: 'Montant mensuel',
-  dueDate: 'Echéance du crédit'
+  dueDate: 'Échéance du crédit'
 })
 
 export const budgetDebtsKeys = buildKeys({
   type: 'Type de dette',
   amountTotal: 'Montant total',
   amountPerMonth: 'Montant mensuel',
-  dueDate: 'Echéance de la dette'
+  dueDate: 'Échéance de la dette'
 })
 
 export const budgetCustomExpensesKeys = buildKeys({

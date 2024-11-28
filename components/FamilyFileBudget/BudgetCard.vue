@@ -60,7 +60,7 @@
                 v-if="item.dueDate"
                 class="fr-col-12 budget-card__subcategory fr-text--xs fr-mb-1v grey"
               >
-                <span>Echéance</span>
+                <span>Échéance</span>
                 <span>
                   {{ formatDate(item.dueDate) }}
                 </span>
