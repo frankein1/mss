@@ -37,9 +37,11 @@
 
           <section class="expenses__total">
             <h2 class="fr-h4 fr-m-0">Total :</h2>
-            <span class="fr-h4 fr-m-0 euro-symbol">{{
-              total !== null ? euros(total) : '-'
-            }}</span>
+            <span
+              class="fr-h4 fr-m-0"
+              :class="{ 'euro-symbol': total !== null }"
+              >{{ total !== null ? euros(total) : '-' }}</span
+            >
           </section>
         </div>
       </main>
@@ -144,6 +146,13 @@
         amountTotal: prismaDecimalToNumber(debt.amountTotal),
         amountPerMonth: prismaDecimalToNumber(debt.amountPerMonth),
         dueDate: debt.dueDate
+      })),
+
+      // Dépenses personnalisées
+      customs: (expenses.value?.customs || []).map(custom => ({
+        id: custom.id,
+        type: custom.type,
+        amount: prismaDecimalToNumber(custom.amount)
       }))
     }
   })
@@ -180,13 +189,30 @@
     })
   })
 
-  const mainExpensesTotal = computed(() =>
+  const defaultExpensesTotal = computed(() =>
     budgetExpensesKeys.keys.reduce<number | null>(
       (acc, cur) =>
         incrementBudgetTotal(acc, expensesValues[cur as ExpensesKey]),
       null
     )
   )
+
+  const customExpensesTotal = computed(() =>
+    expensesValues.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+      null
+    )
+  )
+
+  const mainExpensesTotal = computed(() => {
+    if (
+      defaultExpensesTotal.value === null &&
+      customExpensesTotal.value === null
+    ) {
+      return null
+    }
+    return (defaultExpensesTotal.value || 0) + (customExpensesTotal.value || 0)
+  })
 
   const loansTotal = computed(() =>
     expensesValues.loans.reduce<number | null>(
@@ -205,6 +231,7 @@
   const total = computed(() => {
     if (
       mainExpensesTotal.value === null &&
+      customExpensesTotal.value === null &&
       loansTotal.value === null &&
       debtsTotal.value === null
     ) {
@@ -213,6 +240,7 @@
 
     return (
       (mainExpensesTotal.value || 0) +
+      (customExpensesTotal.value || 0) +
       (loansTotal.value || 0) +
       (debtsTotal.value || 0)
     )

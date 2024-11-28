@@ -16,11 +16,13 @@ export async function getBudget({
       expenses: {
         include: {
           loans: { orderBy: { created: 'asc' } },
-          debts: { orderBy: { created: 'asc' } }
+          debts: { orderBy: { created: 'asc' } },
+          customs: { orderBy: { created: 'asc' } }
         }
       },
       incomes: {
         include: {
+          customs: { orderBy: { created: 'asc' } },
           beneficiary: {
             select: {
               id: true,

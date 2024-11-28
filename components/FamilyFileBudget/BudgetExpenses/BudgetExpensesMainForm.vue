@@ -162,11 +162,35 @@
           :label="budgetExpensesKeys.byKey.other"
         />
       </div>
+      <div class="fr-col-12">
+        <hr class="separator fr-m-1w" />
+      </div>
+      <h3 class="fr-h5 fr-m-0 fr-col-12">Charges personnalisées</h3>
+      <div class="fr-col-12">
+        <CustomForm
+          v-for="(field, idx) in fields"
+          :key="field.key"
+          type="expense"
+          :index="idx"
+          @remove="remove(idx)"
+        />
+      </div>
+      <DsfrButton
+        label="Ajouter une charge personalisée"
+        type="button"
+        icon="fr-icon-add-line"
+        tertiary
+        no-outline
+        @click="push({ id: v4() })"
+      />
     </section>
 
-    <section class="subtotal fr-h4 fr-mt-3w">
+    <section class="subtotal fr-h4 fr-mt-5w">
       <span>Sous-total charges principales</span>
-      <span class="primary euro-symbol">
+      <span
+        class="primary"
+        :class="{ 'euro-symbol': total !== null }"
+      >
         {{ total !== null ? euros(total) : '-' }}
       </span>
     </section>
@@ -175,8 +199,13 @@
 
 <script setup lang="ts">
   import { budgetExpensesKeys } from '~/client/options'
+  import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import { v4 } from 'uuid'
 
   defineProps<{ total: number | null }>()
+
+  const { fields, push, remove } =
+    useFieldArray<UpdateLoanOrDebtInput>('customs')
 </script>
 
 <style scoped>

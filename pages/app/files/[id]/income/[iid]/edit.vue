@@ -46,9 +46,11 @@
 
           <section class="income__total">
             <h2 class="fr-h4 fr-m-0">Total :</h2>
-            <span class="fr-h4 fr-m-0 euro-symbol">{{
-              total !== null ? euros(total) : '-'
-            }}</span>
+            <span
+              class="fr-h4 fr-m-0"
+              :class="{ 'euro-symbol': total !== null }"
+              >{{ total !== null ? euros(total) : '-' }}</span
+            >
           </section>
         </div>
       </main>
@@ -207,7 +209,14 @@
       // Autre ressources
       dailyAllowance: prismaDecimalToNumber(income.value?.dailyAllowance),
       annuity: prismaDecimalToNumber(income.value?.annuity),
-      other: prismaDecimalToNumber(income.value?.other)
+      other: prismaDecimalToNumber(income.value?.other),
+
+      // Ressources personnalisée
+      customs: (income.value?.customs || []).map(custom => ({
+        id: custom.id,
+        type: custom.type,
+        amount: prismaDecimalToNumber(custom.amount)
+      }))
     }
   })
 
@@ -240,12 +249,25 @@
     })
   })
 
-  const total = computed(() =>
+  const defaultTotal = computed(() =>
     budgetIncomeKeys.keys.reduce<number | null>(
       (acc, cur) => incrementBudgetTotal(acc, incomeValues[cur as IncomeKey]),
       null
     )
   )
+  const customIncomeTotal = computed(() =>
+    incomeValues.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+      null
+    )
+  )
+
+  const total = computed(() => {
+    if (defaultTotal.value === null && customIncomeTotal.value === null) {
+      return null
+    }
+    return (defaultTotal.value || 0) + (customIncomeTotal.value || 0)
+  })
 
   function onCancel() {
     navigateTo(budgetTabRoute)

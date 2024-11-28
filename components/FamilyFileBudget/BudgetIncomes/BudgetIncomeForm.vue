@@ -124,11 +124,39 @@
         />
       </div>
     </section>
+
+    <hr class="separator" />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h2 class="fr-h5 fr-m-0 fr-col-12">Ressources personnalisées</h2>
+      <div class="fr-col-12">
+        <CustomForm
+          v-for="(field, idx) in fields"
+          :key="field.key"
+          type="income"
+          :index="idx"
+          @remove="remove(idx)"
+        />
+      </div>
+      <DsfrButton
+        label="Ajouter une ressources personalisée"
+        type="button"
+        icon="fr-icon-add-line"
+        tertiary
+        no-outline
+        @click="push({ id: v4() })"
+      />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
   import { budgetIncomeKeys } from '~/client/options'
+  import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import { v4 } from 'uuid'
+
+  const { fields, push, remove } =
+    useFieldArray<UpdateLoanOrDebtInput>('customs')
 </script>
 
 <style scoped>

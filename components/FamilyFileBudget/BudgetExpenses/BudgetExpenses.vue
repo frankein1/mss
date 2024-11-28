@@ -1,11 +1,7 @@
 <template>
   <div class="card card--rust fr-mb-2w">
     <h3 class="fr-h6 fr-m-0">Charges du foyer fiscal</h3>
-    <span
-      class="fr-h4 fr-m-0"
-      :class="{ 'euro-symbol': total !== null }"
-      >{{ total !== null ? euros(total) : '-' }}</span
-    >
+    <span class="fr-h4 fr-m-0 euro-symbol">{{ euros(total) }}</span>
   </div>
 
   <BudgetCard
@@ -13,9 +9,7 @@
     color="rust"
     title="Charges principales"
     :total="mainExpensesTotal"
-    :keys="nonZeroExpensesKeys"
-    :label-getter="(key: string) => budgetExpensesKeys.value(key)"
-    :value-getter="(key: string) => expenses[key as ExpensesKey]"
+    :items="expensesItems"
     :edit-route="
       routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
     "
@@ -59,44 +53,55 @@
     expenses: BudgetExpenses
   }>()
 
-  const nonZeroExpensesKeys = computed(() =>
-    budgetExpensesKeys.keys.filter(
+  const getExpenses = () => {
+    const keys = budgetExpensesKeys.keys.filter(
       key =>
         (prismaDecimalToNumber(props.expenses[key as ExpensesKey]) || 0) > 0
     )
+    const regularExpenses = keys.map(key => {
+      return {
+        key: key,
+        label: budgetExpensesKeys.value(key) || '',
+        amount: (props.expenses[key as ExpensesKey] || 0) as number
+      }
+    })
+    const customExpenses = props.expenses.customs.map(expense => {
+      return {
+        key: expense.expensesId,
+        label: expense.type || '',
+        amount: Number(expense.amount) || 0
+      }
+    })
+    return [...regularExpenses, ...customExpenses]
+  }
+
+  const expensesItems = computed(() => getExpenses())
+
+  const mainExpensesTotal = computed(
+    () =>
+      expensesItems.value.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+        null
+      ) || 0
   )
 
-  const mainExpensesTotal = computed(() =>
-    nonZeroExpensesKeys.value.reduce<number | null>(
-      (acc, cur) =>
-        incrementBudgetTotal(acc, props.expenses[cur as ExpensesKey]),
-      null
-    )
+  const loansTotal = computed(
+    () =>
+      props.expenses.loans.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+        null
+      ) || 0
   )
 
-  const loansTotal = computed(() =>
-    props.expenses.loans.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
-      null
-    )
-  )
-
-  const debtsTotal = computed(() =>
-    props.expenses.debts.reduce<number | null>(
-      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
-      null
-    )
+  const debtsTotal = computed(
+    () =>
+      props.expenses.debts.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+        null
+      ) || 0
   )
 
   const total = computed(() => {
-    if (
-      mainExpensesTotal.value === null &&
-      loansTotal.value === null &&
-      debtsTotal.value === null
-    ) {
-      return null
-    }
-
     return (
       (mainExpensesTotal.value || 0) +
       (loansTotal.value || 0) +

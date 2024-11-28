@@ -20,7 +20,10 @@
 
     <section class="subtotal fr-h4 fr-mt-3w">
       <span>Sous-total crédit(s)</span>
-      <span class="primary euro-symbol">
+      <span
+        class="primary"
+        :class="{ 'euro-symbol': total !== null }"
+      >
         {{ total !== null ? euros(total) : '-' }}
       </span>
     </section>

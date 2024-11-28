@@ -6,29 +6,28 @@
     <div class="budget-card__title">
       <h4 class="fr-text--lead fr-m-0">{{ title }}</h4>
 
-      <span
-        class="fr-h6 fr-m-0"
-        :class="{ 'euro-symbol': total !== null }"
-      >
-        {{ total !== null ? euros(total) : '-' }}
+      <span class="fr-h6 fr-m-0 euro-symbol">
+        {{ euros(total) }}
       </span>
     </div>
 
-    <template v-if="!hasSubsections && labelGetter && valueGetter">
+    <!-- No subsection -->
+    <template v-if="!hasSubsections && items">
       <ul class="list-styled">
         <li
-          v-for="(key, index) in keys"
-          :key="index"
+          v-for="item in items"
+          :key="item.key"
         >
-          <span>{{ labelGetter(key) }}</span>
+          <span>{{ item.label }}</span>
           <span class="budget-card__item__value euro-symbol">
-            {{ euros(valueGetter(key)) }}
+            {{ euros(item.amount) }}
           </span>
         </li>
       </ul>
     </template>
 
-    <template v-else>
+    <!-- Subsection -->
+    <template v-else-if="hasSubsections && subsectionItems">
       <ul class="list-styled">
         <li
           v-for="(item, index) in subsectionItems"
@@ -61,7 +60,7 @@
                 v-if="item.dueDate"
                 class="fr-col-12 budget-card__subcategory fr-text--xs fr-mb-1v grey"
               >
-                <span>Echéance</span>
+                <span>Échéance</span>
                 <span>
                   {{ formatDate(item.dueDate) }}
                 </span>
@@ -93,16 +92,15 @@
     defineProps<{
       color: 'rust' | 'deep-blue'
       title: string
-      total: number | null
+      total: number
       editRoute: string
-      hasSubsections?: boolean
-      // without subsections
-      keys?: string[]
-      labelGetter?: ((key: string) => string | null) | undefined
-      valueGetter?:
-        | ((key: string) => number | Prisma.Decimal | null)
-        | undefined
+      items?: {
+        key: string
+        label: string
+        amount: number
+      }[]
       // with subsections
+      hasSubsections?: boolean
       subsectionItems?: {
         type: string | null
         amountTotal: Prisma.Decimal | null
@@ -111,9 +109,9 @@
       }[]
     }>(),
     {
+      items: undefined,
       hasSubsections: false,
       subsectionItems: () => [],
-      keys: () => [],
       labelGetter: undefined,
       valueGetter: undefined
     }
