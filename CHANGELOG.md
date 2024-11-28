@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.34.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.33.0...v1.34.0) (2024-11-28)
+
+
+### Features
+
+* **brevo:** ajout chatbot sur la page d'accueil ([bd5ebfd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bd5ebfdf9f8ef415d818c6ddae2838e0c0056193)), closes [#669](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/669)
+* **security:** ajout hook pre-commit de détection de secret ([8bead26](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8bead260e562977a38eeff3f7d01ca3f9c534c22)), closes [#667](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/667)
+* **sso:** désactivation d'Inclusion Connect ([b30c915](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b30c915547e23b5cf6183c0d689d08cc057fb1de)), closes [#640](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/640)
+* **statistiques:** ajout filtre tranche d'âge ([c1267a5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c1267a5201496895389042da56bc7bf68d745ef7)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+
+
+### Bug Fixes
+
+* **auth:** redirection pour comptes désactivés ([6a919f6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6a919f680e3a5aec2877ebe5076033790ba92ce3)), closes [#658](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/658)
+* **statistiques:** nouvelle librairie d'export d'image ([66105c3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/66105c3a31aa37f10addf9b396999843d64c4787)), closes [#663](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/663)
+
 ## [1.33.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.32.0...v1.33.0) (2024-11-25)
 
 
