@@ -75,6 +75,9 @@ export function prepareFilters(filters: FollowupFilterInput) {
     case FilterFollowupNotFilled.PrescribingOrganization:
       formattedFilters.prescribingOrganization = null
       break
+    case FilterFollowupNotFilled.Duration:
+      formattedFilters.duration = null
+      break
     default:
       break
   }

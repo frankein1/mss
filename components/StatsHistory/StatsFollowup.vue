@@ -122,6 +122,17 @@
             :filters="filters"
           />
         </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="followupCardsConfig.followupDuration.id"
+          :card-name="followupCardsConfig.followupDuration.name"
+        >
+          <StatsFollowupDuration
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
       </div>
     </template>
   </div>
@@ -202,6 +213,10 @@
     prescribingOrganizations: {
       id: 'stats-followup-prescribing-organizations',
       name: 'Organismes prescripteurs'
+    },
+    followupDuration: {
+      id: 'stats-followup-time-duration',
+      name: 'Durée des entretiens'
     },
     ...(application.value.module.ministere && {
       ministre: {
