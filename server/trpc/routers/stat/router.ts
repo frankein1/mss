@@ -14,6 +14,9 @@ export const statRouter = router({
   getBeneficiaryCount: protectedProcedure
     .input(routes.getBeneficiaryCountQ.inputValidation)
     .query(routes.getBeneficiaryCountQ.execute),
+  getFamilyFileCount: protectedProcedure
+    .input(routes.getFamilyFileCountQ.inputValidation)
+    .query(routes.getFamilyFileCountQ.execute),
   getCSPStats: protectedProcedure
     .input(routes.getCSPStatsQ.inputValidation)
     .query(routes.getCSPStatsQ.execute),

@@ -13,3 +13,4 @@ export { getMinistereCategorieStatsQuery } from './getMinistereCategorieStatsQue
 export { getCityStatsQuery } from './getCityStatsQuery'
 export { getDepartmentStatsQuery } from './getDepartmentStatsQuery'
 export { getMinistereInterpellationStatsQuery } from './getMinistereInterpellationStatsQuery'
+export { getFamilyFileCountQuery } from './getFamilyFileCountQuery'
