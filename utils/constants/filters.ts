@@ -31,5 +31,6 @@ export enum FilterFileInstructionNotFilled {
 }
 
 export enum FilterFollowupNotFilled {
-  PrescribingOrganization = 'prescribingOrganization'
+  PrescribingOrganization = 'prescribingOrganization',
+  Duration = 'duration'
 }
