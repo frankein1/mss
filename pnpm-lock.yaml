@@ -198,8 +198,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(postcss-html@1.7.0)(stylelint@16.10.0(typescript@5.6.3))
       stylelint-config-standard-scss:
-        specifier: ^13.1.0
-        version: 13.1.0(postcss@8.4.49)(stylelint@16.10.0(typescript@5.6.3))
+        specifier: ^14.0.0
+        version: 14.0.0(postcss@8.4.49)(stylelint@16.10.0(typescript@5.6.3))
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.10.0)(typescript@5.6.3)
@@ -2350,7 +2350,7 @@ packages:
     engines: {node: '>= 0.8'}
 
   batch@0.6.1:
-    resolution: {integrity: sha1-3DQxT05nkxgJP8dgJyUl+UvyXBY=}
+    resolution: {integrity: sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==}
 
   bcrypt-pbkdf@1.0.2:
     resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
@@ -2425,7 +2425,7 @@ packages:
     engines: {node: '>=8.0.0'}
 
   buffer-equal-constant-time@1.0.1:
-    resolution: {integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=}
+    resolution: {integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==}
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
@@ -2668,7 +2668,7 @@ packages:
     engines: {node: '>= 14'}
 
   concat-map@0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
   concat-stream@2.0.0:
     resolution: {integrity: sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==}
@@ -2877,7 +2877,7 @@ packages:
     hasBin: true
 
   cssfilter@0.0.10:
-    resolution: {integrity: sha1-xtJnJjKi5cg+AT5oZKQs6N79IK4=}
+    resolution: {integrity: sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==}
 
   cssnano-preset-default@7.0.6:
     resolution: {integrity: sha512-ZzrgYupYxEvdGGuqL+JKOY70s7+saoNlHSCK/OGn1vB2pQK8KSET8jvenzItcY+kA7NoWvfbb/YhlzuzNKjOhQ==}
@@ -3331,7 +3331,7 @@ packages:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
   ee-first@1.1.1:
-    resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
+    resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
   electron-to-chromium@1.5.65:
     resolution: {integrity: sha512-PWVzBjghx7/wop6n22vS2MLU8tKGd4Q91aCEGhG/TYmW6PP5OcSXcdnxTe1NNt0T66N8D6jxh4kC8UsdzOGaIw==}
@@ -6181,12 +6181,12 @@ packages:
     peerDependencies:
       stylelint: ^16.1.0
 
-  stylelint-config-standard-scss@13.1.0:
-    resolution: {integrity: sha512-Eo5w7/XvwGHWkeGLtdm2FZLOMYoZl1omP2/jgFCXyl2x5yNz7/8vv4Tj6slHvMSSUNTaGoam/GAZ0ZhukvalfA==}
+  stylelint-config-standard-scss@14.0.0:
+    resolution: {integrity: sha512-6Pa26D9mHyi4LauJ83ls3ELqCglU6VfCXchovbEqQUiEkezvKdv6VgsIoMy58i00c854wVmOw0k8W5FTpuaVqg==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       postcss: ^8.3.3
-      stylelint: ^16.3.1
+      stylelint: ^16.11.0
     peerDependenciesMeta:
       postcss:
         optional: true
@@ -6646,7 +6646,7 @@ packages:
       vue: ^3.4.26
 
   verror@1.10.0:
-    resolution: {integrity: sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=}
+    resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
 
   vite-hot-client@0.2.4:
@@ -14103,7 +14103,7 @@ snapshots:
     dependencies:
       stylelint: 16.10.0(typescript@5.6.3)
 
-  stylelint-config-standard-scss@13.1.0(postcss@8.4.49)(stylelint@16.10.0(typescript@5.6.3)):
+  stylelint-config-standard-scss@14.0.0(postcss@8.4.49)(stylelint@16.10.0(typescript@5.6.3)):
     dependencies:
       stylelint: 16.10.0(typescript@5.6.3)
       stylelint-config-recommended-scss: 14.1.0(postcss@8.4.49)(stylelint@16.10.0(typescript@5.6.3))
