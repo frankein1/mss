@@ -15,7 +15,7 @@
     </p>
 
     <StatsPie
-      pie-label="Répartion des statuts"
+      pie-label="Répartion des durées des entretiens"
       :stats="durationStats"
       :total-count="totalCount"
       :not-filled-route="
