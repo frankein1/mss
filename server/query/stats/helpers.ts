@@ -151,9 +151,13 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
     socialSupportFilters.subjects = { some: typesListFilter }
   }
 
+  if (filters.ministre) {
+    socialSupportFilters.ministre = { in: filters.ministre }
+  }
+
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
-  if (filters.socialSupportSubjects?.length) {
+  if (filters.socialSupportSubjects?.length || filters.ministre) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 

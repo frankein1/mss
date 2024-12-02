@@ -146,7 +146,7 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
-    if (application.value.module.ministere && props.isHistory) {
+    if (application.value.module.ministere) {
       statsFilters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
