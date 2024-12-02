@@ -6,7 +6,7 @@
   <AtomAlert
     v-else-if="error"
     :alert-type="AlertType.Error"
-    message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
+    message="Les statistiques de la durée des entretiens n'ont pas pu être chargées."
   />
   <template v-else-if="followupDuration && followupDuration.length">
     <p class="fr-text--xs text--muted">
