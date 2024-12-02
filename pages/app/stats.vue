@@ -5,6 +5,7 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs
+          class="stats-tabs"
           tab-list-name="Statistiques de la structure"
           :tab-titles="tabTitles"
           :heading-level="2"
@@ -153,5 +154,9 @@
   the stat panel */
   :deep(.fr-tabs__panel) {
     min-height: 36.5rem;
+  }
+
+  .stats-tabs {
+    height: calc(var(--tabs-height) + 30px);
   }
 </style>

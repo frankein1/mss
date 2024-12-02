@@ -34,6 +34,7 @@
     fileInstructionTypePictos,
     fileInstructionTypeFilterKeys
   } from '~/client/options'
+  import { ChartColor } from '~/utils/color/chartColors'
 
   const trpcClient = useTrpcClient()
 
@@ -61,14 +62,14 @@
 
   function getColor(subject: FileInstructionType) {
     if (subject === FileInstructionType.Housing) {
-      return '#000091'
+      return ChartColor.LightBlue
     }
     if (subject === FileInstructionType.Financial) {
-      return '#009081'
+      return ChartColor.Peach
     }
     if (subject === FileInstructionType.Other) {
-      return '#A558A0'
+      return ChartColor.Yellow
     }
-    return ''
+    return ChartColor.Gray
   }
 </script>

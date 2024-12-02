@@ -24,6 +24,7 @@
 <script lang="ts" setup>
   import { SocialSupportStatus } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
+  import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
@@ -55,10 +56,10 @@
       return '#fcc63a'
     }
     if (status === SocialSupportStatus.InvestigationOngoing) {
-      return '#7AB1E8'
+      return ChartColor.LightBlue
     }
     if (status === SocialSupportStatus.Accepted) {
-      return '#3bea7e'
+      return ChartColor.Green
     }
     if (status === SocialSupportStatus.Refused) {
       return '#FF732C'

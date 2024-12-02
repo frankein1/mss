@@ -1,6 +1,6 @@
 import { StructureType } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { socialSupportStatusKeys } from '~/client/options'
+import { followupDurationKeys, socialSupportStatusKeys } from '~/client/options'
 import { WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,
@@ -9,7 +9,8 @@ import {
   getFollowupMediumStatsQuery,
   getFollowupMinistreStatsQuery,
   getFollowupPrescribingOrganizationStatsQuery,
-  getFollowupStatusStatsQuery
+  getFollowupStatusStatsQuery,
+  getFollowupDurationStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -21,6 +22,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
+import { followupFieldLabels } from '~/client/labels'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -231,6 +233,24 @@ const handler = async ({
     ]
   })
 
+  // Duration
+  const followupDuration = await getFollowupDurationStatsQuery(user, input)
+  const followupDurationRows = followupDuration.map(item => {
+    return {
+      label: item.duration
+        ? followupDurationKeys.byKey[item.duration]
+        : STATS_NULL_LABEL,
+      number: item._count.toString(),
+      percent: `${getPercentage(item._count, followupCount)}%`
+    }
+  })
+  exportData.push({
+    name: 'Durée des entretiens',
+    columns: getColumns('Durée des entretiens'),
+    rows: followupDurationRows
+  })
+
+  // Create export
   return await createExport(user.id, exportData)
 }
 

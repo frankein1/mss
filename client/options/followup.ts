@@ -35,5 +35,6 @@ export const followupDurationKeys = buildKeys({
 
 export const followupNotFilledKeys = buildKeys({
   [FilterFollowupNotFilled.PrescribingOrganization]:
-    followupFieldLabels['prescribingOrganizationId']
+    followupFieldLabels['prescribingOrganizationId'],
+  [FilterFollowupNotFilled.Duration]: followupFieldLabels.duration
 })
