@@ -2,9 +2,15 @@
   <div>
     <BudgetExpensesMainForm :total="mainTotal" />
 
-    <BudgetExpensesLoansForm :total="loansTotal" />
+    <BudgetExpensesLoansForm
+      id="credits"
+      :total="loansTotal"
+    />
 
-    <BudgetExpensesDebtsForm :total="debtsTotal" />
+    <BudgetExpensesDebtsForm
+      id="dettes"
+      :total="debtsTotal"
+    />
   </div>
 </template>
 
@@ -14,4 +20,21 @@
     loansTotal: number | null
     debtsTotal: number | null
   }>()
+
+  onMounted(() => {
+    if (window.location.hash == '#dettes') {
+      const detteElement = document.getElementById('dettes')
+      if (detteElement) {
+        detteElement.scrollIntoView()
+      }
+      return
+    }
+    if (window.location.hash == '#credits') {
+      const creditElement = document.getElementById('credits')
+      if (creditElement) {
+        creditElement.scrollIntoView()
+      }
+      return
+    }
+  })
 </script>

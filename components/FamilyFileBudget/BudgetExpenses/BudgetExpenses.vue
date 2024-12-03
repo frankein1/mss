@@ -23,7 +23,8 @@
     :total="loansTotal"
     :subsection-items="expenses.loans"
     :edit-route="
-      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id) +
+      '#credits'
     "
   />
 
@@ -35,7 +36,8 @@
     :total="debtsTotal"
     :subsection-items="expenses.debts"
     :edit-route="
-      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id) +
+      '#dettes'
     "
   />
 </template>
