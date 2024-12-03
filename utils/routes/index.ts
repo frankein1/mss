@@ -2,7 +2,8 @@ import { routes as admin } from './admin'
 import {
   routes as auth,
   apiInclusionConnectRoutes,
-  apiProConnectRoutes
+  apiProConnectRoutes,
+  apiRdvspRoutes
 } from './auth'
 import { routes as beneficiary } from './beneficiary'
 import { routes as budget } from './budget'
@@ -34,7 +35,8 @@ export const routes = {
 
 export const apiRoutes = {
   inclusionConnect: apiInclusionConnectRoutes,
-  proConnect: apiProConnectRoutes
+  proConnect: apiProConnectRoutes,
+  rdvsp: apiRdvspRoutes
 }
 
 export type { AppBeneficiaryEditRoute } from './beneficiary'
