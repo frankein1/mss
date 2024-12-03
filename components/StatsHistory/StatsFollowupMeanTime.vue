@@ -51,10 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupDuration } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors'
+  import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
 
   const trpcClient = useTrpcClient()
 
@@ -80,43 +80,6 @@
         }
       }) || []
   )
-
-  const convertDurationInMinutes = (
-    duration: FollowupDuration | null
-  ): number => {
-    switch (duration) {
-      case FollowupDuration.Half:
-        return 30
-      case FollowupDuration.Hour:
-        return 60
-      case FollowupDuration.MoreThanHour:
-        return 90
-      case FollowupDuration.Quarter:
-        return 15
-      case FollowupDuration.ThreeQuarter:
-        return 45
-      default:
-        return 0
-    }
-  }
-
-  type SocialSupport = {
-    followup: {
-      duration: FollowupDuration | null
-    } | null
-  }
-
-  const getSocialSupportSubjectTotalDuration = (
-    socialSupports: SocialSupport[]
-  ) => {
-    return (
-      socialSupports.reduce(
-        (total, support) =>
-          total + convertDurationInMinutes(support.followup?.duration || null),
-        0
-      ) / socialSupports.length
-    )
-  }
 
   const meanTime = computed(() => {
     return (
