@@ -91,6 +91,9 @@ export const statRouter = router({
   getFollowupDurationStats: protectedProcedure
     .input(routes.getFollowupDurationStatsQ.inputValidation)
     .query(routes.getFollowupDurationStatsQ.execute),
+  getFollowupMeanTimeStats: protectedProcedure
+    .input(routes.getFollowupMeanTimeStatsQ.inputValidation)
+    .query(routes.getFollowupMeanTimeStatsQ.execute),
   getHelpRequestSubjectStats: protectedProcedure
     .input(routes.getHelpRequestSubjectsStatsQ.inputValidation)
     .query(routes.getHelpRequestSubjectsStatsQ.execute),

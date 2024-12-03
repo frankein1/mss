@@ -7,3 +7,4 @@ export { getFollowupPrescribingOrganizationStatsQuery } from './getFollowupPresc
 export { getFollowupActionsEntreprisesStatsQuery } from './getFollowupActionsEntreprisesStatsQuery'
 export { getFollowupBeneficiaryNumberQuery } from './getFollowupBeneficiaryNumberQuery'
 export { getFollowupDurationStatsQuery } from './getFollowupDurationStatsQuery'
+export { getFollowupMeanTimeStatsQuery } from './getFollowupMeanTimeStatsQuery'

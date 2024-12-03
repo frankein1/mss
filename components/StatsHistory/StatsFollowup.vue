@@ -133,6 +133,16 @@
             :filters="filters"
           />
         </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="followupCardsConfig.followupMeanTime.id"
+          :card-name="followupCardsConfig.followupMeanTime.name"
+        >
+          <StatsFollowupMeanTime
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
       </div>
     </template>
   </div>
@@ -217,6 +227,10 @@
     followupDuration: {
       id: 'stats-followup-time-duration',
       name: 'Durée des entretiens'
+    },
+    followupMeanTime: {
+      id: 'stats-followup-mean-time',
+      name: 'Durée moyenne d’un entretien par objet d’accompagnement'
     },
     ...(application.value.module.ministere && {
       ministre: {

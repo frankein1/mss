@@ -10,7 +10,8 @@ import {
   getFollowupMinistreStatsQuery,
   getFollowupPrescribingOrganizationStatsQuery,
   getFollowupStatusStatsQuery,
-  getFollowupDurationStatsQuery
+  getFollowupDurationStatsQuery,
+  getFollowupMeanTimeStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -22,7 +23,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
-import { followupFieldLabels } from '~/client/labels'
+import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -248,6 +249,51 @@ const handler = async ({
     name: 'Durée des entretiens',
     columns: getColumns('Durée des entretiens'),
     rows: followupDurationRows
+  })
+
+  // Mean time
+  const followupMeanTime = await getFollowupMeanTimeStatsQuery(user, input)
+  const followupMeanTimeCols = [
+    {
+      key: 'label',
+      header: 'Objet d’accompagnement'
+    },
+    {
+      key: 'number',
+      header: 'Durée en minutes'
+    }
+  ]
+  const followupMeanTimeRows = followupMeanTime.map(item => {
+    return {
+      label: item.name,
+      number: getSocialSupportSubjectTotalDuration(item.socialSupports).toFixed(
+        0
+      )
+    }
+  })
+  const meanTime = () => {
+    return (
+      followupMeanTimeRows.reduce(
+        (total: number, item) => total + Number(item.number),
+        0
+      ) / followupMeanTimeRows.length
+    )
+  }
+  const followupTotalMeanTimeRows = [
+    {
+      label: 'Durée moyenne des entretiens',
+      number: meanTime().toFixed(2)
+    },
+    {
+      label: '',
+      number: ''
+    }
+  ]
+
+  exportData.push({
+    name: 'Durée moyenne par objet d’accompagnement',
+    columns: followupMeanTimeCols,
+    rows: [...followupTotalMeanTimeRows, ...followupMeanTimeRows]
   })
 
   // Create export
