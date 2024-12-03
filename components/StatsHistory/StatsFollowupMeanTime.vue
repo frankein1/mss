@@ -82,6 +82,9 @@
   )
 
   const meanTime = computed(() => {
+    if (meanTimeStats.value.length === 0) {
+      return 0
+    }
     return (
       meanTimeStats.value.reduce((total, item) => total + item.count, 0) /
       meanTimeStats.value.length

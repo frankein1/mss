@@ -5,5 +5,8 @@ export enum ChartColor {
   LightBlue = '#78b0e8',
   DeepBlue = '#3558A2',
   Green = '#6FE49D',
+  LightPink = '#FCBFB7',
+  GreenArchipel = '#00BBC3',
+  // for not filled items
   Gray = '#CFCFCF'
 }
