@@ -45,7 +45,25 @@ export const fixturesBudgetIncomes = [
   {
     id: 'f488f1a6-352c-4ed8-bec8-99d47524cde1',
     type: 'Beneficiary',
-    budgetId: fixturesBudgets[6].id
+    budgetId: fixturesBudgets[6].id,
+    salary: 980,
+    aah: 360,
+    primeActivite: 35
+  },
+  {
+    id: 'd2a07914-b383-429c-a43c-12901d171026',
+    type: 'HouseholdMember',
+    budgetId: fixturesBudgets[6].id,
+    salary: 1426,
+    customs: {
+      create: [
+        {
+          id: '056f8da0-9df7-4c8d-b967-539fea177da2',
+          type: 'Allocation PAJE',
+          amount: 150
+        }
+      ]
+    }
   },
   {
     id: '7308d77d-054d-46ec-bee0-afb7e20e7400',

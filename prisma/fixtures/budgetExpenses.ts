@@ -28,7 +28,39 @@ export const fixturesBudgetExpenses = [
   },
   {
     id: '016729d1-0888-4cc5-847c-5d1fa55b9d0d',
-    budgetId: fixturesBudgets[6].id
+    budgetId: fixturesBudgets[6].id,
+    rent: 610,
+    expenses: 36,
+    water: 19,
+    electricity: 110,
+    carInsurance: 22,
+    homeInsurance: 22,
+    healthInsurance: 66,
+    phoneInternet: 19,
+    loans: {
+      create: [
+        {
+          id: '28955b49-0c12-4561-aca1-0e6cdc7b57e1',
+          type: 'Crédit auto',
+          dueDate: new Date('05/05/2024'),
+          amountPerMonth: 120
+        }
+      ]
+    },
+    customs: {
+      create: [
+        {
+          id: 'c33f97dc-6398-4f19-93c1-5cfe514f6d5e',
+          type: 'Abonnement Netflix',
+          amount: 12
+        },
+        {
+          id: 'ba1e98fc-3034-4803-bb06-1b0e1c48aa6b',
+          type: 'Amazon Prime',
+          amount: 7
+        }
+      ]
+    }
   },
   {
     id: '474d8ce5-35dc-4fda-8f84-15201e690a1e',

@@ -99,7 +99,7 @@ export const fixturesBeneficiaries = [
     fileNumber: 'V1S7SSACE7',
     structureId: fixtureStructures[0].id,
     status: 'Active',
-    title: 'Mister',
+    title: 'Miss',
     usualName: 'APFELMANN',
     firstName: 'Aurélie',
     gender: 'Female',
