@@ -9,6 +9,9 @@ type SocialSupport = {
 export const getSocialSupportSubjectTotalDuration = (
   socialSupports: SocialSupport[]
 ) => {
+  if (socialSupports.length === 0) {
+    return 0
+  }
   return (
     socialSupports.reduce(
       (total, support) =>

@@ -53,7 +53,7 @@
 
   function getColor(status: SocialSupportStatus) {
     if (status === SocialSupportStatus.WaitingAdditionalInformation) {
-      return '#fcc63a'
+      return ChartColor.Yellow
     }
     if (status === SocialSupportStatus.InvestigationOngoing) {
       return ChartColor.LightBlue
@@ -62,20 +62,20 @@
       return ChartColor.Green
     }
     if (status === SocialSupportStatus.Refused) {
-      return '#FF732C'
+      return ChartColor.Pink
     }
     if (status === SocialSupportStatus.Adjourned) {
-      return '#6f45f7'
+      return ChartColor.Peach
     }
     if (status === SocialSupportStatus.ClosedByBeneficiary) {
-      return '#f95c5e'
+      return ChartColor.DeepBlue
     }
     if (status === SocialSupportStatus.ClosedByAgent) {
-      return '#c9191e'
+      return ChartColor.LightPink
     }
     if (status === SocialSupportStatus.Dismissed) {
-      return '#CE70CC'
+      return ChartColor.GreenArchipel
     }
-    return ''
+    return ChartColor.Gray
   }
 </script>
