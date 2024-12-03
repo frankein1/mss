@@ -22,6 +22,15 @@
         :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
       />
     </div>
+    <div class="fr-col-12">
+      <VeeAddressInput
+        name="street"
+        :label="beneficiaryFieldLabels.street"
+        :zip-code="zipcode"
+        hint="Numéro et voie"
+        @address-selected="onAddressSelected"
+      />
+    </div>
     <div class="fr-col-12 fr-col-md-3">
       <VeeInput
         name="zipcode"
@@ -38,29 +47,20 @@
       />
     </div>
     <div class="fr-col-12">
-      <VeeAddressInput
-        name="street"
-        :label="beneficiaryFieldLabels.street"
-        :zip-code="zipcode"
-        hint="Numéro et voie"
-        @address-selected="onAddressSelected"
-      />
-    </div>
-    <div class="fr-col-12">
       <VeeInput
         name="addressComplement"
         :label="beneficiaryFieldLabels.addressComplement"
         hint="Bâtiment, escalier, numéro d'appartement, lieu-dit, etc."
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-hidden">
       <VeeDepartmentInput
         name="department"
         :label="beneficiaryFieldLabels.department"
         @department-selected="setDepartmentValue($event)"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-hidden">
       <VeeRegionInput
         name="region"
         :label="beneficiaryFieldLabels.region"
