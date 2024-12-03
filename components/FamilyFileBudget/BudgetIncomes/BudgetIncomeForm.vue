@@ -139,7 +139,7 @@
         />
       </div>
       <DsfrButton
-        label="Ajouter une ressources personalisée"
+        label="Ajouter une ressource personnalisée"
         type="button"
         icon="fr-icon-add-line"
         tertiary

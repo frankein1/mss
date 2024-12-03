@@ -107,13 +107,16 @@
     )
   }
 
-  const total = computed(
-    () =>
-      memberDefaultIncomes.value.reduce<number | null>(
-        (acc, cur) => incrementBudgetTotal(acc, cur),
-        null
-      ) || 0
-  )
+  const total = computed(() => {
+    let subTotal = 0
+    props.incomes.forEach((income, idxIncome) => {
+      subTotal =
+        subTotal +
+        memberDefaultIncomes.value[idxIncome] +
+        getMemberTotalCustomIncome(income)
+    })
+    return subTotal
+  })
 </script>
 
 <style scoped lang="scss">

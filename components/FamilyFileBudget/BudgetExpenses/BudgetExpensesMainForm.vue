@@ -176,7 +176,7 @@
         />
       </div>
       <DsfrButton
-        label="Ajouter une charge personalisée"
+        label="Ajouter une charge personnalisée"
         type="button"
         icon="fr-icon-add-line"
         tertiary
