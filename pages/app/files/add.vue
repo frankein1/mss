@@ -1,5 +1,5 @@
 <template>
-  <PageContainer class="page-container">
+  <PageContainer>
     <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiariesAdd()" />
     <PageTitle
       :title="title"
@@ -80,10 +80,3 @@
     })
   }
 </script>
-
-<style scoped>
-  .page-container {
-    padding-left: 10em;
-    padding-right: 10em;
-  }
-</style>
