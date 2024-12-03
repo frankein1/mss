@@ -74,6 +74,15 @@
           type="email"
         />
       </div>
+      <div class="fr-col-12">
+        <VeeAddressInput
+          name="street"
+          :label="beneficiaryFieldLabels.street"
+          :zip-code="zipcode"
+          hint="Numéro et voie"
+          @address-selected="onAddressSelected"
+        />
+      </div>
       <div class="fr-col-12 fr-col-md-3">
         <VeeInput
           name="zipcode"
@@ -89,15 +98,21 @@
           @city-selected="onCitySelected"
         />
       </div>
-      <div class="fr-col-12">
-        <VeeAddressInput
-          name="street"
-          :label="beneficiaryFieldLabels.street"
-          :zip-code="zipcode"
-          hint="Numéro et voie"
-          @address-selected="onAddressSelected"
+      <!-- masqué -->
+
+      <div class="fr-col-12 fr-hidden">
+        <VeeDepartmentInput
+          name="department"
+          :label="beneficiaryFieldLabels.department"
         />
       </div>
+      <div class="fr-col-12 fr-hidden">
+        <VeeRegionInput
+          name="region"
+          :label="beneficiaryFieldLabels.region"
+        />
+      </div>
+      <!-- masqué -->
       <div
         v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6"
@@ -220,7 +235,9 @@
 
   const { onCitySelected, onAddressSelected } = useAddressFields({
     setCityValue: (value: string) => setFieldValue('city', value),
-    setZipcodeValue: (value: string) => setFieldValue('zipcode', value)
+    setZipcodeValue: (value: string) => setFieldValue('zipcode', value),
+    setRegionValue: (value: string) => setFieldValue('region', value),
+    setDepartmentValue: (value: string) => setFieldValue('department', value)
   })
 </script>
 

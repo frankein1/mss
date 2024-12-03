@@ -15,6 +15,8 @@ export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
     street: true,
     zipcode: true,
     city: true,
+    department: true,
+    region: true,
     birthDate: true
   })
   .merge(
