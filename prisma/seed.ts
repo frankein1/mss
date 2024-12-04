@@ -114,18 +114,26 @@ function loadFixturesBudgets() {
 function loadFixturesBudgetIncomes() {
   console.log('💰 Budget Incomes...')
 
-  return prismaClient.budgetIncome.createMany({
-    data: fixturesBudgetIncomes,
-    skipDuplicates: true
+  // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
+  return fixturesBudgetIncomes.map(item => {
+    return prismaClient.budgetIncome.upsert({
+      create: item,
+      where: { id: item.id },
+      update: {}
+    })
   })
 }
 
 function loadFixturesBudgetExpenses() {
   console.log('💸 Budget Expenses...')
 
-  return prismaClient.budgetExpenses.createMany({
-    data: fixturesBudgetExpenses,
-    skipDuplicates: true
+  // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
+  return fixturesBudgetExpenses.map(item => {
+    return prismaClient.budgetExpenses.upsert({
+      create: item,
+      where: { id: item.id },
+      update: {}
+    })
   })
 }
 
@@ -160,8 +168,8 @@ function loadFixtures() {
     ...loadFixturesSocialSupports(),
     loadFixturesBeneficiaryRelatives(),
     loadFixturesBudgets(),
-    loadFixturesBudgetIncomes(),
-    loadFixturesBudgetExpenses()
+    ...loadFixturesBudgetIncomes(),
+    ...loadFixturesBudgetExpenses()
   ]
 }
 
