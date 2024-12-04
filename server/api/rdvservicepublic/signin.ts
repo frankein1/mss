@@ -5,6 +5,7 @@ import { getConfig, authorize } from '~/server/lib/rdvsp-oauth.client'
 
 const { auth } = useRuntimeConfig()
 
+// To migrate to trpc in order to have user info
 export default defineEventHandler(async event => {
   console.log('in rdvsp server signin route')
   const session = await useSession<AuthSession>(event, {
