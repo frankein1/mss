@@ -1,6 +1,7 @@
 import { getDeltaIncomeExpenses } from './helpers'
 import { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
+import { BudgetIncomeWithCustoms } from '~/types/budget'
 
 export async function getInfo({
   ctx,
@@ -12,7 +13,11 @@ export async function getInfo({
   const infos = await BudgetRepo.findUniqueOrThrow(ctx.user, {
     where: { familyFileId },
     include: {
-      incomes: true,
+      incomes: {
+        include: {
+          customs: true
+        }
+      },
       expenses: {
         include: {
           loans: true,

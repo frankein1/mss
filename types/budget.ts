@@ -9,6 +9,7 @@ import type {
   BudgetIncomeCustom
 } from '@prisma/client'
 import { BeneficiaryFileIdentification } from './beneficiary'
+import { custom } from 'zod'
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,
@@ -42,6 +43,10 @@ export type BudgetExpensesWithLoansAndDebts = BudgetExpenses & {
   loans: BudgetExpensesLoan[]
   debts: BudgetExpensesDebt[]
   customs: BudgetExpensesCustom[]
+}
+
+export type BudgetIncomeWithCustoms = BudgetIncome & {
+  customs: BudgetIncomeCustom[]
 }
 
 export { BudgetExpenses, BudgetIncome }

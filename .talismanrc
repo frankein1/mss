@@ -1,5 +1,8 @@
 threshold: medium
 
+scopeconfig:
+  - scope: node
+
 fileignoreconfig:
   - filename: pnpm-lock.yaml
     checksum: 9561b4943641bb1e7fd3241d586601eeb93efe000651c04e3dda3501224b77b3

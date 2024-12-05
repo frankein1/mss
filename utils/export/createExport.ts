@@ -4,7 +4,6 @@ import ExcelPkg, { Column, Workbook } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 import { RowType, WorksheetType } from '~/types/export'
 
-// eslint-disable-next-line import/no-named-as-default-member
 const { Workbook: WorkbookConstructor } = ExcelPkg
 
 function getFullColumns(
@@ -51,7 +50,12 @@ function createWorksheet(workbook: Workbook, worksheetData: WorksheetType) {
     bold: true
   }
 
-  worksheetData.rows.forEach(row => worksheet.addRow(row))
+  worksheetData.rows.forEach(row => {
+    const newRow = worksheet.addRow(row)
+    if ((row as RowType).bold) {
+      newRow.font = { bold: true }
+    }
+  })
 }
 
 export async function createExport(

@@ -11,7 +11,8 @@ export enum EventCategory {
   OverviewToHistory = 'Accès Tableau de bord > Accompagnements',
   History = 'Historique',
   Beneficiary = 'Beneficiaire',
-  ExportStats = 'Export des statistiques'
+  ExportStats = 'Export des statistiques',
+  ExportBudget = 'Export du budget'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -99,7 +100,7 @@ export enum OverviewToHistoryEventAction {
   InvestigationOngoing = "Dossiers d'instruction - En cours d'instruction"
 }
 
-export enum ExportStatsEventAction {
+export enum ExportEventAction {
   DownloadImages = 'Export en images',
   DownloadExcel = "Export d'un document Excel"
 }
@@ -117,7 +118,7 @@ export type EventAction =
   | OverviewToHistoryEventAction
   | BeneficiaryHistoryAction
   | BeneficiaryAction
-  | ExportStatsEventAction
+  | ExportEventAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

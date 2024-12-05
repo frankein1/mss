@@ -1,20 +1,35 @@
 import {
   IncomeKey,
   ExpensesKey,
-  BudgetIncome,
-  BudgetExpensesWithLoansAndDebts
+  BudgetExpensesWithLoansAndDebts,
+  BudgetIncomeWithCustoms
 } from '~/types/budget'
 import { budgetIncomeKeys, budgetExpensesKeys } from '~/client/options'
 import { incrementBudgetTotal } from '~/utils/budget'
 
-function getTotalIncome(incomes: BudgetIncome[]) {
-  return incomes.reduce<number | null>((acc, income) => {
+const getTotalIncome = (incomes: BudgetIncomeWithCustoms[]) => {
+  const regularIncomes = incomes.reduce<number | null>((acc, income) => {
     const total = budgetIncomeKeys.keys.reduce<number | null>(
       (iacc, key) => incrementBudgetTotal(iacc, income[key as IncomeKey]),
       null
     )
     return incrementBudgetTotal(acc, total)
   }, null)
+
+  const customIncomes = incomes.reduce<number | null>((acc, income) => {
+    const total =
+      income.customs.reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+        null
+      ) || 0
+    return incrementBudgetTotal(acc, total)
+  }, null)
+
+  if (!regularIncomes && !customIncomes) {
+    return null
+  }
+
+  return (regularIncomes || 0) + (customIncomes || 0)
 }
 
 function getTotalExpenses(expenses: BudgetExpensesWithLoansAndDebts) {
@@ -47,7 +62,7 @@ function getTotalExpenses(expenses: BudgetExpensesWithLoansAndDebts) {
 }
 
 export function getDeltaIncomeExpenses(
-  incomes: BudgetIncome[],
+  incomes: BudgetIncomeWithCustoms[],
   expenses: BudgetExpensesWithLoansAndDebts | null
 ) {
   const totalIncome = getTotalIncome(incomes)
