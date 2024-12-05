@@ -23,6 +23,7 @@ export * from './budget.schema'
 export * from './dataInclusion.schema'
 export * from './brevo.schema'
 export * from './job.schema'
+export * from './rdvsp.schema'
 
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
   switch (issue.code) {

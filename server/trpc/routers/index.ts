@@ -20,6 +20,7 @@ import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
+import { rdvspRouter } from './rdvspRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
@@ -42,7 +43,8 @@ export const appRouter = router({
   permissions: permissionsRouter,
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,
-  file: fileRouter
+  file: fileRouter,
+  rdvsp: rdvspRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter
