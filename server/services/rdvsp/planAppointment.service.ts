@@ -2,7 +2,7 @@ import { BeneficiaryRepo, StructureRepo, UserRepo } from '~/server/database'
 import { PlanAppointmentInput } from '~/server/schema'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import { invalidError, forbiddenError } from '~/server/trpc'
+import { invalidError, forbiddenError, unauthorizedError } from '~/server/trpc'
 
 async function createRdvspUsager(
   beneficiaryId: string,
@@ -23,9 +23,13 @@ async function createRdvspUsager(
   )
 
   console.log(usager)
-  if ('errors' in usager || !usager.id) {
-    console.log(usager)
-    throw invalidError('could not create usager')
+  if ('errors' in usager || 'status' in usager || !usager.id) {
+    if (usager.status === 401) {
+      console.log('throw unauthorized')
+      throw unauthorizedError('not authenticated')
+    } else {
+      throw invalidError('could not create usager')
+    }
   }
 
   const externalRdvspId = usager.id.toString()

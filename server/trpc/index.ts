@@ -1,4 +1,9 @@
-export { forbiddenError, invalidError, notfoundError } from './trpcErrors'
+export {
+  forbiddenError,
+  invalidError,
+  notfoundError,
+  unauthorizedError
+} from './trpcErrors'
 export {
   publicProcedure,
   protectedProcedure,
