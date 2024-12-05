@@ -17,3 +17,9 @@ export const invalidError = (message?: string) =>
     code: 'BAD_REQUEST',
     message: message ?? 'Opération invalide. Veuillez réessayer ultérieurement.'
   })
+
+export const unauthorizedError = (message?: string) =>
+  new TRPCError({
+    code: 'UNAUTHORIZED',
+    message: message ?? "Echec d'authentification."
+  })

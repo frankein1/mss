@@ -4,12 +4,6 @@
       :title="title"
       class="fr-mt-2w"
     />
-    <NuxtLink
-      :href="apiRoutes.rdvsp.ApiSignIn.path()"
-      external
-      class="fr-btn btn--secondary"
-      >Se connecter avec rdvsp</NuxtLink
-    >
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-6 fr-col-lg-8">
@@ -27,7 +21,7 @@
 
 <script setup lang="ts">
   import DpoRedirectModal from '~/components/DpoRedirectModal/DpoRedirectModal.vue'
-  import { routes, apiRoutes } from '~/utils/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.user.AppOverview.title
   const route = useRoute()
