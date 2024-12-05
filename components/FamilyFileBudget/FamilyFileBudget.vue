@@ -62,8 +62,8 @@
     getFamilyFileInjectionKey
   ) as GetFamilyFile
   const { data, error } = budget
-  const firstFamilyfileId = familyFileIdentification.value
-    ? familyFileIdentification.value[0].id
+  const firstFamilyfileId = data?.value?.familyFileId
+    ? data.value.familyFileId
     : null
 
   const firstBeneficiary = familyFileIdentification.value
