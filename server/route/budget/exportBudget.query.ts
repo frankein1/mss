@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { WorksheetType } from '~/types/export'
+import { RowType, WorksheetType } from '~/types/export'
 import { GetBudgetInput, getBudgetSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
@@ -102,15 +102,15 @@ const handler = async ({
     }
   ]
 
-  const expensesRows = getExpensesRows(budget.expenses)
+  const expensesRows: RowType[] = getExpensesRows(budget.expenses)
 
   const loansRows = budget.expenses?.loans.map(loan => ({
     label: loan.type || '',
-    value: Number(loan.amountPerMonth) || 0
+    value: loan.amountPerMonth?.toFixed(2) || '0'
   }))
   const debtRows = budget.expenses?.debts.map(debt => ({
     label: debt.type || '',
-    value: Number(debt.amountPerMonth) || 0
+    value: debt.amountPerMonth?.toFixed(2) || '0'
   }))
 
   if (loansRows && loansRows.length > 0) {

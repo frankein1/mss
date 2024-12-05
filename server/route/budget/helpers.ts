@@ -1,9 +1,15 @@
 import { budgetExpensesKeys, budgetIncomeKeys } from '~/client/options'
 import { prismaDecimalToNumber } from '~/utils/prisma'
-import { BudgetExpenses, BudgetIncome } from '@prisma/client'
-import { ExpensesKey, IncomeKey } from '~/types/budget'
+import {
+  BudgetExpensesWithLoansAndDebts,
+  BudgetIncomeWithCustoms,
+  ExpensesKey,
+  IncomeKey
+} from '~/types/budget'
 
-export const getExpensesRows = (expenses: BudgetExpenses | null) => {
+export const getExpensesRows = (
+  expenses: BudgetExpensesWithLoansAndDebts | null
+) => {
   if (!expenses) {
     return []
   }
@@ -13,19 +19,19 @@ export const getExpensesRows = (expenses: BudgetExpenses | null) => {
   const regularExpenses = keys.map(key => {
     return {
       label: budgetExpensesKeys.value(key) || '',
-      value: Number(expenses[key as ExpensesKey]) || 0
+      value: expenses[key as ExpensesKey]?.toFixed(0) || '0'
     }
   })
   const customExpenses = expenses.customs.map(expense => {
     return {
       label: expense.type || '',
-      value: Number(expense.amount) || 0
+      value: expense.amount?.toFixed(0) || '0'
     }
   })
   return [...regularExpenses, ...customExpenses]
 }
 
-export const getIncomeRows = (income: BudgetIncome | null) => {
+export const getIncomeRows = (income: BudgetIncomeWithCustoms | null) => {
   if (!income) {
     return []
   }
@@ -35,13 +41,13 @@ export const getIncomeRows = (income: BudgetIncome | null) => {
   const regularIncome = keys.map(key => {
     return {
       label: budgetIncomeKeys.value(key) || '',
-      value: Number(income[key as IncomeKey]) || 0
+      value: income[key as IncomeKey]?.toFixed(0) || '0'
     }
   })
 
   const customIncome = income.customs.map(custom => ({
     label: custom.type || '',
-    value: Number(custom.amount) || 0
+    value: custom.amount?.toFixed(0) || '0'
   }))
 
   return [...regularIncome, ...customIncome]

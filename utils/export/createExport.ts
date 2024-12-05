@@ -52,7 +52,7 @@ function createWorksheet(workbook: Workbook, worksheetData: WorksheetType) {
 
   worksheetData.rows.forEach(row => {
     const newRow = worksheet.addRow(row)
-    if (row.bold) {
+    if ((row as RowType).bold) {
       newRow.font = { bold: true }
     }
   })
