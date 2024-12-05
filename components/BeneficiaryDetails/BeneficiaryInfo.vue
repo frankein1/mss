@@ -13,6 +13,7 @@
         :family-file="familyFile"
         @delete="emit('delete')"
         @split="emit('split')"
+        @plan-appointment="emit('planAppointment')"
       />
     </div>
   </div>
@@ -80,7 +81,7 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ delete: []; split: [] }>()
+  const emit = defineEmits<{ delete: []; split: []; planAppointment: [] }>()
 
   const beneficiaryTitle = computed(() => {
     let title = 'Informations'

@@ -21,6 +21,16 @@
         Imprimer
       </NuxtLink>
     </li>
+    <li>
+      <button
+        class="fr-btn fr-btn--secondary fr-mb-0"
+        type="button"
+        title="Prendre rdv"
+        @click="emit('planAppointment')"
+      >
+        Prendre rdv
+      </button>
+    </li>
     <li v-if="familyFile">
       <button
         class="fr-btn fr-btn--secondary fr-mb-0"
@@ -62,7 +72,7 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ delete: []; split: [] }>()
+  const emit = defineEmits<{ delete: []; split: []; planAppointment: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)

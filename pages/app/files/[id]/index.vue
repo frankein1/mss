@@ -48,6 +48,7 @@
             :family-file="familyFileIdentification.length > 1"
             @delete="openDeleteModal"
             @split="openSplitModal"
+            @plan-appointment="onPlanAppointment"
           />
         </template>
 
@@ -280,6 +281,22 @@
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
       reloadData: () =>
         reloadData(familyFileIdentification.value?.[0]?.id || '')
+    })
+  }
+
+  const isSubmittingPlanAppointment = ref(false)
+  async function onPlanAppointment() {
+    await useTrpcMutation({
+      mutation: () =>
+        trpcClient.rdvsp.planAppointment.mutate({
+          beneficiaryId: selectedBeneficiary.value?.id || ''
+        }),
+      isSubmitting: isSubmittingPlanAppointment,
+      onSuccess: url => {
+        window.location.href = url
+      },
+      // TODO ajouter la gestion de l'auth en cas de pb de conn
+      onFailure: () => snackbar.error('La prise de rendez-vous a échoué.')
     })
   }
 
