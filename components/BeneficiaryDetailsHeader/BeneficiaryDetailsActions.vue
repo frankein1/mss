@@ -90,13 +90,4 @@
     overflow: initial;
     padding: 0.5rem 1rem;
   }
-
-  div[aria-describedby='available-soon-tooltip'] {
-    color: var(--text-disabled-grey);
-    cursor: not-allowed;
-
-    img {
-      filter: saturate(0) brightness(1.75);
-    }
-  }
 </style>

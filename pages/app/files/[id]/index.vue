@@ -44,11 +44,17 @@
           <BeneficiaryInfo
             :beneficiary="selectedBeneficiary"
             :social-support-subjects="socialSupportSubjects"
-            :permissions="selectedPermissions"
-            :family-file="familyFileIdentification.length > 1"
-            @delete="openDeleteModal"
-            @split="openSplitModal"
-          />
+          >
+            <template #actions>
+              <BeneficiaryDetailsActions
+                :beneficiary-id="selectedBeneficiary.id"
+                :permissions="selectedPermissions"
+                :family-file="familyFileIdentification.length > 1"
+                @delete="openDeleteModal"
+                @split="openSplitModal"
+              />
+            </template>
+          </BeneficiaryInfo>
         </template>
 
         <template #[tabTitles.at(1)?.panelId]>
