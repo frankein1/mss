@@ -29,7 +29,7 @@
         }
       ]"
       :stats-percentage="false"
-      :to-fixed="2"
+      :to-fixed="0"
       unit=" min"
       :with-sum="false"
     />

@@ -9,11 +9,6 @@
     message="Les statistiques de la durée des entretiens n'ont pas pu être chargées."
   />
   <template v-else-if="followupDuration && followupDuration.length">
-    <p class="fr-text--xs text--muted">
-      Pourcentage calculé sur le nombre total de synthèses avec une durée
-      d’entretien renseignée.
-    </p>
-
     <StatsPie
       pie-label="Répartion des durées des entretiens"
       :stats="durationStats"
