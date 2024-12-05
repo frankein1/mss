@@ -171,7 +171,7 @@
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
-  import { EventCategory, ExportStatsEventAction } from '~/types/matomo'
+  import { EventCategory, ExportEventAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -292,7 +292,7 @@
         callback: async () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
-            ExportStatsEventAction.DownloadImages
+            ExportEventAction.DownloadImages
           )
           alertClose.value = false
           const date = new Date()
@@ -315,7 +315,7 @@
         callback: () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
-            ExportStatsEventAction.DownloadExcel
+            ExportEventAction.DownloadExcel
           )
           handleExportExcel()
         }

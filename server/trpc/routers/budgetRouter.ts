@@ -17,6 +17,9 @@ export const budgetRouter = router({
   getBudget: protectedProcedure
     .input(budgetRoutes.getBudget.inputValidation)
     .query(budgetRoutes.getBudget.execute),
+  exportBudget: protectedProcedure
+    .input(budgetRoutes.exportBudget.inputValidation)
+    .query(budgetRoutes.exportBudget.execute),
   getInfo: protectedProcedure
     .input(budgetRoutes.getInfo.inputValidation)
     .query(budgetRoutes.getInfo.execute),

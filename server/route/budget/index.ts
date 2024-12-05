@@ -7,6 +7,7 @@ import { getIncome } from './getIncome.query'
 import { getInfo } from './getInfo.query'
 import { getBudget } from './getBudget.query'
 import { createBudgetIncome } from './createBudgetIncome.mutation'
+import { exportBudget } from './exportBudget.query'
 
 export const budgetRoutes = {
   updateInfo,
@@ -17,5 +18,6 @@ export const budgetRoutes = {
   getIncome,
   getInfo,
   getBudget,
-  createBudgetIncome
+  createBudgetIncome,
+  exportBudget
 }
