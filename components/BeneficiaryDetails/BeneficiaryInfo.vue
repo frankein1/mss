@@ -6,14 +6,7 @@
       </h3>
     </div>
     <div class="fr-col-12 fr-col-xl-6 detail-actions">
-      <BeneficiaryDetailsActions
-        class="actions"
-        :beneficiary-id="beneficiary.id"
-        :permissions="permissions"
-        :family-file="familyFile"
-        @delete="emit('delete')"
-        @split="emit('split')"
-      />
+      <slot name="actions"></slot>
     </div>
   </div>
   <BeneficiaryInfoSection
@@ -71,16 +64,11 @@
 <script lang="ts" setup>
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
-  import { FamilyFilePermissions } from '~/server/security'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     socialSupportSubjects: SocialSupportSubjectIdAndName[]
-    permissions: FamilyFilePermissions | undefined
-    familyFile?: boolean
   }>()
-
-  const emit = defineEmits<{ delete: []; split: [] }>()
 
   const beneficiaryTitle = computed(() => {
     let title = 'Informations'
@@ -114,17 +102,17 @@
     align-self: center;
   }
 
-  .actions {
-    @include dsfr-media-query.respond-from('xl') {
-      justify-content: right;
-    }
-  }
-
   .detail-actions {
     margin-top: 1rem;
 
     @include dsfr-media-query.respond-from('xl') {
       margin-top: 0;
+    }
+
+    > :deep(ul) {
+      @include dsfr-media-query.respond-from('xl') {
+        justify-content: right;
+      }
     }
   }
 </style>
