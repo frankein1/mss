@@ -14,6 +14,7 @@ const badrequest = (message: string) =>
   createError({ statusCode: 400, message })
 
 export default defineEventHandler(async event => {
+  console.log('in rdvsp callback for auth')
   const { code, state } = getQuery(event)
   const cfg = client.getConfig()
 
@@ -68,19 +69,23 @@ export default defineEventHandler(async event => {
   const getProvider = (agent: any) =>
     agent.inclusion_connect_open_id_sub ? 'ProConnect' : 'Email'
 
-  const account = await prismaClient.account.findUnique({
+  const account = await prismaClient.externalAccount.findUnique({
     where: {
       provider_providerAccountId: {
         provider: getProvider(agent),
         providerAccountId: agent.id.toString()
       }
     },
-    select: { id: true, user: true }
+    select: {
+      id: true,
+      user: { select: { id: true } }
+    }
   })
 
   if (!account) {
+    console.log('create account')
     await Promise.all([
-      prismaClient.account.create({
+      prismaClient.externalAccount.create({
         data: {
           user: { connect: { id: user.id } },
           type: 'rdvsp',
@@ -94,12 +99,15 @@ export default defineEventHandler(async event => {
       }),
       prismaClient.user.update({
         where: { id: user.id },
-        // activate rdvsp integration with externalRdvspActive
-        data: {}
+        data: {
+          externalRdvspActive: true,
+          externalRdvspId: agent.id.toString()
+        }
       })
     ])
   } else {
-    prismaClient.account.update({
+    console.log('update account', account.id)
+    await prismaClient.externalAccount.update({
       where: { id: account.id },
       data: {
         accessToken: token.access_token,
