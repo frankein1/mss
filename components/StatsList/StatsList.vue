@@ -45,7 +45,7 @@
           :class="{ 'fr-h5 fr-mb-0': emphasis }"
           :style="{ color: !statsPercentage ? color : undefined }"
         >
-          {{ toFixed ? count.toFixed(toFixed) : count
+          {{ toFixed != null ? count.toFixed(toFixed) : count
           }}<template v-if="unit">{{ unit }}</template>
         </div>
         <div
