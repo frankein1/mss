@@ -1,3 +1,4 @@
+import { Beneficiary } from '@prisma/client'
 import { apiRoutes } from '~/utils/routes'
 
 interface RdvspConfig {
@@ -15,9 +16,14 @@ interface RdvspAuthToken {
   created_at: number
 }
 
-interface RdvspError {
+interface RdvspAuthError {
   error: string
   error_description: string
+}
+
+interface RdvspError {
+  status: boolean
+  errors: string[]
 }
 
 interface RdvspAgentInfo {
@@ -82,7 +88,7 @@ export async function getToken(cfg: RdvspConfig, code: string) {
     return res as RdvspAuthToken
   }
 
-  return res as RdvspError
+  return res as RdvspAuthError
 }
 
 async function getWrapper<T>(
@@ -101,7 +107,7 @@ async function getWrapper<T>(
     return res.agent as T
   }
 
-  return res as RdvspError
+  return res as RdvspAuthError
 }
 
 // Use zod to validate format ?
@@ -115,4 +121,49 @@ export async function getOrganisation(cfg: RdvspConfig, accessToken: string) {
     '/api/v1/organisations',
     accessToken
   )
+}
+
+export async function createUsager(
+  cfg: RdvspConfig,
+  accessToken: string,
+  organisationId: string,
+  agentId: string,
+  beneficiary: Pick<
+    Beneficiary,
+    'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'email' | 'phone1'
+  >
+) {
+  const response = await fetch(`${cfg.issuer}/api/v1/users`, {
+    method: 'post',
+    body: new URLSearchParams({
+      ['organisation_ids[]']: organisationId,
+      ['referent_agent_ids[]']: agentId,
+      ...(beneficiary.firstName && { first_name: beneficiary.firstName }),
+      ...(beneficiary.usualName && { last_name: beneficiary.usualName }),
+      ...(beneficiary.birthName && { birth_name: beneficiary.birthName }),
+      ...(beneficiary.birthDate && {
+        birth_date: beneficiary.birthDate.toISOString().split('T')[0]
+      }),
+      ...(beneficiary.email && { email: beneficiary.email }),
+      ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
+      notify_by_sms: 'true',
+      notify_by_email: 'true'
+    }),
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+
+  let res: any
+  try {
+    res = await response.json()
+  } catch {
+    console.log('other error', response.statusText)
+    return { status: response.status, statusText: response.statusText }
+  }
+
+  if (response.ok) {
+    console.log('usager creation successful', res.user)
+    return { id: res.user.id as number }
+  }
+  console.log('usager creation failed', res)
+  return res as RdvspError
 }
