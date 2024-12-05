@@ -83,8 +83,8 @@
     useGetStructureInfo,
     getStructureInfoInjectionKey
   } from '~/composables/useGetStructureInfoForBeneficiary'
-  import { TRPCClientErrorLike } from '@trpc/client'
-  import { routes } from '~/utils/routes'
+  import { TRPCClientError, TRPCClientErrorLike } from '@trpc/client'
+  import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
@@ -295,9 +295,34 @@
       onSuccess: url => {
         window.location.href = url
       },
-      // TODO ajouter la gestion de l'auth en cas de pb de conn
-      onFailure: () => snackbar.error('La prise de rendez-vous a échoué.')
+      onFailure: handleAppointmentPlanningFailure
     })
+  }
+
+  function handleAppointmentPlanningFailure(e: unknown) {
+    if (e instanceof TRPCClientError) {
+      switch (e.data.code) {
+        case 'UNAUTHORIZED':
+          snackbar.info(
+            'Authentification sur RDVSP en cours. Veuillez patienter.'
+          )
+          navigateTo(apiRoutes.rdvsp.ApiSignIn.path(), { external: true })
+          break
+        case 'FORBIDDEN':
+          snackbar.error(
+            "Cette fonctionnalité n'est pas disponible. Veuillez vous rapprocher de votre responsable de structure."
+          )
+          break
+        case 'BAD_REQUEST':
+        default:
+          snackbar.error('La prise de rendez-vous a échoué.')
+          break
+      }
+    } else {
+      snackbar.error(
+        'La prise de rendez-vous a échoué pour une raison inconnue.'
+      )
+    }
   }
 
   async function reloadData(id: string) {
