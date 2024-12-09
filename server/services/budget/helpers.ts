@@ -7,7 +7,7 @@ import {
 import { budgetIncomeKeys, budgetExpensesKeys } from '~/client/options'
 import { incrementBudgetTotal } from '~/utils/budget'
 
-const getTotalIncome = (incomes: BudgetIncomeWithCustoms[]) => {
+export const getTotalIncome = (incomes: BudgetIncomeWithCustoms[]) => {
   const regularIncomes = incomes.reduce<number | null>((acc, income) => {
     const total = budgetIncomeKeys.keys.reduce<number | null>(
       (iacc, key) => incrementBudgetTotal(iacc, income[key as IncomeKey]),
@@ -32,7 +32,7 @@ const getTotalIncome = (incomes: BudgetIncomeWithCustoms[]) => {
   return (regularIncomes || 0) + (customIncomes || 0)
 }
 
-function getTotalExpenses(expenses: BudgetExpensesWithLoansAndDebts) {
+export function getTotalExpenses(expenses: BudgetExpensesWithLoansAndDebts) {
   const main = budgetExpensesKeys.keys.reduce<number | null>(
     (acc, cur) => incrementBudgetTotal(acc, expenses[cur as ExpensesKey]),
     null
