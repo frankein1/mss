@@ -5,8 +5,12 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { getBudget } from '~/server/services/budget/getBudget.service'
-import { getExpensesRows, getIncomeRows } from './helpers'
+import { getRowTotal, getExpensesRows, getIncomeRows } from './helpers'
 import { formatBudgetMemberLabel } from '~/utils/budget'
+import {
+  getTotalExpenses,
+  getTotalIncome
+} from '~/server/services/budget/helpers'
 
 const handler = async ({
   input: { familyFileId },
@@ -31,6 +35,12 @@ const handler = async ({
   ]
 
   const infoRows = [
+    {
+      label: 'Nombre de personnes dans le foyer',
+      value: budget.numberHouseholdMembers
+        ? budget.numberHouseholdMembers.toFixed(0)
+        : ''
+    },
     {
       label: 'Épargne',
       value: budget.savings ? budget.savings.toFixed(2) + ' €' : ''
@@ -81,13 +91,27 @@ const handler = async ({
       bold: true
     }
     const rows = getIncomeRows(income)
-    return [header, ...rows]
+    const footer = {
+      label: 'Total ' + formatBudgetMemberLabel(income),
+      value: getRowTotal(rows).toFixed(2) + ' €',
+      bold: true
+    }
+    return [header, ...rows, footer]
   })
+
+  const totalIncome = {
+    label: 'Revenus du foyer fiscal',
+    value:
+      getTotalIncome(budget.incomes) != null
+        ? getTotalIncome(budget.incomes)?.toFixed(2) + ' €'
+        : '-',
+    bold: true
+  }
 
   exportData.push({
     name: 'Revenus',
     columns: incomeColumns,
-    rows: beneficiariesRows.flat()
+    rows: [...beneficiariesRows.flat(), totalIncome]
   })
 
   // Expenses
@@ -106,11 +130,11 @@ const handler = async ({
 
   const loansRows = budget.expenses?.loans.map(loan => ({
     label: loan.type || '',
-    value: loan.amountPerMonth?.toFixed(2) || '0'
+    value: loan.amountPerMonth?.toFixed(2) + ' €' || '0'
   }))
   const debtRows = budget.expenses?.debts.map(debt => ({
     label: debt.type || '',
-    value: debt.amountPerMonth?.toFixed(2) || '0'
+    value: debt.amountPerMonth?.toFixed(2) + ' €' || '0'
   }))
 
   if (loansRows && loansRows.length > 0) {
@@ -120,7 +144,12 @@ const handler = async ({
         value: '',
         bold: true
       },
-      ...loansRows
+      ...loansRows,
+      {
+        label: 'Total crédit(s)',
+        value: getRowTotal(loansRows).toFixed(2) + ' €',
+        bold: true
+      }
     )
   }
   if (debtRows && debtRows.length > 0) {
@@ -130,14 +159,28 @@ const handler = async ({
         value: '',
         bold: true
       },
-      ...debtRows
+      ...debtRows,
+      {
+        label: 'Total dette(s)',
+        value: getRowTotal(debtRows).toFixed(2) + ' €',
+        bold: true
+      }
     )
+  }
+
+  const totalExpensesRow = {
+    label: 'Charges du foyer fiscal',
+    value:
+      budget.expenses && getTotalExpenses(budget.expenses)
+        ? (getTotalExpenses(budget.expenses) || 0).toFixed(2) + ' €'
+        : '-',
+    bold: true
   }
 
   exportData.push({
     name: 'Dépenses',
     columns: expensesColumns,
-    rows: expensesRows
+    rows: [...expensesRows, totalExpensesRow]
   })
 
   // Create export
