@@ -1,8 +1,13 @@
 import { BeneficiaryRepo, StructureRepo, UserRepo } from '~/server/database'
 import { PlanAppointmentInput } from '~/server/schema'
 import * as client from '~/server/lib/rdvsp-oauth.client'
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import { invalidError, forbiddenError, unauthorizedError } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security'
+import {
+  invalidError,
+  forbiddenError,
+  unauthorizedError,
+  ProtectedAppContext
+} from '~/server/trpc'
 
 async function createRdvspUsager(
   beneficiaryId: string,
@@ -23,13 +28,11 @@ async function createRdvspUsager(
   )
 
   console.log(usager)
-  if ('errors' in usager || 'status' in usager || !usager.id) {
-    if (usager.status === 401) {
-      console.log('throw unauthorized')
-      throw unauthorizedError('not authenticated')
-    } else {
+  if ('status' in usager) {
+    if (usager.status !== 401) {
       throw invalidError('could not create usager')
     }
+    throw unauthorizedError('not authenticated')
   }
 
   const externalRdvspId = usager.id.toString()
@@ -67,20 +70,21 @@ async function getAgentAuthInfo(user: SecurityRuleGrantee) {
     acc => acc.accessToken !== null
   )
 
-  if (
-    !connectedRdvspAccounts.length ||
-    !connectedRdvspAccounts[0].accessToken
-  ) {
-    throw forbiddenError('rdvsp account not connected')
+  const hasToken =
+    connectedRdvspAccounts.length && connectedRdvspAccounts[0].accessToken
+
+  if (!hasToken) {
+    throw unauthorizedError('rdvsp account not connected')
   }
 
   return {
     externalRdvspId: u.externalRdvspId,
-    accessToken: connectedRdvspAccounts[0].accessToken
+    accessToken: connectedRdvspAccounts[0].accessToken as string
   }
 }
 
-/** This function needs a structure and user activated in rdvsp.
+/** This function needs a structure and user activated in rdvsp
+ * otherwise throws a forbidden error.
  *
  * When the beneficiary already has an external "usager" id
  * from rdvsp, the function simply redirects to the appointment
@@ -88,14 +92,17 @@ async function getAgentAuthInfo(user: SecurityRuleGrantee) {
  *
  * If the beneficiary does not have a rdvsp usager created,
  * it is created through the rdvsp API and then the appointment
- * url is generated
+ * url is generated.
+ *
+ * Throws an unauthorized error if user is not authenticated to
+ * RDVSP api.
  */
 export async function planAppointment({
   input,
   ctx
 }: {
   input: PlanAppointmentInput
-  ctx: SecurityRuleContext
+  ctx: ProtectedAppContext
 }) {
   const {
     rdvsp: { issuer }
@@ -124,29 +131,36 @@ export async function planAppointment({
     throw forbiddenError('rdvsp integration not active for structure')
   }
 
-  let usagerId: string
-
   if (ben.externalRdvspId) {
-    usagerId = ben.externalRdvspId
-  } else {
-    console.log('usager has not been created in rdvsp yet')
-    const { accessToken, externalRdvspId } = await getAgentAuthInfo(ctx.user)
-
-    console.log('rdvsp agent id', externalRdvspId)
-
-    usagerId = await createRdvspUsager(
-      input.beneficiaryId,
+    // Early return: Beneficiary already has a Usager profile in RDVSP
+    return getRdvspAppointmentUrl(
+      issuer,
       structure.externalRdvspId,
-      externalRdvspId,
-      accessToken,
-      ben
+      ben.externalRdvspId
     )
   }
 
-  console.log('usagerId', usagerId)
+  // Usager has not been created in rdvsp yet
+  console.log('usager has not been created in rdvsp yet')
+  const { accessToken, externalRdvspId } = await getAgentAuthInfo(ctx.user)
 
-  const url = `${issuer}/admin/organisations/${structure.externalRdvspId}/creneaux_search?user_ids[]=${usagerId}`
-  console.log('redirecturl', url)
+  console.log('rdvsp agent id', externalRdvspId)
 
-  return url
+  const usagerId = await createRdvspUsager(
+    input.beneficiaryId,
+    structure.externalRdvspId,
+    externalRdvspId,
+    accessToken,
+    ben
+  )
+
+  return getRdvspAppointmentUrl(issuer, structure.externalRdvspId, usagerId)
+}
+
+function getRdvspAppointmentUrl(
+  base: string,
+  organizationId: string,
+  usagerId: string
+) {
+  return `${base}/admin/organisations/${organizationId}/creneaux_search?user_ids[]=${usagerId}`
 }

@@ -3,3 +3,9 @@ export interface AuthSession {
   state: string
   redirectUrl?: string
 }
+
+export interface RdvspAuthSession {
+  nonce: string
+  state: string
+  metadata: any
+}
