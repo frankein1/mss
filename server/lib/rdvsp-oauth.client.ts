@@ -132,7 +132,9 @@ export async function createUsager(
     Beneficiary,
     'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'email' | 'phone1'
   >
-) {
+): Promise<
+  { id: number } | RdvspError | { status: number; statusText: string }
+> {
   const response = await fetch(`${cfg.issuer}/api/v1/users`, {
     method: 'post',
     body: new URLSearchParams({

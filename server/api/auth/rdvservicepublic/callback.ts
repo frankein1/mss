@@ -1,5 +1,5 @@
 import { useSession } from 'h3'
-import { AuthSession } from '~/server/types/session'
+import { RdvspAuthSession } from '~/server/types/session'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user'
@@ -9,14 +9,17 @@ const { auth } = useRuntimeConfig()
 
 const unauthorized = (message: string) =>
   createError({ statusCode: 401, message })
-// const forbidden = (message: string) => createError({ statusCode: 403, message })
+
 const badrequest = (message: string) =>
   createError({ statusCode: 400, message })
 
+/** RDVSP Oauth callback endpoint
+ * Register rdvsp auth token in database and redirect to page
+ * which will handle the action to be performed after signin
+ */
 export default defineEventHandler(async event => {
   console.log('in rdvsp callback for auth')
   const { code, state } = getQuery(event)
-  const cfg = client.getConfig()
 
   if (!code || !state) {
     throw unauthorized('No code or state returned from RDVSP OAuth')
@@ -24,16 +27,41 @@ export default defineEventHandler(async event => {
   console.log('code', code)
   console.log('state', state)
 
-  const session = await useSession<AuthSession>(event, {
+  const session = await useSession<RdvspAuthSession>(event, {
     password: auth.sessionSecret
   })
 
+  try {
+    await createOrUpdateToken(code as string, state as string, session)
+  } catch (e) {
+    await session.clear()
+    throw e
+  }
+
+  // After successful signin, perform intended action through browser
+  const options = {
+    action: session.data.metadata.action,
+    id: session.data.metadata.id
+  }
+  const redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+
+  await session.clear()
+  return sendRedirect(event, redirect || routes.user.AppOverview.path())
+})
+
+/** Update external_account table with RDVSP auth token for the user */
+async function createOrUpdateToken(
+  code: string,
+  state: string,
+  session: { data: RdvspAuthSession }
+) {
   const { nonce: sessionNonce, state: sessionState } = session.data
 
   if (!sessionNonce || !sessionState || sessionState !== state) {
     throw unauthorized('Missing or invalid state or nonce')
   }
 
+  const cfg = client.getConfig()
   const token = await client.getToken(cfg, code as string)
 
   console.log(token)
@@ -41,7 +69,7 @@ export default defineEventHandler(async event => {
     throw badrequest('Could not retrieve authentication token')
   }
 
-  // nonce verification could be implemented here
+  // FIXME nonce verification could be implemented here
 
   const agent = await client.getAgentInfo(cfg, token.access_token)
   console.log(agent)
@@ -60,7 +88,9 @@ export default defineEventHandler(async event => {
     }
   })
 
-  // if structure integration is not active, fetch rdvsp organisation, activate structure and store rdvsp organisation id in structure
+  // TODO if structure integration is not active
+  // sol 1: activate it: fetch rdvsp organisation, activate structure and store rdvsp organisation id in structure
+  // sol 2: throw. Structure activation would then be done manually through back office
 
   if (!user) {
     throw badrequest('Could not retrieve user info')
@@ -100,7 +130,6 @@ export default defineEventHandler(async event => {
       prismaClient.user.update({
         where: { id: user.id },
         data: {
-          externalRdvspActive: true,
           externalRdvspId: agent.id.toString()
         }
       })
@@ -117,7 +146,4 @@ export default defineEventHandler(async event => {
       }
     })
   }
-
-  // On redirigera vers la page de prise de rdv de rdvsp
-  return sendRedirect(event, routes.user.AppOverview.path())
-})
+}

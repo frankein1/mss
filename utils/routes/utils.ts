@@ -1,6 +1,7 @@
 export const AppRoute = '/app'
 export const FilesRoute = '/app/files'
 export const BeneficiariesRoute = `${AppRoute}/beneficiaries`
+export const RdvspRoute = `${AppRoute}/integrations/rdvsp`
 
 export function getRouteOptions<T extends Record<string, any>>(options?: T) {
   const hasDefinedOptions = options && Object.values(options).every(o => !!o)

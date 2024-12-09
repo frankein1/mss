@@ -308,12 +308,19 @@
   function handleAppointmentPlanningFailure(e: unknown) {
     if (e instanceof TRPCClientError) {
       switch (e.data.code) {
-        case 'UNAUTHORIZED':
+        case 'UNAUTHORIZED': {
           snackbar.info(
             'Authentification sur RDVSP en cours. Veuillez patienter.'
           )
-          navigateTo(apiRoutes.rdvsp.ApiSignIn.path(), { external: true })
+          const options = {
+            action: 'planAppointment',
+            id: selectedBeneficiary.value?.id || ''
+          }
+          navigateTo(apiRoutes.rdvsp.ApiSignIn.path(options), {
+            external: true
+          })
           break
+        }
         case 'FORBIDDEN':
           snackbar.error(
             "Cette fonctionnalité n'est pas disponible. Veuillez vous rapprocher de votre responsable de structure."

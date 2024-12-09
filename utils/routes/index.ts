@@ -16,6 +16,7 @@ import { routes as landing } from './landing'
 import { routes as stats } from './stats'
 import { routes as structure } from './structure'
 import { routes as user } from './user'
+import { routes as rdvsp } from './rdvsp'
 
 export const routes = {
   admin,
@@ -30,7 +31,8 @@ export const routes = {
   landing,
   structure,
   stats,
-  user
+  user,
+  rdvsp
 }
 
 export const apiRoutes = {
