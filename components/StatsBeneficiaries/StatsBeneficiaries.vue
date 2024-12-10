@@ -45,7 +45,7 @@
       />
 
       <!-- Cards -->
-      <template v-else-if="beneficiaryCount">
+      <template v-else-if="beneficiaryCount?.count">
         <div class="fr-col-12">
           <StatsBeneficiariesFamilyFileNumber
             v-if="
