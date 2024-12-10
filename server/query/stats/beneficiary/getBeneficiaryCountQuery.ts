@@ -7,9 +7,16 @@ export async function getBeneficiaryCountQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  return await BeneficiaryRepo.count(user, {
-    where: {
-      ...prepareBeneficiaryStatFilters(input)
-    }
-  })
+  return {
+    count: await BeneficiaryRepo.count(user, {
+      where: {
+        ...prepareBeneficiaryStatFilters(input)
+      }
+    }),
+    new: await BeneficiaryRepo.count(user, {
+      where: {
+        ...prepareBeneficiaryStatFilters(input, true)
+      }
+    })
+  }
 }

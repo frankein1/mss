@@ -19,7 +19,13 @@
           />
         </template>
         <template #title>
-          {{ beneficiaryCountLabel }}
+          <span> {{ beneficiaryCountLabel[0] }}</span>
+          <span
+            v-if="beneficiaryCountLabel[1] && beneficiaryCount?.count"
+            class="fr-text--lg"
+          >
+            {{ beneficiaryCountLabel[1] }}</span
+          >
         </template>
       </StatsHeader>
       <StatsExportAlert
@@ -42,8 +48,14 @@
       <template v-else-if="beneficiaryCount">
         <div class="fr-col-12">
           <StatsBeneficiariesFamilyFileNumber
+            v-if="
+              Object.keys(filters).length === 0 ||
+              filters.period ||
+              filters.referent ||
+              filters.beneficiaryStatus
+            "
             history-type="beneficiary"
-            :total-count="beneficiaryCount"
+            :total-count="beneficiaryCount.count"
             :filters="filters"
           />
         </div>
@@ -54,7 +66,7 @@
           :card-name="beneficiariesCardConfig.gender.name"
         >
           <StatsBeneficiariesGender
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -65,7 +77,7 @@
           :card-name="beneficiariesCardConfig.ages.name"
         >
           <StatsBeneficiariesAgeGroups
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -76,7 +88,7 @@
           :card-name="beneficiariesCardConfig.familySituations.name"
         >
           <StatsBeneficiariesFamilySituations
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -87,7 +99,7 @@
           :card-name="beneficiariesCardConfig.cities.name"
         >
           <StatsBeneficiariesCities
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -98,7 +110,7 @@
           :card-name="beneficiariesCardConfig.counties.name"
         >
           <StatsBeneficiariesDepartments
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -109,7 +121,7 @@
           :card-name="beneficiariesCardConfig.region.name"
         >
           <StatsBeneficiariesRegions
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
           />
         </StatsCard>
@@ -121,7 +133,7 @@
           :card-name="beneficiariesCardConfig.accomodationZone.name"
         >
           <StatsBeneficiariesAccommodationZone
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
         /></StatsCard>
 
@@ -131,7 +143,7 @@
           :card-name="beneficiariesCardConfig.accomodationMode.name"
         >
           <StatsBeneficiariesAccommodationMode
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
         /></StatsCard>
 
@@ -141,7 +153,7 @@
           :card-name="beneficiariesCardConfig.mobility.name"
         >
           <StatsBeneficiariesMobility
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
         /></StatsCard>
 
@@ -151,7 +163,7 @@
           :card-name="beneficiariesCardConfig.csp.name"
         >
           <StatsBeneficiariesCSP
-            :beneficiary-count="beneficiaryCount"
+            :beneficiary-count="beneficiaryCount.count"
             :filters="filters"
         /></StatsCard>
 
@@ -162,7 +174,7 @@
             :card-name="beneficiariesCardConfig.ministereStructures.name"
           >
             <StatsBeneficiariesMinistereStructure
-              :beneficiary-count="beneficiaryCount"
+              :beneficiary-count="beneficiaryCount.count"
               :filters="filters"
           /></StatsCard>
 
@@ -174,7 +186,7 @@
             "
           >
             <StatsBeneficiariesMinistereDepartementService
-              :beneficiary-count="beneficiaryCount"
+              :beneficiary-count="beneficiaryCount.count"
               :filters="filters"
           /></StatsCard>
 
@@ -184,7 +196,7 @@
             :card-name="beneficiariesCardConfig.ministereCategorie.name"
           >
             <StatsBeneficiariesMinistereCategorie
-              :beneficiary-count="beneficiaryCount"
+              :beneficiary-count="beneficiaryCount.count"
               :filters="filters"
           /></StatsCard>
 
@@ -194,7 +206,7 @@
             :card-name="beneficiariesCardConfig.ministereInterpellation.name"
           >
             <StatsBeneficiariesMinistereInterpellation
-              :beneficiary-count="beneficiaryCount"
+              :beneficiary-count="beneficiaryCount.count"
               :filters="filters"
           /></StatsCard>
         </template>
@@ -208,7 +220,7 @@
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
   import { Menu } from '~/types/menu'
-  import { StatsCardConfig } from '~/types/stat'
+  import { StatsCardConfig, StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
 
@@ -240,12 +252,24 @@
     error
   } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
 
-  const beneficiaryCountLabel = computed(
-    () =>
-      `${beneficiaryCount.value || 0} ${
-        beneficiaryCount.value || 0 > 1 ? 'Bénéficiaires' : 'Bénéficiaire'
-      }`
-  )
+  const plural = (word: string, q: number, end = 's') =>
+    q > 1 ? `${q} ${word}${end}` : `${q} ${word}`
+
+  const beneficiaryCountLabel = computed(() => {
+    const hasDateFilter =
+      (filters.value.period &&
+        filters.value.period !== StatPeriodFilter.Custom) ||
+      (filters.value.period === StatPeriodFilter.Custom &&
+        (filters.value.fromDate || filters.value.toDate))
+
+    if (hasDateFilter) {
+      return [
+        `${plural('Bénéficiaire', beneficiaryCount.value?.count || 0)}`,
+        ` dont ${plural('nouveau', beneficiaryCount.value?.new || 0, 'x')}`
+      ]
+    }
+    return [plural('Bénéficiaire', beneficiaryCount.value?.count || 0)]
+  })
 
   const excelIsDownloading = (downloading: boolean) => {
     isDownloading.value = downloading
@@ -323,7 +347,7 @@
   const menus: ComputedRef<Menu[]> = computed(() => {
     const menus: Menu[] = []
 
-    if (beneficiaryCount.value != 0) {
+    if (beneficiaryCount.value?.count != 0) {
       menus.push({
         label: 'En images (.zip)',
         callback: async () => {
@@ -345,7 +369,7 @@
       })
     }
 
-    if (beneficiaryCount.value != 0 && application.value.export.stats) {
+    if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
         callback: () => {

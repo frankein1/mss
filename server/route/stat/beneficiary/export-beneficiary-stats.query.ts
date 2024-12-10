@@ -60,7 +60,7 @@ const handler = async ({
   const genderRows = genders.map(({ gender, _count }) => ({
     label: beneficiaryGenderKeys.value(gender) || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({ name: 'Genre', columns: genderColumns, rows: genderRows })
 
@@ -70,7 +70,7 @@ const handler = async ({
   const ageRows = ages.map(({ ageGroup, _count }) => ({
     label: ageGroupKeys.value(ageGroup) || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: "Tranches d'âge",
@@ -84,7 +84,7 @@ const handler = async ({
   const familyRows = situations.map(({ familySituation, _count }) => ({
     label: familySituationKeys.value(familySituation) || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: 'Types de situations familiales',
@@ -98,7 +98,7 @@ const handler = async ({
   const cityRows = cities.map(({ city, _count }) => ({
     label: city || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: 'Villes',
@@ -112,7 +112,7 @@ const handler = async ({
   const departmentRows = departments.map(({ department, _count }) => ({
     label: department || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: 'Départements',
@@ -126,7 +126,7 @@ const handler = async ({
   const regionRows = regions.map(({ region, _count }) => ({
     label: region || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({ name: 'Régions', columns: regionColumns, rows: regionRows })
 
@@ -140,7 +140,7 @@ const handler = async ({
           beneficiaryAccommodationZoneKeys.value(accommodationZone) ||
           STATS_NULL_LABEL,
         number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount)}%`
+        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
       })
     )
     exportData.push({
@@ -158,7 +158,7 @@ const handler = async ({
       beneficiaryAccommodationModeKeys.value(accommodationMode) ||
       STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: "Modes d'hébergement",
@@ -172,7 +172,7 @@ const handler = async ({
   const mobilityRows = mobilities.map(({ mobility, _count }) => ({
     label: beneficiaryMobilityKeys.value(mobility) || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({
     name: 'Données mobilité',
@@ -189,7 +189,7 @@ const handler = async ({
         socioProfessionalCategory
       ) || STATS_NULL_LABEL,
     number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount)}%`
+    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))
   exportData.push({ name: 'CSP', columns: CSPColumns, rows: CSPRows })
 
@@ -202,7 +202,7 @@ const handler = async ({
         label:
           ministereStructureKeys.value(ministereStructure) || STATS_NULL_LABEL,
         number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount)}%`
+        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
       })
     )
     exportData.push({
@@ -226,7 +226,7 @@ const handler = async ({
             ministereDepartementServiceAc
           ) || STATS_NULL_LABEL,
         number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount)}%`
+        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
       })
     )
     exportData.push({
@@ -243,7 +243,7 @@ const handler = async ({
         label:
           ministereCategorieKeys.value(ministereCategorie) || STATS_NULL_LABEL,
         number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount)}%`
+        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
       })
     )
     exportData.push({
