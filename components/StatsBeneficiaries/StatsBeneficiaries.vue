@@ -19,13 +19,13 @@
           />
         </template>
         <template #title>
-          <span> {{ beneficiaryCountLabel[0] }}</span>
-          <span
+          <div>{{ beneficiaryCountLabel[0] }}</div>
+          <div
             v-if="beneficiaryCountLabel[1] && beneficiaryCount?.count"
-            class="fr-text--lg"
+            class="fr-text--lg fr-mb-0"
           >
-            {{ beneficiaryCountLabel[1] }}</span
-          >
+            {{ beneficiaryCountLabel[1] }}
+          </div>
         </template>
       </StatsHeader>
       <StatsExportAlert
@@ -253,7 +253,7 @@
   } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
 
   const plural = (word: string, q: number, end = 's') =>
-    q > 1 ? `${q} ${word}${end}` : `${q} ${word}`
+    q > 1 ? `${word}${end}` : `${word}`
 
   const beneficiaryCountLabel = computed(() => {
     const hasDateFilter =
@@ -262,13 +262,16 @@
       (filters.value.period === StatPeriodFilter.Custom &&
         (filters.value.fromDate || filters.value.toDate))
 
+    const count = beneficiaryCount.value?.count || 0
+    const countNew = beneficiaryCount.value?.new || 0
+
     if (hasDateFilter) {
       return [
-        `${plural('Bénéficiaire', beneficiaryCount.value?.count || 0)}`,
-        ` dont ${plural('nouveau', beneficiaryCount.value?.new || 0, 'x')}`
+        `${count} ${plural('Bénéficiaire', count)} ${plural('accompagné', count)}`,
+        `${countNew} ${plural('bénéficiaire', countNew)} ${plural('créé', countNew)} dans la période`
       ]
     }
-    return [plural('Bénéficiaire', beneficiaryCount.value?.count || 0)]
+    return [`${count} ${plural('Bénéficiaire', count)}`]
   })
 
   const excelIsDownloading = (downloading: boolean) => {
