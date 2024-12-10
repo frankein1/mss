@@ -195,6 +195,7 @@ const adminHandler = async ({
       city: null,
       department: null,
       region: null,
+      qpv: false,
       noPhone: false,
       phone1: null,
       phone2: null,

@@ -62,6 +62,7 @@ export type GetBeneficiaryGeneral = Pick<
   | 'city'
   | 'region'
   | 'department'
+  | 'qpv'
   | 'noPhone'
   | 'phone1'
   | 'phone2'

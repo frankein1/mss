@@ -223,6 +223,7 @@ function getGeneral(
     city: beneficiary.city,
     region: beneficiary.region,
     department: beneficiary.department,
+    qpv: beneficiary.qpv,
     noPhone: beneficiary.noPhone,
     phone1: beneficiary.phone1,
     phone2: beneficiary.phone2,
