@@ -185,7 +185,7 @@ const handler = async ({
   const prescribingOrganizationRows =
     helpRequestPrescribingOrganizationData.map(item => {
       return {
-        label: 'Organismes prescripteurs',
+        label: item.prescribingOrganization,
         number: item._count.toString(),
         percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
       }
@@ -274,8 +274,8 @@ const handler = async ({
 
   const amountsAllocatedRows = amountsAllocated.breakdown.map(breakdown => ({
     label: breakdown.label,
-    allocated: breakdown.count.toString(),
-    asked: breakdown.subCount.toString(),
+    allocated: breakdown.count.toFixed(2) + ' €',
+    asked: breakdown.subCount.toFixed(2) + ' €',
     percent: `${getPercentage(breakdown.count, breakdown.subCount)}%`
   }))
 
@@ -299,20 +299,22 @@ const handler = async ({
   const amountsByInstructorOrganizationRows =
     amountsByInstructorOrganization.map(amount => ({
       label: amount.label,
-      allocated: amount.count.toString(),
-      asked: amount.subCount.toString(),
+      allocated: amount.count.toFixed(2) + ' €',
+      asked: amount.subCount.toFixed(2) + ' €',
       percent: `${getPercentage(amount.count, amount.subCount)}%`
     }))
   amountsByInstructorOrganizationRows.push({
     label: 'TOTAL',
-    allocated: amountsByInstructorOrganization
-      .map(amount => amount.count)
-      .reduce((acc, cur) => acc + cur, 0)
-      .toString(),
-    asked: amountsByInstructorOrganization
-      .map(amount => amount.subCount)
-      .reduce((acc, cur) => acc + cur, 0)
-      .toString(),
+    allocated:
+      amountsByInstructorOrganization
+        .map(amount => amount.count)
+        .reduce((acc, cur) => acc + cur, 0)
+        .toFixed(2) + ' €',
+    asked:
+      amountsByInstructorOrganization
+        .map(amount => amount.subCount)
+        .reduce((acc, cur) => acc + cur, 0)
+        .toFixed(2) + ' €',
     percent: '100%'
   })
 
@@ -335,14 +337,15 @@ const handler = async ({
 
   const amountsBySubjectRows = amountsBySubject.map(amount => ({
     label: amount.label,
-    allocated: amount.count.toString()
+    allocated: amount.count.toFixed(2) + ' €'
   }))
   amountsBySubjectRows.push({
     label: 'TOTAL',
-    allocated: amountsBySubject
-      .map(amount => amount.count)
-      .reduce((acc, cur) => acc + cur, 0)
-      .toString()
+    allocated:
+      amountsBySubject
+        .map(amount => amount.count)
+        .reduce((acc, cur) => acc + cur, 0)
+        .toFixed(2) + ' €'
   })
 
   exportData.push({
