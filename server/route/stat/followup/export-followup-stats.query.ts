@@ -1,6 +1,10 @@
 import { StructureType } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { followupDurationKeys, socialSupportStatusKeys } from '~/client/options'
+import {
+  followupDurationKeys,
+  followupMediumKeys,
+  socialSupportStatusKeys
+} from '~/client/options'
 import { WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,
@@ -74,8 +78,9 @@ const handler = async ({
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)
 
   const followupMediumRows = followupMediumData.map(item => {
+    const label = followupMediumKeys.value(item.medium)
     return {
-      label: (item.medium || STATS_NULL_LABEL) as string,
+      label: (label || STATS_NULL_LABEL) as string,
       number: item._count.toString(),
       percent: `${getPercentage(item._count, followupCount)}%`
     }
@@ -208,7 +213,7 @@ const handler = async ({
   const prescribingOrganizationRows = followupPrescribingOrganizationData.map(
     item => {
       return {
-        label: 'Organismes prescripteurs',
+        label: item.prescribingOrganization,
         number: item._count.toString(),
         percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
       }
