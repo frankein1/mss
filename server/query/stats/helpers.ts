@@ -165,9 +165,17 @@ export function prepareBeneficiaryStatFilters(
     socialSupportFilters.subjects = { some: typesListFilter }
   }
 
+  if (filters.ministre) {
+    socialSupportFilters.ministre = { in: filters.ministre }
+  }
+
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
-  if (hasDateFilter || filters.socialSupportSubjects?.length) {
+  if (
+    hasDateFilter ||
+    filters.socialSupportSubjects?.length ||
+    filters.ministre
+  ) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 
