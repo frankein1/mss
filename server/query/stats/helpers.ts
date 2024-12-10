@@ -141,8 +141,22 @@ export function prepareFollowupStatFilters(
   }
 }
 
-export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
+/** filterCreated: if true, when filtering on period,
+ *  filter also on beneficiaries created during the period */
+export function prepareBeneficiaryStatFilters(
+  filters: StatFilterInput,
+  filterCreated = false
+) {
   const socialSupportFilters: Prisma.SocialSupportWhereInput = {}
+
+  const hasDateFilter =
+    (filters.period && filters.period !== StatPeriodFilter.Custom) ||
+    (filters.period === StatPeriodFilter.Custom &&
+      (filters.fromDate || filters.toDate))
+
+  if (hasDateFilter) {
+    socialSupportFilters.created = prepareDateFilters(filters)
+  }
 
   if (filters.socialSupportSubjects?.length) {
     const typesListFilter = {
@@ -153,16 +167,11 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
-  if (filters.socialSupportSubjects?.length) {
+  if (hasDateFilter || filters.socialSupportSubjects?.length) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 
-  const hasDateFilter =
-    (filters.period && filters.period !== StatPeriodFilter.Custom) ||
-    (filters.period === StatPeriodFilter.Custom &&
-      (filters.fromDate || filters.toDate))
-
-  if (hasDateFilter) {
+  if (filterCreated && hasDateFilter) {
     formattedFilters.created = prepareDateFilters(filters)
   }
 
