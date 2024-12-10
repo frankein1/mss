@@ -48,6 +48,12 @@
       <template v-else-if="beneficiaryCount">
         <div class="fr-col-12">
           <StatsBeneficiariesFamilyFileNumber
+            v-if="
+              Object.keys(filters).length === 0 ||
+              filters.period ||
+              filters.referent ||
+              filters.beneficiaryStatus
+            "
             history-type="beneficiary"
             :total-count="beneficiaryCount.count"
             :filters="filters"
