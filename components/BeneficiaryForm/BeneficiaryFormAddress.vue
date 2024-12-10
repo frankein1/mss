@@ -53,14 +53,14 @@
         hint="Bâtiment, escalier, numéro d'appartement, lieu-dit, etc."
       />
     </div>
-    <div class="fr-col-12 fr-hidden">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeDepartmentInput
         name="department"
         :label="beneficiaryFieldLabels.department"
         @department-selected="setDepartmentValue($event)"
       />
     </div>
-    <div class="fr-col-12 fr-hidden">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeRegionInput
         name="region"
         :label="beneficiaryFieldLabels.region"
