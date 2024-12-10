@@ -122,13 +122,18 @@
        * Use default values if the initial values have to be set on form reset
        */
       defaultValues?: FilterValues
+      /**
+       * All filters are expanded by default
+       */
+      expandedByDefault?: boolean
     }>(),
     {
       fullWidthFilters: false,
       noReset: false,
       initialSelectedValues: undefined,
       resultsLabel: undefined,
-      defaultValues: undefined
+      defaultValues: undefined,
+      expandedByDefault: false
     }
   )
 
@@ -146,7 +151,7 @@
 
   const COLLAPSED_FILTERS_ID = getRandId('filters-')
   const form = ref<HTMLFormElement | null>(null)
-  const expanded = ref<boolean>(false)
+  const expanded = ref<boolean>(props.expandedByDefault)
 
   const {
     controlledValues: selectedFilters,

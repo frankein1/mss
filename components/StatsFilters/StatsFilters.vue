@@ -8,6 +8,7 @@
       v-else
       :filters="statsFilters"
       :default-values="defaultValues"
+      :expanded-by-default="true"
       @filter="emit('update:filters', $event)"
     />
   </div>
