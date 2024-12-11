@@ -2,6 +2,64 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.36.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.34.0...v1.36.0) (2024-12-11)
+
+
+### Features
+
+* **budget:** ajout de charges et revenus personnalisés ([c53b927](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c53b927b0bf568ac2fef658e5f1944a4140e5902)), closes [#660](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/660)
+* **budget:** défilement de la page vers l'élément sélectionné du formulaire charge du foyer ([1ba0215](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1ba02155f7082f34c39bef6acfd4fda8147f3f59)), closes [#654](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/654)
+* **budget:** exporter le budget en doc excel ([6f972d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f972d6dcfe0f2140d0f7f94d0298b149d80522b)), closes [#504](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/504)
+* **dossier:** amélioration des champs adresse du formulaire ([ebb67ce](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ebb67ce716892485612dfa881e24ed4885df17e9)), closes [#520](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/520)
+* **statistiques:** ajout du filtre ministre ([7f15b70](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7f15b70f46dad825f5122dd49b7cb41b0bf80dbe)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **statistiques:** ajout nombre de foyers concernés pour les stats beneficiaire ([d85732a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d85732ad7e121cadb01e219324c7db3f0789d1f6)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** Carte durée des entretiens ([2c78a3e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2c78a3e6cf53fdb23d376c75b3ae89a4017d801d)), closes [#668](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/668)
+* **statistiques:** carte durée moyenne d’un entretien ([14dd33c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14dd33c48e077083ba4df7dc62100272a6b5c73f)), closes [#668](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/668)
+
+
+### Bug Fixes
+
+* **bénéficiaire:** ajout de permission au module budget ([125b3ad](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/125b3adc0a6cbee73ebd3ef234168b8f48750fe0))
+* **bénéficiaire:** champs département et région visibles ([038fe80](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/038fe806653c7086ef8d15f737578812b186fad8))
+* **statistiques:** ajout des nouveaux bénéficiaires créés au filtre période ([4b7b273](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4b7b273de26ca6364023b5d6f4db80e84d1a6cba)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** ajoute le nombre de bénéficiaires créés dans la période ([0f8198e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0f8198e8d710a96b031ae7dc5b9e206c4c03045b)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** corrections d'erreurs dans les exports ([556b406](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/556b40602e88ff9f9bcfc6ca31b5cf040935663a)), closes [#683](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/683)
+* **statistiques:** filtre ministre pris en compte dans la requête d'interpellation ([f144612](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f1446121a348d1482dbf995a690f61aa5757b7de)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **statistiques:** le filtre période filtre sur la date de création des bénéficiaires ([5d2c570](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5d2c5708314fe8b187fd650291a8226b7cc0c70d)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** les filtres sont tous visibles par défaut ([4983736](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/498373615626e6712dd1ccbcb3441a703244148e))
+* **statistiques:** pas d'affichage des stats si le nombre de bénéficiaires est 0 ([83ce4f3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/83ce4f3cc6597ee7917a5c84df71e96113b0fca0)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** requête d'interpellation sélectionne uniquement les ministres filtrés ([d7245a0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d7245a0bb0b52ad222e7226b5c07a0f4341ec4c0)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **utilisateurs:** correction ligne module budget dans tableau des rôles et habilitations ([27c9868](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27c986808e9e02504db7b266417ab9bee1a61e7a))
+
+## [1.35.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.34.0...v1.35.0) (2024-12-11)
+
+
+### Features
+
+* **budget:** ajout de charges et revenus personnalisés ([c53b927](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c53b927b0bf568ac2fef658e5f1944a4140e5902)), closes [#660](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/660)
+* **budget:** défilement de la page vers l'élément sélectionné du formulaire charge du foyer ([1ba0215](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1ba02155f7082f34c39bef6acfd4fda8147f3f59)), closes [#654](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/654)
+* **budget:** exporter le budget en doc excel ([6f972d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f972d6dcfe0f2140d0f7f94d0298b149d80522b)), closes [#504](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/504)
+* **dossier:** amélioration des champs adresse du formulaire ([ebb67ce](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ebb67ce716892485612dfa881e24ed4885df17e9)), closes [#520](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/520)
+* **statistiques:** ajout du filtre ministre ([7f15b70](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7f15b70f46dad825f5122dd49b7cb41b0bf80dbe)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **statistiques:** ajout nombre de foyers concernés pour les stats beneficiaire ([d85732a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d85732ad7e121cadb01e219324c7db3f0789d1f6)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** Carte durée des entretiens ([2c78a3e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2c78a3e6cf53fdb23d376c75b3ae89a4017d801d)), closes [#668](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/668)
+* **statistiques:** carte durée moyenne d’un entretien ([14dd33c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14dd33c48e077083ba4df7dc62100272a6b5c73f)), closes [#668](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/668)
+
+
+### Bug Fixes
+
+* **bénéficiaire:** ajout de permission au module budget ([125b3ad](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/125b3adc0a6cbee73ebd3ef234168b8f48750fe0))
+* **bénéficiaire:** champs département et région visibles ([038fe80](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/038fe806653c7086ef8d15f737578812b186fad8))
+* **statistiques:** ajout des nouveaux bénéficiaires créés au filtre période ([4b7b273](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4b7b273de26ca6364023b5d6f4db80e84d1a6cba)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** ajoute le nombre de bénéficiaires créés dans la période ([0f8198e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0f8198e8d710a96b031ae7dc5b9e206c4c03045b)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** corrections d'erreurs dans les exports ([556b406](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/556b40602e88ff9f9bcfc6ca31b5cf040935663a)), closes [#683](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/683)
+* **statistiques:** filtre ministre pris en compte dans la requête d'interpellation ([f144612](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f1446121a348d1482dbf995a690f61aa5757b7de)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **statistiques:** le filtre période filtre sur la date de création des bénéficiaires ([5d2c570](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5d2c5708314fe8b187fd650291a8226b7cc0c70d)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** les filtres sont tous visibles par défaut ([4983736](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/498373615626e6712dd1ccbcb3441a703244148e))
+* **statistiques:** pas d'affichage des stats si le nombre de bénéficiaires est 0 ([83ce4f3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/83ce4f3cc6597ee7917a5c84df71e96113b0fca0)), closes [#661](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/661)
+* **statistiques:** requête d'interpellation sélectionne uniquement les ministres filtrés ([d7245a0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d7245a0bb0b52ad222e7226b5c07a0f4341ec4c0)), closes [#672](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/672)
+* **utilisateurs:** correction ligne module budget dans tableau des rôles et habilitations ([27c9868](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27c986808e9e02504db7b266417ab9bee1a61e7a))
+
 ## [1.34.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.33.0...v1.34.0) (2024-11-28)
 
 
