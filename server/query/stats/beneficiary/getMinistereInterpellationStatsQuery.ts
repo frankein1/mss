@@ -8,15 +8,17 @@ export async function getMinistereInterpellationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
+  const filters = prepareBeneficiaryStatFilters(input)
   const beneficiariesWithMinistreHistory = await BeneficiaryRepo.findMany(
     user,
     {
       where: {
-        ...prepareBeneficiaryStatFilters(input),
+        ...filters,
         socialSupports: {
           some: {
             ministre: { not: null }
-          }
+          },
+          ...(filters.socialSupports || {})
         }
       },
       select: {
