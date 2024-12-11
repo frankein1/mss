@@ -46,6 +46,15 @@ setup('authenticate as Social Worker Jean', async ({ page }) => {
   await page.context().storageState({ path: workerFile })
 })
 
+setup('authenticate as Reception Agent Jean', async ({ page }) => {
+  const agentFile = 'playwright/.auth/reception-agent.json'
+  const username = process.env.RECEPTION_AGENT_EMAIL || ''
+  const pwd = process.env.RECEPTION_AGENT_PASSWORD || ''
+
+  await authenticate(page, username, pwd)
+  await page.context().storageState({ path: agentFile })
+})
+
 setup('authenticate as Structure Manager Anita', async ({ page }) => {
   const managerFile = 'playwright/.auth/structure-manager-new-user.json'
   const username = process.env.STRUCTURE_MANAGER_NEW_USER_EMAIL || ''
