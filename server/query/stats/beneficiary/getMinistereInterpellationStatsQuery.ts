@@ -1,4 +1,4 @@
-import { Minister } from '@prisma/client'
+import { Minister, Prisma } from '@prisma/client'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import { BeneficiaryRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
@@ -9,6 +9,14 @@ export async function getMinistereInterpellationStatsQuery(
   input: StatFilterInput
 ) {
   const filters = prepareBeneficiaryStatFilters(input)
+
+  let socialSupportsSelect: Prisma.SocialSupportWhereInput
+  if (filters.socialSupports?.some?.ministre) {
+    socialSupportsSelect = { ministre: filters.socialSupports.some.ministre }
+  } else {
+    socialSupportsSelect = { ministre: { not: null } }
+  }
+
   const beneficiariesWithMinistreHistory = await BeneficiaryRepo.findMany(
     user,
     {
@@ -23,9 +31,7 @@ export async function getMinistereInterpellationStatsQuery(
       },
       select: {
         socialSupports: {
-          where: {
-            ministre: { not: null }
-          }
+          where: socialSupportsSelect
         }
       }
     }
