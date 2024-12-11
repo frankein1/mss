@@ -122,9 +122,9 @@ pnpm:test:e2e:
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
-    AUTH_KEYCLOAK_ISSUER_URL: https://recette.connect.inclusion.beta.gouv.fr
-    AUTH_KEYCLOAK_CLIENT_ID: demo
-    AUTH_KEYCLOAK_CLIENT_SECRET: ${E2E_AUTH_KEYCLOAK_CLIENT_SECRET}
+    AUTH_PROCONNECT_ISSUER_URL: https://fca.integ01.dev-agentconnect.fr/api/v2
+    AUTH_PROCONNECT_CLIENT_ID: ${E2E_AUTH_PROCONNECT_CLIENT_ID}
+    AUTH_PROCONNECT_CLIENT_SECRET: ${E2E_AUTH_PROCONNECT_CLIENT_SECRET}
     STRUCTURE_MANAGER_EMAIL: jeanne.responsable@yopmail.com
     STRUCTURE_MANAGER_PASSWORD: ${E2E_STRUCTURE_MANAGER_PASSWORD}
     SOCIAL_WORKER_EMAIL: jean.travailleur-social@yopmail.com
