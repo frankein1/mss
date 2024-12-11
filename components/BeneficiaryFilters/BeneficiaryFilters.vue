@@ -30,6 +30,7 @@
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
+  import { beneficiaryFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
   const hasReferentsFilters = !useAuthState().isReferent()
@@ -145,7 +146,7 @@
     if (application.value.module.vulnerablePerson) {
       filters.push({
         name: 'vulnerablePerson',
-        label: 'Registre des personnes vulnérables',
+        label: beneficiaryFieldLabels.vulnerablePerson,
         options: withEmptyValue(yesNoOptions, 'Tous les bénéficiaires'),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
@@ -153,6 +154,16 @@
         matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
       })
     }
+
+    filters.push({
+      name: 'qpv',
+      label: beneficiaryFieldLabels.qpv,
+      options: withEmptyValue(yesNoOptions, 'Tous'),
+      type: FilterType.SelectOne,
+      alwaysExpanded: false,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.QPV
+    })
 
     filters.push({
       name: 'notFilled',

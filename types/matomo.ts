@@ -22,7 +22,8 @@ export enum BeneficiaryFilterEventAction {
   Status = 'Statut',
   AgeGroup = "Tranche d'âge",
   VulnerablePerson = 'Registre des personnes vulnérables',
-  NotFilled = 'Champ non renseigné'
+  NotFilled = 'Champ non renseigné',
+  QPV = 'Quartier prioritaire de la politique de la ville'
 }
 
 export enum BeneficiaryHistoryAction {

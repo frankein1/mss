@@ -158,6 +158,7 @@ const filter = (
       : undefined,
     taxHouseholds: !isObjectEmpty(taxHouseholds) ? taxHouseholds : undefined,
     entourages: !isObjectEmpty(entourages) ? entourages : undefined,
+    qpv: beneficiary.qpv,
     history
   }
 }
