@@ -1,7 +1,5 @@
 import { test, expect, Page } from '@playwright/test'
 
-test.skip()
-
 async function validateHeadings(page: Page) {
   await expect(page).toHaveTitle(/Tableau de bord/)
 
@@ -51,12 +49,7 @@ test.describe('Homepage as authenticated Structure Manager', () => {
 
     await validateHeadings(page)
     await validateLegals(page, 'manager')
-    await validateTopbarMenu(page, [
-      'Mon compte',
-      'Utilisateurs',
-      'Structure',
-      'Déconnexion'
-    ])
+    await validateTopbarMenu(page, ['Utilisateurs', 'Structure', 'Déconnexion'])
   })
 })
 
@@ -70,6 +63,6 @@ test.describe('Homepage as authenticated Social Worker', () => {
 
     await validateHeadings(page)
     await validateLegals(page, 'user')
-    await validateTopbarMenu(page, ['Mon compte', 'Structure', 'Déconnexion'])
+    await validateTopbarMenu(page, ['Structure', 'Déconnexion'])
   })
 })

@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test'
 
-test.skip()
-
 test('Home page should allow to login using Inclusion Connect', async ({
   page
 }) => {
@@ -13,11 +11,13 @@ test('Home page should allow to login using Inclusion Connect', async ({
 
   await expect(page).toHaveTitle(/Se connecter à ma structure/)
 
-  await page.getByRole('link', { name: /inclusionconnect/i }).click()
+  await page
+    .getByRole('link', { name: /s'identifier avec proconnect/i })
+    .click()
 
-  await expect(page).toHaveURL(
-    /connect.inclusion.beta.gouv.fr\/accounts\/login/
-  )
+  await expect(page).toHaveURL(/dev-agentconnect.fr/)
 
-  await expect(page.getByRole('heading', { name: /connexion/i })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: /se connecter à mon suivi social/i })
+  ).toBeVisible()
 })

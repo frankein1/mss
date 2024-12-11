@@ -15,8 +15,6 @@ test.afterEach(async () => {
   })
 })
 
-test.skip()
-
 test.describe('Validate CGU as new Structure Manager', () => {
   test.use({ storageState: 'playwright/.auth/structure-manager-new-user.json' })
 
