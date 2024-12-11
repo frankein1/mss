@@ -21,7 +21,7 @@ function getBread<T extends 'AppHistory' | 'AppFileAdd'>(name: T) {
   return [{ text: title, to: r[name].path() }]
 }
 
-function getBreadFamilyFile(
+export function getBreadFamilyFile(
   familyFileId: string,
   familyIdentification: BeneficiaryNames[] | null,
   options?: FamilyFileUrlOptions

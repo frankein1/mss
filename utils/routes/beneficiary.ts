@@ -180,5 +180,11 @@ export const routes = {
         `${BeneficiariesRoute}/${beneficiaryId}/edit/external-organisations`,
         options
       )
+  },
+  AppBeneficiaryArchive: {
+    name: 'AppBeneficiaryArchive',
+    title: () => 'Gérer le dossier',
+    path: (beneficiaryId: string) =>
+      `${BeneficiariesRoute}/${beneficiaryId}/archive`
   }
 } as const
