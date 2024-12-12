@@ -14,7 +14,7 @@
       {{ label }}
     </legend>
     <div
-      v-for="{ value: optionValue, label: optionLabel } in options"
+      v-for="{ value: optionValue, label: optionLabel, disabled } in options"
       :key="optionValue"
       class="fr-fieldset__element"
       :class="{
@@ -35,6 +35,7 @@
           :name="name"
           :checked="optionValue === value"
           :class="{ 'fr-sr-only': asTag }"
+          :disabled="disabled"
           @change="onChange"
         />
         <label
@@ -80,13 +81,13 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
-  import type { Options } from '~/utils/options'
+  import type { OptionsWithDisabled } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       name: string
       label: string
-      options: Options
+      options: OptionsWithDisabled
       pictos?: { [key: string]: string }
       inline?: boolean
       noLabel?: boolean
