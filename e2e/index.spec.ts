@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test'
 
-test.skip()
-
 test('Home page should have title and allow to register', async ({ page }) => {
   await page.goto('/')
 

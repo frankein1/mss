@@ -7,20 +7,26 @@ async function authenticate(
   newUser = false
 ) {
   await page.goto('/auth/login')
-  await page.getByRole('link', { name: /inclusionconnect/i }).click()
+  await page
+    .getByRole('link', { name: /s'identifier avec proconnect/i })
+    .click()
 
-  await page.waitForURL(/connect.inclusion.beta.gouv.fr/)
+  // Auth system redirection : ProConnect
+  await page.waitForURL(/dev-agentconnect.fr/i, { waitUntil: 'networkidle' })
+  await page.getByLabel('Email professionnel').fill(username)
+  await page.getByRole('button', { name: /^continuer$/i }).click()
 
-  await page.getByLabel('Adresse e-mail').fill(username)
-  await page.getByLabel('Mot de passe').fill(password)
-  await page.getByRole('button', { name: /connexion/i }).click()
+  // Identity provider redirection : MonComptePro
+  await page.waitForURL(/moncomptepro.beta.gouv.fr/i)
+  await page.getByLabel('Renseignez votre mot de passe').fill(password)
+  await page.getByRole('button', { name: /identifier/i }).click()
 
   // Sometimes login flow sets cookies in the process of several redirects.
   // Wait for the final URL to ensure that the cookies are actually set.
   await page.waitForURL(newUser ? /\/cgu/ : /\/app\/overview/)
 }
 
-setup.skip()
+setup.slow()
 
 setup('authenticate as Structure Manager Jeanne', async ({ page }) => {
   const managerFile = 'playwright/.auth/structure-manager.json'
@@ -38,6 +44,15 @@ setup('authenticate as Social Worker Jean', async ({ page }) => {
 
   await authenticate(page, username, pwd)
   await page.context().storageState({ path: workerFile })
+})
+
+setup('authenticate as Reception Agent Jean', async ({ page }) => {
+  const agentFile = 'playwright/.auth/reception-agent.json'
+  const username = process.env.RECEPTION_AGENT_EMAIL || ''
+  const pwd = process.env.RECEPTION_AGENT_PASSWORD || ''
+
+  await authenticate(page, username, pwd)
+  await page.context().storageState({ path: agentFile })
 })
 
 setup('authenticate as Structure Manager Anita', async ({ page }) => {
