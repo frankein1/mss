@@ -102,7 +102,7 @@
     }
   },
   "engines": {
-    "pnpm": ">=9 <=9.12.1"
+    "pnpm": ">=9 <=9.15"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
