@@ -1,6 +1,10 @@
 import { breadcrumbs as user } from './user'
-import type { BeneficiaryIdentification } from '~/types/beneficiary'
+import type {
+  BeneficiaryIdentification,
+  BeneficiaryNames
+} from '~/types/beneficiary'
 import { routes } from '~/utils/routes'
+import { getBreadFamilyFile } from './file'
 
 const r = routes.beneficiary
 type Routes = typeof r
@@ -13,7 +17,10 @@ function getBread<T extends 'AppBeneficiaries' | 'AppBeneficiariesAdd'>(
 }
 
 export function getBreadWithBeneficiary<
-  T extends 'AppBeneficiaryEdit' | 'AppBeneficiaryPrint'
+  T extends
+    | 'AppBeneficiaryEdit'
+    | 'AppBeneficiaryPrint'
+    | 'AppBeneficiaryArchive'
 >(name: T, beneficiary: BeneficiaryIdentification | null) {
   const title = r[name].title(beneficiary)
   return [{ text: title, to: r[name].path(beneficiary?.id || '') }]
@@ -73,5 +80,19 @@ export const breadcrumbs = {
     ...user.AppOverview(),
     ...getBreadBeneficiary(beneficiary),
     ...getBreadWithBeneficiary('AppBeneficiaryPrint', beneficiary)
+  ],
+  AppBeneficiaryArchive: (
+    beneficiary: BeneficiaryIdentification | null,
+    familyFileId: string,
+    familyIdentification: BeneficiaryNames[] | null
+  ) => [
+    ...user.AppOverview(),
+    ...getBread('AppBeneficiaries'),
+    ...getBreadFamilyFile(
+      familyFileId,
+      familyIdentification,
+      beneficiary ? { beneficiaryId: beneficiary.id } : undefined
+    ),
+    ...getBreadWithBeneficiary('AppBeneficiaryArchive', beneficiary)
   ]
 }
