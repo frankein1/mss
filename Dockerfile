@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/vigigloo/tools/pnpm:node-22_pnpm-9.1.4 as build
+FROM registry.gitlab.com/vigigloo/tools/pnpm:node-22_pnpm-9.15.0 as build
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml .npmrc prisma /app/
