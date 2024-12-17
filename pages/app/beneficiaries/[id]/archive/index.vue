@@ -39,6 +39,7 @@
         v-if="archiveFormStatus == 'archive'"
         class="fr-mt-4w"
         :download-received="downloadReceived"
+        :beneficiary-id="beneficiaryId"
         @download-archive="onDownloadArchive"
         @delete-file="onDeleteFile"
       />
@@ -52,6 +53,8 @@
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import ArchiveDelayModal from '~/components/Archive/ArchiveDelayModal.vue'
+  import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
 
   const title = routes.beneficiary.AppBeneficiaryArchive.title
   useHead({ title })
@@ -66,6 +69,7 @@
   type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
   const archiveFormStatus = ref<ArchiveFormStatus>(null)
   const downloadReceived = ref<boolean>(false)
+  const trpcClient = useTrpcClient()
 
   const {
     beneficiary,
@@ -97,9 +101,19 @@
     }
   }
 
-  const onDownloadArchive = (values: any) => {
-    console.log('ARCHIVE!')
+  const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
     console.log(values)
+    const exportedFile = await trpcClient.beneficiary.exportBeneficiary.query({
+      ...values
+    })
+    if (!exportedFile?.data) {
+      throw new Error('no data')
+    }
+    const downloadLink = document.createElement('a')
+    downloadLink.href = getExportUrl(exportedFile.data)
+    downloadLink.download = 'test.pdf'
+    downloadLink.click()
+    downloadLink.remove()
     downloadReceived.value = true
   }
 
