@@ -325,3 +325,20 @@ select:focus:not(:focus-visible) {
 .text--muted {
   color: var(--grey-425-625);
 }
+
+.btn-container,
+.btn-container--right,
+.btn-container--left {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.btn-container--right {
+  justify-content: flex-end;
+}
+
+.btn-container--left {
+  justify-content: flex-start;
+}
