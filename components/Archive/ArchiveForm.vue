@@ -59,20 +59,24 @@
 
 <script lang="ts" setup>
   import { archiveReasonKeys, ArchiveReasons } from '~/client/options/archive'
+  import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { AlertType } from '~/utils/constants/alert'
 
   const props = defineProps<{
     downloadReceived: boolean
+    beneficiaryId: string
   }>()
 
   const emit = defineEmits<{
-    downloadArchive: [value: any]
+    downloadArchive: [value: ExportBeneficiaryInput]
     deleteFile: []
   }>()
 
   const disabledDeleteButton = computed(() => !props.downloadReceived)
   const { values: formValues } = useForm({
-    initialValues: {}
+    initialValues: {
+      beneficiaryId: props.beneficiaryId
+    }
   })
   const reasons = archiveReasonKeys.options
   const { value: reasonValue } = useField<ArchiveReasons>('reason')
