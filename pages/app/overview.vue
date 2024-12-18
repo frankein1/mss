@@ -47,5 +47,5 @@
     }
   })
 
-  useBrevoChatbot()
+  // useBrevoChatbot()
 </script>
