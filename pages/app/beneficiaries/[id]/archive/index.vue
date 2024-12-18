@@ -25,7 +25,6 @@
     <template v-if="beneficiary?.id && beneficiaryIdentification">
       <PageTitle title="Gérer le dossier" />
       <ArchiveChoiceForm
-        :beneficiary-identification="beneficiaryIdentification"
         :permissions="permissions"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
@@ -68,10 +67,10 @@
   const snackbar = useSnackbar()
   const modal = useModal()
   const beneficiaryId = route.params.id as string
-  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
   const archiveFormStatus = ref<ArchiveFormStatus>(null)
   const downloadReceived = ref<boolean>(false)
   const trpcClient = useTrpcClient()
+  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
 
   const {
     beneficiary,
@@ -112,8 +111,9 @@
     if (!exportedFile?.data) {
       throw new Error('no data')
     }
+    console.log(exportedFile.beneficiaryDetails)
     const downloadLink = document.createElement('a')
-    downloadLink.href = getExportUrl(exportedFile.data)
+    downloadLink.href = exportedFile.data
     downloadLink.download = 'test.pdf'
     downloadLink.click()
     downloadLink.remove()

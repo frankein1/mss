@@ -46,14 +46,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary } from '@prisma/client'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'
 
   const archiveChoiceForm = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    beneficiaryIdentification: BeneficiaryIdentification
     permissions?: FamilyFilePermissions | undefined
   }>()
 
