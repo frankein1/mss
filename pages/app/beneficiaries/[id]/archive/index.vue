@@ -108,12 +108,14 @@
     const exportedFile = await trpcClient.beneficiary.exportBeneficiary.query({
       ...values
     })
-    if (!exportedFile?.data) {
+    if (!exportedFile?.puppeteerPdf) {
       throw new Error('no data')
     }
     console.log(exportedFile.beneficiaryDetails)
+    console.log(exportedFile.data)
+    console.log(exportedFile.puppeteerPdf)
     const downloadLink = document.createElement('a')
-    downloadLink.href = exportedFile.data
+    downloadLink.href = exportedFile.puppeteerPdf
     downloadLink.download = 'test.pdf'
     downloadLink.click()
     downloadLink.remove()

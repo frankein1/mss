@@ -54,6 +54,7 @@
     "pdfkit": "^0.15.2",
     "postcss-html": "^1.7.0",
     "prisma": "^5.22.0",
+    "puppeteer": "^23.11.0",
     "superjson": "^2.2.1",
     "trpc-nuxt": "^0.10.22",
     "uuid": "^11.0.3",
