@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.36.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.36.0...v1.36.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* **brevo:** déasctivation de brevo chatbot ([6f7e219](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f7e21951a3ed04aa4dbc2a9f52efd9f547c9acb))
+
 ## [1.36.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.34.0...v1.36.0) (2024-12-11)
 
 
