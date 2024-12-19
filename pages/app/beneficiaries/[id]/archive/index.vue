@@ -55,7 +55,6 @@
   import ArchiveDeleteModal from '~/components/Archive/ArchiveDeleteModal.vue'
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
   import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-  import { getExportUrl } from '~/utils/export/getExportUrl'
 
   const title = routes.beneficiary.AppBeneficiaryArchive.title
   useHead({ title })
@@ -104,18 +103,17 @@
   }
 
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
-    console.log(values)
     const exportedFile = await trpcClient.beneficiary.exportBeneficiary.query({
       ...values
     })
-    if (!exportedFile?.puppeteerPdf) {
+    console.log(exportedFile.beneficiaryDetails)
+    console.log(exportedFile.counts)
+
+    if (!exportedFile?.data) {
       throw new Error('no data')
     }
-    console.log(exportedFile.beneficiaryDetails)
-    console.log(exportedFile.data)
-    console.log(exportedFile.puppeteerPdf)
     const downloadLink = document.createElement('a')
-    downloadLink.href = exportedFile.puppeteerPdf
+    downloadLink.href = exportedFile.data
     downloadLink.download = 'test.pdf'
     downloadLink.click()
     downloadLink.remove()

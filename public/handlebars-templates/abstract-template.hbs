@@ -1,0 +1,65 @@
+{{! Do no use  Hex color code in css, it will return all blank}}
+
+<style type='text/css' media='all'>
+  @font-face { font-family: 'Marianne'; src:
+  url('https://github.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff2')
+  format('woff2'),
+  url('https://cdn.rawgit.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff')
+  format('woff'); font-weight: 500; font-style: normal; font-display: swap; } *
+  { font-family: 'Marianne', Arial, Helvetica, sans-serif; font-weight: 500;
+  font-style: normal; color: rgb(58 58 58); box-sizing: border-box; margin-top:
+  0; } body { margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2 {
+  font-weight: 700; } .bold { font-weight: bold; } hr { color: rgb(221 221 221);
+  background-color: rgb(221 221 221); border: none; height: 2px; }
+  .hr-short-blue { width: 75px; height: 6px; color: rgb(69 80 229);
+  background-color: rgb(69 80 229); margin-left: 0; margin-right: auto;
+  margin-bottom: 50px; } .card { border-radius: 8px; border: 1px rgb(221 221
+  221) solid; padding: 16px; margin-bottom: 16px; } .card :last-child {
+  margin-bottom: 0; }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>{{{name}}}</title>
+  </head>
+  <body>
+    <h1>{{{name}}}</h1>
+    {{#if birthDate}}
+      <p>Né(e) le {{birthDate}}</p>
+    {{/if}}
+    <hr class='hr-short-blue' />
+
+    <div class='card'>
+      <p>Dossier créé le {{created}}</p>
+      <p>Dossier archivé le {{archivedDate}}</p>
+      <p>Archive réalisée par {{{userName}}}</p>
+      {{#if reason.completed}}
+        <p>Motif de l'archive&nbsp;:</p>
+        {{#if reason.reason}}
+          <p>{{reason.reason}}
+            {{#if reason.date}}
+              <span> (le 12/02/2022)</span>
+            {{/if}}
+          </p>
+        {{/if}}
+        {{#if reason.clarification}}
+          <p>{{{reason.clarification}}}</p>
+        {{/if}}
+      {{/if}}
+
+    </div>
+
+    <div class='card'>
+      <h2>{{counts.totalHelpRequestCount}} instructions de dossier</h2>
+      <p><span class='bold'>{{counts.housingCount}}</span>
+        demande(s) de logement</p>
+      <p><span class='bold'>{{counts.financialCount}}</span>
+        aide(s) financières</p>
+      <p><span class='bold'>{{counts.otherCount}}</span> autre(s)</p>
+      <hr />
+      <h2>{{counts.followupCount}} synthèse(s) d’entretiens</h2>
+    </div>
+  </body>
+
+</html>
