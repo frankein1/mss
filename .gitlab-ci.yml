@@ -73,8 +73,6 @@ pnpm:test:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
   script:
-    - ls /usr/lib/libssl.so.3
-    - ls /lib/libssl.so.3
     - if $[[ ! -e /lib/libssl.so.3 ]]; then ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3; else echo "Link already exists"; fi
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
