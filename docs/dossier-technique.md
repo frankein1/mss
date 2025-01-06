@@ -69,9 +69,9 @@ Les briques structurantes du projet sont:
 
 #### Services externes
 
-| Source      | Destination | Protocole | Port | Localisation  | Interne/URL Externe       |
-| ----------- | ----------- | --------- | ---- | ------------- | ------------------------- |
-| Nuxt Server | Brevo       | SMTP      | 587  | Paris, France | smtp-relay.sendinblue.com |
+| Source      | Destination | Protocole | Port | Localisation  | Interne/URL Externe |
+| ----------- | ----------- | --------- | ---- | ------------- | ------------------- |
+| Nuxt Server | Brevo       | SMTP      | 587  | Paris, France | smtp.tem.scw.cloud  |
 
 Note : l'application expose aussi une API avec deux points d'entrée :
 
