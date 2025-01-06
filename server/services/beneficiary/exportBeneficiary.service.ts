@@ -6,7 +6,7 @@ import {
   FollowupRepo,
   SocialSupportRepo
 } from '~/server/database'
-import puppeteer from 'puppeteer'
+import puppeteer, { PDFOptions } from 'puppeteer'
 import hbs from 'handlebars'
 // import fs from 'fs-extra'
 // import path from 'path'
@@ -109,35 +109,48 @@ export const exportBeneficiary = async ({
       followupCount
     }
   }
-  const content = await compile(
+  const abstractContent = await compile(
     'handlebars-templates/abstract-template.hbs',
     hbsData
   )
+
   const browser = await puppeteer.launch()
+
+  // Abstract Page
   const pageOne = await browser.newPage()
-  await pageOne.setContent(content)
+  await pageOne.setContent(abstractContent)
   await pageOne.emulateMediaType('screen')
-  await pageOne.goto('data:text/html,' + content, {
+  await pageOne.goto('data:text/html,' + abstractContent, {
     waitUntil: 'networkidle0'
   })
-  const byteArray = await pageOne.pdf({
-    format: 'A4',
-    landscape: false,
-    scale: 1,
-    printBackground: true,
-    margin: {
-      top: 20,
-      bottom: 20,
-      left: 20,
-      right: 20
-    }
-  })
+  const pdfBuffer = await pageOne.pdf(pdfOptions)
+  const data = uint8ArrayToBase64(pdfBuffer, 'application/pdf')
 
-  const data = uint8ArrayToBase64(byteArray, 'application/pdf')
+  // SocialSupports pages (Test with 1 page)
+  const socialSupportContent = await compile(
+    'handlebars-templates/followup-template.hbs',
+    {
+      name: beneficiaryDetails.firstName + ' ' + beneficiaryDetails.usualName,
+      socialSupport: socialSupports[0]
+    }
+  )
+  const socialSupportPage = await browser.newPage()
+  await socialSupportPage.setContent(socialSupportContent)
+  await socialSupportPage.emulateMediaType('screen')
+  await socialSupportPage.goto('data:text/html,' + socialSupportContent, {
+    waitUntil: 'networkidle0'
+  })
+  const socialSuportPdfBuffer = await socialSupportPage.pdf(pdfOptions)
+  const socialSuportPdf = uint8ArrayToBase64(
+    socialSuportPdfBuffer,
+    'application/pdf'
+  )
 
   return {
     data,
+    socialSuportPdf,
     beneficiaryDetails,
+    socialSupports,
     counts: { housingCount, financialCount, otherCount, followupCount }
   }
 }
@@ -162,4 +175,17 @@ const compile = async function (templateName: string, data: any) {
   const filePath = path.join(process.cwd(), 'public', templateName)
   const template = await fs.promises.readFile(filePath, 'utf-8')
   return hbs.compile(template)(data)
+}
+
+const pdfOptions: PDFOptions = {
+  format: 'A4',
+  landscape: false,
+  scale: 1,
+  printBackground: true,
+  margin: {
+    top: 20,
+    bottom: 20,
+    left: 20,
+    right: 20
+  }
 }

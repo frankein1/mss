@@ -108,6 +108,7 @@
     })
     console.log(exportedFile.beneficiaryDetails)
     console.log(exportedFile.counts)
+    console.log(exportedFile.socialSupports)
 
     if (!exportedFile?.data) {
       throw new Error('no data')
@@ -117,6 +118,13 @@
     downloadLink.download = 'test.pdf'
     downloadLink.click()
     downloadLink.remove()
+
+    const downloadLink2 = document.createElement('a')
+    downloadLink2.href = exportedFile.socialSuportPdf
+    downloadLink2.download = 'socialSuportPdf.pdf'
+    downloadLink2.click()
+    downloadLink2.remove()
+
     downloadReceived.value = true
   }
 
