@@ -74,8 +74,6 @@ pnpm:test:
     APP_URL: http://localhost:3000
   script:
     - if [[ ! -e /lib/libssl.so.3 ]]; then ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3; else echo "Link already exists"; fi
-    - apk add --update --no-cache openssl1.1-compat
-    - ls /lib/libssl.so.3
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
     - pnpm run --if-present test --coverage
