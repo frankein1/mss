@@ -73,6 +73,7 @@ pnpm:test:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
   script:
+    - apk add openssl
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
     - pnpm run --if-present test --coverage
