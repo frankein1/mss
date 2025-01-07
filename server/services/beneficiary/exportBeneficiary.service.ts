@@ -1,17 +1,11 @@
-import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import { SecurityRuleContext } from '~/server/security'
-import {
-  BeneficiaryRepo,
-  UserRepo,
-  FollowupRepo,
-  SocialSupportRepo
-} from '~/server/database'
+import fs from 'fs'
+import path from 'path'
 import puppeteer, { PDFOptions } from 'puppeteer'
 import hbs from 'handlebars'
-// import fs from 'fs-extra'
-// import path from 'path'
-import * as path from 'node:path'
-import * as fs from 'node:fs'
+import JSZip from 'jszip'
+import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import { SecurityRuleContext } from '~/server/security'
+import { BeneficiaryRepo, UserRepo, SocialSupportRepo } from '~/server/database'
 import { archiveReasonKeys, ArchiveReasons } from '~/client/options/archive'
 
 export const exportBeneficiary = async ({
@@ -74,20 +68,13 @@ export const exportBeneficiary = async ({
       })
     ])
 
-  // la fiche pdf récapitulative de l'archivage (qui a archivé, quelle date, le motif de l'archivage,
-  // la date d'ouverture du dossier, nombre de suivis). Nom du fichier : Résumé_archive
+  // handlebars -> https://github.com/ankur20us/demo-puppeteer/blob/master/index.js
+  // API puppeteer https://pptr.dev/api/puppeteer.puppeteernode
 
-  // PUPPETEER
-  // TODO
-  // - Générer du html dynamique (avec pug, handlebars...)
-  //    - handlebars -> https://github.com/ankur20us/demo-puppeteer/blob/master/index.js
-  //    - pug (beta.gouv mon-aide-cyber) -> https://github.com/betagouv/mon-aide-cyber/blob/main/mon-aide-cyber-api/src/infrastructure/adaptateurs/AdaptateurDeRestitutionPDF.ts#L159
-  //    - https://github.com/wuno/wuno-pdf-generator/tree/master
-  //    - https://github.com/wuno/wuno-pdf-generator/blob/master/server/controllers/pdf.js
-  // - Générer plusieurs pages HTML -> plusieurs PDFs
-  //    - API puppeteer https://pptr.dev/api/puppeteer.puppeteernode
+  const browser = await puppeteer.launch()
 
-  const hbsData = {
+  // Informations Page
+  const informationsData = {
     name: beneficiaryDetails.firstName + ' ' + beneficiaryDetails.usualName,
     birthDate: beneficiaryDetails.birthDate?.toLocaleDateString(),
     created: beneficiaryDetails.created?.toLocaleDateString(),
@@ -109,22 +96,18 @@ export const exportBeneficiary = async ({
       followupCount
     }
   }
-  const abstractContent = await compile(
-    'handlebars-templates/abstract-template.hbs',
-    hbsData
+  const informationContent = await compile(
+    'handlebars-templates/informations-template.hbs',
+    informationsData
   )
 
-  const browser = await puppeteer.launch()
-
-  // Abstract Page
-  const pageOne = await browser.newPage()
-  await pageOne.setContent(abstractContent)
-  await pageOne.emulateMediaType('screen')
-  await pageOne.goto('data:text/html,' + abstractContent, {
+  const informationsPage = await browser.newPage()
+  await informationsPage.setContent(informationContent)
+  await informationsPage.emulateMediaType('screen')
+  await informationsPage.goto('data:text/html,' + informationContent, {
     waitUntil: 'networkidle0'
   })
-  const pdfBuffer = await pageOne.pdf(pdfOptions)
-  const data = uint8ArrayToBase64(pdfBuffer, 'application/pdf')
+  const informationsPdfBuffer = await informationsPage.pdf(pdfOptions)
 
   // SocialSupports pages (Test with 1 page)
   const socialSupportContent = await compile(
@@ -141,17 +124,28 @@ export const exportBeneficiary = async ({
     waitUntil: 'networkidle0'
   })
   const socialSuportPdfBuffer = await socialSupportPage.pdf(pdfOptions)
-  const socialSuportPdf = uint8ArrayToBase64(
-    socialSuportPdfBuffer,
-    'application/pdf'
+
+  // create zip file
+  const zip = new JSZip()
+  zip.file('Informations.pdf', informationsPdfBuffer, { binary: true })
+  zip.file('Historique/socialSupport1.pdf', socialSuportPdfBuffer, {
+    binary: true
+  })
+  zip.file('Historique/socialSupport2.pdf', socialSuportPdfBuffer, {
+    binary: true
+  })
+  const generatedArchiveFile = await zip.generateAsync({
+    type: 'nodebuffer',
+    compression: 'DEFLATE',
+    compressionOptions: { level: 9 }
+  })
+  const archiveFile = uint8ArrayToBase64(
+    generatedArchiveFile,
+    'application/zip'
   )
 
   return {
-    data,
-    socialSuportPdf,
-    beneficiaryDetails,
-    socialSupports,
-    counts: { housingCount, financialCount, otherCount, followupCount }
+    archiveFile
   }
 }
 
