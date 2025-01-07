@@ -106,6 +106,7 @@
     const exportedFile = await trpcClient.beneficiary.exportBeneficiary.query({
       ...values
     })
+    console.log(exportedFile.socialSupports)
     if (!exportedFile?.archiveFile) {
       throw new Error('no data')
     }

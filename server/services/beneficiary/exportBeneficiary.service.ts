@@ -6,7 +6,25 @@ import JSZip from 'jszip'
 import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
 import { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo, UserRepo, SocialSupportRepo } from '~/server/database'
-import { archiveReasonKeys, ArchiveReasons } from '~/client/options/archive'
+import {
+  Beneficiary,
+  Followup,
+  PartnerOrganization,
+  PartnerOrganizationContact,
+  SocialSupport,
+  SocialSupportSubject,
+  User
+} from '@prisma/client'
+
+import {
+  documentTypeKeys,
+  ministerKeys,
+  followupDurationKeys,
+  followupMediumKeys,
+  followupStatusKeys,
+  archiveReasonKeys,
+  ArchiveReasons
+} from '~/client/options'
 
 export const exportBeneficiary = async ({
   ctx,
@@ -21,18 +39,24 @@ export const exportBeneficiary = async ({
   const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id: ctx.user.id }
   })
+
+  // TODO: use select and create a function + get the type of the return value
   const socialSupports = await SocialSupportRepo.findMany(user, {
     where: {
       familyFileId: beneficiaryDetails.familyFileId
     },
     include: {
-      createdBy: true,
-      lastUpdatedBy: true,
-      familyFile: {
+      followup: {
         include: {
-          referents: true
+          prescribingOrganization: true,
+          prescribingOrganizationContact: true
         }
       },
+      documents: {
+        select: { name: true, type: true }
+      },
+      createdBy: true,
+      lastUpdatedBy: true,
       subjects: true
     },
     orderBy: [{ date: 'desc' }, { created: 'desc' }]
@@ -73,9 +97,9 @@ export const exportBeneficiary = async ({
 
   const browser = await puppeteer.launch()
 
-  // Informations Page
-  const informationsData = {
-    name: beneficiaryDetails.firstName + ' ' + beneficiaryDetails.usualName,
+  // Abstract Page
+  const abstractData = {
+    name: getBeneficiaryName(beneficiaryDetails),
     birthDate: beneficiaryDetails.birthDate?.toLocaleDateString(),
     created: beneficiaryDetails.created?.toLocaleDateString(),
     archivedDate: new Date().toLocaleDateString(),
@@ -96,43 +120,52 @@ export const exportBeneficiary = async ({
       followupCount
     }
   }
-  const informationContent = await compile(
-    'handlebars-templates/informations-template.hbs',
-    informationsData
+  const abstractContent = await compile(
+    'handlebars-templates/abstract-template.hbs',
+    abstractData
   )
 
-  const informationsPage = await browser.newPage()
-  await informationsPage.setContent(informationContent)
-  await informationsPage.emulateMediaType('screen')
-  await informationsPage.goto('data:text/html,' + informationContent, {
+  const abstractPage = await browser.newPage()
+  await abstractPage.setContent(abstractContent)
+  await abstractPage.emulateMediaType('screen')
+  await abstractPage.goto('data:text/html,' + abstractContent, {
     waitUntil: 'networkidle0'
   })
-  const informationsPdfBuffer = await informationsPage.pdf(pdfOptions)
+  const abstractPdfBuffer = await abstractPage.pdf(pdfOptions)
 
-  // SocialSupports pages (Test with 1 page)
-  const socialSupportContent = await compile(
-    'handlebars-templates/followup-template.hbs',
-    {
-      name: beneficiaryDetails.firstName + ' ' + beneficiaryDetails.usualName,
-      socialSupport: socialSupports[0]
-    }
+  const followups = await Promise.all(
+    socialSupports
+      .filter(socialSupport => socialSupport.socialSupportType === 'Followup')
+      .map(async followup => {
+        const content = await compile(
+          'handlebars-templates/followup-template.hbs',
+          {
+            beneficiaryName: getBeneficiaryName(beneficiaryDetails),
+            ...getFollowupData(followup)
+          }
+        )
+
+        const page = await browser.newPage()
+        await page.setContent(content)
+        await page.emulateMediaType('screen')
+        await page.goto('data:text/html,' + content, {
+          waitUntil: 'networkidle0'
+        })
+
+        return {
+          filename: `Historique/entretiens_${followup.id}.pdf`,
+          buffer: await page.pdf(pdfOptions)
+        }
+      })
   )
-  const socialSupportPage = await browser.newPage()
-  await socialSupportPage.setContent(socialSupportContent)
-  await socialSupportPage.emulateMediaType('screen')
-  await socialSupportPage.goto('data:text/html,' + socialSupportContent, {
-    waitUntil: 'networkidle0'
-  })
-  const socialSuportPdfBuffer = await socialSupportPage.pdf(pdfOptions)
 
   // create zip file
   const zip = new JSZip()
-  zip.file('Informations.pdf', informationsPdfBuffer, { binary: true })
-  zip.file('Historique/socialSupport1.pdf', socialSuportPdfBuffer, {
-    binary: true
-  })
-  zip.file('Historique/socialSupport2.pdf', socialSuportPdfBuffer, {
-    binary: true
+  zip.file('Informations.pdf', abstractPdfBuffer, { binary: true })
+  followups.forEach(followup => {
+    zip.file(followup.filename, followup.buffer, {
+      binary: true
+    })
   })
   const generatedArchiveFile = await zip.generateAsync({
     type: 'nodebuffer',
@@ -145,7 +178,8 @@ export const exportBeneficiary = async ({
   )
 
   return {
-    archiveFile
+    archiveFile,
+    socialSupports
   }
 }
 
@@ -182,4 +216,69 @@ const pdfOptions: PDFOptions = {
     left: 20,
     right: 20
   }
+}
+
+const getBeneficiaryName = (beneficiary: Beneficiary) => {
+  return beneficiary.firstName + ' ' + beneficiary.usualName
+}
+const getFollowupData = (
+  socialSupport: SocialSupportWithFollowupAndSubject
+) => {
+  const subjectsNames = socialSupport.subjects.map(subject => subject.name)
+  const documents = socialSupport.documents?.map(document => ({
+    name: document.name,
+    type: documentTypeKeys.value(document.type)
+  }))
+  return {
+    createdByEmail: socialSupport.createdBy?.email,
+    lastUpdatedByEmail: socialSupport.lastUpdatedBy?.email,
+    firstFollowup: socialSupport.followup?.firstFollowup || null,
+    date: socialSupport.date.toLocaleDateString(),
+    ministre: socialSupport.ministre
+      ? ministerKeys.value(socialSupport.ministre)
+      : null,
+    numeroPegase: socialSupport.numeroPegase,
+    duration: socialSupport.followup?.duration
+      ? followupDurationKeys.value(socialSupport.followup.duration)
+      : null,
+    medium: socialSupport.followup?.medium
+      ? followupMediumKeys.value(socialSupport.followup.medium)
+      : null,
+    thirdPersonName: socialSupport.followup?.thirdPersonName,
+    place: socialSupport.followup?.place,
+    subjectsNames: subjectsNames.join(', '),
+    status: socialSupport.status
+      ? followupStatusKeys.value(socialSupport.status)
+      : null,
+    dueDate: socialSupport.dueDate,
+    prescribingOrganizationName:
+      socialSupport.followup?.prescribingOrganization?.name,
+    prescribingOrganizationContact:
+      socialSupport.followup?.prescribingOrganizationContact?.name,
+    synthesis: socialSupport.synthesis,
+    actions:
+      socialSupport.followup?.forwardedToJustice != null ||
+      socialSupport.followup?.redirected != null,
+    forwardedToJustice: socialSupport.followup?.forwardedToJustice,
+    redirected: socialSupport.followup?.redirected,
+    structureName: socialSupport.followup?.structureName,
+    documents: documents || null
+  }
+}
+
+type SocialSupportWithFollowupAndSubject = SocialSupport & {
+  followup: FollowupWithPrescribingOrganization | null
+  subjects: SocialSupportSubject[]
+  createdBy: User | null
+  lastUpdatedBy: User | null
+  documents:
+    | {
+        name: string
+        type: string
+      }[]
+    | null
+}
+type FollowupWithPrescribingOrganization = Followup & {
+  prescribingOrganization: PartnerOrganization | null
+  prescribingOrganizationContact: PartnerOrganizationContact | null
 }

@@ -1,4 +1,5 @@
 export * from './ageGroup'
+export * from './archive'
 export * from './beneficiary'
 export * from './budget'
 export * from './document'
