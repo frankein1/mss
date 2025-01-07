@@ -51,6 +51,11 @@
             label="Adresse"
             :value="formatAddress(beneficiary.general)"
           />
+          <BeneficiaryInfoLabel
+            v-if="beneficiary.general.qpv != null"
+            :label="beneficiaryFieldLabels.qpv"
+            :value="beneficiary.general.qpv ? 'Oui' : 'Non'"
+          />
         </div>
         <div
           v-if="hasEmailOrAddressComplement(beneficiary.general)"
@@ -79,6 +84,7 @@
     hasPhoneOrAddress,
     hasEmailOrAddressComplement
   } from '~/utils/beneficiary'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

@@ -67,6 +67,12 @@
         @region-selected="setRegionValue($event)"
       />
     </div>
+    <div class="fr-col-12">
+      <VeeCheckbox
+        name="qpv"
+        :label="beneficiaryFieldLabels.qpv"
+      />
+    </div>
     <div
       v-if="application.module.ministere"
       class="fr-col-12"
@@ -90,6 +96,7 @@
     beneficiaryAccommodationModeKeys,
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
+  import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
 
   const { application } = usePermissions()
 

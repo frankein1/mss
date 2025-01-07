@@ -68,6 +68,10 @@ const beneficiaryFilterSchema = z.object({
     .string()
     .nullish()
     .transform(val => (val ? val === 'true' : undefined)),
+  qpv: z
+    .string()
+    .nullish()
+    .transform(val => (val ? val === 'true' : undefined)),
   notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
 })
 

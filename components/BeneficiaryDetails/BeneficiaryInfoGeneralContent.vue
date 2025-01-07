@@ -85,6 +85,12 @@
         :value="general.department"
         class="fr-col-6"
       />
+      <BeneficiaryInfoLabel
+        v-if="general.qpv != null"
+        :label="beneficiaryFieldLabels.qpv"
+        :value="general.qpv ? 'Oui' : 'Non'"
+        class="fr-col-6"
+      />
     </div>
   </div>
 

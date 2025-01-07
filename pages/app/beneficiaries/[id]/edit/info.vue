@@ -98,6 +98,7 @@
       vulnerablePerson,
       status,
       ...general,
+      qpv: general.qpv ? true : false,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
       deathDate: general.deathDate ? new Date(general.deathDate) : undefined
     }
