@@ -102,16 +102,18 @@
     }
   }
 
+  // TODO: au pending, afficher un loader dans le bouton de téléchargement
+  // + try catch + mettre le  dans finally
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
-    const exportedFile = await trpcClient.beneficiary.exportBeneficiary.query({
+    const response = await trpcClient.beneficiary.exportBeneficiary.query({
       ...values
     })
-    console.log(exportedFile.socialSupports)
-    if (!exportedFile?.archiveFile) {
+    console.log(response.beneficiaryDetails)
+    if (!response?.archiveFile) {
       throw new Error('no data')
     }
     const downloadLink = document.createElement('a')
-    downloadLink.href = exportedFile.archiveFile
+    downloadLink.href = response.archiveFile
     downloadLink.download = 'archiveFile.zip'
     downloadLink.click()
     downloadLink.remove()

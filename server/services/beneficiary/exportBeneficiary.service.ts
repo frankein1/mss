@@ -4,18 +4,9 @@ import puppeteer, { PDFOptions } from 'puppeteer'
 import hbs from 'handlebars'
 import JSZip from 'jszip'
 import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import { SecurityRuleContext } from '~/server/security'
+import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import { BeneficiaryRepo, UserRepo, SocialSupportRepo } from '~/server/database'
-import {
-  Beneficiary,
-  Followup,
-  PartnerOrganization,
-  PartnerOrganizationContact,
-  SocialSupport,
-  SocialSupportSubject,
-  User
-} from '@prisma/client'
-
+import { Beneficiary, User } from '@prisma/client'
 import {
   documentTypeKeys,
   ministerKeys,
@@ -23,7 +14,20 @@ import {
   followupMediumKeys,
   followupStatusKeys,
   archiveReasonKeys,
-  ArchiveReasons
+  ArchiveReasons,
+  beneficiaryAccommodationModeKeys,
+  beneficiaryMobilityKeys,
+  familySituationKeys,
+  beneficiaryGirKeys,
+  beneficiarySocioProfessionalCategoryKeys,
+  beneficiaryProtectionMeasureKeys,
+  beneficiaryOrientationTypeKeys,
+  relativeRelationshipKeys,
+  beneficiaryStatusKeys,
+  beneficiaryTitleKeys,
+  beneficiaryGenderKeys,
+  beneficiaryStudyLevelKeys,
+  pensionOrganisationKeys
 } from '~/client/options'
 
 export const exportBeneficiary = async ({
@@ -33,34 +37,18 @@ export const exportBeneficiary = async ({
   ctx: SecurityRuleContext
   input: ExportBeneficiaryInput
 }) => {
-  const beneficiaryDetails = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.beneficiaryId }
-  })
+  const beneficiaryDetails = await getBeneficaryDetails(
+    input.beneficiaryId,
+    ctx.user
+  )
   const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id: ctx.user.id }
   })
 
-  // TODO: use select and create a function + get the type of the return value
-  const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: {
-      familyFileId: beneficiaryDetails.familyFileId
-    },
-    include: {
-      followup: {
-        include: {
-          prescribingOrganization: true,
-          prescribingOrganizationContact: true
-        }
-      },
-      documents: {
-        select: { name: true, type: true }
-      },
-      createdBy: true,
-      lastUpdatedBy: true,
-      subjects: true
-    },
-    orderBy: [{ date: 'desc' }, { created: 'desc' }]
-  })
+  const socialSupports = await getSocialSupports(
+    beneficiaryDetails.familyFileId,
+    user
+  )
 
   const [housingCount, financialCount, otherCount, followupCount] =
     await Promise.all([
@@ -124,7 +112,6 @@ export const exportBeneficiary = async ({
     'handlebars-templates/abstract-template.hbs',
     abstractData
   )
-
   const abstractPage = await browser.newPage()
   await abstractPage.setContent(abstractContent)
   await abstractPage.emulateMediaType('screen')
@@ -133,6 +120,25 @@ export const exportBeneficiary = async ({
   })
   const abstractPdfBuffer = await abstractPage.pdf(pdfOptions)
 
+  // Beneficiary informations
+  const informationsContent = await compile(
+    'handlebars-templates/beneficiary-info-template.hbs',
+    {
+      beneficiaryName: getBeneficiaryName(beneficiaryDetails),
+      ...getBeneficiaryInfoData(
+        beneficiaryDetails as BeneficiaryWithEntourageAndRelative
+      )
+    }
+  )
+  const infoPage = await browser.newPage()
+  await infoPage.setContent(informationsContent)
+  await infoPage.emulateMediaType('screen')
+  await infoPage.goto('data:text/html,' + informationsContent, {
+    waitUntil: 'networkidle0'
+  })
+  const infoPdfBuffer = await infoPage.pdf(pdfOptions)
+
+  // Followups
   const followups = await Promise.all(
     socialSupports
       .filter(socialSupport => socialSupport.socialSupportType === 'Followup')
@@ -161,7 +167,12 @@ export const exportBeneficiary = async ({
 
   // create zip file
   const zip = new JSZip()
-  zip.file('Informations.pdf', abstractPdfBuffer, { binary: true })
+  zip.file('Résumé_archive.pdf', abstractPdfBuffer, { binary: true })
+  zip.file(
+    `Informations/${getBeneficiaryName(beneficiaryDetails)}.pdf`,
+    infoPdfBuffer,
+    { binary: true }
+  )
   followups.forEach(followup => {
     zip.file(followup.filename, followup.buffer, {
       binary: true
@@ -179,7 +190,7 @@ export const exportBeneficiary = async ({
 
   return {
     archiveFile,
-    socialSupports
+    beneficiaryDetails
   }
 }
 
@@ -221,9 +232,7 @@ const pdfOptions: PDFOptions = {
 const getBeneficiaryName = (beneficiary: Beneficiary) => {
   return beneficiary.firstName + ' ' + beneficiary.usualName
 }
-const getFollowupData = (
-  socialSupport: SocialSupportWithFollowupAndSubject
-) => {
+const getFollowupData = (socialSupport: SocialSupportItem) => {
   const subjectsNames = socialSupport.subjects.map(subject => subject.name)
   const documents = socialSupport.documents?.map(document => ({
     name: document.name,
@@ -266,19 +275,149 @@ const getFollowupData = (
   }
 }
 
-type SocialSupportWithFollowupAndSubject = SocialSupport & {
-  followup: FollowupWithPrescribingOrganization | null
-  subjects: SocialSupportSubject[]
-  createdBy: User | null
-  lastUpdatedBy: User | null
-  documents:
-    | {
-        name: string
-        type: string
-      }[]
-    | null
+const getBeneficiaryInfoData = (
+  beneficiary: BeneficiaryWithEntourageAndRelative
+) => {
+  const pensionOrganisations = beneficiary.pensionOrganisations.map(item =>
+    pensionOrganisationKeys.value(item)
+  )
+  const beneficiaries = beneficiary.familyFile?.beneficiaries?.map(
+    beneficiary => ({
+      firstName: beneficiary.firstName,
+      usualName: beneficiary.usualName,
+      relationship: beneficiary.relationship
+        ? relativeRelationshipKeys.value(beneficiary.relationship)
+        : null
+    })
+  )
+  const referents = beneficiary.familyFile?.referents.map(
+    referent => referent.firstName + ' ' + referent.lastName
+  )
+  const relatives = beneficiary.relatives
+    ? beneficiary.relatives.map((relative, idx) => ({
+        index: idx + 1,
+        additionalInformation: relative.additionalInformation,
+        birthDate: relative.birthDate
+          ? relative.birthDate.toLocaleDateString()
+          : null,
+        caregiver: relative.caregiver,
+        city: relative.city,
+        email: relative.email,
+        firstName: relative.firstName,
+        lastName: relative.lastName,
+        hosted: relative.hosted,
+        phone: relative.phone,
+        relationship: relative.relationship
+          ? relativeRelationshipKeys.value(relative.relationship)
+          : null
+      }))
+    : null
+
+  return {
+    ...beneficiary,
+    beneficiaries,
+    relatives,
+    referents: referents ? referents.join(', ') : null,
+    birthDate: beneficiary.birthDate
+      ? beneficiary.birthDate.toLocaleDateString()
+      : null,
+    divorceDate: beneficiary.divorceDate
+      ? beneficiary.divorceDate.toLocaleDateString()
+      : null,
+    weddingDate: beneficiary.weddingDate
+      ? beneficiary.weddingDate.toLocaleDateString()
+      : null,
+    accommodationMode: beneficiary.accommodationMode
+      ? beneficiaryAccommodationModeKeys.value(beneficiary.accommodationMode)
+      : null,
+    mobility: beneficiary.mobility
+      ? beneficiaryMobilityKeys.value(beneficiary.mobility)
+      : null,
+    familySituation: beneficiary.familySituation
+      ? familySituationKeys.value(beneficiary.familySituation)
+      : null,
+    gir: beneficiary.gir ? beneficiaryGirKeys.value(beneficiary.gir) : null,
+    socioProfessionalCategory: beneficiary.socioProfessionalCategory
+      ? beneficiarySocioProfessionalCategoryKeys.value(
+          beneficiary.socioProfessionalCategory
+        )
+      : null,
+    pensionOrganisations: beneficiary.pensionOrganisations
+      ? pensionOrganisations.join(', ')
+      : null,
+    protectionMeasure: beneficiary.protectionMeasure
+      ? beneficiaryProtectionMeasureKeys.value(beneficiary.protectionMeasure)
+      : null,
+    orientationType: beneficiary.orientationType
+      ? beneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
+      : null,
+    relationship: beneficiary.relationship
+      ? relativeRelationshipKeys.value(beneficiary.relationship)
+      : null,
+    status: beneficiary.status
+      ? beneficiaryStatusKeys.value(beneficiary.status)
+      : null,
+    title: beneficiary.title
+      ? beneficiaryTitleKeys.value(beneficiary.title)
+      : null,
+    gender: beneficiary.gender
+      ? beneficiaryGenderKeys.value(beneficiary.gender)
+      : null,
+    studyLevel: beneficiary.studyLevel
+      ? beneficiaryStudyLevelKeys.value(beneficiary.studyLevel)
+      : null
+  }
 }
-type FollowupWithPrescribingOrganization = Followup & {
-  prescribingOrganization: PartnerOrganization | null
-  prescribingOrganizationContact: PartnerOrganizationContact | null
+
+const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
+  return await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: { id: id },
+    include: {
+      relatives: true,
+      familyFile: {
+        select: {
+          referents: true,
+          beneficiaries: {
+            where: { NOT: { id: id } },
+            select: {
+              firstName: true,
+              usualName: true,
+              relationship: true
+            }
+          }
+        }
+      }
+    }
+  })
 }
+
+const getSocialSupports = async (familyFileId: string, user: User) => {
+  return await SocialSupportRepo.findMany(user, {
+    where: {
+      familyFileId: familyFileId
+    },
+    include: {
+      followup: {
+        include: {
+          prescribingOrganization: true,
+          prescribingOrganizationContact: true
+        }
+      },
+      documents: {
+        select: { name: true, type: true }
+      },
+      createdBy: true,
+      lastUpdatedBy: true,
+      subjects: true
+    },
+    orderBy: [{ date: 'desc' }, { created: 'desc' }]
+  })
+}
+
+type SocialSupportWithFollowupAndSubject = Awaited<
+  ReturnType<typeof getSocialSupports>
+>
+type SocialSupportItem = SocialSupportWithFollowupAndSubject[0]
+type BeneficiaryWithEntourageAndRelative = Awaited<
+  ReturnType<typeof getBeneficaryDetails>
+>
