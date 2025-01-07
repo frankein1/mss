@@ -37,7 +37,15 @@ export const ministerKeys = buildKeys({
   [Minister.SalimaSaa]:
     "Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)",
   [Minister.CharlotteParmentierLecocq]:
-    'Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)'
+    'Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)',
+  [Minister.CatherineVautrinBayrou1]:
+    'Catherine Vautrin 2 (Ministre du Travail, de la Santé, des Solidarités et des Familles)',
+  [Minister.AstridPanosyanBouvetBayrou1]:
+    "Astrid Panosyan-Bouvet 2 (Ministre chargée du Travail et de l'Emploi)",
+  [Minister.YannickNeuder]:
+    "Yannick Neuder (Ministre chargé de la Santé et de l'Accès aux soins)",
+  [Minister.CharlotteParmentierLecocqBayrou1]:
+    'Charlotte Parmentier-Lecocq 2 (Ministre chargée de l’Autonomie et du Handicap)'
 })
 
 export const ministereDepartmentServiceAcKeys = buildKeys({

@@ -973,6 +973,14 @@ enum Minister {
   SalimaSaa
   // Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)
   CharlotteParmentierLecocq
+  // Catherine Vautrin - 2 (Ministre du Travail, de la Santé, des Solidarités et des Familles)
+  CatherineVautrinBayrou1
+  // Astrid Panosyan-Bouvet - 2 (Ministre chargée du Travail et de l'Emploi)
+  AstridPanosyanBouvetBayrou1
+  // Yannick Neuder (Ministre chargé de la Santé et de l'Accès aux soins)
+  YannickNeuder
+  // Charlotte Parmentier-Lecocq - 2 (Ministre chargée de l’Autonomie et du Handicap)
+  CharlotteParmentierLecocqBayrou1
 }
 
 enum BeneficiaryAccommodationZone {
