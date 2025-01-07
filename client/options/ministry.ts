@@ -7,45 +7,45 @@ import {
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const ministerKeys = buildKeys({
-  [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
-  [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
-  [Minister.JeanChristopheCombe]:
-    'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
-  [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Personnes handicapées)',
-  [Minister.GenevieveDarrieussecqBarnier1]:
-    'Geneviève Darrieussecq (Ministre de la Santé et de l’Accès aux soins)',
-  [Minister.OlivierDussopt]:
-    'Olivier Dussopt (Travail, Plein emploi et Insertion)',
-  [Minister.SarahElHairy]:
-    'Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)',
-  [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
-  [Minister.CaroleGrandjean]:
-    'Carole Grandjean (Enseignement, Formation professionnels)',
-  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
-  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
-  [Minister.FredericValletoux]:
-    'Frédéric Valletoux (Délégué Santé et Prévention)',
-  [Minister.CatherineVautrin]:
-    'Catherine Vautrin (Travail, Santé et Solidarités)',
-  [Minister.AgnesCanayer]:
-    'Agnès Canayer (Ministre déléguée, chargée de la Famille et de la Petite Enfance)',
-  [Minister.AstridPanosyanBouvet]:
-    'Astrid Panosyan-Bouvet (Ministre du Travail et de l’Emploi)',
-  [Minister.PaulChristophe]:
-    'Paul Christophe (Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes)',
-  [Minister.SalimaSaa]:
-    "Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)",
+  [Minister.CharlotteParmentierLecocqBayrou1]:
+    'Charlotte Parmentier-Lecocq (2) - Gvt Bayrou (Ministre chargée de l’Autonomie et du Handicap)',
+  [Minister.YannickNeuder]:
+    "Yannick Neuder - Gvt Bayrou (Ministre chargé de la Santé et de l'Accès aux soins)",
+  [Minister.AstridPanosyanBouvetBayrou1]:
+    "Astrid Panosyan-Bouvet (2) - Gvt Bayrou (Ministre chargée du Travail et de l'Emploi)",
+  [Minister.CatherineVautrinBayrou1]:
+    'Catherine Vautrin (2) - Gvt Bayrou (Ministre du Travail, de la Santé, des Solidarités et des Familles)',
   [Minister.CharlotteParmentierLecocq]:
     'Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)',
-  [Minister.CatherineVautrinBayrou1]:
-    'Catherine Vautrin 2 (Ministre du Travail, de la Santé, des Solidarités et des Familles)',
-  [Minister.AstridPanosyanBouvetBayrou1]:
-    "Astrid Panosyan-Bouvet 2 (Ministre chargée du Travail et de l'Emploi)",
-  [Minister.YannickNeuder]:
-    "Yannick Neuder (Ministre chargé de la Santé et de l'Accès aux soins)",
-  [Minister.CharlotteParmentierLecocqBayrou1]:
-    'Charlotte Parmentier-Lecocq 2 (Ministre chargée de l’Autonomie et du Handicap)'
+  [Minister.SalimaSaa]:
+    "Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)",
+  [Minister.PaulChristophe]:
+    'Paul Christophe (Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes)',
+  [Minister.AstridPanosyanBouvet]:
+    'Astrid Panosyan-Bouvet (Ministre du Travail et de l’Emploi)',
+  [Minister.AgnesCanayer]:
+    'Agnès Canayer (Ministre déléguée, chargée de la Famille et de la Petite Enfance)',
+  [Minister.CatherineVautrin]:
+    'Catherine Vautrin (Travail, Santé et Solidarités)',
+  [Minister.FredericValletoux]:
+    'Frédéric Valletoux (Délégué Santé et Prévention)',
+  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
+  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
+  [Minister.CaroleGrandjean]:
+    'Carole Grandjean (Enseignement, Formation professionnels)',
+  [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
+  [Minister.SarahElHairy]:
+    'Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)',
+  [Minister.OlivierDussopt]:
+    'Olivier Dussopt (Travail, Plein emploi et Insertion)',
+  [Minister.GenevieveDarrieussecqBarnier1]:
+    'Geneviève Darrieussecq (Ministre de la Santé et de l’Accès aux soins)',
+  [Minister.GenevieveDarrieussecq]:
+    'Geneviève Darrieussecq (Personnes handicapées)',
+  [Minister.JeanChristopheCombe]:
+    'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
+  [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
+  [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)'
 })
 
 export const ministereDepartmentServiceAcKeys = buildKeys({
