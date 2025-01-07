@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.37.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.36.0...v1.37.0) (2025-01-07)
+
+
+### Features
+
+* **archivage:** création d'une page archivage et ses composants ([a49d6ef](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a49d6efe5d3407fd9d43d26ba8c5e23882a662a1)), closes [#687](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/687)
+* **ministres:** mise à jour ministres jan24 ([081a368](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/081a36840641e4dbb3cd91c6880a8089d082c7b1)), closes [#700](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/700)
+
+
+### Bug Fixes
+
+* **brevo:** déasactivation de brevo chatbot ([fb8fa99](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fb8fa995f5ba8d92c65a8a4813ebbf69ad24fd97)), closes [#696](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/696)
+* migration ministres ([a4393d7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a4393d78d4f81cf9d3ccaae12d40291e48cd2d01)), closes [#700](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/700)
+* **ministres:** rajout gouvernement et réordonnancement ([5f5d285](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5f5d285c6a22c2f0ccf2b97734871da0c84f06f1)), closes [#700](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/700)
+
 ## [1.36.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.34.0...v1.36.0) (2024-12-11)
 
 
