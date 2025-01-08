@@ -81,7 +81,7 @@
   .pagetitle__icon {
     color: var(--primary);
     background-color: var(--primary-light);
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -23,7 +23,11 @@
       "
     />
     <template v-if="beneficiary?.id && beneficiaryIdentification">
-      <PageTitle title="Gérer le dossier" />
+      <PageTitle
+        :title="pageTitle"
+        icon="fr-icon-folder-2-line"
+      />
+      <RequiredFields />
       <ArchiveChoiceForm
         :permissions="permissions"
         @change-value="changeStatus($event)"
@@ -86,6 +90,15 @@
   const deletpermission: ComputedRef<boolean> = computed(
     () => permissions.value?.delete || false
   )
+  const pageTitle = computed(() => {
+    if (beneficiary.value) {
+      return (
+        'Gérer le dossier de ' +
+        formatBeneficiaryName(beneficiary.value.general)
+      )
+    }
+    return 'Gérer le dossier'
+  })
 
   const changeStatus = (value: string) => {
     archiveFormStatus.value = value as ArchiveFormStatus
@@ -105,9 +118,8 @@
   // TODO: au pending, afficher un loader dans le bouton de téléchargement
   // + try catch + mettre le  dans finally
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
-    const response = await trpcClient.beneficiary.exportBeneficiary.query({
-      ...values
-    })
+    const response =
+      await trpcClient.beneficiary.exportBeneficiary.query(values)
     console.log(response.beneficiaryDetails)
     if (!response?.archiveFile) {
       throw new Error('no data')

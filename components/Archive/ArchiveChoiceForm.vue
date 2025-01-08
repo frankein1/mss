@@ -13,7 +13,7 @@
         to="https://www.cnil.fr/sites/cnil/files/atoms/files/referentiel_relatif_aux_traitements_de_donnees_personnelles_pour_le_suivi_social_et_medico-social_des_personnes_agees_en_situation_de_handicap_ou_en_difficulte.pdf"
         external
         target="_blank"
-        >référentiel en vigueur. </NuxtLink
+        >référentiel en vigueur </NuxtLink
       >. S'il s'agit d'un dossier foyer, les autres membres ne seront pas
       impactés par ces choix.
     </p>
@@ -95,6 +95,5 @@
 <style lang="scss" scoped>
   .fr-link {
     color: inherit;
-    text-decoration: underline;
   }
 </style>
