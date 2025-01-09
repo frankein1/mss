@@ -28,6 +28,7 @@
         <VeeSelect
           name="reason"
           label="Motif de l'archivage"
+          :disabled="pending"
           :options="withEmptyValue(reasons)"
         />
         <VeeInput
@@ -35,10 +36,12 @@
           type="date"
           name="date"
           label="Date"
+          :disabled="pending"
         />
         <VeeInput
           name="clarification"
           label="Précisions"
+          :disabled="pending"
         />
       </div>
 
@@ -60,15 +63,16 @@
         <button
           class="fr-btn fr-mb-0"
           type="button"
+          :disabled="pending"
           @click="onDownloadArchive()"
         >
-          Télécharger
+          {{ pending ? 'Téléchargement en cours' : 'Télécharger' }}
         </button>
         <button
           class="fr-btn fr-btn--icon-left fr-icon-delete-line fr-mb-0 edit-btn"
           :class="{ 'btn-delete-action': !disabledDeleteButton }"
           type="button"
-          :disabled="disabledDeleteButton"
+          :disabled="disabledDeleteButton || pending"
           @click="onDelete()"
         >
           Supprimer dénitivement
@@ -86,6 +90,7 @@
   const props = defineProps<{
     downloadReceived: boolean
     beneficiaryId: string
+    pending: boolean
   }>()
 
   const emit = defineEmits<{
@@ -95,16 +100,18 @@
 
   const keepName = ref<boolean | null>(null)
 
-  const keepNameOptions = [
-    { label: 'Non, tout supprimer', value: 'false' },
-    { label: 'Oui, conserver ', value: 'true' }
-  ]
+  const keepNameOptions = computed(() => [
+    { label: 'Non, tout supprimer', value: 'false', disabled: props.pending },
+    { label: 'Oui, conserver ', value: 'true', disabled: props.pending }
+  ])
 
   const onChangeKeepName = (value: string) => {
     keepName.value = value === 'true'
   }
 
-  const disabledDeleteButton = computed(() => !props.downloadReceived)
+  const disabledDeleteButton = computed(
+    () => !props.downloadReceived || props.pending
+  )
   const { values: formValues } = useForm({
     initialValues: {
       beneficiaryId: props.beneficiaryId,

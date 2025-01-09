@@ -52,6 +52,7 @@
 
   const props = defineProps<{
     permissions?: FamilyFilePermissions | undefined
+    pending: boolean
   }>()
 
   const emit = defineEmits<{
@@ -65,19 +66,19 @@
     archive: '/pictograms/archive.svg'
   }
 
-  const radioButtonOptions = [
+  const radioButtonOptions = computed(() => [
     {
       value: 'delete',
       label: 'Supprimer définitivement le dossier',
-      disabled: !props.permissions?.delete || false
+      disabled: !props.permissions?.delete || props.pending
     },
     {
       value: 'archive',
       label: 'Réaliser une archive et supprimer le dossier',
       // TODO: archive must be a permission. Ex: props.permissions.archive
-      disabled: false
+      disabled: props.pending
     }
-  ]
+  ])
 
   const { resetForm } = useForm({
     initialValues: {}

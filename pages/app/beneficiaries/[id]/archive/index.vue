@@ -30,6 +30,7 @@
       <RequiredFields />
       <ArchiveChoiceForm
         :permissions="permissions"
+        :pending="downloadPending"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
@@ -43,6 +44,7 @@
         class="fr-mt-4w"
         :download-received="downloadReceived"
         :beneficiary-id="beneficiaryId"
+        :pending="downloadPending"
         @download-archive="onDownloadArchive"
         @delete-file="openDeleteModal"
       />
@@ -72,6 +74,7 @@
   const beneficiaryId = route.params.id as string
   const archiveFormStatus = ref<ArchiveFormStatus>(null)
   const downloadReceived = ref<boolean>(false)
+  const downloadPending = ref<boolean>(false)
   const trpcClient = useTrpcClient()
   type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
 
@@ -115,21 +118,27 @@
     }
   }
 
-  // TODO: au pending, afficher un loader dans le bouton de téléchargement
-  // + try catch + mettre le  dans finally
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
-    const response =
-      await trpcClient.beneficiary.exportBeneficiary.query(values)
-    console.log(response.beneficiaryDetails)
-    if (!response?.archiveFile) {
-      throw new Error('no data')
+    downloadPending.value = true
+    try {
+      const response =
+        await trpcClient.beneficiary.exportBeneficiary.query(values)
+      if (!response?.archiveFile) {
+        throw new Error('no data')
+      }
+      const archiveFile = response.archiveFile
+      const downloadLink = document.createElement('a')
+      downloadLink.href = archiveFile
+      downloadLink.download = 'archiveFile.zip'
+      downloadLink.click()
+      downloadLink.remove()
+      downloadReceived.value = true
+    } catch (error) {
+      snackbar.error("L'export de l'archive à échoué.")
+      throw error
+    } finally {
+      downloadPending.value = false
     }
-    const downloadLink = document.createElement('a')
-    downloadLink.href = response.archiveFile
-    downloadLink.download = 'archiveFile.zip'
-    downloadLink.click()
-    downloadLink.remove()
-    downloadReceived.value = true
   }
 
   const onDelayArchive = () => {
