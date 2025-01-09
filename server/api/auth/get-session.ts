@@ -4,6 +4,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 import { includeOrderedCGUHistory } from '~/server/query'
+import { structureContextQuery } from '~/server/trpc/createContext'
 
 export default defineEventHandler(async event => {
   const authUser = event.context.auth?.user as JwtUser
@@ -21,12 +22,7 @@ export default defineEventHandler(async event => {
     },
     include: {
       ...includeOrderedCGUHistory(),
-      structure: {
-        select: {
-          id: true,
-          type: true
-        }
-      }
+      structure: structureContextQuery()
     }
   })
 

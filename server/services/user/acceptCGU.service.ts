@@ -9,6 +9,7 @@ import { cookieOptions } from '~/utils/cookie'
 import { JwtUser } from '~/types/user'
 import { getAppContextPermissions } from '~/server/security'
 import { includeOrderedCGUHistory } from '~/server/query'
+import { structureContextQuery } from '~/server/trpc/createContext'
 
 function getUserFromAuthToken(event: ProtectedAppContext['event']) {
   const {
@@ -56,12 +57,7 @@ async function updateUserWithCGUVersion(id: string) {
       }
     },
     include: {
-      structure: {
-        select: {
-          id: true,
-          type: true
-        }
-      },
+      structure: structureContextQuery(),
       ...includeOrderedCGUHistory()
     }
   })

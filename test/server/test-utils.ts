@@ -23,29 +23,34 @@ const createCaller = (user: AppContext['user']) => {
   return setupFactory(ctx)
 }
 
+const structure = {
+  id: fixtureStructures[0].id,
+  type: fixtureStructures[0].type
+}
+
 /** Create context user for each role to be tested */
 const users = {
   structureManager: {
     id: fixturesUsers[FixtureUserRole.StructureManager].id,
-    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
+    structure,
     role: fixturesUsers[FixtureUserRole.StructureManager].role,
     status: fixturesUsers[FixtureUserRole.StructureManager].status
   },
   receptionAgent: {
     id: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
-    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
+    structure,
     role: fixturesUsers[FixtureUserRole.ReceptionAgent].role,
     status: fixturesUsers[FixtureUserRole.ReceptionAgent].status
   },
   socialWorker: {
     id: fixturesUsers[FixtureUserRole.SocialWorker].id,
-    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
+    structure,
     role: fixturesUsers[FixtureUserRole.SocialWorker].role,
     status: fixturesUsers[FixtureUserRole.SocialWorker].status
   },
   referent: {
     id: fixturesUsers[FixtureUserRole.Referent].id,
-    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
+    structure,
     role: fixturesUsers[FixtureUserRole.Referent].role,
     status: fixturesUsers[FixtureUserRole.Referent].status
   }

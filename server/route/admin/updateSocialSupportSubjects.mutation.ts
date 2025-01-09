@@ -6,6 +6,7 @@ import {
 } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { StructureService } from '~/server/services'
+import { structureContextQuery } from '~/server/trpc/createContext'
 
 const adminHandler = async ({
   input,
@@ -18,10 +19,7 @@ const adminHandler = async ({
     where: {
       id: input.structureId
     },
-    select: {
-      id: true,
-      type: true
-    }
+    select: structureContextQuery().select
   })
   return StructureService.updateSocialSupportSubjects({
     input,

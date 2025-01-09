@@ -3,6 +3,14 @@ import { H3Event, parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
 import { UserRepo } from '~/server/database'
 
+export const structureContextQuery = () => ({
+  select: { id: true, type: true }
+})
+
+export const userContextQuery = () => ({
+  select: { id: true, role: true, status: true }
+})
+
 export const createContext = async (event: H3Event) => {
   const config = useRuntimeConfig()
 
@@ -24,12 +32,8 @@ export const createContext = async (event: H3Event) => {
     const user = await UserRepo.prisma.findUniqueOrThrow({
       where: { id: userData.id },
       select: {
-        id: true,
-        role: true,
-        status: true,
-        structure: {
-          select: { id: true, type: true }
-        }
+        ...userContextQuery().select,
+        structure: structureContextQuery()
       }
     })
 
