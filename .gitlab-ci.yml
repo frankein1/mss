@@ -15,7 +15,8 @@ include:
       - /proxy/license-scanning.yml
       - /proxy/code-quality.yml
       - /proxy/dependency-scanning.yml
-      - /proxy/container-scanning.yml
+      # Will be active again using scalingo container cf. #702
+      # - /proxy/container-scanning.yml
       - /proxy/sast.yml
       - /proxy/secret-scanning.yml
       - /pnpm.auto.yml
@@ -180,5 +181,3 @@ deploy:scalingo-prod:
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
     - git push scalingo latest:main -f
-
-
