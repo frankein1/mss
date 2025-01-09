@@ -27,8 +27,20 @@ import {
   beneficiaryTitleKeys,
   beneficiaryGenderKeys,
   beneficiaryStudyLevelKeys,
-  pensionOrganisationKeys
+  pensionOrganisationKeys,
+  followupKeys,
+  fileInstructionStatusKeys,
+  ministryFileInstructionStatusKeys,
+  ministrySocialSupportStatusKeys,
+  socialSupportStatusKeys,
+  typeSuiviKeys
 } from '~/client/options'
+import {
+  followupFieldLabels,
+  helpRequestFieldLabels,
+  housingHelpRequestFieldLabels
+} from '~/client/labels'
+import { buildKeys, Keys } from '~/utils/keys/keyBuilder'
 
 export const exportBeneficiary = async ({
   ctx,
@@ -51,38 +63,10 @@ export const exportBeneficiary = async ({
   )
 
   const [housingCount, financialCount, otherCount, followupCount] =
-    await Promise.all([
-      SocialSupportRepo.count(user, {
-        where: {
-          familyFileId: beneficiaryDetails.familyFileId,
-          socialSupportType: 'HelpRequestHousing'
-        }
-      }),
-      SocialSupportRepo.count(user, {
-        where: {
-          familyFileId: beneficiaryDetails.familyFileId,
-          socialSupportType: 'HelpRequest',
-          fileInstruction: { helpRequest: { financialSupport: true } }
-        }
-      }),
-      SocialSupportRepo.count(user, {
-        where: {
-          familyFileId: beneficiaryDetails.familyFileId,
-          socialSupportType: 'HelpRequest',
-          fileInstruction: { helpRequest: { financialSupport: false } }
-        }
-      }),
-      SocialSupportRepo.count(user, {
-        where: {
-          familyFileId: beneficiaryDetails.familyFileId,
-          socialSupportType: 'Followup'
-        }
-      })
-    ])
+    await getCounts(beneficiaryDetails.familyFileId, user)
 
   // handlebars -> https://github.com/ankur20us/demo-puppeteer/blob/master/index.js
   // API puppeteer https://pptr.dev/api/puppeteer.puppeteernode
-
   const browser = await puppeteer.launch()
 
   // Abstract Page
@@ -120,37 +104,18 @@ export const exportBeneficiary = async ({
   })
   const abstractPdfBuffer = await abstractPage.pdf(pdfOptions)
 
-  // Beneficiary informations
-  const informationsContent = await compile(
-    'handlebars-templates/beneficiary-info-template.hbs',
-    {
-      beneficiaryName: getBeneficiaryName(beneficiaryDetails),
-      ...getBeneficiaryInfoData(
-        beneficiaryDetails as BeneficiaryWithEntourageAndRelative
-      )
-    }
-  )
-  const infoPage = await browser.newPage()
-  await infoPage.setContent(informationsContent)
-  await infoPage.emulateMediaType('screen')
-  await infoPage.goto('data:text/html,' + informationsContent, {
-    waitUntil: 'networkidle0'
-  })
-  const infoPdfBuffer = await infoPage.pdf(pdfOptions)
-
-  // Followups
+  // Followups pages
   const followups = await Promise.all(
     socialSupports
       .filter(socialSupport => socialSupport.socialSupportType === 'Followup')
-      .map(async followup => {
+      .map(async (followup, idx) => {
         const content = await compile(
-          'handlebars-templates/followup-template.hbs',
+          'handlebars-templates/social-support-template.hbs',
           {
             beneficiaryName: getBeneficiaryName(beneficiaryDetails),
-            ...getFollowupData(followup)
+            ...convertSocialSupport(followup)
           }
         )
-
         const page = await browser.newPage()
         await page.setContent(content)
         await page.emulateMediaType('screen')
@@ -159,7 +124,37 @@ export const exportBeneficiary = async ({
         })
 
         return {
-          filename: `Historique/entretiens_${followup.id}.pdf`,
+          filename: `Historique/entretiens_${idx + 1}.pdf`,
+          buffer: await page.pdf(pdfOptions)
+        }
+      })
+  )
+
+  // Helprequests pages
+  const helpRequests = await Promise.all(
+    socialSupports
+      .filter(
+        socialSupport =>
+          socialSupport.socialSupportType === 'HelpRequest' ||
+          socialSupport.socialSupportType === 'HelpRequestHousing'
+      )
+      .map(async (helpRequest, idx) => {
+        const content = await compile(
+          'handlebars-templates/social-support-template.hbs',
+          {
+            beneficiaryName: getBeneficiaryName(beneficiaryDetails),
+            ...convertSocialSupport(helpRequest)
+          }
+        )
+        const page = await browser.newPage()
+        await page.setContent(content)
+        await page.emulateMediaType('screen')
+        await page.goto('data:text/html,' + content, {
+          waitUntil: 'networkidle0'
+        })
+
+        return {
+          filename: `Historique/instruction_de_dossier_${idx + 1}.pdf`,
           buffer: await page.pdf(pdfOptions)
         }
       })
@@ -167,14 +162,15 @@ export const exportBeneficiary = async ({
 
   // create zip file
   const zip = new JSZip()
+
   zip.file('Résumé_archive.pdf', abstractPdfBuffer, { binary: true })
-  zip.file(
-    `Informations/${getBeneficiaryName(beneficiaryDetails)}.pdf`,
-    infoPdfBuffer,
-    { binary: true }
-  )
   followups.forEach(followup => {
     zip.file(followup.filename, followup.buffer, {
+      binary: true
+    })
+  })
+  helpRequests.forEach(helprequest => {
+    zip.file(helprequest.filename, helprequest.buffer, {
       binary: true
     })
   })
@@ -190,7 +186,10 @@ export const exportBeneficiary = async ({
 
   return {
     archiveFile,
-    beneficiaryDetails
+    initialsocialSupports: socialSupports,
+    socialSupports: socialSupports.map(socialsupport =>
+      convertSocialSupport(socialsupport)
+    )
   }
 }
 
@@ -232,143 +231,6 @@ const pdfOptions: PDFOptions = {
 const getBeneficiaryName = (beneficiary: Beneficiary) => {
   return beneficiary.firstName + ' ' + beneficiary.usualName
 }
-const getFollowupData = (socialSupport: SocialSupportItem) => {
-  const subjectsNames = socialSupport.subjects.map(subject => subject.name)
-  const documents = socialSupport.documents?.map(document => ({
-    name: document.name,
-    type: documentTypeKeys.value(document.type)
-  }))
-  return {
-    createdByEmail: socialSupport.createdBy?.email,
-    lastUpdatedByEmail: socialSupport.lastUpdatedBy?.email,
-    firstFollowup: socialSupport.followup?.firstFollowup || null,
-    date: socialSupport.date.toLocaleDateString(),
-    ministre: socialSupport.ministre
-      ? ministerKeys.value(socialSupport.ministre)
-      : null,
-    numeroPegase: socialSupport.numeroPegase,
-    duration: socialSupport.followup?.duration
-      ? followupDurationKeys.value(socialSupport.followup.duration)
-      : null,
-    medium: socialSupport.followup?.medium
-      ? followupMediumKeys.value(socialSupport.followup.medium)
-      : null,
-    thirdPersonName: socialSupport.followup?.thirdPersonName,
-    place: socialSupport.followup?.place,
-    subjectsNames: subjectsNames.join(', '),
-    status: socialSupport.status
-      ? followupStatusKeys.value(socialSupport.status)
-      : null,
-    dueDate: socialSupport.dueDate,
-    prescribingOrganizationName:
-      socialSupport.followup?.prescribingOrganization?.name,
-    prescribingOrganizationContact:
-      socialSupport.followup?.prescribingOrganizationContact?.name,
-    synthesis: socialSupport.synthesis,
-    actions:
-      socialSupport.followup?.forwardedToJustice != null ||
-      socialSupport.followup?.redirected != null,
-    forwardedToJustice: socialSupport.followup?.forwardedToJustice,
-    redirected: socialSupport.followup?.redirected,
-    structureName: socialSupport.followup?.structureName,
-    documents: documents || null
-  }
-}
-
-const getBeneficiaryInfoData = (
-  beneficiary: BeneficiaryWithEntourageAndRelative
-) => {
-  const pensionOrganisations = beneficiary.pensionOrganisations.map(item =>
-    pensionOrganisationKeys.value(item)
-  )
-  const beneficiaries = beneficiary.familyFile?.beneficiaries?.map(
-    beneficiary => ({
-      firstName: beneficiary.firstName,
-      usualName: beneficiary.usualName,
-      relationship: beneficiary.relationship
-        ? relativeRelationshipKeys.value(beneficiary.relationship)
-        : null
-    })
-  )
-  const referents = beneficiary.familyFile?.referents.map(
-    referent => referent.firstName + ' ' + referent.lastName
-  )
-  const relatives = beneficiary.relatives
-    ? beneficiary.relatives.map((relative, idx) => ({
-        index: idx + 1,
-        additionalInformation: relative.additionalInformation,
-        birthDate: relative.birthDate
-          ? relative.birthDate.toLocaleDateString()
-          : null,
-        caregiver: relative.caregiver,
-        city: relative.city,
-        email: relative.email,
-        firstName: relative.firstName,
-        lastName: relative.lastName,
-        hosted: relative.hosted,
-        phone: relative.phone,
-        relationship: relative.relationship
-          ? relativeRelationshipKeys.value(relative.relationship)
-          : null
-      }))
-    : null
-
-  return {
-    ...beneficiary,
-    beneficiaries,
-    relatives,
-    referents: referents ? referents.join(', ') : null,
-    birthDate: beneficiary.birthDate
-      ? beneficiary.birthDate.toLocaleDateString()
-      : null,
-    divorceDate: beneficiary.divorceDate
-      ? beneficiary.divorceDate.toLocaleDateString()
-      : null,
-    weddingDate: beneficiary.weddingDate
-      ? beneficiary.weddingDate.toLocaleDateString()
-      : null,
-    accommodationMode: beneficiary.accommodationMode
-      ? beneficiaryAccommodationModeKeys.value(beneficiary.accommodationMode)
-      : null,
-    mobility: beneficiary.mobility
-      ? beneficiaryMobilityKeys.value(beneficiary.mobility)
-      : null,
-    familySituation: beneficiary.familySituation
-      ? familySituationKeys.value(beneficiary.familySituation)
-      : null,
-    gir: beneficiary.gir ? beneficiaryGirKeys.value(beneficiary.gir) : null,
-    socioProfessionalCategory: beneficiary.socioProfessionalCategory
-      ? beneficiarySocioProfessionalCategoryKeys.value(
-          beneficiary.socioProfessionalCategory
-        )
-      : null,
-    pensionOrganisations: beneficiary.pensionOrganisations
-      ? pensionOrganisations.join(', ')
-      : null,
-    protectionMeasure: beneficiary.protectionMeasure
-      ? beneficiaryProtectionMeasureKeys.value(beneficiary.protectionMeasure)
-      : null,
-    orientationType: beneficiary.orientationType
-      ? beneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
-      : null,
-    relationship: beneficiary.relationship
-      ? relativeRelationshipKeys.value(beneficiary.relationship)
-      : null,
-    status: beneficiary.status
-      ? beneficiaryStatusKeys.value(beneficiary.status)
-      : null,
-    title: beneficiary.title
-      ? beneficiaryTitleKeys.value(beneficiary.title)
-      : null,
-    gender: beneficiary.gender
-      ? beneficiaryGenderKeys.value(beneficiary.gender)
-      : null,
-    studyLevel: beneficiary.studyLevel
-      ? beneficiaryStudyLevelKeys.value(beneficiary.studyLevel)
-      : null
-  }
-}
-
 const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
   return await BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id: id },
@@ -396,22 +258,265 @@ const getSocialSupports = async (familyFileId: string, user: User) => {
     where: {
       familyFileId: familyFileId
     },
-    include: {
+    select: {
+      id: false,
+      date: true,
+      status: true,
+      createdBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true
+        }
+      },
+      lastUpdatedBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true
+        }
+      },
+      ministre: true,
+      numeroPegase: true,
+      dueDate: true,
+      socialSupportType: true,
+      subjects: {
+        select: {
+          name: true
+        }
+      },
+      fileInstruction: {
+        select: {
+          decisionDate: true,
+          dispatchDate: true,
+          examinationDate: true,
+          externalStructure: true,
+          fullFile: true,
+          refusalReason: true,
+          refusalReasonOther: true,
+          instructorOrganization: {
+            select: {
+              name: true
+            }
+          },
+          instructorOrganizationContact: {
+            select: {
+              name: true
+            }
+          },
+          helpRequest: true,
+          housingHelpRequest: {
+            select: {
+              askedHousing: true,
+              firstOpeningDate: true,
+              housingType: true,
+              isFirst: true,
+              isPmr: true,
+              lowIncomeHousingType: true,
+              maxCharges: true,
+              maxRent: true,
+              reason: true,
+              roomCount: true,
+              taxHouseholdAdditionalInformation: true,
+              uniqueId: true,
+              prescribingOrganization: {
+                select: {
+                  name: true
+                }
+              },
+              prescribingOrganizationContact: {
+                select: {
+                  name: true
+                }
+              }
+            }
+          }
+        }
+      },
       followup: {
-        include: {
-          prescribingOrganization: true,
-          prescribingOrganizationContact: true
+        select: {
+          firstFollowup: true,
+          id: false,
+          updated: true,
+          medium: true,
+          place: true,
+          thirdPersonName: true, //'Tierce personne'
+          duration: true,
+          forwardedToJustice: true, // Transmis à la justice
+          redirected: true, // Réorienté après l'entretien
+          structureName: true, // Nom de l'organisme
+          helpRequested: true, // Instruction de dossier
+          classified: true, // Classé
+          prescribingOrganization: {
+            select: {
+              name: true
+            }
+          },
+          prescribingOrganizationContact: {
+            select: {
+              name: true
+            }
+          }
         }
       },
       documents: {
         select: { name: true, type: true }
       },
-      createdBy: true,
-      lastUpdatedBy: true,
-      subjects: true
+      synthesis: true,
+      privateSynthesis: true
     },
     orderBy: [{ date: 'desc' }, { created: 'desc' }]
   })
+}
+
+const getCounts = async (familyFileId: string, user: User) =>
+  await Promise.all([
+    SocialSupportRepo.count(user, {
+      where: {
+        familyFileId: familyFileId,
+        socialSupportType: 'HelpRequestHousing'
+      }
+    }),
+    SocialSupportRepo.count(user, {
+      where: {
+        familyFileId: familyFileId,
+        socialSupportType: 'HelpRequest',
+        fileInstruction: { helpRequest: { financialSupport: true } }
+      }
+    }),
+    SocialSupportRepo.count(user, {
+      where: {
+        familyFileId: familyFileId,
+        socialSupportType: 'HelpRequest',
+        fileInstruction: { helpRequest: { financialSupport: false } }
+      }
+    }),
+    SocialSupportRepo.count(user, {
+      where: {
+        familyFileId: familyFileId,
+        socialSupportType: 'Followup'
+      }
+    })
+  ])
+
+const convertSocialSupport = (initialSocialSupport: SocialSupportItem) => {
+  const socialSupport = getKeys(
+    convertToLabelValueArray(initialSocialSupport),
+    helpRequestFieldLabels,
+    socialSupportKeys()
+  )
+  socialSupport?.push({
+    label: 'Créé par',
+    value: `${initialSocialSupport.createdBy.firstName} ${initialSocialSupport.createdBy.lastName} ${initialSocialSupport.createdBy.email}`
+  })
+  if (initialSocialSupport.lastUpdatedBy) {
+    socialSupport?.push({
+      label: 'Dernière mise à jour par',
+      value: `${initialSocialSupport.lastUpdatedBy.firstName} ${initialSocialSupport.lastUpdatedBy.lastName} ${initialSocialSupport.lastUpdatedBy.email}`
+    })
+  }
+  const fileInstruction = getKeys(
+    convertToLabelValueArray(initialSocialSupport?.fileInstruction),
+    helpRequestFieldLabels,
+    socialSupportKeys()
+  )
+  const helpRequest = getKeys(
+    convertToLabelValueArray(
+      initialSocialSupport?.fileInstruction?.helpRequest
+    ),
+    helpRequestFieldLabels,
+    socialSupportKeys()
+  )
+  const housingHelpRequest = getKeys(
+    convertToLabelValueArray(
+      initialSocialSupport?.fileInstruction?.housingHelpRequest
+    ),
+    housingHelpRequestFieldLabels,
+    socialSupportKeys()
+  )
+  const followup = getKeys(
+    convertToLabelValueArray(initialSocialSupport?.followup),
+    followupFieldLabels,
+    socialSupportKeys()
+  )
+
+  if (
+    fileInstruction &&
+    initialSocialSupport?.fileInstruction?.instructorOrganization
+  ) {
+    fileInstruction.push({
+      label: 'Organisme instructeur',
+      value: initialSocialSupport.fileInstruction.instructorOrganization.name
+    })
+  }
+  if (
+    fileInstruction &&
+    initialSocialSupport?.fileInstruction?.instructorOrganizationContact
+  ) {
+    fileInstruction.push({
+      label: "Contact de l'organisme instructeur",
+      value:
+        initialSocialSupport.fileInstruction.instructorOrganizationContact.name
+    })
+  }
+  if (
+    housingHelpRequest &&
+    initialSocialSupport?.fileInstruction?.housingHelpRequest
+      ?.prescribingOrganization
+  ) {
+    housingHelpRequest.push({
+      label: 'Organisme prescripteur',
+      value:
+        initialSocialSupport.fileInstruction.housingHelpRequest
+          .prescribingOrganization.name
+    })
+  }
+
+  if (
+    housingHelpRequest &&
+    initialSocialSupport?.fileInstruction?.housingHelpRequest
+      ?.prescribingOrganizationContact
+  ) {
+    housingHelpRequest.push({
+      label: "Contact de l'organisme prescripteur",
+      value:
+        initialSocialSupport.fileInstruction.housingHelpRequest
+          ?.prescribingOrganizationContact.name
+    })
+  }
+
+  if (
+    followup &&
+    initialSocialSupport?.followup &&
+    initialSocialSupport?.followup.prescribingOrganization
+  ) {
+    followup.push({
+      label: 'Organisme prescripteur',
+      value: initialSocialSupport.followup.prescribingOrganization.name
+    })
+  }
+  if (
+    followup &&
+    initialSocialSupport?.followup &&
+    initialSocialSupport?.followup.prescribingOrganizationContact
+  ) {
+    followup.push({
+      label: "Contact de l'organisme prescripteur",
+      value: initialSocialSupport.followup.prescribingOrganizationContact.name
+    })
+  }
+
+  const subjects = initialSocialSupport.subjects.map(subject => subject.name)
+
+  return {
+    socialSupport,
+    fileInstruction,
+    helpRequest,
+    housingHelpRequest,
+    followup,
+    subjects,
+    documents: initialSocialSupport.documents
+  }
 }
 
 type SocialSupportWithFollowupAndSubject = Awaited<
@@ -421,3 +526,84 @@ type SocialSupportItem = SocialSupportWithFollowupAndSubject[0]
 type BeneficiaryWithEntourageAndRelative = Awaited<
   ReturnType<typeof getBeneficaryDetails>
 >
+
+const getKeys = (
+  obj:
+    | {
+        label: string
+        value: string | string[]
+      }[]
+    | null,
+  fieldLabels: any,
+  keys: Keys
+) => {
+  if (obj == null) {
+    return null
+  }
+
+  return obj.map(item => {
+    if (typeof item.value == 'boolean') {
+      return {
+        label: fieldLabels[item.label] ? fieldLabels[item.label] : item.label,
+        value: item.value ? 'oui' : 'non'
+      }
+    }
+    if (
+      Array.isArray(item.value) &&
+      item.label !== 'documents' &&
+      item.label !== 'subjects'
+    ) {
+      const convertedValues = item.value.map(value => {
+        return keys.byKey[value] ? keys.byKey[value] : value
+      })
+      return {
+        label: fieldLabels[item.label] ? fieldLabels[item.label] : item.label,
+        value: convertedValues.join(', ')
+      }
+    }
+    if (!Array.isArray(item.value)) {
+      return {
+        label: fieldLabels[item.label] ? fieldLabels[item.label] : item.label,
+        value: keys.byKey[item.value] ? keys.byKey[item.value] : item.value
+      }
+    }
+  })
+}
+
+const convertToLabelValueArray = (
+  obj: Record<string, any> | null | undefined
+): { label: string; value: any }[] | null => {
+  if (obj == null) {
+    return null
+  }
+  const result: { label: string; value: any }[] = []
+
+  const recurse = (currentObj: Record<string, any>): void => {
+    for (const key in currentObj) {
+      if (Object.prototype.hasOwnProperty.call(currentObj, key)) {
+        const value = currentObj[key]
+        if (value instanceof Date) {
+          result.push({ label: key, value: value.toLocaleDateString() })
+        }
+        if (Array.isArray(value)) {
+          result.push({ label: key, value })
+        } else if (typeof value != 'object') {
+          result.push({ label: key, value })
+        }
+      }
+    }
+  }
+  recurse(obj)
+  return result
+}
+
+const socialSupportKeys = () => {
+  return buildKeys({
+    ...typeSuiviKeys.byKey,
+    ...fileInstructionStatusKeys.byKey,
+    ...ministryFileInstructionStatusKeys.byKey,
+    ...socialSupportStatusKeys.byKey,
+    ...ministrySocialSupportStatusKeys.byKey,
+    ...followupKeys().byKey
+  })
+}

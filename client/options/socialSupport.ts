@@ -1,5 +1,5 @@
 import { SocialSupportStatus } from '@prisma/client'
-import { followupStatusKeys } from './followup'
+import { followupKeys, followupStatusKeys } from './followup'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 
 export enum TypeSuivi {

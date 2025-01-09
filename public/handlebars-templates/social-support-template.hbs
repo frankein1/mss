@@ -1,0 +1,95 @@
+<style type='text/css' media='all'>
+  @font-face { font-family: 'Marianne'; src:
+  url('https://github.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff2')
+  format('woff2'),
+  url('https://cdn.rawgit.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff')
+  format('woff'); font-weight: 500; font-style: normal; font-display: swap; } *
+  { font-family: 'Marianne', Arial, Helvetica, sans-serif; font-weight: 500;
+  font-style: normal; color: rgb(58 58 58); box-sizing: border-box; margin-top:
+  0; } body { margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2 {
+  font-weight: 700; } .bold { font-weight: bold; } hr { margin: 2rem 0; } ul >
+  li { margin-bottom: 0.5rem; }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    {{#if followup}}
+      <title>Entretien avec {{{beneficiaryName}}}</title>
+    {{/if}}
+    {{#if housingHelpRequest}}
+      <title>Instruction de dossier {{{beneficiaryName}}}</title>
+    {{/if}}
+    {{#if helpRequest}}
+      <title>Instruction de dossier {{{beneficiaryName}}}</title>
+    {{/if}}
+  </head>
+  <body>
+    {{#if followup}}
+      <h1>Entretien avec {{{beneficiaryName}}}</h1>
+    {{/if}}
+    {{#if housingHelpRequest}}
+      <h1>Instruction de dossier {{{beneficiaryName}}}</h1>
+    {{/if}}
+    {{#if helpRequest}}
+      <h1>Instruction de dossier {{{beneficiaryName}}}</h1>
+    {{/if}}
+
+    <ul>
+      {{#if socialSupport}}
+        {{#each socialSupport}}
+          {{#if value}}
+            <li><span class='bold'>{{{label}}} </span>{{{value}}}</li>
+          {{/if}}
+        {{/each}}
+      {{/if}}
+      {{#if followup}}
+        {{#each followup}}
+          {{#if value}}
+            <li><span class='bold'>{{{label}}} </span>{{{value}}}</li>
+          {{/if}}
+        {{/each}}
+      {{/if}}
+
+      {{#if subjects}}
+        <li><span class='bold'>Objet(s) de l'accompagnement </span>
+          <ul>
+            {{#each subjects}}
+              <li>{{{this}}}</li>
+            {{/each}}
+          </ul>
+        </li>
+      {{/if}}
+
+      {{#if fileInstruction}}
+        {{#each fileInstruction}}
+          {{#if value}}
+            <li><span class='bold'>{{{label}}} </span>{{{value}}}</li>
+          {{/if}}
+        {{/each}}
+      {{/if}}
+    </ul>
+
+    {{#if housingHelpRequest}}
+      <hr />
+      <h2>Demande de logement</h2>
+      <ul>
+        {{#each housingHelpRequest}}
+          {{#if value}}
+            <li><span class='bold'>{{{label}}} </span>{{{value}}}</li>
+          {{/if}}
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#if documents}}
+      <hr />
+      <h2>Liste des documents</h2>
+      <ul>
+        {{#each documents}}
+          <li>{{{type}}} : <em>{{{name}}}</em></li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </body>
+</html>

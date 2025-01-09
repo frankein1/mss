@@ -14,7 +14,7 @@ function buildKeys<T extends Record<string, string>>(byKey: T) {
   }
 }
 
-type Keys = ReturnType<typeof buildKeys>
+export type Keys = ReturnType<typeof buildKeys>
 
 function mergeKeys(keys1: Keys, keys2: Keys) {
   const byKey1 = keys1.byKey

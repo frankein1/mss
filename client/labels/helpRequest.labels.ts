@@ -31,5 +31,14 @@ export const helpRequestFieldLabels = {
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
   financialSupport: 'Aide financière',
-  isRefundable: 'Cette aide est-elle remboursable ?'
+  isRefundable: 'Cette aide est-elle remboursable ?',
+  //
+  lastUpdatedById: 'Dernière mise à jour',
+  synthesisRichText: 'Synthèse riche',
+  privateSynthesisRichText: 'Compte rendu privé riche',
+  structureId: 'Structure',
+  created: 'Date de création',
+  socialSupportType: "Type d'historique",
+  followup: "Synthèse(s) d'entretien",
+  subjects: 'Sujets'
 }
