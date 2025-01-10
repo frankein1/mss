@@ -7,7 +7,17 @@
   "dockerfile": {
     "enabled": false
   },
-  "ignoreDeps": ["pnpm", "h3", "typescript"],
+  "ignoreDeps": ["pnpm", "h3"],
+  "packageRules": [
+    {
+      "groupName": "dsfr",
+      "matchPackagePatterns": ["/^dsfr/"]
+    },
+    {
+      "groupName": "vue-dsfr",
+      "matchPackagePatterns": ["vue-dsfr"]
+    }
+  ],
   "timezone": "Europe/Paris",
   "schedule": ["* * * * 0,6"],
   "updateNotScheduled": false,
