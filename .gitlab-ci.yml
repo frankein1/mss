@@ -56,7 +56,17 @@ variables:
 
 .vigigloo:pnpm:install:
   image:
-    name: registry.gitlab.com/vigigloo/tools/pnpm@sha256:d7f32b4ea51fa28019b0db553243f841ef878a6e6bc136ea139a8c33c105997f
+    name: registry.gitlab.com/vigigloo/tools/pnpm:node-${NODE_VERSION}_pnpm-${PNPM_VERSION}
+
+pnpm:build:
+  stage: build
+  extends: .vigigloo:pnpm:install
+  interruptible: true
+  needs: ['pnpm:install']
+  cache:
+    policy: pull
+  script:
+    - pnpm run --if-present build
 
 pnpm:test:
   extends: .vigigloo:pnpm:test

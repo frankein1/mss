@@ -10,8 +10,12 @@
   "ignoreDeps": ["pnpm", "h3"],
   "packageRules": [
     {
+      "groupName": "Playwright",
+      "matchPackagePatterns": ["@playwright/test"]
+    },
+    {
       "groupName": "dsfr",
-      "matchPackagePatterns": ["/^dsfr/"]
+      "matchPackagePatterns": ["@gouvfr/dsfr"]
     },
     {
       "groupName": "vue-dsfr",
