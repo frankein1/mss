@@ -157,7 +157,7 @@
 
     filters.push({
       name: 'qpv',
-      label: beneficiaryFieldLabels.qpv,
+      label: 'Quartier prioritaire',
       options: withEmptyValue(yesNoOptions, 'Tous'),
       type: FilterType.SelectOne,
       alwaysExpanded: false,

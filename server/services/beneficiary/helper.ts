@@ -66,7 +66,11 @@ export function prepareBeneficiaryFilters(
   }
 
   if (filters.qpv !== undefined) {
-    formattedFilters.qpv = filters.qpv
+    if (filters.qpv) {
+      formattedFilters.qpv = true
+    } else {
+      formattedFilters.OR = [{ qpv: null }, { qpv: false }]
+    }
   }
 
   if (filters.notFilled) {

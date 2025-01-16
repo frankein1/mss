@@ -4,7 +4,7 @@
     novalidate
   >
     <div
-      v-if="expandedByDefaultFilters.length"
+      :id="FILTERS_ID"
       class="filters"
       :class="{
         'full-width-filters': fullWidthFilters
@@ -16,24 +16,15 @@
         :filter="filter"
         @change-filter="onChangeFilter(filter)"
       />
-    </div>
-    <template v-if="collapsedByDefaultFilters.length">
-      <div
-        v-show="expanded"
-        :id="COLLAPSED_FILTERS_ID"
-        class="filters"
-        :class="{
-          'full-width-filters': fullWidthFilters
-        }"
-      >
+      <template v-if="expanded && collapsedByDefaultFilters.length">
         <AtomFilter
           v-for="filter in collapsedByDefaultFilters"
           :key="filter.name"
           :filter="filter"
           @change-filter="onChangeFilter(filter)"
         />
-      </div>
-    </template>
+      </template>
+    </div>
   </form>
   <div
     v-if="!noReset || collapsedByDefaultFilters.length"
@@ -77,7 +68,7 @@
         <button
           class="fr-btn fr-btn--tertiary-no-outline fr-icon-filter-fill"
           aria-expanded="false"
-          :aria-controls="COLLAPSED_FILTERS_ID"
+          :aria-controls="FILTERS_ID"
           @click="expanded = !expanded"
         >
           {{ expandBtnLabel }}
@@ -149,7 +140,7 @@
     filter: [filter: FilterValues]
   }>()
 
-  const COLLAPSED_FILTERS_ID = getRandId('filters-')
+  const FILTERS_ID = getRandId('filters-')
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(props.expandedByDefault)
 
