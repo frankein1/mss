@@ -1,0 +1,306 @@
+<style type='text/css' media='all'>
+  @font-face { font-family: 'Marianne'; src:
+  url('https://github.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff2')
+  format('woff2'),
+  url('https://cdn.rawgit.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff')
+  format('woff'); font-weight: 500; font-style: normal; font-display: swap; } *
+  { font-family: 'Marianne', Arial, Helvetica, sans-serif; font-weight: 500;
+  font-style: normal; color: rgb(58 58 58); box-sizing: border-box; margin-top:
+  0; } body { margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2, h3, h4 {
+  font-weight: 700; } .bold { font-weight: bold; } hr { margin: 2rem 0; } ul >
+  li { margin-bottom: 0.5rem; }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>{{{beneficiaryName}}}</title>
+  </head>
+  <body>
+    <h1>{{{beneficiaryName}}}</h1>
+
+    <h2>Informations générales</h2>
+    <ul>
+      {{#if referents}}
+        <li><span class='bold'>Agent(s) référent(s) :
+          </span>{{{referents}}}</li>
+      {{/if}}
+      <li><span class='bold'>Mandat Aidants Connect : </span>
+        {{#if aidantConnectAuthorized}}oui{{else}}non{{/if}}
+      </li>
+      <li><span class='bold'>Registre des personnes vulnérables :
+        </span>{{#if vulnerablePerson}}oui{{else}}non{{/if}}</li>
+    </ul>
+
+    <h3>Identité du bénéficiaire</h3>
+    <ul>
+      {{#if title}}
+        <li><span class='bold'>Civilité : </span>{{{title}}}</li>
+      {{/if}}
+      {{#if usualName}}
+        <li><span class='bold'>Nom usuel : </span>{{{usualName}}}</li>
+      {{/if}}
+      {{#if birthName}}
+        <li><span class='bold'>Nom de naissance : </span>{{{birthName}}}</li>
+      {{/if}}
+      {{#if firstName}}
+        <li><span class='bold'>Prénom(s) : </span>{{{firstName}}}</li>
+      {{/if}}
+      {{#if birthDate}}
+        <li><span class='bold'>Date de naissance : </span>{{{birthDate}}}</li>
+      {{/if}}
+      {{#if birthPlace}}
+        <li><span class='bold'>Lieu de naissance : </span>{{{birthPlace}}}</li>
+      {{/if}}
+      {{#if gender}}
+        <li><span class='bold'>Genre : </span>{{{gender}}}</li>
+      {{/if}}
+      {{#if nationality}}
+        <li><span class='bold'>Nationalité : </span>{{{nationality}}}</li>
+      {{/if}}
+    </ul>
+
+    <h3>Coordonnées</h3>
+    <ul>
+      {{#if noPhone}}<li>N'a pas de téléphone</li>{{/if}}
+      <li><span class='bold'>Numéro de téléphone : </span>
+        <ul>
+          {{#if phone1}}<li>{{{phone1}}}</li>{{/if}}
+          {{#if phone2}}<li>{{{phone2}}}</li>{{/if}}
+        </ul>
+      </li>
+      {{#if email}}
+        <li><span class='bold'>Email : </span>{{{email}}}</li>
+      {{/if}}
+    </ul>
+
+    <h3>Adresse/Hébergement</h3>
+    <ul>
+      {{#if accommodationMode}}
+        <li><span class='bold'>Mode d'hébergement :
+          </span>{{{accommodationMode}}}</li>
+      {{/if}}
+      {{#if accommodationName}}
+        <li><span class='bold'>Dénomination de la structure&nbsp;: / Nom et
+            prénom du tiers&nbsp;:
+          </span>{{{accommodationName}}}</li>
+      {{/if}}
+      {{#if accommodationAdditionalInformation}}
+        <li><span class='bold'>Précisions hébergement :
+          </span>{{{accommodationAdditionalInformation}}}</li>
+      {{/if}}
+      {{#if street}}
+        <li><span class='bold'>Adresse : </span>{{{street}}}</li>
+      {{/if}}
+      {{#if zipcode}}
+        <li><span class='bold'>Code postal : </span>{{{zipcode}}}</li>
+      {{/if}}
+      {{#if city}}
+        <li><span class='bold'>Ville : </span>{{{city}}}</li>
+      {{/if}}
+      {{#if addressComplement}}
+        <li><span class='bold'>Complément d'adresse :
+          </span>{{{addressComplement}}}</li>
+      {{/if}}
+      {{#if department}}
+        <li><span class='bold'>Département : </span>{{{department}}}</li>
+      {{/if}}
+      {{#if region}}
+        <li><span class='bold'>Région : </span>{{{region}}}</li>
+      {{/if}}
+      {{#if qpv}}
+        <li>Quartier prioritaire de la politique de la ville : oui</li>
+      {{/if}}
+    </ul>
+
+    {{#if mobility}}
+      <h3>Mobilité</h3>
+      <ul>
+        <li><span class='bold'>Données mobilité : </span>{{{mobility}}}</li>
+      </ul>
+    {{/if}}
+
+    {{#if additionalInformation}}
+      <h3>Informations complémentaires</h3>
+      <ul>
+        <li>{{{additionalInformation}}}</li>
+      </ul>
+    {{/if}}
+
+    <hr />
+    <h2>Situation familiale</h2>
+    <ul>
+      {{#if familySituation}}
+        <li><span class='bold'>Situation familiale :
+          </span>{{{familySituation}}}</li>
+      {{/if}}
+      {{#if divorceDate}}
+        <li><span class='bold'>Date de séparation / divorce :
+          </span>{{{divorceDate}}}</li>
+      {{/if}}
+      {{#if weddingDate}}
+        <li><span class='bold'>Date de mariage / pacs :
+          </span>{{{weddingDate}}}</li>
+      {{/if}}
+      {{#if minorChildren}}
+        <li><span class='bold'>Nombre d'enfant(s) mineur(s) :
+          </span>{{{minorChildren}}}</li>
+      {{/if}}
+      {{#if majorChildren}}
+        <li><span class='bold'>Nombre d'enfant(s) majeur(s) :
+          </span>{{{majorChildren}}}</li>
+      {{/if}}
+      {{#if caregiver}}
+        <li>Ce bénéficiaire est aidant familial</li>
+      {{/if}}
+    </ul>
+
+    {{#if beneficiaries}}
+      <h3>Autres bénéficiaires du dossier</h3>
+      <ul>
+        {{#each beneficiaries}}
+          <li>{{{firstName}}}
+            {{{usualName}}}
+            {{#if relationship}}– {{{relationship}}}{{/if}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#if relatives}}
+      <hr />
+      <h2>Entourage</h2>
+      {{#each relatives}}
+        <ul>
+          <li><h4>Proche {{index}}</h4>
+            <ul>
+              {{#if firstName}}
+                <li><span class='bold'>Prénom : </span>{{{firstName}}}</li>
+              {{/if}}
+              {{#if lastName}}
+                <li><span class='bold'>Nom : </span>{{{lastName}}}</li>
+              {{/if}}
+              {{#if birthDate}}
+                <li><span class='bold'>Date de naissance :
+                  </span>{{{birthDate}}}</li>
+              {{/if}}
+              {{#if city}}
+                <li><span class='bold'>Ville : </span>{{{city}}}</li>
+              {{/if}}
+              {{#if phone}}
+                <li><span class='bold'>Téléphone : </span>{{{phone}}}</li>
+              {{/if}}
+              {{#if email}}
+                <li><span class='bold'>Email : </span>{{{email}}}</li>
+              {{/if}}
+              {{#if relationship}}
+                <li><span class='bold'>Lien de la relation :
+                  </span>{{{relationship}}}</li>
+              {{/if}}
+              {{#if hosted}}
+                <li>Vit au domicile du bénéficiaire</li>
+              {{/if}}
+              {{#if caregiver}}
+                <li>Aidant familial</li>
+              {{/if}}
+              {{#if additionalInformation}}
+                <li><span class='bold'>Informations complémentaires :
+                  </span>{{{additionalInformation}}}</li>
+              {{/if}}
+            </ul>
+          </li>
+        </ul>
+      {{/each}}
+    {{/if}}
+
+    <hr />
+    <h2>Santé</h2>
+    <ul>
+      {{#if gir}}
+        <li><span class='bold'>GIR : </span>{{{gir}}}</li>
+      {{/if}}
+      {{#if doctor}}
+        <li><span class='bold'>Médecin traitant : </span>{{{doctor}}}</li>
+      {{/if}}
+      {{#if socialSecurityNumber}}
+        <li><span class='bold'>N° de Sécurité Sociale :
+          </span>{{{socialSecurityNumber}}}</li>
+      {{/if}}
+      {{#if insurance}}
+        <li><span class='bold'>Mutuelle : </span>{{{insurance}}}</li>
+      {{/if}}
+      {{#if healthAdditionalInformation}}
+        <li><span class='bold'>Informations complémentaires :
+          </span>{{{healthAdditionalInformation}}}</li>
+      {{/if}}
+    </ul>
+
+    <hr />
+    <h2>Activité</h2>
+    <ul>
+      {{#if socioProfessionalCategory}}
+        <li><span class='bold'>Catégorie socio-professionnelle :
+          </span>{{{socioProfessionalCategory}}}</li>
+      {{/if}}
+      {{#if occupation}}
+        <li><span class='bold'>Profession(s) : </span>{{{occupation}}}</li>
+      {{/if}}
+      {{#if studyLevel}}
+        <li><span class='bold'>Niveau d'étude : </span>{{{studyLevel}}}</li>
+      {{/if}}
+      {{#if employer}}
+        <li><span class='bold'>Employeur : </span>{{{employer}}}</li>
+      {{/if}}
+      {{#if employerSiret}}
+        <li><span class='bold'>SIRET de l'employeur :
+          </span>{{{employerSiret}}}</li>
+      {{/if}}
+      {{#if unemploymentNumber}}
+        <li><span class='bold'>N° Pôle Emploi :
+          </span>{{{unemploymentNumber}}}</li>
+      {{/if}}
+      {{#if pensionOrganisations}}
+        <li><span class='bold'>Organismes de retraite :
+          </span>{{{pensionOrganisations}}}</li>
+      {{/if}}
+      {{#if otherPensionOrganisations}}
+        <li><span class='bold'>Autre organismes de retraite :
+          </span>{{{otherPensionOrganisations}}}</li>
+      {{/if}}
+      {{#if cafNumber}}
+        <li><span class='bold'>N° CAF : </span>{{{cafNumber}}}</li>
+      {{/if}}
+    </ul>
+
+    <hr />
+    <h2>Structures extérieures</h2>
+    <ul>
+      {{#if protectionMeasure}}
+        <li><span class='bold'>Mesures de protection :
+          </span>{{{protectionMeasure}}}</li>
+      {{/if}}
+      {{#if representative}}
+        <li><span class='bold'>Nom, prénom, coordonnées du mandataire :
+          </span>{{{representative}}}</li>
+      {{/if}}
+      {{#if prescribingStructure}}
+        <li><span class='bold'>Organisme prescripteur :
+          </span>{{{prescribingStructure}}}</li>
+      {{/if}}
+      {{#if orientationType}}
+        <li><span class='bold'>Mode d'orientation :
+          </span>{{{orientationType}}}</li>
+      {{/if}}
+      {{#if orientationStructure}}
+        <li><span class='bold'>Organisme d'orientation :
+          </span>{{{orientationStructure}}}</li>
+      {{/if}}
+      {{#if serviceProviders}}
+        <li><span class='bold'>Prestataires : </span>{{{serviceProviders}}}</li>
+      {{/if}}
+      {{#if involvedPartners}}
+        <li><span class='bold'>Partenaires intervenants :
+          </span>{{{involvedPartners}}}</li>
+      {{/if}}
+    </ul>
+  </body>
+</html>

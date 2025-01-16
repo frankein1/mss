@@ -7,3 +7,7 @@ fileignoreconfig:
   - filename: pnpm-lock.yaml
     checksum: 9561b4943641bb1e7fd3241d586601eeb93efe000651c04e3dda3501224b77b3
 version: ''
+
+- filename: public/handlebars-templates/help-request-template.hbs
+  checksum: 704109120468aacbd1b28e918ed7d4f31d46891e6fabaedad33827e84b99327e
+version: ""

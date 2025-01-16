@@ -1,0 +1,296 @@
+<style type='text/css' media='all'>
+  @font-face { font-family: 'Marianne'; src:
+  url('https://github.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff2')
+  format('woff2'),
+  url('https://cdn.rawgit.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff')
+  format('woff'); font-weight: 500; font-style: normal; font-display: swap; } *
+  { font-family: 'Marianne', Arial, Helvetica, sans-serif; font-weight: 500;
+  font-style: normal; color: rgb(58 58 58); box-sizing: border-box; margin-top:
+  0; } body { margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2 {
+  font-weight: 700; } .bold { font-weight: bold; } hr { margin: 2rem 0; } ul >
+  li { margin-bottom: 0.5rem; }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Instruction de dossier {{{beneficiaryName}}}</title>
+  </head>
+  <body>
+    <h1>Instruction de dossier {{{beneficiaryName}}}</h1>
+    <ul>
+      {{#if createdBy}}
+        <li><span class='bold'>Créé par : </span>{{{createdBy}}}</li>
+      {{/if}}
+      {{#if lastUpdatedBy}}
+        <li><span class='bold'>Dernière mise à jour par :
+          </span>{{{lastUpdatedBy}}}</li>
+      {{/if}}
+      {{#if ministre}}
+        <li><span class='bold'>Ministre : </span>{{{ministre}}}</li>
+        <li><span class='bold'>Numéro pégase : </span>{{{numeroPegase}}}</li>
+      {{/if}}
+    </ul>
+    {{#if helpRequest}}
+      <hr />
+      {{#if helpRequest.type}}<h2>{{{helpRequest.type}}}</h2>{{/if}}
+      <ul>
+        {{#if date}}
+          <li><span class='bold'>Date d'ouverture du dossier :
+            </span>{{{date}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.subject}}
+          <li><span class='bold'>Objet de l'accompagnement :
+            </span>{{{helpRequest.subject}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.prescribingOrganization}}
+          <li><span class='bold'>Organisme prescripteur :
+            </span>{{{helpRequest.prescribingOrganization}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.prescribingOrganizationContact}}
+          <li><span class='bold'>Contact organisme prescripteur :
+            </span>{{{helpRequest.prescribingOrganizationContact}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.externalStructure}}
+          <li><span class='bold'>Le dossier est instruit :
+            </span>{{{helpRequest.externalStructure}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.instructorOrganization}}
+          <li><span class='bold'>Organisme instructeur :
+            </span>{{{helpRequest.instructorOrganization}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.instructorOrganizationContact}}
+          <li><span class='bold'>Contact organisme instructeur :
+            </span>{{{helpRequest.instructorOrganizationContact}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.dispatchDate}}
+          <li><span class='bold'>Date d'envoi du dossier :
+            </span>{{{helpRequest.dispatchDate}}}</li>
+        {{/if}}
+      </ul>
+      {{#if helpRequest.isOther}}
+        <h2>Informations sur le dossier d'instruction</h2>
+      {{/if}}
+      {{#if helpRequest.isFinancial}}
+        <h2>Informations sur l'aide financière</h2>
+      {{/if}}
+      <ul>
+        {{#if helpRequest.status}}
+          <li><span class='bold'>Status :
+            </span>{{{helpRequest.status}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.isRefundable}}
+          <li><span class='bold'>Cette aide est-elle remboursable ? :
+            </span>{{{helpRequest.isRefundable}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.askedAmount}}
+          <li><span class='bold'>Montant demandé :
+            </span>{{{helpRequest.askedAmount}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.decisionDate}}
+          <li><span class='bold'>Date de la décision :
+            </span>{{{helpRequest.decisionDate}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.refusalReason}}
+          <li><span class='bold'>Motif du refus :
+            </span>{{{helpRequest.refusalReason}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.handlingDate}}
+          <li><span class='bold'>Date de la fin de prise en charge :
+            </span>{{{helpRequest.handlingDate}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.dueDate}}
+          <li><span class='bold'>Date d'échéance :
+            </span>{{{helpRequest.dueDate}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.fullFile}}
+          <li><span class='bold'>Ce dossier est complet :
+            </span>{{{helpRequest.fullFile}}}</li>
+        {{/if}}
+      </ul>
+    {{/if}}
+
+    {{#if housingHelpRequest}}
+      <hr />
+      <h2>Demande de logement</h2>
+      <ul>
+        {{#if date}}
+          <li><span class='bold'>Date d'ouverture du dossier :
+            </span>{{{date}}}</li>
+        {{/if}}
+
+        <li><span class='bold'>Première demande :</span>
+          {{{housingHelpRequest.isFirst}}}
+        </li>
+
+        {{#if housingHelpRequest.firstOpeningDate}}
+          <li><span class='bold'>Date de la première demande :
+            </span>{{{housingHelpRequest.firstOpeningDate}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.askedHousing}}
+          <li><span class='bold'>Logement demandé :
+            </span>
+            <ul>
+              {{#each housingHelpRequest.askedHousing}}<li
+                >{{{this}}}</li>{{/each}}
+            </ul></li>
+        {{/if}}
+
+        {{#if housingHelpRequest.prescribingOrganization}}
+          <li><span class='bold'>Organisme prescripteur :
+            </span>{{{housingHelpRequest.prescribingOrganization}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.prescribingOrganizationContact}}
+          <li><span class='bold'>Contact organisme prescripteur :
+            </span>{{{housingHelpRequest.prescribingOrganizationContact}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.externalStructure}}
+          <li><span class='bold'>Le dossier est instruit :
+            </span>{{{housingHelpRequest.externalStructure}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.instructorOrganization}}
+          <li><span class='bold'>Organisme instructeur :
+            </span>{{{housingHelpRequest.instructorOrganization}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.instructorOrganizationContact}}
+          <li><span class='bold'>Contact organisme instructeur :
+            </span>{{{housingHelpRequest.instructorOrganizationContact}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.dispatchDate}}
+          <li><span class='bold'>Date d'envoi du dossier :
+            </span>{{{housingHelpRequest.dispatchDate}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.status}}
+          <li><span class='bold'>Status :
+            </span>{{{housingHelpRequest.status}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.reason}}
+          <li><span class='bold'>Motif de la demande de logement :
+            </span>{{{housingHelpRequest.reason}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.uniqueId}}
+          <li><span class='bold'>Numéro unique de suivi :
+            </span>{{{housingHelpRequest.uniqueId}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.decisionDate}}
+          <li><span class='bold'>Date de la décision :
+            </span>{{{housingHelpRequest.decisionDate}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.handlingDate}}
+          <li><span class='bold'>Date de la fin de prise en charge :
+            </span>{{{housingHelpRequest.handlingDate}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.dueDate}}
+          <li><span class='bold'>Date d'échéance :
+            </span>{{{housingHelpRequest.dueDate}}}</li>
+        {{/if}}
+      </ul>
+      <h2>Caractéristiques du logement demandé</h2>
+      <ul>
+        {{#if housingHelpRequest.taxHouseholdAdditionalInformation}}
+          <li><span class='bold'>Précision sur la composition du foyer :
+            </span>{{{housingHelpRequest.taxHouseholdAdditionalInformation}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.maxRent}}
+          <li><span class='bold'>Montant maximum du loyer :
+            </span>{{{housingHelpRequest.maxRent}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.maxRent}}
+          <li><span class='bold'>Montant maximum du loyer :
+            </span>{{{housingHelpRequest.maxRent}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.maxCharges}}
+          <li><span class='bold'>Montant maximum des charges :
+            </span>{{{housingHelpRequest.maxCharges}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.housingType}}
+          <li><span class='bold'>Typologie du logement :
+            </span>{{{housingHelpRequest.housingType}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.roomCount}}
+          <li><span class='bold'>Nombre de pièces :
+            </span>{{{housingHelpRequest.roomCount}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.lowIncomeHousingType}}
+          <li><span class='bold'>Logement à loyer modéré :
+            </span>{{{housingHelpRequest.lowIncomeHousingType}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.isPmr}}
+          <li><span class='bold'>Besoin d'un logement PMR :
+            </span>{{{housingHelpRequest.isPmr}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.fullFile}}
+          <li><span class='bold'>Ce dossier est complet :
+            </span>{{{housingHelpRequest.fullFile}}}</li>
+        {{/if}}
+      </ul>
+    {{/if}}
+
+    {{#if synthesis}}
+      <hr />
+      <h2>Compte rendu</h2>
+      <p>{{{synthesis}}}</p>
+    {{/if}}
+
+    {{#if actions}}
+      <hr />
+      <h2>Actions entreprises</h2>
+      <ul>
+        {{#if redirected}}
+          <li>Réorienté après l'entretien.
+            {{#if structureName}}
+              ({{{structureName}}})
+            {{/if}}
+          </li>
+        {{/if}}
+        {{#if forwardedToJustice}}
+          <li>Instruction de dossier</li>
+        {{/if}}
+      </ul>
+    {{/if}}
+
+    {{#if documents}}
+      <hr />
+      <h2>Liste des documents</h2>
+      <ul>
+        {{#each documents}}
+          <li>{{{type}}} : <em>{{{name}}}</em></li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </body>
+</html>

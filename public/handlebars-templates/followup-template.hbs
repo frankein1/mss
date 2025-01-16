@@ -1,0 +1,107 @@
+<style type='text/css' media='all'>
+  @font-face { font-family: 'Marianne'; src:
+  url('https://github.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff2')
+  format('woff2'),
+  url('https://cdn.rawgit.com/betagouv/recommandations-collaboratives/raw/8452c472413ab27f2dc5d6c5b80a087084a0a570/recoco/apps/home/static/home/fonts/Marianne-Medium.woff')
+  format('woff'); font-weight: 500; font-style: normal; font-display: swap; } *
+  { font-family: 'Marianne', Arial, Helvetica, sans-serif; font-weight: 500;
+  font-style: normal; color: rgb(58 58 58); box-sizing: border-box; margin-top:
+  0; } body { margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2 {
+  font-weight: 700; } .bold { font-weight: bold; } hr { margin: 2rem 0; } ul >
+  li { margin-bottom: 0.5rem; }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Entretien avec {{{beneficiaryName}}}</title>
+  </head>
+  <body>
+    <h1>Entretien avec {{{beneficiaryName}}}</h1>
+    <ul>
+      {{#if createdByEmail}}
+        <li><span class='bold'>Créé par : </span>{{{createdByEmail}}}</li>
+      {{/if}}
+      {{#if lastUpdatedByEmail}}
+        <li><span class='bold'>Dernière mise à jour par :
+          </span>{{{lastUpdatedByEmail}}}</li>
+      {{/if}}
+      <li><span class='bold'>1er entretien : </span>{{#if
+          firstFollowup
+        }}Oui{{else}}Non{{/if}}</li>
+      {{#if date}}<li><span class='bold'>Date de saisie
+          </span>{{{date}}}</li>{{/if}}
+      {{#if ministre}}
+        <li><span class='bold'>Ministre : </span>{{{ministre}}}</li>
+        <li><span class='bold'>Numéro pégase : </span>{{{numeroPegase}}}</li>
+      {{/if}}
+      {{#if duration}}
+        <li><span class='bold'>Durée de l'entretien :
+          </span>{{{duration}}}</li>
+      {{/if}}
+      {{#if medium}}
+        <li><span class='bold'>Type d'entretien :
+          </span>{{{medium}}}</li>
+      {{/if}}
+      {{#if thirdPersonName}}
+        <li><span class='bold'>Tierce personne :
+          </span>{{{thirdPersonName}}}</li>
+      {{/if}}
+      {{#if place}}
+        <li><span class='bold'>Lieu de rendez-vous :
+          </span>{{{place}}}</li>
+      {{/if}}
+      {{#if subjectsNames}}<li><span class='bold'>Objet(s) de l'accompagnement :
+          </span>{{{subjectsNames}}}</li>
+      {{/if}}
+      {{#if status}}<li><span class='bold'>Status :
+          </span>{{{status}}}</li>
+      {{/if}}
+      {{#if dueDate}}<li><span class='bold'>Date d'échéance :
+          </span>{{{dueDate}}}</li>
+      {{/if}}
+      {{#if prescribingOrganizationName}}<li><span class='bold'>Organisme
+            prescripteur&nbsp;:
+          </span>{{{prescribingOrganizationName}}}</li>
+      {{/if}}
+      {{#if prescribingOrganizationContact}}<li>
+          <span class='bold'>Contact de l'organisme prescripteur&nbsp;:
+          </span>{{{prescribingOrganizationContact}}}
+        </li>
+      {{/if}}
+    </ul>
+
+    {{#if synthesis}}
+      <hr />
+      <h2>Compte rendu</h2>
+      <p>{{{synthesis}}}</p>
+    {{/if}}
+
+    {{#if actions}}
+      <hr />
+      <h2>Actions entreprises</h2>
+      <ul>
+        {{#if redirected}}
+          <li>Réorienté après l'entretien.
+            {{#if structureName}}
+              ({{{structureName}}})
+            {{/if}}
+          </li>
+        {{/if}}
+        {{#if forwardedToJustice}}
+          <li>Instruction de dossier</li>
+        {{/if}}
+      </ul>
+    {{/if}}
+
+    {{#if documents}}
+      <hr />
+      <h2>Liste des documents</h2>
+      <ul>
+        {{#each documents}}
+          <li>{{{type}}} : <em>{{{name}}}</em></li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </body>
+</html>

@@ -387,7 +387,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2022-10-27'),
     fileInstruction: {

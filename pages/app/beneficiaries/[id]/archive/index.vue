@@ -23,27 +23,37 @@
       "
     />
     <template v-if="beneficiary?.id && beneficiaryIdentification">
-      <PageTitle title="Gérer le dossier" />
+      <PageTitle
+        :title="pageTitle"
+        icon="fr-icon-folder-2-line"
+      />
+      <RequiredFields />
       <ArchiveChoiceForm
-        :beneficiary-identification="beneficiaryIdentification"
         :permissions="permissions"
+        :pending="downloadPending"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
-      <ArchiveDelete
-        v-if="archiveFormStatus == 'delete' && deletpermission"
-        class="fr-mt-4w"
-        @delete-file="deleteFile"
-      />
-      <ArchiveForm
-        v-if="archiveFormStatus == 'archive'"
-        class="fr-mt-4w"
-        :download-received="downloadReceived"
-        @download-archive="onDownloadArchive"
-        @delete-file="openDeleteModal"
-      />
-      <OpenModalHack />
+      <section ref="deleteSection">
+        <ArchiveDelete
+          v-if="archiveFormStatus == 'delete' && deletpermission"
+          class="fr-mt-4w"
+          @delete-file="deleteFile"
+        />
+      </section>
+      <section ref="archiveSection">
+        <ArchiveForm
+          v-if="archiveFormStatus == 'archive'"
+          class="fr-mt-4w"
+          :download-received="downloadReceived"
+          :beneficiary-id="beneficiaryId"
+          :pending="downloadPending"
+          @download-archive="onDownloadArchive"
+          @delete-file="openDeleteModal"
+        />
+      </section>
     </template>
+    <OpenModalHack />
   </PageContainer>
 </template>
 
@@ -54,6 +64,7 @@
   import ArchiveDelayModal from '~/components/Archive/ArchiveDelayModal.vue'
   import ArchiveDeleteModal from '~/components/Archive/ArchiveDeleteModal.vue'
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
+  import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
 
   const title = routes.beneficiary.AppBeneficiaryArchive.title
   useHead({ title })
@@ -65,9 +76,13 @@
   const snackbar = useSnackbar()
   const modal = useModal()
   const beneficiaryId = route.params.id as string
-  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
   const archiveFormStatus = ref<ArchiveFormStatus>(null)
   const downloadReceived = ref<boolean>(false)
+  const downloadPending = ref<boolean>(false)
+  const trpcClient = useTrpcClient()
+  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
+  const deleteSection = ref<HTMLElement | null>(null)
+  const archiveSection = ref<HTMLElement | null>(null)
 
   const {
     beneficiary,
@@ -84,9 +99,41 @@
   const deletpermission: ComputedRef<boolean> = computed(
     () => permissions.value?.delete || false
   )
+  const beneficiaryName = computed(() => {
+    if (!beneficiary.value) {
+      return '[inconnu]'
+    }
+    return formatBeneficiaryName({
+      firstName: beneficiary.value.general.firstName,
+      usualName: beneficiary.value.general.usualName,
+      title: null
+    })
+  })
+
+  const pageTitle = computed(() => {
+    if (beneficiary.value) {
+      return 'Gérer le dossier de ' + beneficiaryName.value
+    }
+    return 'Gérer le dossier'
+  })
 
   const changeStatus = (value: string) => {
     archiveFormStatus.value = value as ArchiveFormStatus
+    if (archiveFormStatus.value === 'delete') {
+      setTimeout(() => {
+        deleteSection?.value?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end'
+        })
+      }, 100)
+    } else if (archiveFormStatus.value === 'archive') {
+      setTimeout(() => {
+        archiveSection?.value?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end'
+        })
+      }, 100)
+    }
   }
 
   const deleteFile = () => {
@@ -100,10 +147,28 @@
     }
   }
 
-  const onDownloadArchive = (values: any) => {
-    console.log('ARCHIVE!')
-    console.log(values)
-    downloadReceived.value = true
+  const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
+    downloadPending.value = true
+    try {
+      const response =
+        await trpcClient.beneficiary.exportBeneficiary.query(values)
+      if (!response?.archiveFile) {
+        throw new Error('no data')
+      }
+      const archiveFile = response.archiveFile
+      const downloadLink = document.createElement('a')
+      downloadLink.href = archiveFile
+      const date = new Date()
+      downloadLink.download = `Archive_dossier_${beneficiaryName.value}_${date.toISOString()}.zip`
+      downloadLink.click()
+      downloadLink.remove()
+      downloadReceived.value = true
+    } catch (error) {
+      snackbar.error("L'export de l'archive à échoué.")
+      throw error
+    } finally {
+      downloadPending.value = false
+    }
   }
 
   const onDelayArchive = () => {
