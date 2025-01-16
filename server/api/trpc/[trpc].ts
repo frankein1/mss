@@ -15,9 +15,11 @@ export default createNuxtApiHandler({
     req: _req
   }) {
     if (error.code === 'INTERNAL_SERVER_ERROR') {
+      console.error(error.message)
       throw createError({
         statusCode: 500,
-        message: "Si l'erreur persiste, merci de prevenir l'équipe support"
+        message: "Si l'erreur persiste, merci de prevenir l'équipe support",
+        statusMessage: error.message
       })
     }
   }
