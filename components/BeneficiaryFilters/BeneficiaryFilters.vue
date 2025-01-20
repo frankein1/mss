@@ -101,6 +101,15 @@
         alwaysExpanded: true,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
+      },
+      {
+        name: 'qpv',
+        label: 'Quartier prioritaire',
+        options: withEmptyValue(yesNoOptions, 'Tous'),
+        type: FilterType.SelectOne,
+        alwaysExpanded: true,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.QPV
       }
     ]
 
@@ -154,16 +163,6 @@
         matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
       })
     }
-
-    filters.push({
-      name: 'qpv',
-      label: 'Quartier prioritaire',
-      options: withEmptyValue(yesNoOptions, 'Tous'),
-      type: FilterType.SelectOne,
-      alwaysExpanded: false,
-      matomoEventCategory: EventCategory.BeneficiaryFilter,
-      matomoEventAction: BeneficiaryFilterEventAction.QPV
-    })
 
     filters.push({
       name: 'notFilled',
