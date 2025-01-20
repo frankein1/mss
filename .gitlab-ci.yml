@@ -33,7 +33,7 @@ variables:
 .scalingo:
   image: ubuntu:latest
   before_script:
-    - apt-get update
+    - apt-get update && apt-get install -y chromium
     - apt-get -y install bash curl git openssh-client
     - curl -O https://cli-dl.scalingo.com/install && bash install
     - scalingo login --api-token $SCALINGO_API_TOKEN
