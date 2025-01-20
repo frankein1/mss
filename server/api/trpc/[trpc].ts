@@ -18,8 +18,7 @@ export default createNuxtApiHandler({
       console.error(error.message)
       throw createError({
         statusCode: 500,
-        message: "Si l'erreur persiste, merci de prevenir l'équipe support",
-        data: error
+        message: "Si l'erreur persiste, merci de prevenir l'équipe support"
       })
     }
   }
