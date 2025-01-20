@@ -1,4 +1,4 @@
-import { Document, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
 import { ExportBeneficiariesInput } from '~/server/schema'
@@ -106,20 +106,32 @@ export async function exportBeneficiaries({
 
   const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
 
+  // Parallelize prisma request to speed up process
+  // The size of the connection pool being limited, set a chunk size of 5
+  const chunkSize = 5
   const rows: RowType[] = []
+  for (let i = 0; i < dataRequest.length; i += chunkSize) {
+    const chunk = dataRequest.slice(i, i + chunkSize)
+    const promises = chunk.map(async req => {
+      const documents = await DocumentRepo.findMany(ctx.user, {
+        where: { familyFileId: req.beneficiary.familyFileId },
+        select: { name: true }
+      })
 
-  for (const { beneficiary } of dataRequest) {
-    const documents = await DocumentRepo.findMany(ctx.user, {
-      where: { familyFileId: beneficiary.familyFileId }
+      const data = formatData(req.beneficiary, documents)
+      return data
     })
-
-    rows.push(formatData(beneficiary, documents))
+    const res = await Promise.all(promises)
+    rows.push(...res)
   }
 
   return { columns, rows }
 }
 
-function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
+function formatData(
+  beneficiary: GetBeneficiaryOutput,
+  documents: { name: string }[]
+) {
   const { general, occupationIncome, taxHouseholds } = beneficiary
   return {
     referents: beneficiary.referents
