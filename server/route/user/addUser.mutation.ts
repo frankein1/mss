@@ -47,7 +47,7 @@ const handler = async ({
     }
   })
 
-  createEmail({
+  await createEmail({
     to: createdUser.email,
     subject: 'Mon Suivi Social - Ouverture de votre compte',
     ...getUserCreationEmailContent(createdUser)

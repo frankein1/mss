@@ -34,7 +34,7 @@ const adminHandler = async ({
     }
   })
 
-  createEmail({
+  await createEmail({
     to: input.email,
     subject: 'Mon Suivi Social - Votre espace a été créé',
     ...getStructureCreationEmailContent()
