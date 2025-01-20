@@ -26,9 +26,13 @@ const handler = async ({
     input
   })
 
-  return await createExport(ctx.user.id, [
-    { name: 'Entretiens', columns, rows }
+  // Forced to return base64 encoded version of the file in tRPC
+  // Cf. https://github.com/trpc/trpc/discussions/658
+  // & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
+  const stream = await createExport(ctx.user.id, [
+    { name: 'Bénéficiaires', columns, rows }
   ])
+  return { data: stream.toString('base64') }
 }
 
 export const exportBeneficiariesQuery = createQuery({

@@ -5,7 +5,12 @@ import hbs from 'handlebars'
 import JSZip from 'jszip'
 import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import { BeneficiaryRepo, UserRepo, SocialSupportRepo } from '~/server/database'
+import {
+  BeneficiaryRepo,
+  UserRepo,
+  SocialSupportRepo,
+  DocumentRepo
+} from '~/server/database'
 import { Beneficiary, User } from '@prisma/client'
 import {
   documentTypeKeys,
@@ -36,6 +41,9 @@ import {
   helpRequestRefusalReasonKeys,
   fileInstructionTypeFilterKeys
 } from '~/client/options'
+import { getBudget } from '../budget/getBudget.service'
+import { exportBudgetSpreadsheet } from '../budget/exportBudgetSpreadsheet'
+import { createExport } from '~/utils/export/createExport'
 
 export const exportBeneficiary = async ({
   ctx,
@@ -59,6 +67,25 @@ export const exportBeneficiary = async ({
 
   const [housingCount, financialCount, otherCount, followupCount] =
     await getCounts(beneficiaryDetails.familyFileId, user)
+
+  // budget
+  const budget = await getBudget({
+    ctx,
+    familyFileId: beneficiaryDetails.familyFileId
+  })
+  const budgetSpredsheet = exportBudgetSpreadsheet(budget)
+  const budgetBuffer = await createExport(ctx.user.id, budgetSpredsheet)
+
+  // documents
+  const documents = await DocumentRepo.findMany(user, {
+    where: {
+      familyFileId: beneficiaryDetails.familyFileId
+    },
+    select: {
+      documentContent: true,
+      name: true
+    }
+  })
 
   // handlebars -> https://github.com/ankur20us/demo-puppeteer/blob/master/index.js
   // API puppeteer https://pptr.dev/api/puppeteer.puppeteernode
@@ -174,7 +201,6 @@ export const exportBeneficiary = async ({
         }
       })
   )
-
   browser.close()
 
   // create zip file
@@ -194,6 +220,15 @@ export const exportBeneficiary = async ({
     zip.file(helpRequest.filename, helpRequest.buffer, {
       binary: true
     })
+  })
+  zip.file('Budget/budget_mensuel.xlsx', budgetBuffer, { binary: true })
+
+  documents.forEach(document => {
+    if (document.documentContent?.content) {
+      zip.file('Documents/' + document.name, document.documentContent.content, {
+        binary: true
+      })
+    }
   })
   const generatedArchiveFile = await zip.generateAsync({
     type: 'nodebuffer',
