@@ -37,17 +37,7 @@ variables:
     - apt-get -y install bash curl git openssh-client
     - curl -O https://cli-dl.scalingo.com/install && bash install
     - scalingo login --api-token $SCALINGO_API_TOKEN
-    - pwd
-    - ls .
-    - echo $HOME
-    - ls /apt/.cache || true
-    - ls /apt/.cache/puppeteer || true
-    - echo $PUPPETEER_CACHE_DIR
-    - echo $PUPPETEER_SKIP_DOWNLOAD
-    - which npm || true
-    - which npx || true
-    - npx puppeteer browsers install chrome
-    - mkdir ~/.ssh
+    - mkdir -p ~/.ssh
     - eval $(ssh-agent -s)
     - echo "$SCALINGO_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo $SCALINGO_SSH_HOST && ssh-keyscan $SCALINGO_SSH_HOST >> ~/.ssh/known_hosts
