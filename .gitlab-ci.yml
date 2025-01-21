@@ -39,12 +39,13 @@ variables:
     - scalingo login --api-token $SCALINGO_API_TOKEN
     - pwd
     - ls .
-    - ls /apt/.cache
-    - ls /apt/.cache/puppeteer
+    - echo $HOME
+    - ls /apt/.cache || true
+    - ls /apt/.cache/puppeteer || true
     - echo $PUPPETEER_CACHE_DIR
     - echo $PUPPETEER_SKIP_DOWNLOAD
-    - which npm
-    - which npx
+    - which npm || true
+    - which npx || true
     - npx puppeteer browsers install chrome
     - mkdir ~/.ssh
     - eval $(ssh-agent -s)
