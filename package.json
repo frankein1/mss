@@ -3,9 +3,7 @@
   "version": "1.37.0",
   "scripts": {
     "dev": "nuxt dev",
-    "scalingo-prebuild": "echo 'scalingo pre build step'",
     "build": "nuxt build",
-    "scalingo-postbuild": "nuxt build && ls /app/.cache",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
