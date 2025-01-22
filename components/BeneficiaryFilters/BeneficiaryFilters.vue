@@ -12,6 +12,7 @@
   <AtomFilters
     v-else-if="beneficiaryFilters"
     :filters="beneficiaryFilters"
+    :expanded-by-default="true"
     :initial-selected-values="filtersState.beneficiary.value || {}"
     @filter="onFilter"
   />
@@ -101,15 +102,6 @@
         alwaysExpanded: true,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
-      },
-      {
-        name: 'qpv',
-        label: 'Quartier prioritaire',
-        options: withEmptyValue(yesNoOptions, 'Tous'),
-        type: FilterType.SelectOne,
-        alwaysExpanded: true,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.QPV
       }
     ]
 
@@ -149,6 +141,15 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
+      },
+      {
+        name: 'qpv',
+        label: 'Quartier prioritaire',
+        options: withEmptyValue(yesNoOptions, 'Tous'),
+        type: FilterType.SelectOne,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.QPV
       }
     )
 
