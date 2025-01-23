@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
+    "scalingo-postbuild": "nuxt build && pnpm dlx puppeteer browsers install chrome",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
