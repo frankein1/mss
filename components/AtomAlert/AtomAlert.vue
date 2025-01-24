@@ -9,8 +9,8 @@
     <component
       :is="titleTag"
       class="fr-alert__title"
-      v-html="text"
-    ></component>
+      >{{ text }}</component
+    >
     <slot name="detailedMessage"></slot>
     <button
       v-if="closeable"

@@ -1,24 +1,14 @@
 import { buildKeys } from '~/utils/keys/keyBuilder'
+import { ArchiveReason } from '@prisma/client'
 
-// ArchiveReasons must come from Prisma from '@prisma/client'
-export const enum ArchiveReasons {
-  NoActivity = 'NoActivity',
-  EndOfFollowup = 'EndOfFollowup',
-  Reorientation = 'Reorientation',
-  Death = 'Death',
-  Displacement = 'Displacement',
-  Transfer = 'Transfer',
-  NotPresent = 'NotPresent',
-  Other = 'Other'
-}
 export const archiveReasonKeys = buildKeys({
-  [ArchiveReasons.NoActivity]:
+  [ArchiveReason.NoActivity]:
     'Sans activité sur le dossier depuis plus de 2 ans',
-  [ArchiveReasons.EndOfFollowup]: 'Fin de l’accompagnement',
-  [ArchiveReasons.Reorientation]: 'Réorientation',
-  [ArchiveReasons.Death]: 'Décès',
-  [ArchiveReasons.Displacement]: 'Déménagement',
-  [ArchiveReasons.Transfer]: 'Entrée en établissement',
-  [ArchiveReasons.NotPresent]: 'La personne ne s’est pas présentée',
-  [ArchiveReasons.Other]: 'Autre'
+  [ArchiveReason.EndOfFollowup]: 'Fin de l’accompagnement',
+  [ArchiveReason.Reorientation]: 'Réorientation',
+  [ArchiveReason.Death]: 'Décès',
+  [ArchiveReason.Displacement]: 'Déménagement',
+  [ArchiveReason.Transfer]: 'Entrée en établissement',
+  [ArchiveReason.NotPresent]: 'La personne ne s’est pas présentée',
+  [ArchiveReason.Other]: 'Autre'
 })

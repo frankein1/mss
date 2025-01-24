@@ -30,6 +30,9 @@ export const beneficiaryRouter = router({
   deleteDraft: protectedProcedure
     .input(routes.deleteBeneficiaryDraftMutation.inputValidation)
     .mutation(routes.deleteBeneficiaryDraftMutation.execute),
+  archiveBeneficiary: protectedProcedure
+    .input(routes.archiveBeneficiaryMutation.inputValidation)
+    .query(routes.archiveBeneficiaryMutation.execute),
   updateGeneralInformation: protectedProcedure
     .input(routes.updateGeneralInformationMutation.inputValidation)
     .mutation(routes.updateGeneralInformationMutation.execute),

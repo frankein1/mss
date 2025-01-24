@@ -11,7 +11,7 @@ import {
   SocialSupportRepo,
   DocumentRepo
 } from '~/server/database'
-import { Beneficiary, User } from '@prisma/client'
+import { ArchiveReason, Beneficiary, User } from '@prisma/client'
 import {
   documentTypeKeys,
   ministerKeys,
@@ -19,7 +19,6 @@ import {
   followupMediumKeys,
   followupStatusKeys,
   archiveReasonKeys,
-  ArchiveReasons,
   beneficiaryAccommodationModeKeys,
   beneficiaryMobilityKeys,
   familySituationKeys,
@@ -100,9 +99,7 @@ export const exportBeneficiary = async ({
     userName: user.firstName + ' ' + user.lastName,
     reason: {
       completed: input.reason != null || input.clarification != null,
-      reason: input.reason
-        ? archiveReasonKeys.byKey[input.reason as ArchiveReasons]
-        : null,
+      reason: input.reason ? archiveReasonKeys.byKey[input.reason] : null,
       date: input.date,
       clarification: input.clarification
     },
@@ -677,7 +674,6 @@ type BeneficiaryWithEntourageAndRelative = Awaited<
 const launchBrowser = (): Promise<Browser> =>
   puppeteer.launch({
     headless: true,
-    executablePath: `/usr/bin/google-chrome`,
     // Documentation des arguments : https://peter.sh/experiments/chromium-command-line-switches/
     // Inspiration pour la liste utilisée ici : https://www.bannerbear.com/blog/ways-to-speed-up-puppeteer-screenshots/
     // Le but est d'avoir un Puppeteer le plus léger et rapide à lancer possible.

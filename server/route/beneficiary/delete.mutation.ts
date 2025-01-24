@@ -3,8 +3,9 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
-import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
+import { BeneficiaryService, FamilyFileService } from '~/server/services'
+import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
@@ -16,12 +17,31 @@ const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
 
 const handler = async ({
   input: { id },
-  ctx: _ctx
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await BeneficiaryRepo.prisma.delete({ where: { id } })
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
+    where: { id },
+    select: {
+      familyFileId: true,
+      familyFile: {
+        select: { beneficiaries: true }
+      }
+    }
+  })
+  const deleteBeneficiary = BeneficiaryRepo.prisma.delete({
+    where: { id }
+  })
+  const deleteFamilyFile = FamilyFileRepo.prisma.delete({
+    where: { id: beneficiary.familyFileId }
+  })
+  const transactions: any[] = [deleteBeneficiary]
+  if (beneficiary.familyFile.beneficiaries.length === 1) {
+    transactions.push(deleteFamilyFile)
+  }
+  await prismaClient.$transaction(transactions)
 }
 
 export const deleteBeneficiaryMutation = createMutation({

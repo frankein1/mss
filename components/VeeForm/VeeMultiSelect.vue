@@ -78,7 +78,7 @@
         :aria-selected="selectedValues.includes(optionValue)"
         @click="
           !disabledOptions.includes(optionValue) &&
-            onToggleOption(optionValue, index)
+          onToggleOption(optionValue, index)
         "
         @mousedown="onOptionMouseDown"
       >

@@ -1,6 +1,7 @@
 import { createFamilyFileMemberMutation } from './create-family-file-member.mutation'
 import { exportBeneficiariesQuery } from './export.query'
 import { exportBeneficiaryQuery } from './exportBeneficiary.query'
+import { archiveBeneficiaryMutation } from './archive.mutation'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
 import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
@@ -20,6 +21,7 @@ import { validateBeneficiaryMutation } from './validate.mutation'
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
   exportBeneficiaryQuery,
+  archiveBeneficiaryMutation,
   getBeneficiaryDetailsQuery,
   getPage,
   searchBeneficiaryQuery,

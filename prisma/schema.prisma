@@ -81,10 +81,11 @@ model User {
   receivedNotifications        Notification[]         @relation(name: "received_notifications")
   itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
 
-  createdBeneficiaries       Beneficiary[] @relation(name: "created_beneficiaries")
-  archivedBeneficiaries      Beneficiary[] @relation(name: "archived_beneficiaries")
-  referentFor                FamilyFile[]  @relation(name: "family_file_referents")
-  splitFromFileBeneficiaries Beneficiary[] @relation(name: "split_from_file_beneficiaries")
+  createdBeneficiaries       Beneficiary[]         @relation(name: "created_beneficiaries")
+  archivedBeneficiaries      Beneficiary[]         @relation(name: "archived_beneficiaries")
+  referentFor                FamilyFile[]          @relation(name: "family_file_referents")
+  splitFromFileBeneficiaries Beneficiary[]         @relation(name: "split_from_file_beneficiaries")
+  archivedBeneficiaries2     ArchivedBeneficiary[] @relation(name: "archived_beneficiaries_2")
 
   createdPartnerOrganizations PartnerOrganization[]
 
@@ -1703,6 +1704,38 @@ model BeneficiaryRelative {
   @@map("beneficiary_relative")
 }
 
+model ArchivedBeneficiary {
+  id           String    @id @default(uuid()) @db.Uuid
+  created      DateTime? @default(now())
+  archivedBy   User      @relation(name: "archived_beneficiaries_2", fields: [archivedById], references: [id])
+  archivedById String    @map("archived_by_id") @db.Uuid
+  updated      DateTime? @updatedAt
+
+  title     BeneficiaryTitle?
+  usualName String?           @map("usual_name")
+  birthName String?           @map("birth_name")
+  firstName String?           @map("first_name")
+
+  reason          ArchiveReason?
+  eventDateReason DateTime?      @map("event_date_reason")
+  clarification   String?
+
+  oldBeneficiaryId String @map("old_beneficiary_id") @db.Uuid
+
+  @@map("archived_beneficiary")
+}
+
+enum ArchiveReason {
+  NoActivity
+  EndOfFollowup
+  Reorientation
+  Death
+  Displacement
+  Transfer
+  NotPresent
+  Other
+}
+
 model Comment {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1850,6 +1883,7 @@ enum UserActivityType {
 enum UserActivityObject {
   Comment
   Beneficiary
+  ArchivedBeneficiary
   FamilyFile
   Budget
   BudgetExpenses

@@ -85,7 +85,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { archiveReasonKeys, ArchiveReasons } from '~/client/options/archive'
+  import { ArchiveReason } from '@prisma/client'
+  import { archiveReasonKeys } from '~/client/options/archive'
   import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -97,7 +98,7 @@
 
   const emit = defineEmits<{
     downloadArchive: [value: ExportBeneficiaryInput]
-    deleteFile: []
+    deleteFile: [value: ExportBeneficiaryInput]
   }>()
 
   const keepName = ref<boolean | null>(null)
@@ -125,13 +126,13 @@
     }
   })
   const reasons = archiveReasonKeys.options
-  const { value: reasonValue } = useField<ArchiveReasons>('reason')
+  const { value: reasonValue } = useField<ArchiveReason>('reason')
   const displayDatePicker: ComputedRef<boolean> = computed(() => {
-    const withDate = [
-      ArchiveReasons.Death,
-      ArchiveReasons.Displacement,
-      ArchiveReasons.Transfer,
-      ArchiveReasons.EndOfFollowup
+    const withDate: ArchiveReason[] = [
+      ArchiveReason.Death,
+      ArchiveReason.Displacement,
+      ArchiveReason.Transfer,
+      ArchiveReason.EndOfFollowup
     ]
     return withDate.includes(reasonValue.value)
   })
@@ -143,7 +144,10 @@
     })
   }
   const onDelete = () => {
-    emit('deleteFile')
+    emit('deleteFile', {
+      ...formValues,
+      keepName: keepName.value as boolean
+    })
   }
 </script>
 

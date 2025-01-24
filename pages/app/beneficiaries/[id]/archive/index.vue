@@ -36,9 +36,14 @@
       />
       <section ref="deleteSection">
         <ArchiveDelete
-          v-if="archiveFormStatus == 'delete' && deletpermission"
+          v-if="archiveFormStatus == 'delete' && deletepermission"
           class="fr-mt-4w"
-          @delete-file="deleteFile"
+          @delete-file="
+            openDeleteModal({
+              keepName: false,
+              beneficiaryId: beneficiary.id
+            })
+          "
         />
       </section>
       <section ref="archiveSection">
@@ -83,6 +88,7 @@
   type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
   const deleteSection = ref<HTMLElement | null>(null)
   const archiveSection = ref<HTMLElement | null>(null)
+  const exportBeneficiaryInput = ref<ExportBeneficiaryInput | null>(null)
 
   const {
     beneficiary,
@@ -96,7 +102,7 @@
   const familyFileId: ComputedRef<string | null> = computed(
     () => beneficiary?.value?.familyFileId || null
   )
-  const deletpermission: ComputedRef<boolean> = computed(
+  const deletepermission: ComputedRef<boolean> = computed(
     () => permissions.value?.delete || false
   )
   const beneficiaryName = computed(() => {
@@ -136,12 +142,20 @@
     }
   }
 
-  const deleteFile = () => {
+  const deleteFile = async (values: ExportBeneficiaryInput) => {
     if (permissions.value?.delete) {
-      // TODO api request
-      console.log('DELETE!')
-      snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
-      navigateTo(routes.user.AppOverview.path())
+      try {
+        await trpcClient.beneficiary.archiveBeneficiary.query(values)
+        snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
+        downloadReceived.value = false // Reset variable
+        exportBeneficiaryInput.value = null // Reset variable
+        modal.close() // ferme toute les modales
+        navigateTo(routes.user.AppOverview.path())
+      } catch (error) {
+        snackbar.error(
+          'Une erreur est apparu lors de la suppression de ce bénéficiaire.'
+        )
+      }
     } else {
       snackbar.error("Vous n'avez pas le droit de supprimer ce dossier.")
     }
@@ -150,19 +164,9 @@
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
     downloadPending.value = true
     try {
-      const response =
-        await trpcClient.beneficiary.exportBeneficiary.query(values)
-      if (!response?.archiveFile) {
-        throw new Error('no data')
-      }
-      const archiveFile = response.archiveFile
-      const downloadLink = document.createElement('a')
-      downloadLink.href = archiveFile
-      const date = new Date()
-      downloadLink.download = `Archive_dossier_${beneficiaryName.value}_${date.toISOString()}.zip`
-      downloadLink.click()
-      downloadLink.remove()
+      await downloadArchive(values)
       downloadReceived.value = true
+      exportBeneficiaryInput.value = values
     } catch (error) {
       snackbar.error("L'export de l'archive à échoué.")
       throw error
@@ -183,12 +187,15 @@
     })
   }
 
-  const openDeleteModal = () => {
+  const openDeleteModal = (values: ExportBeneficiaryInput) => {
     modal.open(ArchiveDeleteModal, {
       triggerOpen: true,
       title:
         'Vérifiez que le téléchargement a bien fonctionné et que le dossier est complet avant de le supprimer',
-      validate: () => deleteFile()
+      validate: () => {
+        deleteFile(values)
+        modal.close()
+      }
     })
   }
 
@@ -197,16 +204,33 @@
       triggerOpen: true,
       title:
         'Attention, vous devez supprimer le bénéficiaire après avoir téléchargé son dossier',
-      validate: () => deleteFile()
+      validate: () =>
+        exportBeneficiaryInput.value
+          ? deleteFile(exportBeneficiaryInput.value)
+          : null
     })
   }
 
   onBeforeRouteLeave((_, __, next) => {
-    if (!downloadReceived.value) {
+    if (!downloadReceived.value || !exportBeneficiaryInput.value) {
       return next()
     }
     openQuitPageModal()
   })
+
+  const downloadArchive = async (values: ExportBeneficiaryInput) => {
+    const response =
+      await trpcClient.beneficiary.exportBeneficiary.query(values)
+    if (!response?.archiveFile) {
+      throw new Error('no data')
+    }
+    const downloadLink = document.createElement('a')
+    downloadLink.href = response.archiveFile
+    const date = new Date()
+    downloadLink.download = `Archive_dossier_${beneficiaryName.value}_${date.toISOString()}.zip`
+    downloadLink.click()
+    downloadLink.remove()
+  }
 </script>
 
 <style lang="scss" scoped>
