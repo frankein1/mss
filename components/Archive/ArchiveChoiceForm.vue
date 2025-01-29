@@ -33,13 +33,12 @@
       />
     </form>
     <p>
-      Je souhaite
       <button
         class="fr-link"
         type="button"
         @click="changeValue('delay')"
       >
-        conserver le dossier 1 an supplémentaire.
+        Je souhaite conserver le dossier 1 an supplémentaire
       </button>
     </p>
   </div>
@@ -95,6 +94,13 @@
 
 <style lang="scss" scoped>
   .fr-link {
-    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25rem;
+
+    &:hover {
+      background-color: transparent;
+      text-decoration-thickness: 2px;
+    }
   }
 </style>

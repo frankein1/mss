@@ -9,6 +9,7 @@ coverage
 .env.dev
 .env.demo
 .env.build
+.cache
 /test-results/
 /playwright-report/
 /blob-report/

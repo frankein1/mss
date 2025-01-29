@@ -12,7 +12,6 @@ import {
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { FamilyFileService } from '~/server/services'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.beneficiaries

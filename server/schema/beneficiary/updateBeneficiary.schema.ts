@@ -199,6 +199,10 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
     .nullish()
 })
 
+export const updateBeneficiaryArchiveDate = z.object({
+  id: z.string().uuid()
+})
+
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >

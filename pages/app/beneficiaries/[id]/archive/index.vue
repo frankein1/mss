@@ -151,7 +151,7 @@
         exportBeneficiaryInput.value = null // Reset variable
         modal.close() // ferme toute les modales
         navigateTo(routes.user.AppOverview.path())
-      } catch (error) {
+      } catch (_error) {
         snackbar.error(
           'Une erreur est apparu lors de la suppression de ce bénéficiaire.'
         )
@@ -175,8 +175,26 @@
     }
   }
 
+  const router = trpcClient.beneficiary
+  const updateBeneficiary = router.updateArchiveDate.useMutation()
+
   const onDelayArchive = () => {
-    console.log('DELAY!')
+    useTrpcMutation({
+      mutation: () =>
+        updateBeneficiary.mutate({
+          id: beneficiaryId
+        }),
+      onSuccess: () => {
+        snackbar.success(
+          'Votre demande de conservation a bien été prise en compte.'
+        )
+        modal.close() // ferme toute les modales
+        navigateTo(routes.user.AppOverview.path())
+      },
+      onFailure: () => {
+        snackbar.error("Impossible de modifier la date d'archivage.")
+      }
+    })
   }
 
   const openDelayModal = () => {

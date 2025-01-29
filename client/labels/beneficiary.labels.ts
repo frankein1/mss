@@ -90,6 +90,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   accommodationZone: "Zone d'hébergement",
   documents: 'Documents',
   updated: 'Dernière mise à jour',
+  archiveDueDate: "Date d'archivage",
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',

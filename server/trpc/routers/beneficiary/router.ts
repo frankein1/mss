@@ -51,6 +51,9 @@ export const beneficiaryRouter = router({
   updateExternalOrganisations: protectedProcedure
     .input(routes.updateExternalOrganisationsMutation.inputValidation)
     .mutation(routes.updateExternalOrganisationsMutation.execute),
+  updateArchiveDate: protectedProcedure
+    .input(routes.updateArchiveDateMutation.inputValidation)
+    .mutation(routes.updateArchiveDateMutation.execute),
   create: protectedProcedure
     .input(routes.createBeneficiaryMutation.inputValidation)
     .mutation(routes.createBeneficiaryMutation.execute),
