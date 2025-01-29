@@ -120,7 +120,7 @@ playwright:install:
     - pnpm --version
     - node --version
 
-.pnpm:test:e2e:
+pnpm:test:e2e:
   extends: .playwright:test
   needs: ['playwright:install']
   services:
