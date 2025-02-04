@@ -28,6 +28,16 @@
           Instruction de dossier
         </button>
       </li>
+      <li v-if="application.module.rdv">
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-calendar-event-line fr-mb-0"
+          type="button"
+          title="Rendez-vous"
+          @click="emit('planAppointment')"
+        >
+          Rendez-vous
+        </button>
+      </li>
       <li class="mesdroitssociaux-btn-container">
         <NuxtLink
           to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
@@ -52,6 +62,10 @@
     beneficiaryId: string
     permissions: FamilyFilePermissions | undefined
   }>()
+
+  const emit = defineEmits<{ planAppointment: [] }>()
+
+  const { application } = usePermissions()
 
   function onAddHelpRequest() {
     useModal().open(HelpRequestModal, {

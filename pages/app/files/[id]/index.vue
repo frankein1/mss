@@ -20,6 +20,7 @@
         :family-file-id="familyFileId"
         :permissions="selectedPermissions"
         class="fr-pb-3w"
+        @plan-appointment="onPlanAppointment"
       />
       <hr />
       <AtomAlert
@@ -52,7 +53,6 @@
                 :family-file="familyFileIdentification.length > 1"
                 @delete="openDeleteModal"
                 @split="openSplitModal"
-                @plan-appointment="onPlanAppointment"
               />
             </template>
           </BeneficiaryInfo>

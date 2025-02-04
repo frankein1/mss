@@ -42,11 +42,6 @@ interface GenericFetchError {
   statusText: string
 }
 
-interface GenericOFetchError {
-  statusCode: number
-  statusMessage: string
-}
-
 interface RdvspAgentInfo {
   id: number
   email: string

@@ -21,16 +21,6 @@
         Imprimer
       </NuxtLink>
     </li>
-    <li v-if="application.module.rdv">
-      <button
-        class="fr-btn fr-btn--secondary fr-mb-0"
-        type="button"
-        title="Prendre rdv"
-        @click="emit('planAppointment')"
-      >
-        Prendre rdv
-      </button>
-    </li>
     <li v-if="familyFile">
       <button
         class="fr-btn fr-btn--secondary fr-mb-0"
@@ -65,7 +55,6 @@
   import { FamilyFilePermissions } from '~/server/security'
 
   const route = useRoute()
-  const { application } = usePermissions()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -73,7 +62,7 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ delete: []; split: []; planAppointment: [] }>()
+  const emit = defineEmits<{ delete: []; split: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
