@@ -113,6 +113,18 @@
       </button>
     </div>
   </div>
+
+  <div class="feature-section bg-color-white structure-info">
+    <h2 class="fr-h4 structure-info__title">Intégrations</h2>
+
+    <div>
+      <DsfrToggleSwitch
+        label="Rendez-vous Service Public"
+        :model-value="structure.externalRdvspActive || undefined"
+        @update:model-value="emit('toggleRdv', $event)"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -124,7 +136,11 @@
     structure: StructureInfo
   }>()
 
-  const emit = defineEmits<{ edit: []; disable: [] }>()
+  const emit = defineEmits<{
+    edit: []
+    disable: []
+    toggleRdv: [value: boolean]
+  }>()
 </script>
 
 <style scoped lang="css">

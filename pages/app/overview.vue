@@ -12,7 +12,8 @@
       <div class="fr-col-6 fr-col-lg-4">
         <PartnerOrganizationOverviewCard class="fr-mb-3w" />
         <OngoingFileInstructions class="fr-mb-3w" />
-        <OngoingFollowups />
+        <OngoingFollowups class="fr-mb-3w" />
+        <OngoingAppointments v-if="application.module.rdv" />
       </div>
     </div>
     <OpenModalHack />
@@ -26,6 +27,7 @@
   const title = routes.user.AppOverview.title
   const route = useRoute()
   const modal = useModal()
+  const { application } = usePermissions()
 
   useHead({ title })
 

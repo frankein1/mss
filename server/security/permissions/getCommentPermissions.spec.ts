@@ -12,7 +12,8 @@ const CTX_BASE: SecurityRuleContext = {
   },
   structure: {
     id: 'dummy-structure-id',
-    type: 'Association'
+    type: 'Association',
+    externalRdvspActive: null
   }
 }
 

@@ -98,7 +98,12 @@ export enum OverviewToHistoryEventAction {
   Todo = "Synthèses d'entretien - À traiter",
   InProgress = "Synthèses d'entretien - En cours",
   WaitingAdditionalInformation = "Dossiers d'instruction - En attente de justificatifs",
-  InvestigationOngoing = "Dossiers d'instruction - En cours d'instruction"
+  InvestigationOngoing = "Dossiers d'instruction - En cours d'instruction",
+  RdvSeen = 'Rendez-vous - Honoré',
+  RdvNoShow = 'Rendez-vous - Absence non excusée',
+  RdvExcused = "Rendez-vous - Annulé à l'initiative de l'usager",
+  RdvRevoked = "Rendez-vous - Annulé à l'initiative du service",
+  RdvUnknown = 'Rendez-vous - Inconnu'
 }
 
 export enum ExportEventAction {

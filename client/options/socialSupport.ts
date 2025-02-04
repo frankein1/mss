@@ -27,7 +27,12 @@ export const fileInstructionStatusKeys = buildKeys({
   [SocialSupportStatus.Adjourned]: 'Ajourné',
   [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
   [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
-  [SocialSupportStatus.Dismissed]: 'Classé sans suite'
+  [SocialSupportStatus.Dismissed]: 'Classé sans suite',
+  [SocialSupportStatus.RdvSeen]: 'Honoré',
+  [SocialSupportStatus.RdvNoShow]: 'Absence non excusée',
+  [SocialSupportStatus.RdvExcused]: "Annulé à l'initiative de l'usager",
+  [SocialSupportStatus.RdvRevoked]: "Annulé à l'initiative du service",
+  [SocialSupportStatus.RdvUnknown]: 'Inconnu'
 })
 
 export const ministryFileInstructionStatusKeys = buildKeys({

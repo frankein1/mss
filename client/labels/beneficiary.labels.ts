@@ -18,6 +18,7 @@ type BeneficiaryFieldLabels = Omit<
   | 'draft'
   | 'previousFamilyFileId'
   | 'splitFromFileById'
+  | 'externalRdvspId'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {

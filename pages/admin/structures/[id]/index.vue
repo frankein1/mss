@@ -18,6 +18,7 @@
         :structure="data.structure"
         @edit="editAdminInfo"
         @disable="disableStructure"
+        @toggle-rdv="toggleRdvspIntegration"
       />
 
       <StructureAdminUsers
@@ -120,6 +121,23 @@
         snackbar.error(
           'La modification des informations de votre structure a échoué.'
         )
+      }
+    })
+  }
+
+  function toggleRdvspIntegration(externalRdvspActive: boolean) {
+    const values = { id: data.value?.structure?.id || '', externalRdvspActive }
+
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.toggleRdvsp.mutate(values),
+      onSuccess: () => {
+        const msg = externalRdvspActive
+          ? 'La fonctionnalité de prise de rendez-vous est maintenant disponible pour tous les agents de la structure'
+          : 'La fonctionnalité de prise de rendez-vous a été désactivée'
+        snackbar.success(msg)
+      },
+      onFailure: () => {
+        snackbar.error("L'activation de la fonctionnalité a échoué")
       }
     })
   }

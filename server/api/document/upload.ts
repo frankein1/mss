@@ -74,7 +74,8 @@ export default defineEventHandler(async event => {
     user,
     structure: {
       id: user.structureId,
-      type: structureType
+      type: structureType,
+      externalRdvspActive: null
     }
   }
 

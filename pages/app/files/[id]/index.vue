@@ -52,6 +52,7 @@
                 :family-file="familyFileIdentification.length > 1"
                 @delete="openDeleteModal"
                 @split="openSplitModal"
+                @plan-appointment="onPlanAppointment"
               />
             </template>
           </BeneficiaryInfo>
@@ -91,8 +92,8 @@
     useGetStructureInfo,
     getStructureInfoInjectionKey
   } from '~/composables/useGetStructureInfoForBeneficiary'
-  import { TRPCClientErrorLike } from '@trpc/client'
-  import { routes } from '~/utils/routes'
+  import { TRPCClientError, TRPCClientErrorLike } from '@trpc/client'
+  import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
@@ -296,6 +297,54 @@
       reloadData: () =>
         reloadData(familyFileIdentification.value?.[0]?.id || '')
     })
+  }
+
+  const isSubmittingPlanAppointment = ref(false)
+  async function onPlanAppointment() {
+    await useTrpcMutation({
+      mutation: () =>
+        trpcClient.rdvsp.planAppointment.mutate({
+          beneficiaryId: selectedBeneficiary.value?.id || ''
+        }),
+      isSubmitting: isSubmittingPlanAppointment,
+      onSuccess: url => {
+        window.location.href = url
+      },
+      onFailure: handleAppointmentPlanningFailure
+    })
+  }
+
+  function handleAppointmentPlanningFailure(e: unknown) {
+    if (e instanceof TRPCClientError) {
+      switch (e.data.code) {
+        case 'UNAUTHORIZED': {
+          snackbar.info(
+            'Authentification sur RDVSP en cours. Veuillez patienter.'
+          )
+          const options = {
+            action: 'planAppointment',
+            id: selectedBeneficiary.value?.id || ''
+          }
+          navigateTo(apiRoutes.rdvsp.ApiSignIn.path(options), {
+            external: true
+          })
+          break
+        }
+        case 'FORBIDDEN':
+          snackbar.error(
+            "Cette fonctionnalité n'est pas disponible. Veuillez vous rapprocher de votre responsable de structure."
+          )
+          break
+        case 'BAD_REQUEST':
+        default:
+          snackbar.error('La prise de rendez-vous a échoué.')
+          break
+      }
+    } else {
+      snackbar.error(
+        'La prise de rendez-vous a échoué pour une raison inconnue.'
+      )
+    }
   }
 
   async function reloadData(id: string) {

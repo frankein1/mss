@@ -41,3 +41,21 @@ export const apiProConnectRoutes = {
     path: () => '/api/proconnect/login-callback'
   }
 } as const
+
+interface RdvspAfterSignInOptions {
+  action: string
+  id: string
+}
+
+export const apiRdvspRoutes = {
+  ApiSignIn: {
+    path: (options?: RdvspAfterSignInOptions) =>
+      `/api/rdvservicepublic/signin${options ? `?action=${options.action}&id=${options.id}` : ''}`
+  },
+  ApiLogout: {
+    path: () => '/api/rdvservicepublic/logout'
+  },
+  ApiCallback: {
+    path: () => '/api/auth/rdvservicepublic/callback'
+  }
+} as const

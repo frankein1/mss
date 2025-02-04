@@ -14,5 +14,11 @@ export const socialSupportStatusClasses = {
   [SocialSupportStatus.ClosedByAgent]: 'fr-badge--error ',
   [SocialSupportStatus.Dismissed]: 'fr-badge--error',
   [SocialSupportStatus.Adjourned]:
-    'fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-warning-fill'
+    'fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-warning-fill',
+  [SocialSupportStatus.RdvSeen]:
+    'fr-badge--success fr-badge--icon-left fr-icon-check-line',
+  [SocialSupportStatus.RdvNoShow]: 'fr-badge--error',
+  [SocialSupportStatus.RdvExcused]: 'fr-badge--purple-glycine',
+  [SocialSupportStatus.RdvRevoked]: 'fr-badge--purple-glycine',
+  [SocialSupportStatus.RdvUnknown]: 'fr-badge--info'
 }

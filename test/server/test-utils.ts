@@ -25,7 +25,8 @@ const createCaller = (user: AppContext['user']) => {
 
 const structure = {
   id: fixtureStructures[0].id,
-  type: fixtureStructures[0].type
+  type: fixtureStructures[0].type,
+  externalRdvspActive: null
 }
 
 /** Create context user for each role to be tested */

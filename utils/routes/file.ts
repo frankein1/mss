@@ -16,6 +16,7 @@ type OriginPage =
   | 'AppFileBudgetInfoEdit'
   | 'AppFileBudgetIncomeEdit'
   | 'AppFileBudgetExpensesEdit'
+  | 'ExternalRdvsp'
 
 // TODO rename item to something clearer
 export interface FamilyFileUrlOptions {

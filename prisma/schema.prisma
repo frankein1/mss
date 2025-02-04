@@ -38,6 +38,30 @@ model Account {
   @@map("account")
 }
 
+model ExternalAccount {
+  id String @id @default(uuid()) @db.Uuid
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  userId            String  @map("user_id") @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refreshToken      String? @map("refresh_token") @db.Text
+  accessToken       String? @map("access_token") @db.Text
+  expiresAt         Int?    @map("expires_at")
+
+  scope        String?
+  idToken      String? @map("id_token") @db.Text
+  sessionState String? @map("session_state")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("external_account")
+}
+
 enum UserStatus {
   Active
   Disabled
@@ -60,7 +84,9 @@ model User {
   role      UserRole
   status    UserStatus @default(value: Active)
 
-  accounts        Account[]
+  accounts         Account[]
+  externalAccounts ExternalAccount[]
+
   createdComments Comment[] @relation(name: "created_by")
 
   aidantConnectAuthorisation Boolean?  @default(false) @map("aidant_connect_authorisation")
@@ -72,8 +98,11 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  structure                    Structure?             @relation(fields: [structureId], references: [id])
-  structureId                  String?                @map("structure_id") @db.Uuid
+  structure   Structure? @relation(fields: [structureId], references: [id])
+  structureId String?    @map("structure_id") @db.Uuid
+
+  externalRdvspId String? @map("external_rdvsp_id")
+
   createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
   lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
   createdDocuments             Document[]
@@ -86,6 +115,8 @@ model User {
   referentFor                FamilyFile[]          @relation(name: "family_file_referents")
   splitFromFileBeneficiaries Beneficiary[]         @relation(name: "split_from_file_beneficiaries")
   archivedBeneficiaries2     ArchivedBeneficiary[] @relation(name: "archived_beneficiaries_2")
+
+  appointments Appointment[] @relation(name: "appointments")
 
   createdPartnerOrganizations PartnerOrganization[]
 
@@ -135,6 +166,9 @@ model Structure {
   disabled                   Boolean        @default(false)
   deactivationAlertEmail     Int            @default(0) @map("deactivation_alert_email")
   deactivationAlertEmailDate DateTime?      @map("deactivation_alert_email_date")
+
+  externalRdvspActive Boolean? @map("external_rdvsp_active")
+  externalRdvspId     String?  @map("external_rdvsp_id")
 
   @@map("structure")
 }
@@ -282,12 +316,20 @@ enum SocialSupportStatus {
   Todo
   InProgress
   Done
+
+  // Appointment status
+  RdvSeen
+  RdvNoShow
+  RdvExcused
+  RdvRevoked
+  RdvUnknown
 }
 
 enum SocialSupportType {
   Followup
   HelpRequestHousing
   HelpRequest
+  Appointment
 }
 
 model SocialSupport {
@@ -335,6 +377,7 @@ model SocialSupport {
 
   followup        Followup?
   fileInstruction FileInstruction?
+  appointment     Appointment?
 
   @@map("social_support")
 }
@@ -572,6 +615,31 @@ model HousingHelpRequest {
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
 
   @@map("housing_help_request")
+}
+
+model Appointment {
+  id String @id @default(uuid()) @db.Uuid
+
+  draft           Boolean
+  externalDraftId String? @map("external_draft_id")
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  durationInMin Decimal? @map("duration_in_min")
+  place         String?
+
+  subject           String?
+  externalSubjectId String? @map("external_subject_id")
+  externalRdvspId   String? @map("external_rdvsp_id")
+
+  agentId String? @map("agent_id") @db.Uuid
+  agent   User?   @relation(name: "appointments", fields: [agentId], references: [id])
+
+  socialSupportId String        @unique @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
+
+  @@map("appointment")
 }
 
 enum BeneficiaryStatus {
@@ -1636,6 +1704,9 @@ model Beneficiary {
   numeroPegase          String?                       @map("numero_pegase")
   accommodationZone     BeneficiaryAccommodationZone? @map("accommodation_zone")
 
+  // External integrations
+  externalRdvspId String? @map("external_rdvsp_id")
+
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
@@ -1901,6 +1972,7 @@ enum UserActivityObject {
   SocialSupport
   HousingHelpRequest
   PartnerOrganization
+  Appointment
 }
 
 model UserActivity {

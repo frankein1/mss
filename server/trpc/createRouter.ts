@@ -1,8 +1,11 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { H3Event } from 'h3'
-import { StructureType, UserRole } from '@prisma/client'
-import { SecurityRuleGrantee } from '../security/rules/types'
+import { UserRole } from '@prisma/client'
+import {
+  SecurityRuleGrantee,
+  SecurityRuleStructure
+} from '../security/rules/types'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
 
@@ -82,7 +85,7 @@ export type AuthContext = {
 export const protectedProcedure = t.procedure.use(structureMiddleware)
 
 export type ProtectedAppContext = AuthContext & {
-  structure: { id: string; type: StructureType }
+  structure: SecurityRuleStructure
 }
 
 /**

@@ -24,6 +24,7 @@ export type AppContextPermissions = {
     partner: boolean
     vulnerablePerson: boolean
     budget: boolean
+    rdv: boolean
   }
 }
 
@@ -62,7 +63,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       helpRequest: false,
       partner: false,
       vulnerablePerson: false,
-      budget: false
+      budget: false,
+      rdv: false
     }
   }
 }
@@ -82,6 +84,7 @@ function getUserContextPermissions(
     ccas,
     city
   } = getGranteRole(ctx)
+  const hasRdvAccess = ctx.structure.externalRdvspActive || false
 
   return {
     export: {
@@ -104,7 +107,8 @@ function getUserContextPermissions(
       helpRequest: manager || socialWorker || instructor || referent,
       partner: manager || socialWorker,
       vulnerablePerson: !ngo && !ministryAgent,
-      budget: !receptionAgent
+      budget: !receptionAgent,
+      rdv: hasRdvAccess
     }
   }
 }

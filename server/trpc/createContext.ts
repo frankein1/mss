@@ -4,7 +4,7 @@ import { verifyJwt } from '../lib/jwt'
 import { UserRepo } from '~/server/database'
 
 export const structureContextQuery = () => ({
-  select: { id: true, type: true }
+  select: { id: true, type: true, externalRdvspActive: true }
 })
 
 export const userContextQuery = () => ({
