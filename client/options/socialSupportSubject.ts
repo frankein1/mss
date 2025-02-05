@@ -7,7 +7,7 @@ export const socialSupportSubjectKeys = buildKeys({
   [DefaultSocialSupportSubject.AllocationDeSolidariteAuxPersonnesAgees]:
     'Allocation de solidarité aux personnes âgées',
   [DefaultSocialSupportSubject.AllocationPersonnaliseesDAutonomie]:
-    "Allocation personnalisées d'autonomie",
+    "Allocation personnalisée d'autonomie",
   [DefaultSocialSupportSubject.ComplementaireSanteSolidaire]:
     'Complémentaire santé solidaire',
   [DefaultSocialSupportSubject.DemandeDAidesMenageres]:
