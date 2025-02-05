@@ -10,7 +10,7 @@ import {
   getCommentPermissions,
   getAppContextPermissions
 } from '~/server/security'
-import { SocialSupportRepo } from '~/server/database'
+import { SocialSupportRepo, StructureRepo } from '~/server/database'
 import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import {
   filterSocialSupport,
@@ -20,6 +20,7 @@ import {
   filterHelpRequest
 } from '~/server/services/helper'
 import { TypeSuivi } from '~/client/options'
+import { getAppointmentRdvspUrl } from '~/server/services/rdvsp/helper'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -38,7 +39,13 @@ function prepareSocialSupportFilters(
   filters: HistoryFilters,
   familyFileId: string
 ) {
-  const formattedFilters: Prisma.SocialSupportWhereInput = {}
+  // validated appointments, followups and instructions
+  const formattedFilters: Prisma.SocialSupportWhereInput = {
+    OR: [
+      { socialSupportType: { not: 'Appointment' } },
+      { appointment: { draft: false } }
+    ]
+  }
 
   if (filters.referents?.length) {
     formattedFilters.familyFile = {
@@ -173,6 +180,14 @@ function loadSocialSupports(
           prescribingOrganizationContact: true
         }
       },
+      appointment: {
+        select: {
+          durationInMin: true,
+          place: true,
+          subject: true,
+          externalRdvspId: true
+        }
+      },
       _count: {
         select: {
           notifications: {
@@ -191,8 +206,13 @@ type SocialSupports = Prisma.PromiseReturnType<typeof loadSocialSupports>
 function formatResult(
   socialSupports: SocialSupports,
   ctx: ProtectedAppContext,
-  familyFile: FamilyFileSecurityTarget
+  familyFile: FamilyFileSecurityTarget,
+  rdvspOrganisationId: string
 ) {
+  const {
+    rdvsp: { issuer }
+  } = useRuntimeConfig()
+
   return socialSupports.map(socialSupport => {
     const { _count } = socialSupport
 
@@ -204,7 +224,7 @@ function formatResult(
 
     const appPermissions = getAppContextPermissions(ctx)
 
-    const { followup, fileInstruction } = socialSupport
+    const { followup, fileInstruction, appointment } = socialSupport
 
     const conditions = {
       minister: appPermissions.module.ministere,
@@ -264,6 +284,17 @@ function formatResult(
       })
     }))
 
+    const appointmentData = appointment
+      ? {
+          ...appointment,
+          url: getAppointmentRdvspUrl(
+            issuer,
+            rdvspOrganisationId,
+            appointment.externalRdvspId || ''
+          )
+        }
+      : null
+
     return {
       data: {
         ...otherData,
@@ -275,11 +306,23 @@ function formatResult(
           ...filteredFileInstruction,
           helpRequest: filteredHelpRequest,
           housingHelpRequest: filteredHousingHelpRequest
-        }
+        },
+        appointment: appointmentData
       },
       permissions: socialSupportPermissions
     }
   })
+}
+
+async function getRdvspOrganisationId(ctx: ProtectedAppContext) {
+  if (!ctx.structure.externalRdvspActive) {
+    return ''
+  }
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: ctx.structure.id },
+    select: { externalRdvspId: true }
+  })
+  return structure.externalRdvspId || ''
 }
 
 const handler = async ({
@@ -291,10 +334,16 @@ const handler = async ({
 }) => {
   const { familyFileId, filters } = input
 
+  const rdvspOrganisationId = await getRdvspOrganisationId(ctx)
+
   const [totalCount, socialSupports, familyFile] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
       where: {
-        familyFileId
+        familyFileId,
+        OR: [
+          { socialSupportType: { not: 'Appointment' } },
+          { appointment: { draft: false } }
+        ]
       }
     }),
     loadSocialSupports(filters, ctx.user, familyFileId),
@@ -302,7 +351,7 @@ const handler = async ({
   ])
 
   return {
-    items: formatResult(socialSupports, ctx, familyFile),
+    items: formatResult(socialSupports, ctx, familyFile, rdvspOrganisationId),
     totalCount
   }
 }

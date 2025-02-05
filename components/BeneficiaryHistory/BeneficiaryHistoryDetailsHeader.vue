@@ -4,19 +4,19 @@
     :class="{ expanded: expanded }"
   >
     <div class="history-details__icon">
-      <span :class="historyTypeIcon"></span>
+      <span :class="attrs.icon"></span>
     </div>
     <div class="history-details__meta">
       <p class="fr-mb-0 fr-text--xs history-details__type-title">
         <AtomPictogram
-          v-if="fileInstructionPicto"
-          :path="fileInstructionPicto"
+          v-if="attrs.picto"
+          :path="attrs.picto"
           length="2rem"
         />
-        {{ historyTypeTitle }}
+        {{ attrs.title }}
       </p>
       <h4 class="history-details__title">
-        <span class="fr-sr-only">{{ historyTypeTitle }} - </span>
+        <span class="fr-sr-only">{{ attrs.title }} - </span>
         <template v-if="data.createdBy">
           {{ formatUserDisplayName(data.createdBy) }}
           <span> · </span>
@@ -39,52 +39,43 @@
         {{ formatDate(data.updated) }}
       </div>
       <ul class="fr-tags-group social-support-subjects-tags">
-        <li
-          v-for="socialSupportSubject in data.subjects"
-          :key="socialSupportSubject.id"
-        >
-          <p class="fr-tag">{{ socialSupportSubject.name }}</p>
-        </li>
+        <template v-if="data.socialSupportType === 'Appointment'">
+          <li v-if="data.appointment?.subject">
+            <p class="fr-tag">{{ data.appointment.subject }}</p>
+          </li>
+        </template>
+        <template v-else>
+          <li
+            v-for="socialSupportSubject in data.subjects"
+            :key="socialSupportSubject.id"
+          >
+            <p class="fr-tag">{{ socialSupportSubject.name }}</p>
+          </li>
+        </template>
       </ul>
     </div>
     <div class="history-details__status">
-      <!-- TODO: use SocialSupportBadgesGroup component -->
-      <ul class="fr-badges-group status-badges">
-        <li>
-          <p
-            class="fr-badge"
-            :class="[socialSupportStatusClasses[props.data.status]]"
-          >
-            {{ statusLabel }}
-          </p>
-        </li>
-        <li v-if="redirectedLabel">
-          <p class="fr-badge fr-badge--purple-glycine">
-            {{ redirectedLabel }}
-          </p>
-        </li>
-        <li v-if="hasUnreadNotifications">
-          <p class="fr-badge fr-badge--new fr-badge--no-icon">
-            <span class="fr-icon-notification-3-fill fr-icon--sm"></span>
-          </p>
-        </li>
-        <li v-if="data.followup?.firstFollowup">
-          <p class="fr-badge fr-badge--info fr-badge--no-icon">
-            {{ followupFieldLabels.firstFollowup }}
-          </p>
-        </li>
-      </ul>
+      <SocialSupportBadgesGroup
+        :status="data.status"
+        :redirected-label
+        :has-unread-notifications
+        :first-followup="
+          data.followup?.firstFollowup
+            ? followupFieldLabels.firstFollowup
+            : undefined
+        "
+      />
       <button
         ref="collapseBtn"
         class="fr-btn collapse-btn fr-btn--tertiary"
         :class="{ expanded: expanded }"
         aria-expanded="false"
         :aria-controls="collapseId"
-        :title="collapseBtnTitle"
+        :title="attrs.collapseTitle"
         @click="emit('toggleExpand')"
       >
-        {{ collapseBtnLabel }}
-        <span :class="[collapseBtnIcon]"></span>
+        {{ collapse.label }}
+        <span :class="[collapse.icon]"></span>
       </button>
     </div>
   </div>
@@ -92,7 +83,6 @@
 
 <script setup lang="ts">
   import type { SocialSupportData } from './types'
-  import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
@@ -100,7 +90,6 @@
   import { followupFieldLabels } from '~/client/labels'
 
   const route = useRoute()
-  const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const props = withDefaults(
     defineProps<{
@@ -117,13 +106,7 @@
     toggleExpand: []
   }>()
 
-  const isFollowup = computed(() => props.data.socialSupportType === 'Followup')
-
   const collapseBtn = ref<HTMLButtonElement | null>(null)
-
-  const statusLabel = computed(() =>
-    socialSupportStatusKeys.value.value(props.data.status)
-  )
 
   const redirectedLabel = computed(() => {
     const followup = props.data.followup
@@ -138,63 +121,51 @@
     }
   })
 
-  const historyTypeIcon = computed(() =>
-    isFollowup.value ? 'fr-icon-followup-fill' : 'fr-icon-help-request-fill'
-  )
-
-  const fileInstructionPicto = computed(() => {
-    if (!props.data.fileInstruction) {
-      return undefined
-    }
-    const { type } = props.data.fileInstruction
-    if (type === 'Financial') {
-      return fileInstructionTypePictos.Financial
-    }
-
-    if (type === 'Other') {
-      return fileInstructionTypePictos.Other
-    }
-
-    if (type === 'Housing') {
-      return fileInstructionTypePictos.Housing
+  const attrs = computed(() => {
+    switch (props.data.socialSupportType) {
+      case 'Followup':
+        return {
+          icon: 'fr-icon-followup-fill',
+          picto: undefined,
+          title: "Synthèse d'entretien",
+          collapseTitle: "Voir les détails de la synthèse d'entretien"
+        }
+      case 'Appointment':
+        return {
+          icon: 'fr-icon-calendar-event-line',
+          picto: undefined,
+          title: 'Rendez-vous',
+          collapseTitle: 'Voir les détails du rendez-vous'
+        }
+      case 'HelpRequest': {
+        let title: string, picto: string
+        if (props.data.fileInstruction?.type === 'Housing') {
+          picto = fileInstructionTypePictos.Housing
+          title = 'Instruction de dossier - Demande de logement'
+        } else if (props.data.fileInstruction?.type === 'Financial') {
+          picto = fileInstructionTypePictos.Financial
+          title = 'Instruction de dossier - Aide financière'
+        } else {
+          picto = fileInstructionTypePictos.Other
+          title = 'Instruction de dossier - Autre'
+        }
+        return {
+          icon: 'fr-icon-help-request-fill',
+          picto,
+          title,
+          collapseTitle: "Voir les détails de l'instruction de dossier"
+        }
+      }
+      default:
+        return { icon: undefined, title: '', collapseTitle: '' }
     }
   })
 
-  const historyTypeTitle = computed(() => {
-    if (isFollowup.value) {
-      return "Synthèse d'entretien"
-    }
-
-    const fileInstruction = props.data.fileInstruction
-
-    const helpRequestTitle = 'Instruction de dossier'
-
-    if (fileInstruction?.type === 'Housing') {
-      return `${helpRequestTitle} - Demande de logement`
-    }
-
-    if (fileInstruction?.type === 'Financial') {
-      return `${helpRequestTitle} - Aide financière`
-    }
-
-    return `${helpRequestTitle} - Autre`
+  const collapse = computed(() => {
+    return props.expanded
+      ? { label: 'Voir moins', icon: 'fr-icon-arrow-up-s-line' }
+      : { label: 'Voir plus', icon: 'fr-icon-arrow-down-s-line' }
   })
-
-  const historyTypeLabel = computed(() =>
-    isFollowup.value ? "la synthèse d'entretien" : "l'instruction de dossier"
-  )
-
-  const collapseBtnTitle = computed(
-    () => `Voir les détails de ${historyTypeLabel.value}`
-  )
-
-  const collapseBtnLabel = computed(() =>
-    props.expanded ? 'Voir moins' : 'Voir plus'
-  )
-
-  const collapseBtnIcon = computed(() =>
-    props.expanded ? 'fr-icon-arrow-up-s-line' : 'fr-icon-arrow-down-s-line'
-  )
 
   onMounted(() => {
     // Expand item if selected in URL
@@ -228,6 +199,11 @@
   .fr-icon-help-request-fill {
     color: var(--color-help-request);
     background-color: var(--color-help-request-light);
+  }
+
+  .fr-icon-calendar-event-line {
+    color: var(--rust);
+    background-color: var(--rust-light);
   }
 
   .history-details__meta {

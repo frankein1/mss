@@ -1,17 +1,14 @@
 import type { SecurityRuleContext } from '~/server/security'
 import { SocialSupportRepo, StructureRepo } from '~/server/database/repository'
-import { validateDraftAppointment } from './validateDraftAppointment.service'
+import { checkDrafts } from './validateDraftAppointment.service'
+import { getAppointmentRdvspUrl } from './helper'
 
 export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
   const {
     rdvsp: { issuer }
   } = useRuntimeConfig()
 
-  try {
-    await checkDrafts({ ctx })
-  } catch (e) {
-    console.log(e)
-  }
+  const draftSyncStatus = await checkDrafts({ ctx })
 
   const [structure, ss] = await Promise.all([
     StructureRepo.findUniqueOrThrow(ctx.user, {
@@ -60,21 +57,11 @@ export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
     subject: s.appointment?.subject,
     date: s.date,
     agentName: `${s.appointment?.agent?.firstName} ${s.appointment?.agent?.lastName}`,
-    url: `${issuer}/admin/organisations/${structure.externalRdvspId}/rdvs/${s.appointment?.externalRdvspId}`,
+    url: getAppointmentRdvspUrl(
+      issuer,
+      structure.externalRdvspId || '',
+      s.appointment?.externalRdvspId || ''
+    ),
     status: s.status
   }))
-}
-
-/** Validate all drafts associated to structure */
-async function checkDrafts({ ctx }: { ctx: SecurityRuleContext }) {
-  const drafts = await SocialSupportRepo.findMany(ctx.user, {
-    where: { appointment: { draft: true } },
-    select: { id: true }
-  })
-
-  const promises = drafts.map(draft =>
-    validateDraftAppointment({ ctx, input: { socialSupportId: draft.id } })
-  )
-
-  return await Promise.all(promises)
 }

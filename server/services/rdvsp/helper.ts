@@ -55,6 +55,14 @@ export function checkIntegrationSetupForStructure(structure: {
   }
 }
 
+export function getAppointmentRdvspUrl(
+  baseUrl: string,
+  organisationId: string,
+  rdvId: string
+) {
+  return `${baseUrl}/admin/organisations/${organisationId}/rdvs/${rdvId}`
+}
+
 export const APPOINTMENT_STATUS = {
   seen: 'RdvSeen',
   noshow: 'RdvNoShow',

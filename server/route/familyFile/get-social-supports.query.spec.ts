@@ -1,4 +1,5 @@
 import { describe, expect } from 'vitest'
+import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { inferProcedureInput } from '@trpc/server'
 import {
   FixtureBeneficiary,
@@ -11,6 +12,16 @@ import { test } from '~/test/server/test-utils'
 import { AppRouter } from '~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['file']['getSocialSupports']>
+
+mockNuxtImport('useRuntimeConfig', () => {
+  return () => {
+    return {
+      rdvsp: {
+        issuer: 'https://demo.anct.gouv.fr'
+      }
+    }
+  }
+})
 
 describe('FamilyFile - Get Social Supports - StructureManager', () => {
   test('should get all social supports when no filter', async ({ trpc }) => {

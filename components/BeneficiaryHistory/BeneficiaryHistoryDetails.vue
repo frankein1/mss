@@ -49,11 +49,18 @@
   const socialSupportId = computed(() => itemData.value.id)
   const collapseId = computed(() => `collapse-${socialSupportId.value}`)
 
-  const typeClass = computed(() =>
-    itemData.value.socialSupportType === 'Followup'
-      ? 'followup-details'
-      : 'help-request-details'
-  )
+  const typeClass = computed(() => {
+    switch (itemData.value.socialSupportType) {
+      case 'Followup':
+        return 'followup-details'
+      case 'HelpRequest':
+        return 'help-request-details'
+      case 'Appointment':
+        return 'appointment-details'
+      default:
+        return ''
+    }
+  })
 
   const hasUnreadNotifications = computed(
     () => !!itemData.value.hasUnreadNotifications
@@ -113,6 +120,15 @@
       }
     }
 
+    &.appointment-details {
+      .beneficiary-history-details-collapse__title {
+        background-color: #fff;
+        border-color: var(--rust);
+        border-style: solid;
+        border-width: 1px;
+      }
+    }
+
     &.expanded {
       &.followup-details {
         .beneficiary-history-details-collapse__title {
@@ -135,6 +151,19 @@
         .beneficiary-history-details-body {
           background-color: #fff;
           border-color: var(--color-help-request);
+          border-style: solid;
+          border-width: 0 3px 3px;
+        }
+      }
+
+      &.appointment-details {
+        .beneficiary-history-details-collapse__title {
+          border-width: 3px 3px 0;
+        }
+
+        .beneficiary-history-details-body {
+          background-color: #fff;
+          border-color: var(--rust);
           border-style: solid;
           border-width: 0 3px 3px;
         }

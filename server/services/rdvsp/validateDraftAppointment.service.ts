@@ -187,3 +187,17 @@ async function addUsagerIdToBeneficiary(
 function getMssAppointmentUrl(base: string) {
   return `${base}/app/overview`
 }
+
+/** Validate all drafts associated to structure */
+export async function checkDrafts({ ctx }: { ctx: SecurityRuleContext }) {
+  const drafts = await SocialSupportRepo.findMany(ctx.user, {
+    where: { appointment: { draft: true } },
+    select: { id: true }
+  })
+
+  const promises = drafts.map(draft =>
+    validateDraftAppointment({ ctx, input: { socialSupportId: draft.id } })
+  )
+
+  return await Promise.allSettled(promises)
+}

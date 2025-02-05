@@ -167,9 +167,9 @@ export default defineNuxtConfig({
       proconnectLabel: 'proconnect'
     },
     rdvsp: {
-      issuer: process.env.RDVSP_OAUTH_ISSUER_URL || '',
-      clientId: process.env.RDVSP_OAUTH_CLIENT_ID || '',
-      clientSecret: process.env.RDVSP_OAUTH_CLIENT_SECRET || ''
+      issuer: process.env.RDVSP_ISSUER || '',
+      clientId: process.env.RDVSP_CLIENT_ID || '',
+      clientSecret: process.env.RDVSP_CLIENT_SECRET || ''
     },
     brevo: {
       apiKey: process.env.BREVO_API_KEY || ''
