@@ -1,11 +1,12 @@
 import path from 'path'
 import {
-  defineConfig,
+  // defineConfig,
   configDefaults,
   coverageConfigDefaults
 } from 'vitest/config'
+import { defineVitestConfig } from '@nuxt/test-utils/config'
 
-export default defineConfig({
+export default defineVitestConfig({
   resolve: {
     alias: {
       '~': path.resolve(__dirname)
