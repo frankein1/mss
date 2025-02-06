@@ -156,8 +156,17 @@
           collapseTitle: "Voir les détails de l'instruction de dossier"
         }
       }
-      default:
+      default: {
+        if (props.data.fileInstruction?.type === 'Housing') {
+          return {
+            icon: 'fr-icon-help-request-fill',
+            picto: fileInstructionTypePictos.Housing,
+            title: 'Instruction de dossier - Demande de logement',
+            collapseTitle: "Voir les détails de l'instruction de dossier"
+          }
+        }
         return { icon: undefined, title: '', collapseTitle: '' }
+      }
     }
   })
 

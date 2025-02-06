@@ -58,7 +58,7 @@
       case 'Appointment':
         return 'appointment-details'
       default:
-        return ''
+        return 'help-request-details'
     }
   })
 
