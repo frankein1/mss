@@ -21,18 +21,18 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  input
+  input,
+  ctx
 }: {
   input: {
     id: string
   }
   ctx: ProtectedAppContext
 }) => {
+  const data = await prepareData(ctx, input.id)
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id: input.id },
-    data: {
-      archiveDueDate: dayjs().add(1, 'year').toDate()
-    }
+    data: data
   })
   return updatedBeneficiary
 }
@@ -50,3 +50,21 @@ export const updateArchiveDateMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
+
+const prepareData = async (ctx: SecurityRuleContext, beneficiaryId: string) => {
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: beneficiaryId },
+    select: { archiveDueDate: true }
+  })
+  if (!beneficiary.archiveDueDate) {
+    return {
+      archiveDueDate: dayjs().add(1, 'year').toDate()
+    }
+  }
+  return {
+    archiveDueDate: dayjs().add(1, 'year').toDate(),
+    archiveDueDateHistory: {
+      push: beneficiary.archiveDueDate
+    }
+  }
+}

@@ -31,6 +31,7 @@
       <ArchiveChoiceForm
         :permissions="permissions"
         :pending="downloadPending"
+        :archive-due-date-history="archiveDueDateHistory"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
@@ -115,6 +116,13 @@
       title: null
     })
   })
+  const archiveDueDateHistory = computed(() => {
+    const history = beneficiary?.value?.archiveDueDateHistory || []
+    if (beneficiary?.value?.archiveDueDate) {
+      history.push(beneficiary.value.archiveDueDate)
+    }
+    return history.length
+  })
 
   const pageTitle = computed(() => {
     if (beneficiary.value) {
@@ -151,7 +159,7 @@
         exportBeneficiaryInput.value = null // Reset variable
         modal.close() // ferme toute les modales
         navigateTo(routes.user.AppOverview.path())
-      } catch (_error) {
+      } catch {
         snackbar.error(
           'Une erreur est apparu lors de la suppression de ce bénéficiaire.'
         )

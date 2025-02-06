@@ -11,7 +11,7 @@ import {
   SocialSupportRepo,
   DocumentRepo
 } from '~/server/database'
-import { ArchiveReason, Beneficiary, User } from '@prisma/client'
+import { Beneficiary, User } from '@prisma/client'
 import {
   documentTypeKeys,
   ministerKeys,

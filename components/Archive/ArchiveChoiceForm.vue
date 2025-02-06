@@ -32,13 +32,19 @@
         @change-value="changeValue($event)"
       />
     </form>
+    <p
+      v-if="archiveDueDateHistory > 0"
+      class="fr-mb-1w"
+    >
+      Votre dossier à déja été conservé {{ archiveDueDateHistory }} fois.
+    </p>
     <p>
       <button
         class="fr-link"
         type="button"
         @click="changeValue('delay')"
       >
-        Je souhaite conserver le dossier 1 an supplémentaire
+        Je souhaite conserver le dossier 1 an supplémentaire.
       </button>
     </p>
   </div>
@@ -51,6 +57,7 @@
 
   const props = defineProps<{
     permissions?: FamilyFilePermissions | undefined
+    archiveDueDateHistory: number
     pending: boolean
   }>()
 

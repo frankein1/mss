@@ -1711,7 +1711,8 @@ model Beneficiary {
   updated DateTime? @updatedAt
 
   // archive due date
-  archiveDueDate DateTime? @map("archive_due_date") @db.Date
+  archiveDueDate        DateTime?  @map("archive_due_date") @db.Date
+  archiveDueDateHistory DateTime[] @map("archive_due_date_history") @db.Date
 
   relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
