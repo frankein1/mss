@@ -1,5 +1,10 @@
-import { UserActivityType } from '@prisma/client'
-import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
+import { SocialSupportSubject, UserActivityType } from '@prisma/client'
+import {
+  BeneficiaryRepo,
+  FamilyFileRepo,
+  FileInstructionRepo,
+  FollowupRepo
+} from '~/server/database'
 import { ArchivedBeneficiaryRepo } from '~/server/database/repository/ArchivedBeneficiaryRepository'
 import { createMutation } from '~/server/route'
 import {
@@ -32,23 +37,54 @@ const handler = async ({
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.beneficiaryId },
     select: {
+      id: true,
+      created: true,
       title: true,
       usualName: true,
       birthName: true,
       firstName: true,
+      structure: {
+        select: {
+          type: true
+        }
+      },
       familyFileId: true,
       familyFile: {
         select: {
           id: true,
-          beneficiaries: true
+          beneficiaries: true,
+          socialSupports: {
+            select: {
+              subjects: true
+            }
+          }
         }
       }
     }
   })
 
+  const where = {
+    socialSupport: {
+      familyFileId: beneficiary.familyFileId
+    }
+  }
+  const followupCount = await FollowupRepo.count(ctx.user, {
+    where
+  })
+  const filleInstructionCount = await FileInstructionRepo.count(ctx.user, {
+    where
+  })
+
   const createArchivedBeneficiary = ArchivedBeneficiaryRepo.prisma.create({
     data: {
-      oldBeneficiaryId: input.beneficiaryId,
+      oldBeneficiaryId: beneficiary.id,
+      fileCreationDate: beneficiary.created,
+      socialSupportSubjects: getSocialSupportsSujectsNames(
+        beneficiary.familyFile.socialSupports
+      ),
+      followupCount,
+      filleInstructionCount,
+      structureType: beneficiary.structure.type,
       archivedById: ctx.user.id,
       clarification: input.clarification ? input.clarification : null,
       reason: input.reason ? input.reason : null,
@@ -90,3 +126,13 @@ export const archiveBeneficiaryMutation = createMutation({
     action: UserActivityType.ARCHIVE
   }
 })
+
+const getSocialSupportsSujectsNames = (
+  socialSupports: {
+    subjects: SocialSupportSubject[]
+  }[]
+) => {
+  const subjects = socialSupports.map(support => support.subjects)
+  const names = subjects.map(subject => subject.map(s => s.name)).flat()
+  return [...new Set(names)] // remove duplicates
+}

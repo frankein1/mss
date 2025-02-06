@@ -1795,7 +1795,12 @@ model ArchivedBeneficiary {
   eventDateReason DateTime?      @map("event_date_reason")
   clarification   String?
 
-  oldBeneficiaryId String @map("old_beneficiary_id") @db.Uuid
+  oldBeneficiaryId      String         @map("old_beneficiary_id") @db.Uuid
+  fileCreationDate      DateTime?      @map("file_creation_date")
+  socialSupportSubjects String[]
+  followupCount         Int?           @map("followup_count")
+  filleInstructionCount Int?           @map("file_instruction_count")
+  structureType         StructureType? @map("structure_type")
 
   @@map("archived_beneficiary")
 }
