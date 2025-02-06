@@ -362,7 +362,7 @@
           const date = new Date()
           setTimeout(() => {
             zipAndDownloadImages(
-              'Statistiques - Béneficaires - ' + date.toLocaleDateString(),
+              'Statistiques - Bénéficiaires - ' + date.toLocaleDateString(),
               beneficiariesCardConfig,
               buttonFilter,
               closeAlert
