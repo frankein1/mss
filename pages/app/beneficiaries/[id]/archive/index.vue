@@ -40,12 +40,7 @@
         <ArchiveDelete
           v-if="archiveFormStatus == 'delete'"
           class="fr-mt-4w"
-          @delete-file="
-            openDeleteModal({
-              keepName: false,
-              beneficiaryId: beneficiary.id
-            })
-          "
+          @delete-file="openDeleteModal()"
         />
       </section>
       <section ref="archiveSection">
@@ -56,7 +51,7 @@
           :beneficiary-id="beneficiaryId"
           :pending="downloadPending"
           @download-archive="onDownloadArchive"
-          @delete-file="openDeleteModal"
+          @delete-file="openArchiveDeleteModal"
         />
       </section>
     </template>
@@ -70,6 +65,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import ArchiveDelayModal from '~/components/Archive/ArchiveDelayModal.vue'
   import ArchiveDeleteModal from '~/components/Archive/ArchiveDeleteModal.vue'
+  import DeleteModal from '~/components/Archive/DeleteModal.vue'
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
   import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
 
@@ -160,7 +156,29 @@
     }
   }
 
-  const deleteFile = async (values: ExportBeneficiaryInput) => {
+  function deletFile(beneficiaryId: string) {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().beneficiary.delete.mutate({
+          id: beneficiaryId
+        }),
+      onSuccess: () => {
+        snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
+        downloadReceived.value = false // Reset variable
+        exportBeneficiaryInput.value = null // Reset variable
+        modal.close() // ferme toutes les modales
+        navigateTo(routes.user.AppOverview.path())
+      },
+      onFailure: () => {
+        modal.close()
+        snackbar.error(
+          'Une erreur est apparu lors de la suppression de ce bénéficiaire.'
+        )
+      }
+    })
+  }
+
+  const archiveAndDeleteFile = async (values: ExportBeneficiaryInput) => {
     if (archivePermission.value) {
       try {
         await trpcClient.beneficiary.archiveBeneficiary.query(values)
@@ -170,6 +188,7 @@
         modal.close() // ferme toutes les modales
         navigateTo(routes.user.AppOverview.path())
       } catch {
+        modal.close() // ferme toutes les modales
         snackbar.error(
           'Une erreur est apparu lors de la suppression de ce bénéficiaire.'
         )
@@ -223,13 +242,23 @@
     })
   }
 
-  const openDeleteModal = (values: ExportBeneficiaryInput) => {
+  const openDeleteModal = () => {
+    modal.open(DeleteModal, {
+      triggerOpen: true,
+      title: 'Attention, toute suppression est définitive',
+      validate: () => {
+        deletFile(beneficiaryId)
+        modal.close()
+      }
+    })
+  }
+  const openArchiveDeleteModal = (values: ExportBeneficiaryInput) => {
     modal.open(ArchiveDeleteModal, {
       triggerOpen: true,
       title:
         'Vérifiez que le téléchargement a bien fonctionné et que le dossier est complet avant de le supprimer',
       validate: () => {
-        deleteFile(values)
+        archiveAndDeleteFile(values)
         modal.close()
       }
     })
@@ -242,7 +271,7 @@
         'Attention, vous devez supprimer le bénéficiaire après avoir téléchargé son dossier',
       validate: () =>
         exportBeneficiaryInput.value
-          ? deleteFile(exportBeneficiaryInput.value)
+          ? archiveAndDeleteFile(exportBeneficiaryInput.value)
           : null
     })
   }

@@ -76,7 +76,7 @@
             :disabled="disabledDeleteButton || pending"
             @click="onDelete()"
           >
-            Supprimer dénitivement
+            Supprimer définitivement
           </button>
         </div>
       </template>
