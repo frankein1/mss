@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import puppeteer, { Browser, PDFOptions } from 'puppeteer'
 import hbs from 'handlebars'
 import JSZip from 'jszip'
 import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
@@ -86,10 +85,6 @@ export const exportBeneficiary = async ({
     }
   })
 
-  // handlebars -> https://github.com/ankur20us/demo-puppeteer/blob/master/index.js
-  // API puppeteer https://pptr.dev/api/puppeteer.puppeteernode
-  const browser = await launchBrowser()
-
   // Abstract Page
   const abstractData = {
     name: getBeneficiaryName(beneficiaryDetails),
@@ -115,13 +110,6 @@ export const exportBeneficiary = async ({
     'handlebars-templates/abstract-template.hbs',
     abstractData
   )
-  const abstractPage = await browser.newPage()
-  await abstractPage.setContent(abstractContent)
-  await abstractPage.emulateMediaType('screen')
-  await abstractPage.goto('data:text/html,' + abstractContent, {
-    waitUntil: 'networkidle0'
-  })
-  const abstractPdfBuffer = await abstractPage.pdf(pdfOptions)
 
   // Beneficiary informations
   const informationsContent = await compile(
@@ -133,13 +121,6 @@ export const exportBeneficiary = async ({
       )
     }
   )
-  const infoPage = await browser.newPage()
-  await infoPage.setContent(informationsContent)
-  await infoPage.emulateMediaType('screen')
-  await infoPage.goto('data:text/html,' + informationsContent, {
-    waitUntil: 'networkidle0'
-  })
-  const infoPdfBuffer = await infoPage.pdf(pdfOptions)
 
   // Followups
   const followups = await Promise.all(
@@ -154,16 +135,9 @@ export const exportBeneficiary = async ({
           }
         )
 
-        const page = await browser.newPage()
-        await page.setContent(content)
-        await page.emulateMediaType('screen')
-        await page.goto('data:text/html,' + content, {
-          waitUntil: 'networkidle0'
-        })
-
         return {
-          filename: `Historique/entretiens_${followup.id}.pdf`,
-          buffer: await page.pdf(pdfOptions)
+          filename: `Historique/entretiens_${followup.id}.html`,
+          content
         }
       })
   )
@@ -185,38 +159,25 @@ export const exportBeneficiary = async ({
           }
         )
 
-        const page = await browser.newPage()
-        await page.setContent(content)
-        await page.emulateMediaType('screen')
-        await page.goto('data:text/html,' + content, {
-          waitUntil: 'networkidle0'
-        })
-
         return {
-          filename: `Historique/instruction_de_dossier_${helpRequest.id}.pdf`,
-          buffer: await page.pdf(pdfOptions)
+          filename: `Historique/instruction_de_dossier_${helpRequest.id}.html`,
+          content
         }
       })
   )
-  browser.close()
 
   // create zip file
   const zip = new JSZip()
-  zip.file('Résumé_archive.pdf', abstractPdfBuffer, { binary: true })
+  zip.file('Résumé_archive.html', abstractContent)
   zip.file(
-    `Informations/${getBeneficiaryName(beneficiaryDetails)}.pdf`,
-    infoPdfBuffer,
-    { binary: true }
+    `Informations/${getBeneficiaryName(beneficiaryDetails)}.html`,
+    informationsContent
   )
   followups.forEach(followup => {
-    zip.file(followup.filename, followup.buffer, {
-      binary: true
-    })
+    zip.file(followup.filename, followup.content)
   })
   helpRequests.forEach(helpRequest => {
-    zip.file(helpRequest.filename, helpRequest.buffer, {
-      binary: true
-    })
+    zip.file(helpRequest.filename, helpRequest.content)
   })
   zip.file('Budget/budget_mensuel.xlsx', budgetBuffer, { binary: true })
 
@@ -262,19 +223,6 @@ const compile = async function (templateName: string, data: any) {
   const filePath = path.join(process.cwd(), 'public', templateName)
   const template = await fs.promises.readFile(filePath, 'utf-8')
   return hbs.compile(template)(data)
-}
-
-const pdfOptions: PDFOptions = {
-  format: 'A4',
-  landscape: false,
-  scale: 1,
-  printBackground: true,
-  margin: {
-    top: 20,
-    bottom: 20,
-    left: 20,
-    right: 20
-  }
 }
 
 const getBeneficiaryName = (beneficiary: Beneficiary) => {
@@ -670,54 +618,3 @@ type SocialSupportItem = SocialSupportWithFollowupAndSubject[0]
 type BeneficiaryWithEntourageAndRelative = Awaited<
   ReturnType<typeof getBeneficaryDetails>
 >
-
-const launchBrowser = (): Promise<Browser> =>
-  puppeteer.launch({
-    headless: true,
-    // Documentation des arguments : https://peter.sh/experiments/chromium-command-line-switches/
-    // Inspiration pour la liste utilisée ici : https://www.bannerbear.com/blog/ways-to-speed-up-puppeteer-screenshots/
-    // Le but est d'avoir un Puppeteer le plus léger et rapide à lancer possible.
-    args: [
-      '--no-sandbox',
-      `--headless`,
-      `--disable-gpu`,
-      '--font-render-hinting=none',
-      '--disable-gpu',
-      '--autoplay-policy=user-gesture-required',
-      '--disable-accelerated-2d-canvas',
-      '--disable-background-networking',
-      '--disable-background-timer-throttling',
-      '--disable-backgrounding-occluded-windows',
-      '--disable-breakpad',
-      '--disable-client-side-phishing-detection',
-      '--disable-component-update',
-      '--disable-default-apps',
-      '--disable-dev-shm-usage',
-      '--disable-domain-reliability',
-      '--disable-extensions',
-      '--disable-features=AudioServiceOutOfProcess',
-      '--disable-hang-monitor',
-      '--disable-ipc-flooding-protection',
-      '--disable-notifications',
-      '--disable-offer-store-unmasked-wallet-cards',
-      '--disable-popup-blocking',
-      '--disable-print-preview',
-      '--disable-prompt-on-repost',
-      '--disable-renderer-backgrounding',
-      '--disable-setuid-sandbox',
-      '--disable-speech-api',
-      '--disable-sync',
-      '--hide-scrollbars',
-      '--ignore-gpu-blacklist',
-      '--metrics-recording-only',
-      '--mute-audio',
-      '--no-default-browser-check',
-      '--no-first-run',
-      '--no-pings',
-      '--no-zygote',
-      '--password-store=basic',
-      '--single-process',
-      '--use-gl=swiftshader',
-      '--use-mock-keychain'
-    ]
-  })

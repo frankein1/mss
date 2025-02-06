@@ -182,7 +182,7 @@
   const onDownloadArchive = async (values: ExportBeneficiaryInput) => {
     downloadPending.value = true
     try {
-      // await downloadArchive(values)
+      await downloadArchive(values)
       downloadReceived.value = true
       exportBeneficiaryInput.value = values
     } catch (error) {

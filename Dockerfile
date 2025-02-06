@@ -1,10 +1,5 @@
 FROM registry.gitlab.com/vigigloo/tools/pnpm:node-22_pnpm-9.15.0 as build
 
-ENV PUPPETEER_SKIP_DOWNLOAD=true
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
-
 WORKDIR /app
 COPY package.json pnpm-lock.yaml .npmrc prisma /app/
 RUN pnpm install --frozen-lockfile --prefer-offline
