@@ -8,7 +8,9 @@ export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
     rdvsp: { issuer }
   } = useRuntimeConfig()
 
+  // FIXME mutualize API calls to avoid multiple authentication
   const draftSyncStatus = await checkDrafts({ ctx })
+  console.log(draftSyncStatus)
 
   const [structure, ss] = await Promise.all([
     StructureRepo.findUniqueOrThrow(ctx.user, {

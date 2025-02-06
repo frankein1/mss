@@ -5,7 +5,7 @@ import {
   StructureRepo
 } from '~/server/database'
 import { PlanAppointmentInput } from '~/server/schema'
-import * as client from '~/server/lib/rdvsp-oauth.client'
+import { client, oauth } from '~/server/lib/rdvsp'
 import {
   invalidError,
   unauthorizedError,
@@ -140,7 +140,7 @@ async function createRdvspPlan(
   beneficiaryHistoryUrl: string
 ) {
   console.log('create rdv plan with rdvsp api')
-  const cfg = client.getConfig()
+  const cfg = oauth.getConfig()
 
   const rdvPlan = await client.createRdvPlan(
     cfg,

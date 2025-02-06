@@ -14,7 +14,7 @@ import {
   checkIntegrationSetupForStructure
 } from './helper'
 import { invalidError } from '~/server/trpc'
-import * as client from '~/server/lib/rdvsp-oauth.client'
+import { oauth, client } from '~/server/lib/rdvsp'
 import dayjs from 'dayjs'
 import { SocialSupportStatus } from '@prisma/client'
 
@@ -133,7 +133,7 @@ async function getRdvspRdvFromPlan(
   accessToken: string
 ) {
   console.log('fetch rdv from rdvsp')
-  const cfg = client.getConfig()
+  const cfg = oauth.getConfig()
 
   const rdvSummary = await client.getRdvSummaryFromPlan(
     cfg,

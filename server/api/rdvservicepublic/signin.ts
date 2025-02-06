@@ -1,7 +1,7 @@
 import { useSession } from 'h3'
 import { v4 } from 'uuid'
 import { RdvspAuthSession } from '~/server/types/session'
-import { getConfig, authorize } from '~/server/lib/rdvsp-oauth.client'
+import { oauth } from '~/server/lib/rdvsp'
 
 const { auth } = useRuntimeConfig()
 
@@ -25,5 +25,5 @@ export default defineEventHandler(async event => {
 
   await session.update(() => ({ nonce, state, metadata: { action, id } }))
 
-  return sendRedirect(event, authorize(getConfig(), nonce, state))
+  return sendRedirect(event, oauth.authorize(oauth.getConfig(), nonce, state))
 })

@@ -1,6 +1,6 @@
 import { useSession } from 'h3'
 import { RdvspAuthSession } from '~/server/types/session'
-import * as client from '~/server/lib/rdvsp-oauth.client'
+import { client, oauth } from '~/server/lib/rdvsp'
 import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'
 import { JwtUser } from '~/types/user'
@@ -69,8 +69,8 @@ async function createOrUpdateToken(
     throw unauthorized('Missing or invalid state or nonce')
   }
 
-  const cfg = client.getConfig()
-  const token = await client.getToken(cfg, code as string)
+  const cfg = oauth.getConfig()
+  const token = await oauth.getTokenFromCode(cfg, code as string)
 
   console.log(token)
   if ('error' in token || !token) {
@@ -145,6 +145,7 @@ async function createOrUpdateToken(
       where: { id: account.id },
       data: {
         accessToken: token.access_token,
+        refreshToken: token.refresh_token,
         expiresAt: token.expires_in,
         scope: token.scope,
         sessionState: state
@@ -161,7 +162,7 @@ async function importRdvspOrganisationId(
   accessToken: string
 ) {
   console.log('import organization')
-  const cfg = client.getConfig()
+  const cfg = oauth.getConfig()
 
   const org = await client.getOrganisation(cfg, accessToken)
 
