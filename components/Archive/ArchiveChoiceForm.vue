@@ -42,6 +42,7 @@
       <button
         class="fr-link"
         type="button"
+        :disabled="!archivePermission"
         @click="changeValue('delay')"
       >
         Je souhaite conserver le dossier 1 an supplémentaire.
@@ -51,14 +52,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { FamilyFilePermissions } from '~/server/security'
-
   const archiveChoiceForm = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    permissions?: FamilyFilePermissions | undefined
     archiveDueDateHistory: number
     pending: boolean
+    archivePermission: boolean | undefined
+    deletePermission: boolean
   }>()
 
   const emit = defineEmits<{
@@ -76,13 +76,12 @@
     {
       value: 'delete',
       label: 'Supprimer définitivement le dossier',
-      disabled: !props.permissions?.delete || props.pending
+      disabled: props.pending || !props.deletePermission
     },
     {
       value: 'archive',
       label: 'Réaliser une archive et supprimer le dossier',
-      // TODO: archive must be a permission. Ex: props.permissions.archive
-      disabled: props.pending
+      disabled: props.pending || !props.archivePermission
     }
   ])
 
@@ -108,6 +107,15 @@
     &:hover {
       background-color: transparent;
       text-decoration-thickness: 2px;
+    }
+  }
+
+  .fr-link[disabled] {
+    text-decoration-color: var(--text-disabled-grey);
+
+    &:hover {
+      text-decoration-thickness: 1px;
+      background-color: transparent;
     }
   }
 </style>

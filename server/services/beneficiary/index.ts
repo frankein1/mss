@@ -10,11 +10,13 @@ import { getSimilar } from './getSimilar.service'
 import {
   getBeneficiarySecurityTarget,
   getEditionPermissions,
-  BeneficiarySecurityTarget
+  BeneficiarySecurityTarget,
+  getArchivePermissions
 } from './permission.service'
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
 import { createFamilyFileMember } from './create-family-file-member.service'
 import { updateEntourage } from './update-entourage.service'
+import { getLastActivity } from './get-last-activity.service'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -27,10 +29,12 @@ export const BeneficiaryService = {
   search,
   getSimilar,
   getEditionPermissions,
+  getArchivePermissions,
   getBeneficiarySecurityTarget,
   getIdFromFamilyFileId,
   createFamilyFileMember,
-  updateEntourage
+  updateEntourage,
+  getLastActivity
 }
 
 export type { BeneficiarySecurityTarget }

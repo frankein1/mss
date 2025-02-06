@@ -23,6 +23,9 @@ export const beneficiaryRouter = router({
   getSimilar: protectedProcedure
     .input(routes.getSimilarBeneficiaryQuery.inputValidation)
     .query(routes.getSimilarBeneficiaryQuery.execute),
+  getBeneficiaryArchivePermission: protectedProcedure
+    .input(routes.getBeneficiaryArchivePermissionsQuery.inputValidation)
+    .query(routes.getBeneficiaryArchivePermissionsQuery.execute),
 
   delete: protectedProcedure
     .input(routes.deleteBeneficiaryMutation.inputValidation)

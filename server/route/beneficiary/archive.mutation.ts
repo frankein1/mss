@@ -6,15 +6,21 @@ import {
   ExportBeneficiaryInput,
   exportBeneficiarySchema
 } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { BeneficiaryService } from '~/server/services'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.beneficiaries
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: ExportBeneficiaryInput
+) => {
+  const permission = await BeneficiaryService.getArchivePermissions({
+    ctx,
+    id: input.beneficiaryId
+  })
+  return permission.archive
+}
 
 const handler = async ({
   input,

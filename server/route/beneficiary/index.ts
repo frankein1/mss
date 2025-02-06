@@ -16,6 +16,7 @@ import { deleteBeneficiaryMutation } from './delete.mutation'
 import { deleteBeneficiaryDraftMutation } from './delete-draft.mutation'
 import { getBeneficiaryTaxHouseholdsQuery } from './get-taxhouseholds'
 import { SimilarBeneficiary, getSimilarBeneficiaryQuery } from './get-similar'
+import { getBeneficiaryArchivePermissionsQuery } from './get-archive-permissions.query'
 import { validateBeneficiaryMutation } from './validate.mutation'
 import { updateArchiveDateMutation } from './update-archive-date.mutation'
 
@@ -28,6 +29,7 @@ export const beneficiaryRoutes = {
   searchBeneficiaryQuery,
   getBeneficiaryTaxHouseholdsQuery,
   getSimilarBeneficiaryQuery,
+  getBeneficiaryArchivePermissionsQuery,
   updateEntourageMutation,
   updateExternalOrganisationsMutation,
   updateGeneralInformationMutation,

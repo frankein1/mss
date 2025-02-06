@@ -7,11 +7,6 @@
     v-else
     class="max-width"
   >
-    <AtomAlert
-      v-if="error"
-      :alert-type="AlertType.Error"
-      message="Le dossier n'a pas pu être chargé."
-    />
     <AtomBreadcrumb
       v-if="familyFileId && familyIdentification"
       :links="
@@ -22,6 +17,11 @@
         )
       "
     />
+    <AtomAlert
+      v-if="error"
+      :alert-type="AlertType.Error"
+      message="Le dossier n'a pas pu être chargé."
+    />
     <template v-if="beneficiary?.id && beneficiaryIdentification">
       <PageTitle
         :title="pageTitle"
@@ -29,15 +29,16 @@
       />
       <RequiredFields />
       <ArchiveChoiceForm
-        :permissions="permissions"
         :pending="downloadPending"
         :archive-due-date-history="archiveDueDateHistory"
+        :archive-permission="archivePermission"
+        :delete-permission="deletepermission"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
       <section ref="deleteSection">
         <ArchiveDelete
-          v-if="archiveFormStatus == 'delete' && deletepermission"
+          v-if="archiveFormStatus == 'delete'"
           class="fr-mt-4w"
           @delete-file="
             openDeleteModal({
@@ -93,19 +94,28 @@
 
   const {
     beneficiary,
-    permissions,
     beneficiaryIdentification,
     familyIdentification,
     pending,
+    permissions,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
 
-  const familyFileId: ComputedRef<string | null> = computed(
-    () => beneficiary?.value?.familyFileId || null
+  const { data: archivePermissionData } =
+    await trpcClient.beneficiary.getBeneficiaryArchivePermission.useQuery({
+      id: beneficiaryId
+    })
+  const archivePermission = computed(
+    () => archivePermissionData?.value?.archive
   )
   const deletepermission: ComputedRef<boolean> = computed(
     () => permissions.value?.delete || false
   )
+
+  const familyFileId: ComputedRef<string | null> = computed(
+    () => beneficiary?.value?.familyFileId || null
+  )
+
   const beneficiaryName = computed(() => {
     if (!beneficiary.value) {
       return '[inconnu]'
@@ -151,13 +161,13 @@
   }
 
   const deleteFile = async (values: ExportBeneficiaryInput) => {
-    if (permissions.value?.delete) {
+    if (archivePermission.value) {
       try {
         await trpcClient.beneficiary.archiveBeneficiary.query(values)
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
         downloadReceived.value = false // Reset variable
         exportBeneficiaryInput.value = null // Reset variable
-        modal.close() // ferme toute les modales
+        modal.close() // ferme toutes les modales
         navigateTo(routes.user.AppOverview.path())
       } catch {
         snackbar.error(
