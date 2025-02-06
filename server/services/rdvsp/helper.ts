@@ -20,7 +20,9 @@ export async function getAgentAuthInfo(user: SecurityRuleGrantee) {
   })
 
   if (!u.externalRdvspId) {
-    throw forbiddenError('Rdvsp integration not active for this user')
+    throw unauthorizedError(
+      'rdvsp: integration not activated yet for this user'
+    )
   }
 
   const connectedRdvspAccounts = u.externalAccounts.filter(
@@ -31,7 +33,7 @@ export async function getAgentAuthInfo(user: SecurityRuleGrantee) {
     connectedRdvspAccounts.length && connectedRdvspAccounts[0].accessToken
 
   if (!hasToken) {
-    throw unauthorizedError('rdvsp account not connected')
+    throw unauthorizedError('rdvsp: account not connected')
   }
 
   return {
