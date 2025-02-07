@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 10,
+      'Non renseigné': 11,
       'Employed': 1
     })
   })

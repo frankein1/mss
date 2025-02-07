@@ -7,7 +7,11 @@ import {
   SecurityRuleGrantee,
   getFamilyFilePermissions
 } from '~/server/security'
-import { getGranteRole, isReferentFor } from '~/server/security/rules/helpers'
+import {
+  getGranteRole,
+  isReferentFor,
+  isMemberOfReferents
+} from '~/server/security/rules/helpers'
 import { BeneficiaryService } from '.'
 
 export function getBeneficiarySecurityTarget(
@@ -56,10 +60,6 @@ function getBeneficiaryArchiveSecurityTarget(
   })
 }
 
-type BeneficiaryArchiveSecurityTarget = Prisma.PromiseReturnType<
-  typeof getBeneficiaryArchiveSecurityTarget
->
-
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
@@ -80,22 +80,27 @@ export const getArchivePermissions = async ({
 }) => {
   const { user } = ctx
   const beneficiary = await getBeneficiaryArchiveSecurityTarget(ctx.user, id)
-  const isReferent = isReferentFor(user, beneficiary.familyFile)
+  const isMember = isMemberOfReferents(user, beneficiary.familyFile)
   const archiveDueDate = beneficiary.archiveDueDate
   const lastActivity = await BeneficiaryService.getLastActivity({
     ctx,
     beneficiaryId: beneficiary.id
   })
   const toArchived = hasToBeArchived(lastActivity, archiveDueDate)
-  const { manager } = getGranteRole(ctx)
+  const { manager, receptionAgent } = getGranteRole(ctx)
 
   if (manager) {
     return {
       archive: true
     }
   }
+  if (receptionAgent) {
+    return {
+      archive: false
+    }
+  }
   return {
-    archive: isReferent && toArchived
+    archive: isMember && toArchived
   }
 }
 

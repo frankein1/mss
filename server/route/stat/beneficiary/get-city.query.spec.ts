@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - City', () => {
     const stats = await trpc.structureManager.stat.getCityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 10,
+      'Non renseigné': 11,
       'Dijon': 1
     })
   })

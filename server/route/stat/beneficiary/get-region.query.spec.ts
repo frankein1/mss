@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Region', () => {
     const stats = await trpc.structureManager.stat.getRegionStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 10,
+      'Non renseigné': 11,
       'Bourgogne-Franche-Comté': 1
     })
   })

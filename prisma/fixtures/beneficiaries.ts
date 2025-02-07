@@ -13,7 +13,8 @@ export enum FixtureBeneficiary {
   HEINIG = 8,
   PENBERTHY = 9,
   DOWNER = 10,
-  MARTIN = 11
+  MARTIN = 11,
+  INACTIVE = 12
 }
 
 export const fixturesBeneficiaries = [
@@ -161,5 +162,17 @@ export const fixturesBeneficiaries = [
     usualName: 'MARTIN',
     firstName: 'Martine',
     gender: 'Female'
+  },
+  {
+    id: '3d18f5ac-45cb-4e7a-9fd1-2a8d537bc2c0',
+    familyFileId: '3d18f5ac-45cb-4e7a-9fd1-2a8d537bc2c0',
+    fileNumber: 'H7KD92LMVN',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'INACTIVE',
+    firstName: 'Max',
+    gender: 'Male',
+    created: new Date('2021-01-01'),
+    updated: new Date('2021-01-01')
   }
 ] satisfies Prisma.BeneficiaryUncheckedCreateInput[]

@@ -115,5 +115,17 @@ export const fixturesFamilyFiles = [
         { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id }
       ]
     }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.INACTIVE].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+        { id: fixturesUsers[FixtureUserRole.Referent].id },
+        { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
+        { id: fixturesUsers[FixtureUserRole.Instructor].id }
+      ]
+    }
   }
 ] satisfies Prisma.FamilyFileUncheckedCreateInput[]

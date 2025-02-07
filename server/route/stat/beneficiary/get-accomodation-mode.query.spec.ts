@@ -29,7 +29,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
       await trpc.structureManager.stat.getAccommodationModeStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 9,
+      'Non renseigné': 10,
       'PrivateRenting': 1,
       'ThirdPerson': 1
     })
@@ -53,7 +53,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
     const stats = await trpc.referent.stat.getAccommodationModeStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 4,
+      'Non renseigné': 5,
       'ThirdPerson': 1
     })
   })

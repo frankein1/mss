@@ -27,7 +27,7 @@ describe('Statistics - Beneficiary - Gender', () => {
 
     expect(parseStats(stats)).toEqual({
       'Female': 4,
-      'Male': 2,
+      'Male': 3,
       'Non renseigné': 4,
       'Other': 1
     })

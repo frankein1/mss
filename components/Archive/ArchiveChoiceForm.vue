@@ -17,6 +17,12 @@
       >. S'il s'agit d'un dossier foyer, les autres membres ne seront pas
       impactés par ces choix.
     </p>
+    <AtomAlert
+      v-if="!archivePermission || !deletePermission"
+      class="fr-mb-2w"
+      :alert-type="AlertType.Warning"
+      :message="getWarningMessage()"
+    />
     <form
       ref="archiveChoiceForm"
       novalidate
@@ -52,6 +58,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { AlertType } from '~/utils/constants/alert'
+
   const archiveChoiceForm = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
@@ -84,6 +92,19 @@
       disabled: props.pending || !props.archivePermission
     }
   ])
+
+  const getWarningMessage = () => {
+    if (!props.deletePermission && !props.archivePermission) {
+      return "vous n'avez pas l'autorisation de gérer le dossier. Rapprochez-vous de votre responsable."
+    }
+    if (!props.deletePermission) {
+      return "vous n'avez pas l'autorisation de supprimer le dossier. Rapprochez-vous de votre responsable."
+    }
+    if (!props.archivePermission) {
+      return "vous n'avez pas l'autorisation d'archiver le dossier. Rapprochez-vous de votre responsable."
+    }
+    return ''
+  }
 
   const { resetForm } = useForm({
     initialValues: {}
