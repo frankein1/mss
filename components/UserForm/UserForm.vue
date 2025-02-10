@@ -107,8 +107,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .form-grid > * {
     @include dsfr.grid-col(12);

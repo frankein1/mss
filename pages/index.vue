@@ -189,8 +189,8 @@
 
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .landing-container-left {
     display: flex;

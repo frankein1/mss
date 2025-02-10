@@ -103,7 +103,7 @@
 </script>
 
 <style scoped lang="scss">
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .beneficiary-budget--header,
   .beneficiary-budget--title {

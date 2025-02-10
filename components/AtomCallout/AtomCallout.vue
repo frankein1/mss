@@ -38,7 +38,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .fr-callout {
     background-color: var(--background-alt-blue-france);

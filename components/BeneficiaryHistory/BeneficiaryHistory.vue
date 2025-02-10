@@ -81,7 +81,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
 
   .history-list {
     @include dsfr.disable-list-style;

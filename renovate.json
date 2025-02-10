@@ -15,11 +15,7 @@
     },
     {
       "groupName": "dsfr",
-      "matchPackagePatterns": ["@gouvfr/dsfr"]
-    },
-    {
-      "groupName": "vue-dsfr",
-      "matchPackagePatterns": ["vue-dsfr"]
+      "matchPackagePatterns": ["@gouvfr/dsfr", "vue-dsfr"]
     }
   ],
   "timezone": "Europe/Paris",

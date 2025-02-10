@@ -133,7 +133,7 @@
 
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   @include dsfr-media-query.respond-from('md') {
     .fr-search-bar--lg .fr-input {

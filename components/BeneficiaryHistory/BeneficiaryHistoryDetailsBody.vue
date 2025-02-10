@@ -257,7 +257,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
 
   .beneficiary-history-details-body {
     --text-spacing: 0 0 1rem;

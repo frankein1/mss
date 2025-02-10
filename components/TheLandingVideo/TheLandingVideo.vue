@@ -106,7 +106,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .fr-content-media {
     margin: 0.5rem 0 !important;

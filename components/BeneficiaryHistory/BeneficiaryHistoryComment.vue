@@ -65,7 +65,7 @@
 </script>
 
 <style lang="scss">
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
 
   .comment-meta {
     display: flex;

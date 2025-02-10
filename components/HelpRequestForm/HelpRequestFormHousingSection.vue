@@ -90,7 +90,7 @@
 </script>
 
 <style scoped lang="scss">
-  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
 
   .fr-accordion {
     &::before {
