@@ -8,7 +8,6 @@ export const documentFileAllowedTypes = [
   'image/gif',
   'image/jpeg',
   'image/png',
-  'image/svg+xml',
   'image/webp',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'application/vnd.ms-excel',
