@@ -16,8 +16,8 @@ async function authenticate(
   await page.getByLabel('Email professionnel').fill(username)
   await page.getByRole('button', { name: /^continuer$/i }).click()
 
-  // Identity provider redirection : MonComptePro
-  await page.waitForURL(/moncomptepro.beta.gouv.fr/i)
+  // Identity provider redirection : Proconnect Identité
+  await page.waitForURL(/identite-sandbox.proconnect.gouv.fr/i)
   await page.getByLabel('Renseignez votre mot de passe').fill(password)
   await page.getByRole('button', { name: /identifier/i }).click()
 
