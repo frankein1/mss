@@ -179,7 +179,8 @@
     }
 
     &:checked + label {
-      background-image: radial-gradient(
+      background-image:
+        radial-gradient(
           transparent 6px,
           var(--border-active-blue-france) 7px,
           transparent 8px

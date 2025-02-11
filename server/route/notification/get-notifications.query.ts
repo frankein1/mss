@@ -132,6 +132,8 @@ function getDescription(notification: Notification) {
       return 'Mise à jour synthèse'
     case 'NewSocialSupportSubject':
       return "Ajout d'objet(s) d'accompagnement"
+    case 'ArchiveDue':
+      return 'Gérer le dossier'
     default:
       return ''
   }
@@ -169,6 +171,8 @@ function getDescriptionHint(
       return `modifiée par ${userName}`
     case 'NewSocialSupportSubject':
       return `ajouté(s) par ${userName}`
+    case 'ArchiveDue':
+      return `Dossier sans activité depuis 2 ans : suppression prévue le ${notification.detail}.`
     default:
       return ''
   }
