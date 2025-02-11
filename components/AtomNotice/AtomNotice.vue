@@ -42,6 +42,10 @@
 </script>
 
 <style scoped>
+  .fr-notice__body {
+    display: initial;
+  }
+
   .notice__content {
     color: var(--text-default-grey);
     font-weight: 400;
