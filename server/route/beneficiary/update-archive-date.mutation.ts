@@ -54,14 +54,16 @@ export const updateArchiveDateMutation = createMutation({
 const prepareData = async (ctx: SecurityRuleContext, beneficiaryId: string) => {
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: beneficiaryId },
-    select: { archiveDueDate: true }
+    select: { archiveDueDate: true, updated: true }
   })
   if (!beneficiary.archiveDueDate) {
     return {
-      archiveDueDate: dayjs().add(1, 'year').toDate()
+      archiveDueDate: dayjs().add(1, 'year').toDate(),
+      updated: beneficiary.updated // ne modifie pas la date de dernière mise à jour
     }
   }
   return {
+    updated: beneficiary.updated, // ne modifie pas la date de dernière mise à jour
     archiveDueDate: dayjs().add(1, 'year').toDate(),
     archiveDueDateHistory: {
       push: beneficiary.archiveDueDate
