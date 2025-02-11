@@ -18,3 +18,4 @@ export function dateIsBetween(
 
 export * from './beneficiary'
 export * from './formatSearchPattern'
+export { formatPhone } from './formatPhone'

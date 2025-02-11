@@ -63,6 +63,7 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
+  import { formatPhone } from '~/utils'
 
   const props = withDefaults(
     defineProps<{
@@ -172,24 +173,6 @@
     }
 
     return value
-  }
-
-  function formatPhone(value: string) {
-    if (
-      value.match(
-        /(^(\+33 [1-9]|0[1-9])( \d\d){4}$)|(^(\+\d\d(?<!\+33)) ?[1-9]( ?\d){6,14}$)/g
-      )
-    ) {
-      return value
-    }
-
-    let telValue = value.replace(/ /g, '')
-
-    if (telValue.match(/^\+33([1-9])((\d){8})$/g)) {
-      telValue = telValue.replace(/^\+33([1-9])((\d){8})$/g, '+33 $1 $2')
-    }
-
-    return telValue.replace(/\d{2}(?=(\d{1,2}){1,4}$)/g, '$& ')
   }
 
   function formatSocialSecurityNumber(value: string) {
