@@ -33,6 +33,7 @@
         :archive-due-date-history="archiveDueDateHistory"
         :archive-permission="archivePermission"
         :delete-permission="deletepermission"
+        :delay-permission="!downloadReceived"
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
@@ -292,7 +293,7 @@
     const downloadLink = document.createElement('a')
     downloadLink.href = response.archiveFile
     const date = new Date()
-    downloadLink.download = `Archive_dossier_${beneficiaryName.value}_${date.toISOString()}.zip`
+    downloadLink.download = `Archive ${beneficiaryName.value} ${date.toLocaleDateString()} Mon-Suivi-Social.zip`
     downloadLink.click()
     downloadLink.remove()
   }

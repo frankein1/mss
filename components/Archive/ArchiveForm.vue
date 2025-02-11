@@ -6,7 +6,7 @@
     <div class="feature-section fr-mt-4w">
       <h2 class="fr-h4">
         Conserver son prénom et son nom dans Mon Suivi Social durant
-        2&nbsp;ans&nbsp;?&nbsp;<span class="color-red">*</span>
+        1&nbsp;an&nbsp;?&nbsp;<span class="color-red">*</span>
       </h2>
       <p class="muted">
         Son dossier passera au statut archivé. Le reste des informations ne sera

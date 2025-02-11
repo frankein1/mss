@@ -48,7 +48,7 @@
       <button
         class="fr-link"
         type="button"
-        :disabled="!archivePermission"
+        :disabled="!archivePermission || !delayPermission"
         @click="changeValue('delay')"
       >
         Je souhaite conserver le dossier 1 an supplémentaire.
@@ -67,6 +67,7 @@
     pending: boolean
     archivePermission: boolean | undefined
     deletePermission: boolean
+    delayPermission: boolean
   }>()
 
   const emit = defineEmits<{
