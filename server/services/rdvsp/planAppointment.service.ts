@@ -30,12 +30,9 @@ export async function planAppointment({
   input: PlanAppointmentInput
   ctx: ProtectedAppContext
 }) {
-  let {
+  const {
     public: { appUrl }
   } = useRuntimeConfig()
-  if (appUrl.includes('localhost')) {
-    appUrl = 'http://localhost.gouv.fr'
-  }
 
   const [structure, ben] = await Promise.all([
     StructureRepo.findUniqueOrThrow(ctx.user, {

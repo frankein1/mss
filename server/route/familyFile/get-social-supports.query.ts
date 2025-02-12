@@ -186,6 +186,7 @@ function loadSocialSupports(
       },
       appointment: {
         select: {
+          time: true,
           durationInMin: true,
           place: true,
           subject: true,

@@ -143,6 +143,7 @@ async function validateDraftAppointment({
         agentId: agent.id,
         subject: rdv.subject,
         externalSubjectId: rdv.externalSubjectId.toString(),
+        time: rdv.date,
         place: rdv.place,
         durationInMin: rdv.durationInMin
       }

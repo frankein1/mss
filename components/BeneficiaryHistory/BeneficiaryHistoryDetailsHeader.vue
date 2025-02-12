@@ -24,6 +24,11 @@
         <span class="history-details__date">
           le {{ formatDate(data.date) }}
         </span>
+        <template v-if="data.appointment?.time">
+          <span class="history-details__date">
+            à {{ formatTime(data.appointment?.time) }}
+          </span>
+        </template>
         <template v-if="!singleBeneficiary">
           <span> · </span>
           <span class="fr-text--regular">
@@ -85,6 +90,7 @@
   import type { SocialSupportData } from './types'
   import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
+  import { formatTime } from '~/utils/formatTime'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { followupFieldLabels } from '~/client/labels'
