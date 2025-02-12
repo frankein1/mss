@@ -12,11 +12,3 @@ export const toggleRdvspSchema = z.object({
 })
 
 export type ToggleRdvspInput = z.infer<typeof toggleRdvspSchema>
-
-export const validateDraftAppointmentSchema = z.object({
-  socialSupportId: z.string().uuid()
-})
-
-export type ValidateDraftAppointmentInput = z.infer<
-  typeof validateDraftAppointmentSchema
->

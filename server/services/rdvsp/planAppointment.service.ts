@@ -68,7 +68,6 @@ export async function planAppointment({
 
   const draft = await createDraftAppointment(ctx, ben.familyFileId, ben.id)
 
-  const returnUrl = `${appUrl}${routes.user.AppOverview.path()}`
   const beneficiaryHistoryUrl = `${appUrl}${routes.file.AppFile.path(
     ben.familyFileId,
     {
@@ -85,7 +84,7 @@ export async function planAppointment({
     rdvPlan = await createRdvspPlan(
       accessToken,
       ben,
-      returnUrl,
+      beneficiaryHistoryUrl,
       beneficiaryHistoryUrl
     )
   } catch (e: unknown) {

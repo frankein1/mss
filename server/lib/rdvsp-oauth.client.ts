@@ -285,7 +285,7 @@ export async function createRdvPlan(
     | 'region'
   >,
   returnUrl: string,
-  beneficiaryHistoryUrl: string
+  dossierUrl: string
 ): Promise<
   { id: number; url: string } | RdvspMutationError | GenericFetchError
 > {
@@ -304,10 +304,8 @@ export async function createRdvPlan(
       })
     },
     return_url: returnUrl,
-    dossier_url: beneficiaryHistoryUrl
+    dossier_url: dossierUrl
   }
-  console.log('body')
-  console.log(JSON.stringify(body))
 
   const response = await fetch(`${cfg.issuer}/api/v1/rdv_plans`, {
     method: 'post',

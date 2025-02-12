@@ -1,6 +1,6 @@
 import type { SecurityRuleContext } from '~/server/security'
 import { SocialSupportRepo, StructureRepo } from '~/server/database/repository'
-import { checkDrafts } from './validateDraftAppointment.service'
+import { validateDraftAppointmentsForAgent } from './validateDraftAppointment.service'
 import { getAppointmentRdvspUrl } from './helper'
 
 export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
@@ -8,7 +8,7 @@ export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
     rdvsp: { issuer }
   } = useRuntimeConfig()
 
-  const draftSyncStatus = await checkDrafts({ ctx })
+  const _draftSyncStatus = await validateDraftAppointmentsForAgent({ ctx })
 
   const [structure, ss] = await Promise.all([
     StructureRepo.findUniqueOrThrow(ctx.user, {

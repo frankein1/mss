@@ -11,7 +11,11 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { SocialSupportRepo, StructureRepo } from '~/server/database'
-import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
+import {
+  FamilyFileSecurityTarget,
+  FamilyFileService,
+  RdvspService
+} from '~/server/services'
 import {
   filterSocialSupport,
   filterFollowup,
@@ -334,6 +338,11 @@ const handler = async ({
 }) => {
   const { familyFileId, filters } = input
 
+  const _draftSyncStatus =
+    await RdvspService.validateDraftAppointmentsForFamilyFile({
+      ctx,
+      input: { familyFileId }
+    })
   const rdvspOrganisationId = await getRdvspOrganisationId(ctx)
 
   const [totalCount, socialSupports, familyFile] = await Promise.all([

@@ -6,7 +6,6 @@ import {
   UserRepo,
   BeneficiaryRepo
 } from '~/server/database/repository'
-import { ValidateDraftAppointmentInput } from '~/server/schema'
 import {
   getAgentAuthInfo,
   APPOINTMENT_STATUS,
@@ -18,35 +17,85 @@ import * as client from '~/server/lib/rdvsp-oauth.client'
 import dayjs from 'dayjs'
 import { SocialSupportStatus } from '@prisma/client'
 
-export async function validateDraftAppointment({
+export async function validateDraftAppointmentsForFamilyFile({
+  ctx,
+  input: { familyFileId }
+}: {
+  ctx: SecurityRuleContext
+  input: { familyFileId: string }
+}) {
+  const res = await prepare({ ctx })
+  if (!res) {
+    return
+  }
+
+  const drafts = await SocialSupportRepo.findMany(ctx.user, {
+    where: { familyFileId, appointment: { draft: true } },
+    select: { id: true }
+  })
+
+  const promises = drafts.map(draft =>
+    validateDraftAppointment({
+      ctx,
+      input: {
+        socialSupportId: draft.id,
+        accessToken: res.accessToken,
+        externalStructureId: res.externalStructureId
+      }
+    })
+  )
+
+  return await Promise.allSettled(promises)
+}
+
+export async function validateDraftAppointmentsForAgent({
+  ctx
+}: {
+  ctx: SecurityRuleContext
+}) {
+  const res = await prepare({ ctx })
+  if (!res) {
+    return
+  }
+
+  const drafts = await SocialSupportRepo.findMany(ctx.user, {
+    where: { appointment: { draft: true } },
+    select: { id: true }
+  })
+
+  const promises = drafts.map(draft =>
+    validateDraftAppointment({
+      ctx,
+      input: {
+        socialSupportId: draft.id,
+        accessToken: res.accessToken,
+        externalStructureId: res.externalStructureId
+      }
+    })
+  )
+
+  return await Promise.allSettled(promises)
+}
+
+async function validateDraftAppointment({
   ctx,
   input
 }: {
   ctx: SecurityRuleContext
-  input: ValidateDraftAppointmentInput
+  input: {
+    socialSupportId: string
+    accessToken: string
+    externalStructureId: string
+  }
 }) {
-  const {
-    public: { appUrl }
-  } = useRuntimeConfig()
-
-  const [structure, ss] = await Promise.all([
-    StructureRepo.findUniqueOrThrow(ctx.user, {
-      where: { id: ctx.structure.id },
-      select: { externalRdvspId: true, externalRdvspActive: true }
-    }),
-    SocialSupportRepo.findUniqueOrThrow(ctx.user, {
-      where: { id: input.socialSupportId },
-      select: {
-        beneficiaryId: true,
-        appointment: { select: { id: true, externalDraftId: true } },
-        beneficiary: { select: { externalRdvspId: true } }
-      }
-    })
-  ])
-
-  checkIntegrationSetupForStructure(structure)
-
-  const { accessToken } = await getAgentAuthInfo(ctx.user)
+  const ss = await SocialSupportRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.socialSupportId },
+    select: {
+      beneficiaryId: true,
+      appointment: { select: { id: true, externalDraftId: true } },
+      beneficiary: { select: { externalRdvspId: true } }
+    }
+  })
 
   const externalDraftId = ss.appointment?.externalDraftId
   if (!externalDraftId) {
@@ -56,13 +105,13 @@ export async function validateDraftAppointment({
   // FIXME il faudrait pouvoir récupérer une liste de rdv plan à l'équipe de RDVSP
   const rdv = await getRdvspRdvFromPlan(
     externalDraftId,
-    structure.externalRdvspId as string,
-    accessToken
+    input.externalStructureId,
+    input.accessToken
   )
 
   if (!rdv) {
     console.log('rdv is still in draft status')
-    return getMssAppointmentUrl(appUrl)
+    return
   }
 
   console.log('success', rdv)
@@ -112,7 +161,7 @@ export async function validateDraftAppointment({
     )
   }
 
-  return getMssAppointmentUrl(appUrl)
+  return
 }
 
 function findAgentFromExternalIds(
@@ -184,20 +233,38 @@ async function addUsagerIdToBeneficiary(
   })
 }
 
-function getMssAppointmentUrl(base: string) {
-  return `${base}/app/overview`
-}
+async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
+  if (!ctx.structure.externalRdvspActive) {
+    return false
+  }
 
-/** Validate all drafts associated to structure */
-export async function checkDrafts({ ctx }: { ctx: SecurityRuleContext }) {
-  const drafts = await SocialSupportRepo.findMany(ctx.user, {
-    where: { appointment: { draft: true } },
-    select: { id: true }
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: ctx.structure.id },
+    select: { externalRdvspId: true, externalRdvspActive: true }
   })
 
-  const promises = drafts.map(draft =>
-    validateDraftAppointment({ ctx, input: { socialSupportId: draft.id } })
-  )
+  try {
+    checkIntegrationSetupForStructure(structure)
+  } catch (e: unknown) {
+    console.log(e)
+    return false
+  }
 
-  return await Promise.allSettled(promises)
+  let accessToken: string
+  try {
+    const res = await getAgentAuthInfo(ctx.user)
+    accessToken = res.accessToken
+  } catch (e: unknown) {
+    console.log(e)
+    return false
+  }
+
+  if (!accessToken) {
+    return false
+  }
+
+  return {
+    accessToken,
+    externalStructureId: structure.externalRdvspId as string
+  }
 }
