@@ -1934,6 +1934,8 @@ model Notification {
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @map("comment_id") @db.Uuid
 
+  archiveDate DateTime? @map("archive_date")
+
   read Boolean? @default(false)
 
   type NotificationType

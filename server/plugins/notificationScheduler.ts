@@ -1,4 +1,4 @@
-import { NotificationType, SocialSupport } from '@prisma/client'
+import { NotificationType, SocialSupport, UserRole } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
   BeneficiaryRepo,
@@ -138,6 +138,18 @@ const createArchiveDueNotifications = async () => {
             }
           }
         }
+      },
+      structure: {
+        select: {
+          users: {
+            where: {
+              role: UserRole.StructureManager
+            },
+            select: {
+              id: true
+            }
+          }
+        }
       }
     }
   })
@@ -155,16 +167,21 @@ const createArchiveDueNotifications = async () => {
       id: beneficiary.id,
       lastActivity: getBeneficiaryLastActivity(beneficiary),
       archiveDueDate: beneficiary.archiveDueDate,
-      referentIds: beneficiary.familyFile.referents.map(r => r.id)
+      referentIds: [
+        ...new Set([
+          ...beneficiary.familyFile.referents.map(r => r.id),
+          ...beneficiary.structure.users.map(u => u.id)
+        ])
+      ]
     }))
 
-  const flatenBeneficiaries = mustBeArchivedBeneficiaries
+  const archiveNotifications = mustBeArchivedBeneficiaries
     .map(beneficiary =>
       beneficiary.referentIds.flatMap(referentId => ({
-        detail: getArchiveDate(
+        archiveDate: getArchiveDate(
           beneficiary.lastActivity,
           beneficiary.archiveDueDate
-        ).toLocaleDateString(),
+        ),
         beneficiaryId: beneficiary.id,
         recipientId: referentId,
         type: NotificationType.ArchiveDue
@@ -172,9 +189,47 @@ const createArchiveDueNotifications = async () => {
     )
     .flat()
 
+  const filtered = await filteredArchiveNotifications(archiveNotifications)
+
   await NotificationRepo.prisma.createMany({
-    data: flatenBeneficiaries
+    data: filtered
   })
+}
+
+const filteredArchiveNotifications = async (
+  notifications: {
+    archiveDate: Date
+    beneficiaryId: string
+    recipientId: string
+    type: NotificationType
+  }[]
+) => {
+  const finalNotifications: {
+    archiveDate: Date
+    beneficiaryId: string
+    recipientId: string
+    type: NotificationType
+  }[] = []
+
+  const responses = await Promise.all(
+    notifications.map(async notification => {
+      return await NotificationRepo.prisma.count({
+        where: {
+          type: NotificationType.ArchiveDue,
+          beneficiaryId: notification.beneficiaryId,
+          recipientId: notification.recipientId,
+          archiveDate: notification.archiveDate
+        }
+      })
+    })
+  )
+
+  responses.forEach((response, index) => {
+    if (response === 0) {
+      finalNotifications.push(notifications[index])
+    }
+  })
+  return finalNotifications
 }
 
 function startScheduler() {

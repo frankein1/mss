@@ -152,6 +152,10 @@ function getDescriptionHint(
   const isFu =
     notification.socialSupport?.socialSupportType === SocialSupportType.Followup
 
+  const archiveMessage = notification.archiveDate
+    ? `Dossier sans activité depuis 2 ans : suppression prévue le ${notification.archiveDate.toLocaleDateString()}.`
+    : `Dossier sans activité depuis 2 ans.`
+
   switch (notification.type) {
     case 'DueDateOneMonth':
     case 'DueDateToday':
@@ -172,7 +176,7 @@ function getDescriptionHint(
     case 'NewSocialSupportSubject':
       return `ajouté(s) par ${userName}`
     case 'ArchiveDue':
-      return `Dossier sans activité depuis 2 ans : suppression prévue le ${notification.detail}.`
+      return archiveMessage
     default:
       return ''
   }

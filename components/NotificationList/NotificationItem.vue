@@ -18,13 +18,28 @@
       >
         {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
-      <p class="fr-mb-0">
+      <p
+        v-if="notification.type === 'ArchiveDue'"
+        class="fr-mb-0"
+      >
+        {{ notification.descriptionHint }}
         <NuxtLink
           v-if="itemLink"
           class="fr-link"
           :to="itemLink"
-          >{{ notification.description }}</NuxtLink
-        >
+          >{{ notification.description }}
+        </NuxtLink>
+      </p>
+      <p
+        v-else
+        class="fr-mb-0"
+      >
+        <NuxtLink
+          v-if="itemLink"
+          class="fr-link"
+          :to="itemLink"
+          >{{ notification.description }}
+        </NuxtLink>
         {{ notification.descriptionHint }}
       </p>
       <p
