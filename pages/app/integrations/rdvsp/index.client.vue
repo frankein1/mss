@@ -1,7 +1,17 @@
 <template>
   <div class="fr-container fr-pb-5w">
-    <AtomLoader class="fr-mx-auto" />
-    <h1 class="fr-h1">Redirection vers RDVSP en cours...</h1>
+    <img
+      src="~/assets/img/redirection-rdvsp.svg"
+      class="fr-responsive-img"
+      alt=""
+    />
+    <h1 class="fr-h1 fr-text--xl">
+      Redirection en cours vers RDV Service Public
+    </h1>
+    <AtomLoader
+      class="fr-mx-auto fr-mt-5w"
+      :diameter="70"
+    />
   </div>
 </template>
 
@@ -54,3 +64,25 @@
     layout: 'empty'
   })
 </script>
+
+<style scoped>
+  .fr-container {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    > .fr-responsive-img {
+      margin-bottom: 1.5rem;
+      max-width: 35rem;
+    }
+
+    > h1 {
+      color: var(--primary);
+      font-weight: var(--bold);
+      max-width: 35rem;
+      text-align: center;
+    }
+  }
+</style>
