@@ -43,7 +43,7 @@
     if (e instanceof TRPCClientError) {
       switch (e.data.code) {
         case 'UNAUTHORIZED':
-          snackbar.info("L'authentification sur RDVSP à échoué.")
+          snackbar.error("L'authentification sur RDVSP à échoué.")
           break
         case 'FORBIDDEN':
           snackbar.error(

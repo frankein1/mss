@@ -32,7 +32,8 @@ export enum BeneficiaryHistoryAction {
   PrintFinancialHelpRequest = 'Imprimer - Instruction de dossier - Aide financière',
   PrintHousingHelpRequest = 'Imprimer - Instruction de dossier -Demande de logement',
   PrintOtherHelpRequest = 'Imprimer - Instruction de dossier - Autre',
-  PrintFollowup = "Imprimer - Synthèse d'entretien"
+  PrintFollowup = "Imprimer - Synthèse d'entretien",
+  PlanAppointment = 'Prendre rendez-vous pour un bénéficiaire'
 }
 
 export enum BeneficiaryAction {

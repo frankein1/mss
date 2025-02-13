@@ -105,12 +105,14 @@
     UpdateBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
   import FamilyFileSplitActionModal from '~/components/FamilyFileSplit/FamilyFileSplitActionModal.vue'
+  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
   const route = useRoute()
   const snackbar = useSnackbar()
   const modal = useModal()
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
+  const matomo = useMatomo()
 
   const familyFileId = route.params.id as string
 
@@ -301,6 +303,11 @@
 
   const isSubmittingPlanAppointment = ref(false)
   async function onPlanAppointment() {
+    matomo.trackEvent(
+      EventCategory.Beneficiary,
+      BeneficiaryHistoryAction.PlanAppointment
+    )
+
     await useTrpcMutation({
       mutation: () =>
         trpcClient.rdvsp.planAppointment.mutate({
