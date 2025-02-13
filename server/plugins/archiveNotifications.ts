@@ -1,4 +1,4 @@
-import { NotificationType, UserRole } from '@prisma/client'
+import { NotificationType, UserRole, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { BeneficiaryRepo, NotificationRepo } from '~/server/database'
 import {
@@ -26,6 +26,7 @@ const createArchiveDueNotifications = async () => {
       familyFile: {
         select: {
           referents: {
+            where: { status: UserStatus.Active },
             select: { id: true }
           },
           budget: {
