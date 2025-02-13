@@ -20,5 +20,8 @@ export const socialSupportStatusClasses = {
   [SocialSupportStatus.RdvNoShow]: 'fr-badge--error',
   [SocialSupportStatus.RdvExcused]: 'fr-badge--purple-glycine',
   [SocialSupportStatus.RdvRevoked]: 'fr-badge--purple-glycine',
-  [SocialSupportStatus.RdvUnknown]: 'fr-badge--info'
+  [SocialSupportStatus.RdvUnknown]: 'fr-badge--info',
+  RdvUpcoming:
+    'fr-badge--yellow-tournesol fr-badge--icon-left fr-icon-flashlight-fill',
+  RdvObsolete: 'fr-badge--info'
 }

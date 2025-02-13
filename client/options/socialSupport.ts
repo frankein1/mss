@@ -27,12 +27,17 @@ export const fileInstructionStatusKeys = buildKeys({
   [SocialSupportStatus.Adjourned]: 'Ajourné',
   [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
   [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
-  [SocialSupportStatus.Dismissed]: 'Classé sans suite',
+  [SocialSupportStatus.Dismissed]: 'Classé sans suite'
+})
+
+export const appointmentStatusKeys = buildKeys({
   [SocialSupportStatus.RdvSeen]: 'Honoré',
   [SocialSupportStatus.RdvNoShow]: 'Absence non excusée',
   [SocialSupportStatus.RdvExcused]: "Annulé à l'initiative de l'usager",
   [SocialSupportStatus.RdvRevoked]: "Annulé à l'initiative du service",
-  [SocialSupportStatus.RdvUnknown]: 'Inconnu'
+  [SocialSupportStatus.RdvUnknown]: 'Status du rendez-vous inconnu',
+  RdvUpcoming: 'A venir',
+  RdvObsolete: 'Rendez-vous passé'
 })
 
 export const ministryFileInstructionStatusKeys = buildKeys({
@@ -50,7 +55,7 @@ export const ministryFileInstructionStatusKeys = buildKeys({
 
 export const socialSupportStatusKeys = mergeKeys(
   followupStatusKeys,
-  fileInstructionStatusKeys
+  mergeKeys(fileInstructionStatusKeys, appointmentStatusKeys)
 )
 
 export const ministrySocialSupportStatusKeys = mergeKeys(

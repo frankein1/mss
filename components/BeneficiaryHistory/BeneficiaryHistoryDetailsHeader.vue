@@ -61,7 +61,7 @@
     </div>
     <div class="history-details__status">
       <SocialSupportBadgesGroup
-        :status="data.status"
+        :status
         :redirected-label
         :has-unread-notifications
         :first-followup="
@@ -94,6 +94,7 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { followupFieldLabels } from '~/client/labels'
+  import dayjs from 'dayjs'
 
   const route = useRoute()
 
@@ -124,6 +125,29 @@
       return followup.structureName
         ? `${label} : ${followup.structureName}`
         : label
+    }
+  })
+
+  const status = computed(() => {
+    if (props.data.socialSupportType !== 'Appointment') {
+      return props.data.status
+    }
+
+    switch (props.data.status) {
+      case 'RdvUnknown': {
+        const now = dayjs(new Date())
+        const time = props.data.appointment?.time
+          ? dayjs(props.data.appointment?.time)
+          : now.set('hour', 23).set('minute', 59)
+
+        const datetime = dayjs(props.data.date)
+          .set('hour', time.get('hour'))
+          .set('minute', time.get('minute'))
+
+        return dateIsSameOrAfter(datetime, now) ? 'RdvUpcoming' : 'RdvObsolete'
+      }
+      default:
+        return props.data.status
     }
   })
 

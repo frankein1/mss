@@ -31,7 +31,7 @@
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
 
   const props = defineProps<{
-    status: SocialSupportStatus
+    status: SocialSupportStatus | 'RdvUpcoming' | 'RdvObsolete'
     hasUnreadNotifications?: boolean
     redirectedLabel?: string
     firstFollowup?: string
