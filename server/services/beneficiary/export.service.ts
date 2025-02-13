@@ -74,12 +74,9 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'pensionOrganisations',
     'otherPensionOrganisations',
     'cafNumber',
-    'bank',
-    'funeralContract',
     'additionalInformation',
     'numeroPegase',
     'entourages',
-    'documents',
     'historyTotal',
     'subjects',
     'referents',
@@ -106,32 +103,16 @@ export async function exportBeneficiaries({
 
   const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
 
-  // Parallelize prisma request to speed up process
-  // The size of the connection pool being limited, set a chunk size of 5
-  const chunkSize = 5
   const rows: RowType[] = []
-  for (let i = 0; i < dataRequest.length; i += chunkSize) {
-    const chunk = dataRequest.slice(i, i + chunkSize)
-    const promises = chunk.map(async req => {
-      const documents = await DocumentRepo.findMany(ctx.user, {
-        where: { familyFileId: req.beneficiary.familyFileId },
-        select: { name: true }
-      })
 
-      const data = formatData(req.beneficiary, documents)
-      return data
-    })
-    const res = await Promise.all(promises)
-    rows.push(...res)
+  for (const { beneficiary } of dataRequest) {
+    rows.push(formatData(beneficiary))
   }
 
   return { columns, rows }
 }
 
-function formatData(
-  beneficiary: GetBeneficiaryOutput,
-  documents: { name: string }[]
-) {
+function formatData(beneficiary: GetBeneficiaryOutput) {
   const { general, occupationIncome, taxHouseholds } = beneficiary
   return {
     referents: beneficiary.referents
@@ -211,16 +192,13 @@ function formatData(
     otherPensionOrganisations:
       occupationIncome?.otherPensionOrganisations || '',
     cafNumber: occupationIncome?.cafNumber || '',
-    // bank: occupationIncome?.bank || '',
-    // funeralContract: occupationIncome?.funeralContract || '',
     additionalInformation: general.additionalInformation || '',
     numeroPegase: general.numeroPegase || '',
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
     updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
-    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
-    documents: documents.map(document => document.name).join(', ')
+    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || ''
   }
 }
 
