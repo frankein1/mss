@@ -14,16 +14,18 @@ export const getLastActivity = async ({
   // si familyFile est mis à jour (ajout ou suppression d'un membre), le beneficiary.updated n'est pas mis à jour
   // Pas de champ "updated" pour la table Document
 
-  const beneficiary = await getBeneficiaryWithUpdateDates(ctx, beneficiaryId)
+  const beneficiary = await getBeneficiaryWithActivityDates(ctx, beneficiaryId)
   return getBeneficiaryLastActivity(beneficiary)
 }
 
-const getlatestDate = (dates: Date[]): Date => {
-  return dates.reduce((max, current) => (current > max ? current : max))
+export const getMostRecenttDate = (dates: Date[]): Date => {
+  const unixMilliseconds = dates.map(date => dayjs(date).valueOf())
+  const max = Math.max(...unixMilliseconds)
+  return new Date(max)
 }
 
 export const getBeneficiaryLastActivity = (
-  beneficiary: BeneficiaryWithUpdateDates
+  beneficiary: BeneficiaryWithActivityDates
 ) => {
   const socialSupportActivites = beneficiary.socialSupports.map(
     support => support.updated
@@ -42,26 +44,29 @@ export const getBeneficiaryLastActivity = (
     ...incomesActivites
   ].filter(Boolean) as Date[]
 
-  return getlatestDate(activities)
+  return getMostRecenttDate(activities)
 }
 
 export const getArchiveDate = (
   lastActivity: Date,
   archiveDueDate: Date | null
 ): Date => {
+  // il n'y a pas eu de conservation du dossier
   if (!archiveDueDate) {
     return dayjs(lastActivity).add(2, 'year').toDate()
   }
-  if (lastActivity < dayjs(archiveDueDate).subtract(1, 'year').toDate()) {
+  // il y a eu une activité depuis l'action de conservation du dossier
+  if (lastActivity > dayjs(archiveDueDate).subtract(1, 'year').toDate()) {
     return dayjs(lastActivity).add(2, 'year').toDate()
   }
+  // il n'y a pas eu d'activité depuis l'action de conservation du dossier
   return archiveDueDate
 }
-type BeneficiaryWithUpdateDates = Awaited<
-  ReturnType<typeof getBeneficiaryWithUpdateDates>
+type BeneficiaryWithActivityDates = Awaited<
+  ReturnType<typeof getBeneficiaryWithActivityDates>
 >
 
-const getBeneficiaryWithUpdateDates = async (
+export const getBeneficiaryWithActivityDates = async (
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ) => {
