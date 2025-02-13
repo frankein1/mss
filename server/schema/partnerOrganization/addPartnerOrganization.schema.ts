@@ -4,38 +4,40 @@ import {
   phoneConstraint,
   requiredStringConstraint,
   siretConstraint,
-  stringConstraint,
+  requiredLimitedStringConstraint,
+  limitedStringConstraint,
   stringOrEmpty
 } from '..'
 
 const contactPartnerOrganizationSchema = z
   .array(
     z.object({
-      id: stringConstraint,
-      name: requiredStringConstraint,
-      email: stringConstraint.nullish(),
-      phone: stringConstraint.nullish()
+      id: limitedStringConstraint(),
+      name: requiredLimitedStringConstraint(),
+      email: limitedStringConstraint().nullish(),
+      phone: limitedStringConstraint().nullish()
     })
   )
   .nullish()
 
 export const addCustomPartnerOrganizationSchema = z.object({
-  name: requiredStringConstraint,
+  name: requiredLimitedStringConstraint(),
   siret: siretConstraint,
-  address: stringConstraint.nullish(),
-  zipcode: stringConstraint.nullish(),
-  city: stringConstraint.nullish(),
+  address: limitedStringConstraint(null, 100).nullish(),
+  zipcode: limitedStringConstraint(null, 10).nullish(),
+  city: limitedStringConstraint().nullish(),
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
-  workingHours: stringConstraint.nullish(),
+  workingHours: limitedStringConstraint(null, 100).nullish(),
   contacts: contactPartnerOrganizationSchema
 })
 
 export const addDataInclusionPartnerOrganizationSchema =
   addCustomPartnerOrganizationSchema.extend({
     dataInclusionId: requiredStringConstraint,
-    siret: siretConstraint.nullish()
+    siret: siretConstraint.nullish(),
+    phone1: limitedStringConstraint(null, 20).nullish()
   })
 
 export const addPartnerOrganizationSchema = z.union([

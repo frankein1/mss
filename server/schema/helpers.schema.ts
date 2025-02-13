@@ -47,6 +47,20 @@ export const requiredStringConstraint = stringConstraint.min(
   'Veuillez renseigner ce champ.'
 )
 
+export function limitedStringConstraint(min: number | null = null, max = 50) {
+  return min
+    ? stringConstraint
+        .min(min, minStringLengthMessage(min))
+        .max(max, maxStringLengthMessage(max))
+    : stringConstraint.max(max, maxStringLengthMessage(max))
+}
+
+export function requiredLimitedStringConstraint(max = 50) {
+  return stringConstraint
+    .min(2, 'Veuillez renseigner ce champ.')
+    .max(max, maxStringLengthMessage(max))
+}
+
 export const cafNumberConstraint = stringConstraint.max(
   8,
   maxStringLengthMessage(8)
