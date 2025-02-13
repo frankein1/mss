@@ -43,20 +43,22 @@
         Mis à jour par {{ formatUserDisplayName(data.lastUpdatedBy) }} le
         {{ formatDate(data.updated) }}
       </div>
-      <ul class="fr-tags-group social-support-subjects-tags">
-        <template v-if="data.socialSupportType === 'Appointment'">
-          <li v-if="data.appointment?.subject">
-            <p class="fr-tag">{{ data.appointment.subject }}</p>
-          </li>
-        </template>
-        <template v-else>
-          <li
-            v-for="socialSupportSubject in data.subjects"
-            :key="socialSupportSubject.id"
-          >
-            <p class="fr-tag">{{ socialSupportSubject.name }}</p>
-          </li>
-        </template>
+      <div
+        v-if="data.appointment?.subject"
+        class="fr-mt-1v"
+      >
+        <p class="fr-mb-0">Motif : {{ data.appointment.subject }}</p>
+      </div>
+      <ul
+        v-else
+        class="fr-tags-group social-support-subjects-tags"
+      >
+        <li
+          v-for="socialSupportSubject in data.subjects"
+          :key="socialSupportSubject.id"
+        >
+          <p class="fr-tag">{{ socialSupportSubject.name }}</p>
+        </li>
       </ul>
     </div>
     <div class="history-details__status">

@@ -22,7 +22,7 @@
             class="fr-btn fr-btn--secondary fr-icon-edit-line"
             external
           >
-            Modifier dans RDVSP
+            Modifier dans RDV Service Public
           </NuxtLink>
         </li>
       </ul>
