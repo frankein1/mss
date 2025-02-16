@@ -102,8 +102,6 @@ async function createDraftAppointment(
   familyFileId: string,
   beneficiaryId: string
 ) {
-  console.log('create draft appointment in mss bdd')
-
   return await SocialSupportRepo.prisma.create({
     data: {
       status: SocialSupportStatus.RdvUnknown,
@@ -135,7 +133,6 @@ async function createRdvspPlan(
   returnUrl: string,
   beneficiaryHistoryUrl: string
 ) {
-  console.log('create rdv plan with rdvsp api')
   const cfg = client.getConfig()
 
   const rdvPlan = await client.createRdvPlan(
@@ -146,7 +143,6 @@ async function createRdvspPlan(
     beneficiaryHistoryUrl
   )
 
-  console.log(rdvPlan)
   if ('status' in rdvPlan) {
     if (rdvPlan.status !== 401) {
       throw invalidError('could not create rdv plan')

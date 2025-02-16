@@ -110,11 +110,10 @@ async function validateDraftAppointment({
   )
 
   if (!rdv) {
-    console.log('rdv is still in draft status')
     return
   }
 
-  console.log('success', rdv)
+  console.log('rdvsp: success', rdv)
 
   const users = await UserRepo.findMany(ctx.user, {
     select: { id: true, externalRdvspId: true },
@@ -154,8 +153,6 @@ async function validateDraftAppointment({
     rdv.externalUsagerIds[0] &&
     rdv.externalUsagerIds[0].toString() !== ss.beneficiary.externalRdvspId
   if (isNewRdvspUsager) {
-    console.log('rdv taken for a new beneficiary')
-
     await addUsagerIdToBeneficiary(
       ss.beneficiaryId,
       rdv.externalUsagerIds[0].toString()
@@ -182,7 +179,6 @@ async function getRdvspRdvFromPlan(
   externalStructureId: string,
   accessToken: string
 ) {
-  console.log('fetch rdv from rdvsp')
   const cfg = client.getConfig()
 
   const rdvSummary = await client.getRdvSummaryFromPlan(
@@ -246,8 +242,7 @@ async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
 
   try {
     checkIntegrationSetupForStructure(structure)
-  } catch (e: unknown) {
-    console.log(e)
+  } catch {
     return false
   }
 
@@ -255,8 +250,7 @@ async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
   try {
     const res = await getAgentAuthInfo(ctx.user)
     accessToken = res.accessToken
-  } catch (e: unknown) {
-    console.log(e)
+  } catch {
     return false
   }
 

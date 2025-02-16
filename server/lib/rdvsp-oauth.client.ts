@@ -144,21 +144,22 @@ async function getWrapper<T>(
   try {
     const res = await ofetch(`${cfg.issuer}${path}`, { headers })
     if ('error' in res) {
-      console.error('error', res)
+      console.log('rdvsp: fetch error api internal error', res)
       throw invalidError('rdvsp: could not retrieve element requested')
     }
 
     return transform ? (transform(res) as T) : (res as T)
   } catch (e: unknown) {
-    console.error('error', e)
     if (e instanceof FetchError) {
       if (e.status === 401) {
         throw unauthorizedError('rdvsp: not authenticated')
       } else {
+        console.log('rdvsp: fetch error status', e.status)
         throw invalidError('rdvsp: could not process request')
       }
     }
 
+    console.log('rdvsp: fetch error status', e)
     throw invalidError('rdvsp: unknown error')
   }
 }
@@ -254,15 +255,14 @@ export async function createUsager(
   try {
     res = await response.json()
   } catch {
-    console.log('other error', response.statusText)
+    console.log('rdvsp: other error', response.statusText)
     return { status: response.status, statusText: response.statusText }
   }
 
   if (response.ok) {
-    console.log('usager creation successful', res.user)
     return { id: res.user.id as number }
   }
-  console.log('usager creation failed', res)
+  console.log('rdvsp: usager creation failed', res)
   return res as RdvspError
 }
 
@@ -320,14 +320,13 @@ export async function createRdvPlan(
   try {
     res = await response.json()
   } catch {
-    console.log('other error', response.statusText)
+    console.log('rdvsp: other error', response.statusText)
     return { status: response.status, statusText: response.statusText }
   }
 
   if (response.ok) {
-    console.log('draft rdv creation successful', res.rdv_plan)
     return { id: res.rdv_plan.id as number, url: res.rdv_plan.url as string }
   }
-  console.log('draft rdv creation failed', res)
+  console.log('rdvsp: draft rdv creation failed', res)
   return res as RdvspMutationError
 }

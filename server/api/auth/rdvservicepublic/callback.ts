@@ -20,8 +20,6 @@ export default defineEventHandler(async event => {
   if (!code || !state) {
     throw unauthorized('No code or state returned from RDVSP OAuth')
   }
-  console.log('code', code)
-  console.log('state', state)
 
   const { user }: { user: JwtUser } = event.context.auth
 
@@ -72,7 +70,6 @@ async function createOrUpdateToken(
   const cfg = client.getConfig()
   const token = await client.getToken(cfg, code as string)
 
-  console.log(token)
   if ('error' in token || !token) {
     throw badrequest('Could not retrieve authentication token')
   }
@@ -80,7 +77,7 @@ async function createOrUpdateToken(
   // FIXME nonce verification could be implemented here
 
   const agent = await client.getAgentInfo(cfg, token.access_token)
-  console.log(agent)
+  console.log(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
 
   if ('error' in agent || !agent) {
     throw badrequest('Could not retrieve agent info')

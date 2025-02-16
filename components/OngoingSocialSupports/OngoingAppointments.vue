@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="false"
     class="feature-section ongoing-social-supports ongoing-social-supports__file-instructions"
   >
     <div class="ongoing-social-supports__header">
