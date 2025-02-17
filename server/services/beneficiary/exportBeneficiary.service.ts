@@ -60,6 +60,7 @@ export const exportBeneficiary = async ({
 
   const socialSupports = await getSocialSupports(
     beneficiaryDetails.familyFileId,
+    beneficiaryDetails.id,
     user
   )
 
@@ -235,8 +236,8 @@ const getFollowupData = (socialSupport: SocialSupportItem) => {
     type: documentTypeKeys.value(document.type)
   }))
   return {
-    createdByEmail: socialSupport.createdBy?.email,
-    lastUpdatedByEmail: socialSupport.lastUpdatedBy?.email,
+    createdBy: getPrettyUserName(socialSupport.createdBy),
+    lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
     firstFollowup: socialSupport.followup?.firstFollowup || null,
     date: socialSupport.date.toLocaleDateString(),
     ministre: socialSupport.ministre
@@ -292,18 +293,8 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
     )
   }
   return {
-    createdBy:
-      socialSupport.createdBy.firstName +
-      ' ' +
-      socialSupport.createdBy.lastName +
-      ' ' +
-      socialSupport.createdBy.email,
-    lastUpdatedBy:
-      socialSupport.lastUpdatedBy?.firstName +
-      ' ' +
-      socialSupport.lastUpdatedBy?.lastName +
-      ' ' +
-      socialSupport.lastUpdatedBy?.email,
+    createdBy: getPrettyUserName(socialSupport.createdBy),
+    lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
     date: socialSupport.date.toLocaleDateString(), // commun
     ministre: socialSupport.ministre
       ? ministerKeys.value(socialSupport.ministre)
@@ -527,10 +518,18 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
   })
 }
 
-const getSocialSupports = async (familyFileId: string, user: User) => {
+const getSocialSupports = async (
+  familyFileId: string,
+  beneficiaryId: string,
+  user: User
+) => {
   return await SocialSupportRepo.findMany(user, {
     where: {
-      familyFileId: familyFileId
+      familyFileId: familyFileId,
+      beneficiaryId: beneficiaryId,
+      appointment: {
+        draft: false
+      }
     },
     include: {
       followup: {
@@ -609,6 +608,23 @@ const getSocialSupports = async (familyFileId: string, user: User) => {
     },
     orderBy: [{ date: 'desc' }, { created: 'desc' }]
   })
+}
+
+const getPrettyUserName = (user: User | null) => {
+  if (!user) {
+    return null
+  }
+  const name = []
+  if (user.firstName) {
+    name.push(user.firstName)
+  }
+  if (user.lastName) {
+    name.push(user.lastName)
+  }
+  if (user.email) {
+    name.push(user.email)
+  }
+  return name.join(' ')
 }
 
 type SocialSupportWithFollowupAndSubject = Awaited<
