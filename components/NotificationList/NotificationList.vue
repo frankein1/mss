@@ -179,22 +179,21 @@
       archiveNotifications.value &&
       archiveNotifications.value.length > 0
     ) {
-      archiveNotifications.value.forEach(notification => {
-        const beneficiaryName = notification.beneficiary
-          ? formatBeneficiaryName({
-              title: null,
-              firstName: notification.beneficiary.firstName,
-              usualName: notification.beneficiary.usualName
-            })
-          : ''
-        modal.open(ArchiveNotificationModal, {
-          triggerOpen: true,
-          title: `Le dossier de ${beneficiaryName} est inactif depuis 2 ans : une action est requise.`,
-          validate: () => {
-            navigateTo(notification.actionUrl)
-            modal.close()
-          }
-        })
+      const firstNotification = archiveNotifications.value[0]
+      const beneficiaryName = firstNotification.beneficiary
+        ? formatBeneficiaryName({
+            title: null,
+            firstName: firstNotification.beneficiary.firstName,
+            usualName: firstNotification.beneficiary.usualName
+          })
+        : ''
+      modal.open(ArchiveNotificationModal, {
+        triggerOpen: true,
+        title: `Le dossier de ${beneficiaryName} est inactif depuis 2 ans : une action est requise.`,
+        validate: () => {
+          navigateTo(firstNotification.actionUrl)
+          modal.close()
+        }
       })
 
       unwatch()

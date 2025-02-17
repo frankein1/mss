@@ -38,6 +38,17 @@
         Dissocier du dossier
       </button>
     </li>
+    <li v-if="archivePermission">
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-folder-2-line fr-mb-0 edit-btn"
+        data-fr-opened="false"
+        type="button"
+        title="Archiver le bénéficiaire"
+        @click="emit('archive')"
+      >
+        Archiver le bénéficiaire
+      </button>
+    </li>
     <li>
       <NuxtLink
         :to="`${editRoute}`"
@@ -55,6 +66,7 @@
   import { FamilyFilePermissions } from '~/server/security'
 
   const route = useRoute()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -62,7 +74,15 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ delete: []; split: [] }>()
+  const { data: archivePermissionData } =
+    await trpcClient.beneficiary.getBeneficiaryArchivePermission.useQuery({
+      id: props.beneficiaryId
+    })
+  const archivePermission = computed(
+    () => archivePermissionData?.value?.archive
+  )
+
+  const emit = defineEmits<{ delete: []; split: []; archive: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
@@ -88,6 +108,10 @@
     .fr-btn[class*=' fr-icon-'].fr-btn--icon-left.fr-icon-edit-line.edit-btn {
     max-width: 100%;
     overflow: initial;
-    padding: 0.5rem 1rem;
+  }
+</style>
+<style lang="scss" scoped>
+  .edit-btn {
+    max-width: 100% !important;
   }
 </style>
