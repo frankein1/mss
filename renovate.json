@@ -15,11 +15,19 @@
     },
     {
       "groupName": "dsfr",
-      "matchPackagePatterns": ["@gouvfr/dsfr", "vue-dsfr"]
+      "matchPackagePatterns": [
+        "@gouvfr/dsfr",
+        "vue-dsfr",
+        "vue-dsfr-nuxt-module"
+      ]
+    },
+    {
+      "groupName": "vue-tsc",
+      "matchPackagePatterns": ["vue-tsc"]
     }
   ],
   "timezone": "Europe/Paris",
-  "schedule": ["* * * * 0,6"],
+  "schedule": ["* * * * 0,1,6"],
   "updateNotScheduled": false,
   "prConcurrentLimit": 5
 }
