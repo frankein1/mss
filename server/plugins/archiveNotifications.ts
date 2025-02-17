@@ -7,8 +7,99 @@ import {
 } from '../services/beneficiary/get-last-activity.service'
 
 const createArchiveDueNotifications = async () => {
+  const twentyThreeMonthsBefore = dayjs().subtract(23, 'month').toDate()
+  const oneMonthBefore = dayjs().subtract(1, 'month').toDate()
   const beneficiaries = await BeneficiaryRepo.prisma.findMany({
-    where: {},
+    where: {
+      OR: [
+        {
+          archiveDueDate: {
+            lte: oneMonthBefore
+          }
+        },
+        {
+          OR: [
+            {
+              updated: {
+                lte: twentyThreeMonthsBefore
+              }
+            },
+            {
+              updated: {}
+            },
+            {
+              documents: {
+                none: {}
+              }
+            },
+            {
+              documents: { some: { created: { lte: twentyThreeMonthsBefore } } }
+            },
+            {
+              socialSupports: {
+                none: {}
+              }
+            },
+            {
+              socialSupports: {
+                some: {
+                  updated: {
+                    lte: twentyThreeMonthsBefore
+                  }
+                }
+              }
+            }
+          ],
+          familyFile: {
+            OR: [
+              {
+                budget: {}
+              },
+              {
+                budget: {
+                  OR: [
+                    {
+                      updated: {}
+                    },
+                    {
+                      updated: {
+                        lte: twentyThreeMonthsBefore
+                      }
+                    },
+                    {
+                      incomes: {
+                        some: {
+                          updated: {
+                            lte: twentyThreeMonthsBefore
+                          }
+                        }
+                      }
+                    },
+                    {
+                      incomes: {
+                        none: {}
+                      }
+                    }
+                  ],
+                  expenses: {
+                    OR: [
+                      {
+                        updated: {}
+                      },
+                      {
+                        updated: {
+                          lte: twentyThreeMonthsBefore
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
     select: {
       id: true,
       updated: true,
