@@ -63,7 +63,6 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
-  import { formatPhone } from '~/utils'
 
   const props = withDefaults(
     defineProps<{

@@ -19,8 +19,10 @@
         :beneficiary-id="selectedBeneficiary.id"
         :family-file-id="familyFileId"
         :permissions="selectedPermissions"
+        :family-file="familyFileIdentification.length > 1"
+        :is-submitting-appointment-plan
         class="fr-pb-3w"
-        @plan-appointment="onPlanAppointment"
+        @plan-appointment="handleAppointmentPlan"
       />
       <hr />
       <AtomAlert
@@ -106,6 +108,7 @@
   } from '~/server/schema'
   import FamilyFileSplitActionModal from '~/components/FamilyFileSplit/FamilyFileSplitActionModal.vue'
   import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
+  import BeneficiaryPlanAppointmentModal from '~/components/BeneficiaryPlanAppointment/BeneficiaryPlanAppointmentModal.vue'
 
   const route = useRoute()
   const snackbar = useSnackbar()
@@ -301,8 +304,36 @@
     })
   }
 
-  const isSubmittingPlanAppointment = ref(false)
-  async function onPlanAppointment() {
+  /** Take an appointment with RDV Service Public for a beneficiary */
+  async function handleAppointmentPlan() {
+    const id = selectedBeneficiary.value?.id || ''
+    if ((familyFileIdentification.value || []).length > 1) {
+      openAppointmentModal(id)
+    } else {
+      await planAppointment(id)
+    }
+  }
+
+  const isSubmittingAppointmentPlan = ref(false)
+
+  function openAppointmentModal(beneficiaryId: string) {
+    const beneficiaryOptions = (familyFileIdentification.value || []).map(
+      m => ({
+        label: formatBeneficiaryDisplayName(m),
+        value: m.id
+      })
+    )
+
+    modal.open(BeneficiaryPlanAppointmentModal, {
+      title: 'Pour quel bénéficiaire souhaitez-vous prendre rendez-vous ?',
+      id: beneficiaryId,
+      beneficiaryOptions,
+      planAppointment,
+      isSubmittingAppointmentPlan: isSubmittingAppointmentPlan.value
+    })
+  }
+
+  async function planAppointment(beneficiaryId: string, fromModal = false) {
     matomo.trackEvent(
       EventCategory.Beneficiary,
       BeneficiaryHistoryAction.PlanAppointment
@@ -310,28 +341,32 @@
 
     await useTrpcMutation({
       mutation: () =>
-        trpcClient.rdvsp.planAppointment.mutate({
-          beneficiaryId: selectedBeneficiary.value?.id || ''
-        }),
-      isSubmitting: isSubmittingPlanAppointment,
+        trpcClient.rdvsp.planAppointment.mutate({ beneficiaryId }),
+      isSubmitting: isSubmittingAppointmentPlan,
       onSuccess: url => {
         window.location.href = url
       },
-      onFailure: handleAppointmentPlanningFailure
+      onFailure: (e: unknown) =>
+        handleAppointmentPlanningFailure(e, beneficiaryId, fromModal)
     })
   }
 
-  function handleAppointmentPlanningFailure(e: unknown) {
+  function handleAppointmentPlanningFailure(
+    e: unknown,
+    id: string,
+    fromModal: boolean
+  ) {
+    if (fromModal) {
+      modal.close()
+      setFocusAfterClose('#action-rdv', 'button')
+    }
     if (e instanceof TRPCClientError) {
       switch (e.data.code) {
         case 'UNAUTHORIZED': {
           snackbar.info(
             'Authentification sur RDVSP en cours. Veuillez patienter.'
           )
-          const options = {
-            action: 'planAppointment',
-            id: selectedBeneficiary.value?.id || ''
-          }
+          const options = { action: 'planAppointment', id }
           navigateTo(apiRoutes.rdvsp.ApiSignIn.path(options), {
             external: true
           })

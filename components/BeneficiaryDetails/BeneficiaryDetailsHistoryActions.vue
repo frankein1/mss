@@ -28,11 +28,18 @@
           Instruction de dossier
         </button>
       </li>
-      <li v-if="application.module.rdv">
+      <li
+        v-if="application.module.rdv"
+        id="action-rdv"
+      >
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-calendar-event-line fr-mb-0"
           type="button"
           title="Rendez-vous"
+          :data-fr-opened="familyFile ? 'false' : ''"
+          :aria-controls="familyFile ? 'global-modal' : ''"
+          :submitting="isSubmittingAppointmentPlan"
+          :readonly="isSubmittingAppointmentPlan"
           @click="emit('planAppointment')"
         >
           Rendez-vous
@@ -61,6 +68,8 @@
     familyFileId: string
     beneficiaryId: string
     permissions: FamilyFilePermissions | undefined
+    isSubmittingAppointmentPlan: boolean
+    familyFile: boolean
   }>()
 
   const emit = defineEmits<{ planAppointment: [] }>()
