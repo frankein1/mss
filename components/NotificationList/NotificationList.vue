@@ -46,6 +46,7 @@
       </div>
     </template>
   </div>
+  <OpenModalHack />
 </template>
 
 <script setup lang="ts">
@@ -53,6 +54,9 @@
   import { AlertType } from '~/utils/constants/alert'
   import { NotificationTypeFilterValue } from '~/client/options'
   import { NOTIFICATIONS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import ArchiveNotificationModal from '~/components/Archive/ArchiveNotificationModal.vue'
+  import { routes } from '~/utils/routes'
+  import { formatBeneficiaryName } from '~/utils/beneficiary'
 
   const trpcClient = useTrpcClient()
 
@@ -150,6 +154,52 @@
       }
     }
   }
+
+  // get archive notifications
+  const { data: archiveData } =
+    await trpcClient.archiveNotification.get.useQuery()
+
+  const archiveNotifications = computed(() => {
+    if (archiveData && archiveData.value) {
+      return archiveData.value.map(notification => ({
+        archiveDate: notification.archiveDate,
+        beneficiary: notification.beneficiary,
+        actionUrl: notification.beneficiary?.id
+          ? routes.beneficiary.AppBeneficiariesArchive.path(
+              notification.beneficiary.id
+            )
+          : null
+      }))
+    }
+  })
+  const modal = useModal()
+  const unwatch = watch(modal.isReady, () => {
+    if (
+      modal.isReady &&
+      archiveNotifications.value &&
+      archiveNotifications.value.length > 0
+    ) {
+      archiveNotifications.value.forEach(notification => {
+        const beneficiaryName = notification.beneficiary
+          ? formatBeneficiaryName({
+              title: null,
+              firstName: notification.beneficiary.firstName,
+              usualName: notification.beneficiary.usualName
+            })
+          : ''
+        modal.open(ArchiveNotificationModal, {
+          triggerOpen: true,
+          title: `Le dossier de ${beneficiaryName} est inactif depuis 2 ans : une action est requise.`,
+          validate: () => {
+            navigateTo(notification.actionUrl)
+            modal.close()
+          }
+        })
+      })
+
+      unwatch()
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

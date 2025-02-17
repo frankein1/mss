@@ -111,6 +111,5 @@ function startScheduler() {
     .run(async () => {
       await createArchiveDueNotifications()
     })
-    // .cron('0 2 1 * *')
-    .everyMinutes(10)
+    .cron('0 2 1 * *')
 }

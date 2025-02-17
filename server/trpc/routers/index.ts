@@ -10,7 +10,10 @@ import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequest/router'
 import { fileInstructionRouter } from './fileInstruction/router'
-import { notificationRouter } from './notification/router'
+import {
+  notificationRouter,
+  archiveNotificationRouter
+} from './notification/router'
 import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
@@ -29,6 +32,7 @@ export const appRouter = router({
   budget: budgetRouter,
   dataInclusion: dataInclusionRouter,
   notification: notificationRouter,
+  archiveNotification: archiveNotificationRouter,
   config: configRouter,
   partner: partnerRouter,
   followup: followupRouter,
