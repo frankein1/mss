@@ -9,6 +9,7 @@
         :label="''"
         name="beneficiaryId"
         :options="beneficiaryOptions"
+        :inline="false"
         required
       />
     </section>
