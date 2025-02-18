@@ -274,7 +274,9 @@ const handler = async ({
     })
   }
 
-  return await createExport(user.id, exportData)
+  const stream = await createExport(user.id, exportData)
+
+  return { data: stream.toString('base64') }
 }
 
 export const exportBeneficiaryStatsQuery = createQuery({
