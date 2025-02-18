@@ -50,12 +50,12 @@ const adminHandler = async ({
     }
   })
 
-  if (!canBeDisabled(structure)) {
-    throw createError({
-      statusCode: 400,
-      message: 'La structure ne peut être désactivée.'
-    })
-  }
+  // if (!canBeDisabled(structure)) {
+  //   throw createError({
+  //     statusCode: 400,
+  //     message: 'La structure ne peut être désactivée.'
+  //   })
+  // }
 
   const deleteNotifications = NotificationRepo.prisma.deleteMany({
     where: {

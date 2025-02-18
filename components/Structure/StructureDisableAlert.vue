@@ -4,6 +4,14 @@
       La structure sera désactivée et les bénéficiaires rattachés anonymisées.
       Cette action est irreversible
     </div>
+    <div class="fr-text--sm">
+      Note :
+      {{
+        canBeDisabled(structure)
+          ? 'La structure est inactive depuis plus de six mois.'
+          : 'La structure a eu une activité dans les six derniers mois.'
+      }}
+    </div>
     <div class="button-bar">
       <button
         class="fr-btn fr-btn--icon-left fr-icon-delete-line delete"
@@ -26,6 +34,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { canBeDisabled } from '~/utils/structure'
   import { StructureInfo } from './types'
 
   const props = defineProps<{
