@@ -7,95 +7,110 @@ import {
 } from '../services/beneficiary/get-last-activity.service'
 
 const createArchiveDueNotifications = async () => {
+  const beneficiaries = await getInactiveBeneficiaries()
+
+  const mustBeArchivedBeneficiaries = beneficiaries
+    .filter(beneficiary => {
+      const lastActivity = getBeneficiaryLastActivity(beneficiary)
+      const archiveDate = getArchiveDate(
+        lastActivity,
+        beneficiary.archiveDueDate
+      )
+      return dayjs(archiveDate).subtract(1, 'month').isBefore(dayjs())
+    })
+    .map(beneficiary => ({
+      id: beneficiary.id,
+      lastActivity: getBeneficiaryLastActivity(beneficiary),
+      archiveDueDate: beneficiary.archiveDueDate,
+      referentIds: [
+        ...new Set([
+          ...beneficiary.familyFile.referents.map(r => r.id),
+          ...beneficiary.structure.users.map(u => u.id)
+        ])
+      ]
+    }))
+
+  const archiveNotifications = mustBeArchivedBeneficiaries
+    .map(beneficiary =>
+      beneficiary.referentIds.flatMap(referentId => ({
+        archiveDate: getArchiveDate(
+          beneficiary.lastActivity,
+          beneficiary.archiveDueDate
+        ),
+        beneficiaryId: beneficiary.id,
+        recipientId: referentId,
+        type: NotificationType.ArchiveDue
+      }))
+    )
+    .flat()
+
+  const filtered = await filteredArchiveNotifications(archiveNotifications)
+
+  await NotificationRepo.prisma.createMany({
+    data: filtered
+  })
+}
+
+export const getInactiveBeneficiaries = async () => {
   const twentyThreeMonthsBefore = dayjs().subtract(23, 'month').toDate()
   const oneMonthBefore = dayjs().subtract(1, 'month').toDate()
-  const beneficiaries = await BeneficiaryRepo.prisma.findMany({
+  return await BeneficiaryRepo.prisma.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          archiveDueDate: {
-            lte: oneMonthBefore
-          }
+          OR: [
+            { archiveDueDate: { gte: oneMonthBefore } },
+            { archiveDueDate: null }
+          ]
+        },
+        {
+          OR: [{ created: { lte: twentyThreeMonthsBefore } }, { created: null }]
+        },
+        {
+          OR: [{ updated: { lte: twentyThreeMonthsBefore } }, { updated: null }]
         },
         {
           OR: [
             {
-              updated: {
-                lte: twentyThreeMonthsBefore
-              }
-            },
-            {
-              updated: {}
-            },
-            {
-              documents: {
-                none: {}
-              }
-            },
-            {
               documents: { some: { created: { lte: twentyThreeMonthsBefore } } }
             },
-            {
-              socialSupports: {
-                none: {}
-              }
-            },
-            {
-              socialSupports: {
-                some: {
-                  updated: {
-                    lte: twentyThreeMonthsBefore
-                  }
-                }
+            { documents: { none: {} } }
+          ]
+        },
+        {
+          familyFile: {
+            budget: {
+              OR: [
+                { updated: { lte: twentyThreeMonthsBefore } },
+                { updated: null }
+              ]
+            }
+          }
+        },
+        {
+          familyFile: {
+            budget: {
+              expenses: {
+                OR: [
+                  { updated: { lte: twentyThreeMonthsBefore } },
+                  { updated: null }
+                ]
               }
             }
-          ],
+          }
+        },
+        {
           familyFile: {
-            OR: [
-              {
-                budget: {}
-              },
-              {
-                budget: {
-                  OR: [
-                    {
-                      updated: {}
-                    },
-                    {
-                      updated: {
-                        lte: twentyThreeMonthsBefore
-                      }
-                    },
-                    {
-                      incomes: {
-                        some: {
-                          updated: {
-                            lte: twentyThreeMonthsBefore
-                          }
-                        }
-                      }
-                    },
-                    {
-                      incomes: {
-                        none: {}
-                      }
-                    }
-                  ],
-                  expenses: {
-                    OR: [
-                      {
-                        updated: {}
-                      },
-                      {
-                        updated: {
-                          lte: twentyThreeMonthsBefore
-                        }
-                      }
-                    ]
+            budget: {
+              OR: [
+                {
+                  incomes: {
+                    some: { created: { lte: twentyThreeMonthsBefore } }
                   }
-                }
-              }
-            ]
+                },
+                { incomes: { none: {} } }
+              ]
+            }
           }
         }
       ]
@@ -103,6 +118,7 @@ const createArchiveDueNotifications = async () => {
     select: {
       id: true,
       updated: true,
+      created: true,
       archiveDueDate: true,
       documents: {
         select: {
@@ -151,49 +167,7 @@ const createArchiveDueNotifications = async () => {
       }
     }
   })
-
-  const mustBeArchivedBeneficiaries = beneficiaries
-    .filter(beneficiary => {
-      const lastActivity = getBeneficiaryLastActivity(beneficiary)
-      const archiveDate = getArchiveDate(
-        lastActivity,
-        beneficiary.archiveDueDate
-      )
-      return dayjs(archiveDate).subtract(1, 'month').isBefore(dayjs())
-    })
-    .map(beneficiary => ({
-      id: beneficiary.id,
-      lastActivity: getBeneficiaryLastActivity(beneficiary),
-      archiveDueDate: beneficiary.archiveDueDate,
-      referentIds: [
-        ...new Set([
-          ...beneficiary.familyFile.referents.map(r => r.id),
-          ...beneficiary.structure.users.map(u => u.id)
-        ])
-      ]
-    }))
-
-  const archiveNotifications = mustBeArchivedBeneficiaries
-    .map(beneficiary =>
-      beneficiary.referentIds.flatMap(referentId => ({
-        archiveDate: getArchiveDate(
-          beneficiary.lastActivity,
-          beneficiary.archiveDueDate
-        ),
-        beneficiaryId: beneficiary.id,
-        recipientId: referentId,
-        type: NotificationType.ArchiveDue
-      }))
-    )
-    .flat()
-
-  const filtered = await filteredArchiveNotifications(archiveNotifications)
-
-  await NotificationRepo.prisma.createMany({
-    data: filtered
-  })
 }
-
 export const filteredArchiveNotifications = async (
   notifications: {
     archiveDate: Date
