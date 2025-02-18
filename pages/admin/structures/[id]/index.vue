@@ -81,7 +81,7 @@
       mutation: () => trpcClient.admin.disableStructure.mutate({ id }),
       onSuccess: () => {
         modal.close()
-        snackbar.success('Structure désactivé')
+        snackbar.success('Structure désactivée')
         navigateTo(routes.admin.AdminStructures.path())
       },
       onFailure: () => {
