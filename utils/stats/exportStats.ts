@@ -60,7 +60,7 @@ export const zipAndDownloadImages = async (
 
   const zipWriter = new ZipWriter(new BlobWriter('application/zip'))
 
-  const promises = nodes.map(async (node, i) => {
+  const promises = nodes.map(async node => {
     const expandButton = node?.getElementsByClassName(
       'btn-unexpanded'
     )[0] as HTMLElement
@@ -69,36 +69,28 @@ export const zipAndDownloadImages = async (
       setTimeout(async () => {
         const width = node.clientWidth
         const height = node.clientHeight
-        try {
-          const blob = await createBlob(node, { width, height }, filter)
-          if (blob == null) {
-            console.error("L'image n'a pas pu être exporté", node.id)
-            return
-          }
-          return zipWriter.add(
-            findImageName(statsCardConfig, node) + '.png',
-            new BlobReader(blob)
-          )
-        } catch (error) {
-          useSnackbar().error("Les images n'ont pas pu être exportées.")
-        }
-      }, 300)
-    } else {
-      const width = node.clientWidth
-      const height = node.clientHeight
-      try {
+
         const blob = await createBlob(node, { width, height }, filter)
         if (blob == null) {
-          console.error("L'image n'a pas pu être exporté", node.id)
-          return
+          throw new Error(`L'image n'a pas pu être exportée ${node.id}`)
         }
         return zipWriter.add(
           findImageName(statsCardConfig, node) + '.png',
           new BlobReader(blob)
         )
-      } catch (error) {
-        useSnackbar().error("Les images n'ont pas pu être exportées.")
+      }, 300)
+    } else {
+      const width = node.clientWidth
+      const height = node.clientHeight
+
+      const blob = await createBlob(node, { width, height }, filter)
+      if (blob == null) {
+        throw new Error(`L'image n'a pas pu être exportée ${node.id}`)
       }
+      return zipWriter.add(
+        findImageName(statsCardConfig, node) + '.png',
+        new BlobReader(blob)
+      )
     }
   })
   try {
@@ -109,8 +101,7 @@ export const zipAndDownloadImages = async (
     link.href = URL.createObjectURL(finalBlob)
     link.click()
     link.remove()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
+  } catch {
     useSnackbar().error("Les images n'ont pas pu être exportées.")
   } finally {
     finallyFn()

@@ -7,7 +7,7 @@
   "dockerfile": {
     "enabled": false
   },
-  "ignoreDeps": ["pnpm", "h3"],
+  "ignoreDeps": ["pnpm", "h3", "html-to-image"],
   "packageRules": [
     {
       "groupName": "Playwright",

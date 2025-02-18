@@ -71,8 +71,8 @@ importers:
         specifier: ^4.7.8
         version: 4.7.8
       html-to-image:
-        specifier: ^1.11.13
-        version: 1.11.13
+        specifier: 1.11.11
+        version: 1.11.11
       json-diff:
         specifier: ^1.0.6
         version: 1.0.6
@@ -4226,8 +4226,8 @@ packages:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
 
-  html-to-image@1.11.13:
-    resolution: {integrity: sha512-cuOPoI7WApyhBElTTb9oqsawRvZ0rHhaHwghRLlTuffoD1B2aDemlCruLeZrUIIdvG7gs9xeELEPm6PhuASqrg==}
+  html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
 
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
@@ -11866,7 +11866,7 @@ snapshots:
 
   html-tags@3.3.1: {}
 
-  html-to-image@1.11.13: {}
+  html-to-image@1.11.11: {}
 
   htmlparser2@8.0.2:
     dependencies:

@@ -88,42 +88,53 @@
     height: number
   }) => {
     const node = document.getElementById(props.cardId)
-    if (node) {
-      try {
-        const scale = 1
-        const blob = await toBlob(node, {
-          width: width,
-          height: height,
-          style: {
-            transform: 'scale(' + scale + ')',
-            transformOrigin: 'top left'
-          },
-          quality: 0.9,
+    const onfail = () =>
+      useSnackbar().error("L'image n'a pas pu être copiée.", () =>
+        copyButton.value?.focus()
+      )
 
-          filter: buttonFilter
-        })
-        if (blob) {
-          navigator.clipboard.write([
-            new ClipboardItem({
-              'image/png': blob
-            })
-          ])
-          imageCopied.value = true
-          useSnackbar().success("L'image est copiée dans votre presse-papier.")
-        } else {
-          useSnackbar().error("L'image n'a pas pu être copié.", () =>
-            copyButton.value?.focus()
-          )
-        }
-        setTimeout(() => {
-          imageCopied.value = false
-        }, 2000)
-      } catch (_error) {
-        useSnackbar().error("L'image n'a pas pu être copié.", () =>
-          copyButton.value?.focus()
-        )
-      }
+    if (!node) {
+      onfail()
+      throw new Error('copyToCliboard: no node found')
     }
+    const scale = 1
+    let blob: Blob | null
+
+    try {
+      blob = await toBlob(node, {
+        width: width,
+        height: height,
+        style: {
+          transform: 'scale(' + scale + ')',
+          transformOrigin: 'top left'
+        },
+        quality: 0.9,
+        filter: buttonFilter
+      })
+      if (!blob) {
+        throw new Error('no blob created')
+      }
+    } catch (e: unknown) {
+      onfail()
+      throw e
+    }
+
+    try {
+      navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': blob
+        })
+      ])
+    } catch (e: unknown) {
+      onfail()
+      throw e
+    }
+
+    imageCopied.value = true
+    setTimeout(() => {
+      imageCopied.value = false
+    }, 2000)
+    useSnackbar().success("L'image est copiée dans votre presse-papier.")
   }
 </script>
 
