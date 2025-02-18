@@ -156,7 +156,7 @@
   }
 
   // get archive notifications
-  const { data: archiveData } =
+  const { data: archiveData, refresh: refreshArchiveData } =
     await trpcClient.archiveNotification.get.useQuery()
 
   const archiveNotifications = computed(() => {
@@ -173,23 +173,32 @@
     }
   })
   const modal = useModal()
-  const unwatch = watch(modal.isReady, () => {
+  refreshArchiveData()
+  const unwatch = watch([modal.isReady, archiveNotifications], ready => {
     if (
-      modal.isReady &&
+      ready &&
       archiveNotifications.value &&
       archiveNotifications.value.length > 0
     ) {
       const firstNotification = archiveNotifications.value[0]
-      const beneficiaryName = firstNotification.beneficiary
-        ? formatBeneficiaryName({
-            title: null,
-            firstName: firstNotification.beneficiary.firstName,
-            usualName: firstNotification.beneficiary.usualName
-          })
-        : ''
+      const beneficiaryNames = archiveNotifications.value.map(notification =>
+        formatBeneficiaryName({
+          title: null,
+          firstName: notification?.beneficiary?.firstName
+            ? notification.beneficiary.firstName
+            : '',
+          usualName: notification?.beneficiary?.usualName
+            ? notification.beneficiary.usualName
+            : ''
+        })
+      )
       modal.open(ArchiveNotificationModal, {
         triggerOpen: true,
-        title: `Le dossier de ${beneficiaryName} est inactif depuis 2 ans : une action est requise.`,
+        title:
+          archiveNotifications.value.length > 1
+            ? `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
+            : `Le dossier de ${beneficiaryNames[0]} est inactif depuis 2 ans : une action est requise.`,
+        beneficiaryNames: beneficiaryNames,
         validate: () => {
           navigateTo(firstNotification.actionUrl)
           modal.close()
