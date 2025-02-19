@@ -56,17 +56,11 @@ const prepareData = async (ctx: SecurityRuleContext, beneficiaryId: string) => {
     where: { id: beneficiaryId },
     select: { archiveDueDate: true, updated: true }
   })
-  if (!beneficiary.archiveDueDate) {
-    return {
-      archiveDueDate: dayjs().add(1, 'year').toDate(),
-      updated: beneficiary.updated // ne modifie pas la date de dernière mise à jour
-    }
-  }
   return {
     updated: beneficiary.updated, // ne modifie pas la date de dernière mise à jour
     archiveDueDate: dayjs().add(1, 'year').toDate(),
     archiveDueDateHistory: {
-      push: beneficiary.archiveDueDate
+      push: dayjs().add(1, 'year').toDate()
     }
   }
 }

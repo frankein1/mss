@@ -38,12 +38,9 @@
         @change-value="changeValue($event)"
       />
     </form>
-    <p
-      v-if="archiveDueDateHistory > 0"
-      class="fr-mb-1w"
-    >
-      Votre dossier à déja été conservé {{ archiveDueDateHistory }} fois.
-    </p>
+    <AtomCallout v-if="archiveDueDateHistory > 0">
+      <p>Ce dossier a déjà été conservé {{ archiveDueDateHistory }} fois.</p>
+    </AtomCallout>
     <p>
       <button
         class="fr-link"
@@ -93,6 +90,8 @@
       disabled: props.pending || !props.archivePermission
     }
   ])
+
+  const calloutText = `Ce dossier a déjà été conservé ${props.archiveDueDateHistory} fois.`
 
   const getWarningMessage = () => {
     if (!props.deletePermission && !props.archivePermission) {

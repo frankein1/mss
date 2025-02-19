@@ -125,9 +125,6 @@
   })
   const archiveDueDateHistory = computed(() => {
     const history = beneficiary?.value?.archiveDueDateHistory || []
-    if (beneficiary?.value?.archiveDueDate) {
-      history.push(beneficiary.value.archiveDueDate)
-    }
     return history.length
   })
 
