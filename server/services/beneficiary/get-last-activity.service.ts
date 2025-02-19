@@ -35,14 +35,52 @@ export const getBeneficiaryLastActivity = (
     ? beneficiary.familyFile.budget?.incomes.map(income => income.updated)
     : []
 
+  const loanActivities = beneficiary.familyFile.budget?.expenses?.loans
+    ? (beneficiary.familyFile.budget.expenses.loans
+        .map(loan => loan.updated)
+        .filter(Boolean) as Date[])
+    : []
+
+  const debtsActivities = beneficiary.familyFile.budget?.expenses?.debts
+    ? (beneficiary.familyFile.budget.expenses.debts
+        .map(debt => debt.updated)
+        .filter(Boolean) as Date[])
+    : []
+
+  const customExpenseActivities = beneficiary.familyFile.budget?.expenses
+    ?.customs
+    ? (beneficiary.familyFile.budget.expenses.customs
+        .map(custom => custom.updated)
+        .filter(Boolean) as Date[])
+    : []
+
+  const customIncomeActivities = beneficiary.familyFile.budget?.incomes
+    ? (beneficiary.familyFile.budget.incomes
+        .flatMap(income => {
+          if (income.customs) {
+            return income.customs.map(custom => custom.updated)
+          }
+          return []
+        })
+        .filter(Boolean) as Date[])
+    : []
+
+  const migrationDate = new Date('2024-06-03T23:06:59.476Z')
   const activities = [
     beneficiary.updated,
+    beneficiary.created,
     beneficiary.familyFile.budget?.updated,
     beneficiary.familyFile.budget?.expenses?.updated,
     ...socialSupportActivites,
     ...documentsActivites,
-    ...incomesActivites
-  ].filter(Boolean) as Date[]
+    ...incomesActivites,
+    ...loanActivities,
+    ...debtsActivities,
+    ...customExpenseActivities,
+    ...customIncomeActivities
+  ]
+    .filter(date => date != null && date.getTime() !== migrationDate.getTime())
+    .filter(Boolean) as Date[]
 
   return getMostRecenttDate(activities)
 }
@@ -62,7 +100,7 @@ export const getArchiveDate = (
   // il n'y a pas eu d'activité depuis l'action de conservation du dossier
   return archiveDueDate
 }
-type BeneficiaryWithActivityDates = Awaited<
+export type BeneficiaryWithActivityDates = Awaited<
   ReturnType<typeof getBeneficiaryWithActivityDates>
 >
 
@@ -74,6 +112,7 @@ export const getBeneficiaryWithActivityDates = async (
     where: { id: beneficiaryId },
     select: {
       updated: true,
+      created: true,
       documents: {
         select: {
           created: true // Pas de champ "updated" pour les documents !
@@ -91,12 +130,32 @@ export const getBeneficiaryWithActivityDates = async (
               updated: true, // informations générales uniquement
               expenses: {
                 select: {
-                  updated: true
+                  updated: true,
+                  loans: {
+                    select: {
+                      updated: true
+                    }
+                  },
+                  debts: {
+                    select: {
+                      updated: true
+                    }
+                  },
+                  customs: {
+                    select: {
+                      updated: true
+                    }
+                  }
                 }
               },
               incomes: {
                 select: {
-                  updated: true
+                  updated: true,
+                  customs: {
+                    select: {
+                      updated: true
+                    }
+                  }
                 }
               }
             }

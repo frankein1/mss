@@ -5,11 +5,11 @@ import {
   getArchiveDate,
   getBeneficiaryLastActivity
 } from '../services/beneficiary/get-last-activity.service'
+import { prismaClient } from '~/server/prisma'
 
 const createArchiveDueNotifications = async () => {
-  const beneficiaries = await getInactiveBeneficiaries()
-
-  const mustBeArchivedBeneficiaries = beneficiaries
+  const inactiveBeneficiaries = await getInactiveBeneficiaries()
+  const mustBeArchivedBeneficiaries = inactiveBeneficiaries
     .filter(beneficiary => {
       const lastActivity = getBeneficiaryLastActivity(beneficiary)
       const archiveDate = getArchiveDate(
@@ -44,16 +44,24 @@ const createArchiveDueNotifications = async () => {
     )
     .flat()
 
-  const filtered = await filteredArchiveNotifications(archiveNotifications)
+  const filteredNotifications =
+    await compareAndFilterNotifications(archiveNotifications)
 
   await NotificationRepo.prisma.createMany({
-    data: filtered
+    data: filteredNotifications
   })
 }
 
 export const getInactiveBeneficiaries = async () => {
   const twentyThreeMonthsBefore = dayjs().subtract(23, 'month').toDate()
   const oneMonthBefore = dayjs().subtract(1, 'month').toDate()
+  // Date migration Budget 2024-06-03T23:06:59.476Z
+  // On récupère également les beneficiaire qui on une date de budget égale au 03/06/2024
+  // car c'est une date de migration
+  const budgetMigrationDateRange = {
+    lt: new Date('2024-06-04'),
+    gte: new Date('2024-06-03')
+  }
   return await BeneficiaryRepo.prisma.findMany({
     where: {
       AND: [
@@ -70,18 +78,13 @@ export const getInactiveBeneficiaries = async () => {
           OR: [{ updated: { lte: twentyThreeMonthsBefore } }, { updated: null }]
         },
         {
-          OR: [
-            {
-              documents: { some: { created: { lte: twentyThreeMonthsBefore } } }
-            },
-            { documents: { none: {} } }
-          ]
-        },
-        {
           familyFile: {
             budget: {
               OR: [
                 { updated: { lte: twentyThreeMonthsBefore } },
+                {
+                  updated: budgetMigrationDateRange
+                },
                 { updated: null }
               ]
             }
@@ -93,6 +96,9 @@ export const getInactiveBeneficiaries = async () => {
               expenses: {
                 OR: [
                   { updated: { lte: twentyThreeMonthsBefore } },
+                  {
+                    updated: budgetMigrationDateRange
+                  },
                   { updated: null }
                 ]
               }
@@ -105,13 +111,122 @@ export const getInactiveBeneficiaries = async () => {
               OR: [
                 {
                   incomes: {
-                    some: { created: { lte: twentyThreeMonthsBefore } }
+                    some: { updated: { lte: twentyThreeMonthsBefore } }
+                  }
+                },
+                {
+                  incomes: {
+                    some: {
+                      updated: budgetMigrationDateRange
+                    }
                   }
                 },
                 { incomes: { none: {} } }
               ]
             }
           }
+        },
+        {
+          familyFile: {
+            budget: {
+              OR: [
+                {
+                  incomes: {
+                    some: {
+                      customs: {
+                        some: { updated: { lte: twentyThreeMonthsBefore } }
+                      }
+                    }
+                  }
+                },
+                {
+                  incomes: {
+                    some: {
+                      customs: { none: {} }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          familyFile: {
+            budget: {
+              expenses: {
+                OR: [
+                  {
+                    loans: {
+                      some: { updated: { lte: twentyThreeMonthsBefore } }
+                    }
+                  },
+                  {
+                    loans: {
+                      some: { updated: budgetMigrationDateRange }
+                    }
+                  },
+                  {
+                    loans: {
+                      none: {}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          familyFile: {
+            budget: {
+              expenses: {
+                OR: [
+                  {
+                    debts: {
+                      some: { updated: { lte: twentyThreeMonthsBefore } }
+                    }
+                  },
+                  {
+                    debts: {
+                      some: { updated: budgetMigrationDateRange }
+                    }
+                  },
+                  {
+                    debts: {
+                      none: {}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          familyFile: {
+            budget: {
+              expenses: {
+                OR: [
+                  {
+                    customs: {
+                      some: { updated: { lte: twentyThreeMonthsBefore } }
+                    }
+                  },
+                  {
+                    customs: {
+                      none: {}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          OR: [
+            {
+              documents: { some: { created: { lte: twentyThreeMonthsBefore } } }
+            },
+            { documents: { none: {} } }
+          ]
         }
       ]
     },
@@ -168,40 +283,43 @@ export const getInactiveBeneficiaries = async () => {
     }
   })
 }
-export const filteredArchiveNotifications = async (
-  notifications: {
-    archiveDate: Date
-    beneficiaryId: string
-    recipientId: string
-    type: NotificationType
-  }[]
+
+type ArchiveNotification = {
+  archiveDate: Date
+  beneficiaryId: string
+  recipientId: string
+  type: NotificationType
+}
+export const compareAndFilterNotifications = async (
+  notifications: ArchiveNotification[]
 ) => {
-  const finalNotifications: {
-    archiveDate: Date
-    beneficiaryId: string
-    recipientId: string
-    type: NotificationType
-  }[] = []
-
-  const responses = await Promise.all(
-    notifications.map(async notification => {
-      return await NotificationRepo.prisma.count({
-        where: {
-          type: NotificationType.ArchiveDue,
-          beneficiaryId: notification.beneficiaryId,
-          recipientId: notification.recipientId,
-          archiveDate: notification.archiveDate
-        }
-      })
-    })
-  )
-
-  responses.forEach((response, index) => {
-    if (response === 0) {
-      finalNotifications.push(notifications[index])
+  const res = await prismaClient.notification.findMany({
+    where: {
+      type: NotificationType.ArchiveDue
     }
   })
-  return finalNotifications
+  const archiveNotificationsFromDb = res.map(notification => ({
+    type: notification.type,
+    beneficiaryId: notification.beneficiaryId,
+    recipientId: notification.recipientId,
+    archiveDate: notification.archiveDate
+  })) as ArchiveNotification[]
+
+  const filtered: ArchiveNotification[] = []
+
+  notifications.forEach(notification => {
+    const existing = archiveNotificationsFromDb.find(
+      archiveNotification =>
+        archiveNotification.beneficiaryId === notification.beneficiaryId &&
+        archiveNotification.recipientId === notification.recipientId &&
+        archiveNotification.archiveDate.getTime() ===
+          notification.archiveDate.getTime()
+    )
+    if (!existing) {
+      filtered.push(notification)
+    }
+  })
+  return filtered
 }
 
 export default createArchiveDueNotifications
