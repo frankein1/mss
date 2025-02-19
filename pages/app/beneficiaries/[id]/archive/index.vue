@@ -105,10 +105,10 @@
   const archivePermission = computed(
     () => archivePermissionData?.value?.archive
   )
+
   const deletepermission: ComputedRef<boolean> = computed(
     () => permissions.value?.delete || false
   )
-
   const familyFileId: ComputedRef<string | null> = computed(
     () => beneficiary?.value?.familyFileId || null
   )
@@ -206,7 +206,7 @@
       downloadReceived.value = true
       exportBeneficiaryInput.value = values
     } catch (error) {
-      snackbar.error("L'export de l'archive à échoué.")
+      snackbar.error("L'export de l'archive a échoué.")
       throw error
     } finally {
       downloadPending.value = false

@@ -89,6 +89,13 @@ export const getArchivePermissions = async ({
   const toArchived = hasToBeArchived(lastActivity, archiveDueDate)
   const { manager, receptionAgent } = getGranteRole(ctx)
 
+  console.log('isMember', isMember)
+  console.log('archiveDueDate', archiveDueDate)
+  console.log('lastActivity', lastActivity)
+  console.log('toArchived', toArchived)
+  console.log('manager', manager)
+  console.log('receptionAgent', receptionAgent)
+
   if (manager) {
     return {
       archive: true
