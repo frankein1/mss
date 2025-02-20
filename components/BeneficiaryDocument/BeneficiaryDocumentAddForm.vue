@@ -74,7 +74,7 @@
       familyFileId: string
       familyFileIdentification?: BeneficiaryFileIdentification[]
       beneficiaryId?: string
-      newDocument: (key: string) => void
+      newDocument: (key: string, name: string) => void
     }>(),
     { familyFileIdentification: () => [], beneficiaryId: undefined }
   )
@@ -132,7 +132,7 @@
           method: 'POST',
           body: formData
         })
-        props.newDocument(key)
+        props.newDocument(key, file.name)
       } catch {
         useSnackbar().error("L'ajout du document a échoué.", () =>
           form.value?.querySelector('select')?.focus()

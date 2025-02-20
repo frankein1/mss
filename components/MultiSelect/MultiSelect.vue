@@ -141,7 +141,6 @@
       optionsClass?: string
       ariaDescribedby?: string
       ariaLabelledBy?: string
-      optionValueResolver?: any
       isSearchable?: boolean
       required?: boolean
       hint?: string

@@ -37,7 +37,7 @@
   }
 
   const emit = defineEmits<{
-    newDocument: [key: string]
+    newDocument: [key: string, name: string]
   }>()
 
   function onAdd() {
@@ -50,8 +50,8 @@
     })
   }
 
-  function onNewDocument(key: string) {
-    emit('newDocument', key)
+  function onNewDocument(key: string, name: string) {
+    emit('newDocument', key, name)
     modal.close()
   }
 </script>
