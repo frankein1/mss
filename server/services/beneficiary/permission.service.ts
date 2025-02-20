@@ -9,7 +9,6 @@ import {
 } from '~/server/security'
 import {
   getGranteRole,
-  isReferentFor,
   isMemberOfReferents
 } from '~/server/security/rules/helpers'
 import { BeneficiaryService } from '.'

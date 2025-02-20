@@ -8,7 +8,6 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { beneficiaryFieldLabels } from '~/client/labels'
-import { DocumentRepo } from '~/server/database'
 import {
   GetBeneficiaryOutput,
   GetBeneficiaryRelative

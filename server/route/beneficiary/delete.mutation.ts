@@ -4,7 +4,7 @@ import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
-import { BeneficiaryService, FamilyFileService } from '~/server/services'
+import { BeneficiaryService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {

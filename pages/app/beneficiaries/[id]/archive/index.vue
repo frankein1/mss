@@ -48,6 +48,7 @@
         <ArchiveForm
           v-if="archiveFormStatus == 'archive'"
           class="fr-mt-4w"
+          :is-ministere="application.module.ministere"
           :download-received="downloadReceived"
           :beneficiary-id="beneficiaryId"
           :pending="downloadPending"
@@ -97,6 +98,8 @@
     permissions,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
+
+  const { application } = usePermissions()
 
   const { data: archivePermissionData } =
     await trpcClient.beneficiary.getBeneficiaryArchivePermission.useQuery({

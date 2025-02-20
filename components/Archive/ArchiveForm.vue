@@ -3,7 +3,10 @@
     ref="archiveForm"
     novalidate
   >
-    <div class="feature-section fr-mt-4w">
+    <div
+      v-if="!isMinistere"
+      class="feature-section fr-mt-4w"
+    >
       <h2 class="fr-h4">
         Conserver son prénom et son nom dans Mon Suivi Social durant
         1&nbsp;an&nbsp;?&nbsp;<span class="color-red">*</span>
@@ -23,7 +26,7 @@
     </div>
 
     <section ref="reasonSection">
-      <template v-if="keepName != null">
+      <template v-if="keepName != null || isMinistere">
         <div class="feature-section fr-mt-4w">
           <h2 class="fr-h4">Précisez les raisons de l’archivage</h2>
           <VeeSelect
@@ -94,6 +97,7 @@
     downloadReceived: boolean
     beneficiaryId: string
     pending: boolean
+    isMinistere: boolean
   }>()
 
   const emit = defineEmits<{
@@ -140,13 +144,13 @@
   const onDownloadArchive = () => {
     emit('downloadArchive', {
       ...formValues,
-      keepName: keepName.value as boolean
+      keepName: keepName.value || false
     })
   }
   const onDelete = () => {
     emit('deleteFile', {
       ...formValues,
-      keepName: keepName.value as boolean
+      keepName: keepName.value || false
     })
   }
 </script>

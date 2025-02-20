@@ -1,7 +1,6 @@
 import { getDeltaIncomeExpenses } from './helpers'
 import { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
-import { BudgetIncomeWithCustoms } from '~/types/budget'
 
 export async function getInfo({
   ctx,
