@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.39.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.38.0...v1.39.0) (2025-02-20)
+
+
+### Features
+
+* **archivage:** pas d'option de conservation nom et prénom pour Ministères ([0ae1160](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0ae116034595d867d1318fc00e33cf4cea15f3ba)), closes [#730](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/730)
+* **rdvsp:** ajout squelette de modale dans le cas d'un foyer de plus d'une personne ([ef74ae8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ef74ae83fc64a68514df8483f5d437f9d8de505e)), closes [#526](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/526)
+
+
+### Bug Fixes
+
+* **documents:** ajout de plusieurs documents à un suivi ([5a5897d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5a5897d1321344fb6a3be21dcf84d06a7a7e1bda)), closes [#738](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/738)
+* **rdvsp:** alignement modale de prise de rdv ([ee746d8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ee746d861cc95df8c07b704f90aca29e1974fae8)), closes [#526](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/526)
+* **statistiques:** adaptation à la nouvelle version de l'export de données ([444d6f4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/444d6f46001d66d3f57a2d3885484879460ad4da)), closes [#739](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/739)
+* **statistiques:** correction du copier-coller des images ([0ae7e01](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0ae7e015cfab3ec22154d6c99820e93d31ed5fd8)), closes [#739](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/739)
+* **structure:** activation conditionnelle du bouton de désactivation ([d477215](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d4772157a19f03e4baf22b6ca6df5396764c6edd)), closes [#676](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/676)
+* **structure:** corrections de l'action de désactivation de structure ([b526d85](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b526d8568eda7d63fa15ed5f2091befd2becef7c)), closes [#676](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/676)
+* **structure:** permettre la désactivation de structure à tout moment ([5d38965](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5d389652602a884840baae1c4d77db895f10a7a6)), closes [#676](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/676)
+
 ## [1.38.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.37.0...v1.38.0) (2025-02-16)
 
 
