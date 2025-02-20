@@ -4,6 +4,7 @@
     <BeneficiaryFormFileInformation
       :agents
       :beneficiary-referent-ids="beneficiaryReferentIds"
+      :initial-beneficiary-status="initialBeneficiaryStatus"
       full
     />
     <BeneficiaryFormIdentity
@@ -25,6 +26,7 @@
     BeneficiaryReferent
   } from '~/types/beneficiary'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import { BeneficiaryStatus } from '@prisma/client'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
@@ -33,6 +35,7 @@
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
       initialBeneficiary: BeneficiaryIdentification | null
+      initialBeneficiaryStatus: BeneficiaryStatus | undefined
     }>(),
     {}
   )

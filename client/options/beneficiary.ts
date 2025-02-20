@@ -37,14 +37,14 @@ export const pensionOrganisationKeys = buildKeys({
 export const beneficiaryStatusKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Actif',
   [BeneficiaryStatus.Inactive]: 'Inactif',
-  [BeneficiaryStatus.Archived]: 'Archivé',
+  [BeneficiaryStatus.Archived]: "Archivé (cette option n'est plus disponible",
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
 })
 
 export const beneficiaryStatusDetailedKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Dossier actif',
   [BeneficiaryStatus.Inactive]: 'Dossier inactif',
-  [BeneficiaryStatus.Archived]: 'Dossier archivé',
+  [BeneficiaryStatus.Archived]: 'Ancien dossier "archivé"',
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
 })
 

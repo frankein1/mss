@@ -22,6 +22,7 @@
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
         :initial-beneficiary="beneficiaryIdentification"
+        :initial-beneficiary-status="beneficiaryStatus"
         @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>
@@ -73,6 +74,10 @@
 
   const beneficiaryReferentIds = computed(() =>
     beneficiary.value ? beneficiary.value.referents.map(r => r.id) : []
+  )
+
+  const beneficiaryStatus = computed(() =>
+    beneficiary.value ? beneficiary.value.status : undefined
   )
 
   const bindedValues = computed(() => {

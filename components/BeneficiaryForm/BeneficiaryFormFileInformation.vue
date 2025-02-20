@@ -4,7 +4,8 @@
       <VeeSelect
         name="status"
         :label="beneficiaryFieldLabels.status"
-        :options="beneficiaryStatusKeys.options"
+        :options="beneficiarystatusOptions"
+        :disabled-options="[BeneficiaryStatus.Archived]"
         required
       />
     </div>
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-  import { UserStatus } from '@prisma/client'
+  import { UserStatus, BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusKeys } from '~/client/options'
   import { BeneficiaryReferent } from '~/types/beneficiary'
@@ -51,11 +52,13 @@
       agents: BeneficiaryReferent[]
       beneficiaryReferentIds?: String[]
       full?: boolean
+      initialBeneficiaryStatus?: BeneficiaryStatus
     }>(),
     {
       beneficiary: undefined,
       full: false,
-      beneficiaryReferentIds: undefined
+      beneficiaryReferentIds: undefined,
+      initialBeneficiaryStatus: undefined
     }
   )
 
@@ -76,4 +79,13 @@
       []
     )
   )
+
+  const beneficiarystatusOptions = computed(() => {
+    if (props.initialBeneficiaryStatus === BeneficiaryStatus.Archived) {
+      return beneficiaryStatusKeys.options
+    }
+    return beneficiaryStatusKeys.options.filter(
+      option => option.value !== BeneficiaryStatus.Archived
+    )
+  })
 </script>
