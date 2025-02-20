@@ -34,6 +34,7 @@ _à compléter_
 - [ ] Export : ajout du champ à l'export (préciser le type d'export): _remplir_
 - [ ] Filtres : ajout du champ dans des filtres (filtre bénéficiaires, filtre accompagnement, filtre statistiques): _remplir_
 - [ ] Statistiques : ajout du champ dans les statistiques (spécifier la carte statistique concernée): _remplir_
+- [ ] Désactivation de structures : ce champ doit être gardé, anonymisé ou supprimé: _remplir_
 
 ## Instructions d'implémentation (pour les devs)
 

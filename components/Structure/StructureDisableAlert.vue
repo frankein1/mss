@@ -1,8 +1,8 @@
 <template>
   <div class="partner-alert">
     <div class="fr-text--md">
-      La structure sera désactivée et les bénéficiaires rattachés anonymisées.
-      Cette action est irreversible
+      La structure sera désactivée et les bénéficiaires rattachés anonymisés.
+      <strong>Cette action est irréversible.</strong>
     </div>
     <div class="fr-text--sm">
       Note :

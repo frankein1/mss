@@ -35,6 +35,9 @@ const adminHandler = async ({
       ]
     }
   }
+
+  where = { ...where, structure: { disabled: false } }
+
   const users = await UserRepo.findMany(user, {
     where,
     select: {

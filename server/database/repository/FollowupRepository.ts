@@ -41,6 +41,7 @@ export const FollowupRepo = {
   prisma: {
     groupBy: prismaClient.followup.groupBy,
     findMany: prismaClient.followup.findMany,
+    updateMany: prismaClient.followup.updateMany,
     create: prismaClient.followup.create,
     delete: prismaClient.followup.delete
   }

@@ -15,25 +15,25 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetStructuresInput
 }) => {
-  let where: Prisma.StructureWhereInput = {}
-  if (input?.search) {
-    where = {
-      disabled: false,
-      OR: [
-        {
-          name: {
-            contains: input.search,
-            mode: 'insensitive'
+  const where: Prisma.StructureWhereInput = input?.search
+    ? {
+        disabled: false,
+        OR: [
+          {
+            name: {
+              contains: input.search,
+              mode: 'insensitive'
+            }
+          },
+          {
+            zipcode: {
+              startsWith: input.search
+            }
           }
-        },
-        {
-          zipcode: {
-            startsWith: input.search
-          }
-        }
-      ]
-    }
-  }
+        ]
+      }
+    : { disabled: false }
+
   const structures = await StructureRepo.findMany(user, {
     where,
     select: {
