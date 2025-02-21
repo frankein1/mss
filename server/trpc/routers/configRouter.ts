@@ -1,5 +1,4 @@
 import { protectedProcedure, router } from '~/server/trpc'
-import { getInclusionConnectClient } from '~/server/lib'
 import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
@@ -15,13 +14,5 @@ export const configRouter = router({
     .query(getBeneficiariesCitiesQuery.execute),
   getExaminationDates: protectedProcedure
     .input(getExaminationDatesQuery.inputValidation)
-    .query(getExaminationDatesQuery.execute),
-  getEditPasswordUrl: protectedProcedure.query(() => {
-    // TO be updated when proconnect will have implemented an endpoint for password edition
-    return ''
-  }),
-  getEditPasswordUrlInclusionConnect: protectedProcedure.query(() => {
-    const client = getInclusionConnectClient()
-    return client.getEditPasswordUrl()
-  })
+    .query(getExaminationDatesQuery.execute)
 })

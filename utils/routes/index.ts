@@ -1,10 +1,5 @@
 import { routes as admin } from './admin'
-import {
-  routes as auth,
-  apiInclusionConnectRoutes,
-  apiProConnectRoutes,
-  apiRdvspRoutes
-} from './auth'
+import { routes as auth, apiProConnectRoutes, apiRdvspRoutes } from './auth'
 import { routes as beneficiary } from './beneficiary'
 import { routes as budget } from './budget'
 import { routes as cgu } from './cgu'
@@ -36,7 +31,6 @@ export const routes = {
 }
 
 export const apiRoutes = {
-  inclusionConnect: apiInclusionConnectRoutes,
   proConnect: apiProConnectRoutes,
   rdvsp: apiRdvspRoutes
 }

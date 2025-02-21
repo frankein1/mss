@@ -7,20 +7,7 @@
         <main
           ref="main"
           class="main-container fr-p-5w"
-        >
-          <ul>
-            <li>
-              <NuxtLink
-                class="fr-link"
-                :to="data"
-                target="_blank"
-                title="Modifier mon mot de passe InclusionConnect - nouvelle fenêtre"
-                rel="noopener external"
-                >Modifier mon mot de passe</NuxtLink
-              >
-            </li>
-          </ul>
-        </main>
+        ></main>
       </div>
     </div>
   </PageContainer>
@@ -33,11 +20,4 @@
   const title = routes.user.AppAccount.title
 
   useHead({ title })
-  const trpcClient = useTrpcClient()
-
-  const { isProConnect } = useAuthProvider()
-
-  const data = isProConnect.value
-    ? await trpcClient.config.getEditPasswordUrl.query()
-    : await trpcClient.config.getEditPasswordUrlInclusionConnect.query()
 </script>
