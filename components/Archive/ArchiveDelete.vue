@@ -17,7 +17,7 @@
       type="button"
       @click="onDelete()"
     >
-      Supprimer dénitivement
+      Supprimer définitivement
     </button>
   </div>
 </template>
