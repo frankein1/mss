@@ -21,6 +21,12 @@
             :to="socialSupport.appointment?.url"
             class="fr-btn fr-btn--secondary fr-icon-edit-line"
             external
+            @click="
+              matomo.trackEvent(
+                EventCategory.Beneficiary,
+                BeneficiaryHistoryAction.UpdateAppointment
+              )
+            "
           >
             Modifier dans RDV Service Public
           </NuxtLink>
@@ -139,6 +145,7 @@
   import { FamilyFilePermissions } from '~/server/security'
   import { TypeSuivi } from '~/client/options'
   import { routes } from '~/utils/routes'
+  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -149,6 +156,8 @@
   const emit = defineEmits<{
     deleted: []
   }>()
+
+  const matomo = useMatomo()
 
   const socialSupport = computed(() => props.item.data)
   const permissions = computed(() => props.item.permissions)

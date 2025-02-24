@@ -33,7 +33,8 @@ export enum BeneficiaryHistoryAction {
   PrintHousingHelpRequest = 'Imprimer - Instruction de dossier -Demande de logement',
   PrintOtherHelpRequest = 'Imprimer - Instruction de dossier - Autre',
   PrintFollowup = "Imprimer - Synthèse d'entretien",
-  PlanAppointment = 'Prendre rendez-vous pour un bénéficiaire'
+  PlanAppointment = 'Prendre rendez-vous pour un bénéficiaire',
+  UpdateAppointment = 'Modifier le rendez-vous dans RDV Service Public'
 }
 
 export enum BeneficiaryAction {
