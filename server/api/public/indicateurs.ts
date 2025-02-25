@@ -13,6 +13,7 @@ export default defineEventHandler({
         id: true,
         name: true,
         zipcode: true,
+        city: true,
         _count: {
           select: { users: true, socialSupports: true }
         }
@@ -23,7 +24,8 @@ export default defineEventHandler({
     return structures.map(s => ({
       id: s.id,
       nom: s.name,
-      codePostal: s.zipcode,
+      codePostal: s.zipcode.trim(),
+      ville: s.city.trim(),
       utilisateurs: s._count.users,
       accompagnements: s._count.socialSupports
     }))
