@@ -28,7 +28,7 @@
 
 ## Description du projet
 
-Logiciel de suivi de bénéficiaires d'aides sociales à destination des travailleurs sociaux des CCAS et CIAS de petites communes non outillés.
+Mon Suivi Social est un logiciel de suivi de bénéficiaires d'aides sociales à destination des travailleurs sociaux des CCAS et CIAS de petites communes non outillés.
 Il permet aux agents de consigner les informations et les comptes-rendus de suivi des bénéficiaires ainsi que d'établir des statistiques à l'échelle de leur structure.
 Il offre un système de rôles et de gestion de permissions assurant la confidentialité des données sensibles.
 
@@ -57,11 +57,14 @@ Les briques structurantes du projet sont:
 
 ### Matrice des flux
 
-#### Applications métier sur Scalingo
+#### Applications métier
+
+Elles sont hébergées sur Scalingo. Un outil de parefeu applicatif et de protection d'attaques de déni de service [Baleen](https://baleen.cloud) est en préparation de déploiement. Les tableaux et graphes incluent son utilisation.
 
 | Source      | Destination       | Protocole | Port | Localisation      | Interne/URL Externe                                      |
 | ----------- | ----------------- | --------- | ---- | ----------------- | -------------------------------------------------------- |
-| Navigateur  | Nuxt client       | HTTPS     | 443  | Paris/SecNumCloud | Externe                                                  |
+| Navigateur  | Baleen (à venir)  | HTTPS     | 443  | Paris/SecNumCloud | Externe                                                  |
+| Baleen      | Nuxt client       | HTTPS     | 443  | Paris/SecNumCloud | Externe                                                  |
 | Nuxt server | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | Interne                                                  |
 | Nuxt client | Metabase          | HTTPS     | 443  | Paris/SecNumCloud | Externe                                                  |
 | Metabase    | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | https://metabase.monsuivisocial.incubateur.anct.gouv.fr/ |
@@ -78,12 +81,14 @@ Les briques structurantes du projet sont:
 
 | Source             | Destination                  | Protocole       | Port | Localisation      | Interne/URL Externe               |
 | ------------------ | ---------------------------- | --------------- | ---- | ----------------- | --------------------------------- |
-| Nuxt Server        | Brevo                        | HTTPS           | 443  | Paris, France     | https://api.brevo.com/v3/contacts |
-| Nuxt Server        | Scaleway Transactional Email | SMTP            | 587  | Paris, France     | smtp.tem.scw.cloud                |
+| Baleen             | Nuxt Server                  | HTTPS           | 443  | Paris             | baleen.cshield.net                |
+| Nuxt Server        | Baleen                       | HTTPS           | 443  | Paris             | baleen.cshield.net                |
+| Baleen             | Brevo                        | HTTPS           | 443  | Paris, France     | https://api.brevo.com/v3/contacts |
+| Baleen             | Scaleway Transactional Email | SMTP            | 587  | Paris, France     | smtp.tem.scw.cloud                |
 | Nuxt Client        | Base Adresse Nationale       | HTTPS           | 443  | Paris, France     | https://api-adresse.data.gouv.fr  |
 | Nuxt Client        | API Découpage administratif  | HTTPS           | 443  | Paris, France     | https://geo.api.gouv.fr           |
-| Nuxt Server        | RDV Service Public           | HTTPS (OAuth)   | 443  | Paris, France     | https://rdv.anct.gouv.fr/api/v1   |
-| RDV Service Public | Nuxt Server                  | HTTPS (webhook) | 443  | Paris/SecNumCloud | https://rdv.anct.gouv.fr/api/v1   |
+| Baleen             | RDV Service Public           | HTTPS (OAuth)   | 443  | Paris, France     | https://rdv.anct.gouv.fr/api/v1   |
+| RDV Service Public | Baleen                       | HTTPS (webhook) | 443  | Paris/SecNumCloud | https://rdv.anct.gouv.fr/api/v1   |
 
 Note : l'application expose aussi une API avec deux points d'entrée :
 
@@ -157,13 +162,18 @@ L'instance `anct-monsuivisocial-dev` est la plateforme de dev. Elle permet de te
 C4Container
     Person(user, "Utilisateur⋅ice", "Agent")
 
+        Container_Boundary(baleen, "Baleen") {
+        System(baleen_waf, "Parefeu Baleen", "WAF + Anti-DDos")
+    }
+
     Container_Boundary(scalingo, "Scalingo") {
-        System(scalingo_gateway, "Gateway Scalingo", "Load balancer+ router")
+        System(scalingo_gateway, "Gateway Scalingo", "Load balancer + router")
         Container(web_app, "Nuxt", "Application web + API JSON")
         ContainerDb(postgres, "PostgreSQL", "Données métier")
     }
 
-    Rel(user, scalingo_gateway, "HTTPS")
+    Rel(user, baleen_waf, "HTTPS")
+    Rel(baleen_waf, scalingo_gateway, "HTTPS")
     Rel(scalingo_gateway, web_app, "")
     Rel(web_app, postgres, "TCP")
 ```
@@ -172,29 +182,41 @@ C4Container
 
 ```mermaid
 C4Container
-    System(web_app, "Nuxt", "Application web + API JSON")
+    Boundary(app, "Web app") {
+        System(web_app, "Nuxt", "Application web + API JSON")
+    }
+
+    Boundary(baleen, "Baleen") {
+        System_Ext(baleen_waf, "Parefeu Baleen", "WAF + Anti-DDos")
+    }
+
+    System_Ext(adresse, "Base Adresse Nationale", "API Adresse")
+    System_Ext(geo.data.gouv, "API Découpage administratif", "API Communes")
+    System_Ext(matomo, "Matomo", "Web analytique")
 
     System_Ext(sentry, "Sentry", "Error monitoring")
 
     System_Ext(metabase, "Metabase", "Statistique publique")
     System_Ext(brevo, "Brevo", "CRM gestion des utilisateurs")
-    System_Ext(matomo, "Matomo", "Web analytique")
     System_Ext(scaleway, "Scaleway Transactional Email", "Emails transactionnels")
 
-    System_Ext(adresse, "Base Adresse Nationale", "API Adresse")
-    System_Ext(geo.data.gouv, "API Découpage administratif", "API Communes")
+
     System_Ext(rdvservicepublic, "Rendez-vous Service Public", "Application de prise de rendez-vous")
 
 
+    BiRel(web_app, baleen_waf, "HTTPS")
+
     Rel(web_app, sentry, "HTTPS")
-    Rel(web_app, metabase, "HTTPS")
-    Rel(web_app, brevo, "SMTP")
     Rel(web_app, matomo, "HTTPS")
-    Rel(web_app, scaleway, "SMTP")
     Rel(web_app, adresse, "HTTPS")
     Rel(web_app, geo.data.gouv, "HTTPS")
-    Rel(web_app, rdvservicepublic, "HTTPS")
-    Rel(rdvservicepublic, web_app, "HTTPS")
+    Rel(web_app, metabase, "HTTPS")
+
+    Rel(baleen_waf, sentry, "HTTPS")
+    Rel(baleen_waf, brevo, "SMTP")
+    Rel(baleen_waf, scaleway, "SMTP")
+
+    BiRel(baleen_waf, rdvservicepublic, "HTTPS")
 ```
 
 #### Échanges entre l'app, les fournisseurs d'identités, et les utilisateur⋅ices
