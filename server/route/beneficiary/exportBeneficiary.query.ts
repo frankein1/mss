@@ -11,7 +11,7 @@ import { BeneficiaryService } from '~/server/services'
 import { ProtectedAppContext } from '~/server/trpc'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.beneficiaries
+  getAppContextPermissions(ctx).export.history
 
 const handler = async ({
   input,
