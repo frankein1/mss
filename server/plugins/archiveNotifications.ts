@@ -227,6 +227,11 @@ export const getInactiveBeneficiaries = async () => {
             },
             { documents: { none: {} } }
           ]
+        },
+        {
+          structure: {
+            disabled: false
+          }
         }
       ]
     },
