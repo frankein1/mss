@@ -270,6 +270,7 @@ export const getInactiveBeneficiaries = async () => {
       },
       structure: {
         select: {
+          name: true, // pour tests
           users: {
             where: {
               role: UserRole.StructureManager
