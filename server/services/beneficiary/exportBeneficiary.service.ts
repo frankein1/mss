@@ -312,10 +312,10 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
       socialSupport.followup?.prescribingOrganizationContact?.name || null,
     synthesis: socialSupport.synthesis,
     actions:
-      socialSupport.followup?.forwardedToJustice !== null ||
-      socialSupport.followup?.redirected !== null ||
-      socialSupport.followup?.helpRequested !== null ||
-      socialSupport.followup?.classified !== null,
+      Boolean(socialSupport.followup?.forwardedToJustice) ||
+      Boolean(socialSupport.followup?.redirected) ||
+      Boolean(socialSupport.followup?.helpRequested) ||
+      Boolean(socialSupport.followup?.classified),
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
     redirected: socialSupport.followup?.redirected,
     structureName: socialSupport.followup?.structureName,

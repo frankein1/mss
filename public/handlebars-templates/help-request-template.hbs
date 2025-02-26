@@ -105,18 +105,20 @@
         {{/if}}
 
         {{#if helpRequest.isRefundable}}
-          <li><span class='bold'>Cette aide est-elle remboursable ? :
+          <li><span class='bold'>Cette aide est-elle remboursable ?
             </span>{{{helpRequest.isRefundable}}}</li>
         {{/if}}
 
         {{#if helpRequest.askedAmount}}
           <li><span class='bold'>Montant demandé :
-            </span>{{{helpRequest.askedAmount}}}</li>
+            </span>{{{helpRequest.askedAmount}}}
+            €</li>
         {{/if}}
 
         {{#if helpRequest.allocatedAmount}}
           <li><span class='bold'>Montant attribué :
-            </span>{{{helpRequest.allocatedAmount}}}</li>
+            </span>{{{helpRequest.allocatedAmount}}}
+            €</li>
         {{/if}}
 
         {{#if helpRequest.paymentMethod}}
@@ -272,17 +274,20 @@
 
         {{#if housingHelpRequest.maxRent}}
           <li><span class='bold'>Montant maximum du loyer :
-            </span>{{{housingHelpRequest.maxRent}}}</li>
+            </span>{{{housingHelpRequest.maxRent}}}
+            €</li>
         {{/if}}
 
         {{#if housingHelpRequest.maxRent}}
           <li><span class='bold'>Montant maximum du loyer :
-            </span>{{{housingHelpRequest.maxRent}}}</li>
+            </span>{{{housingHelpRequest.maxRent}}}
+            €</li>
         {{/if}}
 
         {{#if housingHelpRequest.maxCharges}}
           <li><span class='bold'>Montant maximum des charges :
-            </span>{{{housingHelpRequest.maxCharges}}}</li>
+            </span>{{{housingHelpRequest.maxCharges}}}
+            €</li>
         {{/if}}
 
         {{#if housingHelpRequest.housingType}}
