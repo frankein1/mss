@@ -114,6 +114,26 @@
             </span>{{{helpRequest.askedAmount}}}</li>
         {{/if}}
 
+        {{#if helpRequest.allocatedAmount}}
+          <li><span class='bold'>Montant attribué :
+            </span>{{{helpRequest.allocatedAmount}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.paymentMethod}}
+          <li><span class='bold'>Mode de paiement :
+            </span>{{{helpRequest.paymentMethod}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.paymentDate}}
+          <li><span class='bold'>Date du paiement :
+            </span>{{{helpRequest.paymentDate}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.examinationDate}}
+          <li><span class='bold'>Date de passage en commission :
+            </span>{{{helpRequest.examinationDate}}}</li>
+        {{/if}}
+
         {{#if helpRequest.decisionDate}}
           <li><span class='bold'>Date de la décision :
             </span>{{{helpRequest.decisionDate}}}</li>
@@ -122,6 +142,11 @@
         {{#if helpRequest.refusalReason}}
           <li><span class='bold'>Motif du refus :
             </span>{{{helpRequest.refusalReason}}}</li>
+        {{/if}}
+
+        {{#if helpRequest.refusalReasonOther}}
+          <li><span class='bold'>Autre motif du refus :
+            </span>{{{helpRequest.refusalReasonOther}}}</li>
         {{/if}}
 
         {{#if helpRequest.handlingDate}}
@@ -213,14 +238,24 @@
             </span>{{{housingHelpRequest.uniqueId}}}</li>
         {{/if}}
 
+        {{#if housingHelpRequest.examinationDate}}
+          <li><span class='bold'>Date de passage en commission :
+            </span>{{{housingHelpRequest.examinationDate}}}</li>
+        {{/if}}
+
         {{#if housingHelpRequest.decisionDate}}
           <li><span class='bold'>Date de la décision :
             </span>{{{housingHelpRequest.decisionDate}}}</li>
         {{/if}}
 
-        {{#if housingHelpRequest.handlingDate}}
-          <li><span class='bold'>Date de la fin de prise en charge :
-            </span>{{{housingHelpRequest.handlingDate}}}</li>
+        {{#if housingHelpRequest.refusalReason}}
+          <li><span class='bold'>Motif du refus :
+            </span>{{{helpRequest.refusalReason}}}</li>
+        {{/if}}
+
+        {{#if housingHelpRequest.refusalReasonOther}}
+          <li><span class='bold'>Autre motif du refus :
+            </span>{{{helpRequest.refusalReasonOther}}}</li>
         {{/if}}
 
         {{#if housingHelpRequest.dueDate}}
@@ -294,8 +329,14 @@
             {{/if}}
           </li>
         {{/if}}
-        {{#if forwardedToJustice}}
+        {{#if helpRequested}}
           <li>Instruction de dossier</li>
+        {{/if}}
+        {{#if classified}}
+          <li>Classé</li>
+        {{/if}}
+        {{#if forwardedToJustice}}
+          <li>Transmis à la justice</li>
         {{/if}}
       </ul>
     {{/if}}

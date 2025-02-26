@@ -10,7 +10,16 @@ import {
   SocialSupportRepo,
   DocumentRepo
 } from '~/server/database'
-import { Beneficiary, User } from '@prisma/client'
+import {
+  Prisma,
+  Beneficiary,
+  BeneficiaryRelative,
+  Followup,
+  User,
+  HelpRequest,
+  FileInstruction,
+  HousingHelpRequest
+} from '@prisma/client'
 import {
   documentTypeKeys,
   ministerKeys,
@@ -42,6 +51,8 @@ import {
 import { getBudget } from '../budget/getBudget.service'
 import { exportBudgetSpreadsheet } from '../budget/exportBudgetSpreadsheet'
 import { createExport } from '~/utils/export/createExport'
+
+type FieldLabels<T> = Record<keyof T, any>
 
 export const exportBeneficiary = async ({
   ctx,
@@ -229,7 +240,45 @@ const compile = async function (templateName: string, data: any) {
 const getBeneficiaryName = (beneficiary: Beneficiary) => {
   return beneficiary.firstName + ' ' + beneficiary.usualName
 }
-const getFollowupData = (socialSupport: SocialSupportItem) => {
+
+type DocumentData = {
+  name: string
+  type: string | null
+}
+
+type SocialSupportForFollowupData = FieldLabels<
+  Pick<
+    Prisma.SocialSupportSelect,
+    | 'createdBy'
+    | 'lastUpdatedBy'
+    | 'date'
+    | 'ministre'
+    | 'numeroPegase'
+    | 'status'
+    | 'dueDate'
+    | 'synthesis'
+  >
+>
+
+type FollowupData = FieldLabels<
+  Omit<
+    Followup,
+    | 'id'
+    | 'updated'
+    | 'socialSupportId'
+    | 'prescribingOrganizationId'
+    | 'prescribingOrganizationContactId'
+  >
+> &
+  SocialSupportForFollowupData & {
+    prescribingOrganizationName: string | null
+    prescribingOrganizationContact: string | null
+    actions: boolean
+    documents: DocumentData[] | null
+    subjectsNames: string
+  }
+
+const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
   const subjectsNames = socialSupport.subjects.map(subject => subject.name)
   const documents = socialSupport.documents?.map(document => ({
     name: document.name,
@@ -258,22 +307,104 @@ const getFollowupData = (socialSupport: SocialSupportItem) => {
       : null,
     dueDate: socialSupport.dueDate,
     prescribingOrganizationName:
-      socialSupport.followup?.prescribingOrganization?.name,
+      socialSupport.followup?.prescribingOrganization?.name || null,
     prescribingOrganizationContact:
-      socialSupport.followup?.prescribingOrganizationContact?.name,
+      socialSupport.followup?.prescribingOrganizationContact?.name || null,
     synthesis: socialSupport.synthesis,
     actions:
-      socialSupport.followup?.forwardedToJustice != null ||
-      socialSupport.followup?.redirected != null,
+      socialSupport.followup?.forwardedToJustice !== null ||
+      socialSupport.followup?.redirected !== null ||
+      socialSupport.followup?.helpRequested !== null ||
+      socialSupport.followup?.classified !== null,
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
     redirected: socialSupport.followup?.redirected,
     structureName: socialSupport.followup?.structureName,
+    helpRequested: socialSupport.followup?.helpRequested,
+    classified: socialSupport.followup?.classified,
     documents: documents || null
   }
 }
 
-const getHelpRequestData = (socialSupport: SocialSupportItem) => {
-  const commonObjects = {
+type SocialSupportForFileInstructionData = FieldLabels<
+  Pick<
+    Prisma.SocialSupportSelect,
+    | 'createdBy'
+    | 'lastUpdatedBy'
+    | 'date'
+    | 'ministre'
+    | 'numeroPegase'
+    | 'synthesis'
+  >
+>
+
+type BaseFileInstruction = Omit<
+  FileInstruction,
+  | 'id'
+  | 'updated'
+  | 'type'
+  | 'socialSupportId'
+  | 'instructorOrganizationId'
+  | 'instructorOrganizationContactId'
+> & {
+  status: string | null
+  instructorOrganization: string | null
+  instructorOrganizationContact: string | null
+}
+
+type HelpRequestData = FieldLabels<
+  BaseFileInstruction &
+    Omit<
+      HelpRequest,
+      | 'id'
+      | 'updated'
+      | 'socialSupportId'
+      | 'prescribingOrganizationId'
+      | 'prescribingOrganizationContactId'
+      | 'subjectId'
+      | 'fileInstructionId'
+      | 'financialSupport'
+    > & {
+      type: string | null
+      isFinancial: boolean
+      isOther: boolean
+      subject: string | null
+      prescribingOrganization: string | null
+      prescribingOrganizationContact: string | null
+      dueDate: string | null
+    }
+>
+
+type HousingHelpRequestData = FieldLabels<
+  BaseFileInstruction &
+    Omit<
+      HousingHelpRequest,
+      | 'id'
+      | 'updated'
+      | 'socialSupportId'
+      | 'prescribingOrganizationId'
+      | 'prescribingOrganizationContactId'
+      | 'fileInstructionId'
+    > & {
+      prescribingOrganization: string | null
+      prescribingOrganizationContact: string | null
+    }
+>
+
+type FileInstructionData = SocialSupportForFileInstructionData & {
+  helpRequest?: HelpRequestData
+  housingHelpRequest?: HousingHelpRequestData
+  documents: DocumentData[] | null
+}
+
+const getHelpRequestData = (
+  socialSupport: SocialSupportItem
+): FileInstructionData => {
+  const documents = socialSupport.documents?.map(document => ({
+    name: document.name,
+    type: documentTypeKeys.value(document.type)
+  }))
+
+  const commonObjects: FieldLabels<BaseFileInstruction> = {
     externalStructure: socialSupport.fileInstruction?.externalStructure
       ? 'En externe'
       : 'En interne',
@@ -284,14 +415,17 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
     dispatchDate:
       socialSupport.fileInstruction?.dispatchDate?.toLocaleDateString(),
     status: fileInstructionStatusKeys.value(socialSupport.status),
+    examinationDate:
+      socialSupport.fileInstruction?.examinationDate?.toLocaleDateString(),
     decisionDate:
       socialSupport.fileInstruction?.decisionDate?.toLocaleDateString(),
-    handlingDate:
-      socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(),
     refusalReason: helpRequestRefusalReasonKeys.value(
       socialSupport.fileInstruction?.refusalReason
-    )
+    ),
+    refusalReasonOther: socialSupport.fileInstruction?.refusalReasonOther,
+    fullFile: socialSupport.fileInstruction?.fullFile
   }
+
   return {
     createdBy: getPrettyUserName(socialSupport.createdBy),
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
@@ -301,6 +435,7 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
       : null,
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
+    documents: documents || null,
 
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
       helpRequest: {
@@ -310,7 +445,8 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
         ),
         isFinancial: socialSupport.fileInstruction?.type === 'Financial',
         isOther: socialSupport.fileInstruction?.type === 'Other',
-        subject: socialSupport.fileInstruction?.helpRequest?.subject.name,
+        subject:
+          socialSupport.fileInstruction?.helpRequest?.subject.name || null,
         prescribingOrganization:
           socialSupport.fileInstruction?.helpRequest?.prescribingOrganization
             ?.name,
@@ -318,11 +454,17 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
           socialSupport.fileInstruction?.helpRequest
             ?.prescribingOrganizationContact?.name,
         dueDate: socialSupport.dueDate?.toLocaleDateString(),
+        handlingDate:
+          socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(),
         fullFile: socialSupport.fileInstruction?.fullFile ? 'oui' : 'non',
         isRefundable: socialSupport.fileInstruction?.helpRequest?.isRefundable
           ? 'Remboursable'
           : 'Non remboursable',
-        askedAmount: socialSupport.fileInstruction?.helpRequest?.askedAmount
+        askedAmount: socialSupport.fileInstruction?.helpRequest?.askedAmount,
+        allocatedAmount:
+          socialSupport.fileInstruction?.helpRequest?.allocatedAmount,
+        paymentDate: socialSupport.fileInstruction?.helpRequest?.paymentDate,
+        paymentMethod: socialSupport.fileInstruction?.helpRequest?.paymentMethod
       }
     }),
 
@@ -372,9 +514,28 @@ const getHelpRequestData = (socialSupport: SocialSupportItem) => {
   }
 }
 
+type BeneficiaryRelativeData = FieldLabels<
+  Omit<
+    BeneficiaryRelative,
+    'id' | 'linkedBeneficiaryId' | 'created' | 'updated' | 'beneficiaryId'
+  > & { index: number }
+>
+
+type FamilyFileBeneficiaryData = {
+  firstName: string | null
+  usualName: string | null
+  relationship: string | null
+}
+
+type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
+  beneficiaries: FamilyFileBeneficiaryData[]
+  referents: string | null
+  relatives: BeneficiaryRelativeData[] | null
+}
+
 const getBeneficiaryInfoData = (
   beneficiary: BeneficiaryWithEntourageAndRelative
-) => {
+): BeneficiaryInfoData => {
   const pensionOrganisations = beneficiary.pensionOrganisations.map(item =>
     pensionOrganisationKeys.value(item)
   )
@@ -391,23 +552,25 @@ const getBeneficiaryInfoData = (
     referent => referent.firstName + ' ' + referent.lastName
   )
   const relatives = beneficiary.relatives
-    ? beneficiary.relatives.map((relative, idx) => ({
-        index: idx + 1,
-        additionalInformation: relative.additionalInformation,
-        birthDate: relative.birthDate
-          ? relative.birthDate.toLocaleDateString()
-          : null,
-        caregiver: relative.caregiver,
-        city: relative.city,
-        email: relative.email,
-        firstName: relative.firstName,
-        lastName: relative.lastName,
-        hosted: relative.hosted,
-        phone: relative.phone,
-        relationship: relative.relationship
-          ? relativeRelationshipKeys.value(relative.relationship)
-          : null
-      }))
+    ? beneficiary.relatives.map(
+        (relative, idx): BeneficiaryRelativeData => ({
+          index: idx + 1,
+          additionalInformation: relative.additionalInformation,
+          birthDate: relative.birthDate
+            ? relative.birthDate.toLocaleDateString()
+            : null,
+          caregiver: relative.caregiver,
+          city: relative.city,
+          email: relative.email,
+          firstName: relative.firstName,
+          lastName: relative.lastName,
+          hosted: relative.hosted,
+          phone: relative.phone,
+          relationship: relative.relationship
+            ? relativeRelationshipKeys.value(relative.relationship)
+            : null
+        })
+      )
     : null
 
   return {
@@ -549,9 +712,11 @@ const getSocialSupports = async (
           externalStructure: true,
           fullFile: true,
           dispatchDate: true,
+          examinationDate: true,
           decisionDate: true,
           type: true,
           refusalReason: true,
+          refusalReasonOther: true,
           instructorOrganization: {
             select: {
               name: true
