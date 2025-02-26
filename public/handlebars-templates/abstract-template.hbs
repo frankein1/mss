@@ -1,15 +1,51 @@
 {{! Do no use  Hex color code in css, it will return all blank}}
 
 <style type='text/css' media='all'>
-  * { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-style:
-  normal; color: rgb(58 58 58); box-sizing: border-box; margin-top: 0; } body {
-  margin: 2rem; } h1 { color: rgb(69 80 229); } h1, h2 { font-weight: 700; }
-  .bold { font-weight: bold; } hr { color: rgb(221 221 221); background-color:
-  rgb(221 221 221); border: none; height: 2px; } .hr-short-blue { width: 75px;
-  height: 6px; color: rgb(69 80 229); background-color: rgb(69 80 229);
-  margin-left: 0; margin-right: auto; margin-bottom: 50px; } .card {
-  border-radius: 8px; border: 1px rgb(221 221 221) solid; padding: 16px;
-  margin-bottom: 16px; } .card :last-child { margin-bottom: 0; }
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: rgb(58 58 58);
+    box-sizing: border-box;
+    margin-top: 0;
+  }
+  body {
+    margin: 2rem;
+  }
+  h1 {
+    color: rgb(69 80 229);
+  }
+  h1,
+  h2 {
+    font-weight: 700;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  hr {
+    color: rgb(221 221 221);
+    background-color: rgb(221 221 221);
+    border: none;
+    height: 2px;
+  }
+  .hr-short-blue {
+    width: 75px;
+    height: 6px;
+    color: rgb(69 80 229);
+    background-color: rgb(69 80 229);
+    margin-left: 0;
+    margin-right: auto;
+    margin-bottom: 50px;
+  }
+  .card {
+    border-radius: 8px;
+    border: 1px rgb(221 221 221) solid;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card :last-child {
+    margin-bottom: 0;
+  }
 </style>
 <html>
   <head>
@@ -33,7 +69,7 @@
         {{#if reason.reason}}
           <p>{{reason.reason}}
             {{#if reason.date}}
-              <span> (le 12/02/2022)</span>
+              <span> (le {{reason.date}})</span>
             {{/if}}
           </p>
         {{/if}}

@@ -46,7 +46,8 @@ import {
   roomCountKeys,
   lowIncomeHousingKeys,
   helpRequestRefusalReasonKeys,
-  fileInstructionTypeFilterKeys
+  fileInstructionTypeFilterKeys,
+  nationalityKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { exportBudgetSpreadsheet } from '../budget/exportBudgetSpreadsheet'
@@ -100,14 +101,14 @@ export const exportBeneficiary = async ({
   // Abstract Page
   const abstractData = {
     name: getBeneficiaryName(beneficiaryDetails),
-    birthDate: beneficiaryDetails.birthDate?.toLocaleDateString(),
-    created: beneficiaryDetails.created?.toLocaleDateString(),
-    archivedDate: new Date().toLocaleDateString(),
+    birthDate: beneficiaryDetails.birthDate?.toLocaleDateString('fr-FR'),
+    created: beneficiaryDetails.created?.toLocaleDateString('fr-FR'),
+    archivedDate: new Date().toLocaleDateString('fr-FR'),
     userName: user.firstName + ' ' + user.lastName,
     reason: {
       completed: input.reason != null || input.clarification != null,
       reason: input.reason ? archiveReasonKeys.byKey[input.reason] : null,
-      date: input.date,
+      date: input.date?.toLocaleDateString('fr-FR'),
       clarification: input.clarification
     },
     counts: {
@@ -193,9 +194,10 @@ export const exportBeneficiary = async ({
   })
   zip.file('Budget/budget_mensuel.xlsx', budgetBuffer, { binary: true })
 
-  documents.forEach(document => {
+  documents.forEach((document, idx) => {
     if (document.documentContent?.content) {
-      zip.file('Documents/' + document.name, document.documentContent.content, {
+      const documentName = idx + 1 + ' - ' + document.name
+      zip.file('Documents/' + documentName, document.documentContent.content, {
         binary: true
       })
     }
@@ -288,7 +290,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     createdBy: getPrettyUserName(socialSupport.createdBy),
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
     firstFollowup: socialSupport.followup?.firstFollowup || null,
-    date: socialSupport.date.toLocaleDateString(),
+    date: socialSupport.date.toLocaleDateString('fr-FR'),
     ministre: socialSupport.ministre
       ? ministerKeys.value(socialSupport.ministre)
       : null,
@@ -305,7 +307,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     status: socialSupport.status
       ? followupStatusKeys.value(socialSupport.status)
       : null,
-    dueDate: socialSupport.dueDate,
+    dueDate: socialSupport.dueDate?.toLocaleDateString('fr-FR'),
     prescribingOrganizationName:
       socialSupport.followup?.prescribingOrganization?.name || null,
     prescribingOrganizationContact:
@@ -349,6 +351,7 @@ type BaseFileInstruction = Omit<
   status: string | null
   instructorOrganization: string | null
   instructorOrganizationContact: string | null
+  handlingDate: Date | null
 }
 
 type HelpRequestData = FieldLabels<
@@ -413,12 +416,16 @@ const getHelpRequestData = (
     instructorOrganizationContact:
       socialSupport.fileInstruction?.instructorOrganizationContact?.name,
     dispatchDate:
-      socialSupport.fileInstruction?.dispatchDate?.toLocaleDateString(),
+      socialSupport.fileInstruction?.dispatchDate?.toLocaleDateString('fr-FR'),
     status: fileInstructionStatusKeys.value(socialSupport.status),
     examinationDate:
       socialSupport.fileInstruction?.examinationDate?.toLocaleDateString(),
     decisionDate:
-      socialSupport.fileInstruction?.decisionDate?.toLocaleDateString(),
+      socialSupport.fileInstruction?.decisionDate?.toLocaleDateString('fr-FR'),
+    handlingDate:
+      socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(
+        'fr-FR'
+      ),
     refusalReason: helpRequestRefusalReasonKeys.value(
       socialSupport.fileInstruction?.refusalReason
     ),
@@ -429,7 +436,7 @@ const getHelpRequestData = (
   return {
     createdBy: getPrettyUserName(socialSupport.createdBy),
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
-    date: socialSupport.date.toLocaleDateString(), // commun
+    date: socialSupport.date.toLocaleDateString('fr-FR'), // commun
     ministre: socialSupport.ministre
       ? ministerKeys.value(socialSupport.ministre)
       : null,
@@ -453,7 +460,7 @@ const getHelpRequestData = (
         prescribingOrganizationContact:
           socialSupport.fileInstruction?.helpRequest
             ?.prescribingOrganizationContact?.name,
-        dueDate: socialSupport.dueDate?.toLocaleDateString(),
+        dueDate: socialSupport.dueDate?.toLocaleDateString('fr-FR'),
         handlingDate:
           socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(),
         fullFile: socialSupport.fileInstruction?.fullFile ? 'oui' : 'non',
@@ -475,7 +482,9 @@ const getHelpRequestData = (
           ? 'Oui'
           : 'Non',
         firstOpeningDate:
-          socialSupport.fileInstruction?.housingHelpRequest?.firstOpeningDate?.toLocaleDateString(),
+          socialSupport.fileInstruction?.housingHelpRequest?.firstOpeningDate?.toLocaleDateString(
+            'fr-FR'
+          ),
         askedHousing:
           socialSupport.fileInstruction?.housingHelpRequest?.askedHousing,
         prescribingOrganization:
@@ -557,7 +566,7 @@ const getBeneficiaryInfoData = (
           index: idx + 1,
           additionalInformation: relative.additionalInformation,
           birthDate: relative.birthDate
-            ? relative.birthDate.toLocaleDateString()
+            ? relative.birthDate.toLocaleDateString('fr-FR')
             : null,
           caregiver: relative.caregiver,
           city: relative.city,
@@ -579,13 +588,13 @@ const getBeneficiaryInfoData = (
     relatives,
     referents: referents ? referents.join(', ') : null,
     birthDate: beneficiary.birthDate
-      ? beneficiary.birthDate.toLocaleDateString()
+      ? beneficiary.birthDate.toLocaleDateString('fr-FR')
       : null,
     divorceDate: beneficiary.divorceDate
-      ? beneficiary.divorceDate.toLocaleDateString()
+      ? beneficiary.divorceDate.toLocaleDateString('fr-FR')
       : null,
     weddingDate: beneficiary.weddingDate
-      ? beneficiary.weddingDate.toLocaleDateString()
+      ? beneficiary.weddingDate.toLocaleDateString('fr-FR')
       : null,
     accommodationMode: beneficiary.accommodationMode
       ? beneficiaryAccommodationModeKeys.value(beneficiary.accommodationMode)
@@ -622,6 +631,9 @@ const getBeneficiaryInfoData = (
       : null,
     gender: beneficiary.gender
       ? beneficiaryGenderKeys.value(beneficiary.gender)
+      : null,
+    nationality: beneficiary.nationality
+      ? nationalityKeys.value(beneficiary.nationality)
       : null,
     studyLevel: beneficiary.studyLevel
       ? beneficiaryStudyLevelKeys.value(beneficiary.studyLevel)
