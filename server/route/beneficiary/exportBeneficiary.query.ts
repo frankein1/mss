@@ -3,15 +3,20 @@ import {
   ExportBeneficiaryInput,
   exportBeneficiarySchema
 } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryService } from '~/server/services'
 import { ProtectedAppContext } from '~/server/trpc'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.history
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: ExportBeneficiaryInput
+) => {
+  const permission = await BeneficiaryService.getArchivePermissions({
+    ctx,
+    id: input.beneficiaryId
+  })
+  return permission.archive
+}
 
 const handler = async ({
   input,
