@@ -91,8 +91,6 @@
     }
   ])
 
-  const calloutText = `Ce dossier a déjà été conservé ${props.archiveDueDateHistory} fois.`
-
   const getWarningMessage = () => {
     if (!props.deletePermission && !props.archivePermission) {
       return "vous n'avez pas l'autorisation de gérer le dossier. Rapprochez-vous de votre responsable."

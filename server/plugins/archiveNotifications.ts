@@ -58,6 +58,7 @@ export const getInactiveBeneficiaries = async () => {
   // Date migration Budget 2024-06-03T23:06:59.476Z
   // On récupère également les beneficiaire qui on une date de budget égale au 03/06/2024
   // car c'est une date de migration
+  // TODO [2026-06-04]: après le 3 juin 2026, on peut supprimer cette condition
   const budgetMigrationDateRange = {
     lt: new Date('2024-06-04'),
     gte: new Date('2024-06-03')

@@ -20,6 +20,10 @@ export default withNuxt({
     'vue/require-default-prop': 'warn',
     'vue/no-required-prop-with-default': 'error',
     'vue/no-unused-emit-declarations': 'warn',
-    'vue/no-unused-properties': 'warn'
+    'vue/no-unused-properties': 'warn',
+    'no-warning-comments': [
+      'warn',
+      { terms: ['todo', 'fixme'], location: 'anywhere' }
+    ]
   }
 })

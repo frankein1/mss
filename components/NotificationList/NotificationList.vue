@@ -174,9 +174,9 @@
   })
   const modal = useModal()
   refreshArchiveData()
-  const unwatch = watch([modal.isReady, archiveNotifications], ready => {
+  const unwatch = watch([modal.isReady, archiveNotifications], () => {
     if (
-      ready &&
+      modal.isReady &&
       archiveNotifications.value &&
       archiveNotifications.value.length > 0
     ) {

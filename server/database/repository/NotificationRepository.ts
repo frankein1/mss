@@ -29,7 +29,6 @@ export const NotificationRepo = {
     create: prismaClient.notification.create,
     deleteMany: prismaClient.notification.deleteMany,
     createMany: prismaClient.notification.createMany,
-    updateMany: prismaClient.notification.updateMany,
-    count: prismaClient.notification.count
+    updateMany: prismaClient.notification.updateMany
   }
 }
