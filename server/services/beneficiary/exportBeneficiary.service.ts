@@ -527,9 +527,7 @@ const getSocialSupports = async (
     where: {
       familyFileId: familyFileId,
       beneficiaryId: beneficiaryId,
-      appointment: {
-        draft: false
-      }
+      socialSupportType: { not: 'Appointment' }
     },
     include: {
       followup: {

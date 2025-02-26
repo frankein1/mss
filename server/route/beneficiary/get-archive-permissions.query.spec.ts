@@ -23,7 +23,8 @@ const createBeneficiaries = async () => {
       referents: {
         connect: [
           { id: fixturesUsers[FixtureUserRole.StructureManager].id },
-          { id: fixturesUsers[FixtureUserRole.Referent].id }
+          { id: fixturesUsers[FixtureUserRole.Referent].id },
+          { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id }
         ]
       },
       budget: undefined
@@ -142,6 +143,16 @@ describe('Beneficiary - Test Archive permissions', async () => {
     expect(archivePermissionReceptionAgent.archive).toBe(false)
   })
 
+  test('social worker should not be able to archive a recent beneficiary', async ({
+    trpc
+  }) => {
+    const archivePermissionSocialWorker =
+      await trpc.socialWorker.beneficiary.getBeneficiaryArchivePermission(
+        inputCoursor
+      )
+    expect(archivePermissionSocialWorker.archive).toBe(false)
+  })
+
   test('referent, beneficiary updated recently. should return false', async ({
     trpc
   }) => {
@@ -200,6 +211,26 @@ describe('Beneficiary - Test Archive permissions', async () => {
         id: beneficiaries[5].id
       })
     expect(archiveParmissionReferent.archive).toBe(true)
+  })
+
+  test('social worker, beneficiary not updated recently, not referent of the file. should not be able to archive', async ({
+    trpc
+  }) => {
+    const archivePermissionSocialWorker =
+      await trpc.socialWorker.beneficiary.getBeneficiaryArchivePermission({
+        id: beneficiaries[1].id
+      })
+    expect(archivePermissionSocialWorker.archive).toBe(false)
+  })
+
+  test('reception agent, beneficiary not updated recently, referent of the file. should not be able to archive', async ({
+    trpc
+  }) => {
+    const archivePermissionReceptionAgent =
+      await trpc.receptionAgent.beneficiary.getBeneficiaryArchivePermission({
+        id: beneficiaries[1].id
+      })
+    expect(archivePermissionReceptionAgent.archive).toBe(false)
   })
 })
 
