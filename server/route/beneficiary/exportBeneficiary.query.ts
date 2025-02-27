@@ -6,6 +6,7 @@ import {
 import { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryService } from '~/server/services'
 import { ProtectedAppContext } from '~/server/trpc'
+import { UserActivityType } from '@prisma/client'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -36,5 +37,13 @@ const handler = async ({
 export const exportBeneficiaryQuery = createQuery({
   inputValidation: exportBeneficiarySchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'beneficiary.exportBeneficiary',
+    target: 'Beneficiary',
+    targetId: ({ ctx }) => {
+      return ctx.user.id
+    },
+    action: UserActivityType.ARCHIVE
+  }
 })
