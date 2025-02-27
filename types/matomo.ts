@@ -12,7 +12,8 @@ export enum EventCategory {
   History = 'Historique',
   Beneficiary = 'Beneficiaire',
   ExportStats = 'Export des statistiques',
-  ExportBudget = 'Export du budget'
+  ExportBudget = 'Export du budget',
+  BeneficiaryArchive = 'Archive Bénéficiaire'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -47,6 +48,13 @@ export enum BeneficiaryHistoryFilterEventAction {
   SocialSupportSubject = "Type d'accompagnement",
   Referent = 'Référent',
   InvolvedBeneficiary = 'Bénéficiaire concerné'
+}
+
+export enum BeneficiaryArchiveAction {
+  ExportArchive = "Export de l'archive",
+  DeleteWithoutArchive = 'Suppression sans archive',
+  DeleteWithArchive = 'Suppression avec archive',
+  DelayArchive = 'Conserver 1 an supplémentaire'
 }
 
 export enum FollowupFilterEventAction {
@@ -127,6 +135,7 @@ export type EventAction =
   | BeneficiaryHistoryAction
   | BeneficiaryAction
   | ExportEventAction
+  | BeneficiaryArchiveAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

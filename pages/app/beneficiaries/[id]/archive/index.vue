@@ -70,6 +70,7 @@
   import DeleteModal from '~/components/Archive/DeleteModal.vue'
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
   import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+  import { BeneficiaryArchiveAction, EventCategory } from '~/types/matomo'
 
   const title = routes.beneficiary.AppBeneficiaryArchive.title
   useHead({ title })
@@ -77,18 +78,20 @@
     name: routes.beneficiary.AppBeneficiaryArchive.name
   })
 
+  const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
   const modal = useModal()
+  const matomo = useMatomo()
   const beneficiaryId = route.params.id as string
   const archiveFormStatus = ref<ArchiveFormStatus>(null)
   const downloadReceived = ref<boolean>(false)
   const downloadPending = ref<boolean>(false)
-  const trpcClient = useTrpcClient()
-  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
   const deleteSection = ref<HTMLElement | null>(null)
   const archiveSection = ref<HTMLElement | null>(null)
   const exportBeneficiaryInput = ref<ExportBeneficiaryInput | null>(null)
+
+  type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
 
   const {
     beneficiary,
@@ -138,6 +141,7 @@
     return 'Gérer le dossier'
   })
 
+  // Form actions
   const changeStatus = (value: string) => {
     archiveFormStatus.value = value as ArchiveFormStatus
     if (archiveFormStatus.value === 'delete') {
@@ -156,17 +160,26 @@
       }, 100)
     }
   }
+  const resetValues = () => {
+    downloadReceived.value = false
+    exportBeneficiaryInput.value = null
+  }
 
-  function deletFile(beneficiaryId: string) {
+  // User actions
+  const deletFile = (beneficiaryId: string) => {
     useTrpcMutation({
-      mutation: () =>
-        useTrpcClient().beneficiary.delete.mutate({
+      mutation: () => {
+        matomo.trackEvent(
+          EventCategory.BeneficiaryArchive,
+          BeneficiaryArchiveAction.DeleteWithoutArchive
+        )
+        return useTrpcClient().beneficiary.delete.mutate({
           id: beneficiaryId
-        }),
+        })
+      },
       onSuccess: () => {
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
-        downloadReceived.value = false // Reset variable
-        exportBeneficiaryInput.value = null // Reset variable
+        resetValues()
         modal.close() // ferme toutes les modales
         navigateTo(routes.user.AppOverview.path())
       },
@@ -182,10 +195,13 @@
   const archiveAndDeleteFile = async (values: ExportBeneficiaryInput) => {
     if (archivePermission.value) {
       try {
+        matomo.trackEvent(
+          EventCategory.BeneficiaryArchive,
+          BeneficiaryArchiveAction.DeleteWithArchive
+        )
         await trpcClient.beneficiary.archiveBeneficiary.query(values)
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
-        downloadReceived.value = false // Reset variable
-        exportBeneficiaryInput.value = null // Reset variable
+        resetValues()
         modal.close() // ferme toutes les modales
         navigateTo(routes.user.AppOverview.path())
       } catch {
@@ -213,10 +229,32 @@
     }
   }
 
+  const downloadArchive = async (values: ExportBeneficiaryInput) => {
+    matomo.trackEvent(
+      EventCategory.BeneficiaryArchive,
+      BeneficiaryArchiveAction.ExportArchive
+    )
+    const response =
+      await trpcClient.beneficiary.exportBeneficiary.query(values)
+    if (!response?.archiveFile) {
+      throw new Error('no data')
+    }
+    const downloadLink = document.createElement('a')
+    downloadLink.href = response.archiveFile
+    const date = new Date()
+    downloadLink.download = `Archive ${beneficiaryName.value} ${date.toLocaleDateString()} Mon-Suivi-Social.zip`
+    downloadLink.click()
+    downloadLink.remove()
+  }
+
   const router = trpcClient.beneficiary
   const updateBeneficiary = router.updateArchiveDate.useMutation()
 
   const onDelayArchive = () => {
+    matomo.trackEvent(
+      EventCategory.BeneficiaryArchive,
+      BeneficiaryArchiveAction.DelayArchive
+    )
     useTrpcMutation({
       mutation: () =>
         updateBeneficiary.mutate({
@@ -235,6 +273,7 @@
     })
   }
 
+  // modales
   const openDelayModal = () => {
     modal.open(ArchiveDelayModal, {
       triggerOpen: true,
@@ -283,20 +322,6 @@
     }
     openQuitPageModal()
   })
-
-  const downloadArchive = async (values: ExportBeneficiaryInput) => {
-    const response =
-      await trpcClient.beneficiary.exportBeneficiary.query(values)
-    if (!response?.archiveFile) {
-      throw new Error('no data')
-    }
-    const downloadLink = document.createElement('a')
-    downloadLink.href = response.archiveFile
-    const date = new Date()
-    downloadLink.download = `Archive ${beneficiaryName.value} ${date.toLocaleDateString()} Mon-Suivi-Social.zip`
-    downloadLink.click()
-    downloadLink.remove()
-  }
 </script>
 
 <style lang="scss" scoped>
