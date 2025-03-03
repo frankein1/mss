@@ -24,7 +24,6 @@ export type ProConnectConfig = {
   clientSecret: string
   redirectUri: string
   postLogoutRedirectUri: string
-  postPasswordEditRedirectUri: string
 }
 
 export type ProConnectUserInfo = JwtPayload & {
@@ -41,22 +40,19 @@ export class ProConnectClient {
   private clientSecret: string
   private redirectUri: string
   private postLogoutRedirectUri: string
-  private postPasswordEditRedirectUri: string
 
   public constructor({
     issuer,
     clientId,
     clientSecret,
     redirectUri,
-    postLogoutRedirectUri,
-    postPasswordEditRedirectUri
+    postLogoutRedirectUri
   }: ProConnectConfig) {
     this.issuer = issuer
     this.clientId = clientId
     this.clientSecret = clientSecret
     this.redirectUri = redirectUri
     this.postLogoutRedirectUri = postLogoutRedirectUri
-    this.postPasswordEditRedirectUri = postPasswordEditRedirectUri
   }
 
   public getRedirectUri(appRedirectUrl?: string) {
@@ -191,8 +187,7 @@ function initClient() {
       clientId: proconnectClientId,
       clientSecret: proconnectClientSecret,
       redirectUri: `${appUrl}${apiRoutes.proConnect.ApiSsoCallback.path()}`,
-      postLogoutRedirectUri: `${appUrl}${routes.auth.AuthLogout.path()}`,
-      postPasswordEditRedirectUri: `${appUrl}${routes.user.AppAccount.path()}`
+      postLogoutRedirectUri: `${appUrl}${routes.auth.AuthLogout.path()}`
     }
     client = new ProConnectClient(config)
   }

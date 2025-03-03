@@ -10,6 +10,5 @@ function getBread<T extends RouteName>(name: T) {
 }
 
 export const breadcrumbs = {
-  AppOverview: () => getBread('AppOverview'),
-  AppAccount: () => [...getBread('AppOverview'), ...getBread('AppAccount')]
+  AppOverview: () => getBread('AppOverview')
 }

@@ -1,6 +1,6 @@
 import { useStorage } from '@vueuse/core'
 
-export type AuthProvider = 'proconnect' | 'inclusionconnect' | 'admin'
+export type AuthProvider = 'proconnect' | 'admin'
 
 export function useAuthProvider() {
   const provider = useStorage<AuthProvider | undefined>(
