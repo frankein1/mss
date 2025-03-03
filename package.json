@@ -23,7 +23,7 @@
   "dependencies": {
     "@getbrevo/brevo": "^2.2.0",
     "@gouvfr/dsfr": "~1.13.0",
-    "@gouvminint/vue-dsfr": "^8.2.1",
+    "@gouvminint/vue-dsfr": "^8.3.0",
     "@prisma/client": "^6.4.1",
     "@sentry/vue": "^8.55.0",
     "@tiptap/core": "2.11.5",
