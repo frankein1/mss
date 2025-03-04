@@ -69,15 +69,15 @@
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
   import { routes } from '~/utils/routes'
+  import { NotificationItemType } from './types'
 
   const props = defineProps<{
-    notification: NotificationItem
+    notification: NotificationItemType
   }>()
 
   const emit = defineEmits<{
