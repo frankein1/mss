@@ -118,10 +118,10 @@ export const archiveBeneficiaryMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
-    key: 'beneficiary.archived',
+    key: 'beneficiary.archive',
     target: 'ArchivedBeneficiary',
-    targetId: ({ ctx }) => {
-      return ctx.user.id
+    targetId: ({ input }) => {
+      return input.beneficiaryId
     },
     action: UserActivityType.ARCHIVE
   }
