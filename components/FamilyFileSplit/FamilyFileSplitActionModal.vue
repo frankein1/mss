@@ -185,7 +185,8 @@
   @import '@gouvfr/dsfr/dist/component/stepper/stepper.min.css';
 
   :deep(.fr-stepper__steps) {
-    background-image: repeating-linear-gradient(
+    background-image:
+      repeating-linear-gradient(
         to right,
         var(--primary) 0,
         var(--primary) var(--active-inner),

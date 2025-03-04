@@ -110,6 +110,12 @@ export const routes = {
       beneficiary ? formatBeneficiaryDisplayName(beneficiary) : '',
     path: getBeneficiaryRoute
   },
+  AppBeneficiariesArchive: {
+    name: 'AppBeneficiariesAdd',
+    title: 'Gérer le dossier',
+    path: (beneficiaryId: string) =>
+      `${BeneficiariesRoute}/${beneficiaryId}/archive`
+  },
   AppBeneficiaryPrint: {
     name: 'AppBeneficiaryPrint',
     title: (beneficiary: BeneficiaryNames | null) =>

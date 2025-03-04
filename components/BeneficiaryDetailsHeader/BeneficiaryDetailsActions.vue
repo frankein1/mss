@@ -38,6 +38,18 @@
         Dissocier du dossier
       </button>
     </li>
+    <li v-if="structureManager">
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0 edit-btn"
+        data-fr-opened="false"
+        type="button"
+        title="Archiver le bénéficiaire"
+        @click="emit('archive')"
+      >
+        <i class="ri-folder-close-line"></i>
+        Archiver le bénéficiaire
+      </button>
+    </li>
     <li>
       <NuxtLink
         :to="`${editRoute}`"
@@ -54,6 +66,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'
 
+  const { isStructureManager } = useAuthState()
   const route = useRoute()
 
   const props = defineProps<{
@@ -62,7 +75,9 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ delete: []; split: [] }>()
+  const structureManager = computed(() => isStructureManager())
+
+  const emit = defineEmits<{ delete: []; split: []; archive: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
@@ -88,6 +103,26 @@
     .fr-btn[class*=' fr-icon-'].fr-btn--icon-left.fr-icon-edit-line.edit-btn {
     max-width: 100%;
     overflow: initial;
-    padding: 0.5rem 1rem;
+  }
+</style>
+
+<style lang="scss" scoped>
+  .edit-btn {
+    max-width: 100% !important;
+  }
+
+  .fr-btns-group--inline {
+    row-gap: 0.75rem;
+
+    .fr-btn {
+      margin: 0 0.5rem 1rem;
+    }
+  }
+
+  .ri-folder-close-line {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234550e5'%3E%3Cpath d='M3 3C2.44772 3 2 3.44772 2 4V20C2 20.5523 2.44772 21 3 21H13V19H4V5H9.58579L11.5858 7H20V12H22V6C22 5.44772 21.5523 5 21 5H12.4142L10.4142 3H3ZM20.4143 17.9999L22.5356 20.1212L21.1214 21.5354L19.0001 19.4141L16.8788 21.5354L15.4646 20.1212L17.5859 17.9999L15.4646 15.8786L16.8788 14.4644L19.0001 16.5857L21.1214 14.4644L22.5356 15.8786L20.4143 17.9999Z'%3E%3C/path%3E%3C/svg%3E");
   }
 </style>

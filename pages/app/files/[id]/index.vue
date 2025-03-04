@@ -55,6 +55,7 @@
                 :family-file="familyFileIdentification.length > 1"
                 @delete="openDeleteModal"
                 @split="openSplitModal"
+                @archive="handleClickArchiveBeneficiary"
               />
             </template>
           </BeneficiaryInfo>
@@ -385,6 +386,16 @@
     } else {
       snackbar.error(
         'La prise de rendez-vous a échoué pour une raison inconnue.'
+      )
+    }
+  }
+
+  const handleClickArchiveBeneficiary = () => {
+    if (selectedBeneficiary.value?.id) {
+      navigateTo(
+        routes.beneficiary.AppBeneficiariesArchive.path(
+          selectedBeneficiary.value.id
+        )
       )
     }
   }

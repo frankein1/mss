@@ -1,11 +1,11 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
-    <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
+    <div class="fr-col-12 fr-col-xl-4 fr-my-2w">
       <h3 class="title fr-h4 fr-mb-0">
         {{ beneficiaryTitle }}
       </h3>
     </div>
-    <div class="fr-col-12 fr-col-xl-6 detail-actions">
+    <div class="fr-col-12 fr-col-xl-8 detail-actions">
       <slot name="actions"></slot>
     </div>
   </div>
@@ -100,6 +100,10 @@
   .title {
     color: var(--primary);
     align-self: center;
+  }
+
+  .fr-grid-row {
+    align-items: center;
   }
 
   .detail-actions {
