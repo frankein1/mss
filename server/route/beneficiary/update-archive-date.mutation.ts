@@ -93,16 +93,7 @@ async function getUserAndBeneficiary(
     BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
       where: { id: beneficiaryId },
       select: {
-        updated: true,
-        familyFile: {
-          select: {
-            referents: {
-              select: {
-                id: true
-              }
-            }
-          }
-        }
+        updated: true
       }
     })
   ])
