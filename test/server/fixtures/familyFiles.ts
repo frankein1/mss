@@ -6,17 +6,24 @@ import {
 } from '~/prisma/fixtures'
 import { prismaClient } from '~/server/prisma'
 
-export async function createFamilyFile(date: Date) {
+const defaultStructureId = fixtureStructures[FixtureStructure.Test].id
+const defaultReferentId = fixturesUsers[FixtureUserRole.Referent].id
+const defaultStructureManagerId =
+  fixturesUsers[FixtureUserRole.StructureManager].id
+
+export async function createFamilyFile(
+  date: Date,
+  structureId: string = defaultStructureId,
+  referentId: string = defaultReferentId,
+  structureManagerId: string = defaultStructureManagerId
+) {
   return await prismaClient.familyFile.create({
     data: {
       structure: {
-        connect: { id: fixtureStructures[FixtureStructure.Test].id }
+        connect: { id: structureId }
       },
       referents: {
-        connect: [
-          { id: fixturesUsers[FixtureUserRole.StructureManager].id },
-          { id: fixturesUsers[FixtureUserRole.Referent].id }
-        ]
+        connect: [{ id: structureManagerId }, { id: referentId }]
       },
       budget: {
         create: {

@@ -1,9 +1,11 @@
 import { Prisma, UserStatus, UserActivityType } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import {
+  AppointmentRepo,
   BeneficiaryRelativeRepo,
   BeneficiaryRepo,
   BudgetRepo,
+  CommentRepo,
   DocumentRepo,
   FileInstructionRepo,
   FollowupRepo,
@@ -11,13 +13,15 @@ import {
   HousingHelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo,
-  StructureRepo
+  StructureRepo,
+  UserRepo
 } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { IdInput, idSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getDisabledStructureAlert } from '~/server/email'
+import { customAlphabet } from 'nanoid'
 
 const adminHandler = async ({
   ctx,
@@ -38,8 +42,10 @@ const adminHandler = async ({
       lastAccess: true,
       name: true,
       users: {
-        where: {
-          status: UserStatus.Active
+        select: {
+          id: true,
+          status: true,
+          email: true
         }
       }
     }
@@ -48,6 +54,14 @@ const adminHandler = async ({
   const deleteNotifications = NotificationRepo.prisma.deleteMany({
     where: {
       beneficiary: {
+        structureId: id
+      }
+    }
+  })
+
+  const deleteComments = CommentRepo.prisma.deleteMany({
+    where: {
+      socialSupport: {
         structureId: id
       }
     }
@@ -77,6 +91,12 @@ const adminHandler = async ({
     }
   })
 
+  await updateFileInstructions(id)
+  await updateHelpRequests(id)
+  await updateHousingHelpRequests(id)
+  await updateFollowups(id)
+  await updateAppointments(id)
+
   const socialSupportUpdate: Required<
     Omit<
       Prisma.SocialSupportUpdateManyMutationInput,
@@ -101,131 +121,9 @@ const adminHandler = async ({
     ministre: null,
     dueDate: null
   }
-  const updateSocialSupport = SocialSupportRepo.prisma.updateMany({
-    where: {
-      beneficiary: {
-        structureId: id
-      }
-    },
+  const updateSocialSupports = SocialSupportRepo.prisma.updateMany({
+    where: { structureId: id },
     data: socialSupportUpdate
-  })
-
-  const fileInstructionUpdate: Required<
-    Omit<
-      Prisma.FileInstructionUncheckedUpdateManyInput,
-      'id' | 'updated' | 'type' | 'socialSupportId'
-    >
-  > = {
-    instructorOrganizationId: null,
-    instructorOrganizationContactId: null,
-    externalStructure: false,
-    examinationDate: null,
-    decisionDate: null,
-    refusalReason: null,
-    refusalReasonOther: null,
-    dispatchDate: null,
-    fullFile: null
-  }
-  await FileInstructionRepo.prisma.updateMany({
-    where: {
-      socialSupport: {
-        beneficiary: {
-          structureId: id
-        }
-      }
-    },
-    data: fileInstructionUpdate
-  })
-
-  const helpRequestUpdate: Required<
-    Omit<
-      Prisma.HelpRequestUncheckedUpdateManyInput,
-      'id' | 'subjectId' | 'financialSupport' | 'fileInstructionId'
-    >
-  > = {
-    prescribingOrganizationId: null,
-    prescribingOrganizationContactId: null,
-    askedAmount: null,
-    allocatedAmount: null,
-    paymentMethod: null,
-    paymentDate: null,
-    handlingDate: null,
-    isRefundable: false
-  }
-  await HelpRequestRepo.prisma.updateMany({
-    where: {
-      fileInstruction: {
-        socialSupport: {
-          beneficiary: {
-            structureId: id
-          }
-        }
-      }
-    },
-    data: helpRequestUpdate
-  })
-
-  const housingHelpRequestUpdate: Required<
-    Omit<
-      Prisma.HousingHelpRequestUncheckedUpdateManyInput,
-      'id' | 'fileInstructionId'
-    >
-  > = {
-    prescribingOrganizationId: null,
-    prescribingOrganizationContactId: null,
-    isFirst: false,
-    firstOpeningDate: null,
-    askedHousing: { set: [] },
-    uniqueId: null,
-    taxHouseholdAdditionalInformation: null,
-    maxRent: null,
-    maxCharges: null,
-    housingType: { set: [] },
-    roomCount: { set: [] },
-    isPmr: null,
-    reason: null,
-    lowIncomeHousingType: { set: [] }
-  }
-  await HousingHelpRequestRepo.prisma.updateMany({
-    where: {
-      fileInstruction: {
-        socialSupport: {
-          beneficiary: {
-            structureId: id
-          }
-        }
-      }
-    },
-    data: housingHelpRequestUpdate
-  })
-
-  const followupUpdate: Required<
-    Omit<
-      Prisma.FollowupUncheckedUpdateManyInput,
-      'id' | 'updated' | 'socialSupportId' | 'medium'
-    >
-  > = {
-    prescribingOrganizationId: null,
-    prescribingOrganizationContactId: null,
-    helpRequested: null,
-    place: null,
-    structureName: null,
-    thirdPersonName: null,
-    classified: null,
-    firstFollowup: null,
-    forwardedToJustice: null,
-    redirected: null,
-    duration: null
-  }
-  await FollowupRepo.prisma.updateMany({
-    where: {
-      socialSupport: {
-        beneficiary: {
-          structureId: id
-        }
-      }
-    },
-    data: followupUpdate
   })
 
   const beneficiaryUpdate: Required<
@@ -315,43 +213,113 @@ const adminHandler = async ({
     accommodationZone: null
   }
   const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
-    where: {
-      structureId: id
-    },
+    where: { structureId: id },
     data: beneficiaryUpdate
   })
 
+  const structureUpdate: Required<
+    Omit<
+      Prisma.StructureUncheckedUpdateManyInput,
+      | 'id'
+      | 'type'
+      | 'zipcode'
+      | 'city'
+      | 'inhabitantsNumber'
+      | 'inseeCode'
+      | 'siret'
+      | 'created'
+      | 'updated'
+      | 'lastActivity'
+      | 'lastAccess'
+      | 'deactivationAlertEmail'
+      | 'deactivationAlertEmailDate'
+    >
+  > = {
+    disabled: true,
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+    dpoFirstName: null,
+    dpoLastName: null,
+    dpoEmail: null,
+    externalRdvspActive: false,
+    externalRdvspId: null
+  }
   const updateStructure = StructureRepo.prisma.update({
-    where: {
-      id
-    },
-    data: {
-      disabled: true,
-      dpoFirstName: null,
-      dpoLastName: null,
-      dpoEmail: null,
-      address: '',
-      phone: '',
-      email: ''
-    }
+    where: { id },
+    data: structureUpdate
   })
 
   await prismaClient.$transaction([
     deleteNotifications,
+    deleteComments,
     deleteDocuments,
     deleteBudget,
     deleteRelatives,
-    updateSocialSupport,
+    updateSocialSupports,
     updateBeneficiaries,
     updateStructure
   ])
 
+  // Deactivate and anonymize all users of the structure while keeping the uniqueness of the email
+  const nanoid = customAlphabet('123456789abcdefghijk', 5)
+  const anonstructure = nanoid()
+
+  type UserUpdate = Required<
+    Omit<
+      Prisma.UserUncheckedUpdateManyInput,
+      | 'id'
+      | 'structureId'
+      | 'role'
+      | 'firstAccess'
+      | 'lastAccess'
+      | 'created'
+      | 'updated'
+    >
+  >
+
   for (const user of structure.users) {
-    await createEmail({
-      to: user.email,
-      subject: 'Suppression de votre espace de travail sur Mon Suivi Social',
-      ...getDisabledStructureAlert()
+    const deleteAccount = prismaClient.account.deleteMany({
+      where: {
+        userId: user.id
+      }
     })
+
+    const deleteExternalAccount = prismaClient.externalAccount.deleteMany({
+      where: {
+        userId: user.id
+      }
+    })
+
+    const userUpdate: UserUpdate = {
+      firstName: '',
+      lastName: '',
+      email: `${nanoid()}@disabled-structure-${anonstructure}.org`,
+      status: UserStatus.Disabled,
+      aidantConnectAuthorisation: null,
+      accessToken: null,
+      accessTokenValidity: null,
+      externalRdvspId: null
+    }
+    const updateUser = UserRepo.prisma.update({
+      where: { id: user.id },
+      data: userUpdate
+    })
+
+    await prismaClient.$transaction([
+      deleteAccount,
+      deleteExternalAccount,
+      updateUser
+    ])
+
+    if (user.status === 'Active') {
+      await createEmail({
+        to: user.email,
+        subject: 'Suppression de votre espace de travail sur Mon Suivi Social',
+        ...getDisabledStructureAlert()
+      })
+    }
   }
 
   return {
@@ -359,6 +327,142 @@ const adminHandler = async ({
     id: structure.id,
     disabled: true
   }
+}
+
+async function updateFileInstructions(structureId: string) {
+  const fileInstructionUpdate: Required<
+    Omit<
+      Prisma.FileInstructionUncheckedUpdateManyInput,
+      'id' | 'updated' | 'type' | 'socialSupportId'
+    >
+  > = {
+    instructorOrganizationId: null,
+    instructorOrganizationContactId: null,
+    externalStructure: false,
+    examinationDate: null,
+    decisionDate: null,
+    refusalReason: null,
+    refusalReasonOther: null,
+    dispatchDate: null,
+    fullFile: null
+  }
+  await FileInstructionRepo.prisma.updateMany({
+    where: {
+      socialSupport: { structureId }
+    },
+    data: fileInstructionUpdate
+  })
+}
+
+async function updateHelpRequests(structureId: string) {
+  const helpRequestUpdate: Required<
+    Omit<
+      Prisma.HelpRequestUncheckedUpdateManyInput,
+      'id' | 'subjectId' | 'financialSupport' | 'fileInstructionId'
+    >
+  > = {
+    prescribingOrganizationId: null,
+    prescribingOrganizationContactId: null,
+    askedAmount: null,
+    allocatedAmount: null,
+    paymentMethod: null,
+    paymentDate: null,
+    handlingDate: null,
+    isRefundable: false
+  }
+  await HelpRequestRepo.prisma.updateMany({
+    where: {
+      fileInstruction: { socialSupport: { structureId } }
+    },
+    data: helpRequestUpdate
+  })
+}
+
+async function updateHousingHelpRequests(structureId: string) {
+  const housingHelpRequestUpdate: Required<
+    Omit<
+      Prisma.HousingHelpRequestUncheckedUpdateManyInput,
+      'id' | 'fileInstructionId'
+    >
+  > = {
+    prescribingOrganizationId: null,
+    prescribingOrganizationContactId: null,
+    isFirst: false,
+    firstOpeningDate: null,
+    askedHousing: { set: [] },
+    uniqueId: null,
+    taxHouseholdAdditionalInformation: null,
+    maxRent: null,
+    maxCharges: null,
+    housingType: { set: [] },
+    roomCount: { set: [] },
+    isPmr: null,
+    reason: null,
+    lowIncomeHousingType: { set: [] }
+  }
+  await HousingHelpRequestRepo.prisma.updateMany({
+    where: {
+      fileInstruction: {
+        socialSupport: { structureId }
+      }
+    },
+    data: housingHelpRequestUpdate
+  })
+}
+
+async function updateFollowups(structureId: string) {
+  const followupUpdate: Required<
+    Omit<
+      Prisma.FollowupUncheckedUpdateManyInput,
+      'id' | 'updated' | 'socialSupportId' | 'medium'
+    >
+  > = {
+    prescribingOrganizationId: null,
+    prescribingOrganizationContactId: null,
+    helpRequested: null,
+    place: null,
+    structureName: null,
+    thirdPersonName: null,
+    classified: null,
+    firstFollowup: null,
+    forwardedToJustice: null,
+    redirected: null,
+    duration: null
+  }
+  await FollowupRepo.prisma.updateMany({
+    where: {
+      socialSupport: { structureId }
+    },
+    data: followupUpdate
+  })
+}
+
+async function updateAppointments(structureId: string) {
+  const appointmentUpdate: Required<
+    Omit<
+      Prisma.AppointmentUncheckedUpdateManyInput,
+      | 'id'
+      | 'created'
+      | 'updated'
+      | 'subject'
+      | 'externalSubjectId'
+      | 'agentId'
+      | 'socialSupportId'
+    >
+  > = {
+    draft: false,
+    externalDraftId: null,
+    time: null,
+    durationInMin: null,
+    place: null,
+    externalRdvspId: null
+  }
+  await AppointmentRepo.prisma.updateMany({
+    where: {
+      socialSupport: { structureId }
+    },
+    data: appointmentUpdate
+  })
 }
 
 export const disableStructure = createMutation({

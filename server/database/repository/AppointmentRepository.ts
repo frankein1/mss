@@ -13,5 +13,8 @@ function update<T extends Prisma.AppointmentUpdateArgs>(
 }
 
 export const AppointmentRepo = {
-  update
+  update,
+  prisma: {
+    updateMany: prismaClient.appointment.updateMany
+  }
 }

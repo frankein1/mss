@@ -6,8 +6,36 @@ import {
 } from '~/prisma/fixtures'
 import { prismaClient } from '~/server/prisma'
 
-export async function createBeneficiary(date: Date, familyFileId: string) {
+const defaultStructureId = fixtureStructures[FixtureStructure.Test].id
+const defaultReferentId = fixturesUsers[FixtureUserRole.Referent].id
+
+export async function createBeneficiary(
+  date: Date,
+  familyFileId: string,
+  structureId = defaultStructureId,
+  referentId = defaultReferentId,
+  fileNumber = '87MB42GCB5'
+) {
   return await prismaClient.beneficiary.create({
+    select: {
+      id: true,
+      fileNumber: true,
+      relatives: {
+        select: {
+          id: true
+        }
+      },
+      documents: {
+        select: {
+          key: true,
+          documentContent: {
+            select: {
+              id: true
+            }
+          }
+        }
+      }
+    },
     data: {
       created: date,
       updated: date,
@@ -15,14 +43,14 @@ export async function createBeneficiary(date: Date, familyFileId: string) {
         connect: { id: familyFileId }
       },
       structure: {
-        connect: { id: fixtureStructures[FixtureStructure.Test].id }
+        connect: { id: structureId }
       },
       createdBy: {
-        connect: { id: fixturesUsers[FixtureUserRole.Referent].id }
+        connect: { id: referentId }
       },
       draft: false,
       aidantConnectAuthorized: true,
-      fileNumber: '87MB42GCB5',
+      fileNumber,
       status: 'Deceased',
       title: 'Miss',
       usualName: 'Attaque',
@@ -131,6 +159,27 @@ export async function createBeneficiary(date: Date, familyFileId: string) {
             caregiver: true,
             additionalInformation: 'Frère habitant le domicile',
             birthDate: new Date('1984-09-23')
+          }
+        ]
+      },
+      documents: {
+        create: [
+          {
+            created: date,
+            familyFileId,
+            createdById: referentId,
+            mimeType: 'application/pdf',
+            name: 'certificat.pdf',
+            filenameDisk: 'random-id',
+            filenameDownload: 'certificat.pdf',
+            type: 'Justificatifs',
+            tags: ['CertificatDeNaissance'],
+            confidential: true,
+            documentContent: {
+              create: {
+                content: Buffer.from('testcontent')
+              }
+            }
           }
         ]
       }

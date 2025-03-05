@@ -13,7 +13,8 @@ export const CommentRepo = {
   prisma: {
     create: prismaClient.comment.create,
     update: prismaClient.comment.update,
-    delete: prismaClient.comment.delete
+    delete: prismaClient.comment.delete,
+    deleteMany: prismaClient.comment.deleteMany
   },
   findUniqueOrThrow
 }
