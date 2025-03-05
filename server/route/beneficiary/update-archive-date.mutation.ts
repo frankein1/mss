@@ -31,14 +31,15 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const [user, ben] = await getUserAndBeneficiary(ctx, input.id)
+  const archiveDueDate = dayjs().add(1, 'year').toDate()
 
   const updateBeneficiary = BeneficiaryRepo.prisma.update({
     where: { id: input.id },
     data: {
       updated: ben.updated, // ne modifie pas la date de dernière mise à jour
-      archiveDueDate: dayjs().add(1, 'year').toDate(),
+      archiveDueDate,
       archiveDueDateHistory: {
-        push: dayjs().add(1, 'year').toDate()
+        push: archiveDueDate
       }
     }
   })
@@ -50,7 +51,8 @@ const handler = async ({
     },
     data: {
       read: true,
-      detail: `Dossier archivé par ${user.firstName} ${user.lastName}`
+      archiveDate: archiveDueDate,
+      detail: `Date d'archivage modifiée par ${user.firstName} ${user.lastName}`
     }
   })
 
