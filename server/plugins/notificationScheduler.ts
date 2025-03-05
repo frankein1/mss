@@ -6,6 +6,7 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
+import createArchiveDueNotifications from './archiveNotifications'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -94,7 +95,32 @@ async function createEndOfSupportHelpRequestNotifications() {
     data: endOfSupportHelpRequestNotifications
   })
 }
+const { public: publicConfig } = useRuntimeConfig()
 
+const archiveScheduler = () => {
+  const scheduler = useScheduler()
+  if (publicConfig.mssEnvironment === 'local') {
+    return scheduler
+      .run(async () => {
+        await createArchiveDueNotifications()
+      })
+      .dailyAt(1, 0)
+  }
+  if (publicConfig.mssEnvironment === 'development') {
+    return scheduler
+      .run(async () => {
+        await createArchiveDueNotifications()
+      })
+      .dailyAt(1, 0)
+  }
+  // else:'demo' and 'production'
+  // TODO: Activate me
+  // return scheduler
+  //   .run(async () => {
+  //     await createArchiveDueNotifications()
+  //   })
+  //   .cron('0 1 * * 0') // At 01:00 on Sunday
+}
 function startScheduler() {
   const scheduler = useScheduler()
 
@@ -105,4 +131,6 @@ function startScheduler() {
       await createEndOfSupportHelpRequestNotifications()
     })
     .dailyAt(1, 0)
+
+  archiveScheduler()
 }

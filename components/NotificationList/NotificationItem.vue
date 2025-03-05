@@ -18,13 +18,36 @@
       >
         {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
-      <p class="fr-mb-0">
+      <p
+        v-if="notification.type === NotificationType.ArchiveDue"
+        class="fr-mb-0"
+      >
+        {{ notification.descriptionHint }}
+        <br />
+        <NuxtLink
+          v-if="itemLink && !notification.onClick"
+          class="fr-link"
+          :to="itemLink"
+          >{{ notification.description }}
+        </NuxtLink>
+        <button
+          v-if="notification.onClick"
+          class="fr-link underline"
+          @click="notification.onClick"
+        >
+          {{ notification.description }}
+        </button>
+      </p>
+      <p
+        v-else
+        class="fr-mb-0"
+      >
         <NuxtLink
           v-if="itemLink"
           class="fr-link"
           :to="itemLink"
-          >{{ notification.description }}</NuxtLink
-        >
+          >{{ notification.description }}
+        </NuxtLink>
         {{ notification.descriptionHint }}
       </p>
       <p
@@ -39,6 +62,7 @@
         {{ formatDate(notification.created) }}
       </p>
       <form
+        v-if="notification.read != null"
         ref="form"
         class="notificationitem__read-form"
       >
@@ -54,15 +78,15 @@
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
   import { routes } from '~/utils/routes'
+  import { NotificationItemType } from './types'
 
   const props = defineProps<{
-    notification: NotificationItem
+    notification: NotificationItemType
   }>()
 
   const emit = defineEmits<{
@@ -103,6 +127,14 @@
   }
 
   const itemLink = computed(() => {
+    if (
+      props.notification.type === NotificationType.ArchiveDue &&
+      props.notification.beneficiary
+    ) {
+      return routes.beneficiary.AppBeneficiariesArchive.path(
+        props.notification.beneficiary.id
+      )
+    }
     if (props.notification.beneficiary) {
       return routes.file.AppFile.path(
         props.notification.beneficiary.familyFile.id,
@@ -165,6 +197,8 @@
   .notificationitem__icon {
     padding: 0.75rem;
     border-radius: 50%;
+    width: 48px;
+    height: 48px;
 
     &.fr-icon-file-text-line {
       background-color: var(--background-alt-yellow-tournesol);
@@ -195,6 +229,18 @@
       background-color: var(--beige-gris-galet-975);
       color: var(--beige-gris-galet-sun-407);
     }
+
+    &.ri-folder-close-line {
+      background-color: #fee9e7;
+      color: #a94645;
+    }
+  }
+
+  .ri-folder-close-line::before {
+    content: url('data:image/svg+xml,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3C2.44772 3 2 3.44772 2 4V20C2 20.5523 2.44772 21 3 21H13V19H4V5H9.58579L11.5858 7H20V12H22V6C22 5.44772 21.5523 5 21 5H12.4142L10.4142 3H3ZM20.4143 17.9999L22.5356 20.1212L21.1214 21.5354L19.0001 19.4141L16.8788 21.5354L15.4646 20.1212L17.5859 17.9999L15.4646 15.8786L16.8788 14.4644L19.0001 16.5857L21.1214 14.4644L22.5356 15.8786L20.4143 17.9999Z" fill="%23A94645"/></svg>');
+    width: 24px;
+    height: 24px;
+    background-color: inherit;
   }
 
   .notificationitem__beneficiary {

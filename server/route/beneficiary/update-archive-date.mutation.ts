@@ -1,11 +1,12 @@
-import { UserActivityType } from '@prisma/client'
+import { NotificationType, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { updateBeneficiaryArchiveDate } from '~/server/schema'
 import { BeneficiaryService } from '~/server/services'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo, NotificationRepo, UserRepo } from '~/server/database'
 import dayjs from 'dayjs'
+import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -29,11 +30,37 @@ const handler = async ({
   }
   ctx: ProtectedAppContext
 }) => {
-  const data = await prepareData(ctx, input.id)
-  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+  const [user, ben] = await getUserAndBeneficiary(ctx, input.id)
+  const archiveDueDate = dayjs().add(1, 'year').toDate()
+
+  const updateBeneficiary = BeneficiaryRepo.prisma.update({
     where: { id: input.id },
-    data: data
+    data: {
+      updated: ben.updated, // ne modifie pas la date de dernière mise à jour
+      archiveDueDate,
+      archiveDueDateHistory: {
+        push: archiveDueDate
+      }
+    }
   })
+
+  const markNotificationsAsRead = NotificationRepo.prisma.updateMany({
+    where: {
+      type: NotificationType.ArchiveDue,
+      beneficiaryId: input.id
+    },
+    data: {
+      read: true,
+      archiveDate: archiveDueDate,
+      detail: `Date d'archivage modifiée par ${user.firstName} ${user.lastName}`
+    }
+  })
+
+  const [updatedBeneficiary, _] = await prismaClient.$transaction([
+    updateBeneficiary,
+    markNotificationsAsRead
+  ])
+
   return updatedBeneficiary
 }
 
@@ -51,16 +78,23 @@ export const updateArchiveDateMutation = createMutation({
   }
 })
 
-const prepareData = async (ctx: SecurityRuleContext, beneficiaryId: string) => {
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: beneficiaryId },
-    select: { archiveDueDate: true, updated: true }
-  })
-  return {
-    updated: beneficiary.updated, // ne modifie pas la date de dernière mise à jour
-    archiveDueDate: dayjs().add(1, 'year').toDate(),
-    archiveDueDateHistory: {
-      push: dayjs().add(1, 'year').toDate()
-    }
-  }
+async function getUserAndBeneficiary(
+  ctx: SecurityRuleContext,
+  beneficiaryId: string
+) {
+  return await Promise.all([
+    UserRepo.findUniqueOrThrow(ctx.user, {
+      where: { id: ctx.user.id },
+      select: {
+        firstName: true,
+        lastName: true
+      }
+    }),
+    BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
+      where: { id: beneficiaryId },
+      select: {
+        updated: true
+      }
+    })
+  ])
 }

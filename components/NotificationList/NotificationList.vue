@@ -46,6 +46,7 @@
       </div>
     </template>
   </div>
+  <OpenModalHack />
 </template>
 
 <script setup lang="ts">
@@ -53,12 +54,18 @@
   import { AlertType } from '~/utils/constants/alert'
   import { NotificationTypeFilterValue } from '~/client/options'
   import { NOTIFICATIONS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import ArchiveNotificationModal from '~/components/Archive/ArchiveNotificationModal.vue'
+  import { routes } from '~/utils/routes'
+  import { formatBeneficiaryName } from '~/utils/beneficiary'
+  import { NotificationItemType } from './types'
 
   const trpcClient = useTrpcClient()
+  const route = useRoute()
 
   const filters = ref<{ type?: NotificationTypeFilterValue | '' }>({})
   const showReadNotifications = ref(false)
   const page = ref(1)
+  const queryfilter = route.query.filter as string
 
   const notificationTypes = computed<NotificationType[] | null>(() => {
     switch (filters.value.type) {
@@ -77,22 +84,48 @@
           NotificationType.NewFollowupElement,
           NotificationType.NewFileInstructionElement
         ]
+      case NotificationTypeFilterValue.Archivage:
+        return [NotificationType.ArchiveDue]
       default:
-        return null
+        return [
+          // All expect Archive type
+          NotificationType.NewDocument,
+          NotificationType.NewComment,
+          NotificationType.DueDateToday,
+          NotificationType.DueDateOneMonth,
+          NotificationType.EndOfSupport,
+          NotificationType.NewFileInstructionElement,
+          NotificationType.UpdateFileInstructionElement,
+          NotificationType.NewFollowupElement,
+          NotificationType.UpdateFollowupElement,
+          NotificationType.NewSocialSupportSubject
+        ]
     }
   })
 
-  const queryInput = computed(() => ({
-    onlyUnread: !showReadNotifications.value,
-    types: notificationTypes.value,
-    perPage: NOTIFICATIONS_REQUEST_LIMIT_DEFAULT,
-    page: 1
-  }))
+  const queryInput = computed(() => {
+    return {
+      onlyUnread: !showReadNotifications.value,
+      types: notificationTypes.value,
+      perPage: NOTIFICATIONS_REQUEST_LIMIT_DEFAULT,
+      page: 1
+    }
+  })
 
   const { data, error, pending } =
     await trpcClient.notification.get.useQuery(queryInput)
 
-  const notifications = computed(() => data.value?.notifications || [])
+  // get archive notifications
+  const { data: archiveData, refresh: refreshArchiveData } =
+    await trpcClient.archiveNotification.get.useQuery()
+
+  const notifications = computed(() => {
+    return addArchiveNotifications(
+      data.value?.notifications as NotificationItemType[],
+      archiveData.value as NotificationItemType[],
+      filters.value.type
+    )
+  })
   const totalCount = computed(() => data.value?.totalCount || 0)
 
   const canSeeMore = computed(
@@ -102,6 +135,50 @@
   watch(filters, () => {
     page.value = 1
   })
+
+  const addArchiveNotifications = (
+    baseNotifications: NotificationItemType[],
+    archiveNotifications: NotificationItemType[],
+    filterType: NotificationTypeFilterValue | '' | undefined
+  ) => {
+    const moreNotification: NotificationItemType = {
+      id: 'MORE_ARCHIVE',
+      read: null,
+      type: NotificationType.ArchiveDue,
+      title: 'Archive',
+      description: 'Voir toutes les notifications',
+      descriptionHint: "Vous avez plus de 3 dossiers en attente d'archivage.",
+      created: new Date(),
+      onClick: () => {
+        filters.value.type = NotificationTypeFilterValue.Archivage
+        selectArchiveTag()
+      }
+    }
+    if (filterType != null) {
+      return baseNotifications
+    }
+    const notifs = archiveNotifications.slice(0, 3)
+    if (archiveNotifications.length > 3) {
+      notifs.push(moreNotification)
+    }
+    if (data.value?.notifications && data.value.notifications.length > 0) {
+      return notifs.concat(data.value.notifications as NotificationItemType[])
+    }
+    return notifs
+  }
+
+  const selectArchiveTag = () => {
+    const archiveTags = document.querySelectorAll('input[value=Archivage]')
+    if (archiveTags.length && archiveTags.length > 0) {
+      const archiveTag = archiveTags[0] as HTMLInputElement
+      archiveTag.click()
+    }
+  }
+  if (queryfilter === 'archivage') {
+    setTimeout(() => {
+      selectArchiveTag()
+    }, 200)
+  }
 
   watch(page, async page => {
     if (page === 1) {
@@ -150,6 +227,67 @@
       }
     }
   }
+
+  const beneficiariesToArchived = computed(() => {
+    if (archiveData && archiveData.value) {
+      return archiveData.value
+        .filter(notification => {
+          if (notification.archiveDate == null) {
+            return false
+          }
+          // display only notifications with archive date passed
+          const archiveDate = notification.archiveDate.getTime()
+          const today = new Date().getTime()
+          return archiveDate < today
+        })
+        .map(notification => ({
+          archiveDate: notification.archiveDate,
+          beneficiary: notification.beneficiary,
+          actionUrl: notification.beneficiary?.id
+            ? routes.beneficiary.AppBeneficiariesArchive.path(
+                notification.beneficiary.id
+              )
+            : null
+        }))
+    }
+  })
+
+  const modal = useModal()
+  refreshArchiveData()
+  const unwatch = watch([modal.isReady, beneficiariesToArchived], () => {
+    if (
+      modal.isReady &&
+      beneficiariesToArchived.value &&
+      beneficiariesToArchived.value.length > 0
+    ) {
+      const firstNotification = beneficiariesToArchived.value[0]
+      const beneficiaryNames = beneficiariesToArchived.value.map(notification =>
+        formatBeneficiaryName({
+          title: null,
+          firstName: notification?.beneficiary?.firstName
+            ? notification.beneficiary.firstName
+            : '',
+          usualName: notification?.beneficiary?.usualName
+            ? notification.beneficiary.usualName
+            : ''
+        })
+      )
+      modal.open(ArchiveNotificationModal, {
+        triggerOpen: true,
+        title:
+          beneficiariesToArchived.value.length > 1
+            ? `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
+            : `Le dossier de ${beneficiaryNames[0]} est inactif depuis 2 ans : une action est requise.`,
+        beneficiaryNames: beneficiaryNames,
+        validate: () => {
+          navigateTo(firstNotification.actionUrl)
+          modal.close()
+        }
+      })
+
+      unwatch()
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

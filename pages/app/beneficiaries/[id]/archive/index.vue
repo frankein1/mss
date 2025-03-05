@@ -181,7 +181,7 @@
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
         resetValues()
         modal.close() // ferme toutes les modales
-        navigateTo(routes.user.AppOverview.path())
+        navigateTo(routes.user.AppOverview.path({ filter: 'archivage' }))
       },
       onFailure: () => {
         modal.close()
@@ -203,7 +203,7 @@
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')
         resetValues()
         modal.close() // ferme toutes les modales
-        navigateTo(routes.user.AppOverview.path())
+        navigateTo(routes.user.AppOverview.path({ filter: 'archivage' }))
       } catch {
         modal.close() // ferme toutes les modales
         snackbar.error(
@@ -265,7 +265,7 @@
           'Votre demande de conservation a bien été prise en compte.'
         )
         modal.close() // ferme toute les modales
-        navigateTo(routes.user.AppOverview.path())
+        navigateTo(routes.user.AppOverview.path({ filter: 'archivage' }))
       },
       onFailure: () => {
         snackbar.error("Impossible de modifier la date d'archivage.")

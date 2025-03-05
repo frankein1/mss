@@ -104,17 +104,17 @@ export const routes = {
     title: 'Créer un dossier',
     path: () => `${FilesRoute}/add`
   },
-  AppBeneficiary: {
-    name: 'AppBeneficiary',
-    title: (beneficiary: BeneficiaryNames | null) =>
-      beneficiary ? formatBeneficiaryDisplayName(beneficiary) : '',
-    path: getBeneficiaryRoute
-  },
   AppBeneficiariesArchive: {
     name: 'AppBeneficiariesAdd',
     title: 'Gérer le dossier',
     path: (beneficiaryId: string) =>
       `${BeneficiariesRoute}/${beneficiaryId}/archive`
+  },
+  AppBeneficiary: {
+    name: 'AppBeneficiary',
+    title: (beneficiary: BeneficiaryNames | null) =>
+      beneficiary ? formatBeneficiaryDisplayName(beneficiary) : '',
+    path: getBeneficiaryRoute
   },
   AppBeneficiaryPrint: {
     name: 'AppBeneficiaryPrint',

@@ -275,6 +275,19 @@ select:focus:not(:focus-visible) {
   }
 }
 
+.fr-link {
+  &.underline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25rem;
+  }
+
+  &:hover {
+    background-color: transparent;
+    text-decoration-thickness: 2px;
+  }
+}
+
 .fr-accordion::before {
   box-shadow: none;
 }
