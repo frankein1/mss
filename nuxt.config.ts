@@ -120,7 +120,15 @@ export default defineNuxtConfig({
         'vue-scrollto',
         'node-fetch-native',
         'uuid',
-        '@trpc/client'
+        '@trpc/client',
+        '@gouvminint/vue-dsfr',
+        'html-to-image',
+        '@zip.js/zip.js',
+        '@tiptap/vue-3',
+        '@tiptap/starter-kit',
+        '@tiptap/extension-link',
+        '@tiptap/pm/model',
+        '@braintree/sanitize-url'
       ]
     },
     css: {
