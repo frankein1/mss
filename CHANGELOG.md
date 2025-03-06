@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.40.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.39.0...v1.40.0) (2025-03-06)
+
+
+### Features
+
+* **api:** ajout de la ville à l'api indicateurs ([f12fb4b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f12fb4b711bc0696b720110b01a1c96b29185e55))
+* **archivage:** notifications ([e9d1e88](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e9d1e88ba4abd5f01eb131192bcb7b95cdec622f)), closes [#719](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/719)
+* **archive:** ajout du bouton archive sur page bénéficiaire ([6a3494d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6a3494d10abb83c3f5967b020aff24f6676b5f33))
+* **export:** journalise les exports bénéficiaires ([687069c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/687069c59c94a36123f1c81f1adeee9c0583b21e)), closes [#559](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/559)
+* **rdvsp:** trace la modification du rdv dans matomo ([1a3746f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1a3746f12d85db68246fc98664a1454f470f21b9)), closes [#744](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/744)
+* **sso:** suppression d'inclusion connect ([90119f7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/90119f71df40dcffb273cf3d820f8bcfc65ab2ea)), closes [#727](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/727)
+* **sso:** suppression du menu mon compte à la suite de la suppression d'IC ([b40c4f7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b40c4f783b048081ab7970d834334831a23ae65b)), closes [#727](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/727)
+* **structure:** anonymisation des données relatives aux utilisateurs d'une structure désactivée ([52d2d9c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/52d2d9cd48bbbe2c59e8c4f5eb059b8119afe779)), closes [#745](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/745)
+
+
+### Bug Fixes
+
+* **archive:** ajout d'éléments manquants dans l'export ([0d508e7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0d508e739df8b52ac726326f3d8a032b1646ef08))
+* **archive:** ajout des champs manquants à l'export du bénéficiaire pour l'archive ([d767569](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d767569a5dd66c2631b9e53967cfa082afc3e67b)), closes [#725](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/725)
+* **archive:** exclue les rendez-vous de l'export du bénéficiaire ([a789e64](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a789e64e04f5a158172d911757b5d2441143e2f1)), closes [#725](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/725)
+* **archive:** exclusion des agents d'accueil des notifications ([8768c45](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8768c454a1ac90283bb7052ae8c300f107a26e58))
+* **archive:** fix des permissions de l'export d'archive ([8dab91a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8dab91a99ce7ab2a6c8e4db8799e8970a76ec8bc))
+* **archive:** n'affiche pas la section Actions si non nécessaire ([34081bc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/34081bc28f43b76d3f28629b71af9b8dfed5bd01)), closes [#725](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/725)
+* **archive:** permissions de l'export ([2904cc8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2904cc866abd62b901f6e39881775fa0fd894cd5))
+
 ## [1.39.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.38.0...v1.39.0) (2025-02-20)
 
 
