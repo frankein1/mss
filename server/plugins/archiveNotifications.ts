@@ -24,7 +24,9 @@ const createArchiveDueNotifications = async () => {
       archiveDueDate: beneficiary.archiveDueDate,
       referentIds: [
         ...new Set([
-          ...beneficiary.familyFile.referents.map(r => r.id),
+          ...beneficiary.familyFile.referents
+            .filter(referent => referent.role !== UserRole.ReceptionAgent)
+            .map(r => r.id),
           ...beneficiary.structure.users.map(u => u.id)
         ])
       ]
@@ -255,7 +257,7 @@ export const getInactiveBeneficiaries = async () => {
         select: {
           referents: {
             where: { status: UserStatus.Active },
-            select: { id: true }
+            select: { id: true, role: true }
           },
           budget: {
             select: {

@@ -1,6 +1,7 @@
 <template>
   <form class="notification-read-toggle">
     <VeeToggle
+      id="notification-toggle"
       label="Afficher les notifications lues"
       name="read"
       :checked-label="false"

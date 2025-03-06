@@ -123,7 +123,8 @@
     return addArchiveNotifications(
       data.value?.notifications as NotificationItemType[],
       archiveData.value as NotificationItemType[],
-      filters.value.type
+      filters.value.type,
+      showReadNotifications.value
     )
   })
   const totalCount = computed(() => data.value?.totalCount || 0)
@@ -139,7 +140,8 @@
   const addArchiveNotifications = (
     baseNotifications: NotificationItemType[],
     archiveNotifications: NotificationItemType[],
-    filterType: NotificationTypeFilterValue | '' | undefined
+    filterType: NotificationTypeFilterValue | '' | undefined,
+    showReadNotifications: boolean
   ) => {
     const moreNotification: NotificationItemType = {
       id: 'MORE_ARCHIVE',
@@ -147,24 +149,34 @@
       type: NotificationType.ArchiveDue,
       title: 'Archive',
       description: 'Voir toutes les notifications',
-      descriptionHint: "Vous avez plus de 3 dossiers en attente d'archivage.",
+      descriptionHint: `Vous avez ${archiveNotifications.length} dossiers en attente d'archivage.`,
       created: new Date(),
       onClick: () => {
         filters.value.type = NotificationTypeFilterValue.Archivage
         selectArchiveTag()
+        showAllNotifications()
       }
     }
     if (filterType != null) {
       return baseNotifications
     }
-    const notifs = archiveNotifications.slice(0, 3)
+    const threeFirstArchiveNotifications = archiveNotifications
+      .filter(notif => {
+        if (showReadNotifications) {
+          return notif
+        }
+        return !notif.read
+      })
+      .slice(0, 3)
     if (archiveNotifications.length > 3) {
-      notifs.push(moreNotification)
+      threeFirstArchiveNotifications.push(moreNotification)
     }
-    if (data.value?.notifications && data.value.notifications.length > 0) {
-      return notifs.concat(data.value.notifications as NotificationItemType[])
+    if (baseNotifications.length > 0) {
+      return threeFirstArchiveNotifications.concat(
+        baseNotifications as NotificationItemType[]
+      )
     }
-    return notifs
+    return threeFirstArchiveNotifications
   }
 
   const selectArchiveTag = () => {
@@ -174,6 +186,18 @@
       archiveTag.click()
     }
   }
+  const showAllNotifications = () => {
+    if (!showReadNotifications.value) {
+      const toogleButtons = document.querySelectorAll(
+        '#notification-toggle > input[name=read]'
+      )
+      if (toogleButtons.length && toogleButtons.length > 0) {
+        const toogleButton = toogleButtons[0] as HTMLInputElement
+        toogleButton.click()
+      }
+    }
+  }
+
   if (queryfilter === 'archivage') {
     setTimeout(() => {
       selectArchiveTag()
@@ -207,6 +231,7 @@
    * It does not use the refresh function from `useQuery` as multiple pages may have been loaded
    */
   function onToggleReadState(notificationId: string, read: boolean) {
+    // normal data
     if (data.value) {
       data.value = {
         totalCount: data.value.totalCount,
@@ -224,6 +249,20 @@
             ({ id }) => id !== notificationId
           )
         }
+      }
+    }
+    // archive data
+    if (archiveData.value) {
+      archiveData.value = archiveData.value.map(notification =>
+        notification.id === notificationId
+          ? { ...notification, read }
+          : notification
+      )
+
+      if (!showReadNotifications.value && read) {
+        archiveData.value = archiveData.value.filter(
+          ({ id }) => id !== notificationId
+        )
       }
     }
   }
