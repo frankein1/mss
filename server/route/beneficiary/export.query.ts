@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import {
   ExportBeneficiariesInput,
@@ -38,5 +39,11 @@ const handler = async ({
 export const exportBeneficiariesQuery = createQuery({
   inputValidation: exportBeneficiariesSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'beneficiary.exportall',
+    target: 'Beneficiary',
+    targetId: ({ ctx }) => ctx.structure.id,
+    action: UserActivityType.EXPORT
+  }
 })

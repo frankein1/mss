@@ -55,6 +55,7 @@ export type CreateRouteOptions<
   auditLog?: {
     key: string
     target: UserActivityObject
+    /** Identifier of the entity on which the activity is performed */
     targetId: TargetIdFinder<Grantee, Input, RouteResult>
     action: UserActivityType
   }

@@ -1962,6 +1962,7 @@ enum UserActivityType {
   DELETE
   VIEW
   ARCHIVE
+  EXPORT
 }
 
 enum UserActivityObject {
