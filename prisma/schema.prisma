@@ -1711,7 +1711,7 @@ model Beneficiary {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  // archive due date
+  lastActivity          DateTime?  @map("last_activity")
   archiveDueDate        DateTime?  @map("archive_due_date") @db.Date
   archiveDueDateHistory DateTime[] @map("archive_due_date_history") @db.Date
 
