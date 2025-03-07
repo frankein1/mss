@@ -116,7 +116,7 @@
     await trpcClient.notification.get.useQuery(queryInput)
 
   // get archive notifications
-  const { data: archiveData, refresh: refreshArchiveData } =
+  const { data: archiveData } =
     await trpcClient.archiveNotification.get.useQuery()
 
   const notifications = computed(() => {
@@ -292,7 +292,6 @@
   })
 
   const modal = useModal()
-  refreshArchiveData()
   const unwatch = watch([modal.isReady, beneficiariesToArchived], () => {
     if (
       modal.isReady &&
