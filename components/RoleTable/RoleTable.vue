@@ -97,6 +97,23 @@
             <td></td>
           </tr>
           <tr>
+            <td>Archivage des dossiers&nbsp;: téléchargement et suppression</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>
+              * Uniquement s'il est référent<br />
+              * Uniquement à 2&nbsp;ans d’inactivité du dossier
+            </td>
+            <td>
+              * Uniquement s'il est référent<br />
+              * Uniquement à 2&nbsp;ans d’inactivité du dossier
+            </td>
+            <td></td>
+            <td>
+              * Uniquement s'il est référent<br />
+              * Uniquement à 2&nbsp;ans d’inactivité du dossier
+            </td>
+          </tr>
+          <tr>
             <td>
               Affectation ou retrait d'un agent référent sur une fiche
               bénéficiaire
@@ -316,7 +333,9 @@
             <td>* les dossiers dont il est référent</td>
           </tr>
           <tr>
-            <td>Annuaire des partenaires : créer et supprimer un organisme</td>
+            <td>
+              Annuaire des partenaires&nbsp;: créer et supprimer un organisme
+            </td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
@@ -358,8 +377,8 @@
     max-width: 14rem;
   }
 
-  th:nth-child(2),
-  td:nth-child(2) {
+  th:not(:first-child),
+  td:not(:first-child) {
     max-width: 10rem;
   }
 
