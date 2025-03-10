@@ -34,6 +34,9 @@ export function useAuthState() {
   function isStructureManager(): boolean {
     return role.value === UserRole.StructureManager
   }
+  function isReceptionAgent(): boolean {
+    return role.value === UserRole.ReceptionAgent
+  }
   function isActive() {
     return status.value === UserStatus.Active
   }
@@ -52,6 +55,7 @@ export function useAuthState() {
     isAdmin,
     isActive,
     isStructureManager,
+    isReceptionAgent,
     getUserName,
     getUserId,
     hasAcceptedCgu

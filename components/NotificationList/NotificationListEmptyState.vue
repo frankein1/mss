@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
   import { NotificationTypeFilterValue } from '~/client/options'
+  const { isReceptionAgent } = useAuthState()
 
   const props = defineProps<{
     notificationType?: NotificationTypeFilterValue | '' | null
@@ -43,6 +44,10 @@
         return 'Les commentaires déposés par un⸱e collègue sur l\'un de vos accompagnements vous sont notifiés dans la catégorie "Commentaires".'
       case NotificationTypeFilterValue.NewItem:
         return 'Le filtre "Ajouts d\'un tiers" vous permet de retrouver tous les documents ajoutés et accompagnements réalisés par un⸱e collègue sur les dossiers des bénéficiaires dont vous êtes référent.e.'
+      case NotificationTypeFilterValue.Archivage:
+        return isReceptionAgent()
+          ? 'Votre rôle utilisateur ne vous autorise pas à archiver les dossiers des bénéficiaires. Rapprochez-vous de votre responsable de structure pour toute modification concernant votre rôle.'
+          : ''
       default:
         return ''
     }
