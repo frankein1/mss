@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { getInactiveBeneficiaries } from './archiveNotifications'
-import { FamilyFileRepo } from '../database'
 import {
   fixturesSocialSupportSubjects,
   fixtureStructures,
@@ -10,6 +9,7 @@ import {
 import { prismaClient } from '~/server/prisma'
 import { v4 } from 'uuid'
 import dayjs from 'dayjs'
+import { FamilyFileRepo } from '~/server/database'
 
 type Beneficiaries = Awaited<ReturnType<typeof createBeneficiaries>>
 let beneficiaries: Beneficiaries = []

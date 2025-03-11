@@ -16,7 +16,11 @@ import {
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
 import { createFamilyFileMember } from './create-family-file-member.service'
 import { updateEntourage } from './update-entourage.service'
-import { getLastActivity } from './get-last-activity.service'
+import {
+  getArchiveDate,
+  getBeneficiaryLastActivity,
+  getLastActivity
+} from './get-last-activity.service'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -34,7 +38,9 @@ export const BeneficiaryService = {
   getIdFromFamilyFileId,
   createFamilyFileMember,
   updateEntourage,
-  getLastActivity
+  getLastActivity,
+  getArchiveDate,
+  getBeneficiaryLastActivity
 }
 
 export type { BeneficiarySecurityTarget }

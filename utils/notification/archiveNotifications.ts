@@ -1,18 +1,16 @@
 import { NotificationType, UserRole, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { BeneficiaryRepo, NotificationRepo } from '~/server/database'
-import {
-  getArchiveDate,
-  getBeneficiaryLastActivity
-} from '../services/beneficiary/get-last-activity.service'
 import { prismaClient } from '~/server/prisma'
+import { BeneficiaryService } from '~/server/services'
 
-const createArchiveDueNotifications = async () => {
+export const createArchiveDueNotifications = async () => {
   const inactiveBeneficiaries = await getInactiveBeneficiaries()
   const mustBeArchivedBeneficiaries = inactiveBeneficiaries
     .filter(beneficiary => {
-      const lastActivity = getBeneficiaryLastActivity(beneficiary)
-      const archiveDate = getArchiveDate(
+      const lastActivity =
+        BeneficiaryService.getBeneficiaryLastActivity(beneficiary)
+      const archiveDate = BeneficiaryService.getArchiveDate(
         lastActivity,
         beneficiary.archiveDueDate
       )
@@ -20,7 +18,7 @@ const createArchiveDueNotifications = async () => {
     })
     .map(beneficiary => ({
       id: beneficiary.id,
-      lastActivity: getBeneficiaryLastActivity(beneficiary),
+      lastActivity: BeneficiaryService.getBeneficiaryLastActivity(beneficiary),
       archiveDueDate: beneficiary.archiveDueDate,
       referentIds: [
         ...new Set([
@@ -35,7 +33,7 @@ const createArchiveDueNotifications = async () => {
   const archiveNotifications = mustBeArchivedBeneficiaries
     .map(beneficiary =>
       beneficiary.referentIds.flatMap(referentId => ({
-        archiveDate: getArchiveDate(
+        archiveDate: BeneficiaryService.getArchiveDate(
           beneficiary.lastActivity,
           beneficiary.archiveDueDate
         ),
@@ -330,5 +328,3 @@ export const compareAndFilterNotifications = async (
   })
   return filtered
 }
-
-export default createArchiveDueNotifications
