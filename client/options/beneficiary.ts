@@ -98,19 +98,24 @@ export const beneficiaryGirKeys = buildKeys({
 
 export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.SickLeave]: 'Arrêt maladie',
-  [BeneficiarySocioProfessionalCategory.Entrepreneur]: "Chef.fe d'entreprise",
+  [BeneficiarySocioProfessionalCategory.Entrepreneur]: "Chef·fe d'entreprise",
   [BeneficiarySocioProfessionalCategory.JobSeeker]: "En recherche d'emploi",
-  [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant.e',
+  [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant·e',
   [BeneficiarySocioProfessionalCategory.Disability]: 'Invalidité',
   [BeneficiarySocioProfessionalCategory.Housewife]: 'Mère au foyer',
   [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité',
   [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié',
+  [BeneficiarySocioProfessionalCategory.Student]: 'Étudiant·e',
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 })
 
 export const beneficiaryStudyLevelKeys = buildKeys({
+  [BeneficiaryStudyLevel.Maternelle]: 'Maternelle',
+  [BeneficiaryStudyLevel.Primaire]: 'Primaire',
+  [BeneficiaryStudyLevel.Collège]: 'Collège',
+  [BeneficiaryStudyLevel.Lycée]: 'Lycée',
   [BeneficiaryStudyLevel.Brevet]: 'Brevet',
   [BeneficiaryStudyLevel.CAP]: 'CAP',
   [BeneficiaryStudyLevel.Bac]: 'Bac',

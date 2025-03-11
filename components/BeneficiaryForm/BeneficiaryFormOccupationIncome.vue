@@ -14,6 +14,30 @@
           "
         />
       </div>
+      <div
+        v-show="
+          socioProfessionalCategory ===
+          BeneficiarySocioProfessionalCategory.Student
+        "
+        class="fr-col-12"
+      >
+        <VeeInput
+          name="schoolName"
+          :label="beneficiaryFieldLabels.schoolName"
+        />
+      </div>
+      <div
+        v-show="
+          socioProfessionalCategory ===
+          BeneficiarySocioProfessionalCategory.Student
+        "
+        class="fr-col-12"
+      >
+        <VeeCheckbox
+          :label="beneficiaryFieldLabels.isSchoolInQPV"
+          name="isSchoolInQPV"
+        />
+      </div>
       <div class="fr-col-12">
         <VeeInput
           name="occupation"
@@ -111,7 +135,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPensionOrganisation } from '@prisma/client'
+  import {
+    BeneficiaryPensionOrganisation,
+    BeneficiarySocioProfessionalCategory
+  } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,
@@ -125,6 +152,8 @@
 
   const { application } = usePermissions()
 
+  const { value: socioProfessionalCategory } =
+    useField<BeneficiarySocioProfessionalCategory>('socioProfessionalCategory')
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')

@@ -210,7 +210,9 @@ const adminHandler = async ({
     involvedPartners: null,
     additionalInformation: null,
     numeroPegase: null,
-    accommodationZone: null
+    accommodationZone: null,
+    schoolName: null,
+    isSchoolInQPV: false
   }
   const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
     where: { structureId: id },

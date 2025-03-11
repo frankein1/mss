@@ -958,9 +958,14 @@ enum BeneficiarySocioProfessionalCategory {
   Other
   Freelance
   Entrepreneur
+  Student
 }
 
 enum BeneficiaryStudyLevel {
+  Maternelle
+  Primaire
+  Collège
+  Lycée
   Brevet
   CAP
   Bac
@@ -1681,6 +1686,8 @@ model Beneficiary {
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
+  schoolName                String?                               @map("school_name")
+  isSchoolInQPV             Boolean                               @default(false) @map("is_school_in_qpv")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
   occupation                String?
   employer                  String?

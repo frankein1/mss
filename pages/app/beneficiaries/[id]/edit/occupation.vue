@@ -63,6 +63,7 @@
       id,
       structureId,
       ...occupationIncome,
+      isSchoolInQPV: Boolean(occupationIncome?.isSchoolInQPV),
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     }
   })
