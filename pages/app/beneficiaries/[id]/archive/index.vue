@@ -27,7 +27,14 @@
         :title="pageTitle"
         icon="fr-icon-folder-2-line"
       />
-      <RequiredFields />
+      <p class="fr-text--bold fr-mb-1w">
+        Agent(s) référent(s)&nbsp;: {{ referentNames }}
+      </p>
+      <BeneficiaryDetailsStatus
+        class="fr-mb-2w"
+        :status="beneficiary.status"
+      />
+      <p><RequiredFields /></p>
       <ArchiveChoiceForm
         :pending="downloadPending"
         :archive-due-date-history="archiveDueDateHistory"
@@ -71,6 +78,7 @@
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
   import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { BeneficiaryArchiveAction, EventCategory } from '~/types/matomo'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const title = routes.beneficiary.AppBeneficiaryArchive.title
   useHead({ title })
@@ -128,6 +136,14 @@
       usualName: beneficiary.value.general.usualName,
       title: null
     })
+  })
+  const referentNames = computed(() => {
+    if (!beneficiary?.value) {
+      return ''
+    }
+    return beneficiary.value.referents
+      .map(referent => formatUserDisplayName(referent))
+      .join(', ')
   })
   const archiveDueDateHistory = computed(() => {
     const history = beneficiary?.value?.archiveDueDateHistory || []
@@ -197,7 +213,9 @@
       try {
         matomo.trackEvent(
           EventCategory.BeneficiaryArchive,
-          BeneficiaryArchiveAction.DeleteWithArchive
+          values.keepName
+            ? BeneficiaryArchiveAction.DeleteWithArchiveAndKeepName
+            : BeneficiaryArchiveAction.DeleteWithArchive
         )
         await trpcClient.beneficiary.archiveBeneficiary.query(values)
         snackbar.success('Le dossier a bien été supprimé de Mon Suivi Social.')

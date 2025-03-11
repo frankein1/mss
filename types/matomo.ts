@@ -53,7 +53,8 @@ export enum BeneficiaryHistoryFilterEventAction {
 export enum BeneficiaryArchiveAction {
   ExportArchive = "Export de l'archive",
   DeleteWithoutArchive = 'Suppression sans archive',
-  DeleteWithArchive = 'Suppression avec archive',
+  DeleteWithArchiveAndKeepName = 'Suppression avec archive et conservation du nom',
+  DeleteWithArchive = 'Suppression avec archive sans conservation du nom',
   DelayArchive = 'Conserver 1 an supplémentaire'
 }
 
