@@ -1,3 +1,4 @@
+export * from './ArchivedBeneficiaryRepository'
 export * from './BeneficiaryRepository'
 export * from './BudgetRepository'
 export * from './BudgetIncomeRepository'
