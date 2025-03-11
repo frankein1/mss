@@ -6,7 +6,6 @@ export type AppContextPermissions = {
   export: {
     stats: boolean
     history: boolean
-    beneficiaries: boolean
   }
   edit: {
     structure: boolean
@@ -45,7 +44,6 @@ function getAdminContextPermissions(): AppContextPermissions {
   return {
     export: {
       history: false,
-      beneficiaries: false,
       stats: false
     },
     edit: {
@@ -89,7 +87,6 @@ function getUserContextPermissions(
   return {
     export: {
       history: manager || socialWorker || referent || instructor,
-      beneficiaries: manager,
       stats: manager || socialWorker || referent || instructor
     },
     edit: {

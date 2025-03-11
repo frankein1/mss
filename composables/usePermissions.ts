@@ -6,8 +6,7 @@ export function usePermissions() {
     () => ({
       export: {
         stats: false,
-        history: false,
-        beneficiaries: false
+        history: false
       },
       edit: {
         structure: false,
@@ -32,8 +31,7 @@ export function usePermissions() {
     application.value = {
       export: {
         stats: false,
-        history: false,
-        beneficiaries: false
+        history: false
       },
       edit: {
         structure: false,

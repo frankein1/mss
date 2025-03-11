@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, UserRole } from '@prisma/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
 import { ExportBeneficiariesInput } from '~/server/schema'
@@ -30,7 +30,7 @@ import {
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 
-export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =
+const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels)[] =
   [
     'usualName',
     'birthName',
@@ -61,7 +61,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'divorceDate',
     'minorChildren',
     'majorChildren',
-    'taxHouseholds',
     'ministereCategorie',
     'ministereDepartementServiceAc',
     'ministereStructure',
@@ -76,7 +75,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'additionalInformation',
     'numeroPegase',
     'entourages',
-    'historyTotal',
     'subjects',
     'referents',
     'aidantConnectAuthorized',
@@ -84,17 +82,41 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'fileNumber'
   ]
 
-export async function exportBeneficiaries({
+export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryFieldLabels)[] =
+  [
+    'usualName',
+    'birthName',
+    'firstName',
+    'birthDate',
+    'status',
+    'gender',
+    'accommodationMode',
+    'accommodationName',
+    'accommodationAdditionalInformation',
+    'street',
+    'addressComplement',
+    'zipcode',
+    'city',
+    'region',
+    'department',
+    'phone1',
+    'phone2',
+    'email',
+    'familySituation',
+    'minorChildren',
+    'majorChildren',
+    'entourages',
+    'subjects'
+  ]
+
+export async function exportAll({
   ctx,
   input
 }: {
   ctx: SecurityRuleContext
   input: ExportBeneficiariesInput
 }) {
-  const columns = BENEFICIARY_EXPORTED_FIELDS.map(key => ({
-    key,
-    header: beneficiaryFieldLabels[key]
-  }))
+  const columns = getColumns(ctx.user.role)
 
   const where: Prisma.BeneficiaryWhereInput = {
     ...prepareBeneficiaryFilters(input.filters)
@@ -105,32 +127,34 @@ export async function exportBeneficiaries({
   const rows: RowType[] = []
 
   for (const { beneficiary } of dataRequest) {
-    rows.push(formatData(beneficiary))
+    rows.push(formatData(beneficiary, ctx.user.role))
   }
 
   return { columns, rows }
 }
 
-function formatData(beneficiary: GetBeneficiaryOutput) {
+function getColumns(userRole: UserRole) {
+  return userRole === UserRole.StructureManager
+    ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE.map(key => ({
+        key,
+        header: beneficiaryFieldLabels[key]
+      }))
+    : BENEFICIARY_EXPORTED_FIELDS_PARTIAL.map(key => ({
+        key,
+        header: beneficiaryFieldLabels[key]
+      }))
+}
+
+function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
   const { general, occupationIncome, taxHouseholds } = beneficiary
-  return {
-    referents: beneficiary.referents
-      .map(referent => formatUserDisplayName(referent))
-      .join(', '),
-    aidantConnectAuthorized: getBooleanOrEmpty(
-      beneficiary.aidantConnectAuthorized
-    ),
-    fileNumber: readableFileNumber(beneficiary.id),
-    status: beneficiaryStatusKeys.byKey[beneficiary.status],
+
+  const exported = {
     usualName: general.usualName || '',
     birthName: general.birthName || '',
     firstName: general.firstName || '',
     birthDate: formatDate(general.birthDate, 'DD-MM-YYYY'),
-    deathDate: formatDate(general.deathDate, 'DD-MM-YYYY'),
+    status: beneficiaryStatusKeys.byKey[beneficiary.status],
     gender: general.gender ? beneficiaryGenderKeys.byKey[general.gender] : '',
-    nationality: general.nationality
-      ? nationalityKeys.byKey[general.nationality]
-      : '',
     accommodationMode: general.accommodationMode
       ? beneficiaryAccommodationModeKeys.byKey[general.accommodationMode]
       : '',
@@ -143,18 +167,38 @@ function formatData(beneficiary: GetBeneficiaryOutput) {
     city: general.city || '',
     region: general.region || '',
     department: general.department || '',
-    qpv: getBooleanOrEmpty(general.qpv) || '',
     phone1: general.phone1 || '',
     phone2: general.phone2 || '',
     email: general.email || '',
     familySituation: taxHouseholds?.familySituation
       ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
+    minorChildren: taxHouseholds?.minorChildren?.toString() || '',
+    majorChildren: taxHouseholds?.majorChildren?.toString() || '',
+    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || ''
+  }
+
+  if (userRole !== UserRole.StructureManager) {
+    return exported
+  }
+
+  return {
+    ...exported,
+    referents: beneficiary.referents
+      .map(referent => formatUserDisplayName(referent))
+      .join(', '),
+    aidantConnectAuthorized: getBooleanOrEmpty(
+      beneficiary.aidantConnectAuthorized
+    ),
+    fileNumber: readableFileNumber(beneficiary.id),
+    deathDate: formatDate(general.deathDate, 'DD-MM-YYYY'),
+    nationality: general.nationality
+      ? nationalityKeys.byKey[general.nationality]
+      : '',
+    qpv: getBooleanOrEmpty(general.qpv) || '',
     weddingDate: formatDate(taxHouseholds?.weddingDate, 'DD-MM-YYYY'),
     divorceDate: formatDate(taxHouseholds?.divorceDate, 'DD-MM-YYYY'),
     caregiver: getBooleanOrEmpty(taxHouseholds?.caregiver),
-    minorChildren: taxHouseholds?.minorChildren?.toString() || '',
-    majorChildren: taxHouseholds?.majorChildren?.toString() || '',
     mobility: general.mobility
       ? beneficiaryMobilityKeys.byKey[general.mobility]
       : '',
@@ -196,8 +240,7 @@ function formatData(beneficiary: GetBeneficiaryOutput) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
-    updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
-    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || ''
+    updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm')
   }
 }
 

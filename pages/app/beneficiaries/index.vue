@@ -32,7 +32,6 @@
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
-                v-if="application.export.beneficiaries"
                 :is-downloading="isDownloading"
                 @export="exportBeneficiaries"
               />

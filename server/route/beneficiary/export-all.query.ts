@@ -4,16 +4,10 @@ import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
 } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
 import { BeneficiaryService } from '~/server/services'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.beneficiaries
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input,
@@ -22,7 +16,7 @@ const handler = async ({
   input: ExportBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
-  const { rows, columns } = await BeneficiaryService.exportBeneficiaries({
+  const { rows, columns } = await BeneficiaryService.exportAll({
     ctx,
     input
   })
@@ -38,7 +32,7 @@ const handler = async ({
 
 export const exportBeneficiariesQuery = createQuery({
   inputValidation: exportBeneficiariesSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {
     key: 'beneficiary.exportall',
