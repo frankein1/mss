@@ -65,6 +65,8 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'ministereDepartementServiceAc',
     'ministereStructure',
     'socioProfessionalCategory',
+    'schoolName',
+    'isSchoolInQPV',
     'occupation',
     'employer',
     'employerSiret',
@@ -219,6 +221,8 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
           occupationIncome.socioProfessionalCategory
         ]
       : '',
+    schoolName: occupationIncome?.schoolName ?? '',
+    isSchoolInQPV: getBooleanOrEmpty(occupationIncome?.isSchoolInQPV),
     occupation: occupationIncome?.occupation || '',
     studyLevel: occupationIncome?.studyLevel || '',
     employer: occupationIncome?.employer || '',

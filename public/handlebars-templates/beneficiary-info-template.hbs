@@ -263,6 +263,15 @@
         <li><span class='bold'>Catégorie socio-professionnelle :
           </span>{{{socioProfessionalCategory}}}</li>
       {{/if}}
+      {{#if schoolName}}
+        <li><span class='bold'>Nom de l'établissement :
+          </span>{{{schoolName}}}</li>
+      {{/if}}
+      {{#if isSchoolInQPV}}
+        <li><span class='bold'>L'établissement est en Quartier Prioritaire de la
+            Ville :
+          </span>Oui</li>
+      {{/if}}
       {{#if occupation}}
         <li><span class='bold'>Profession(s) : </span>{{{occupation}}}</li>
       {{/if}}
