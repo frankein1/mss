@@ -15,8 +15,7 @@ include:
       - /proxy/license-scanning.yml
       - /proxy/code-quality.yml
       - /proxy/dependency-scanning.yml
-      # Will be active again using scalingo container cf. #702
-      # - /proxy/container-scanning.yml
+      - /proxy/container-scanning.yml
       - /proxy/sast.yml
       - /proxy/secret-scanning.yml
       - /pnpm.auto.yml
@@ -28,6 +27,17 @@ variables:
   PLAYWRIGHT_VERSION: 1.49.1
   #A synchroniser avec la version présente en production
   POSTGRES_VERSION: 14.12
+
+container_scanning:
+  environment:
+    name: development
+  stage: .post
+  variables:
+    CS_IMAGE: $CONTAINER_SCANNING_IMAGE:$CI_COMMIT_SHA
+    CS_REGISTRY_USER: $SCALINGO_USER_NAME
+    CS_REGISTRY_PASSWORD: $SCALINGO_API_TOKEN
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
 
 # prepare git env to push new code to scalingo
 .scalingo:
