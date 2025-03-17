@@ -7,7 +7,7 @@ import {
 } from '../services/beneficiary/get-last-activity.service'
 import { prismaClient } from '~/server/prisma'
 
-const createArchiveDueNotifications = async () => {
+export const createArchiveDueNotifications = async () => {
   const inactiveBeneficiaries = await getInactiveBeneficiaries()
   const mustBeArchivedBeneficiaries = inactiveBeneficiaries
     .filter(beneficiary => {
@@ -331,4 +331,4 @@ export const compareAndFilterNotifications = async (
   return filtered
 }
 
-export default createArchiveDueNotifications
+export default function () {}

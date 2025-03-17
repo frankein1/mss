@@ -6,7 +6,7 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
-import createArchiveDueNotifications from './archiveNotifications'
+import { createArchiveDueNotifications } from './archiveNotifications'
 
 export default defineNitroPlugin(() => {
   startScheduler()
