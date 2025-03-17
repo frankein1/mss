@@ -37,7 +37,7 @@
           name="structureId"
           :label="userFieldLabels.structureId"
           :options="withEmptyValue(structureOptions)"
-          :required="!isAdmin"
+          required
         />
       </div>
       <div class="fr-col-6">
@@ -56,10 +56,7 @@
           required
         />
       </div>
-      <div
-        v-if="!isAdmin"
-        class="fr-col-6"
-      >
+      <div class="fr-col-6">
         <VeeCheckbox
           :label="userFieldLabels.aidantConnectAuthorisation"
           name="aidantConnectAuthorisation"
@@ -79,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus, UserRole } from '@prisma/client'
+  import { UserStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { AdminUserOutput } from './types'
   import { userFieldLabels } from '~/client/labels'
@@ -115,9 +112,7 @@
       : []
   )
 
-  const { handleSubmit, values } = useForm<
-    AdminEditUserInput | AdminCreateUserInput
-  >({
+  const { handleSubmit } = useForm<AdminEditUserInput | AdminCreateUserInput>({
     validationSchema: toTypedSchema(
       props.user ? adminEditUserSchema : adminCreateUserSchema
     ),
@@ -126,14 +121,12 @@
       firstName: props.user?.firstName,
       lastName: props.user?.lastName,
       email: props.user?.email,
-      role: props.user?.role,
+      role: props.user?.role as any,
       status: props.user?.status || UserStatus.Active,
       aidantConnectAuthorisation: !!props.user?.aidantConnectAuthorisation,
       structureId: props.user?.structureId || urlStructureId || ''
     }
   })
-
-  const isAdmin = computed(() => values.role === UserRole.Administrator)
 
   const { onSubmit: onUpdateUser, caughtErrors } = useCatchFormErrors(
     handleSubmit,
