@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.40.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.1...v1.40.2) (2025-03-17)
+
+
+### Bug Fixes
+
+* **admin:** empêche de créer un administrateur à partir de l'espace admin ([b1cacc4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b1cacc4ba93afddaf0d701d9fe06acbae744bc53))
+* **archive:** supprime la création des notifications au démarrage de l'application ([652c072](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/652c072a76d0cf2643c5238b67a85179a4df7c1b))
+
 ## [1.40.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.0...v1.40.1) (2025-03-07)
 
 
