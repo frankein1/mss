@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, UserRole } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import {
   AdminGetUsersInput,
@@ -36,7 +36,12 @@ const adminHandler = async ({
     }
   }
 
-  where = { ...where, structure: { disabled: false } }
+  where = {
+    ...where,
+    AND: [
+      { role: { not: UserRole.Administrator }, structure: { disabled: false } }
+    ]
+  }
 
   const users = await UserRepo.findMany(user, {
     where,

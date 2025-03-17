@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client'
+import { UserRole } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { notfoundError, AdminContext } from '~/server/trpc'
+import { AdminContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import { UserRepo } from '~/server/database'
 
@@ -12,15 +12,10 @@ const adminHandler = async ({
   input: { id: string }
 }) => {
   const user = await UserRepo.findUniqueOrThrow(ctx.user, {
-    where: { id }
+    where: { id, role: { not: UserRole.Administrator } }
   })
-  if (user) {
-    return user
-  }
-  throw notfoundError()
+  return user
 }
-
-export type AdminUserOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
 export const getUser = createQuery({
   inputValidation: idSchema,

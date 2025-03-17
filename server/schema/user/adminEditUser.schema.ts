@@ -1,15 +1,9 @@
 import { z } from 'zod'
-import { adminCreateUserBaseSchema } from './adminCreateUser.schema'
-import { requiredErrorMessage } from '~/utils/zod'
+import { adminCreateUserSchema } from './adminCreateUser.schema'
 
-const adminEditUserSchema = adminCreateUserBaseSchema
-  .extend({
-    id: z.string().uuid()
-  })
-  .refine(({ role, structureId }) => role === 'Administrator' || structureId, {
-    message: requiredErrorMessage,
-    path: ['structureId']
-  })
+const adminEditUserSchema = adminCreateUserSchema.extend({
+  id: z.string().uuid()
+})
 
 type AdminEditUserInput = z.infer<typeof adminEditUserSchema>
 

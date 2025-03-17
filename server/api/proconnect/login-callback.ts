@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import { User } from '@prisma/client'
+import { User, UserRole } from '@prisma/client'
 import { decode } from 'jsonwebtoken'
 import {
   getProConnectClient,
@@ -12,6 +12,7 @@ import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
 import { AuthSession } from '~/server/types/session'
+import { forbidden } from '~/utils/api/errors'
 
 const config = useRuntimeConfig()
 const { auth } = config
@@ -94,6 +95,10 @@ export default defineEventHandler(async event => {
   if (!user) {
     const unknownUserUrl = `${appUrl}${routes.error.ErrorUnknownUser.path()}`
     return sendRedirect(event, unknownUserUrl)
+  }
+
+  if (user.role === UserRole.Administrator) {
+    throw forbidden('[ProConnect] Access denied')
   }
 
   // upsert account

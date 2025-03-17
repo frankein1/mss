@@ -19,10 +19,17 @@ async function getUser(email: string) {
 
 export default defineEventHandler(async event => {
   const { email: input } = await readBody(event)
+  const {
+    public: { mssEnvironment }
+  } = useRuntimeConfig()
 
   const user = await getUser(input)
 
-  if (!user || user.role !== UserRole.Administrator) {
+  if (
+    !user ||
+    user.role !== UserRole.Administrator ||
+    (mssEnvironment !== 'local' && !user.email.endsWith('@beta.gouv.fr'))
+  ) {
     throw forbiddenError()
   }
 
