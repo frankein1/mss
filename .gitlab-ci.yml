@@ -36,6 +36,7 @@ container_scanning:
     CS_IMAGE: $CONTAINER_SCANNING_IMAGE:$CI_COMMIT_SHA
     CS_REGISTRY_USER: $SCALINGO_USER_NAME
     CS_REGISTRY_PASSWORD: $SCALINGO_API_TOKEN
+    SECURE_LOG_LEVEL: debug
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
 
@@ -67,16 +68,6 @@ container_scanning:
 .vigigloo:pnpm:install:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-${NODE_VERSION}_pnpm-${PNPM_VERSION}
-
-pnpm:build:
-  stage: build
-  extends: .vigigloo:pnpm:install
-  interruptible: true
-  needs: ['pnpm:install']
-  cache:
-    policy: pull
-  script:
-    - pnpm run --if-present build
 
 pnpm:test:
   extends: .vigigloo:pnpm:test
