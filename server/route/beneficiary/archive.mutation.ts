@@ -45,7 +45,8 @@ const handler = async ({
       firstName: true,
       structure: {
         select: {
-          type: true
+          type: true,
+          id: true
         }
       },
       familyFileId: true,
@@ -86,6 +87,7 @@ const handler = async ({
       filleInstructionCount,
       structureType: beneficiary.structure.type,
       archivedById: ctx.user.id,
+      structureId: beneficiary.structure.id,
       clarification: input.clarification ? input.clarification : null,
       reason: input.reason ? input.reason : null,
       eventDateReason: input.date ? input.date : null,

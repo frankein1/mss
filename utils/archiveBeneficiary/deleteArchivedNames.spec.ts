@@ -1,7 +1,11 @@
 import { describe, vi, beforeEach, afterEach, it, expect } from 'vitest'
 import dayjs from 'dayjs'
 import { ArchivedBeneficiaryRepo } from '~/server/database'
-import { fixturesUsers } from '~/prisma/fixtures'
+import {
+  FixtureStructure,
+  fixtureStructures,
+  fixturesUsers
+} from '~/prisma/fixtures'
 import { BeneficiaryTitle, StructureType } from '@prisma/client'
 import { deleteArchivedNames } from './deleteArchivedNames'
 
@@ -48,6 +52,7 @@ const createArchivedBeneficiary = async () => {
       filleInstructionCount: 0,
       structureType: StructureType.Ccas,
       archivedById: fixturesUsers[0].id,
+      structureId: fixtureStructures[FixtureStructure.Test].id,
       clarification: 'Bénéficiaire inactif',
       reason: 'EndOfFollowup',
       eventDateReason: null,

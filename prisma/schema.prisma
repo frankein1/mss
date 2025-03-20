@@ -170,6 +170,8 @@ model Structure {
   externalRdvspActive Boolean? @map("external_rdvsp_active")
   externalRdvspId     String?  @map("external_rdvsp_id")
 
+  archivedBeneficiaries ArchivedBeneficiary[]
+
   @@map("structure")
 }
 
@@ -1792,6 +1794,8 @@ model ArchivedBeneficiary {
   created      DateTime? @default(now())
   archivedBy   User      @relation(name: "archived_beneficiaries_2", fields: [archivedById], references: [id])
   archivedById String    @map("archived_by_id") @db.Uuid
+  structureId  String    @map("structure_id") @db.Uuid
+  structure    Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   updated      DateTime? @updatedAt
 
   title     BeneficiaryTitle?
