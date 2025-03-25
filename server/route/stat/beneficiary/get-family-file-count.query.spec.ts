@@ -14,6 +14,6 @@ describe('Statistics - Beneficiary - Family File Count', () => {
 
     const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
 
-    expect(stats).toEqual({ family: 0, beneficiary: 12 })
+    expect(stats).toEqual({ family: 1, beneficiary: 11 })
   })
 })

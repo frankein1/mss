@@ -85,7 +85,11 @@
           NotificationType.NewFileInstructionElement
         ]
       case NotificationTypeFilterValue.Archivage:
-        return [NotificationType.ArchiveDue]
+        return [
+          NotificationType.ArchiveDueToday,
+          NotificationType.ArchiveDueOneMonth,
+          NotificationType.ArchiveDueSevenDays
+        ]
       default:
         return [
           // All expect Archive type
@@ -146,7 +150,7 @@
     const moreNotification: NotificationItemType = {
       id: 'MORE_ARCHIVE',
       read: null,
-      type: NotificationType.ArchiveDue,
+      type: NotificationType.ArchiveDueToday,
       title: 'Archive',
       description: 'Voir toutes les notifications',
       descriptionHint: `Vous avez ${archiveNotifications.length} dossiers en attente d'archivage.`,

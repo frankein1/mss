@@ -28,7 +28,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     expect(parseStats(stats)).toEqual({
       'CoupleWithChildren': 1,
       'Divorced': 2,
-      'Non renseigné': 9
+      'Non renseigné': 10
     })
   })
 })

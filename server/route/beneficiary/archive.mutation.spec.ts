@@ -96,12 +96,12 @@ async function createBeneficiary(familyFileId: string) {
         createMany: {
           data: [
             {
-              type: 'ArchiveDue',
+              type: 'ArchiveDueToday',
               archiveDate: now,
               recipientId: fixturesUsers[FixtureUserRole.Referent].id
             },
             {
-              type: 'ArchiveDue',
+              type: 'ArchiveDueToday',
               archiveDate: now,
               recipientId: fixturesUsers[FixtureUserRole.StructureManager].id
             }

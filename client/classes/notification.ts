@@ -11,5 +11,7 @@ export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.NewFileInstructionElement]: 'fr-icon-questionnaire-line',
   [NotificationType.UpdateFileInstructionElement]: 'fr-icon-questionnaire-line',
   [NotificationType.NewSocialSupportSubject]: 'fr-icon-settings-5-line',
-  [NotificationType.ArchiveDue]: 'ri-folder-close-line'
+  [NotificationType.ArchiveDueToday]: 'ri-folder-close-line',
+  [NotificationType.ArchiveDueOneMonth]: 'ri-folder-close-line',
+  [NotificationType.ArchiveDueSevenDays]: 'ri-folder-close-line'
 }

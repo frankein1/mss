@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Gender', () => {
     const stats = await trpc.structureManager.stat.getGenderStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Female': 4,
+      'Female': 5,
       'Male': 3,
       'Non renseigné': 4,
       'Other': 1

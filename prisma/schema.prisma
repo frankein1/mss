@@ -1914,7 +1914,9 @@ enum NotificationType {
   NewFollowupElement
   UpdateFollowupElement
   NewSocialSupportSubject
-  ArchiveDue
+  ArchiveDueToday              @map("ArchiveDue")
+  ArchiveDueSevenDays
+  ArchiveDueOneMonth
 }
 
 model Notification {

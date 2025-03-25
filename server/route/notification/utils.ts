@@ -69,7 +69,9 @@ export function getDescription(notification: Notification) {
       return 'Mise à jour synthèse'
     case 'NewSocialSupportSubject':
       return "Ajout d'objet(s) d'accompagnement"
-    case 'ArchiveDue':
+    case 'ArchiveDueToday':
+    case 'ArchiveDueOneMonth':
+    case 'ArchiveDueSevenDays':
       return 'Gérer le dossier'
     default:
       return ''
@@ -90,7 +92,7 @@ export function getDescriptionHint(
     notification.socialSupport?.socialSupportType === SocialSupportType.Followup
 
   const archiveMessage = notification.archiveDate
-    ? `Dossier sans activité depuis 2 ans : suppression prévue le ${notification.archiveDate.toLocaleDateString()}.`
+    ? `Dossier sans activité depuis 2 ans\u00A0: suppression prévue le ${notification.archiveDate.toLocaleDateString()}.`
     : `Dossier sans activité depuis 2 ans.`
 
   switch (notification.type) {
@@ -112,8 +114,12 @@ export function getDescriptionHint(
       return `modifiée par ${userName}`
     case 'NewSocialSupportSubject':
       return `ajouté(s) par ${userName}`
-    case 'ArchiveDue':
+    case 'ArchiveDueToday':
       return archiveMessage
+    case 'ArchiveDueOneMonth':
+      return 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans un mois.'
+    case 'ArchiveDueSevenDays':
+      return 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans une semaine.'
     default:
       return ''
   }

@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Department', () => {
     const stats = await trpc.structureManager.stat.getDepartmentStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
+      'Non renseigné': 12,
       "Côte-d'Or": 1
     })
   })

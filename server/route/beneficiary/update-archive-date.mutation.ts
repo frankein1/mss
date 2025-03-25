@@ -46,7 +46,7 @@ const handler = async ({
 
   const markNotificationsAsRead = NotificationRepo.prisma.updateMany({
     where: {
-      type: NotificationType.ArchiveDue,
+      type: NotificationType.ArchiveDueToday,
       beneficiaryId: input.id
     },
     data: {

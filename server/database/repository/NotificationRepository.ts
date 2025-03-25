@@ -29,6 +29,10 @@ export const NotificationRepo = {
     create: prismaClient.notification.create,
     deleteMany: prismaClient.notification.deleteMany,
     createMany: prismaClient.notification.createMany,
-    updateMany: prismaClient.notification.updateMany
+    updateMany: prismaClient.notification.updateMany,
+    /** Unwrapped findMany should only be used in operations initiated by the server
+    and NOT by a user as no constraints on recipient
+    For user-initiated actions, use NotificationRepo.findMany. */
+    findMany: prismaClient.notification.findMany
   }
 }

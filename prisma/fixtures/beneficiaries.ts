@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { FixtureStructure, fixtureStructures } from './'
+import dayjs from 'dayjs'
 
 export enum FixtureBeneficiary {
   TEARLE = 0,
@@ -14,7 +15,8 @@ export enum FixtureBeneficiary {
   PENBERTHY = 9,
   DOWNER = 10,
   MARTIN = 11,
-  INACTIVE = 12
+  INACTIVE = 12,
+  TESSON = 13
 }
 
 export const fixturesBeneficiaries = [
@@ -174,5 +176,17 @@ export const fixturesBeneficiaries = [
     gender: 'Male',
     created: new Date('2021-01-01'),
     updated: new Date('2021-01-01')
+  },
+  {
+    id: '8cc24c93-a73e-4bf6-bf37-a791f79bcd3e',
+    familyFileId: '3d18f5ac-45cb-4e7a-9fd1-2a8d537bc2c0',
+    fileNumber: 'FS4GVA5OM4',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'TESSON',
+    firstName: 'Sandra',
+    gender: 'Female',
+    created: new Date('2021-01-01'),
+    updated: dayjs().subtract(2, 'years').add(3, 'days').toDate()
   }
 ] satisfies Prisma.BeneficiaryUncheckedCreateInput[]

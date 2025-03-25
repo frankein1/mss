@@ -14,7 +14,7 @@ export const getLastActivity = async ({
   // si familyFile est mis à jour (ajout ou suppression d'un membre), le beneficiary.updated n'est pas mis à jour
   // Pas de champ "updated" pour la table Document
 
-  const beneficiary = await getBeneficiaryWithActivityDates(ctx, beneficiaryId)
+  const beneficiary = await getBeneficiaryWithActivityDates(beneficiaryId)
   return getBeneficiaryLastActivity(beneficiary)
 }
 
@@ -105,10 +105,9 @@ export type BeneficiaryWithActivityDates = Awaited<
 >
 
 export const getBeneficiaryWithActivityDates = async (
-  ctx: SecurityRuleContext,
   beneficiaryId: string
 ) => {
-  return await BeneficiaryRepo.findWithNoDraftCondition(ctx.user, {
+  return await BeneficiaryRepo.prisma.findUniqueOrThrow({
     where: { id: beneficiaryId },
     select: {
       updated: true,

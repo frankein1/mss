@@ -6,7 +6,8 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
-import { createArchiveDueNotifications } from '~/utils/notification/archiveNotifications'
+import { createArchiveDueOneMonthNotifications } from '~/server/services/notification/create-archive-due-one-month-notifications.service'
+import { createArchiveDueRemindersNotifications } from '~/server/services/notification/create-archive-reminders-notifications.service'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -95,32 +96,30 @@ async function createEndOfSupportHelpRequestNotifications() {
     data: endOfSupportHelpRequestNotifications
   })
 }
-const { public: publicConfig } = useRuntimeConfig()
 
-const archiveScheduler = () => {
+function archiveScheduler() {
   const scheduler = useScheduler()
-  if (publicConfig.mssEnvironment === 'local') {
-    return scheduler
+  const { public: publicConfig } = useRuntimeConfig()
+
+  const isLocalOrDev = ['local', 'development'].includes(
+    publicConfig.mssEnvironment
+  )
+  if (isLocalOrDev) {
+    scheduler
       .run(async () => {
-        await createArchiveDueNotifications()
+        await createArchiveDueOneMonthNotifications()
+        await createArchiveDueRemindersNotifications()
       })
-      .dailyAt(1, 0)
+      // .dailyAt(1, 0)
+      // FIXME for test on dev deployment use 30 min scheduler
+      .everyThirtyMinutes()
+    return
   }
-  if (publicConfig.mssEnvironment === 'development') {
-    return scheduler
-      .run(async () => {
-        await createArchiveDueNotifications()
-      })
-      .dailyAt(1, 0)
-  }
-  // else:'demo' and 'production'
-  // TODO: Activate me
-  // return scheduler
-  //   .run(async () => {
-  //     await createArchiveDueNotifications()
-  //   })
-  //   .cron('0 1 * * 0') // At 01:00 on Sunday
+
+  scheduler.run(createArchiveDueOneMonthNotifications).cron('0 1 * * 0') // At 02:00 on Sunday
+  scheduler.run(createArchiveDueRemindersNotifications).dailyAt(2, 0)
 }
+
 function startScheduler() {
   const scheduler = useScheduler()
 

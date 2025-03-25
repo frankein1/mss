@@ -126,6 +126,12 @@ export const fixturesFamilyFiles = [
         { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
         { id: fixturesUsers[FixtureUserRole.Instructor].id }
       ]
+    },
+    budget: {
+      create: {
+        created: new Date('2021-01-01'),
+        updated: new Date('2021-01-01')
+      }
     }
   }
 ] satisfies Prisma.FamilyFileUncheckedCreateInput[]

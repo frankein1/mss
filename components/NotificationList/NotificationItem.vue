@@ -19,7 +19,7 @@
         {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
       <p
-        v-if="notification.type === NotificationType.ArchiveDue"
+        v-if="notification.type === NotificationType.ArchiveDueToday"
         class="fr-mb-0"
       >
         {{ notification.descriptionHint }}
@@ -128,7 +128,9 @@
 
   const itemLink = computed(() => {
     if (
-      props.notification.type === NotificationType.ArchiveDue &&
+      (props.notification.type === NotificationType.ArchiveDueToday ||
+        props.notification.type === NotificationType.ArchiveDueOneMonth ||
+        props.notification.type === NotificationType.ArchiveDueSevenDays) &&
       props.notification.beneficiary
     ) {
       return routes.beneficiary.AppBeneficiariesArchive.path(

@@ -15,7 +15,13 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   const res = await NotificationRepo.findMany(user, {
     where: {
       recipientId: user.id,
-      type: NotificationType.ArchiveDue
+      type: {
+        in: [
+          NotificationType.ArchiveDueToday,
+          NotificationType.ArchiveDueOneMonth,
+          NotificationType.ArchiveDueSevenDays
+        ]
+      }
     },
     include: notificationInclude,
     orderBy: {

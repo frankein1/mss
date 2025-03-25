@@ -12,7 +12,9 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.NewFollowupElement]: 'Synthèse',
   [NotificationType.UpdateFollowupElement]: 'Synthèse',
   [NotificationType.NewSocialSupportSubject]: 'Configuration',
-  [NotificationType.ArchiveDue]: 'Archive'
+  [NotificationType.ArchiveDueToday]: 'Archive',
+  [NotificationType.ArchiveDueOneMonth]: 'Archive',
+  [NotificationType.ArchiveDueSevenDays]: 'Archive'
 })
 
 export enum NotificationTypeFilterValue {

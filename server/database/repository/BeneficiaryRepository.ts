@@ -49,6 +49,10 @@ export const BeneficiaryRepo = {
     update: prismaClient.beneficiary.update,
     updateMany: prismaClient.beneficiary.updateMany,
     delete: prismaClient.beneficiary.delete,
-    findMany: prismaClient.beneficiary.findMany
+    /** Unwrapped findMany should only be used in operations initiated by the server
+    and NOT by a user as no constraints on structure, referents or draft status is included.
+    For user-initiated actions, use BeneficiaryRepo.findMany. */
+    findMany: prismaClient.beneficiary.findMany,
+    findUniqueOrThrow: prismaClient.beneficiary.findUniqueOrThrow
   }
 }

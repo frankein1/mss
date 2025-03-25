@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixturesBeneficiaries } from './'
+import { FixtureBeneficiary, fixturesBeneficiaries } from './'
 
 export const fixturesBudgets = [
   {
@@ -49,5 +49,11 @@ export const fixturesBudgets = [
   {
     id: '4c081679-5ca8-480f-8448-fb9631290f12',
     familyFileId: fixturesBeneficiaries[11].id
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.INACTIVE].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.INACTIVE].id,
+    created: new Date('2021-01-01'),
+    updated: new Date('2021-01-01')
   }
 ] satisfies Prisma.BudgetUncheckedCreateInput[]

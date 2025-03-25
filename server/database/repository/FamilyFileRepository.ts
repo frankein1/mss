@@ -28,6 +28,7 @@ export const FamilyFileRepo = {
   prisma: {
     update: prismaClient.familyFile.update,
     create: prismaClient.familyFile.create,
-    delete: prismaClient.familyFile.delete
+    delete: prismaClient.familyFile.delete,
+    deleteMany: prismaClient.familyFile.deleteMany
   }
 }
