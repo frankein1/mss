@@ -29,17 +29,21 @@
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
+  import { appointmentStatusKeys } from '~/client/options'
 
   const props = defineProps<{
     status: SocialSupportStatus | 'RdvUpcoming' | 'RdvObsolete'
     hasUnreadNotifications?: boolean
     redirectedLabel?: string
     firstFollowup?: string
+    isAppointment?: boolean
   }>()
 
   const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const statusLabel = computed(() =>
-    socialSupportStatusKeys.value.value(props.status)
+    props.isAppointment
+      ? appointmentStatusKeys.value(props.status)
+      : socialSupportStatusKeys.value.value(props.status)
   )
 </script>

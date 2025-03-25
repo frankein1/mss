@@ -33,7 +33,7 @@
         <div>date : {{ formatDate(ss.date) }}</div>
         <div>lieu : {{ ss.place }}</div>
         <div>motif : {{ ss.subject }}</div>
-        <div>statut : {{ socialSupportStatusKeys.value(ss.status) }}</div>
+        <div>statut : {{ appointmentStatusKeys.value(ss.status) }}</div>
         <NuxtLink
           :href="ss.url"
           target="_blank"
@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
+  import { appointmentStatusKeys } from '~/client/options'
 
   const { data, status, error } =
     await useTrpcClient().rdvsp.getAppointments.useQuery()
@@ -61,8 +62,6 @@
   const errorMessage = computed(() =>
     error.value ? "Les rendez-vous à venir n'ont pas pu être chargés." : ''
   )
-
-  const { socialSupportStatusKeys } = useSocialSupportStatus()
 </script>
 
 <style scoped lang="scss">

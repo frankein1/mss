@@ -55,7 +55,7 @@ export const ministryFileInstructionStatusKeys = buildKeys({
 
 export const socialSupportStatusKeys = mergeKeys(
   followupStatusKeys,
-  mergeKeys(fileInstructionStatusKeys, appointmentStatusKeys)
+  fileInstructionStatusKeys
 )
 
 export const ministrySocialSupportStatusKeys = mergeKeys(
