@@ -66,6 +66,7 @@
         :status
         :redirected-label
         :has-unread-notifications
+        :is-appointment="Boolean(data.appointment)"
         :first-followup="
           data.followup?.firstFollowup
             ? followupFieldLabels.firstFollowup

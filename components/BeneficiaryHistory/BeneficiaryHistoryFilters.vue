@@ -26,7 +26,6 @@
   import type { FilterProp } from '~/types/filter'
   import {
     followupMediumKeys,
-    followupStatusKeys,
     typeSuiviKeys,
     TypeSuivi
   } from '~/client/options'
@@ -100,11 +99,6 @@
     return ''
   })
 
-  const statusOptions = [
-    ...followupStatusKeys.options,
-    ...socialSupportStatusOptions.value
-  ]
-
   const typeSuiviValue = computed(() => props.values.typeSuivi)
 
   const isFilteringHelpRequests = computed(
@@ -150,7 +144,10 @@
       {
         name: 'status',
         label: followupFieldLabels.status,
-        options: withEmptyValue(statusOptions, 'Tous les statuts'),
+        options: withEmptyValue(
+          socialSupportStatusOptions.value,
+          'Tous les statuts'
+        ),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Status,
