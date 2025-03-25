@@ -1,5 +1,5 @@
 import { useScheduler } from '#scheduler'
-import { deleteArchivedNames } from '~/utils/archiveBeneficiary/deleteArchivedNames'
+import { deleteArchivedNames } from '~/server/services/notification/delete-archive-names.service'
 
 export default defineNitroPlugin(() => {
   startScheduler()

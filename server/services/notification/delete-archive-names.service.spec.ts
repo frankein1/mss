@@ -7,28 +7,29 @@ import {
   fixturesUsers
 } from '~/prisma/fixtures'
 import { BeneficiaryTitle, StructureType } from '@prisma/client'
-import { deleteArchivedNames } from './deleteArchivedNames'
+import { deleteArchivedNames } from './delete-archive-names.service'
 
 let beneficiaryId: string | null = null
 
-describe('Delete archived names if older than 1 year', () => {
-  beforeEach(async () => {
-    vi.useFakeTimers()
-    const beneficiary = await createArchivedBeneficiary()
-    beneficiaryId = beneficiary.id
-  })
+beforeEach(async () => {
+  vi.useFakeTimers()
+  const beneficiary = await createArchivedBeneficiary()
+  beneficiaryId = beneficiary.id
+})
 
-  afterEach(async () => {
-    await deleteArchiveBeneficiary()
-    // restoring date after each test run
-    vi.useRealTimers()
-  })
+afterEach(async () => {
+  await deleteArchiveBeneficiary()
+  // restoring date after each test run
+  vi.useRealTimers()
+})
 
+describe('Notification - Beneficiary Archive - Delete archived names if older than 1 year', () => {
   it("shouldn't have names or title", async () => {
     const future = dayjs().add(2, 'years').toDate()
     vi.setSystemTime(future)
 
     await deleteArchivedNames()
+
     const beneficiaries = await ArchivedBeneficiaryRepo.prisma.findMany({
       where: {
         updated: { lte: new Date() }
