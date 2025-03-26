@@ -18,5 +18,7 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const FamilyFileConstraints = {
-  get
+  get,
+  update: get,
+  delete: get
 }

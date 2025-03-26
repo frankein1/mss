@@ -10,7 +10,21 @@ import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
 
 const t = initTRPC.context<AppContext>().create({
-  transformer: superjson
+  transformer: superjson,
+  errorFormatter(opts) {
+    const { shape, error } = opts
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        // Allow the 'MSS_CODE' field to be available on error.data.MSS_CODE on the frontend.
+        // It's meant to be used when the backend needs to send a specific error code.
+        ...(error?.cause !== undefined && 'MSS_CODE' in error.cause
+          ? { MSS_CODE: error.cause.MSS_CODE }
+          : {})
+      }
+    }
+  }
 })
 
 export const { router, createCallerFactory } = t

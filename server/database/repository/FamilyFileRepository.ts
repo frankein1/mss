@@ -22,9 +22,27 @@ function findUniqueOrThrow<T extends Prisma.FamilyFileFindUniqueOrThrowArgs>(
   return prismaClient.familyFile.findUniqueOrThrow(params)
 }
 
+function update<T extends Prisma.FamilyFileUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.FamilyFileUpdateArgs>
+) {
+  appendConstraints(user, params, FamilyFileConstraints.update)
+  return prismaClient.familyFile.update(params)
+}
+
+function deleteWithConstraints<T extends Prisma.FamilyFileDeleteArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.FamilyFileDeleteArgs>
+) {
+  appendConstraints(user, params, FamilyFileConstraints.delete)
+  return prismaClient.familyFile.delete(params)
+}
+
 export const FamilyFileRepo = {
   findMany,
   findUniqueOrThrow,
+  update,
+  delete: deleteWithConstraints,
   prisma: {
     update: prismaClient.familyFile.update,
     create: prismaClient.familyFile.create,

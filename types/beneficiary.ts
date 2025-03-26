@@ -21,11 +21,6 @@ export type BeneficiaryIdentification = Pick<
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
-export type BeneficiaryIdentificationWithFileId = Pick<
-  Beneficiary,
-  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'familyFileId'
->
-
 export type BeneficiaryFileIdentification = Pick<
   Beneficiary,
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'relationship'

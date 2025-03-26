@@ -21,6 +21,7 @@ import {
   getBeneficiaryLastActivity,
   getLastActivity
 } from './get-last-activity.service'
+import { linkToFamilyFile } from './linkToFamilyFile.service'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -40,7 +41,8 @@ export const BeneficiaryService = {
   updateEntourage,
   getLastActivity,
   getArchiveDate,
-  getBeneficiaryLastActivity
+  getBeneficiaryLastActivity,
+  linkToFamilyFile
 }
 
 export type { BeneficiarySecurityTarget }

@@ -51,6 +51,7 @@
       >
         <slot
           name="result"
+          :input="combobox"
           :result="result"
         >
         </slot>
@@ -65,7 +66,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryIdentificationWithFileId } from '~/types/beneficiary'
+  import { inferProcedureOutput } from '@trpc/server'
+  import { AppRouter } from '~/server/trpc/routers'
   import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -75,7 +77,9 @@
     searchFn: (search: string) => Promise<any[]>
   }>()
 
-  const results = ref<BeneficiaryIdentificationWithFileId[]>([])
+  const results = ref<inferProcedureOutput<AppRouter['beneficiary']['search']>>(
+    []
+  )
   const timeout = ref<NodeJS.Timeout | null>(null)
   const error = ref<string>('')
 

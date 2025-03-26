@@ -38,11 +38,20 @@ function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
   return prismaClient.beneficiary.count(params)
 }
 
+function update<T extends Prisma.BeneficiaryUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
+) {
+  appendConstraints(user, params, BeneficiaryConstraints.update)
+  return prismaClient.beneficiary.update(params)
+}
+
 export const BeneficiaryRepo = {
   findMany,
   findUniqueOrThrow,
   findWithNoDraftCondition,
   count,
+  update,
   prisma: {
     groupBy: prismaClient.beneficiary.groupBy,
     create: prismaClient.beneficiary.create,

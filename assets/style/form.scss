@@ -1,10 +1,6 @@
 @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
 @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
-.form-grid {
-  width: 100%;
-}
-
 .form-grid > *:not(.fr-col-12, .fr-col-6, .fr-fieldset__legend) {
   @include dsfr.grid-col(12);
 

@@ -43,5 +43,6 @@ const getNoDraftCondition = (user: SecurityRuleGrantee) => {
 
 export const BeneficiaryConstraints = {
   get,
-  getNoDraftCondition
+  getNoDraftCondition,
+  update: get
 }

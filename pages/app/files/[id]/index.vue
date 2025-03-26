@@ -192,9 +192,14 @@
     selectedError.value = error.value
   }
 
-  if (familyFileIdentification && familyFileIdentification.value?.length) {
-    getBeneficiaryDetails(getBeneficiaryIdOnPageLoad())
-  }
+  watch(
+    () => route.query.beneficiaryId,
+    () => {
+      // Fetch new data based on the beneficiary id
+      getBeneficiaryDetails(getBeneficiaryIdOnPageLoad())
+    },
+    { immediate: true }
+  )
 
   // Segmented Family
   const openBeneficiary = (beneficiaryId: string): void => {
@@ -268,7 +273,7 @@
           await reloadData(id)
         },
         onFailure: () => {
-          snackbar.error("L'ajout d'un membre au foyer à échoué.")
+          snackbar.error("L'ajout d'un membre au foyer a échoué.")
         }
       })
     }

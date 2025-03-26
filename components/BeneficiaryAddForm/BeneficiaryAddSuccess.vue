@@ -19,8 +19,22 @@
         <p>
           Chaque bénéficiaire conserve ses informations personnelles, ses
           documents et ses suivis individuels mais ces éléments sont rassemblés
-          au sein d'un seul et même dossier. Le budget lui est commun à tous les
-          membres du dossier
+          au sein d'un seul et même dossier.
+        </p>
+      </div>
+    </div>
+
+    <div class="success-content fr-mb-6w">
+      <div class="content-icon fr-mr-2w">
+        <span
+          class="fr-icon-money-euro-circle-line"
+          aria-hidden="true"
+        ></span>
+      </div>
+      <div class="content-text">
+        <p>
+          Le budget est commun à tous les membres du dossier. Pensez à le mettre
+          à jour.
         </p>
       </div>
     </div>

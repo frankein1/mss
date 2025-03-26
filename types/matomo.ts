@@ -13,7 +13,13 @@ export enum EventCategory {
   Beneficiary = 'Beneficiaire',
   ExportStats = 'Export des statistiques',
   ExportBudget = 'Export du budget',
-  BeneficiaryArchive = 'Archive Bénéficiaire'
+  BeneficiaryArchive = 'Archive Bénéficiaire',
+  FamilyFile = 'Dossier Foyer'
+}
+
+export enum FamilyFileAction {
+  CreateBeneficiary = 'Créer un bénéficiaire',
+  LinkBeneficiary = 'Lier un bénéficiaire'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -137,6 +143,7 @@ export type EventAction =
   | BeneficiaryAction
   | ExportEventAction
   | BeneficiaryArchiveAction
+  | FamilyFileAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

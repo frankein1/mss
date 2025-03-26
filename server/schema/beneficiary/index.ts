@@ -1,4 +1,5 @@
 export * from './createBeneficiary.schema'
+export * from './linkToFamilyFile.schema'
 export * from './exportBeneficiaries.schema'
 export * from './getBeneficiaries.schema'
 export * from './searchBeneficiary.schema'

@@ -97,3 +97,14 @@
     modal.value?.removeEventListener('dsfr.conceal', onClose)
   })
 </script>
+
+<style scoped lang="scss">
+  .fr-modal__body {
+    overflow-y: auto;
+  }
+
+  .fr-modal__content {
+    padding-bottom: 4rem;
+    margin-bottom: 0;
+  }
+</style>
