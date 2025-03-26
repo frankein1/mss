@@ -142,6 +142,9 @@ async function validateDraftAppointment({
         agentId: agent.id,
         subject: rdv.subject,
         externalSubjectId: rdv.externalSubjectId.toString(),
+        // Native postgres times are read in UTC timezone by prisma as '1970-01-01THH:mm:ss.000Z'
+        // Since the meeting time as been stored "as is" in the database, it will have to
+        // be read by the frontend converted in UTC timezone.
         time: rdv.date,
         place: rdv.place,
         durationInMin: rdv.durationInMin
@@ -215,7 +218,19 @@ async function getRdvspRdvFromPlan(
     place: rdv.address,
     durationInMin: rdv.duration_in_min,
     externalAgentIds: (rdv.agents || []).map(a => a.id),
-    date: dayjs(rdv.starts_at).toDate(),
+    // We receive ISO8601 Date strings from RSVP, eg `2024-04-04T12:00:00+02:00`
+    // with a timezone offset corresponding to Paris (where the RDVSP servers are located)
+    // regardless of the user's timezone. The previous example can be a user from New Caledonia
+    // setting a meeting on 2024-04-04 at 12pm local time.
+    // Thus, it makes sense to store the "clock on the wall time".
+    // Since the meetings are only in-person, the planner will always think of the meeting
+    // with the geographical & temporal context of where & when the meeting will take place, not the present one.
+    // eg. If the planner set the meeting to `2024-02-04T09:00:00+02:00`, they almost certainly
+    // meant 9AM on the April 2nd, no matter if a DST occurs in between, or if the meeting
+    // takes place in a different timezone then the one they were in when they set the meeting.
+    // Hence why we strip the timezone offset.
+    // See https://www.creativedeletion.com/2015/03/19/persisting_future_datetimes.html
+    date: getDateWithoutTimezoneInformation(rdv.starts_at),
     externalUsagerIds: (rdv.users || []).map(u => u.id)
   }
 }
@@ -262,4 +277,13 @@ async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
     accessToken,
     externalStructureId: structure.externalRdvspId as string
   }
+}
+
+/**
+ * This method changes the timezone to UTC while preserving the original time
+ * eg. `2024-02-04T12:00:00+12:00` -> `2024-02-04T12:00:00Z`
+ * @param {string} dateISO8601 - An ISO8601 date string, usually with a timezone offset.
+ */
+const getDateWithoutTimezoneInformation = (dateISO8601: string) => {
+  return dayjs(dateISO8601).utc(true).toDate()
 }
