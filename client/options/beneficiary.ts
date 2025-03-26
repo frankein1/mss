@@ -105,7 +105,7 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.Housewife]: 'Mère au foyer',
   [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité',
   [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié',
-  [BeneficiarySocioProfessionalCategory.Student]: 'Étudiant·e',
+  [BeneficiarySocioProfessionalCategory.Student]: 'Étudiant·e / Élève',
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
