@@ -27,8 +27,6 @@ describe('Notification - Beneficiary Archive - Create notifications for archives
     })
     createdNotificationIds = notifs.map(n => n.id)
 
-    expect(notifs.length).toEqual(6)
-
     // See __fixtures__/index.ts for information on number of referents and expected archive date
     const johnDoeNotifs = notifs.filter(
       n => n.beneficiaryId === test.ID_JOHN_DOE
@@ -44,12 +42,16 @@ describe('Notification - Beneficiary Archive - Create notifications for archives
     const ericDuversNotifs = notifs.filter(
       n => n.beneficiaryId === test.ID_ERIC_DUVERS
     )
-    expect(ericDuversNotifs.length).toBe(1)
+    expect(ericDuversNotifs.length).toBe(2)
     expect(new Set(ericDuversNotifs.map(n => n.type))).toEqual(
       new Set([NotificationType.ArchiveDueOneMonth])
     )
+    // Eric DUVERS has 3 referents but one of them is inactive
     expect(new Set(ericDuversNotifs.map(n => n.recipientId))).toEqual(
-      new Set([fixturesUsers[FixtureUserRole.StructureManager].id])
+      new Set([
+        fixturesUsers[FixtureUserRole.StructureManager].id,
+        fixturesUsers[FixtureUserRole.Referent].id
+      ])
     )
 
     const maxInactiveNotifs = notifs.filter(
@@ -81,5 +83,7 @@ describe('Notification - Beneficiary Archive - Create notifications for archives
         fixturesUsers[FixtureUserRole.Referent].id
       ])
     )
+
+    expect(notifs.length).toEqual(7)
   })
 })

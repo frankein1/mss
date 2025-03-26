@@ -92,7 +92,7 @@
         ]
       default:
         return [
-          // All expect Archive type
+          // All except Archive type
           NotificationType.NewDocument,
           NotificationType.NewComment,
           NotificationType.DueDateToday,

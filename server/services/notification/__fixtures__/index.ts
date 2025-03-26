@@ -20,7 +20,7 @@ const ID_TESSON = fixturesBeneficiaries[FixtureBeneficiary.TESSON].id
 const ID_INACTIVE = fixturesBeneficiaries[FixtureBeneficiary.INACTIVE].id
 
 const threeYearsBeforeNow = dayjs().subtract(3, 'year').toDate()
-const twoYearsBeforeNow = dayjs().subtract(2, 'year').toDate()
+const twoYearsBeforeNow = dayjs().subtract(2, 'year').add(1, 'day').toDate()
 const twoYearsMinusTwoDaysBefore = dayjs()
   .subtract(2, 'year')
   .add(2, 'days')
@@ -146,7 +146,9 @@ const createBeneficiary = async () => {
           structureId: fixtureStructures[0].id,
           referents: {
             connect: [
-              { id: fixturesUsers[FixtureUserRole.StructureManager].id }
+              { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+              { id: fixturesUsers[FixtureUserRole.Referent].id },
+              { id: fixturesUsers[FixtureUserRole.Instructor].id }
             ]
           },
           budget: {

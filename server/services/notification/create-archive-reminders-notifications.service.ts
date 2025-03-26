@@ -6,7 +6,10 @@ import { performance } from 'node:perf_hooks'
 
 /** Reminder notifications for inactive beneficiaries :
  * - due to be archived in 7 days
- * - due to be archived today */
+ * - due to be archived today
+ *
+ * Only beneficiaries that have already received a 1-month notification
+ * can receive a reminder */
 export const createArchiveDueRemindersNotifications = async () => {
   const start = performance.now()
 
@@ -20,9 +23,6 @@ export const createArchiveDueRemindersNotifications = async () => {
 }
 
 async function handleCreation() {
-  const dueDateInNDays = (archiveDate: Date, N: number) =>
-    dayjs(archiveDate).subtract(N, 'day').isBefore(dayjs())
-
   // Filter all beneficiaries that must be archived in less than 7 days
   const mustBeArchivedBeneficiaries = (
     await getInactiveBeneficiariesWithOneMonthNotification()
@@ -49,6 +49,13 @@ async function handleCreation() {
   })
 
   return filteredNotifications.length
+}
+
+/** Select archive dates between now and now + N days */
+function dueDateInNDays(archiveDate: Date, N: number) {
+  const date = dayjs(archiveDate)
+  const now = dayjs()
+  return date.isAfter(now) && date.subtract(N, 'day').isBefore(now)
 }
 
 type ArchiveNotification = {

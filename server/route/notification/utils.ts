@@ -90,10 +90,10 @@ export function getDescriptionHint(
 
   const isFu =
     notification.socialSupport?.socialSupportType === SocialSupportType.Followup
-
-  const archiveMessage = notification.archiveDate
-    ? `Dossier sans activité depuis 2 ans\u00A0: suppression prévue le ${notification.archiveDate.toLocaleDateString()}.`
-    : `Dossier sans activité depuis 2 ans.`
+  const archiveDatePassed =
+    notification.archiveDate &&
+    notification.created &&
+    notification.archiveDate.getTime() < notification.created.getTime()
 
   switch (notification.type) {
     case 'DueDateOneMonth':
@@ -115,9 +115,13 @@ export function getDescriptionHint(
     case 'NewSocialSupportSubject':
       return `ajouté(s) par ${userName}`
     case 'ArchiveDueToday':
-      return archiveMessage
+      return "Dossier sans activité depuis 2 ans\u00A0: suppression prévue aujourd'hui."
+    // The planned job for archives due in 1 month can also create notifications
+    // for beneficiaries that have already passed their archive date (for example during its first execution)
     case 'ArchiveDueOneMonth':
-      return 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans un mois.'
+      return archiveDatePassed
+        ? 'Dossier sans activité depuis 2 ans\u00A0: date de supression dépassée.'
+        : 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans un mois.'
     case 'ArchiveDueSevenDays':
       return 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans une semaine.'
     default:
