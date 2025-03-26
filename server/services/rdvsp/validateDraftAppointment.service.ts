@@ -287,10 +287,28 @@ async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
 /**
  * This method changes the timezone to UTC while preserving the original time
  * eg. `2024-02-04T12:00:00+12:00` -> `2024-02-04T12:00:00Z`
+ *
+ * This function does not take into account all cases but as the time returned by RDVSP
+ * is always formatted the same, it should not be a problem.
+ *
  * @param {string} dateISO8601 - An ISO8601 date string, usually with a timezone offset.
  */
 const getDateWithoutTimezoneInformation = (dateISO8601: string) => {
-  return dayjs(dateISO8601).utc(true).toDate()
+  let timezone: string | null = null
+
+  if (dateISO8601.slice(-1) === 'Z') {
+    // utc YYYY-MM-DDTHH:mm.000Z
+    timezone = dateISO8601.slice(-5)
+  } else if (dateISO8601.slice(-6).startsWith(' ')) {
+    // timezone space YYYY-MM-DD HH:mm +TTTT
+    timezone = dateISO8601.slice(-6)
+  } else {
+    // timezone no space YYYY-MM-DDTHH:mm+TTTT
+    timezone = dateISO8601.slice(-5)
+  }
+
+  const transformed = dateISO8601.replace(timezone, '')
+  return dayjs(`${transformed}+0000`).utc().toDate()
 }
 
 export const test = {
