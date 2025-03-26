@@ -210,6 +210,11 @@ async function getRdvspRdvFromPlan(
     throw invalidError('Could not retrieve rdv in rdvsp')
   }
 
+  console.log('rdv.starts_at', rdv.starts_at)
+  console.log('date', getDateWithoutTimezoneInformation(rdv.starts_at))
+  console.log('now', new Date())
+  console.log('tz guess', dayjs.tz.guess())
+
   return {
     id: rdv.id,
     subject: rdv.motif.name,
@@ -286,4 +291,8 @@ async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
  */
 const getDateWithoutTimezoneInformation = (dateISO8601: string) => {
   return dayjs(dateISO8601).utc(true).toDate()
+}
+
+export const test = {
+  getDateWithoutTimezoneInformation
 }
