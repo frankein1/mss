@@ -26,7 +26,7 @@
         </span>
         <template v-if="data.appointment?.time">
           <span class="history-details__date">
-            à {{ formatTime(data.appointment?.time) }}
+            à {{ getUTCTimeFromDate(data.appointment?.time) }}
           </span>
         </template>
         <template v-if="!singleBeneficiary">
@@ -93,7 +93,7 @@
   import type { SocialSupportData } from './types'
   import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
-  import { formatTime } from '~/utils/formatTime'
+  import { getUTCTimeFromDate } from '~/utils/getUTCTimeFromDate'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { followupFieldLabels } from '~/client/labels'
