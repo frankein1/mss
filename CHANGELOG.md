@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.40.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.2...v1.40.3) (2025-03-27)
+
+
+### Bug Fixes
+
+* **rdvsp:** change le formattage des dates en backend ([ba64c11](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ba64c112fa26a3b4de10f1052fd549e60c254968)), closes [#741](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/741)
+* **rdvsp:** suppression de la conversion de fuseau horaire de l'heure du rendez-vous dans la BDD ([141bec8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/141bec88a6307ab28371504373806f0fe6a45238)), closes [#764](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/764)
+* **rdvsp:** suppression des statuts des rdv dans le filtre de l'historique ([4338531](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/433853169218fb650f0e28f1c8b353a2bd8adf5a)), closes [#764](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/764)
+
 ## [1.40.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.1...v1.40.2) (2025-03-17)
 
 
