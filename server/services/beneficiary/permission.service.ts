@@ -80,12 +80,11 @@ export const getArchivePermissions = async ({
   const { user } = ctx
   const beneficiary = await getBeneficiaryArchiveSecurityTarget(ctx.user, id)
   const isMember = isMemberOfReferents(user, beneficiary.familyFile)
-  const archiveDueDate = beneficiary.archiveDueDate
   const lastActivity = await BeneficiaryService.getLastActivity({
     ctx,
     beneficiaryId: beneficiary.id
   })
-  const toArchived = hasToBeArchived(lastActivity, archiveDueDate)
+  const toArchived = hasToBeArchived(lastActivity)
   const { manager, receptionAgent } = getGranteRole(ctx)
 
   if (manager) {
@@ -103,14 +102,13 @@ export const getArchivePermissions = async ({
   }
 }
 
-const hasToBeArchived = (lastActivity: Date, archiveDueDate: Date | null) => {
-  const twoYearsBeforeNow = dayjs().subtract(2, 'year').toDate()
-  const delayDecisionDate = dayjs(archiveDueDate).subtract(1, 'year').toDate()
-  if (!archiveDueDate) {
-    return lastActivity < twoYearsBeforeNow
-  }
-  if (lastActivity < delayDecisionDate) {
-    return lastActivity < twoYearsBeforeNow
-  }
-  return lastActivity < twoYearsBeforeNow
+/** A beneficiary can be archived 1 year and 11 months after their last activity if
+ * no delay has been set
+ */
+const hasToBeArchived = (lastActivity: Date) => {
+  const twoYearsMinusOneMonthsBeforeNow = dayjs()
+    .subtract(2, 'year')
+    .add(1, 'month')
+    .toDate()
+  return lastActivity < twoYearsMinusOneMonthsBeforeNow
 }
