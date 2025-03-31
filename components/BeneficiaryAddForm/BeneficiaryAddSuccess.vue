@@ -4,7 +4,7 @@
       <AtomPictogram path="/pictograms/success.svg" />
       <p class="fr-h5">
         Bénéficiaire ajouté avec succès.<br />
-        Il s’agit désormais d’un dossier “foyer”.
+        Tous les bénéficiaires sont rassemblés dans un dossier “foyer”.
       </p>
     </div>
 
