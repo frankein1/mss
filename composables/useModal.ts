@@ -25,6 +25,10 @@ function _useModal() {
 
   const isReady = computed(() => ready.value)
 
+  const defaultProps: Modal = {
+    size: 'md'
+  }
+
   function open<T extends Component>(
     component: T,
     props?: Modal & ComponentProps<T>
@@ -34,7 +38,7 @@ function _useModal() {
     }
     modalState.value = {
       component,
-      props: props ?? {}
+      props: { ...defaultProps, ...props }
     }
     triggerOpen.value = !!props?.triggerOpen
     setIsOpen(true)

@@ -7,26 +7,18 @@
         suite.
       </p>
     </div>
-    <div class="fr-text--bold fr-mb-2w">Souhaitez-vous :</div>
     <div class="fr-col-12 fr-mb-2w">
-      <label
-        v-for="option in addMemberModeOptions"
-        :key="option.label"
-        class="fr-mr-2w"
-        ><input
-          v-model="addMemberMode"
-          type="radio"
-          name="addMemberMode"
-          :value="option.value"
-          class="fr-mr-1w"
-          @change="
-            matomo.trackEvent(
-              EventCategory.FamilyFile,
-              option.matomoEventAction
-            )
-          "
-        />{{ option.label }}
-      </label>
+      <DsfrRadioButtonSet
+        v-model="addMemberMode"
+        :disabled="false"
+        inline
+        :options="addMemberModeOptions"
+        @update:model-value="onAddMemberModeUpdate"
+      >
+        <template #legend
+          ><span class="fr-text--bold">Souhaitez-vous :</span></template
+        >
+      </DsfrRadioButtonSet>
     </div>
     <div class="fr-col-12 fr-pt-2w">
       <hr class="fr-pb-2w" />
@@ -168,6 +160,13 @@
     }
   ]
   const addMemberMode = ref(addMemberModeOptions[0].value)
+
+  function onAddMemberModeUpdate(val: string | number | boolean) {
+    const option = addMemberModeOptions.find(({ value }) => value === val)
+    if (option) {
+      matomo.trackEvent(EventCategory.FamilyFile, option.matomoEventAction)
+    }
+  }
 
   const props = defineProps<{
     isSubmitting: boolean

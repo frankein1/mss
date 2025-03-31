@@ -236,6 +236,7 @@
   const openAddBeneficiaryModal = (): void => {
     if (familyFileId) {
       modal.open(BeneficiaryAddForm, {
+        size: 'lg',
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
         familyFileId,

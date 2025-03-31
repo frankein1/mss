@@ -8,7 +8,9 @@
   >
     <div class="fr-container fr-container--fluid fr-container-md">
       <div class="fr-grid-row fr-grid-row--center">
-        <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
+        <div
+          :class="['fr-col-12', getModalSizeClassName(modalState?.props.size)]"
+        >
           <div class="fr-modal__body">
             <div class="fr-modal__header">
               <button
@@ -50,12 +52,27 @@
 <script lang="ts" setup generic="M extends Component">
   import { inject } from 'vue'
   import { useModal, modalInjectionKey } from '../../composables/useModal'
+  import { Modal } from '~/types/modal'
 
   const modalState = inject(modalInjectionKey)
 
   const modal = ref<HTMLDialogElement | null>(null)
 
   const { isOpen, setReady, setIsOpen, title, triggerOpen, close } = useModal()
+
+  function getModalSizeClassName(size: Modal['size']) {
+    switch (size) {
+      case 'sm':
+        return 'fr-col-md-4'
+      case 'lg':
+        return 'fr-col-md-8'
+      case 'xl':
+        return 'fr-col-12'
+      case 'md':
+      default:
+        return 'fr-col-md-6'
+    }
+  }
 
   // This becomes non null much later in the page loading process
   // and prevents the modal to be disclosed when using triggerOpen
