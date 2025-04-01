@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
   import { z } from 'zod'
+  import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 
   const props = defineProps<{ export: (code: string) => void }>()
 
@@ -58,7 +59,9 @@
   })
 
   const { handleSubmit } = useForm<{ code: string }>({
-    validationSchema: toTypedSchema(z.object({ code: z.string().length(6) }))
+    validationSchema: toTypedSchema(
+      z.object({ code: z.string().length(VALIDATION_CODE_LENGTH) })
+    )
   })
 
   const onSubmit = handleSubmit(async ({ code }) => {
