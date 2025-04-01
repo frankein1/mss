@@ -63,6 +63,7 @@
 <script lang="ts" setup>
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
+    INVALID_CODE_ERROR_MESSAGE,
     BENEFICIARIES_REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
@@ -73,6 +74,8 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { EventCategory, BeneficiaryAction } from '~/types/matomo'
+  import { isTRPCClientError } from '~/utils/error'
 
   const title = routes.beneficiary.AppBeneficiaries.title
 
@@ -83,7 +86,6 @@
   })
 
   const route = useRoute()
-  const { application } = usePermissions()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
 
@@ -125,11 +127,17 @@
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
-  async function exportBeneficiaries() {
+  async function exportBeneficiaries(code: string) {
     isDownloading.value = true
+    useMatomo().trackEvent(
+      EventCategory.ExportBeneficiary,
+      BeneficiaryAction.ExportAll
+    )
+
     try {
       const exportedBeneficiaries =
         await trpcClient.beneficiary.exportBeneficiaries.query({
+          code,
           orderBy: orderBy.value,
           filters: filters.value
         })
@@ -141,8 +149,18 @@
       downloadLink.download = getExportFilename('beneficiaires')
       downloadLink.click()
       downloadLink.remove()
-    } catch {
-      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+
+      useModal().close()
+    } catch (err: unknown) {
+      if (isTRPCClientError(err)) {
+        const msg =
+          err.data?.code === 'FORBIDDEN'
+            ? INVALID_CODE_ERROR_MESSAGE
+            : FAILED_DOWNLOAD_ERROR_MESSAGE
+        useSnackbar().error(msg)
+      } else {
+        useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+      }
     } finally {
       isDownloading.value = false
     }

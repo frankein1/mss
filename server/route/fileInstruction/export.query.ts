@@ -9,7 +9,7 @@ import {
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-import { FileInstructionService } from '~/server/services'
+import { FileInstructionService, UserService } from '~/server/services'
 
 const handler = async ({
   input,
@@ -18,6 +18,11 @@ const handler = async ({
   input: ExportFileInstructionsInput
   ctx: ProtectedAppContext
 }) => {
+  await UserService.verifyAuthorizationCode({
+    ctx,
+    input: { code: input.code }
+  })
+
   const { columns, rows } = await FileInstructionService.exportFileInstructions(
     {
       ctx,

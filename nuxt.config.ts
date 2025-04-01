@@ -264,6 +264,15 @@ export default defineNuxtConfig({
       security: {
         xssValidator: false
       }
+    },
+    // The export functionality is limited to 5 calls per minute to prevent brute forcing the validation step
+    '/api/trpc/user.authorizeExport': {
+      security: {
+        rateLimiter: {
+          interval: 60_000,
+          tokensPerInterval: 5
+        }
+      }
     }
   },
 

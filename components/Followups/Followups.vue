@@ -52,6 +52,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
+    INVALID_CODE_ERROR_MESSAGE,
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
@@ -60,6 +61,7 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
+  import { isTRPCClientError } from '~/utils/error'
 
   const route = useRoute()
   const filtersState = useFilters()
@@ -103,7 +105,7 @@
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
-  async function exportFollowups() {
+  async function exportFollowups(code: string) {
     isDownloading.value = true
     useMatomo().trackEvent(
       EventCategory.ExportHistory,
@@ -112,6 +114,7 @@
 
     try {
       const exportedFollowups = await trpcClient.followup.getExport.query({
+        code,
         orderBy: orderBy.value,
         filters: filters.value
       })
@@ -123,8 +126,18 @@
       downloadLink.download = getExportFilename('entretiens')
       downloadLink.click()
       downloadLink.remove()
-    } catch {
-      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+
+      useModal().close()
+    } catch (err: unknown) {
+      if (isTRPCClientError(err)) {
+        const msg =
+          err.data?.code === 'FORBIDDEN'
+            ? INVALID_CODE_ERROR_MESSAGE
+            : FAILED_DOWNLOAD_ERROR_MESSAGE
+        useSnackbar().error(msg)
+      } else {
+        useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+      }
     } finally {
       isDownloading.value = false
     }

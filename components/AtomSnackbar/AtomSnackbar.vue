@@ -60,7 +60,7 @@
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .snackbar {
-    z-index: $above-z-index;
+    z-index: $over-modal-z-index;
     margin: 2rem;
     display: none;
     position: fixed;

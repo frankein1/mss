@@ -1,0 +1,1 @@
+export const VALIDATION_CODE_LENGTH = 8

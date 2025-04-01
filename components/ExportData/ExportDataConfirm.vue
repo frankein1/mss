@@ -1,23 +1,69 @@
 <template>
-  <div>
+  <div v-if="isSubmitting">Loading...</div>
+  <div v-else-if="error">{{ error.message }}</div>
+  <div v-else>
+    <p>
+      Vous êtes sur le point d'exporter des données personnelles des
+      bénéficiaires.
+      <strong>
+        Nous attirons votre attention sur les données sensibles du fichier que
+        vous téléchargez.
+      </strong>
+    </p>
+
     <p>Toutes les pages seront exportées avec les filtres actuels.</p>
-    <div class="export-btn-container">
-      <button
-        class="fr-btn"
-        @click="onExport"
-      >
-        Exporter
-      </button>
-    </div>
+
+    <form
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <VeeInput
+        name="code"
+        required
+        label="Veuillez entrer le code reçu par email valable 10 minutes pour valider
+      l'export de données"
+      />
+
+      <div class="export-btn-container">
+        <button
+          class="fr-btn"
+          @click="onSubmit"
+        >
+          Exporter
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts" setup>
-  const props = defineProps<{ export: () => void }>()
+  import { z } from 'zod'
 
-  function onExport() {
-    props.export()
-  }
+  const props = defineProps<{ export: (code: string) => void }>()
+
+  const trpcClient = useTrpcClient()
+
+  const isSubmitting = ref(false)
+  const error = ref<Error | null>(null)
+
+  useTrpcMutation({
+    isSubmitting,
+    mutation: () => trpcClient.user.authorizeExport.mutate(),
+    onFailure: () => {
+      error.value = new Error(
+        "La génération du code d'autorisation a échoué. Si vous avez effectué beaucoup d'appels à l'export, veuillez attendre une ou deux minutes."
+      )
+    }
+  })
+
+  const { handleSubmit } = useForm<{ code: string }>({
+    validationSchema: toTypedSchema(z.object({ code: z.string().length(6) }))
+  })
+
+  const onSubmit = handleSubmit(async ({ code }) => {
+    props.export(code)
+  })
 </script>
 
 <style scoped>

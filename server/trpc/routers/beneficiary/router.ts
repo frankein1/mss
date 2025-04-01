@@ -26,7 +26,6 @@ export const beneficiaryRouter = router({
   getBeneficiaryArchivePermission: protectedProcedure
     .input(routes.getBeneficiaryArchivePermissionsQuery.inputValidation)
     .query(routes.getBeneficiaryArchivePermissionsQuery.execute),
-
   delete: protectedProcedure
     .input(routes.deleteBeneficiaryMutation.inputValidation)
     .mutation(routes.deleteBeneficiaryMutation.execute),

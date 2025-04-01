@@ -1,22 +1,20 @@
 import { protectedProcedure, router } from '~/server/trpc'
-import {
-  acceptCGUMutation,
-  addUserMutation,
-  updateUserMutation,
-  getUsersQuery
-} from '~/server/route/user'
+import { userRoutes as routes } from '~/server/route'
 
 export const userRouter = router({
   update: protectedProcedure
-    .input(updateUserMutation.inputValidation)
-    .mutation(updateUserMutation.execute),
+    .input(routes.updateUserMutation.inputValidation)
+    .mutation(routes.updateUserMutation.execute),
   add: protectedProcedure
-    .input(addUserMutation.inputValidation)
-    .mutation(addUserMutation.execute),
+    .input(routes.addUserMutation.inputValidation)
+    .mutation(routes.addUserMutation.execute),
   getUsers: protectedProcedure
-    .input(getUsersQuery.inputValidation)
-    .query(getUsersQuery.execute),
+    .input(routes.getUsersQuery.inputValidation)
+    .query(routes.getUsersQuery.execute),
   acceptCGU: protectedProcedure
-    .input(acceptCGUMutation.inputValidation)
-    .mutation(acceptCGUMutation.execute)
+    .input(routes.acceptCGUMutation.inputValidation)
+    .mutation(routes.acceptCGUMutation.execute),
+  authorizeExport: protectedProcedure
+    .input(routes.authorizeExportMutation.inputValidation)
+    .mutation(routes.authorizeExportMutation.execute)
 })

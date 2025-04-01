@@ -1,8 +1,10 @@
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 import { fileInstructionFilterSchema } from './filter.schema'
+import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 
 export const exportFileInstructionsSchema = z.object({
+  code: z.string().length(VALIDATION_CODE_LENGTH),
   orderBy: z.object({
     socialSupport: z
       .object({

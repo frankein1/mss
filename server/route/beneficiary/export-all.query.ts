@@ -4,7 +4,7 @@ import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
 } from '~/server/schema'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryService, UserService } from '~/server/services'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -16,6 +16,11 @@ const handler = async ({
   input: ExportBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
+  await UserService.verifyAuthorizationCode({
+    ctx,
+    input: { code: input.code }
+  })
+
   const { rows, columns } = await BeneficiaryService.exportAll({
     ctx,
     input

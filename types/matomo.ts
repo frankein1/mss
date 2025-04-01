@@ -7,6 +7,7 @@ export enum EventCategory {
   CreateBeneficiary = 'Créer un bénéficiaire',
   UsersActivity = 'Historique des changements',
   AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
+  ExportBeneficiary = 'Export des bénéficiaires',
   ExportHistory = 'Export des accompagnements',
   OverviewToHistory = 'Accès Tableau de bord > Accompagnements',
   History = 'Historique',
@@ -46,7 +47,8 @@ export enum BeneficiaryHistoryAction {
 
 export enum BeneficiaryAction {
   Print = 'Imprimer',
-  Split = 'Dissocier'
+  Split = 'Dissocier',
+  ExportAll = 'Exporter tous les bénéficiaires'
 }
 
 export enum BeneficiaryHistoryFilterEventAction {

@@ -2,6 +2,7 @@ import { buildKeys } from '../keys/keyBuilder'
 
 export const UNKNOWN_ERROR_MESSAGE = 'Une erreur est survenue.'
 export const FAILED_DOWNLOAD_ERROR_MESSAGE = 'Le téléchargement a échoué.'
+export const INVALID_CODE_ERROR_MESSAGE = 'Le code est erroné ou expiré.'
 export const SENSITIVE_DATA_HINT =
   "Il est fortement recommandé de ne stocker que les informations utiles au suivi du bénéficiaire et d'éviter le recueil d'informations sensibles (données de santé, mots de passe, etc)."
 

@@ -6,7 +6,7 @@ import {
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-import { FollowupService } from '~/server/services'
+import { FollowupService, UserService } from '~/server/services'
 
 const handler = async ({
   input,
@@ -15,6 +15,11 @@ const handler = async ({
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
 }) => {
+  await UserService.verifyAuthorizationCode({
+    ctx,
+    input: { code: input.code }
+  })
+
   const { rows, columns } = await FollowupService.exportFollowups({
     ctx,
     input
