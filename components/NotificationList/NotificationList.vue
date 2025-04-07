@@ -320,7 +320,7 @@
           beneficiariesToArchived.value.length > 1
             ? `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
             : `Le dossier de ${beneficiaryNames[0]} est inactif depuis 2 ans : une action est requise.`,
-        beneficiaryNames: beneficiaryNames,
+        beneficiaryNames: Array.from(new Set(beneficiaryNames)),
         validate: () => {
           navigateTo(firstNotification.actionUrl)
           modal.close()
