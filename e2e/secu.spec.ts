@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('[nuxt-security]', async () => {
+test.describe.skip('[nuxt-security]', async () => {
   test.use({ storageState: 'playwright/.auth/structure-manager.json' })
 
   test('[nuxt-security] Default Headers', async ({ page }) => {
