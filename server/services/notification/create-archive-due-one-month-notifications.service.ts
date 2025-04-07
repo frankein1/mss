@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { NotificationRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { getInactiveBeneficiaries } from './helper'
+import { performance } from 'node:perf_hooks'
 
 /** Notifications for inactive beneficiaries due to be archived in 1 month */
 export const createArchiveDueOneMonthNotifications = async () => {

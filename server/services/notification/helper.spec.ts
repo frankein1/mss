@@ -21,7 +21,7 @@ beforeAll(async () => await test.createBeneficiary())
 afterAll(async () => await test.deleteBeneficiary())
 
 describe('Notification - Beneficiary Archive - List inactive beneficiaries', () => {
-  it('should return all beneficiaries without activity in profile, social supports, budget or documents', async () => {
+  it('should return all beneficiaries without activity in profile or budget (social supports or documents are not included for query performance reasons)', async () => {
     const beneficiaries = await getInactiveBeneficiaries()
 
     const set = new Set(beneficiaries.map(b => b.id))
@@ -29,7 +29,13 @@ describe('Notification - Beneficiary Archive - List inactive beneficiaries', () 
     expect(set.has(test.ID_ERIC_DUVERS)).toBe(true)
     expect(set.has(test.ID_INACTIVE)).toBe(true)
     expect(set.has(test.ID_TESSON)).toBe(true)
-    expect(set.size).toBe(4)
+
+    // Active but on social supports or documents
+    expect(set.has(test.UUID_JANE)).toBe(true)
+    expect(set.has(test.UUID_GRECO)).toBe(true)
+    expect(set.has(test.UUID_DOC)).toBe(true)
+
+    expect(set.size).toBe(7)
   })
 })
 

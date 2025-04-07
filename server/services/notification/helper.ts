@@ -2,6 +2,7 @@ import { NotificationType, Prisma, UserRole, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { BeneficiaryRepo, NotificationRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
+import { performance } from 'node:perf_hooks'
 
 type InactiveBeneficiary = Awaited<ReturnType<typeof inactiveQuery>>[0]
 
@@ -32,10 +33,17 @@ export async function getInactiveBeneficiariesWithOneMonthNotification(
 }
 
 async function inactiveQuery() {
-  return await BeneficiaryRepo.prisma.findMany({
+  const start = performance.now()
+  const res = await BeneficiaryRepo.prisma.findMany({
     where: where(),
     select: select()
   })
+  const end = performance.now()
+  const duration = (end - start) / 1000
+  console.log(
+    `    inactive query [${new Date()}]: time: ${duration}s - nb : ${res.length}`
+  )
+  return res
 }
 
 async function inactiveQueryFromNotification() {
@@ -85,13 +93,13 @@ function where(): Prisma.BeneficiaryWhereInput {
   }
 
   // filter beneficiaries with no social supports OR social supports updated more than 23 months ago
-  const allSocialSupportsUpdatedMoreThan23MonthsAgo: Prisma.BeneficiaryWhereInput =
-    {
-      OR: [
-        { socialSupports: { none: {} } },
-        { socialSupports: { every: { OR: nullOrUpdatedMoreThen23MonthsAgo } } }
-      ]
-    }
+  // const allSocialSupportsUpdatedMoreThan23MonthsAgo: Prisma.BeneficiaryWhereInput =
+  //   {
+  //     OR: [
+  //       { socialSupports: { none: {} } },
+  //       { socialSupports: { every: { OR: nullOrUpdatedMoreThen23MonthsAgo } } }
+  //     ]
+  //   }
 
   const budgetUpdatedMoreThan23MonthsAgo: Prisma.BudgetWhereInput = {
     OR: [
@@ -102,21 +110,21 @@ function where(): Prisma.BeneficiaryWhereInput {
 
   // filter beneficiaries with no incomes OR incomes updated more than 23 months ago
   // custom incomes are updated at the same time as incomes so filtering on them is not necessary
-  const allIncomesUpdatedMoreThan23MonthsAgo: Prisma.BudgetWhereInput = {
-    OR: [
-      { incomes: { none: {} } },
-      {
-        incomes: {
-          every: {
-            OR: [
-              ...nullOrUpdatedMoreThen23MonthsAgo,
-              { updated: budgetMigrationDateRange }
-            ]
-          }
-        }
-      }
-    ]
-  }
+  // const allIncomesUpdatedMoreThan23MonthsAgo: Prisma.BudgetWhereInput = {
+  //   OR: [
+  //     { incomes: { none: {} } },
+  //     {
+  //       incomes: {
+  //         every: {
+  //           OR: [
+  //             ...nullOrUpdatedMoreThen23MonthsAgo,
+  //             { updated: budgetMigrationDateRange }
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   ]
+  // }
 
   // filter beneficiaries with no expenses OR expenses updated more than 23 months ago
   // loans, debts and custom expenses are updated at the same time as expenses so filtering on them is not necessary
@@ -136,33 +144,39 @@ function where(): Prisma.BeneficiaryWhereInput {
 
   // filter beneficiaries with no documents OR documents created more than 23 months ago
   // (there is no updated field on document)
-  const allDocumentsCreatedMoreThan23MonthsAgo: Prisma.BeneficiaryWhereInput = {
-    OR: [
-      { documents: { none: {} } },
-      {
-        documents: {
-          every: {
-            OR: [
-              { created: { lte: twentyThreeMonthsBefore } },
-              { created: null }
-            ]
-          }
-        }
-      }
-    ]
-  }
+  // const allDocumentsCreatedMoreThan23MonthsAgo: Prisma.BeneficiaryWhereInput = {
+  //   OR: [
+  //     { documents: { none: {} } },
+  //     {
+  //       documents: {
+  //         every: {
+  //           OR: [
+  //             { created: { lte: twentyThreeMonthsBefore } },
+  //             { created: null }
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   ]
+  // }
 
+  // The query is simplified because it took too much time
+  // The filter on activity for supports and document is performed during
+  // the filter on archive date in the software and not in the DB anymore
+  // This should soon be migrated to a persisted beneficiary last activity date
+  // because it won't work when there are too many beneficiaries inactive
+  // See https://github.com/prisma/prisma/issues/21648
   const where: Prisma.BeneficiaryWhereInput = {
     AND: [
       { archiveDueDate: null },
       { structure: { disabled: false } },
       beneficiaryCreatedMoreThan23MonthsAgo,
       beneficiaryUpdatedMoreThan23MonthsAgo,
-      allSocialSupportsUpdatedMoreThan23MonthsAgo,
-      allDocumentsCreatedMoreThan23MonthsAgo,
+      // allSocialSupportsUpdatedMoreThan23MonthsAgo,
+      // allDocumentsCreatedMoreThan23MonthsAgo,
       { familyFile: { budget: budgetUpdatedMoreThan23MonthsAgo } },
-      { familyFile: { budget: expensesUpdatedMoreThan23MonthsAgo } },
-      { familyFile: { budget: allIncomesUpdatedMoreThan23MonthsAgo } }
+      { familyFile: { budget: expensesUpdatedMoreThan23MonthsAgo } }
+      // { familyFile: { budget: allIncomesUpdatedMoreThan23MonthsAgo } }
     ]
   }
 
