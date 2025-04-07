@@ -14,7 +14,8 @@
           "
         />
       </div>
-      <div
+      <!-- Disable until we have validation/autocomplete on the School Name-->
+      <!-- <div
         v-show="
           socioProfessionalCategory ===
           BeneficiarySocioProfessionalCategory.Student
@@ -37,7 +38,7 @@
           :label="beneficiaryFieldLabels.isSchoolInQPV"
           name="isSchoolInQPV"
         />
-      </div>
+      </div> -->
       <div class="fr-col-12">
         <VeeInput
           name="occupation"
