@@ -10,6 +10,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FileInstructionService, UserService } from '~/server/services'
+import { UserActivityType } from '@prisma/client'
 
 const handler = async ({
   input,
@@ -44,5 +45,11 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 export const exportFileInstructions = createQuery({
   securityCheck,
   handler,
-  inputValidation: exportFileInstructionsSchema
+  inputValidation: exportFileInstructionsSchema,
+  auditLog: {
+    key: 'fileInstruction.exportall',
+    target: 'FileInstruction',
+    targetId: ({ ctx }) => ctx.structure.id,
+    action: UserActivityType.EXPORT
+  }
 })

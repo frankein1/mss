@@ -7,6 +7,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FollowupService, UserService } from '~/server/services'
+import { UserActivityType } from '@prisma/client'
 
 const handler = async ({
   input,
@@ -39,5 +40,11 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 export const getExport = createQuery({
   inputValidation: exportFollowupsSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'followup.exportall',
+    target: 'Followup',
+    targetId: ({ ctx }) => ctx.structure.id,
+    action: UserActivityType.EXPORT
+  }
 })
