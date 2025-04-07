@@ -25,7 +25,7 @@ export async function sendAuthorizationCode(ctx: ProtectedAppContext) {
     subject: 'Mon Suivi Social : code de validation pour votre export',
     text: `Bonjour,
 
-Vous avez effectué un export de données depuis Mon Suivi Social. Afin de confirmer cet export, vous devez renseigner ce code : ${created.authorizationCode}. <b>Il est valable 10 minutes.</b>
+Vous avez effectué un export de données depuis Mon Suivi Social. Afin de confirmer cet export, vous devez renseigner ce code : ${created.authorizationCode}. <strong>Il est valable 10 minutes.</strong>
 
 Pour rappel, nous attirons votre attention sur l'export de données personnelles en dehors de la plateforme de Mon Suivi Social :
 

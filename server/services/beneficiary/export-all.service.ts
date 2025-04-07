@@ -107,7 +107,6 @@ export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryField
     'familySituation',
     'minorChildren',
     'majorChildren',
-    'entourages',
     'subjects'
   ]
 
@@ -176,8 +175,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
     minorChildren: taxHouseholds?.minorChildren?.toString() || '',
-    majorChildren: taxHouseholds?.majorChildren?.toString() || '',
-    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || ''
+    majorChildren: taxHouseholds?.majorChildren?.toString() || ''
   }
 
   if (userRole !== UserRole.StructureManager) {
@@ -241,6 +239,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     cafNumber: occupationIncome?.cafNumber || '',
     additionalInformation: general.additionalInformation || '',
     numeroPegase: general.numeroPegase || '',
+    entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',

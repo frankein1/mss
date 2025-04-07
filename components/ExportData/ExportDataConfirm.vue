@@ -2,6 +2,8 @@
   <div v-if="isSubmitting">Loading...</div>
   <div v-else-if="error">{{ error.message }}</div>
   <div v-else>
+    <p>Ne fermez pas cette fenêtre.</p>
+
     <p>
       Vous êtes sur le point d'exporter des données personnelles des
       bénéficiaires.
@@ -60,7 +62,14 @@
 
   const { handleSubmit } = useForm<{ code: string }>({
     validationSchema: toTypedSchema(
-      z.object({ code: z.string().length(VALIDATION_CODE_LENGTH) })
+      z.object({
+        code: z
+          .string()
+          .length(
+            VALIDATION_CODE_LENGTH,
+            'Le champ doit contenir 8 caractères.'
+          )
+      })
     )
   })
 
