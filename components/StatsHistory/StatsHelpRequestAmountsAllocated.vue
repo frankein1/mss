@@ -21,10 +21,11 @@
 
     <StatsList
       :stats
+      :to-fixed="2"
       with-sub-count
       stats-bar
       :stats-percentage="false"
-      sub-count-label="Montant Demandé"
+      :sub-count-label="helpRequestFieldLabels.askedAmount"
       unit="€"
       :display-total="false"
     />
@@ -39,6 +40,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
 

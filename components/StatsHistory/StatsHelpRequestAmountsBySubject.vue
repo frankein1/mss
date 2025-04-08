@@ -11,7 +11,9 @@
   <template v-else-if="stats && stats.length">
     <StatsList
       :stats
+      :to-fixed="2"
       :stats-percentage="false"
+      :sub-count-label="helpRequestFieldLabels.askedAmount"
       unit="€"
     />
   </template>
@@ -25,6 +27,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
 

@@ -14,10 +14,11 @@
     </p>
     <StatsList
       :stats
+      :to-fixed="2"
       with-sub-count
       stats-bar
       :stats-percentage="false"
-      sub-count-label="Montant Demandé"
+      :sub-count-label="helpRequestFieldLabels.askedAmount"
       unit="€"
       :not-filled-route
     />
@@ -35,6 +36,7 @@
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
 
