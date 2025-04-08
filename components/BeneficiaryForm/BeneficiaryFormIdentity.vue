@@ -48,16 +48,6 @@
       :initial-beneficiary="initialBeneficiary"
       @update:similar-beneficiary="updateSimilarBeneficiary"
     />
-    <div
-      v-if="isDeceased"
-      class="fr-col-12"
-    >
-      <VeeInput
-        name="deathDate"
-        :label="beneficiaryFieldLabels.deathDate"
-        type="date"
-      />
-    </div>
     <div class="fr-col-12">
       <VeeSelect
         name="gender"
@@ -86,7 +76,6 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     beneficiaryGenderKeys,
@@ -105,13 +94,10 @@
     update: [similarBeneficiary: SimilarBeneficiary]
   }>()
 
-  const { value: status } = useField<BeneficiaryStatus>('status')
   const { value: usualName } = useField<string | null | undefined>('usualName')
   const { value: birthName } = useField<string | null | undefined>('birthName')
   const { value: firstName } = useField<string | null | undefined>('firstName')
   const { value: birthDate } = useField<Date | null | undefined>('birthDate')
-
-  const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
 
   const updateSimilarBeneficiary = () => {
     emit('update', similarBeneficiary.value)

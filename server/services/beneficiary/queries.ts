@@ -232,6 +232,7 @@ function getGeneral(
     phone2: beneficiary.phone2,
     email: beneficiary.email,
     mobility: beneficiary.mobility,
+    status: beneficiary.status,
     additionalInformation: beneficiary.additionalInformation
   }
 

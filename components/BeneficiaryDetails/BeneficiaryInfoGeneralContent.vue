@@ -13,6 +13,12 @@
         <div class="field-value">
           {{ formatBeneficiaryBirthInfo(general) }}
         </div>
+        <div
+          v-if="isDeceased && !!general.deathDate"
+          class="field-value"
+        >
+          Décédé(e) le {{ formatDate(general.deathDate) }}
+        </div>
       </div>
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.gender"
@@ -139,8 +145,13 @@
     hasIdentityInformations
   } from '~/utils/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { BeneficiaryStatus } from '@prisma/client'
 
-  defineProps<{
+  const props = defineProps<{
     general: GetBeneficiaryGeneral
   }>()
+
+  const isDeceased = computed(
+    () => props.general.status === BeneficiaryStatus.Deceased
+  )
 </script>

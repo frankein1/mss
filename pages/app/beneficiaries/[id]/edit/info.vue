@@ -91,7 +91,6 @@
       referents,
       aidantConnectAuthorized,
       vulnerablePerson,
-      status,
       general
     } = beneficiary.value
 
@@ -101,7 +100,6 @@
       referents: referents.map(referent => referent.id),
       aidantConnectAuthorized,
       vulnerablePerson,
-      status,
       ...general,
       qpv: general.qpv ? true : false,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,

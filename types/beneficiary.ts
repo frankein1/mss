@@ -45,6 +45,7 @@ export type GetBeneficiaryGeneral = Pick<
   | 'birthPlace'
   | 'deathDate'
   | 'gender'
+  | 'status'
   | 'nationality'
   | 'numeroPegase'
   | 'accommodationMode'

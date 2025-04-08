@@ -1,5 +1,8 @@
 <template>
-  <BeneficiaryFormSection section-title="Coordonnées">
+  <BeneficiaryFormSection
+    class="fr-grid-row--bottom"
+    section-title="Coordonnées"
+  >
     <div
       v-if="!noPhone"
       class="fr-col-12 fr-col-lg-6"

@@ -8,6 +8,13 @@
         :disabled-options="[BeneficiaryStatus.Archived]"
         required
       />
+      <div v-if="isDeceased">
+        <VeeInput
+          name="deathDate"
+          :label="beneficiaryFieldLabels.deathDate"
+          type="date"
+        />
+      </div>
     </div>
     <div class="fr-col-12 fr-col-lg-6">
       <MultiSelect
@@ -63,7 +70,9 @@
   )
 
   const { application } = usePermissions()
+  const { value: status } = useField<BeneficiaryStatus>('status')
 
+  const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
   const disabledReferentOptions = computed(() =>
