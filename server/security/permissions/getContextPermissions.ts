@@ -98,7 +98,7 @@ function getUserContextPermissions(
     module: {
       users: manager,
       stats: manager || socialWorker || instructor || referent,
-      statsByReferent: manager,
+      statsByReferent: socialWorker || manager,
       health: true,
       ministere: ministryAgent,
       helpRequest: manager || socialWorker || instructor || referent,
