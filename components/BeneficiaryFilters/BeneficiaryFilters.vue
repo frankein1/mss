@@ -25,7 +25,9 @@
     beneficiaryStatusKeys,
     beneficiaryNotFilledKeys,
     ageGroupKeys,
-    yesNoOptions
+    yesNoOptions,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import type { BeneficiaryFilterInput } from '~/server/schema'
@@ -177,6 +179,28 @@
       matomoEventCategory: EventCategory.BeneficiaryFilter,
       matomoEventAction: BeneficiaryFilterEventAction.NotFilled
     })
+
+    if (application.value.module.ministere) {
+      filters.push({
+        name: 'ministereDepartementServiceAc',
+        label: beneficiaryFieldLabels.ministereDepartementServiceAc,
+        options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction:
+          BeneficiaryFilterEventAction.MinistereDepartementServiceAc
+      })
+      filters.push({
+        name: 'ministereStructure',
+        label: beneficiaryFieldLabels.ministereStructure,
+        options: withEmptyValue(ministereStructureKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.MinistereStructure
+      })
+    }
 
     return filters
   })

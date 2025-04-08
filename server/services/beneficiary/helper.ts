@@ -73,6 +73,15 @@ export function prepareBeneficiaryFilters(
     }
   }
 
+  if (filters.ministereDepartementServiceAc) {
+    formattedFilters.ministereDepartementServiceAc =
+      filters.ministereDepartementServiceAc
+  }
+
+  if (filters.ministereStructure) {
+    formattedFilters.ministereStructure = filters.ministereStructure
+  }
+
   if (filters.notFilled) {
     formattedFilters[filters.notFilled] = null
   }

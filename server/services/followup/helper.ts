@@ -27,6 +27,8 @@ export function prepareFilters(filters: FollowupFilterInput) {
     period,
     fromDate,
     toDate,
+    ministereDepartementServiceAc,
+    ministereStructure,
     notFilled
   } = filters
 
@@ -41,6 +43,8 @@ export function prepareFilters(filters: FollowupFilterInput) {
     socialSupportSubjects?.length ||
     createdById ||
     ministre ||
+    ministereDepartementServiceAc ||
+    ministereStructure ||
     period
   ) {
     formattedFilters.socialSupport = {}
@@ -61,6 +65,28 @@ export function prepareFilters(filters: FollowupFilterInput) {
 
     if (ministre) {
       formattedFilters.socialSupport.ministre = { in: ministre }
+    }
+
+    if (ministereStructure) {
+      if (formattedFilters.socialSupport.beneficiary) {
+        formattedFilters.socialSupport.beneficiary.ministereStructure =
+          ministereStructure
+      } else {
+        formattedFilters.socialSupport.beneficiary = {
+          ministereStructure: filters.ministereStructure
+        }
+      }
+    }
+
+    if (ministereDepartementServiceAc) {
+      if (formattedFilters.socialSupport.beneficiary) {
+        formattedFilters.socialSupport.beneficiary.ministereDepartementServiceAc =
+          ministereDepartementServiceAc
+      } else {
+        formattedFilters.socialSupport.beneficiary = {
+          ministereDepartementServiceAc: filters.ministereDepartementServiceAc
+        }
+      }
     }
 
     if (

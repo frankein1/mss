@@ -31,7 +31,9 @@ export enum BeneficiaryFilterEventAction {
   AgeGroup = "Tranche d'âge",
   VulnerablePerson = 'Registre des personnes vulnérables',
   NotFilled = 'Champ non renseigné',
-  QPV = 'Quartier prioritaire de la politique de la ville'
+  QPV = 'Quartier prioritaire de la politique de la ville',
+  MinistereDepartementServiceAc = "Département ou service de l'Administration Centrale",
+  MinistereStructure = 'Structure de rattachement'
 }
 
 export enum BeneficiaryHistoryAction {
@@ -73,7 +75,9 @@ export enum FollowupFilterEventAction {
   Agent = 'Agent',
   Period = 'Période',
   Ministre = 'Ministre',
-  NotFilled = 'Champ non renseigné'
+  NotFilled = 'Champ non renseigné',
+  MinistereDepartementServiceAc = "Département ou service de l'Administration Centrale",
+  MinistereStructure = 'Structure de rattachement'
 }
 
 export enum HelpRequestFilterEventAction {
@@ -86,7 +90,9 @@ export enum HelpRequestFilterEventAction {
   RoomCount = 'Nombre de pièces',
   LowIncomeHousingType = 'Logement à loyer modéré',
   NotFilled = 'Champ non renseigné',
-  Period = 'Période'
+  Period = 'Période',
+  MinistereDepartementServiceAc = "Département ou service de l'Administration Centrale",
+  MinistereStructure = 'Structure de rattachement'
 }
 
 export enum DocumentEventAction {

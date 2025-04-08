@@ -51,6 +51,26 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.ministre = { in: filters.ministre }
   }
 
+  if (filters.ministereStructure) {
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.ministereStructure = filters.ministereStructure
+    } else {
+      socialSupport.beneficiary = {
+        ministereStructure: filters.ministereStructure
+      }
+    }
+  }
+  if (filters.ministereDepartementServiceAc) {
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.ministereDepartementServiceAc =
+        filters.ministereDepartementServiceAc
+    } else {
+      socialSupport.beneficiary = {
+        ministereDepartementServiceAc: filters.ministereDepartementServiceAc
+      }
+    }
+  }
+
   if (filters.createdById) {
     socialSupport.createdById = { in: filters.createdById }
   }
@@ -206,6 +226,15 @@ export function prepareBeneficiaryStatFilters(
       gte: dateRange.lower?.toDate(),
       lte: dateRange.upper?.toDate()
     }
+  }
+
+  if (filters.ministereStructure) {
+    formattedFilters.ministereStructure = filters.ministereStructure
+  }
+
+  if (filters.ministereDepartementServiceAc) {
+    formattedFilters.ministereDepartementServiceAc =
+      filters.ministereDepartementServiceAc
   }
 
   return formattedFilters

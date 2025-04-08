@@ -23,6 +23,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     toDate,
     roomCount,
     lowIncomeHousingType,
+    ministereDepartementServiceAc,
+    ministereStructure,
     notFilled
   } = filters
 
@@ -35,11 +37,12 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   }
 
   if (
-    status ||
-    socialSupportSubjects?.length ||
-    createdById ||
-    ministre?.length ||
-    period
+    (status ||
+      socialSupportSubjects?.length ||
+      createdById ||
+      ministre?.length ||
+      period,
+    ministereDepartementServiceAc || ministereStructure)
   ) {
     formattedFilters.socialSupport = {}
 
@@ -66,6 +69,27 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
       (period === FileInstructionPeriodFilter.Custom && (fromDate || toDate))
     ) {
       formattedFilters.socialSupport.date = prepareDateFilters(filters)
+    }
+
+    if (ministereStructure) {
+      if (formattedFilters.socialSupport.beneficiary) {
+        formattedFilters.socialSupport.beneficiary.ministereStructure =
+          ministereStructure
+      } else {
+        formattedFilters.socialSupport.beneficiary = {
+          ministereStructure: filters.ministereStructure
+        }
+      }
+    }
+    if (ministereDepartementServiceAc) {
+      if (formattedFilters.socialSupport.beneficiary) {
+        formattedFilters.socialSupport.beneficiary.ministereDepartementServiceAc =
+          ministereDepartementServiceAc
+      } else {
+        formattedFilters.socialSupport.beneficiary = {
+          ministereDepartementServiceAc: filters.ministereDepartementServiceAc
+        }
+      }
     }
   }
 

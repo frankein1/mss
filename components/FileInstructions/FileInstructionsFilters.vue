@@ -28,7 +28,8 @@
   import type { FilterProp } from '~/types/filter'
   import {
     helpRequestFieldLabels,
-    housingHelpRequestFieldLabels
+    housingHelpRequestFieldLabels,
+    beneficiaryFieldLabels
   } from '~/client/labels'
   import {
     ministerKeys,
@@ -37,7 +38,9 @@
     lowIncomeHousingKeys,
     fileInstructionTypePictos,
     fileInstructionNotFilledKeys,
-    periodKeys
+    periodKeys,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
   import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
@@ -236,6 +239,25 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Ministre
+      })
+      fileInstructionsFilters.push({
+        name: 'ministereDepartementServiceAc',
+        label: beneficiaryFieldLabels.ministereDepartementServiceAc,
+        options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: false,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction:
+          HelpRequestFilterEventAction.MinistereDepartementServiceAc
+      })
+      fileInstructionsFilters.push({
+        name: 'ministereStructure',
+        label: beneficiaryFieldLabels.ministereStructure,
+        options: withEmptyValue(ministereStructureKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: false,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.MinistereStructure
       })
     }
 

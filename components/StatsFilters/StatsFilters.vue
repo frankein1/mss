@@ -21,14 +21,19 @@
     beneficiaryStatusKeys,
     periodKeys,
     ministerKeys,
-    ageGroupKeys
+    ageGroupKeys,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { StatPeriodFilter } from '~/types/stat'
-  import { helpRequestFieldLabels } from '~/client/labels'
+  import {
+    beneficiaryFieldLabels,
+    helpRequestFieldLabels
+  } from '~/client/labels'
 
   const { application } = usePermissions()
 
@@ -152,6 +157,20 @@
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+      statsFilters.push({
+        name: 'ministereDepartementServiceAc',
+        label: beneficiaryFieldLabels.ministereDepartementServiceAc,
+        options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+      statsFilters.push({
+        name: 'ministereStructure',
+        label: beneficiaryFieldLabels.ministereStructure,
+        options: withEmptyValue(ministereStructureKeys.options),
+        type: FilterType.SelectOne,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }

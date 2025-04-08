@@ -9,7 +9,9 @@ import {
   DocumentType,
   EmailStatus,
   FileInstructionType,
-  JobStatus
+  JobStatus,
+  BeneficiaryMinistereDepartementServiceAc,
+  BeneficiaryMinistereStructure
 } from '@prisma/client'
 import {
   kindOfBooleanSchema,
@@ -44,6 +46,10 @@ const statFilterSchema = z.object({
     .nullish(),
   referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministereDepartementServiceAc: z
+    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .nullish(),
+  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
   beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
   ageGroup: z.nativeEnum(AgeGroup).nullish()
@@ -64,6 +70,10 @@ const beneficiaryFilterSchema = z.object({
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
   ageGroup: z.nativeEnum(AgeGroup).nullish(),
+  ministereDepartementServiceAc: z
+    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .nullish(),
+  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
   vulnerablePerson: z
     .string()
     .nullish()
@@ -105,6 +115,10 @@ const followupFilterSchema = z.object({
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministereDepartementServiceAc: z
+    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .nullish(),
+  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
   notFilled: z.nativeEnum(FilterFollowupNotFilled).nullish()
 })
 

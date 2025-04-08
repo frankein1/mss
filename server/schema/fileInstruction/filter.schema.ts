@@ -4,7 +4,9 @@ import {
   SocialSupportStatus,
   FileInstructionType,
   HousingRoomCount,
-  LowIncomeHousingType
+  LowIncomeHousingType,
+  BeneficiaryMinistereDepartementServiceAc,
+  BeneficiaryMinistereStructure
 } from '@prisma/client'
 import dayjs from 'dayjs'
 import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
@@ -18,6 +20,10 @@ export const fileInstructionFilterSchema = z.object({
   createdById: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministereDepartementServiceAc: z
+    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .nullish(),
+  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
   roomCount: z.nativeEnum(HousingRoomCount).nullish(),
   lowIncomeHousingType: z.nativeEnum(LowIncomeHousingType).nullish(),
   notFilled: z.nativeEnum(FilterFileInstructionNotFilled).nullish(),

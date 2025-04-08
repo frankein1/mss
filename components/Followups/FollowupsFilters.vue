@@ -25,14 +25,16 @@
     followupMediumKeys,
     ministerKeys,
     periodKeys,
-    followupNotFilledKeys
+    followupNotFilledKeys,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
   import type { FollowupFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { followupFieldLabels } from '~/client/labels'
+  import { followupFieldLabels, beneficiaryFieldLabels } from '~/client/labels'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
   import { FollowupPeriodFilter } from '~/types/followup'
 
@@ -158,6 +160,25 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Ministre
+      })
+      filters.push({
+        name: 'ministereDepartementServiceAc',
+        label: beneficiaryFieldLabels.ministereDepartementServiceAc,
+        options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: false,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction:
+          FollowupFilterEventAction.MinistereDepartementServiceAc
+      })
+      filters.push({
+        name: 'ministereStructure',
+        label: beneficiaryFieldLabels.ministereStructure,
+        options: withEmptyValue(ministereStructureKeys.options),
+        type: FilterType.SelectOne,
+        alwaysExpanded: false,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.MinistereStructure
       })
     }
 
