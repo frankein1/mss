@@ -1,13 +1,5 @@
 <template>
   <div class="topbar__container">
-    <NuxtLink
-      class="fr-link topbar__help"
-      to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
-      target="_blank"
-      rel="noopener external"
-      titre="Aide - nouvelle fenêtre"
-      >Aide</NuxtLink
-    >
     <AtomDropdown
       :label="getUserName()"
       :menus="menus"
@@ -62,10 +54,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-  }
-
-  .topbar__help {
-    margin-right: 2em;
   }
 
   .topbar__menu {

@@ -69,6 +69,16 @@
               Créer un dossier
             </NuxtLink>
           </li>
+          <li class="fr-mt-3w fr-mr-1w">
+            <NuxtLink
+              class="fr-link fr-sidemenu__link fr-sidemenu__help"
+              to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
+              target="_blank"
+              rel="noopener external"
+              titre="Aide - nouvelle fenêtre"
+              >Aide</NuxtLink
+            >
+          </li>
         </ul>
         <ul class="fr-footer__bottom-list">
           <li class="fr-footer__bottom-item">
@@ -203,6 +213,10 @@
 
   .fr-sidemenu__list {
     margin-left: 0.5rem;
+  }
+
+  .fr-sidemenu__help {
+    justify-content: center;
   }
 
   .fr-sidemenu__link {
