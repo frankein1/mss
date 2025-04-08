@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.41.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.1...v1.41.0) (2025-04-08)
+
+
+### Features
+
+* **archive:** envoi des notifications de rappel J-7 et J-0 des bénéficiaires à archiver ([201c7a2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/201c7a2e25c74b65c41b989f733b80dd0ca9cb8c)), closes [#755](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/755) [#741](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/741)
+* **beneficiaire:** ajout des champs dans l'archivage, l'export, la supression ([2cd82bd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2cd82bd1ae7379d4925be6fdeace2d1009e07613)), closes [#750](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/750)
+* **beneficiaire:** ajout des champs schoolName & isSchoolInQPV ([b2c3207](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b2c32072c7aa2ebb23794a929db1ccf6019fce7d)), closes [#750](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/750)
+* **export:** ajout code vérification à l'export des bénéficiaires ([b8f557c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b8f557c6517064feb6af205d252d74c846f96119)), closes [#559](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/559)
+* **export:** export des bénéficiaires pour tous les rôles ([3af6208](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3af62082c2e63f6c9b6d8469c636719d249f7722)), closes [#559](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/559)
+* **familyFile:** lier un bénéficiaire existant ([e6435a4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e6435a4f4b8952bd4a2c360f6e1dff139a38c540)), closes [#720](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/720)
+
+
+### Bug Fixes
+
+* **admin:** empêche de créer un administrateur à partir de l'espace admin ([02dffe8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/02dffe8fe1b3172954155c99af09998642dda6a7))
+* **archivage:** ajout d'évènement matomo ([fd2e5cd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fd2e5cdbc4101958452066fd5ec7b1bc023c324a)), closes [#752](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/752)
+* **archivage:** mise à jour du tableau des rôles et habilitations ([2e8ba99](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2e8ba99bfd9344f281d3d5d63e51a5726070d83e)), closes [#746](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/746)
+* **archive:** archivage possible après 1 an 11 mois d'inactivité ([a7b50a7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a7b50a7199daa3d8e1279db694bf907939bf9f20)), closes [#741](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/741)
+* **archive:** envoi rappels uniquement pour archives à venir et modifie labels... ([6e1fd83](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6e1fd83c59c7768e1c01548487b186bc13cb18e2)), closes [#741](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/741)
+* **archive:** simplification de la requete des bénéficiaires inactifs ([ddf6a0e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ddf6a0e246786b9b23ea3e0b81510f4086ac9a5c)), closes [#771](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/771)
+* **archive:** suppression doublons dans la modale des bénéficiaires à archiver ([8583109](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8583109992de7900df9a8dfd42320bd8fd4e0b15)), closes [#771](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/771)
+* change student label ([fa07b5c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fa07b5c9108b2c4e6fbbaaa10ce536cd80162cea))
+* changement de wording sur l'ajout de bénéficiaire ([98c6d0a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/98c6d0a0e6ac43a80a30355320917822d8496467))
+* corrections UI mineures sur l'ajout/lien de bénéficiaire ([e530227](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e5302279063bfa22e4095e430feb8426b9a35fab)), closes [#720](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/720)
+* **export:** 8 caractères dans le formulaire du code de validation ([959e1e0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/959e1e0fb5cab86a214ae4d902b07b3ce5c6de0c))
+* **export:** ajout log d'activité pour les exports d'accompagnement ([63057d7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/63057d77f8be9aa1a844a2dcaa7e865294e130a7)), closes [#559](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/559)
+* **export:** suppression colonne entourage et améliorations UI ([7733787](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7733787fd3da1529519be0957f16a15b3bdd5730)), closes [#559](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/559)
+* **notifications:** message d'info pour les agents dans onglet archivage ([850d863](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/850d86304586b0df2368b66dde25d4d5c60667ca)), closes [#719](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/719)
+* **rdvsp:** change le formattage des dates en backend ([62e2f2b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/62e2f2b67c28906809736ff6071379a513f9f14d)), closes [#741](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/741)
+* **rdvsp:** suppression de la conversion de fuseau horaire de l'heure du rendez-vous dans la BDD ([91a5896](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/91a589600277a55e7882f530d669f78e3e8647e0)), closes [#764](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/764)
+* **rdvsp:** suppression des statuts des rdv dans le filtre de l'historique ([a66a69c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a66a69c5ccd1ac4f1040477df60181ca9e5ef08f)), closes [#764](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/764)
+
 ## [1.40.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.40.0...v1.40.1) (2025-03-07)
 
 
