@@ -85,7 +85,8 @@ export enum HelpRequestFilterEventAction {
   Ministre = 'Ministre',
   RoomCount = 'Nombre de pièces',
   LowIncomeHousingType = 'Logement à loyer modéré',
-  NotFilled = 'Champ non renseigné'
+  NotFilled = 'Champ non renseigné',
+  Period = 'Période'
 }
 
 export enum DocumentEventAction {

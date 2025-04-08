@@ -1,8 +1,10 @@
 import { Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
 import {
   FileInstructionFilterInput,
   ExportFileInstructionsInput
 } from '~/server/schema'
+import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
 import { SortOrder } from '~/types/table'
 import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 
@@ -16,6 +18,9 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     examinationDate,
     createdById,
     ministre,
+    period,
+    fromDate,
+    toDate,
     roomCount,
     lowIncomeHousingType,
     notFilled
@@ -33,7 +38,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     status ||
     socialSupportSubjects?.length ||
     createdById ||
-    ministre?.length
+    ministre?.length ||
+    period
   ) {
     formattedFilters.socialSupport = {}
 
@@ -53,6 +59,13 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
 
     if (ministre?.length) {
       formattedFilters.socialSupport.ministre = { in: ministre }
+    }
+
+    if (
+      (period && period !== FileInstructionPeriodFilter.Custom) ||
+      (period === FileInstructionPeriodFilter.Custom && (fromDate || toDate))
+    ) {
+      formattedFilters.socialSupport.date = prepareDateFilters(filters)
     }
   }
 
@@ -112,4 +125,36 @@ export function prepareSort(sort: ExportFileInstructionsInput['orderBy']) {
   }
 
   return orderBy
+}
+
+function prepareDateFilters(filters: FileInstructionFilterInput) {
+  switch (filters.period) {
+    case FileInstructionPeriodFilter.ThisYear:
+      return {
+        gte: dayjs().startOf('year').toDate(),
+        lte: dayjs().endOf('year').toDate()
+      }
+    case FileInstructionPeriodFilter.LastYear:
+      return {
+        gte: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        lte: dayjs().subtract(1, 'year').endOf('year').toDate()
+      }
+    case FileInstructionPeriodFilter.ThisMonth:
+      return {
+        gte: dayjs().startOf('month').toDate(),
+        lte: dayjs().endOf('month').toDate()
+      }
+    case FileInstructionPeriodFilter.LastMonth:
+      return {
+        gte: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        lte: dayjs().subtract(1, 'month').endOf('month').toDate()
+      }
+    case FileInstructionPeriodFilter.Custom:
+      return {
+        ...(filters.fromDate && { gte: filters.fromDate }),
+        ...(filters.toDate && { lte: filters.toDate })
+      }
+    default:
+      return undefined
+  }
 }

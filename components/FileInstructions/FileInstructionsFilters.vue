@@ -36,9 +36,11 @@
     roomCountKeys,
     lowIncomeHousingKeys,
     fileInstructionTypePictos,
-    fileInstructionNotFilledKeys
+    fileInstructionNotFilledKeys,
+    periodKeys
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
+  import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
 
   const props = defineProps<{
     filters: FileInstructionFilterInput
@@ -124,8 +126,31 @@
         matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
         alwaysExpanded: true,
         pictos: fileInstructionTypePictos
+      },
+      {
+        name: 'period',
+        label: 'Période',
+        type: FilterType.SelectOne,
+        options: withEmptyValue(periodKeys.options, ''),
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Period
       }
     ]
+
+    if (props.filters.period === FileInstructionPeriodFilter.Custom) {
+      fileInstructionsFilters.push(
+        {
+          name: 'fromDate',
+          label: 'Du',
+          type: FilterType.Date
+        },
+        {
+          name: 'toDate',
+          label: 'Au',
+          type: FilterType.Date
+        }
+      )
+    }
 
     if (props.filters.fileInstructionType !== 'Housing') {
       fileInstructionsFilters.push({

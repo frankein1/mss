@@ -12,5 +12,5 @@ export const periodKeys = buildKeys({
   [StatPeriodFilter.LastYear]: "L'année dernière",
   [StatPeriodFilter.ThisMonth]: 'Ce mois-ci',
   [StatPeriodFilter.LastMonth]: 'Le mois dernier',
-  [StatPeriodFilter.Custom]: 'Personnaliser'
+  [StatPeriodFilter.Custom]: 'Personnalisée'
 })
