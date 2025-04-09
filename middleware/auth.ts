@@ -7,9 +7,7 @@ export default defineNuxtRouteMiddleware(to => {
 
   if (!authState.isAuthenticated()) {
     return navigateTo({
-      path: isAdminRoute
-        ? routes.auth.AuthAdmin.path()
-        : routes.auth.AuthLogin.path(),
+      path: routes.auth.AuthLogin.path(),
       query: { redirectUrl: to.fullPath }
     })
   }

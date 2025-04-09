@@ -22,6 +22,14 @@
           Page d'accueil
         </NuxtLink>
       </li>
+      <li v-if="hasSignoutLink">
+        <NuxtLink
+          class="fr-btn"
+          :to="apiRoutes.proConnect.ApiLogoutProconnectOnly.path()"
+          external
+          >Réessayer une connexion</NuxtLink
+        >
+      </li>
       <li>
         <NuxtLink
           class="fr-btn fr-btn--secondary"
@@ -35,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+  import { apiRoutes } from '~/utils/routes'
+
   const {
     public: {
       email: { from: supportEmail }
@@ -58,6 +68,9 @@
         return 'Page non trouvée'
       case 503:
         return 'Service indisponible'
+      case 401:
+      case 403:
+        return 'Accès interdit'
       default:
         return 'Erreur inattendue'
     }
@@ -71,6 +84,12 @@
     switch (props.error.statusCode) {
       case 404:
         return 'La page que vous cherchez est introuvable. Excusez-nous pour la gène occasionnée.'
+      case 401:
+        return "Les informations d'authentification sont incorrectes. Merci de réessayer."
+      case 403:
+        return props.error.message.match(/mfa necessary/i)
+          ? "L'authentification double facteur est nécessaire pour accéder à l'application."
+          : "Vous n'avez pas les droits suffisants pour accéder à cette page."
       default:
         return 'Désolé, le service rencontre un problème, nous travaillons pour le résoudre le plus rapidement possible.'
     }
@@ -88,6 +107,12 @@
         return [
           "Merci de réessayer plus tard, vous serez en mesure de réutiliser le service très rapidement. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
         ]
+      case 401:
+      case 403:
+        return [
+          'Vérifiez que vous avez bien le rôle nécessaire pour accéder à la page souhaitée et que votre compte Proconnect est bien configuré.',
+          "Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
+        ]
       default:
         return [
           "Essayez de rafraichir la page, sinon merci de réessayer plus tard. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
@@ -96,4 +121,7 @@
   })
 
   const hasHomeLink = computed(() => props.error.statusCode === 404)
+  const hasSignoutLink = computed(
+    () => props.error.statusCode === 403 || props.error.statusCode === 401
+  )
 </script>

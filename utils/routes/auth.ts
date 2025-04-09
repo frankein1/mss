@@ -4,11 +4,6 @@ export const routes = {
     title: 'Se connecter à ma structure',
     path: () => '/auth/login'
   },
-  AuthAdmin: {
-    name: 'AuthAdmin',
-    title: "Se connecter à l'espace d'administration",
-    path: () => '/auth/admin'
-  },
   AuthValidateToken: {
     name: 'AuthValidateToken',
     title: 'Jeton en cours de vérification',
@@ -30,6 +25,9 @@ export const apiProConnectRoutes = {
   },
   ApiSsoCallback: {
     path: () => '/api/proconnect/login-callback'
+  },
+  ApiLogoutProconnectOnly: {
+    path: () => '/api/proconnect/proconnect-logout'
   }
 } as const
 

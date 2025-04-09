@@ -16,6 +16,9 @@
 
   definePageMeta({
     layout: 'landing',
+    // This middleware is added to admin and user dashboards.
+    // TODO If it is not acceptable for the admin panel, a separate
+    // login page will be created for the admin panel.
     middleware: 'skip-auth'
   })
 </script>

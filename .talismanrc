@@ -10,5 +10,7 @@ fileignoreconfig:
     checksum: 704109120468aacbd1b28e918ed7d4f31d46891e6fabaedad33827e84b99327e
   - filename: server/services/budget/exportBudgetSpreadsheet.ts
     checksum: b08a1d41a7cdb910caef92137160081588189b02fc3688fb02bfd1bfdbe2b0ae
+  - filename: components/Auth/SsoButton.vue
+    checksum: 9142fbefbd6c201d71d74683b6cf385203ddbbed3ebfcfcd67dd8403cc136e02
 
 version: ''

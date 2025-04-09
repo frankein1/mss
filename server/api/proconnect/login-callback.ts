@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import { User, UserRole } from '@prisma/client'
+import { User } from '@prisma/client'
 import { decode } from 'jsonwebtoken'
 import {
   getProConnectClient,
@@ -12,27 +12,25 @@ import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
 import { AuthSession } from '~/server/types/session'
-import { forbidden } from '~/utils/api/errors'
+import { forbidden, unauthorized } from '~/utils/api/errors'
 
 const config = useRuntimeConfig()
 const { auth } = config
 
 const { proconnectProvider, proconnectLabel } = auth
 
+// TODO: throw all errors at the same time
+// add server messages & client messages
+// always clear session
+
 export default defineEventHandler(async event => {
   const { code, state } = getQuery(event)
 
   if (!code) {
-    throw createError({
-      statusCode: 400,
-      message: '[ProConnect] no code returned from ProConnect'
-    })
+    throw unauthorized('[ProConnect] no code returned from ProConnect')
   }
   if (!state) {
-    throw createError({
-      statusCode: 400,
-      message: '[ProConnect] no state returned from ProConnect'
-    })
+    throw unauthorized('[ProConnect] no state returned from ProConnect')
   }
 
   const {
@@ -46,17 +44,11 @@ export default defineEventHandler(async event => {
   const { nonce: sessionNonce, state: sessionState, redirectUrl } = session.data
 
   if (!sessionNonce || !sessionState) {
-    throw createError({
-      statusCode: 400,
-      message: '[ProConnect] state or nonce are not in session'
-    })
+    throw unauthorized('[ProConnect] state or nonce are not in session')
   }
 
   if (sessionState !== state) {
-    throw createError({
-      statusCode: 400,
-      message: '[ProConnect] `states` must be equal'
-    })
+    throw unauthorized('[ProConnect] `states` must be equal')
   }
 
   const client = getProConnectClient()
@@ -73,13 +65,10 @@ export default defineEventHandler(async event => {
   const nonce = payload?.nonce
 
   if (sessionNonce !== nonce) {
-    throw createError({
-      statusCode: 400,
-      message: '[ProConnect] `nonces` must be equal'
-    })
+    throw unauthorized('[ProConnect] `nonces` must be equal')
   }
 
-  const { email, sub } = await fetchUserInfo(client, accessToken)
+  const { email, sub, custom } = await fetchUserInfo(client, accessToken)
 
   const account = await getAccount({ sub })
 
@@ -90,15 +79,40 @@ export default defineEventHandler(async event => {
     user = await getUser(email)
   }
 
-  const { appUrl } = config.public
+  const { appUrl, mssEnvironment } = config.public
 
+  // If user has not been previously created through admin panel
+  // forbid access and provide a logout link to retry in the error page
   if (!user) {
-    const unknownUserUrl = `${appUrl}${routes.error.ErrorUnknownUser.path()}`
-    return sendRedirect(event, unknownUserUrl)
+    const logoutUrl = client.getLogoutUrl({ idToken, state })
+    await session.update({ logoutUrl })
+    throw forbidden('[ProConnect] Access denied: unknown user')
   }
 
-  if (user.role === UserRole.Administrator) {
-    throw forbidden('[ProConnect] Access denied')
+  // Check 2FA presence when authenticating as an admin
+  if (user.role === 'Administrator') {
+    const emailIsValid =
+      mssEnvironment === 'local' || user.email.endsWith('@beta.gouv.fr')
+    const emailIsVerified =
+      mssEnvironment === 'local' || Boolean(custom?.email_verified)
+
+    // If already authenticated, going through login flow does not fill amr field and entails 403.
+    // This is mitigated by providing a proconnect-only logout link in the error page
+    const authenticationModes = (payload?.amr || []) as string[]
+    const hasMFA =
+      authenticationModes.includes('pwd') && authenticationModes.includes('mfa')
+
+    if (!emailIsValid || !emailIsVerified) {
+      const logoutUrl = client.getLogoutUrl({ idToken, state })
+      await session.update({ logoutUrl })
+      throw forbidden('[ProConnect] Access denied')
+    }
+
+    if (!hasMFA) {
+      const logoutUrl = client.getLogoutUrl({ idToken, state })
+      await session.update({ logoutUrl })
+      throw forbidden('[ProConnect] Access denied: MFA necessary')
+    }
   }
 
   // upsert account

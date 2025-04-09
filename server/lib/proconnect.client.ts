@@ -32,6 +32,7 @@ export type ProConnectUserInfo = JwtPayload & {
   aud: string
   exp: number
   iat: number
+  custom?: { email_verified: boolean }
 }
 
 export class ProConnectClient {
@@ -154,13 +155,26 @@ export class ProConnectClient {
     const { nonce, state } = args
     const params = new URLSearchParams({
       client_id: this.clientId,
-      scope: 'openid email siret',
+      scope: 'openid email siret custom',
       response_type: 'code',
       redirect_uri: this.redirectUri,
       acr_values: 'eidas1',
       state,
-      nonce
+      nonce,
+      claims: JSON.stringify({
+        id_token: {
+          // retrieve authentication mode
+          amr: { essential: true },
+          // retrieve authentication timestamp
+          auth_time: { essential: true }
+          // acr: {
+          //   essential: true
+          //   value: 'https://proconnect.gouv.fr/assurance/self-asserted-2fa'
+          // }
+        }
+      })
     })
+
     return `${this.issuer}/authorize?${params}`
   }
 

@@ -273,6 +273,15 @@ export default defineNuxtConfig({
           tokensPerInterval: 5
         }
       }
+    },
+    // The Proconnect only logout is limited to 2 calls per minute
+    '/api/proconnect/proconnect-logout': {
+      security: {
+        rateLimiter: {
+          interval: 60_000,
+          tokensPerInterval: 2
+        }
+      }
     }
   },
 
