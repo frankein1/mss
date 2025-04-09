@@ -40,9 +40,7 @@ export const exportBeneficiaryQuery = createQuery({
   auditLog: {
     key: 'beneficiary.exportBeneficiary',
     target: 'Beneficiary',
-    targetId: ({ ctx }) => {
-      return ctx.user.id
-    },
+    targetId: ({ input }) => input.beneficiaryId,
     action: UserActivityType.ARCHIVE
   }
 })

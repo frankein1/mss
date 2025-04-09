@@ -30,9 +30,7 @@ export const createFamilyFileMemberMutation = createMutation({
   auditLog: {
     key: 'beneficiary.create',
     target: 'Beneficiary',
-    targetId: ({ ctx }) => {
-      return ctx.user.id
-    },
+    targetId: ({ routeResult }) => routeResult.id,
     action: UserActivityType.CREATE
   }
 })

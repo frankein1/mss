@@ -55,7 +55,12 @@ export type CreateRouteOptions<
   auditLog?: {
     key: string
     target: UserActivityObject
-    /** Identifier of the entity on which the activity is performed */
+    /** Identifier of the entity on which the activity is performed.
+     * For RUD operations, it will likely be an ID retrieved from
+     * the input (eg. ({ctx}) => ctx.input.id).
+     * For Create operations, it will likely be the primary key of
+     * created entity (eg. ({routeResult}) => routeResult.id).
+     * */
     targetId: TargetIdFinder<Grantee, Input, RouteResult>
     action: UserActivityType
   }

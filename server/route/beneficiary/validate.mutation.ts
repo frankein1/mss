@@ -28,9 +28,7 @@ export const validateBeneficiaryMutation = createMutation({
   auditLog: {
     key: 'beneficiary.validate',
     target: 'Beneficiary',
-    targetId: ({ ctx }) => {
-      return ctx.user.id
-    },
+    targetId: ({ input }) => input.id,
     action: UserActivityType.UPDATE
   }
 })

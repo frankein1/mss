@@ -25,9 +25,7 @@ export const createBudgetIncome = createMutation({
   auditLog: {
     key: 'beneficiary.createBudgetIncome',
     target: 'Budget',
-    targetId: ({ ctx }) => {
-      return ctx.user.id
-    },
+    targetId: ({ routeResult }) => routeResult.id,
     action: UserActivityType.CREATE
   }
 })
