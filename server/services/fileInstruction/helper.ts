@@ -37,12 +37,13 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   }
 
   if (
-    (status ||
-      socialSupportSubjects?.length ||
-      createdById ||
-      ministre?.length ||
-      period,
-    ministereDepartementServiceAc || ministereStructure)
+    status ||
+    socialSupportSubjects?.length ||
+    createdById ||
+    ministre?.length ||
+    period ||
+    ministereDepartementServiceAc ||
+    ministereStructure
   ) {
     formattedFilters.socialSupport = {}
 
