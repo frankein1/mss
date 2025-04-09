@@ -238,6 +238,8 @@
 
   .fr-btns-group .fr-btn {
     margin-bottom: 0;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
   }
 
   .name > .fr-badge {
