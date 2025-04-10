@@ -4,7 +4,7 @@
       <h3 class="fr-accordion__title">
         <button
           class="fr-accordion__btn"
-          aria-expanded="false"
+          aria-expanded="true"
           aria-controls="help-request-form-housing-section-accordion"
           type="button"
         >
