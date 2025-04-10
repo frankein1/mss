@@ -1,5 +1,10 @@
 <template>
-  <div class="file-instruction-filters">
+  <div
+    :class="{
+      'file-instruction-filters--housing':
+        props.filters.fileInstructionType === 'Housing'
+    }"
+  >
     <AtomAlert
       v-if="fetchError"
       class="fr-mb-2w"
@@ -297,7 +302,7 @@
 </script>
 
 <style lang="scss">
-  .file-instruction-filters {
+  .file-instruction-filters--housing {
     .filters {
       align-items: start;
     }
