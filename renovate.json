@@ -24,6 +24,10 @@
     {
       "groupName": "vue-tsc",
       "matchPackagePatterns": ["vue-tsc"]
+    },
+    {
+      "groupName": "tRPC",
+      "matchPackagePatterns": ["@trpc/client", "@trpc/server", "trpc-nuxt"]
     }
   ],
   "timezone": "Europe/Paris",
