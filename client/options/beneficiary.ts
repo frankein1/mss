@@ -107,7 +107,7 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié',
   [BeneficiarySocioProfessionalCategory.Student]: 'Étudiant·e / Élève',
   [BeneficiarySocioProfessionalCategory.NoActivity]:
-    'Sans activité (non inscrit à Pôle Emploi)',
+    'Sans activité (non inscrit à France Travail)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 })
 

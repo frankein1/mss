@@ -72,7 +72,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   isSchoolInQPV: "L'établissement est en Quartier Prioritaire de la Ville",
   employer: 'Employeur',
   employerSiret: "SIRET de l'employeur",
-  unemploymentNumber: 'N° Pôle Emploi',
+  unemploymentNumber: 'N° France Travail',
   pensionOrganisations: 'Organismes de retraite',
   cafNumber: 'N° CAF',
   bank: 'Banque',
