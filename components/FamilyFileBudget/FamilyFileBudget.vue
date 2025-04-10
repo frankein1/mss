@@ -3,7 +3,15 @@
     <div class="beneficiary-budget--header">
       <div class="beneficiary-budget--title">
         <AtomPictogram path="/pictograms/money.svg" />
-        <h2 class="fr-m-0">Budget mensuel du foyer fiscal</h2>
+        <div>
+          <h2 class="fr-mb-1v">Budget mensuel du foyer fiscal</h2>
+          <p
+            v-if="bugetLastActivity"
+            class="fr-m-0 fr-text--bold"
+          >
+            Dernière mise à jour : {{ bugetLastActivity.toLocaleDateString() }}
+          </p>
+        </div>
       </div>
       <button
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-fill fr-btn--icon-left"
@@ -47,7 +55,9 @@
 </template>
 
 <script lang="ts" setup>
+  import dayjs from 'dayjs'
   import { getFamilyFileInjectionKey } from '~/composables/useGetFamilyFile'
+  import { BudgetWithExpensesAndIncomes } from '~/types/budget'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportFilename } from '~/utils/export/getExportFilename'
@@ -100,6 +110,72 @@
       }
     }
   }
+
+  // get last activity
+  const bugetLastActivity = computed(() => {
+    return getBudgetLastActivity(data.value)
+  })
+
+  const getMostRecenttDate = (dates: Date[]): Date => {
+    const unixMilliseconds = dates.map(date => dayjs(date).valueOf())
+    const max = Math.max(...unixMilliseconds)
+    return new Date(max)
+  }
+
+  const getBudgetLastActivity = (
+    budget: BudgetWithExpensesAndIncomes | null
+  ) => {
+    if (!budget) {
+      return null
+    }
+
+    const incomesActivites = budget
+      ? budget?.incomes.map(income => income.updated)
+      : []
+    const loanActivities = budget.expenses?.loans
+      ? (budget.expenses.loans
+          .map(loan => loan.updated)
+          .filter(Boolean) as Date[])
+      : []
+    const debtsActivities = budget.expenses?.debts
+      ? (budget.expenses.debts
+          .map(debt => debt.updated)
+          .filter(Boolean) as Date[])
+      : []
+    const customExpenseActivities = budget.expenses?.customs
+      ? (budget.expenses.customs
+          .map(custom => custom.updated)
+          .filter(Boolean) as Date[])
+      : []
+    const customIncomeActivities = budget.incomes
+      ? (budget.incomes
+          .flatMap(income => {
+            if (income.customs) {
+              return income.customs.map(custom => custom.updated)
+            }
+            return []
+          })
+          .filter(Boolean) as Date[])
+      : []
+
+    // Date de migration de le fonctionalité Budget.
+    const migrationDate = new Date('2024-06-03T23:06:59.476Z')
+    const activities = [
+      budget.updated,
+      budget.expenses?.updated,
+      ...incomesActivites,
+      ...loanActivities,
+      ...debtsActivities,
+      ...customExpenseActivities,
+      ...customIncomeActivities
+    ].filter(date => date != null && date.getTime() !== migrationDate.getTime())
+
+    if (activities.length === 0) {
+      return null
+    }
+
+    return getMostRecenttDate(activities.filter(Boolean) as Date[])
+  }
 </script>
 
 <style scoped lang="scss">
@@ -133,7 +209,8 @@
     }
   }
 
-  .beneficiary-budget--title > h2 {
+  .beneficiary-budget--title h2,
+  .beneficiary-budget--title p {
     color: var(--primary);
   }
 </style>
