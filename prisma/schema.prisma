@@ -1061,6 +1061,8 @@ enum Minister {
   YannickNeuder
   // Charlotte Parmentier-Lecocq - 2 (Ministre chargée de l’Autonomie et du Handicap)
   CharlotteParmentierLecocqBayrou1
+  // Sarah El Haïry - 2 (Haut-commissaire à l’enfance)
+  SarahElHairyBayrou1
 }
 
 enum BeneficiaryAccommodationZone {

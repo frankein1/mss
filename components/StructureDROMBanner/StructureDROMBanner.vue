@@ -15,6 +15,10 @@
       <p>
         Une correction sera apportée <strong>le 19 mai</strong> et vos dates
         mises à jour.
+        <strong
+          >Continuez de saisir les dates sous le format choisi jusqu'ici et ne
+          modifiez pas vos dossiers.</strong
+        >
       </p>
       <p>
         Si vous avez utilisé dans ces champs un format J+1 merci de prendre
