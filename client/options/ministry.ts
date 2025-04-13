@@ -7,6 +7,8 @@ import {
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const ministerKeys = buildKeys({
+  [Minister.SarahElHairyBayrou1]:
+    'Sarah El Haïry (2) - Gvt Bayrou (Haut-commissaire à l’enfance)',
   [Minister.CharlotteParmentierLecocqBayrou1]:
     'Charlotte Parmentier-Lecocq (2) - Gvt Bayrou (Ministre chargée de l’Autonomie et du Handicap)',
   [Minister.YannickNeuder]:
