@@ -7,7 +7,7 @@ export function ageGroupToDateRange(ageGroup: AgeGroup): {
   switch (ageGroup) {
     case AgeGroup.Less18:
       return { lower: dayjs().subtract(18, 'year').add(1, 'day') }
-    case AgeGroup.Group18_25:
+    case AgeGroup.Group18_24:
       return {
         lower: dayjs().subtract(25, 'year').add(1, 'day'),
         upper: dayjs().subtract(18, 'year')

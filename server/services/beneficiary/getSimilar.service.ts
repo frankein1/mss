@@ -1,4 +1,4 @@
-import { Prisma, UserStatus } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { GetSimilarBeneficiaryInput } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database/repository'
 import { BeneficiaryConstraints } from '~/server/database/constraints'
@@ -122,8 +122,6 @@ export async function getSimilar({
   if (params.where.familyFile) {
     params.where.familyFile.referents = undefined
   }
-
-  params.where.status = UserStatus.Active
 
   const similarBeneficiaries = await BeneficiaryRepo.prisma.findMany({
     ...params,
