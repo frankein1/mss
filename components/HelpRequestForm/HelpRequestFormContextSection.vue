@@ -79,7 +79,7 @@
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(partnerOrganizationOptions)"
-        :disabled="organizationContactIsDisabled"
+        :disabled="prescribingOrganizationContactIsDisabled"
         @change-value="onPrescribingOrganization"
       />
     </div>
@@ -87,7 +87,7 @@
     <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="prescribingOrganizationContactId"
-        :disabled="organizationContactIsDisabled"
+        :disabled="prescribingOrganizationContactIsDisabled"
         :label="helpRequestFieldLabels.prescribingOrganizationContactId"
         :options="withEmptyValue(prescribingOrganizationContactOptions)"
       />
@@ -131,7 +131,7 @@
     <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="prescribingOrganizationContactId"
-        :disabled="organizationContactIsDisabled"
+        :disabled="prescribingOrganizationContactIsDisabled"
         :label="helpRequestFieldLabels.prescribingOrganizationContactId"
         :options="withEmptyValue(prescribingOrganizationContactOptions)"
       />
@@ -174,6 +174,7 @@
         name="instructorOrganizationContactId"
         :label="helpRequestFieldLabels.instructorOrganizationContactId"
         :options="withEmptyValue(instructorOrganizationContactOptions)"
+        :disabled="instructorOrganizationContactIsDisabled"
       />
     </div>
 
@@ -276,8 +277,19 @@
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 
-  const selectedPartnerOrganization = computed(() => {
+  const selectedPrescribingOrganization = computed(() => {
     const partnerId = prescribingOrganizationId.value
+    if (!partnerId) {
+      return null
+    }
+
+    return (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+  })
+
+  const selectedInstructorOrganization = computed(() => {
+    const partnerId = instructorOrganizationId.value
     if (!partnerId) {
       return null
     }
@@ -305,11 +317,21 @@
     getContacts(instructorOrganizationId.value)
   )
 
-  const organizationContactIsDisabled = computed(() => {
-    if (!selectedPartnerOrganization.value) {
+  const prescribingOrganizationContactIsDisabled = computed(() => {
+    if (!selectedPrescribingOrganization.value) {
       return true
     }
-    if ((selectedPartnerOrganization.value.contacts || []).length === 0) {
+    if ((selectedPrescribingOrganization.value.contacts || []).length === 0) {
+      return true
+    }
+    return false
+  })
+
+  const instructorOrganizationContactIsDisabled = computed(() => {
+    if (!selectedInstructorOrganization.value) {
+      return true
+    }
+    if ((selectedInstructorOrganization.value.contacts || []).length === 0) {
       return true
     }
     return false
