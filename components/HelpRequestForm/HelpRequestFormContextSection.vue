@@ -79,6 +79,7 @@
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(partnerOrganizationOptions)"
+        :disabled="organizationContactIsDisabled"
         @change-value="onPrescribingOrganization"
       />
     </div>
@@ -86,6 +87,7 @@
     <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="prescribingOrganizationContactId"
+        :disabled="organizationContactIsDisabled"
         :label="helpRequestFieldLabels.prescribingOrganizationContactId"
         :options="withEmptyValue(prescribingOrganizationContactOptions)"
       />
@@ -129,6 +131,7 @@
     <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="prescribingOrganizationContactId"
+        :disabled="organizationContactIsDisabled"
         :label="helpRequestFieldLabels.prescribingOrganizationContactId"
         :options="withEmptyValue(prescribingOrganizationContactOptions)"
       />
@@ -273,6 +276,17 @@
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 
+  const selectedPartnerOrganization = computed(() => {
+    const partnerId = prescribingOrganizationId.value
+    if (!partnerId) {
+      return null
+    }
+
+    return (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+  })
+
   const getContacts = (id: string | null) => {
     if (!id) {
       return []
@@ -290,4 +304,14 @@
   const instructorOrganizationContactOptions = computed(() =>
     getContacts(instructorOrganizationId.value)
   )
+
+  const organizationContactIsDisabled = computed(() => {
+    if (!selectedPartnerOrganization.value) {
+      return true
+    }
+    if ((selectedPartnerOrganization.value.contacts || []).length === 0) {
+      return true
+    }
+    return false
+  })
 </script>
