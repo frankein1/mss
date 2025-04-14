@@ -39,7 +39,8 @@
   import { ChartColor } from '~/utils/color/chartColors'
 
   const AgeGroupColors = {
-    [AgeGroup.Less25]: ChartColor.Peach,
+    [AgeGroup.Less18]: ChartColor.LightPink,
+    [AgeGroup.Group18_24]: ChartColor.Peach,
     [AgeGroup.Group25_34]: ChartColor.LightBlue,
     [AgeGroup.Group35_44]: ChartColor.Yellow,
     [AgeGroup.Group45_54]: ChartColor.Pink,

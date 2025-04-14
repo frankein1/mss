@@ -153,7 +153,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     usualName: general.usualName || '',
     birthName: general.birthName || '',
     firstName: general.firstName || '',
-    birthDate: formatDate(general.birthDate, 'DD-MM-YYYY'),
+    birthDate: formatDate(general.birthDate, 'DD/MM/YYYY'),
     status: beneficiaryStatusKeys.byKey[beneficiary.status],
     gender: general.gender ? beneficiaryGenderKeys.byKey[general.gender] : '',
     accommodationMode: general.accommodationMode
