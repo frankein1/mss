@@ -1,6 +1,6 @@
 {
   "name": "monsuivisocial-v2",
-  "version": "1.41.0",
+  "version": "1.41.1",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
