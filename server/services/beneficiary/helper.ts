@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client'
 import { BeneficiaryFilterServerInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
-export function prepareBeneficiarySearchConditions(query: string) {
+export function prepareBeneficiarySearchConditions(query: string): {
+  AND: Prisma.BeneficiaryWhereInput[]
+} {
   const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
 
   const fields = ['usualName', 'birthName', 'firstName'] as const
@@ -21,12 +23,15 @@ export function prepareBeneficiarySearchConditions(query: string) {
 
 export function prepareBeneficiaryFilters(
   filters: BeneficiaryFilterServerInput
-) {
+): Prisma.BeneficiaryWhereInput {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+  // When several OR combinations are used on different fields,
+  // they need to be combined inside an AND clause.
+  formattedFilters.AND = []
 
   if (filters.search) {
     const searchConditions = prepareBeneficiarySearchConditions(filters.search)
-    formattedFilters.AND = searchConditions.AND
+    formattedFilters.AND.push(...searchConditions.AND)
   }
 
   if (filters.socialSupportSubjects?.length) {
@@ -54,11 +59,21 @@ export function prepareBeneficiaryFilters(
   }
 
   if (filters.ageGroup) {
-    const dateRange = ageGroupToDateRange(filters.ageGroup)
-    formattedFilters.birthDate = {
-      gte: dateRange.lower?.toDate(),
-      lte: dateRange.upper?.toDate()
-    }
+    const ageFilters = filters.ageGroup.reduce<
+      {
+        birthDate: Prisma.DateTimeNullableFilter
+      }[]
+    >((acc, ageGroup) => {
+      const dateRange = ageGroupToDateRange(ageGroup)
+      acc.push({
+        birthDate: {
+          gte: dateRange.lower?.toDate(),
+          lte: dateRange.upper?.toDate()
+        }
+      })
+      return acc
+    }, [])
+    formattedFilters.AND.push({ OR: ageFilters })
   }
 
   if (filters.vulnerablePerson !== undefined) {
@@ -69,7 +84,7 @@ export function prepareBeneficiaryFilters(
     if (filters.qpv) {
       formattedFilters.qpv = true
     } else {
-      formattedFilters.OR = [{ qpv: null }, { qpv: false }]
+      formattedFilters.AND.push({ OR: [{ qpv: null }, { qpv: false }] })
     }
   }
 
@@ -84,6 +99,11 @@ export function prepareBeneficiaryFilters(
 
   if (filters.notFilled) {
     formattedFilters[filters.notFilled] = null
+  }
+
+  if (formattedFilters.AND.length === 0) {
+    // There might not be any filters inside the AND clause after all
+    delete formattedFilters.AND
   }
 
   return formattedFilters

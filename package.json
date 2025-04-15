@@ -13,7 +13,7 @@
     "lint:prettier": "prettier --check {.,**/*.prisma}",
     "lint": "npm run lint:typecheck && npm run lint:js && npm run lint:style && npm run lint:prettier",
     "lintfix": "prettier --write --list-different {.,**/*.prisma} && npm run lint:js -- --fix && npm run lint:style -- --fix",
-    "test": "vitest",
+    "test": "TZ=UTC vitest",
     "test:e2e": "playwright test",
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
     "prisma": "prisma",

@@ -69,7 +69,7 @@ const beneficiaryFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish(),
+  ageGroup: z.array(z.nativeEnum(AgeGroup)).nullish(),
   ministereDepartementServiceAc: z
     .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),

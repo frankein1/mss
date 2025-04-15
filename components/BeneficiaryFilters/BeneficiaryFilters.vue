@@ -135,11 +135,8 @@
       {
         name: 'ageGroup',
         label: "Tranche d'âge",
-        options: withEmptyValue(
-          ageGroupKeys.options,
-          "Toutes les tranches d'âge"
-        ),
-        type: FilterType.SelectOne,
+        options: ageGroupKeys.options,
+        type: FilterType.SelectMultiple,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
