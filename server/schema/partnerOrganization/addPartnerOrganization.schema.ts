@@ -21,7 +21,7 @@ const contactPartnerOrganizationSchema = z
   .nullish()
 
 export const addCustomPartnerOrganizationSchema = z.object({
-  name: requiredLimitedStringConstraint(),
+  name: requiredLimitedStringConstraint(300),
   siret: siretConstraint,
   address: limitedStringConstraint(null, 100).nullish(),
   zipcode: limitedStringConstraint(null, 10).nullish(),
