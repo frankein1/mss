@@ -4,11 +4,6 @@ export const routes = {
     title: 'Votre compte est désactivé',
     path: () => '/error/disabled-account'
   },
-  ErrorUnknownUser: {
-    name: 'ErrorUnknownUser',
-    title: "Votre compte ProConnect n'est pas rattaché",
-    path: () => '/error/unknown-user'
-  },
   ErrorInvalidToken: {
     name: 'ErrorInvalidToken',
     title: "L'authentification a échoué",

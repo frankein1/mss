@@ -99,8 +99,6 @@ export default defineEventHandler(async event => {
     // If already authenticated, going through login flow does not fill amr field and entails 403.
     // This is mitigated by providing a proconnect-only logout link in the error page
     const authenticationModes = (payload?.amr || []) as string[]
-    const hasMFA =
-      authenticationModes.includes('pwd') && authenticationModes.includes('mfa')
 
     if (!emailIsValid || !emailIsVerified) {
       const logoutUrl = client.getLogoutUrl({ idToken, state })
@@ -108,7 +106,7 @@ export default defineEventHandler(async event => {
       throw forbidden('[ProConnect] Access denied')
     }
 
-    if (!hasMFA) {
+    if (!authenticationModes.includes('mfa')) {
       const logoutUrl = client.getLogoutUrl({ idToken, state })
       await session.update({ logoutUrl })
       throw forbidden('[ProConnect] Access denied: MFA necessary')
