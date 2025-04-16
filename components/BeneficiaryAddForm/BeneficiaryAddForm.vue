@@ -150,22 +150,17 @@
   const addMemberModeOptions = [
     {
       label: 'Créer un nouveau bénéficiaire',
-      value: 'create',
-      matomoEventAction: FamilyFileAction.CreateBeneficiary
+      value: 'create'
     },
     {
       label: 'Lier un bénéficiaire existant',
-      value: 'link',
-      matomoEventAction: FamilyFileAction.LinkBeneficiary
+      value: 'link'
     }
   ]
   const addMemberMode = ref(addMemberModeOptions[0].value)
 
   function onAddMemberModeUpdate(val: string | number | boolean) {
     const option = addMemberModeOptions.find(({ value }) => value === val)
-    if (option) {
-      matomo.trackEvent(EventCategory.FamilyFile, option.matomoEventAction)
-    }
   }
 
   const props = defineProps<{
@@ -188,6 +183,10 @@
     async values => {
       const response = await props.add(values)
       if (response) {
+        matomo.trackEvent(
+          EventCategory.FamilyFile,
+          FamilyFileAction.CreateBeneficiary
+        )
         goToSuccessPage(response)
         newBeneficiaryId.value = response
       }

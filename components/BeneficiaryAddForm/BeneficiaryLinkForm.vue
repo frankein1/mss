@@ -86,6 +86,7 @@
   import { RelativeRelationship } from '@prisma/client'
   import { MSS_ERROR_CODES, isTRPCClientErrorWithMSSCode } from '~/utils/error'
   import { ArrayElement } from '~/types/utils'
+  import { EventCategory, FamilyFileAction } from '~/types/matomo'
 
   type BeneficiarySearchResult = ArrayElement<
     inferProcedureOutput<AppRouter['beneficiary']['search']>
@@ -99,6 +100,7 @@
     goToSuccessPage: [beneficiaryId?: string]
   }>()
 
+  const matomo = useMatomo()
   const trpcClient = useTrpcClient()
   const linkToFamilyFileError = ref<string | null>(null)
   const linked_beneficiary = ref<BeneficiarySearchResult | undefined>(undefined)
@@ -161,6 +163,12 @@
           })
         })
         .then(() => emit('goToSuccessPage', linked_beneficiary.value?.id))
+        .then(() =>
+          matomo.trackEvent(
+            EventCategory.FamilyFile,
+            FamilyFileAction.LinkBeneficiary
+          )
+        )
         .catch(error => {
           if (!(error instanceof Error)) {
             return
