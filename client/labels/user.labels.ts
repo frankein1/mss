@@ -18,5 +18,6 @@ export const userFieldLabels: FieldLabels<User> = {
   accessTokenValidity: "Date d'expiration du token",
   externalRdvspId: 'Identifiant Rendez-vous Service Public',
   authorizationCode: "Code d'autorisation",
-  authorizationCodeValidity: "Validité du code d'autorisation"
+  authorizationCodeValidity: "Validité du code d'autorisation",
+  accountReminderEmail: "Nombre d'e-mail de rappel de création de compte"
 }

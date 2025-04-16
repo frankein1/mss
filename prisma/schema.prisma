@@ -123,6 +123,8 @@ model User {
 
   createdPartnerOrganizations PartnerOrganization[]
 
+  accountReminderEmail Int? @default(0) @map("account_reminder_email")
+
   CGUHistory     CGUHistory[]
   userActivities UserActivity[]
 

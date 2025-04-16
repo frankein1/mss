@@ -304,7 +304,8 @@ const adminHandler = async ({
       accessTokenValidity: null,
       externalRdvspId: null,
       authorizationCode: null,
-      authorizationCodeValidity: null
+      authorizationCodeValidity: null,
+      accountReminderEmail: 0
     }
     const updateUser = UserRepo.prisma.update({
       where: { id: user.id },
