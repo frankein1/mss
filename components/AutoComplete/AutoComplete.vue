@@ -14,6 +14,7 @@
     label: '',
     labelClass: '',
     modelValue: '',
+    errorMessage: '',
     wrapperClass: ''
   })
 
