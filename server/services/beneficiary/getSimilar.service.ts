@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, UserStatus } from '@prisma/client'
 import { GetSimilarBeneficiaryInput } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database/repository'
 import { BeneficiaryConstraints } from '~/server/database/constraints'
@@ -138,7 +138,8 @@ export async function getSimilar({
             select: {
               id: true,
               firstName: true,
-              lastName: true
+              lastName: true,
+              status: true
             }
           }
         }
@@ -149,23 +150,31 @@ export async function getSimilar({
   if (!similarBeneficiaries.length) {
     return undefined
   }
+  const similarBeneficiary = similarBeneficiaries[0]
 
+  // Si utilisateur n'a pas le rôle Référent,
+  // pas besoin de transmettre le nom du référent du dossier
   if (!isReferent(user)) {
-    return { ...similarBeneficiaries[0], referent: undefined }
+    return { ...similarBeneficiary, referent: undefined }
   }
 
   const similarWithReferent = similarBeneficiaries.find(s =>
     isMemberOfReferents(user, s.familyFile)
   )
 
+  // Si utilisateur a le rôle est Référent et qu'il est référent du dossier,
+  // pas besoin de transmettre le nom du référent du dossier
   if (similarWithReferent) {
     return { ...similarWithReferent, referent: undefined }
   }
 
-  const similarBeneficiary = similarBeneficiaries[0]
-
+  // Si utilisateur a le rôle est Référent et qu'il n'est pas référent du dossier,
+  // on transmet le nom du référent du dossier
   return {
     ...similarBeneficiary,
-    referent: similarBeneficiary.familyFile.referents[0]
+    referent:
+      similarBeneficiary.familyFile.referents[0].status === UserStatus.Active
+        ? similarBeneficiary.familyFile.referents[0]
+        : undefined
   }
 }
