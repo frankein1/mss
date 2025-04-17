@@ -1,4 +1,4 @@
-import { JobStatus, Structure, User } from '@prisma/client'
+import { JobStatus, Structure, User, UserStatus } from '@prisma/client'
 import { UserRepo } from '~/server/database'
 import { brevoClient } from '~/server/lib'
 import { JobResultService } from '~/server/services'
@@ -27,6 +27,7 @@ async function exportContacts(all: boolean) {
   }
 
   const users = await getUsers(startDate)
+
   if (users.length === 0) {
     await JobResultService.update({
       id: job.id,
@@ -103,6 +104,7 @@ function buildJson(
       created,
       firstAccess,
       lastAccess,
+      status,
       _count: { createdSocialSupports }
     }) => ({
       email,
@@ -118,6 +120,7 @@ function buildJson(
           structure?.lastAccess,
           'DD-MM-YYYY'
         ),
+        ACCES_MSS: status === UserStatus.Active ? 'Yes' : 'No',
         STRUCTURE_AVEC_1_SUIVI:
           (structure?._count.socialSupports || 0) > 0 ? 'Yes' : 'No',
         CREATION_DATE: formatDate(created, 'DD-MM-YYYY'),

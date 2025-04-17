@@ -46,7 +46,7 @@
               secondary
               :disabled="pending"
               icon="fr-icon-refresh-line"
-              @click="() => refresh"
+              @click="onRefresh()"
             />
           </li>
         </DsfrButtonGroup>
@@ -93,7 +93,7 @@
     perPage: perPage.value
   }))
 
-  const { data, pending, refresh } =
+  const { data, pending } =
     await trpcClient.admin.getJobResults.useQuery(queryInput)
 
   const jobs = computed(() => data.value?.jobs || [])
@@ -134,5 +134,9 @@
         snackbar.error("Echec de lancement de l'export des contacts")
       }
     })
+  }
+
+  const onRefresh = async () => {
+    await refreshNuxtData()
   }
 </script>
