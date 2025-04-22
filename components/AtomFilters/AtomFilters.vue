@@ -88,7 +88,6 @@
     FilterValue,
     FilterValues
   } from '~/types/filter'
-  import { getRandId } from '~/utils/random'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
   import { getOptionLabel } from '~/utils/options'
 
@@ -140,7 +139,7 @@
     filter: [filter: FilterValues]
   }>()
 
-  const FILTERS_ID = getRandId('filters-')
+  const FILTERS_ID = 'filters-' + useId()
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(props.expandedByDefault)
 

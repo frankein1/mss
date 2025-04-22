@@ -139,7 +139,6 @@
     STATS_COLLAPSED_LIMIT,
     STATS_NULL_LABEL
   } from '~/utils/constants/stats'
-  import { getRandId } from '~/utils/random'
   import { getPercentage } from '~/utils/stats'
 
   const props = withDefaults(
@@ -170,7 +169,7 @@
       displayTotal: true
     }
   )
-  const STATS_ID = getRandId('stats-')
+  const STATS_ID = 'stats-' + useId()
   const expandStats = ref<boolean>(false)
 
   const displayedStats = computed(() =>

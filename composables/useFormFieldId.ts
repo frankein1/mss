@@ -1,7 +1,6 @@
-import { getRandId } from '~/utils/random'
-
 export function useFormFieldId(name: Ref<string>) {
-  const randomId = computed(() => getRandId(`${name.value}-`))
+  const id = useId()
+  const randomId = computed(() => `${name.value}-` + id)
   const errorId = computed(() => `${randomId.value}-error-desc-error`)
 
   return { id: randomId, errorId }
