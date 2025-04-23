@@ -39,13 +39,6 @@
                 </button>
               </div>
             </div>
-            <div class="fr-header__service">
-              <p class="fr-header__service-title">
-                <span class="fr-badge fr-badge--sm fr-badge--green-emeraude">
-                  BETA
-                </span>
-              </p>
-            </div>
           </div>
           <div class="fr-header__tools">
             <div class="fr-header__tools-links">
