@@ -211,6 +211,10 @@
     box-shadow: none;
   }
 
+  fr-sidemenu__btn {
+    color: white;
+  }
+
   .fr-sidemenu__list {
     margin-left: 0.5rem;
   }
