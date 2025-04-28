@@ -1,4 +1,4 @@
-import { FollowupMedium, NotificationType } from '@prisma/client'
+import { FollowupMedium, NotificationType, Prisma } from '@prisma/client'
 import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import {
@@ -55,77 +55,82 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     duration
   } = input
 
-  const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
-    where: { id: socialSupportId },
-    data: {
-      lastUpdatedBy: connect(ctx.user.id),
-      documents: prepareDocumentsMutations(documents, target.documents),
-      subjects: prepareSocialSupportSubjectsMutations(
-        subjects,
-        target.subjects
-      ),
-      ministre,
-      date,
-      synthesis,
-      synthesisRichText,
-      privateSynthesis,
-      privateSynthesisRichText,
-      status,
-      numeroPegase,
-      dueDate
-    },
-    include: {
-      familyFile: {
-        select: {
-          id: true
+  const updateSocialSupport = () =>
+    SocialSupportRepo.update(ctx.user, {
+      where: { id: socialSupportId },
+      data: {
+        lastUpdatedBy: connect(ctx.user.id),
+        documents: prepareDocumentsMutations(documents, target.documents),
+        subjects: prepareSocialSupportSubjectsMutations(
+          subjects,
+          target.subjects
+        ),
+        ministre,
+        date,
+        synthesis,
+        synthesisRichText,
+        privateSynthesis,
+        privateSynthesisRichText,
+        status,
+        numeroPegase,
+        dueDate
+      },
+      include: {
+        familyFile: {
+          select: {
+            id: true
+          }
         }
       }
-    }
-  })
+    })
 
-  const updateFollowup = FollowupRepo.update(ctx.user, {
-    where: { id: input.id },
-    data: {
-      prescribingOrganizationId: prescribingOrganizationId || null,
-      prescribingOrganizationContactId:
-        prescribingOrganizationContactId || null,
-      redirected,
-      structureName: redirected ? structureName : null,
-      medium,
-      place: medium === FollowupMedium.ExternalAppointment ? place : null,
-      thirdPersonName:
-        medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
-      helpRequested,
-      firstFollowup,
-      classified,
-      forwardedToJustice,
-      duration
-    }
-  })
+  const updateFollowup = () =>
+    FollowupRepo.update(ctx.user, {
+      where: { id: input.id },
+      data: {
+        prescribingOrganizationId: prescribingOrganizationId || null,
+        prescribingOrganizationContactId:
+          prescribingOrganizationContactId || null,
+        redirected,
+        structureName: redirected ? structureName : null,
+        medium,
+        place: medium === FollowupMedium.ExternalAppointment ? place : null,
+        thirdPersonName:
+          medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+        helpRequested,
+        firstFollowup,
+        classified,
+        forwardedToJustice,
+        duration
+      }
+    })
 
-  const updateSocialSupportSubject =
+  const updateSocialSupportSubject = () =>
     SocialSupportSubjectService.markUsed(subjects)
 
-  const transactions = []
+  const transactions: (() => Prisma.PrismaPromise<any>)[] = []
 
   transactions.push(updateSocialSupport)
   transactions.push(updateFollowup)
   transactions.push(updateSocialSupportSubject)
 
   if (ctx.user.id !== target.createdById) {
-    const createNotification = NotificationRepo.prisma.create({
-      data: {
-        recipientId: target.createdById,
-        itemCreatedById: ctx.user.id,
-        beneficiaryId: target.beneficiaryId,
-        socialSupportId: target.id,
-        type: NotificationType.UpdateFollowupElement
-      }
-    })
+    const createNotification = () =>
+      NotificationRepo.prisma.create({
+        data: {
+          recipientId: target.createdById,
+          itemCreatedById: ctx.user.id,
+          beneficiaryId: target.beneficiaryId,
+          socialSupportId: target.id,
+          type: NotificationType.UpdateFollowupElement
+        }
+      })
     transactions.push(createNotification)
   }
 
-  const [socialSupportResult] = await prismaClient.$transaction(transactions)
+  const [socialSupportResult] = await prismaClient.$transaction(
+    transactions.map(t => t())
+  )
 
   return socialSupportResult
 }
