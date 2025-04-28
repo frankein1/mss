@@ -9,6 +9,7 @@ import {
 } from '~/server/security'
 import {
   getGranteRole,
+  isInSameStructure,
   isMemberOfReferents
 } from '~/server/security/rules/helpers'
 import { BeneficiaryService } from '.'
@@ -21,6 +22,7 @@ export function getBeneficiarySecurityTarget(
     where: { id },
     select: {
       id: true,
+      createdById: true,
       familyFile: {
         select: {
           structureId: true,
@@ -68,6 +70,22 @@ export async function getEditionPermissions(
     ctx,
     familyFile: beneficiary.familyFile
   })
+}
+
+export async function getDeleteDraftPermissions(
+  ctx: SecurityRuleContext,
+  id: string
+): Promise<{ delete: boolean }> {
+  const beneficiary = await getBeneficiarySecurityTarget(ctx.user, id)
+
+  if (!isInSameStructure(ctx.user, beneficiary.familyFile)) {
+    return {
+      delete: false
+    }
+  }
+  return {
+    delete: beneficiary.createdById === ctx.user.id
+  }
 }
 
 export const getArchivePermissions = async ({

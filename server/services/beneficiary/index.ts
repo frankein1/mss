@@ -10,6 +10,7 @@ import { getSimilar } from './getSimilar.service'
 import {
   getBeneficiarySecurityTarget,
   getEditionPermissions,
+  getDeleteDraftPermissions,
   BeneficiarySecurityTarget,
   getArchivePermissions
 } from './permission.service'
@@ -33,6 +34,7 @@ export const BeneficiaryService = {
   exportBeneficiary,
   search,
   getSimilar,
+  getDeleteDraftPermissions,
   getEditionPermissions,
   getArchivePermissions,
   getBeneficiarySecurityTarget,
