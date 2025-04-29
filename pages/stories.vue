@@ -6,6 +6,11 @@
 
       <h2 class="fr-col-12">Multiselect 2</h2>
       <div class="fr-col-12">
+        <CameraButton />
+      </div>
+
+      <h2 class="fr-col-12">Multiselect 2</h2>
+      <div class="fr-col-12">
         <MultiSelectStory />
       </div>
 
