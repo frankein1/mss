@@ -16,11 +16,11 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       '@gouvfr/dsfr':
-        specifier: ~1.13.0
-        version: 1.13.0
+        specifier: ~1.13.1
+        version: 1.13.1
       '@gouvminint/vue-dsfr':
-        specifier: ^8.3.0
-        version: 8.3.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
+        specifier: ^8.3.1
+        version: 8.3.1(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
       '@prisma/client':
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
@@ -225,7 +225,7 @@ importers:
         version: 3.1.1(@types/node@22.14.1)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@25.0.1)(sass@1.86.3)(terser@5.39.0)(yaml@2.7.0)
       vue-dsfr-nuxt-module:
         specifier: ^2.0.0
-        version: 2.0.0(@gouvfr/dsfr@1.13.0)(@gouvminint/vue-dsfr@8.3.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3)))(magicast@0.3.5)
+        version: 2.0.0(@gouvfr/dsfr@1.13.1)(@gouvminint/vue-dsfr@8.3.1(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3)))(magicast@0.3.5)
       vue-tsc:
         specifier: ^2.2.8
         version: 2.2.8(typescript@5.8.3)
@@ -705,12 +705,12 @@ packages:
   '@getbrevo/brevo@2.2.0':
     resolution: {integrity: sha512-mNCkXtgqn6jqLglAx1JzZcTj53kBZ5dK9Yd6zVuEyXAvhz68f5Ps6dSJar9HvkHH0Lfr3NrqW76xurjcoxqhIg==}
 
-  '@gouvfr/dsfr@1.13.0':
-    resolution: {integrity: sha512-I6JLYfE63dogk5qOx69gMfW/bKsm+daFgfx2QX75isbKBy5khlJdVxOD0A6ohvywvUJlEcZTmVK8rNHeVvGmgw==}
+  '@gouvfr/dsfr@1.13.1':
+    resolution: {integrity: sha512-dCB0YuQ8YczGYT1qPO0nDYYQCq7As58DSPR59bDIsxYRgzq8D0UT8oVgzDCn6vWHzomnB0E/41LZ0mQ2kYi3CQ==}
     engines: {node: '>=18.16.1'}
 
-  '@gouvminint/vue-dsfr@8.3.0':
-    resolution: {integrity: sha512-hZ/oickrWE4yhzpZXhQlTZLKzos4pQBrm3ZKOHRI2X9qdZnJr9hJnzh61VeljaPKlG7uX3OEi2NpKn8w5OZd3g==}
+  '@gouvminint/vue-dsfr@8.3.1':
+    resolution: {integrity: sha512-sBy6TCx0w75sYXUSIIcltLwN3MQ6hO0aRaxDWDq81PkqhIixfbLLz6o/4rynAcdA//3nH0qpKJt/8QShPRjG+g==}
     engines: {node: '>=20.x.x', npm: '>=10.x.x'}
     hasBin: true
     peerDependencies:
@@ -7952,11 +7952,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@gouvfr/dsfr@1.13.0': {}
+  '@gouvfr/dsfr@1.13.1': {}
 
-  '@gouvminint/vue-dsfr@8.3.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))':
+  '@gouvminint/vue-dsfr@8.3.1(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))':
     dependencies:
-      '@gouvfr/dsfr': 1.13.0
+      '@gouvfr/dsfr': 1.13.1
       '@iconify/vue': 4.3.0(vue@3.5.13(typescript@5.8.3))
       focus-trap: 7.6.4
       focus-trap-vue: 4.0.3(focus-trap@7.6.4)(vue@3.5.13(typescript@5.8.3))
@@ -15486,10 +15486,10 @@ snapshots:
 
   vue-devtools-stub@0.1.0: {}
 
-  vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.13.0)(@gouvminint/vue-dsfr@8.3.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3)))(magicast@0.3.5):
+  vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.13.1)(@gouvminint/vue-dsfr@8.3.1(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3)))(magicast@0.3.5):
     dependencies:
-      '@gouvfr/dsfr': 1.13.0
-      '@gouvminint/vue-dsfr': 8.3.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
+      '@gouvfr/dsfr': 1.13.1
+      '@gouvminint/vue-dsfr': 8.3.1(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3)))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
     transitivePeerDependencies:
       - magicast
