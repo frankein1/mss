@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationType, Prisma } from '@prisma/client'
 import { cleanUpdateInput } from './helper'
 import {
   SocialSupportRepo,
@@ -71,94 +71,99 @@ export async function update({ input, ctx }: UpdateParams) {
     isPmr
   } = cleanUpdateInput(input)
 
-  const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
-    where: { id: input.socialSupportId },
-    data: {
-      lastUpdatedBy: connect(ctx.user.id),
-      status,
-      synthesis,
-      synthesisRichText,
-      privateSynthesis,
-      privateSynthesisRichText,
-      ministre,
-      numeroPegase,
-      dueDate,
-      date,
-      documents: prepareDocumentsMutations(
-        documents,
-        target.fileInstruction.socialSupport.documents
-      )
-    },
-    include: {
-      familyFile: {
-        select: {
-          id: true
+  const updateSocialSupport = () =>
+    SocialSupportRepo.update(ctx.user, {
+      where: { id: input.socialSupportId },
+      data: {
+        lastUpdatedBy: connect(ctx.user.id),
+        status,
+        synthesis,
+        synthesisRichText,
+        privateSynthesis,
+        privateSynthesisRichText,
+        ministre,
+        numeroPegase,
+        dueDate,
+        date,
+        documents: prepareDocumentsMutations(
+          documents,
+          target.fileInstruction.socialSupport.documents
+        )
+      },
+      include: {
+        familyFile: {
+          select: {
+            id: true
+          }
         }
       }
-    }
-  })
+    })
 
-  const updateFileInstruction = FileInstructionRepo.prisma.update({
-    where: {
-      socialSupportId: input.socialSupportId
-    },
-    data: {
-      examinationDate,
-      decisionDate,
-      refusalReason,
-      dispatchDate,
-      fullFile,
-      externalStructure,
-      instructorOrganizationId: instructorOrganizationId || undefined,
-      instructorOrganizationContactId:
-        instructorOrganizationContactId || undefined
-    }
-  })
-
-  const updateHousingHelpRequest = HousingHelpRequestRepo.prisma.update({
-    where: { id: input.id },
-    data: {
-      isFirst,
-      firstOpeningDate,
-      reason,
-      uniqueId,
-      askedHousing,
-      housingType: housingType || undefined,
-      roomCount: roomCount || undefined,
-      lowIncomeHousingType: lowIncomeHousingType || undefined,
-      taxHouseholdAdditionalInformation,
-      maxRent,
-      maxCharges,
-      isPmr,
-      prescribingOrganization: prescribingOrganizationId
-        ? connect(prescribingOrganizationId)
-        : undefined,
-      prescribingOrganizationContact: prescribingOrganizationContactId
-        ? connect(prescribingOrganizationContactId)
-        : undefined
-    }
-  })
-
-  const transactions = []
-
-  transactions.push(updateSocialSupport)
-  transactions.push(updateFileInstruction)
-  transactions.push(updateHousingHelpRequest)
-
-  if (ctx.user.id !== target.fileInstruction.socialSupport.createdById) {
-    const createNotification = NotificationRepo.prisma.create({
+  const updateFileInstruction = () =>
+    FileInstructionRepo.prisma.update({
+      where: {
+        socialSupportId: input.socialSupportId
+      },
       data: {
-        recipientId: target.fileInstruction.socialSupport.createdById,
-        itemCreatedById: ctx.user.id,
-        beneficiaryId: target.fileInstruction.socialSupport.beneficiaryId,
-        socialSupportId: target.fileInstruction.socialSupport.id,
-        type: NotificationType.UpdateFileInstructionElement
+        examinationDate,
+        decisionDate,
+        refusalReason,
+        dispatchDate,
+        fullFile,
+        externalStructure,
+        instructorOrganizationId: instructorOrganizationId || undefined,
+        instructorOrganizationContactId:
+          instructorOrganizationContactId || undefined
       }
     })
+
+  const updateHousingHelpRequest = () =>
+    HousingHelpRequestRepo.prisma.update({
+      where: { id: input.id },
+      data: {
+        isFirst,
+        firstOpeningDate,
+        reason,
+        uniqueId,
+        askedHousing,
+        housingType: housingType || undefined,
+        roomCount: roomCount || undefined,
+        lowIncomeHousingType: lowIncomeHousingType || undefined,
+        taxHouseholdAdditionalInformation,
+        maxRent,
+        maxCharges,
+        isPmr,
+        prescribingOrganization: prescribingOrganizationId
+          ? connect(prescribingOrganizationId)
+          : undefined,
+        prescribingOrganizationContact: prescribingOrganizationContactId
+          ? connect(prescribingOrganizationContactId)
+          : undefined
+      }
+    })
+
+  const transactions: (() => Prisma.PrismaPromise<any>)[] = [
+    updateSocialSupport,
+    updateFileInstruction,
+    updateHousingHelpRequest
+  ]
+  if (ctx.user.id !== target.fileInstruction.socialSupport.createdById) {
+    const createNotification = () =>
+      NotificationRepo.prisma.create({
+        data: {
+          recipientId: target.fileInstruction.socialSupport.createdById,
+          itemCreatedById: ctx.user.id,
+          beneficiaryId: target.fileInstruction.socialSupport.beneficiaryId,
+          socialSupportId: target.fileInstruction.socialSupport.id,
+          type: NotificationType.UpdateFileInstructionElement
+        }
+      })
     transactions.push(createNotification)
   }
 
-  const [socialSupportResult] = await prismaClient.$transaction(transactions)
+  const [socialSupportResult] = await prismaClient.$transaction(
+    transactions.map(transaction => transaction())
+  )
 
   return { helpRequest: socialSupportResult }
 }

@@ -1,4 +1,4 @@
-import { SocialSupportSubject, UserActivityType } from '@prisma/client'
+import { Prisma, SocialSupportSubject, UserActivityType } from '@prisma/client'
 import {
   BeneficiaryRepo,
   FamilyFileRepo,
@@ -76,43 +76,50 @@ const handler = async ({
     where
   })
 
-  const createArchivedBeneficiary = ArchivedBeneficiaryRepo.prisma.create({
-    data: {
-      oldBeneficiaryId: beneficiary.id,
-      fileCreationDate: beneficiary.created,
-      socialSupportSubjects: getSocialSupportsSujectsNames(
-        beneficiary.familyFile.socialSupports
-      ),
-      followupCount,
-      filleInstructionCount,
-      structureType: beneficiary.structure.type,
-      archivedById: ctx.user.id,
-      structureId: beneficiary.structure.id,
-      clarification: input.clarification ? input.clarification : null,
-      reason: input.reason ? input.reason : null,
-      eventDateReason: input.date ? input.date : null,
-      title: input.keepName ? beneficiary.title : null,
-      usualName: input.keepName ? beneficiary.usualName : null,
-      birthName: input.keepName ? beneficiary.birthName : null,
-      firstName: input.keepName ? beneficiary.firstName : null
-    }
-  })
+  const createArchivedBeneficiary = () =>
+    ArchivedBeneficiaryRepo.prisma.create({
+      data: {
+        oldBeneficiaryId: beneficiary.id,
+        fileCreationDate: beneficiary.created,
+        socialSupportSubjects: getSocialSupportsSujectsNames(
+          beneficiary.familyFile.socialSupports
+        ),
+        followupCount,
+        filleInstructionCount,
+        structureType: beneficiary.structure.type,
+        archivedById: ctx.user.id,
+        structureId: beneficiary.structure.id,
+        clarification: input.clarification ? input.clarification : null,
+        reason: input.reason ? input.reason : null,
+        eventDateReason: input.date ? input.date : null,
+        title: input.keepName ? beneficiary.title : null,
+        usualName: input.keepName ? beneficiary.usualName : null,
+        birthName: input.keepName ? beneficiary.birthName : null,
+        firstName: input.keepName ? beneficiary.firstName : null
+      }
+    })
 
-  const deleteBeneficiary = BeneficiaryRepo.prisma.delete({
-    where: { id: input.beneficiaryId }
-  })
+  const deleteBeneficiary = () =>
+    BeneficiaryRepo.prisma.delete({
+      where: { id: input.beneficiaryId }
+    })
 
-  const deleteFamilyFile = FamilyFileRepo.prisma.delete({
-    where: { id: beneficiary.familyFileId }
-  })
+  const deleteFamilyFile = () =>
+    FamilyFileRepo.prisma.delete({
+      where: { id: beneficiary.familyFileId }
+    })
 
-  const transactions: any[] = [createArchivedBeneficiary, deleteBeneficiary]
-
+  const transactions: (() => Prisma.PrismaPromise<any>)[] = [
+    createArchivedBeneficiary,
+    deleteBeneficiary
+  ]
   if (beneficiary.familyFile.beneficiaries.length === 1) {
     transactions.push(deleteFamilyFile)
   }
 
-  await prismaClient.$transaction(transactions)
+  await prismaClient.$transaction(
+    transactions.map(transactions => transactions())
+  )
 }
 
 export const archiveBeneficiaryMutation = createMutation({

@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { Prisma, UserActivityType } from '@prisma/client'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
@@ -31,17 +31,21 @@ const handler = async ({
       }
     }
   })
-  const deleteBeneficiary = BeneficiaryRepo.prisma.delete({
-    where: { id, draft: true }
-  })
-  const deleteFamilyFile = FamilyFileRepo.prisma.delete({
-    where: { id: beneficiary.familyFileId }
-  })
-  const transactions: any[] = [deleteBeneficiary]
-  if (beneficiary.familyFile.beneficiaries.length === 1) {
-    transactions.push(deleteFamilyFile)
+  const deleteBeneficiary = () =>
+    BeneficiaryRepo.prisma.delete({
+      where: { id, draft: true }
+    })
+  const deleteFamilyFile = () =>
+    FamilyFileRepo.prisma.delete({
+      where: { id: beneficiary.familyFileId }
+    })
+
+  // do not delete familyFile if there are other beneficiaries
+  if (beneficiary.familyFile.beneficiaries.length > 1) {
+    await deleteBeneficiary()
+    return
   }
-  await prismaClient.$transaction(transactions)
+  await prismaClient.$transaction([deleteBeneficiary(), deleteFamilyFile()])
 }
 
 export const deleteBeneficiaryDraftMutation = createMutation({

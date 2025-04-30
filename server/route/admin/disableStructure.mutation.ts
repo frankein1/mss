@@ -51,45 +51,50 @@ const adminHandler = async ({
     }
   })
 
-  const deleteNotifications = NotificationRepo.prisma.deleteMany({
-    where: {
-      beneficiary: {
-        structureId: id
+  const deleteNotifications = () =>
+    NotificationRepo.prisma.deleteMany({
+      where: {
+        beneficiary: {
+          structureId: id
+        }
       }
-    }
-  })
+    })
 
-  const deleteComments = CommentRepo.prisma.deleteMany({
-    where: {
-      socialSupport: {
-        structureId: id
+  const deleteComments = () =>
+    CommentRepo.prisma.deleteMany({
+      where: {
+        socialSupport: {
+          structureId: id
+        }
       }
-    }
-  })
+    })
 
-  const deleteDocuments = DocumentRepo.prisma.deleteMany({
-    where: {
-      beneficiary: {
-        structureId: id
+  const deleteDocuments = () =>
+    DocumentRepo.prisma.deleteMany({
+      where: {
+        beneficiary: {
+          structureId: id
+        }
       }
-    }
-  })
+    })
 
-  const deleteRelatives = BeneficiaryRelativeRepo.prisma.deleteMany({
-    where: {
-      beneficiary: {
-        structureId: id
+  const deleteRelatives = () =>
+    BeneficiaryRelativeRepo.prisma.deleteMany({
+      where: {
+        beneficiary: {
+          structureId: id
+        }
       }
-    }
-  })
+    })
 
-  const deleteBudget = BudgetRepo.prisma.deleteMany({
-    where: {
-      familyFile: {
-        structureId: id
+  const deleteBudget = () =>
+    BudgetRepo.prisma.deleteMany({
+      where: {
+        familyFile: {
+          structureId: id
+        }
       }
-    }
-  })
+    })
 
   await updateFileInstructions(id)
   await updateHelpRequests(id)
@@ -121,10 +126,11 @@ const adminHandler = async ({
     ministre: null,
     dueDate: null
   }
-  const updateSocialSupports = SocialSupportRepo.prisma.updateMany({
-    where: { structureId: id },
-    data: socialSupportUpdate
-  })
+  const updateSocialSupports = () =>
+    SocialSupportRepo.prisma.updateMany({
+      where: { structureId: id },
+      data: socialSupportUpdate
+    })
 
   const beneficiaryUpdate: Required<
     Omit<
@@ -214,10 +220,11 @@ const adminHandler = async ({
     schoolName: null,
     isSchoolInQPV: false
   }
-  const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
-    where: { structureId: id },
-    data: beneficiaryUpdate
-  })
+  const updateBeneficiaries = () =>
+    BeneficiaryRepo.prisma.updateMany({
+      where: { structureId: id },
+      data: beneficiaryUpdate
+    })
 
   const structureUpdate: Required<
     Omit<
@@ -248,20 +255,21 @@ const adminHandler = async ({
     externalRdvspActive: false,
     externalRdvspId: null
   }
-  const updateStructure = StructureRepo.prisma.update({
-    where: { id },
-    data: structureUpdate
-  })
+  const updateStructure = () =>
+    StructureRepo.prisma.update({
+      where: { id },
+      data: structureUpdate
+    })
 
   await prismaClient.$transaction([
-    deleteNotifications,
-    deleteComments,
-    deleteDocuments,
-    deleteBudget,
-    deleteRelatives,
-    updateSocialSupports,
-    updateBeneficiaries,
-    updateStructure
+    deleteNotifications(),
+    deleteComments(),
+    deleteDocuments(),
+    deleteBudget(),
+    deleteRelatives(),
+    updateSocialSupports(),
+    updateBeneficiaries(),
+    updateStructure()
   ])
 
   // Deactivate and anonymize all users of the structure while keeping the uniqueness of the email
@@ -282,17 +290,19 @@ const adminHandler = async ({
   >
 
   for (const user of structure.users) {
-    const deleteAccount = prismaClient.account.deleteMany({
-      where: {
-        userId: user.id
-      }
-    })
+    const deleteAccount = () =>
+      prismaClient.account.deleteMany({
+        where: {
+          userId: user.id
+        }
+      })
 
-    const deleteExternalAccount = prismaClient.externalAccount.deleteMany({
-      where: {
-        userId: user.id
-      }
-    })
+    const deleteExternalAccount = () =>
+      prismaClient.externalAccount.deleteMany({
+        where: {
+          userId: user.id
+        }
+      })
 
     const userUpdate: UserUpdate = {
       firstName: '',
@@ -307,15 +317,16 @@ const adminHandler = async ({
       authorizationCodeValidity: null,
       accountReminderEmail: 0
     }
-    const updateUser = UserRepo.prisma.update({
-      where: { id: user.id },
-      data: userUpdate
-    })
+    const updateUser = () =>
+      UserRepo.prisma.update({
+        where: { id: user.id },
+        data: userUpdate
+      })
 
     await prismaClient.$transaction([
-      deleteAccount,
-      deleteExternalAccount,
-      updateUser
+      deleteAccount(),
+      deleteExternalAccount(),
+      updateUser()
     ])
 
     if (user.status === 'Active') {
