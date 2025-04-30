@@ -18,7 +18,7 @@
       "
       @save="saveTarget = $event"
     />
-    <main
+    <div
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
@@ -54,7 +54,7 @@
         :permissions="permissions"
         @save="saveTarget = $event"
       />
-    </main>
+    </div>
     <BeneficiaryFormActions
       class="fr-col-12"
       :is-submitting="isSubmitting"

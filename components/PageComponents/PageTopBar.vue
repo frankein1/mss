@@ -1,5 +1,8 @@
 <template>
-  <div class="topbar__container">
+  <div
+    id="topbar"
+    class="topbar__container"
+  >
     <AtomDropdown
       :label="getUserName()"
       :menus="menus"

@@ -4,7 +4,7 @@
     novalidate
     @submit.prevent="onSubmit"
   >
-    <main class="fr-container content fr-pb-5w">
+    <div class="fr-container content fr-pb-5w">
       <AtomBreadcrumb :links="breadcrumbs.structure.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
@@ -81,7 +81,7 @@
           </section>
         </div>
       </div>
-    </main>
+    </div>
     <AtomActionsBar>
       <ul
         class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"

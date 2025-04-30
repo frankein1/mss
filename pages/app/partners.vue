@@ -2,56 +2,54 @@
   <PageContainer>
     <AtomBreadcrumb :links="breadcrumbs.structure.AppPartners()" />
     <PageTitle :title="title" />
-    <main>
-      <h2 class="fr-h4 partner-subtitle fr-m-0">
-        {{ `${data?.length} organismes partenaires de votre structure` }}
-      </h2>
-      <div class="fr-mb-1w">
-        Les personnes avec un rôle "responsable de structure" ou "travailleur
-        social" peuvent ajouter ou supprimer des partenaires
+    <h2 class="fr-h4 partner-subtitle fr-m-0">
+      {{ `${data?.length} organismes partenaires de votre structure` }}
+    </h2>
+    <div class="fr-mb-1w">
+      Les personnes avec un rôle "responsable de structure" ou "travailleur
+      social" peuvent ajouter ou supprimer des partenaires
+    </div>
+    <div class="fr-m-0 fr-text--xs">
+      Ces informations étant partagées avec l'ensemble des utilisateurs, il est
+      fortement recommandé de ne stocker que les informations utiles à
+      l'activité de votre structure et informer les contacts qui se trouvent
+      dans cet annuaire.
+    </div>
+    <div class="fr-py-2w partner-search-bar">
+      <div class="partner-search-bar__input">
+        <form ref="form">
+          <VeeSearchInput
+            name="filter"
+            label="Rechercher"
+            :label-visible="false"
+            @on-input="onSearch"
+          />
+        </form>
       </div>
-      <div class="fr-m-0 fr-text--xs">
-        Ces informations étant partagées avec l'ensemble des utilisateurs, il
-        est fortement recommandé de ne stocker que les informations utiles à
-        l'activité de votre structure et informer les contacts qui se trouvent
-        dans cet annuaire.
-      </div>
-      <div class="fr-py-2w partner-search-bar">
-        <div class="partner-search-bar__input">
-          <form ref="form">
-            <VeeSearchInput
-              name="filter"
-              label="Rechercher"
-              :label-visible="false"
-              @on-input="onSearch"
-            />
-          </form>
+      <template v-if="application.module.partner">
+        <div class="partner-search-bar__action">
+          <button
+            data-fr-opened="false"
+            aria-controls="global-modal"
+            type="button"
+            class="fr-btn fr-btn--icon-left fr-btn--md fr-btn--secondary fr-icon-add-line"
+            @click="openCreateModal"
+          >
+            Ajouter
+          </button>
         </div>
-        <template v-if="application.module.partner">
-          <div class="partner-search-bar__action">
-            <button
-              data-fr-opened="false"
-              aria-controls="global-modal"
-              type="button"
-              class="fr-btn fr-btn--icon-left fr-btn--md fr-btn--secondary fr-icon-add-line"
-              @click="openCreateModal"
-            >
-              Ajouter
-            </button>
-          </div>
-        </template>
-      </div>
-      <div class="partner-catalog">
-        <PartnerOrganizationCard
-          v-for="partner in partners"
-          :key="partner.id"
-          :partner="partner"
-          class="partner-catalog-item"
-          @edit="openEditModal"
-          @delete="openRemoveModal"
-        />
-      </div>
-    </main>
+      </template>
+    </div>
+    <div class="partner-catalog">
+      <PartnerOrganizationCard
+        v-for="partner in partners"
+        :key="partner.id"
+        :partner="partner"
+        class="partner-catalog-item"
+        @edit="openEditModal"
+        @delete="openRemoveModal"
+      />
+    </div>
   </PageContainer>
 </template>
 

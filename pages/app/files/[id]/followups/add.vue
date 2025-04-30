@@ -17,7 +17,7 @@
       <RequiredFields />
     </PageTitle>
 
-    <main ref="formContainer">
+    <div ref="formContainer">
       <AtomLazyComponent
         :pending
         :error="Boolean(fetchError)"
@@ -34,7 +34,7 @@
           @save-followup="onAddFollowup"
         />
       </AtomLazyComponent>
-    </main>
+    </div>
   </PageContainer>
 </template>
 

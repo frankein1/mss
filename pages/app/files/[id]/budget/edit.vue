@@ -10,7 +10,7 @@
       novalidate
       @submit.prevent="onSubmit"
     >
-      <main class="content">
+      <div class="content">
         <div class="fr-container fr-pb-2w">
           <AtomBreadcrumb
             :links="
@@ -44,7 +44,7 @@
 
           <BudgetGeneralInformationForm />
         </div>
-      </main>
+      </div>
 
       <BudgetActionBar
         :is-submitting="isSubmitting"

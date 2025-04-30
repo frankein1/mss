@@ -1,5 +1,5 @@
 <template>
-  <main class="landing-main-container fr-container fr-my-8w">
+  <div class="landing-main-container fr-container fr-my-8w">
     <div class="fr-grid-row fr-my-5w">
       <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2">
         <h1 class="register-title">
@@ -57,7 +57,7 @@
     <section class="fr-grid-row fr-grid-row--center">
       <TheLandingVideo />
     </section>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

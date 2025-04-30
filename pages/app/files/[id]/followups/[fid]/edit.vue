@@ -9,7 +9,7 @@
       "
     />
     <PageTitle :title="title" />
-    <main ref="formContainer">
+    <div ref="formContainer">
       <AtomLazyComponent
         :pending
         :error="Boolean(fetchError)"
@@ -27,7 +27,7 @@
           @save-followup="onUpdateFollowup"
         />
       </AtomLazyComponent>
-    </main>
+    </div>
   </PageContainer>
 </template>
 

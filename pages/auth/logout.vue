@@ -1,9 +1,9 @@
 <template>
-  <main class="landing-main-container fr-container fr-my-8w">
+  <div class="landing-main-container fr-container fr-my-8w">
     <client-only>
       <AuthLogout :inactive="inactive"></AuthLogout>
     </client-only>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

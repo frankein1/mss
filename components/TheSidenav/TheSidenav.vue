@@ -1,5 +1,6 @@
 <template>
   <nav
+    id="navigation"
     class="fr-sidemenu fr-sidemenu--sticky-full-height fr-p-0"
     role="navigation"
     aria-labelledby="sidemenu-title"

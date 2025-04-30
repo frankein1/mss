@@ -3,8 +3,18 @@
     class="page-container"
     :class="route.name ? [route.name + '-style'] : []"
   >
+    <DsfrSkipLinks
+      class="fr-sr-only"
+      :links="[
+        { id: 'main-content', text: 'Aller au contenu principal' },
+        { id: 'header', text: `Aller à l'entête` },
+        { id: 'footer', text: `Aller au pied de page` }
+      ]"
+    />
     <TheLandingHeader />
-    <slot />
+    <main id="main-content">
+      <slot />
+    </main>
     <TheLandingFooter />
     <AtomSnackbar />
   </div>

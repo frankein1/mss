@@ -1,10 +1,10 @@
 <template>
-  <main class="landing-main-container fr-container fr-my-8w">
+  <div class="landing-main-container fr-container fr-my-8w">
     <h1 class="login-title fr-h2 fr-mb-5w">
       {{ routes.auth.AuthLogin.title }}
     </h1>
     <SsoButton />
-  </main>
+  </div>
 </template>
 
 <script lang="ts" setup>

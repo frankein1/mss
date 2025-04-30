@@ -2,7 +2,7 @@
   <PageContainer>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <main
+        <div
           ref="formContainer"
           class="main-container fr-p-5w"
         >
@@ -10,7 +10,7 @@
             :is-submitting="isSubmitting"
             @update-user="onAddUser($event as AdminCreateUserInput)"
           />
-        </main>
+        </div>
       </div>
     </div>
   </PageContainer>

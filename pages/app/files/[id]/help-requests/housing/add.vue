@@ -19,7 +19,7 @@
     >
       <RequiredFields />
     </PageTitle>
-    <main ref="formContainer">
+    <div ref="formContainer">
       <AtomLazyComponent
         :pending
         :error="Boolean(error)"
@@ -34,7 +34,7 @@
           @save-housing-help-request="onAddHousingHelpRequest"
         />
       </AtomLazyComponent>
-    </main>
+    </div>
   </PageContainer>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main class="landing-main-container fr-container fr-my-8w">
+    <div class="landing-main-container fr-container fr-my-8w">
       <section class="fr-grid-row fr-grid-row--center fr-mb-16w">
         <div class="fr-col-12 fr-col-lg-5 landing-container-left">
           <h1 class="landing-title">
@@ -161,7 +161,7 @@
           </div>
         </div>
       </section>
-    </main>
+    </div>
     <section class="contact-section">
       <div class="fr-container">
         <h2>Nous contacter</h2>

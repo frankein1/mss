@@ -3,7 +3,7 @@
     <PageTitle :title="user ? formatUserDisplayName(user) : '-'" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <main
+        <div
           ref="formContainer"
           class="main-container fr-p-5w"
         >
@@ -23,7 +23,7 @@
             :is-submitting="isSubmitting"
             @update-user="onUpdateUser($event as AdminEditUserInput)"
           />
-        </main>
+        </div>
       </div>
     </div>
   </PageContainer>

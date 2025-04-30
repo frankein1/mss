@@ -1,9 +1,6 @@
 <template>
   <NuxtLayout name="landing">
-    <main
-      id="content"
-      role="main"
-    >
+    <main id="content">
       <div class="fr-container">
         <div
           class="fr-my-7w fr-mt-md-12w fr-mb-md-10w fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-grid-row--center"

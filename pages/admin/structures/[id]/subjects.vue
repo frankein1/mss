@@ -3,7 +3,7 @@
     novalidate
     @submit.prevent="onSubmit"
   >
-    <main class="fr-container content fr-py-5w">
+    <div class="fr-container content fr-py-5w">
       <PageTitle :title="title" />
 
       <AtomLoader
@@ -59,7 +59,7 @@
           </section>
         </div>
       </div>
-    </main>
+    </div>
     <AtomActionsBar>
       <ul
         class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"

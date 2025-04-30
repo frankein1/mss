@@ -1,5 +1,6 @@
 <template>
   <header
+    id="header"
     role="banner"
     class="fr-header"
   >

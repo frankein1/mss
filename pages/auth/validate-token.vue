@@ -1,5 +1,5 @@
 <template>
-  <main class="landing-main-container fr-container fr-my-8w">
+  <div class="landing-main-container fr-container fr-my-8w">
     <client-only>
       <ValidateToken />
       <template #fallback>
@@ -12,7 +12,7 @@
         </div>
       </template>
     </client-only>
-  </main>
+  </div>
 </template>
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
