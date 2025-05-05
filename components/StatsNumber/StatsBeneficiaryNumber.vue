@@ -1,19 +1,21 @@
 <template>
-  <h5 class="fr-m-2w fr-grid-row">
+  <div class="fr-m-2w fr-grid-row">
     <div class="fr-col-6">
       <span
-        class="text-big"
+        class="text-big fr-h2"
         :class="historyType"
         >{{ beneficiaryCounts }}&nbsp;</span
       >
-      <template v-if="historyType === 'beneficiary'">
-        {{
-          `${plural('dossier', beneficiaryCounts)} ${plural('bénéficiaire', beneficiaryCounts)}`
-        }}
-      </template>
-      <template v-else>{{
-        `${plural('bénéficiaire', beneficiaryCounts)} ${plural('concerné', beneficiaryCounts)}`
-      }}</template>
+      <span class="fr-h5">
+        <template v-if="historyType === 'beneficiary'">
+          {{
+            `${plural('dossier', beneficiaryCounts)} ${plural('bénéficiaire', beneficiaryCounts)}`
+          }}
+        </template>
+        <template v-else>{{
+          `${plural('bénéficiaire', beneficiaryCounts)} ${plural('concerné', beneficiaryCounts)}`
+        }}</template></span
+      >
     </div>
 
     <div
@@ -21,15 +23,15 @@
       class="fr-col-6"
     >
       <span
-        class="text-big"
+        class="text-big fr-h2"
         :class="historyType"
         >{{ familyCounts }}&nbsp;</span
       >
-      <span>{{
+      <span class="fr-h5">{{
         `${plural('dossier', familyCounts)} ${plural('foyer', familyCounts)}`
       }}</span>
     </div>
-  </h5>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="feature-section bg-color-white structure-info">
+  <section class="feature-section bg-color-white structure-info">
     <h2 class="fr-h4 structure-info__title">
       Informations sur votre structure
     </h2>
@@ -82,7 +82,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

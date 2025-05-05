@@ -48,7 +48,8 @@ body,
 }
 
 nav.content,
-main.content {
+main.content,
+main form .content {
   height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
   overflow-y: auto;
 }

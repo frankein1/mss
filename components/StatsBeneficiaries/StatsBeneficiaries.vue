@@ -1,17 +1,23 @@
 <template>
-  <div class="fr-container--fluid fr-mb-3w">
-    <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-      <!-- Filters -->
-      <div class="fr-col-12">
-        <StatsFilters
-          v-model:filters="filters"
-          :social-support-subject-options="socialSupportSubjectOptions"
-          :beneficiaries-cities-options="beneficiariesCitiesOptions"
-          :agent-options="agentOptions"
-        />
-      </div>
+  <div>
+    <!-- Filters -->
 
-      <StatsHeader :menus="menus">
+    <StatsFilters
+      v-model:filters="filters"
+      :social-support-subject-options="socialSupportSubjectOptions"
+      :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :agent-options="agentOptions"
+    />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h3 class="fr-sr-only">Résultats</h3>
+      <StatsHeader
+        class="fr-mt-3w"
+        :menus="menus"
+      >
+        <template #header>
+          <h4 class="fr-sr-only">Nombre de bénéficiaires</h4>
+        </template>
         <template #icon>
           <img
             src="~/assets/img/avatar.svg"
@@ -32,7 +38,6 @@
         v-if="!alertClose"
         @close-alert="alertClose = true"
       />
-
       <!-- Alert + Loader -->
       <AtomAlert
         v-if="error"
@@ -211,7 +216,7 @@
           /></StatsCard>
         </template>
       </template>
-    </div>
+    </section>
   </div>
 </template>
 

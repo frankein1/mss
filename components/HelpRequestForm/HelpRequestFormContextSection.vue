@@ -1,211 +1,215 @@
 <template>
-  <h3 class="fr-col-12 fr-h5 fr-mb-0">Contexte du dossier d'instruction</h3>
+  <section
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
+  >
+    <h3 class="fr-col-12 fr-h5 fr-mb-0">Contexte du dossier d'instruction</h3>
 
-  <div class="fr-col-12">
-    <VeeInput
-      name="date"
-      :label="helpRequestFieldLabels.date"
-      type="date"
-      required
-    />
-  </div>
-
-  <template v-if="application.module.ministere">
     <div class="fr-col-12">
       <VeeInput
-        name="numeroPegase"
-        :label="helpRequestFieldLabels.numeroPegase"
-        hint="Format attendu : A-00-000000"
-      />
-    </div>
-
-    <div class="fr-col-12">
-      <VeeSelect
-        name="ministre"
-        :label="helpRequestFieldLabels.ministre"
-        :options="withEmptyValue(ministerKeys.options)"
+        name="date"
+        :label="helpRequestFieldLabels.date"
+        type="date"
         required
       />
     </div>
-  </template>
 
-  <template v-if="isHousingSupport">
+    <template v-if="application.module.ministere">
+      <div class="fr-col-12">
+        <VeeInput
+          name="numeroPegase"
+          :label="helpRequestFieldLabels.numeroPegase"
+          hint="Format attendu : A-00-000000"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeSelect
+          name="ministre"
+          :label="helpRequestFieldLabels.ministre"
+          :options="withEmptyValue(ministerKeys.options)"
+          required
+        />
+      </div>
+    </template>
+
+    <template v-if="isHousingSupport">
+      <div class="fr-col-12">
+        <VeeRadioButtons
+          name="isFirst"
+          :label="helpRequestFieldLabels.isFirst"
+          :options="isFirstKeys.options"
+        />
+      </div>
+
+      <div
+        v-if="isFirst === 'false'"
+        class="fr-col-12"
+      >
+        <VeeInput
+          name="firstOpeningDate"
+          :label="housingHelpRequestFieldLabels.firstOpeningDate"
+          type="date"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <fieldset
+          class="fr-fieldset"
+          aria-labelledby="housing-help-request-asked-housing-legend"
+        >
+          <legend
+            id="housing-help-request-asked-housing-legend"
+            class="fr-fieldset__legend fr-fieldset__legend--regular"
+          >
+            {{ housingHelpRequestFieldLabels.askedHousing }}
+          </legend>
+          <div
+            v-for="{ value, label } in askedHousingKeys.options"
+            :key="value"
+            class="fr-fieldset__element fr-fieldset__element--inline"
+          >
+            <VeeCheckbox
+              :name="value"
+              :label="label"
+            />
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ROW -->
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.prescribingOrganizationId"
+          name="prescribingOrganizationId"
+          :options="withEmptyValue(partnerOrganizationOptions)"
+          :disabled="prescribingOrganizationContactIsDisabled"
+          @change-value="onPrescribingOrganization"
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSelect
+          name="prescribingOrganizationContactId"
+          :disabled="prescribingOrganizationContactIsDisabled"
+          :label="helpRequestFieldLabels.prescribingOrganizationContactId"
+          :options="withEmptyValue(prescribingOrganizationContactOptions)"
+        />
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="fr-col-12">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.subjectId"
+          name="subjectId"
+          :options="socialSupportSubjectOptions"
+          required
+          hint
+        >
+          <template #hint>
+            <NuxtLink
+              v-if="application.edit.structure"
+              :to="routes.structure.AppStructure.path()"
+              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+              >Je personnalise les objets d'accompagnement de ma structure
+            </NuxtLink>
+            <template v-else>
+              Les responsables de votre structure peuvent personnaliser les
+              objets d'accompagnement
+            </template>
+          </template>
+        </VeeSearchableSelect>
+      </div>
+
+      <!-- ROW -->
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.prescribingOrganizationId"
+          name="prescribingOrganizationId"
+          :options="withEmptyValue(partnerOrganizationOptions)"
+          @change-value="onPrescribingOrganization"
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSelect
+          name="prescribingOrganizationContactId"
+          :disabled="prescribingOrganizationContactIsDisabled"
+          :label="helpRequestFieldLabels.prescribingOrganizationContactId"
+          :options="withEmptyValue(prescribingOrganizationContactOptions)"
+        />
+      </div>
+
+      <!-- ROW -->
+      <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <NuxtLink
+          :to="routes.structure.AppPartners.path()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+        >
+          Données issues de l'annuaire de partenaires
+        </NuxtLink>
+      </div>
+    </template>
+
+    <!-- ROW -->
     <div class="fr-col-12">
-      <VeeRadioButtons
-        name="isFirst"
-        :label="helpRequestFieldLabels.isFirst"
-        :options="isFirstKeys.options"
+      <VeeSelect
+        label="Le dossier est instruit..."
+        name="externalStructure"
+        :options="withEmptyValue(externalOrganisationKeys.options)"
+        required
       />
     </div>
 
+    <!-- ROW -->
+
+    <template v-if="isExternalSupport">
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.instructorOrganizationId"
+          name="instructorOrganizationId"
+          :options="partnerOrganizationOptions"
+          @change-value="onInstructorOrganization"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSelect
+          name="instructorOrganizationContactId"
+          :label="helpRequestFieldLabels.instructorOrganizationContactId"
+          :options="withEmptyValue(instructorOrganizationContactOptions)"
+          :disabled="instructorOrganizationContactIsDisabled"
+        />
+      </div>
+
+      <!-- ROW -->
+      <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <NuxtLink
+          :to="routes.structure.AppPartners.path()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+        >
+          Données issues de l'annuaire de partenaires
+        </NuxtLink>
+      </div>
+    </template>
+
     <div
-      v-if="isFirst === 'false'"
+      v-if="hasSetExternalStructure"
       class="fr-col-12"
     >
       <VeeInput
-        name="firstOpeningDate"
-        :label="housingHelpRequestFieldLabels.firstOpeningDate"
+        v-if="isExternalSupport"
+        name="dispatchDate"
+        :label="helpRequestFieldLabels.dispatchDate"
+        type="date"
+      />
+      <VeeInput
+        v-else
+        name="examinationDate"
+        :label="helpRequestFieldLabels.examinationDate"
         type="date"
       />
     </div>
-
-    <div class="fr-col-12">
-      <fieldset
-        class="fr-fieldset"
-        aria-labelledby="housing-help-request-asked-housing-legend"
-      >
-        <legend
-          id="housing-help-request-asked-housing-legend"
-          class="fr-fieldset__legend fr-fieldset__legend--regular"
-        >
-          {{ housingHelpRequestFieldLabels.askedHousing }}
-        </legend>
-        <div
-          v-for="{ value, label } in askedHousingKeys.options"
-          :key="value"
-          class="fr-fieldset__element fr-fieldset__element--inline"
-        >
-          <VeeCheckbox
-            :name="value"
-            :label="label"
-          />
-        </div>
-      </fieldset>
-    </div>
-
-    <!-- ROW -->
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSearchableSelect
-        :label="helpRequestFieldLabels.prescribingOrganizationId"
-        name="prescribingOrganizationId"
-        :options="withEmptyValue(partnerOrganizationOptions)"
-        :disabled="prescribingOrganizationContactIsDisabled"
-        @change-value="onPrescribingOrganization"
-      />
-    </div>
-
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSelect
-        name="prescribingOrganizationContactId"
-        :disabled="prescribingOrganizationContactIsDisabled"
-        :label="helpRequestFieldLabels.prescribingOrganizationContactId"
-        :options="withEmptyValue(prescribingOrganizationContactOptions)"
-      />
-    </div>
-  </template>
-
-  <template v-else>
-    <div class="fr-col-12">
-      <VeeSearchableSelect
-        :label="helpRequestFieldLabels.subjectId"
-        name="subjectId"
-        :options="socialSupportSubjectOptions"
-        required
-        hint
-      >
-        <template #hint>
-          <NuxtLink
-            v-if="application.edit.structure"
-            :to="routes.structure.AppStructure.path()"
-            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-            >Je personnalise les objets d'accompagnement de ma structure
-          </NuxtLink>
-          <template v-else>
-            Les responsables de votre structure peuvent personnaliser les objets
-            d'accompagnement
-          </template>
-        </template>
-      </VeeSearchableSelect>
-    </div>
-
-    <!-- ROW -->
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSearchableSelect
-        :label="helpRequestFieldLabels.prescribingOrganizationId"
-        name="prescribingOrganizationId"
-        :options="withEmptyValue(partnerOrganizationOptions)"
-        @change-value="onPrescribingOrganization"
-      />
-    </div>
-
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSelect
-        name="prescribingOrganizationContactId"
-        :disabled="prescribingOrganizationContactIsDisabled"
-        :label="helpRequestFieldLabels.prescribingOrganizationContactId"
-        :options="withEmptyValue(prescribingOrganizationContactOptions)"
-      />
-    </div>
-
-    <!-- ROW -->
-    <div class="fr-col-12 fr-mt-0 fr-pt-0">
-      <NuxtLink
-        :to="routes.structure.AppPartners.path()"
-        class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-      >
-        Données issues de l'annuaire de partenaires
-      </NuxtLink>
-    </div>
-  </template>
-
-  <!-- ROW -->
-  <div class="fr-col-12">
-    <VeeSelect
-      label="Le dossier est instruit..."
-      name="externalStructure"
-      :options="withEmptyValue(externalOrganisationKeys.options)"
-      required
-    />
-  </div>
-
-  <!-- ROW -->
-
-  <template v-if="isExternalSupport">
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSearchableSelect
-        :label="helpRequestFieldLabels.instructorOrganizationId"
-        name="instructorOrganizationId"
-        :options="partnerOrganizationOptions"
-        @change-value="onInstructorOrganization"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-md-6">
-      <VeeSelect
-        name="instructorOrganizationContactId"
-        :label="helpRequestFieldLabels.instructorOrganizationContactId"
-        :options="withEmptyValue(instructorOrganizationContactOptions)"
-        :disabled="instructorOrganizationContactIsDisabled"
-      />
-    </div>
-
-    <!-- ROW -->
-    <div class="fr-col-12 fr-mt-0 fr-pt-0">
-      <NuxtLink
-        :to="routes.structure.AppPartners.path()"
-        class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-      >
-        Données issues de l'annuaire de partenaires
-      </NuxtLink>
-    </div>
-  </template>
-
-  <div
-    v-if="hasSetExternalStructure"
-    class="fr-col-12"
-  >
-    <VeeInput
-      v-if="isExternalSupport"
-      name="dispatchDate"
-      :label="helpRequestFieldLabels.dispatchDate"
-      type="date"
-    />
-    <VeeInput
-      v-else
-      name="examinationDate"
-      :label="helpRequestFieldLabels.examinationDate"
-      type="date"
-    />
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

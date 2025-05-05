@@ -1,165 +1,168 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+  <div>
     <!-- Filters -->
-    <div class="fr-col-12">
-      <h3 class="fr-sr-only">Filtres</h3>
-      <StatsFilters
-        v-model:filters="filters"
-        :social-support-subject-options="socialSupportSubjectOptions"
-        :beneficiaries-cities-options="beneficiariesCitiesOptions"
-        :agent-options="agentOptions"
-        :is-help-request="true"
-        :is-history="true"
+    <StatsFilters
+      v-model:filters="filters"
+      :social-support-subject-options="socialSupportSubjectOptions"
+      :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :agent-options="agentOptions"
+      :is-help-request="true"
+      :is-history="true"
+    />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h3 class="fr-sr-only">Résultats</h3>
+      <StatsHeader
+        :menus="menus"
+        class="fr-mb-1w fr-mt-3w"
+      >
+        <template #header>
+          <h4 class="fr-sr-only">Nombre d'instructions de dossiers</h4>
+        </template>
+        <template #icon>
+          <AtomicIconHelpRequest :is-big="true" />
+        </template>
+        <template #title>
+          {{ helpRequestCountLabel }}
+        </template>
+      </StatsHeader>
+      <StatsExportAlert
+        v-if="!alertClose"
+        @close-alert="alertClose = true"
       />
-    </div>
 
-    <StatsHeader
-      :menus="menus"
-      class="fr-mb-1w"
-    >
-      <template #icon>
-        <AtomicIconHelpRequest :is-big="true" />
-      </template>
-      <template #title>
-        {{ helpRequestCountLabel }}
-      </template>
-    </StatsHeader>
-    <StatsExportAlert
-      v-if="!alertClose"
-      @close-alert="alertClose = true"
-    />
+      <!-- Alert + Loader -->
+      <AtomAlert
+        v-if="error"
+        :alert-type="AlertType.Error"
+        message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
+      />
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
+      />
 
-    <!-- Alert + Loader -->
-    <AtomAlert
-      v-if="error"
-      :alert-type="AlertType.Error"
-      message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
-    />
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
+      <!-- Cards -->
+      <template v-else-if="helpRequestCount">
+        <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+          <!-- ROW -->
+          <div class="fr-col-12">
+            <StatsHelpRequestBeneficiaryNumber
+              history-type="helprequest"
+              :filters="filters"
+            />
+          </div>
 
-    <!-- Cards -->
-    <template v-else-if="helpRequestCount">
-      <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-        <!-- ROW -->
-        <div class="fr-col-12">
-          <StatsHelpRequestBeneficiaryNumber
-            history-type="helprequest"
-            :filters="filters"
-          />
+          <!-- ROW -->
+          <StatsCard
+            v-if="displayed.instructionType"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.instructionType.id"
+            :card-name="helpRequestCardsConfig.instructionType.name"
+          >
+            <StatsFileInstructionType
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.socialSupportSubjects"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.subjects.id"
+            :card-name="helpRequestCardsConfig.subjects.name"
+          >
+            <StatsHelpRequestSubject
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.status.id"
+            :card-name="helpRequestCardsConfig.status.name"
+          >
+            <StatsHelpRequestStatus
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.ministere"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.ministres.id"
+            :card-name="helpRequestCardsConfig.ministres.name"
+          >
+            <StatsHelpRequestMinistre
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
+            :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
+          >
+            <StatsHelpRequestPrescribingOrganizations
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.instructions.id"
+            :card-name="helpRequestCardsConfig.instructions.name"
+          >
+            <StatsHelpRequestInstructions
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.financial"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.amountAllocated.id"
+            :card-name="helpRequestCardsConfig.amountAllocated.name"
+          >
+            <StatsHelpRequestAmountsAllocated :filters />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.financial"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.amountsBySubject.id"
+            :card-name="helpRequestCardsConfig.amountsBySubject.name"
+          >
+            <StatsHelpRequestAmountsBySubject :filters="filters" />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.financial"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
+            :card-name="
+              helpRequestCardsConfig.amountByInstructorOrganization.name
+            "
+          >
+            <StatsHelpRequestAmountsByInstructorOrganization :filters />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.housing"
+            class="fr-col-12 fr-col-md-6"
+            :card-id="helpRequestCardsConfig.housingHelpRequest.id"
+            :card-name="helpRequestCardsConfig.housingHelpRequest.name"
+          >
+            <StatsHousingHelpRequests :filters="filters" />
+          </StatsCard>
         </div>
-
-        <!-- ROW -->
-        <StatsCard
-          v-if="displayed.instructionType"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.instructionType.id"
-          :card-name="helpRequestCardsConfig.instructionType.name"
-        >
-          <StatsFileInstructionType
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.socialSupportSubjects"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.subjects.id"
-          :card-name="helpRequestCardsConfig.subjects.name"
-        >
-          <StatsHelpRequestSubject
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.status.id"
-          :card-name="helpRequestCardsConfig.status.name"
-        >
-          <StatsHelpRequestStatus
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.ministere"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.ministres.id"
-          :card-name="helpRequestCardsConfig.ministres.name"
-        >
-          <StatsHelpRequestMinistre
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
-          :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
-        >
-          <StatsHelpRequestPrescribingOrganizations
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.instructions.id"
-          :card-name="helpRequestCardsConfig.instructions.name"
-        >
-          <StatsHelpRequestInstructions
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.financial"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountAllocated.id"
-          :card-name="helpRequestCardsConfig.amountAllocated.name"
-        >
-          <StatsHelpRequestAmountsAllocated :filters />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.financial"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountsBySubject.id"
-          :card-name="helpRequestCardsConfig.amountsBySubject.name"
-        >
-          <StatsHelpRequestAmountsBySubject :filters="filters" />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.financial"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
-          :card-name="
-            helpRequestCardsConfig.amountByInstructorOrganization.name
-          "
-        >
-          <StatsHelpRequestAmountsByInstructorOrganization :filters />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.housing"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="helpRequestCardsConfig.housingHelpRequest.id"
-          :card-name="helpRequestCardsConfig.housingHelpRequest.name"
-        >
-          <StatsHousingHelpRequests :filters="filters" />
-        </StatsCard>
-      </div>
-    </template>
+      </template>
+    </section>
   </div>
 </template>
 

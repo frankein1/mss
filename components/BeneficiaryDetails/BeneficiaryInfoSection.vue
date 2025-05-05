@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     class="feature-section fr-mt-1w"
     :class="{ 'fr-accordion': title }"
   >
@@ -42,7 +42,7 @@
         </ul>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

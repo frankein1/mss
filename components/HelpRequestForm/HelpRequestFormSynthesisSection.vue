@@ -1,39 +1,43 @@
 <template>
-  <h3 class="fr-col-12 fr-h5 fr-mb-0">Compte rendu</h3>
-
-  <div class="fr-col-12">
-    <AtomTextEditor
-      name="synthesis"
-      :initial-value="synthesisRichTextValue || null"
-      :initial-raw-value="synthesis"
-      :label="helpRequestFieldLabels.synthesis"
-      @update="onUpdateSynthesis"
-    >
-      <template #hint>
-        {{ SENSITIVE_DATA_HINT }}
-      </template>
-    </AtomTextEditor>
-  </div>
-
-  <div
-    v-if="canEditPrivateSynthesis"
-    class="fr-col-12"
+  <section
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
   >
-    <AtomTextEditor
-      name="privateSynthesis"
-      :initial-value="privateSynthesisRichTextValue || null"
-      :initial-raw-value="privateSynthesis"
-      :label="helpRequestFieldLabels.privateSynthesis"
-      label-icon="fr-icon-lock-line"
-      :min-height="120"
-      @update="onUpdatePrivateSynthesis"
+    <h3 class="fr-col-12 fr-h5 fr-mb-0">Compte rendu</h3>
+
+    <div class="fr-col-12">
+      <AtomTextEditor
+        name="synthesis"
+        :initial-value="synthesisRichTextValue || null"
+        :initial-raw-value="synthesis"
+        :label="helpRequestFieldLabels.synthesis"
+        @update="onUpdateSynthesis"
+      >
+        <template #hint>
+          {{ SENSITIVE_DATA_HINT }}
+        </template>
+      </AtomTextEditor>
+    </div>
+
+    <div
+      v-if="canEditPrivateSynthesis"
+      class="fr-col-12"
     >
-      <template #hint>
-        Le compte rendu privé est uniquement visible et modifiable par l'agent
-        qui instruit le dossier.<br />{{ SENSITIVE_DATA_HINT }}
-      </template>
-    </AtomTextEditor>
-  </div>
+      <AtomTextEditor
+        name="privateSynthesis"
+        :initial-value="privateSynthesisRichTextValue || null"
+        :initial-raw-value="privateSynthesis"
+        :label="helpRequestFieldLabels.privateSynthesis"
+        label-icon="fr-icon-lock-line"
+        :min-height="120"
+        @update="onUpdatePrivateSynthesis"
+      >
+        <template #hint>
+          Le compte rendu privé est uniquement visible et modifiable par l'agent
+          qui instruit le dossier.<br />{{ SENSITIVE_DATA_HINT }}
+        </template>
+      </AtomTextEditor>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">

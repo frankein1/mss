@@ -39,47 +39,48 @@
         message="Les informations de votre structure n'ont pas pu être chargées."
       />
 
-      <div v-else-if="data">
-        <div class="fr-accordions-group">
-          <section class="feature-section fr-accordion fr-mb-1w">
-            <h2 class="fr-accordion__title">
-              <button
-                class="fr-accordion__btn fr-h4"
-                type="button"
-                aria-expanded="false"
-                aria-controls="accordion-selection"
-              >
-                Sélectionner parmi une suggestion d’objets
-              </button>
-            </h2>
-            <div
-              id="accordion-selection"
+      <div
+        v-else-if="data"
+        class="fr-accordions-group"
+      >
+        <section class="feature-section fr-accordion fr-mb-1w">
+          <h2 class="fr-accordion__title">
+            <button
+              class="fr-accordion__btn fr-h4"
               type="button"
-              class="fr-collapse"
+              aria-expanded="false"
+              aria-controls="accordion-selection"
             >
-              <SocialSupportSubjectsSelection :subjects="data" />
-            </div>
-          </section>
-          <section class="feature-section fr-accordion">
-            <h2 class="fr-accordion__title">
-              <button
-                class="fr-accordion__btn fr-h4"
-                type="button"
-                aria-expanded="false"
-                aria-controls="accordion-customization"
-              >
-                Créer un objet personnalisé
-              </button>
-            </h2>
+              Sélectionner parmi une suggestion d’objets
+            </button>
+          </h2>
+          <div
+            id="accordion-selection"
+            type="button"
+            class="fr-collapse"
+          >
+            <SocialSupportSubjectsSelection :subjects="data" />
+          </div>
+        </section>
+        <section class="feature-section fr-accordion">
+          <h2 class="fr-accordion__title">
+            <button
+              class="fr-accordion__btn fr-h4"
+              type="button"
+              aria-expanded="false"
+              aria-controls="accordion-customization"
+            >
+              Créer un objet personnalisé
+            </button>
+          </h2>
 
-            <div
-              id="accordion-customization"
-              class="fr-collapse"
-            >
-              <SocialSupportSubjectsCustomCreation />
-            </div>
-          </section>
-        </div>
+          <div
+            id="accordion-customization"
+            class="fr-collapse"
+          >
+            <SocialSupportSubjectsCustomCreation />
+          </div>
+        </section>
       </div>
     </div>
     <AtomActionsBar>

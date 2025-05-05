@@ -25,7 +25,7 @@
       </div>
     </section>
 
-    <div class="feature-section fr-p-5w">
+    <section class="feature-section fr-p-5w">
       <div
         class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
       >
@@ -305,7 +305,7 @@
           </button>
         </li>
       </ul>
-    </div>
+    </section>
   </form>
 </template>
 

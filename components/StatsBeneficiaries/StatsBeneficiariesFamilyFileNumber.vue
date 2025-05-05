@@ -1,5 +1,6 @@
 <template>
   <div class="feature-section fr-p-2w">
+    <h4>Nombre de dossiers concernés</h4>
     <AtomLoader
       v-if="status === 'pending'"
       class="fr-mx-auto"

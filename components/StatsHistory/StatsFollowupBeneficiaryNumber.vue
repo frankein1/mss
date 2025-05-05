@@ -1,5 +1,6 @@
 <template>
   <div class="feature-section fr-p-2w">
+    <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
     <AtomLoader
       v-if="pending"
       class="fr-mx-auto"

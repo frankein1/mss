@@ -16,10 +16,12 @@
     </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
-        <div class="feature-section">
+        <h2 class="fr-sr-only">Filtres</h2>
+        <section class="feature-section">
           <BeneficiaryFilters @filter="filters = $event" />
-        </div>
-        <div class="feature-section fr-mt-2w">
+        </section>
+        <section class="feature-section fr-mt-2w">
+          <h2 class="fr-sr-only">Liste des bénéficiaires</h2>
           <AtomAlert
             v-if="error"
             class="fr-mx-5v"
@@ -54,7 +56,7 @@
               />
             </template>
           </template>
-        </div>
+        </section>
       </div>
     </div>
   </PageContainer>

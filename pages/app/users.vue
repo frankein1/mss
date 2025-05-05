@@ -4,7 +4,7 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <div class="main-container fr-p-5w">
+        <section class="feature-section">
           <UserTable
             :users="users"
             :pending="usersPending"
@@ -20,13 +20,14 @@
               <RoleTable id="roles-details" />
             </DsfrAccordion>
           </DsfrAccordionsGroup>
-        </div>
+        </section>
 
-        <div class="main-container fr-p-5w fr-mt-4w">
-          <template v-if="application.module.users">
-            <UserForm @users-refresh="usersRefresh" />
-          </template>
-        </div>
+        <section
+          v-if="application.module.users"
+          class="feature-section fr-mt-4w"
+        >
+          <UserForm @users-refresh="usersRefresh" />
+        </section>
       </div>
     </div>
   </PageContainer>

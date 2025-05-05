@@ -1,11 +1,11 @@
 <template>
-  <!-- Title + Export buttons -->
   <div class="fr-col-12 header">
     <div class="header-title">
       <slot name="icon"></slot>
-      <h3 class="stats-main-title fr-mb-0 fr-ml-1w">
+      <slot name="header"></slot>
+      <p class="fr-mb-0 fr-ml-1w fr-h3">
         <slot name="title"></slot>
-      </h3>
+      </p>
     </div>
     <AtomDropdown
       v-if="menus.length > 0"
@@ -40,7 +40,7 @@
       align-items: center;
     }
 
-    h3 {
+    .fr-h3 {
       color: var(--primary);
     }
 

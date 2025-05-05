@@ -19,13 +19,11 @@
     "
   />
 
-  <section>
-    <BudgetIncomesAddMember
-      :family-file-id="familyFileId"
-      :budget-id="budgetId"
-      :family-file-identification="filterdFamilifileIdentitfication"
-    />
-  </section>
+  <BudgetIncomesAddMember
+    :family-file-id="familyFileId"
+    :budget-id="budgetId"
+    :family-file-identification="filterdFamilifileIdentitfication"
+  />
 </template>
 
 <script lang="ts" setup>

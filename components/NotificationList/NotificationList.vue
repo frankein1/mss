@@ -1,5 +1,5 @@
 <template>
-  <div class="feature-section">
+  <section class="feature-section">
     <NotificationListHeader />
     <NotificationFilters @filter="filters = $event" />
     <hr v-if="error || pending || !notifications.length" />
@@ -45,7 +45,7 @@
         />
       </div>
     </template>
-  </div>
+  </section>
   <OpenModalHack />
 </template>
 

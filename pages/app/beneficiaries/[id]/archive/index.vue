@@ -44,14 +44,14 @@
         @change-value="changeStatus($event)"
         @delay-archive="openDelayModal"
       />
-      <section ref="deleteSection">
+      <div ref="deleteSection">
         <ArchiveDelete
           v-if="archiveFormStatus == 'delete'"
           class="fr-mt-4w"
           @delete-file="openDeleteModal()"
         />
-      </section>
-      <section ref="archiveSection">
+      </div>
+      <div ref="archiveSection">
         <ArchiveForm
           v-if="archiveFormStatus == 'archive'"
           class="fr-mt-4w"
@@ -61,7 +61,7 @@
           @download-archive="onDownloadArchive"
           @delete-file="openArchiveDeleteModal"
         />
-      </section>
+      </div>
     </template>
     <OpenModalHack />
   </PageContainer>

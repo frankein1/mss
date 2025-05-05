@@ -30,7 +30,7 @@
         <BudgetGeneralInformation :budget="data" />
         <div class="fr-container--fluid fr-mt-5w">
           <div class="fr-grid-row fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <section class="fr-col-12 fr-col-md-6">
               <BudgetIncomes
                 v-if="data.incomes"
                 :family-file-id="familyFileId"
@@ -38,15 +38,15 @@
                 :budget-id="data.id"
                 :family-file-identification="familyFileIdentification || []"
               />
-            </div>
+            </section>
 
-            <div class="fr-col-6">
+            <section class="fr-col-12 fr-col-md-6">
               <BudgetExpenses
                 v-if="data.expenses"
                 :family-file-id="familyFileId"
                 :expenses="data.expenses"
               />
-            </div>
+            </section>
           </div>
         </div>
       </div>

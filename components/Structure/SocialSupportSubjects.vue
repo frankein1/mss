@@ -1,5 +1,5 @@
 <template>
-  <div class="feature-section bg-color-white sss">
+  <section class="feature-section bg-color-white sss">
     <h2 class="fr-h4 sss__title">
       Objets d’accompagnements proposés par votre structure
     </h2>
@@ -51,7 +51,7 @@
         Ajouter un accompagnement
       </NuxtLink>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

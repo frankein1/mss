@@ -1,5 +1,5 @@
 <template>
-  <div class="feature-section fr-mt-1w">
+  <section class="feature-section fr-mt-1w">
     <h2 class="fr-h4">
       Que souhaitez-vous faire du dossier&nbsp;?&nbsp;<span class="color-red"
         >*</span
@@ -51,7 +51,7 @@
         Je souhaite conserver le dossier 1 an supplémentaire.
       </button>
     </p>
-  </div>
+  </section>
 </template>
 
 <script lang="ts" setup>

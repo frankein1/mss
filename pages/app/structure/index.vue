@@ -8,27 +8,25 @@
       v-if="pending"
       class="fr-mx-auto"
     />
-
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
       message="Les informations de votre structure n'ont pas pu être chargées."
     />
-
-    <div v-else-if="data">
+    <template v-else-if="data">
       <StructureInfo
         class="fr-mb-5w"
         :structure="data.structure"
         @edit="onEdit"
       />
-      <OpenModalHack />
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         :edit-path="routes.structure.AppStructureSubjects.path()"
         @refresh="refresh"
       />
-    </div>
+    </template>
+    <OpenModalHack />
   </PageContainer>
 </template>
 

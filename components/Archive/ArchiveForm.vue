@@ -3,7 +3,7 @@
     ref="archiveForm"
     novalidate
   >
-    <div class="feature-section fr-mt-4w">
+    <section class="feature-section fr-mt-4w">
       <h2 class="fr-h4">Précisez les raisons de l’archivage</h2>
       <VeeSelect
         name="reason"
@@ -23,7 +23,7 @@
         label="Précisions"
         :disabled="pending"
       />
-    </div>
+    </section>
 
     <AtomAlertMSS
       class="fr-mt-4w"

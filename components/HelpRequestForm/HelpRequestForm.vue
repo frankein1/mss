@@ -26,51 +26,55 @@
     </section>
 
     <div class="feature-section fr-p-5w">
+      <HelpRequestFormContextSection
+        :social-support-subjects="socialSupportSubjects"
+        :partner-organizations="partnerOrganizations"
+        :is-external-support="isExternalSupport"
+        :has-set-external-structure="hasSetExternalStructure"
+        :is-housing-support="isHousingSupport"
+      />
+
+      <hr class="fr-col-12 helprequestform__divider" />
+
+      <HelpRequestFormInfoSection
+        :status="status"
+        :has-set-external-structure="hasSetExternalStructure"
+        :is-external-support="isExternalSupport"
+        :subject="subject"
+      />
+
+      <HelpRequestFormHousingSection v-if="isHousingSupport" />
+
+      <hr
+        v-else
+        class="helprequestform__divider"
+      />
+
+      <HelpRequestFormSynthesisSection
+        :can-edit-private-synthesis="canEditPrivateSynthesis"
+      />
+
+      <hr class="helprequestform__divider" />
+
+      <HelpRequestFormDocumentSection
+        :family-file-id="familyFileId || ''"
+        :beneficiary-id="beneficiaryId || ''"
+      />
+
+      <hr class="helprequestform__divider" />
       <div
         class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
       >
-        <HelpRequestFormContextSection
-          :social-support-subjects="socialSupportSubjects"
-          :partner-organizations="partnerOrganizations"
-          :is-external-support="isExternalSupport"
-          :has-set-external-structure="hasSetExternalStructure"
-          :is-housing-support="isHousingSupport"
-        />
-
-        <hr class="helprequestform__divider" />
-
-        <HelpRequestFormInfoSection
-          :status="status"
-          :has-set-external-structure="hasSetExternalStructure"
-          :is-external-support="isExternalSupport"
-          :subject="subject"
-        />
-
-        <HelpRequestFormHousingSection v-if="isHousingSupport" />
-
-        <hr
-          v-else
-          class="helprequestform__divider"
-        />
-
-        <HelpRequestFormSynthesisSection
-          :can-edit-private-synthesis="canEditPrivateSynthesis"
-        />
-
-        <hr class="helprequestform__divider" />
-
-        <HelpRequestFormDocumentSection
-          :family-file-id="familyFileId || ''"
-          :beneficiary-id="beneficiaryId || ''"
-        />
-
         <div class="fr-col-12">
           <VeeCheckbox
             name="fullFile"
             :label="helpRequestFieldLabels.fullFile"
           />
         </div>
-
+      </div>
+      <div
+        class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
+      >
         <ul
           class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
         >
@@ -162,8 +166,8 @@
 
 <style scoped lang="scss">
   .helprequestform__divider {
-    width: calc(100% - 1.5rem);
-    margin: 0.75rem 0 -0.75rem;
+    width: 100%;
+    margin: 2rem 0 1rem;
   }
 
   :deep(.fr-col-12 .fr-fieldset) {

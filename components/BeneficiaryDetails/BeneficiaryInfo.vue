@@ -9,10 +9,7 @@
       <slot name="actions"></slot>
     </div>
   </div>
-  <BeneficiaryInfoSection
-    id="header"
-    title=""
-  >
+  <BeneficiaryInfoSection title="">
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
   </BeneficiaryInfoSection>
   <BeneficiaryInfoSection

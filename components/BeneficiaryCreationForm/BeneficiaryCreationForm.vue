@@ -11,7 +11,7 @@
   >
     <BeneficiaryFormFileInformation :agents />
 
-    <div
+    <section
       class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
     >
       <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
@@ -123,7 +123,7 @@
           hint="Format attendu : A-00-000000"
         />
       </div>
-    </div>
+    </section>
 
     <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-5w">
       <AtomCallout

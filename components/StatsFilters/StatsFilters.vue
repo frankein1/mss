@@ -1,5 +1,6 @@
 <template>
-  <div class="feature-section">
+  <section class="feature-section">
+    <h3 class="fr-sr-only">Filtres</h3>
     <AtomLoader
       v-if="!socialSupportSubjectOptions || !beneficiariesCitiesOptions"
       class="fr-mx-auto"
@@ -11,7 +12,7 @@
       :expanded-by-default="true"
       @filter="emit('update:filters', $event)"
     />
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
