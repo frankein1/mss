@@ -2,6 +2,8 @@
   <div class="stats-bar">
     <div
       role="progressbar"
+      aria-label="Barre de progression"
+      :aria-labelledby="labelledby"
       :style="`width:${getPercentage(count, totalCount)}%;`"
       :aria-valuenow="getPercentage(count, totalCount)"
       aria-valuemin="0"
@@ -17,6 +19,7 @@
     defineProps<{
       count: number
       totalCount: number
+      labelledby: string
       color?: string
     }>(),
     {

@@ -5,15 +5,9 @@
       class="stats-list"
     >
       <li
-        v-for="{
-          key,
-          label,
-          count,
-          subCount,
-          color,
-          picto,
-          emphasis
-        } in displayedStats"
+        v-for="(
+          { key, label, count, subCount, color, picto, emphasis }, index
+        ) in displayedStats"
         :key="key"
         class="stats-entry"
         :class="{
@@ -23,7 +17,7 @@
           'with-sub-count': withSubCount
         }"
       >
-        <div>
+        <div :id="index + STATS_ID">
           <img
             v-if="picto"
             :src="picto"
@@ -83,6 +77,7 @@
           :count="withSubCount ? Math.min(subCount || count, count) : count"
           :total-count="withSubCount ? subCount || count : totalCount"
           :color="color"
+          :labelledby="index + STATS_ID"
         />
         <span
           v-if="withSubCount"
