@@ -27,6 +27,7 @@
         >RGAA</abbr
       >. <span>Le site n'a encore pas été audité.</span>
     </p>
+
     <h2>Stratégie et plan d'action</h2>
     <p>
       La stratégie d'accessibilité suit
@@ -38,14 +39,23 @@
       >
       .
     </p>
-    <p>Le plan d'action 2024 :</p>
+    <p>Le plan d'action 2025&nbsp;:</p>
     <ul>
-      <li>Plateforme intégralement navigable au clavier</li>
-      <li>Amélioration de la hiérarchie des titres</li>
-      <li>Plateforme navigable en zoom 200%</li>
-      <li>Lien d'évitements</li>
-      <li>Améliorer l'accessibilité des formulaires</li>
+      <li>
+        Ajouter un lien d’évitement sur l’ensemble des pages de la plateforme
+      </li>
+      <li>Amélioration de la sémantique (ajout de sections etc.)</li>
+      <li>Mise à jour des attributs ARIA non autorisés</li>
+      <li>Améliorer l’accessibilité des barres de progression</li>
+      <li>
+        Remplacer les abréviations inclusives (point médian etc.) par d’autres
+        formulations inclusives
+      </li>
+      <li>Amélioration continue de la navigation clavier</li>
+      <li>Mise en place de tests automatiques ou automatisés</li>
+      <li>Passage d’un audit de conformité par un cabinet indépendant</li>
     </ul>
+
     <h2>Amélioration et contact</h2>
     <p>
       Si vous n'arrivez pas à accéder à un contenu ou à un service, vous pouvez
