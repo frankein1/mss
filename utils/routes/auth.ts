@@ -11,7 +11,7 @@ export const routes = {
   },
   AuthLogout: {
     name: 'AuthLogout',
-    title: 'Vous avez été déconnecté·e',
+    title: 'Déconnexion effectuée',
     path: () => '/auth/logout'
   }
 } as const

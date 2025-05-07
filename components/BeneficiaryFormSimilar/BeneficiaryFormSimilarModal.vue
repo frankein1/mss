@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="fr-mb-0">
-      Êtes-vous sûr·e de vouloir créer ce nouveau bénéficiaire ?
+      Souhaitez-vous vraiment créer ce nouveau bénéficiaire ?
     </p>
     <p>
       Dossier déjà existant :

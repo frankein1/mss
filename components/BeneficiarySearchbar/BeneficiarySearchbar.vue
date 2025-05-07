@@ -2,7 +2,7 @@
   <div class="beneficiary-toolbar">
     <BeneficiarySearchbarInput
       class="beneficiary-search fr-mr-2w"
-      label="Rechercher un·e bénéficiaire"
+      label="Rechercher un dossier bénéficiaire"
       name="beneficiary-search"
       :search-fn="searchBeneficiaries"
     >

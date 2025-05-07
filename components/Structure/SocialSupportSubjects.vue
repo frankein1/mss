@@ -125,7 +125,7 @@
 
   function removeSubject(id: string, name: string) {
     modal.open(SocialSupportSubjectDeletion, {
-      title: `Etes-vous sûr·e de vouloir retirer l’objet “${name}” de vos accompagnements ?`,
+      title: `Souhaitez-vous vraiment retirer l’objet “${name}” de vos accompagnements ?`,
       isSubmitting: isSubmittingDeletion.value,
       delete: () => onDeleteStructureSubject(id)
     })

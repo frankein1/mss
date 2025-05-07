@@ -30,7 +30,7 @@ export const routes = {
         ? `Modifier l'instruction de dossier ${formatBeneficiaryDisplayName(
             beneficiary
           )}`
-        : "Modifier l'instruction de dossier d'un·e bénéficiaire",
+        : "Modifier l'instruction de dossier d'une personne bénéficiaire",
     path: (
       familyFileId: string,
       helpRequestId: string,

@@ -12,7 +12,7 @@ export const routes = {
     title: (beneficiary: BeneficiaryNames | null) =>
       beneficiary
         ? `Entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
-        : 'Entretien avec un·e bénéficiaire',
+        : 'Entretien avec une personne bénéficiaire',
     path: (familyFileId: string, options?: FollowupAddRouteOptions) =>
       `${FilesRoute}/${familyFileId}/followups/add${getRouteOptions(options)}`
   },
@@ -21,7 +21,7 @@ export const routes = {
     title: (beneficiary: BeneficiaryNames | null) =>
       beneficiary
         ? `Modifier l'entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
-        : "Modifier l'entretien avec un·e bénéficiaire",
+        : "Modifier l'entretien avec une personne bénéficiaire",
     path: (familyFileId: string, followupId: string) =>
       `${FilesRoute}/${familyFileId}/followups/${followupId}/edit`
   }

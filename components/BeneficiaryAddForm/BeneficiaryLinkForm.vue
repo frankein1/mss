@@ -18,7 +18,7 @@
           :class="{ 'color-red': linkToFamilyFileError !== null }"
           for="beneficiary-search"
         >
-          Sélectionner un·e bénéficiaire
+          Sélectionner un dossier bénéficiaire
           <span class="color-red">*</span>
         </label>
         <BeneficiarySearchbarInput

@@ -38,14 +38,14 @@ export const beneficiaryStatusKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Actif',
   [BeneficiaryStatus.Inactive]: 'Inactif',
   [BeneficiaryStatus.Archived]: "Archivé (cette option n'est plus disponible)",
-  [BeneficiaryStatus.Deceased]: 'Décédé·e'
+  [BeneficiaryStatus.Deceased]: 'Décédé'
 })
 
 export const beneficiaryStatusDetailedKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Dossier actif',
   [BeneficiaryStatus.Inactive]: 'Dossier inactif',
   [BeneficiaryStatus.Archived]: 'Ancien dossier "archivé"',
-  [BeneficiaryStatus.Deceased]: 'Décédé·e'
+  [BeneficiaryStatus.Deceased]: 'Décédé'
 })
 
 export const beneficiaryTitleKeys = buildKeys({
@@ -61,15 +61,15 @@ export const beneficiaryGenderKeys = buildKeys({
 
 export const beneficiaryFamilySituationKeys = buildKeys({
   [BeneficiaryFamilySituation.Single]: 'Célibataire',
-  [BeneficiaryFamilySituation.Divorced]: 'Divorcé·e',
+  [BeneficiaryFamilySituation.Divorced]: 'Divorcé/Divorcée',
   [BeneficiaryFamilySituation.Cohabitation]: 'En concubinage',
   [BeneficiaryFamilySituation.CoupleWithChildren]: 'En couple avec enfant(s)',
-  [BeneficiaryFamilySituation.Married]: 'Marié·e',
-  [BeneficiaryFamilySituation.CivilUnion]: 'Pacsé·e',
+  [BeneficiaryFamilySituation.Married]: 'Marié/Mariée',
+  [BeneficiaryFamilySituation.CivilUnion]: 'Pacsé/Pacsée',
   [BeneficiaryFamilySituation.SingleParentWithChildren]:
-    'Parent isolé·e avec enfant(s)',
-  [BeneficiaryFamilySituation.Separated]: 'Séparé·e',
-  [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
+    'Parent isolé avec enfant(s)',
+  [BeneficiaryFamilySituation.Separated]: 'Séparé/Séparée',
+  [BeneficiaryFamilySituation.Widow]: 'Veuf/Veuve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
 })
 
@@ -98,14 +98,15 @@ export const beneficiaryGirKeys = buildKeys({
 
 export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.SickLeave]: 'Arrêt maladie',
-  [BeneficiarySocioProfessionalCategory.Entrepreneur]: "Chef·fe d'entreprise",
+  [BeneficiarySocioProfessionalCategory.Entrepreneur]:
+    "Chef ou cheffe d'entreprise",
   [BeneficiarySocioProfessionalCategory.JobSeeker]: "En recherche d'emploi",
-  [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant·e',
+  [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant/Indépendante',
   [BeneficiarySocioProfessionalCategory.Disability]: 'Invalidité',
-  [BeneficiarySocioProfessionalCategory.Housewife]: 'Mère au foyer',
-  [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité',
-  [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié',
-  [BeneficiarySocioProfessionalCategory.Student]: 'Étudiant·e / Élève',
+  [BeneficiarySocioProfessionalCategory.Housewife]: 'Parent au foyer',
+  [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité/Retraitée',
+  [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié/Salariée',
+  [BeneficiarySocioProfessionalCategory.Student]: 'En étude / Élève',
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à France Travail)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
@@ -158,15 +159,15 @@ export const beneficiaryProtectionMeasureKeys = buildKeys({
 
 export const familySituationKeys = buildKeys({
   [BeneficiaryFamilySituation.Single]: 'Célibataire',
-  [BeneficiaryFamilySituation.Divorced]: 'Divorcé·e',
+  [BeneficiaryFamilySituation.Divorced]: 'Divorcé/Divorcée',
   [BeneficiaryFamilySituation.Cohabitation]: 'En concubinage',
   [BeneficiaryFamilySituation.CoupleWithChildren]: 'En couple avec enfant(s)',
-  [BeneficiaryFamilySituation.Married]: 'Marié·e',
-  [BeneficiaryFamilySituation.CivilUnion]: 'Pacsé·e',
+  [BeneficiaryFamilySituation.Married]: 'Marié/Mariée',
+  [BeneficiaryFamilySituation.CivilUnion]: 'Pacsé/Pacsée',
   [BeneficiaryFamilySituation.SingleParentWithChildren]:
-    'Parent isolé·e avec enfant(s)',
-  [BeneficiaryFamilySituation.Separated]: 'Séparé·e',
-  [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
+    'Parent isolé avec enfant(s)',
+  [BeneficiaryFamilySituation.Separated]: 'Séparé/Séparée',
+  [BeneficiaryFamilySituation.Widow]: 'Veuf/Veuve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
 })
 
@@ -181,7 +182,7 @@ export const beneficiaryOrientationTypeKeys = buildKeys({
 })
 
 export const commonRelationshipKeys = buildKeys({
-  [RelativeRelationship.Conjoint]: 'Conjoint·e',
+  [RelativeRelationship.Conjoint]: 'Conjoint/Conjointe',
   [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
   [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
   [RelativeRelationship.Sibling]: 'Fratrie',
@@ -192,9 +193,9 @@ export const commonRelationshipKeys = buildKeys({
 })
 
 const entourageRelationshipKeys = buildKeys({
-  [RelativeRelationship.Neighbour]: 'Voisin·e',
+  [RelativeRelationship.Neighbour]: 'Voisinage',
   [RelativeRelationship.EntourageProfessionnel]: 'Entourage professionnel',
-  [RelativeRelationship.Ami]: 'Ami·e'
+  [RelativeRelationship.Ami]: 'Cercle amical'
 })
 
 export const relativeRelationshipKeys = mergeKeys(
@@ -214,8 +215,8 @@ export const beneficiaryAccommodationModeKeys = buildKeys({
   [BeneficiaryAccommodationMode.NursingHome]: 'EHPAD, résidence senior',
   [BeneficiaryAccommodationMode.EmergencyHousing]:
     'Hébergement de type CHRS, CHU, CPH, CADA...',
-  [BeneficiaryAccommodationMode.Parents]: 'Hébergé·e au domicile parental',
-  [BeneficiaryAccommodationMode.ThirdPerson]: 'Hébergé·e chez un tiers',
+  [BeneficiaryAccommodationMode.Parents]: 'Hébergé au domicile parental',
+  [BeneficiaryAccommodationMode.ThirdPerson]: 'Hébergé chez un tiers',
   [BeneficiaryAccommodationMode.PrivateRenting]: 'Locataire parc privé',
   [BeneficiaryAccommodationMode.SocialRenting]: 'Locataire parc social',
   [BeneficiaryAccommodationMode.Fortune]: 'Logement de fortune',

@@ -29,14 +29,15 @@
               l'échéance.
             </li>
             <li>
-              Les commentaires déposés par un·e collègue sur l'un de vos
-              accompagnements vous sont notifiés dans la catégorie
+              Les commentaires déposés par par une personne de votre équipe sur
+              l'un de vos accompagnements vous sont notifiés dans la catégorie
               "commentaires".
             </li>
             <li>
               Le filtre "ajouts d'un tiers" vous permet de retrouver tous les
-              documents et accompagnements réalisés par un·e collègue sur les
-              dossiers des bénéficiaires dont vous êtes référent·e.
+              documents et accompagnements réalisés par par une personne de
+              votre équipe sur les dossiers des bénéficiaires dont vous êtes la
+              personne référente.
             </li>
           </ul>
         </div>

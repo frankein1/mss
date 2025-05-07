@@ -93,7 +93,7 @@
         name: 'search',
         label: 'Recherche',
         type: FilterType.Search,
-        placeholder: 'Rechercher un·e bénéficiaire',
+        placeholder: 'Rechercher un dossier bénéficiaire',
         alwaysExpanded: true
       },
       {

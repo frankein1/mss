@@ -41,9 +41,9 @@
       case NotificationTypeFilterValue.DueDate:
         return "Définissez des dates d'échéances à la création d'un accompagnement (entretien ou instruction d'un dossier) dans le dossier d'un bénéficiaire. Un rappel est envoyé un mois avant et le jour de l'échéance."
       case NotificationTypeFilterValue.NewComment:
-        return 'Les commentaires déposés par un⸱e collègue sur l\'un de vos accompagnements vous sont notifiés dans la catégorie "Commentaires".'
+        return 'Les commentaires déposés par votre collègue sur l\'un de vos accompagnements vous sont notifiés dans la catégorie "Commentaires".'
       case NotificationTypeFilterValue.NewItem:
-        return 'Le filtre "Ajouts d\'un tiers" vous permet de retrouver tous les documents ajoutés et accompagnements réalisés par un⸱e collègue sur les dossiers des bénéficiaires dont vous êtes référent.e.'
+        return 'Le filtre "Ajouts d\'un tiers" vous permet de retrouver tous les documents ajoutés et accompagnements réalisés par votre collègue sur les dossiers des bénéficiaires dont vous êtes référent.'
       case NotificationTypeFilterValue.Archivage:
         return isReceptionAgent()
           ? 'Votre rôle utilisateur ne vous autorise pas à archiver les dossiers des bénéficiaires. Rapprochez-vous de votre responsable de structure pour toute modification concernant votre rôle.'
