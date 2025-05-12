@@ -1,5 +1,5 @@
 <template>
-  <div
+  <article
     class="feature-section ongoing-social-supports"
     :class="[
       isFileInstructions
@@ -51,7 +51,7 @@
     >
       {{ emptyMessage }}
     </p>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">

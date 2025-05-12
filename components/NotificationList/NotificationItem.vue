@@ -1,66 +1,74 @@
 <template>
   <li
-    class="notificationitem"
+    class="notification-item-container"
     :class="{ notificationitem__read: notification.read }"
   >
-    <span
-      class="notificationitem__icon"
-      :class="[notificationIcon]"
-      aria-hidden="true"
-    ></span>
-    <p class="fr-text--sm fr-text--bold fr-mb-0">
-      {{ notification.title }}
-    </p>
-    <div>
-      <p
-        v-if="notification.beneficiary"
-        class="notificationitem__beneficiary"
-      >
-        {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
-      </p>
-      <p
-        v-if="notification.type === NotificationType.ArchiveDueToday"
-        class="fr-mb-0"
-      >
-        {{ notification.descriptionHint }}
-        <br />
-        <NuxtLink
-          v-if="itemLink && !notification.onClick"
-          class="fr-link"
-          :to="itemLink"
-          >{{ notification.description }}
-        </NuxtLink>
-        <button
-          v-if="notification.onClick"
-          class="fr-link underline"
-          @click="notification.onClick"
-        >
-          {{ notification.description }}
-        </button>
-      </p>
-      <p
-        v-else
-        class="fr-mb-0"
-      >
-        <NuxtLink
-          v-if="itemLink"
-          class="fr-link"
-          :to="itemLink"
-          >{{ notification.description }}
-        </NuxtLink>
-        {{ notification.descriptionHint }}
-      </p>
-      <p
-        v-if="notification.detail"
-        class="fr-text--sm notificationitem__comment"
-      >
-        {{ notification.detail }}
+    <div class="notification-item-icon">
+      <div
+        class="notificationitem__icon"
+        :class="[notificationIcon]"
+        aria-hidden="true"
+      ></div>
+    </div>
+    <div class="notification-item-title">
+      <p class="fr-text--sm fr-text--bold fr-mb-0">
+        {{ notification.title }}
       </p>
     </div>
-    <div class="notificationitem__end">
+    <div class="notification-item-content">
+      <div>
+        <p
+          v-if="notification.beneficiary"
+          class="notificationitem__beneficiary"
+        >
+          {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
+        </p>
+        <p
+          v-if="notification.type === NotificationType.ArchiveDueToday"
+          class="fr-mb-0"
+        >
+          {{ notification.descriptionHint }}
+          <br />
+          <NuxtLink
+            v-if="itemLink && !notification.onClick"
+            class="fr-link"
+            :to="itemLink"
+            >{{ notification.description }}
+          </NuxtLink>
+          <button
+            v-if="notification.onClick"
+            class="fr-link underline"
+            @click="notification.onClick"
+          >
+            {{ notification.description }}
+          </button>
+        </p>
+        <p
+          v-else
+          class="fr-mb-0"
+        >
+          <NuxtLink
+            v-if="itemLink"
+            class="fr-link"
+            :to="itemLink"
+            >{{ notification.description }}
+          </NuxtLink>
+          {{ notification.descriptionHint }}
+        </p>
+        <p
+          v-if="notification.detail"
+          class="fr-text--sm notificationitem__comment"
+        >
+          {{ notification.detail }}
+        </p>
+      </div>
+    </div>
+    <div class="notification-item-date">
       <p class="fr-text--xs notificationitem__date">
         {{ formatDate(notification.created) }}
       </p>
+    </div>
+    <div class="notification-item-checkbox">
       <form
         v-if="notification.read != null"
         ref="form"
@@ -182,17 +190,67 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
-  .notificationitem {
+  .notification-item-container {
     border-top: 1px solid var(--border-default-grey);
     padding: 1rem 1.5rem;
     display: grid;
-    grid-template-columns: auto 1fr 3fr min-content;
-    gap: 1rem;
+    grid-template-columns: 3rem auto 2rem;
+    grid-template-rows: repeat(3, auto);
+    grid-gap: 1rem;
     align-items: center;
 
     &:not(.notificationitem__read) {
       background-color: var(--background-alt-blue-france);
+    }
+
+    .notification-item-icon {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .notification-item-title {
+      grid-area: 1 / 2 / 2 / 4;
+    }
+
+    .notification-item-content {
+      grid-area: 2 / 1 / 3 / 4;
+    }
+
+    .notification-item-date {
+      align-self: end;
+      grid-area: 3 / 1 / 4 / 3;
+    }
+
+    .notification-item-checkbox {
+      grid-area: 3 / 3 / 4 / 4;
+    }
+
+    @include dsfr-media-query.respond-from('lg') {
+      grid-template-columns: repeat(4, auto);
+      grid-template-rows: repeat(2, auto);
+
+      .notification-item-icon {
+        grid-area: 1 / 1 / 3 / 2;
+      }
+
+      .notification-item-title {
+        grid-area: 1 / 2 / 3 / 3;
+      }
+
+      .notification-item-content {
+        grid-area: 1 / 3 / 3 / 4;
+      }
+
+      .notification-item-date {
+        grid-area: 1 / 4 / 2 / 5;
+        align-self: start;
+      }
+
+      .notification-item-checkbox {
+        grid-area: 2 / 4 / 3 / 5;
+        justify-self: end;
+      }
     }
   }
 

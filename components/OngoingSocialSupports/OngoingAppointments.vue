@@ -1,5 +1,5 @@
 <template>
-  <div
+  <article
     v-if="false"
     class="feature-section ongoing-social-supports ongoing-social-supports__file-instructions"
   >
@@ -49,7 +49,7 @@
     >
       Vous n'avez pas de rendez-vous prévus
     </p>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">

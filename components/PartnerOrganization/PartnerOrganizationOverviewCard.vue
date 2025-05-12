@@ -1,13 +1,15 @@
 <template>
-  <NuxtLink
-    :href="routes.structure.AppPartners.path()"
-    class="partner-box__link"
-  >
-    <div class="feature-section partner-box">
-      <AtomPictogram path="/pictograms/annuaire.svg" />
-      <h2 class="partner-box__title fr-h6">Partenaires</h2>
-    </div>
-  </NuxtLink>
+  <article>
+    <NuxtLink
+      :href="routes.structure.AppPartners.path()"
+      class="partner-box__link"
+    >
+      <div class="feature-section partner-box">
+        <AtomPictogram path="/pictograms/annuaire.svg" />
+        <h2 class="partner-box__title fr-h6">Partenaires</h2>
+      </div>
+    </NuxtLink>
+  </article>
 </template>
 
 <script lang="ts" setup>

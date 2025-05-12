@@ -11,6 +11,7 @@
         </h2>
         <button
           class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-right fr-icon-question-line fr-btn--tooltip"
+          type="button"
           aria-describedby="notification-more-info-tooltip"
         >
           En savoir plus
@@ -52,6 +53,17 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/variables' as *;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
+  svg {
+    display: none;
+    min-width: 80px;
+    min-height: 80px;
+
+    @include dsfr-media-query.respond-from('lg') {
+      display: block;
+    }
+  }
 
   .notification-list-header__container {
     padding: 1.5rem;
@@ -68,7 +80,13 @@
     margin-bottom: 0.25rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @include dsfr-media-query.respond-from('lg') {
+      flex-direction: row;
+    }
   }
 
   .notification-list-header__title {
