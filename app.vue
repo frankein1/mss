@@ -30,6 +30,7 @@
 
   const { public: publicConfig } = useRuntimeConfig()
   const matomo = useMatomo()
+  useRouterFocusReset()
 
   useHead({
     htmlAttrs: {
