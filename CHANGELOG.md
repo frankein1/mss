@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.42.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.0...v1.42.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* extend node memory ([22c3e0a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/22c3e0a5625ebfc5959e8ae33bb6cd35448f909d)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+
 ## [1.42.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.41.0...v1.42.0) (2025-04-28)
 
 
