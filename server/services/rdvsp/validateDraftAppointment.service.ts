@@ -16,7 +16,17 @@ import { invalidError } from '~/server/trpc'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import dayjs from 'dayjs'
 import { SocialSupportStatus } from '@prisma/client'
+import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
 
+/** Sync validated appointments from RDVSP and remove draft status
+ *
+ * WARNING1: the RDVSP API is not adapted to fetch validated rdvsp.rdvs
+ * from rdvsp.rdv_plans.
+ * As a result only appointments more recent than 2 days before will be synced for the time being
+ *
+ * WARNING2: Appointment created with a date set more than 2 days in the past
+ * will not be synced
+ */
 export async function validateDraftAppointmentsForFamilyFile({
   ctx,
   input: { familyFileId }
@@ -29,18 +39,38 @@ export async function validateDraftAppointmentsForFamilyFile({
     return
   }
 
+  const now = dayjs(new Date())
+  const twoDaysBeforeNow = now.subtract(2, 'day')
+
+  const cfg = client.getConfig()
+  const rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
+    cfg,
+    res.accessToken,
+    res.externalStructureId,
+    twoDaysBeforeNow.format('YYYY-MM-DD')
+  )
+
   const drafts = await SocialSupportRepo.findMany(ctx.user, {
-    where: { familyFileId, appointment: { draft: true } },
-    select: { id: true }
+    where: {
+      familyFileId,
+      created: { gte: twoDaysBeforeNow.toDate() },
+      appointment: { draft: true }
+    },
+    select: {
+      id: true,
+      beneficiaryId: true,
+      appointment: { select: { id: true, externalDraftId: true } },
+      beneficiary: { select: { externalRdvspId: true } }
+    }
   })
 
   const promises = drafts.map(draft =>
     validateDraftAppointment({
       ctx,
       input: {
-        socialSupportId: draft.id,
+        socialSupport: draft,
         accessToken: res.accessToken,
-        externalStructureId: res.externalStructureId
+        rdvList: rdvsMoreRecentThan2Days
       }
     })
   )
@@ -48,6 +78,15 @@ export async function validateDraftAppointmentsForFamilyFile({
   return await Promise.allSettled(promises)
 }
 
+/** Sync validated appointments from RDVSP and remove draft status
+ *
+ * WARNING1: the RDVSP API is not adapted to fetch validated rdvsp.rdvs
+ * from rdvsp.rdv_plans.
+ * As a result only appointments more recent than 2 days before will be synced for the time being
+ *
+ * WARNING2: Appointment created with a date set more than 2 days in the past
+ * will not be synced
+ */
 export async function validateDraftAppointmentsForAgent({
   ctx
 }: {
@@ -58,23 +97,49 @@ export async function validateDraftAppointmentsForAgent({
     return
   }
 
+  const now = dayjs(new Date())
+  const twoDaysBeforeNow = now.subtract(2, 'day')
+
+  const cfg = client.getConfig()
+  const rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
+    cfg,
+    res.accessToken,
+    res.externalStructureId,
+    twoDaysBeforeNow.format('YYYY-MM-DD')
+  )
+
   const drafts = await SocialSupportRepo.findMany(ctx.user, {
-    where: { appointment: { draft: true } },
-    select: { id: true }
+    where: {
+      created: { gte: twoDaysBeforeNow.toDate() },
+      appointment: { draft: true }
+    },
+    select: {
+      id: true,
+      beneficiaryId: true,
+      appointment: { select: { id: true, externalDraftId: true } },
+      beneficiary: { select: { externalRdvspId: true } }
+    }
   })
 
   const promises = drafts.map(draft =>
     validateDraftAppointment({
       ctx,
       input: {
-        socialSupportId: draft.id,
+        socialSupport: draft,
         accessToken: res.accessToken,
-        externalStructureId: res.externalStructureId
+        rdvList: rdvsMoreRecentThan2Days
       }
     })
   )
 
   return await Promise.allSettled(promises)
+}
+
+interface SocialSupportToValidate {
+  id: string
+  beneficiaryId: string
+  appointment: { id: string; externalDraftId: string | null } | null
+  beneficiary: { externalRdvspId: string | null } | null
 }
 
 async function validateDraftAppointment({
@@ -83,30 +148,23 @@ async function validateDraftAppointment({
 }: {
   ctx: SecurityRuleContext
   input: {
-    socialSupportId: string
+    socialSupport: SocialSupportToValidate
     accessToken: string
-    externalStructureId: string
+    rdvList: RdvspRdv[]
   }
 }) {
-  const ss = await SocialSupportRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.socialSupportId },
-    select: {
-      beneficiaryId: true,
-      appointment: { select: { id: true, externalDraftId: true } },
-      beneficiary: { select: { externalRdvspId: true } }
-    }
-  })
+  const ss = input.socialSupport
 
   const externalDraftId = ss.appointment?.externalDraftId
   if (!externalDraftId) {
     throw invalidError('Could not find appointment external draft id')
   }
 
-  // FIXME il faudrait pouvoir récupérer une liste de rdv plan à l'équipe de RDVSP
-  const rdv = await getRdvspRdvFromPlan(
+  // FIXME il faudrait pouvoir récupérer un rdv complet à partir d'un rdv plan: demander à l'équipe de RDVSP
+  const rdv = await getRdvspRdvFromList(
     externalDraftId,
-    input.externalStructureId,
-    input.accessToken
+    input.accessToken,
+    input.rdvList
   )
 
   if (!rdv) {
@@ -126,7 +184,7 @@ async function validateDraftAppointment({
 
   await Promise.all([
     SocialSupportRepo.update(ctx.user, {
-      where: { id: input.socialSupportId },
+      where: { id: ss.id },
       data: {
         status:
           APPOINTMENT_STATUS[rdv.status as RdvspStatus] ||
@@ -154,6 +212,7 @@ async function validateDraftAppointment({
 
   const isNewRdvspUsager =
     rdv.externalUsagerIds[0] &&
+    ss.beneficiary &&
     rdv.externalUsagerIds[0].toString() !== ss.beneficiary.externalRdvspId
   if (isNewRdvspUsager) {
     await addUsagerIdToBeneficiary(
@@ -177,10 +236,10 @@ function findAgentFromExternalIds(
   })
 }
 
-async function getRdvspRdvFromPlan(
+async function getRdvspRdvFromList(
   externalDraftId: string,
-  externalStructureId: string,
-  accessToken: string
+  accessToken: string,
+  rdvList: RdvspRdv[]
 ) {
   const cfg = client.getConfig()
 
@@ -198,15 +257,12 @@ async function getRdvspRdvFromPlan(
     throw invalidError('Could not retrieve summary from plan in rdvsp')
   }
 
-  // FIXME refactor this call to fetch a precise element instead of using the complete list of rdv in organisation
-  const rdv = await client.getRdv(
-    cfg,
-    accessToken,
-    rdvSummary.id.toString(),
-    externalStructureId
+  const filtered = rdvList.filter(
+    rdv => rdv.id.toString() === rdvSummary.id.toString()
   )
+  const rdv: RdvspRdv | null = filtered.length > 0 ? filtered[0] : null
 
-  if (!rdv) {
+  if (rdv === null) {
     throw invalidError('Could not retrieve rdv in rdvsp')
   }
 
