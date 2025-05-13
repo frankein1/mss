@@ -10,6 +10,7 @@ import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
+import { createEmailSubject } from '~/server/email/createEmailSubject'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users
@@ -49,7 +50,7 @@ const handler = async ({
 
   await createEmail({
     to: createdUser.email,
-    subject: 'Mon Suivi Social - Ouverture de votre compte',
+    subject: createEmailSubject('Mon Suivi Social - Ouverture de votre compte'),
     ...getUserCreationEmailContent(createdUser)
   })
 

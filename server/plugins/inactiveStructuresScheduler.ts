@@ -4,6 +4,7 @@ import { useScheduler } from '#scheduler'
 import { createEmail } from '~/server/query'
 import { getInactiveStructureAlert } from '~/server/email'
 import { UserStatus } from '@prisma/client'
+import { createEmailSubject } from '../email/createEmailSubject'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -99,7 +100,9 @@ async function sendEmail(users: { email: string }[]) {
   for (const user of users) {
     await createEmail({
       to: user.email,
-      subject: 'Votre espace de travail sur Mon Suivi Social va être supprimé',
+      subject: createEmailSubject(
+        'Votre espace de travail sur Mon Suivi Social va être supprimé'
+      ),
       ...getInactiveStructureAlert()
     })
   }

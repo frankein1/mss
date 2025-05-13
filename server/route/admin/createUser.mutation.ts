@@ -6,6 +6,7 @@ import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
+import { createEmailSubject } from '~/server/email/createEmailSubject'
 
 const adminHandler = async ({
   ctx,
@@ -41,7 +42,7 @@ const adminHandler = async ({
 
   await createEmail({
     to: createdUser.email,
-    subject: 'Mon Suivi Social - Ouverture de votre compte',
+    subject: createEmailSubject('Mon Suivi Social - Ouverture de votre compte'),
     ...getUserCreationEmailContent(createdUser)
   })
 

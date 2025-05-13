@@ -6,6 +6,7 @@ import { StructureRepo } from '~/server/database'
 import { createEmail } from '~/server/query'
 import { getStructureCreationEmailContent } from '~/server/email'
 import { socialSupportSubjectKeys } from '~/client/options'
+import { createEmailSubject } from '~/server/email/createEmailSubject'
 
 const adminHandler = async ({
   ctx: _ctx,
@@ -36,7 +37,7 @@ const adminHandler = async ({
 
   await createEmail({
     to: input.email,
-    subject: 'Mon Suivi Social - Votre espace a été créé',
+    subject: createEmailSubject('Mon Suivi Social - Votre espace a été créé'),
     ...getStructureCreationEmailContent()
   })
 

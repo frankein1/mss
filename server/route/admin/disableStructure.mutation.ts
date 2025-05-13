@@ -22,6 +22,7 @@ import { AdminContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getDisabledStructureAlert } from '~/server/email'
 import { customAlphabet } from 'nanoid'
+import { createEmailSubject } from '~/server/email/createEmailSubject'
 
 const adminHandler = async ({
   ctx,
@@ -332,7 +333,9 @@ const adminHandler = async ({
     if (user.status === 'Active') {
       await createEmail({
         to: user.email,
-        subject: 'Suppression de votre espace de travail sur Mon Suivi Social',
+        subject: createEmailSubject(
+          'Suppression de votre espace de travail sur Mon Suivi Social'
+        ),
         ...getDisabledStructureAlert()
       })
     }

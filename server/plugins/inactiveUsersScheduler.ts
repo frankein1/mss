@@ -5,6 +5,7 @@ import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
 import { User, UserStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
+import { createEmailSubject } from '../email/createEmailSubject'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -64,7 +65,9 @@ const createAccountReminderEmail = async () => {
     }
     await createEmail({
       to: user.email,
-      subject: 'Mon Suivi Social - Ouverture de votre compte',
+      subject: createEmailSubject(
+        'Mon Suivi Social - Ouverture de votre compte'
+      ),
       ...getUserCreationEmailContent(userData)
     })
   }
