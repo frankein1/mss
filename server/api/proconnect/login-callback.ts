@@ -68,7 +68,7 @@ export default defineEventHandler(async event => {
     throw unauthorized('[ProConnect] `nonces` must be equal')
   }
 
-  const { email, sub, custom } = await fetchUserInfo(client, accessToken)
+  const { email, sub } = await fetchUserInfo(client, accessToken)
 
   const account = await getAccount({ sub })
 
@@ -92,15 +92,15 @@ export default defineEventHandler(async event => {
   // Check 2FA presence when authenticating as an admin
   if (user.role === 'Administrator') {
     const emailIsValid =
-      mssEnvironment === 'local' || user.email.endsWith('@beta.gouv.fr')
-    const emailIsVerified =
-      mssEnvironment === 'local' || Boolean(custom?.email_verified)
+      mssEnvironment === 'local' ||
+      user.email.endsWith('@beta.gouv.fr') ||
+      user.email.endsWith('@ext.anct.gouv.fr')
 
     // If already authenticated, going through login flow does not fill amr field and entails 403.
     // This is mitigated by providing a proconnect-only logout link in the error page
     const authenticationModes = (payload?.amr || []) as string[]
 
-    if (!emailIsValid || !emailIsVerified) {
+    if (!emailIsValid) {
       const logoutUrl = client.getLogoutUrl({ idToken, state })
       await session.update({ logoutUrl })
       throw forbidden('[ProConnect] Access denied')
