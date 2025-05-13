@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.42.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.1...v1.42.2) (2025-05-13)
+
+
+### Bug Fixes
+
+* **rdvsp:** sync des rendez-vous plus récents que l'avant-veille uniquement ([135bdb7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/135bdb7e4bdf1e1bb016972b109840e343a50678)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+
 ## [1.42.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.0...v1.42.1) (2025-05-13)
 
 
