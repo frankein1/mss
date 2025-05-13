@@ -4,6 +4,7 @@ import { apiRoutes } from '~/utils/routes'
 import { formatDate } from '~/utils/formatDate'
 import { ofetch, FetchError } from 'ofetch'
 import { invalidError, unauthorizedError } from '~/server/trpc'
+import dayjs from 'dayjs'
 
 interface RdvspConfig {
   clientId: string
@@ -63,7 +64,7 @@ interface RdvspRdvSummary {
   status: string
 }
 
-interface RdvspRdvPlan {
+export interface RdvspRdv {
   id: number
   address: string
   agents: { id: number }[]
@@ -197,73 +198,36 @@ export async function getRdvSummaryFromPlan(
 }
 
 // FIXME refactor this when a better API endpoint becomes available
-export async function getRdv(
+export async function getRdvsStartingAfter(
   cfg: RdvspConfig,
   accessToken: string,
-  id: string,
-  organisationId: string
+  organisationId: string,
+  starts_after: string
 ) {
-  const list: RdvspRdvPlan[] = []
+  const list: RdvspRdv[] = []
   let isLastPage = false
+  let nPages = 0
 
   while (!isLastPage) {
     const res = await getWrapper<{
-      rdvs: RdvspRdvPlan[]
+      rdvs: RdvspRdv[]
       meta: { next_page: number | null }
-    }>(cfg, `/api/v1/organisations/${organisationId}/rdvs`, accessToken)
+    }>(
+      cfg,
+      `/api/v1/organisations/${organisationId}/rdvs?starts_after=${starts_after}`,
+      accessToken
+    )
     if (res.meta.next_page === null) {
       isLastPage = true
     }
     list.push(...res.rdvs)
+    nPages += 1
   }
 
-  const filtered = list.filter(rdv => rdv.id.toString() === id)
-  return filtered.length > 0 ? filtered[0] : null
-}
+  console.log(`rdvsp: ${list.length} rdvs for organisation ${organisationId}`)
+  console.log(`rdvsp: ${nPages} pages for paginated rdvs request`)
 
-// FIXME à supprimer
-export async function createUsager(
-  cfg: RdvspConfig,
-  accessToken: string,
-  organisationId: string,
-  agentId: string,
-  beneficiary: Pick<
-    Beneficiary,
-    'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'email' | 'phone1'
-  >
-): Promise<{ id: number } | RdvspError | GenericFetchError> {
-  const response = await fetch(`${cfg.issuer}/api/v1/users`, {
-    method: 'post',
-    body: new URLSearchParams({
-      ['organisation_ids[]']: organisationId,
-      ['referent_agent_ids[]']: agentId,
-      ...(beneficiary.firstName && { first_name: beneficiary.firstName }),
-      ...(beneficiary.usualName && { last_name: beneficiary.usualName }),
-      ...(beneficiary.birthName && { birth_name: beneficiary.birthName }),
-      ...(beneficiary.birthDate && {
-        birth_date: beneficiary.birthDate.toISOString().split('T')[0]
-      }),
-      ...(beneficiary.email && { email: beneficiary.email }),
-      ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
-      notify_by_sms: 'true',
-      notify_by_email: 'true'
-    }),
-    headers: { Authorization: `Bearer ${accessToken}` }
-  })
-
-  let res: any
-  try {
-    res = await response.json()
-  } catch {
-    console.log('rdvsp: other error', response.statusText)
-    return { status: response.status, statusText: response.statusText }
-  }
-
-  if (response.ok) {
-    return { id: res.user.id as number }
-  }
-  console.log('rdvsp: usager creation failed', res)
-  return res as RdvspError
+  return list
 }
 
 export async function createRdvPlan(
