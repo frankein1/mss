@@ -1,5 +1,6 @@
 <template>
   <nav
+    id="secondary-navigation"
     class="fr-sidemenu"
     role="navigation"
   >

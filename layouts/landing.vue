@@ -4,11 +4,10 @@
     :class="route.name ? [route.name + '-style'] : []"
   >
     <DsfrSkipLinks
-      class="fr-sr-only"
       :links="[
-        { id: 'main-content', text: 'Aller au contenu principal' },
-        { id: 'header', text: `Aller à l'entête` },
-        { id: 'footer', text: `Aller au pied de page` }
+        { id: 'main-content', text: 'Contenu' },
+        { id: 'header', text: `Entête` },
+        { id: 'footer', text: `Pied de page` }
       ]"
     />
     <TheLandingHeader />

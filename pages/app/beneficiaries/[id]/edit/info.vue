@@ -176,4 +176,8 @@
       }
     })
   }
+
+  definePageMeta({
+    layout: 'second-navigation'
+  })
 </script>
