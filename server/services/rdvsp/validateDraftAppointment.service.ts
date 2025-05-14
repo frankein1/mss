@@ -17,6 +17,7 @@ import * as client from '~/server/lib/rdvsp-oauth.client'
 import dayjs from 'dayjs'
 import { SocialSupportStatus } from '@prisma/client'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
+import { TRPCError } from '@trpc/server'
 
 /** Sync validated appointments from RDVSP and remove draft status
  *
@@ -42,13 +43,28 @@ export async function validateDraftAppointmentsForFamilyFile({
   const now = dayjs(new Date())
   const twoDaysBeforeNow = now.subtract(2, 'day')
 
-  const cfg = client.getConfig()
-  const rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
-    cfg,
-    res.accessToken,
-    res.externalStructureId,
-    twoDaysBeforeNow.format('YYYY-MM-DD')
-  )
+  let rdvsMoreRecentThan2Days: RdvspRdv[] = []
+
+  try {
+    const cfg = client.getConfig()
+    rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
+      cfg,
+      res.accessToken,
+      res.externalStructureId,
+      twoDaysBeforeNow.format('YYYY-MM-DD')
+    )
+  } catch (e: unknown) {
+    if (e instanceof TRPCError && e.code === 'UNAUTHORIZED') {
+      // Since refresh tokens are not used yet, the synchronization
+      // is not done when the user is not authenticated to RDVSP.
+      // The validation of draft appointments should fail silently in this case
+      console.log(
+        'rdvsp: not authenticated in  validateDraftAppointmentsForFamilyFile'
+      )
+      return
+    }
+    throw e
+  }
 
   const drafts = await SocialSupportRepo.findMany(ctx.user, {
     where: {
@@ -100,13 +116,28 @@ export async function validateDraftAppointmentsForAgent({
   const now = dayjs(new Date())
   const twoDaysBeforeNow = now.subtract(2, 'day')
 
-  const cfg = client.getConfig()
-  const rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
-    cfg,
-    res.accessToken,
-    res.externalStructureId,
-    twoDaysBeforeNow.format('YYYY-MM-DD')
-  )
+  let rdvsMoreRecentThan2Days: RdvspRdv[] = []
+
+  try {
+    const cfg = client.getConfig()
+    rdvsMoreRecentThan2Days = await client.getRdvsStartingAfter(
+      cfg,
+      res.accessToken,
+      res.externalStructureId,
+      twoDaysBeforeNow.format('YYYY-MM-DD')
+    )
+  } catch (e: unknown) {
+    if (e instanceof TRPCError && e.code === 'UNAUTHORIZED') {
+      // Since refresh tokens are not used yet, the synchronization
+      // is not done when the user is not authenticated to RDVSP.
+      // The validation of draft appointments should fail silently in this case
+      console.log(
+        'rdvsp: not authenticated in  validateDraftAppointmentsForAgent'
+      )
+      return
+    }
+    throw e
+  }
 
   const drafts = await SocialSupportRepo.findMany(ctx.user, {
     where: {

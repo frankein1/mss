@@ -8,7 +8,14 @@ export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
     rdvsp: { issuer }
   } = useRuntimeConfig()
 
-  const _draftSyncStatus = await validateDraftAppointmentsForAgent({ ctx })
+  try {
+    await validateDraftAppointmentsForAgent({ ctx })
+  } catch (e: unknown) {
+    console.log(
+      'rdvsp: synchronization failed in get appointments, should fail silently',
+      e
+    )
+  }
 
   const [structure, ss] = await Promise.all([
     StructureRepo.findUniqueOrThrow(ctx.user, {
