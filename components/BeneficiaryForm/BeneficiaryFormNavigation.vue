@@ -3,9 +3,11 @@
     id="secondary-navigation"
     class="fr-sidemenu"
     role="navigation"
+    aria-labelledby="secondarymenu-title"
   >
     <div class="fr-sidemenu__inner">
       <button
+        id="secondarymenu-title"
         class="fr-sidemenu__btn"
         aria-controls="fr-sidemenu-wrapper"
         aria-expanded="false"

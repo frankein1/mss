@@ -1,5 +1,5 @@
 <template>
-  <ul role="navigation">
+  <ul>
     <!-- Titles -->
     <li>
       <button

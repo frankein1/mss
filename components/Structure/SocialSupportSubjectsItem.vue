@@ -6,7 +6,7 @@
       v-if="application.edit.structure"
       class="sss-item__actions"
     >
-      <div
+      <button
         :id="`button-edit-${id}`"
         :class="editClass"
         data-fr-opened="false"
@@ -14,16 +14,17 @@
         :aria-describedby="`tooltip-edit-${id}`"
         aria-label="editTooltipLabel"
         @click="onEdit"
-      ></div>
-      <span
-        :id="`tooltip-edit-${id}`"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        aria-hidden="true"
-        >{{ editTooltipLabel }}</span
       >
+        <span
+          :id="`tooltip-edit-${id}`"
+          class="fr-tooltip fr-placement"
+          aria-hidden="true"
+        >
+          {{ editTooltipLabel }}
+        </span>
+      </button>
 
-      <div
+      <button
         :id="`button-remove-${id}`"
         class="icon fr-icon-close-circle-line"
         data-fr-opened="false"
@@ -31,14 +32,14 @@
         :aria-describedby="`tooltip-remove-${id}`"
         aria-label="Retirer"
         @click="$emit('remove')"
-      ></div>
-      <span
-        :id="`tooltip-remove-${id}`"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        aria-hidden="true"
-        >Retirer</span
       >
+        <span
+          :id="`tooltip-remove-${id}`"
+          class="fr-tooltip fr-placement"
+          aria-hidden="true"
+          >Retirer</span
+        >
+      </button>
     </div>
   </div>
 </template>
@@ -93,7 +94,7 @@
 
   .sss-item__actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .icon {

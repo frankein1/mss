@@ -227,7 +227,7 @@
     }
 
     @include dsfr-media-query.respond-from('lg') {
-      grid-template-columns: repeat(4, auto);
+      grid-template-columns: 3rem 6.5rem auto auto;
       grid-template-rows: repeat(2, auto);
 
       .notification-item-icon {

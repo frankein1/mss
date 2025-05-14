@@ -36,6 +36,9 @@
   function plotChart() {
     $buildChart(chart.value, {
       type: 'pie',
+      options: {
+        responsive: false
+      },
       data: {
         labels: props.stats.map(({ label }) => label),
         datasets: [
