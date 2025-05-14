@@ -339,11 +339,18 @@ const handler = async ({
 }) => {
   const { familyFileId, filters } = input
 
-  const _draftSyncStatus =
+  try {
     await RdvspService.validateDraftAppointmentsForFamilyFile({
       ctx,
       input: { familyFileId }
     })
+  } catch (e: unknown) {
+    console.log(
+      'rdvsp: synchronization failed in get social supports, should fail silently',
+      e
+    )
+  }
+
   const rdvspOrganisationId = await getRdvspOrganisationId(ctx)
 
   const [totalCount, socialSupports, familyFile] = await Promise.all([
