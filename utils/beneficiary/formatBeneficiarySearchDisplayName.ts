@@ -1,12 +1,17 @@
-import { formatBeneficiaryDisplayName } from './formatBeneficiaryDisplayName'
 import { BeneficiaryIdentification } from '~/types/beneficiary'
 
 export function formatBeneficiarySearchDisplayName(
   beneficiary: BeneficiaryIdentification
 ): string {
-  const name = formatBeneficiaryDisplayName(beneficiary)
-  const birthDate = beneficiary.birthDate
-    ? formatDate(beneficiary.birthDate)
-    : ''
-  return birthDate ? `${name} (${birthDate})` : name
+  const { firstName, usualName, birthName } = beneficiary
+  if (usualName && birthName) {
+    return `${usualName.toUpperCase()} (${birthName.toUpperCase()}) ${firstName}`
+  }
+  if (!usualName && birthName) {
+    return `${birthName.toUpperCase()} ${firstName}`
+  }
+  if (usualName && !birthName) {
+    return `${usualName.toUpperCase()} ${firstName}`
+  }
+  return firstName ?? ''
 }

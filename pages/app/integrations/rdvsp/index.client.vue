@@ -80,7 +80,7 @@
 
     > h1 {
       color: var(--primary);
-      font-weight: var(--bold);
+      font-weight: var(--font-weight-bold);
       max-width: 35rem;
       text-align: center;
     }

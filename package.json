@@ -52,6 +52,7 @@
     "nuxt-security": "2.2.0",
     "postcss-html": "^1.8.0",
     "prisma": "^6.6.0",
+    "remove-accents": "^0.5.0",
     "superjson": "^2.2.2",
     "trpc-nuxt": "^0.10.22",
     "uuid": "^11.1.0",
@@ -115,5 +116,6 @@
     "*.{js,ts,vue}": "eslint --cache --fix",
     "*.{css,scss,sass,html,vue}": "stylelint",
     "*.**": "prettier --check {.,**/*.prisma}"
-  }
+  },
+  "packageManager": "pnpm@9.15.0"
 }

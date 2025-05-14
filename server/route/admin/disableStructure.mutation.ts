@@ -151,6 +151,9 @@ const adminHandler = async ({
       | 'externalRdvspId'
       | 'fileNumber'
       | 'birthDate'
+      | 'firstNameNormalized'
+      | 'usualNameNormalized'
+      | 'birthNameNormalized'
     >
   > = {
     archivedById: ctx.user.id,

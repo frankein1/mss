@@ -1,23 +1,28 @@
 import { Prisma } from '@prisma/client'
+import RemoveAccents from 'remove-accents'
 import { BeneficiaryFilterServerInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
 export function prepareBeneficiarySearchConditions(query: string): {
   AND: Prisma.BeneficiaryWhereInput[]
 } {
-  const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
+  const tokens = RemoveAccents.remove(
+    query.trim().replace(/%/g, '').toLowerCase()
+  ).split(/\s+/g)
 
-  const fields = ['usualName', 'birthName', 'firstName'] as const
+  const fields = [
+    'usualNameNormalized',
+    'birthNameNormalized',
+    'firstNameNormalized'
+  ] as const
 
   const searchConditions = tokens.map(token => ({
     OR: fields.map(field => ({
       [field]: {
-        contains: token,
-        mode: 'insensitive'
+        contains: token
       }
     }))
   }))
-
   return { AND: searchConditions }
 }
 

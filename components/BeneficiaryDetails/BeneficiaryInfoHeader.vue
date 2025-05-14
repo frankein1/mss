@@ -10,7 +10,7 @@
       <div class="fr-col-12 fr-col-lg-6">
         <p class="fr-mb-1w">Dossier N°&nbsp;{{ beneficiary.fileNumber }}</p>
         <div class="fr-mb-1w">
-          <BeneficiaryDetailsStatus :status="beneficiary.status" />
+          <BeneficiaryStatusBadge :status="beneficiary.status" />
         </div>
         <div v-if="beneficiary.aidantConnectAuthorized">
           <div class="fr-icon-success-line field-value">

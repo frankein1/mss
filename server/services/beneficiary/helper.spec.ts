@@ -22,21 +22,18 @@ describe('prepareBeneficiarySearchConditions', () => {
           {
             "OR": [
               {
-                "usualName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+                "usualNameNormalized": {
+                  "contains": "martin",
                 },
               },
               {
-                "birthName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+                "birthNameNormalized": {
+                  "contains": "martin",
                 },
               },
               {
-                "firstName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+                "firstNameNormalized": {
+                  "contains": "martin",
                 },
               },
             ],
@@ -49,55 +46,49 @@ describe('prepareBeneficiarySearchConditions', () => {
   it('should return multiple lists of combinations grouped by an OR when they are multiple input tokens', () => {
     expect(prepareBeneficiarySearchConditions('Martin Mystère'))
       .toMatchInlineSnapshot(`
-      {
-        "AND": [
-          {
-            "OR": [
-              {
-                "usualName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+        {
+          "AND": [
+            {
+              "OR": [
+                {
+                  "usualNameNormalized": {
+                    "contains": "martin",
+                  },
                 },
-              },
-              {
-                "birthName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+                {
+                  "birthNameNormalized": {
+                    "contains": "martin",
+                  },
                 },
-              },
-              {
-                "firstName": {
-                  "contains": "Martin",
-                  "mode": "insensitive",
+                {
+                  "firstNameNormalized": {
+                    "contains": "martin",
+                  },
                 },
-              },
-            ],
-          },
-          {
-            "OR": [
-              {
-                "usualName": {
-                  "contains": "Mystère",
-                  "mode": "insensitive",
+              ],
+            },
+            {
+              "OR": [
+                {
+                  "usualNameNormalized": {
+                    "contains": "mystere",
+                  },
                 },
-              },
-              {
-                "birthName": {
-                  "contains": "Mystère",
-                  "mode": "insensitive",
+                {
+                  "birthNameNormalized": {
+                    "contains": "mystere",
+                  },
                 },
-              },
-              {
-                "firstName": {
-                  "contains": "Mystère",
-                  "mode": "insensitive",
+                {
+                  "firstNameNormalized": {
+                    "contains": "mystere",
+                  },
                 },
-              },
-            ],
-          },
-        ],
-      }
-    `)
+              ],
+            },
+          ],
+        }
+      `)
   })
 })
 
@@ -116,21 +107,18 @@ describe('prepareBeneficiaryFilters', () => {
           {
             "OR": [
               {
-                "usualName": {
-                  "contains": "Jean",
-                  "mode": "insensitive",
+                "usualNameNormalized": {
+                  "contains": "jean",
                 },
               },
               {
-                "birthName": {
-                  "contains": "Jean",
-                  "mode": "insensitive",
+                "birthNameNormalized": {
+                  "contains": "jean",
                 },
               },
               {
-                "firstName": {
-                  "contains": "Jean",
-                  "mode": "insensitive",
+                "firstNameNormalized": {
+                  "contains": "jean",
                 },
               },
             ],
@@ -138,21 +126,18 @@ describe('prepareBeneficiaryFilters', () => {
           {
             "OR": [
               {
-                "usualName": {
-                  "contains": "Paul",
-                  "mode": "insensitive",
+                "usualNameNormalized": {
+                  "contains": "paul",
                 },
               },
               {
-                "birthName": {
-                  "contains": "Paul",
-                  "mode": "insensitive",
+                "birthNameNormalized": {
+                  "contains": "paul",
                 },
               },
               {
-                "firstName": {
-                  "contains": "Paul",
-                  "mode": "insensitive",
+                "firstNameNormalized": {
+                  "contains": "paul",
                 },
               },
             ],

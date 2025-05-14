@@ -13,7 +13,8 @@
   --deep-blue: #{$deep-blue};
 
   /* Typo */
-  --bold: #{$font-weight-bold};
+  --font-weight-normal: #{$font-weight-normal};
+  --font-weight-bold: #{$font-weight-bold};
 
   /* Default values */
   --default-border-radius: #{$default-border-radius};
@@ -332,6 +333,10 @@ select:focus:not(:focus-visible) {
   content: '\00a0€';
 }
 
+.text--primary {
+  color: var(--primary);
+}
+
 .text--grey {
   color: var(--text-default-grey);
 }
@@ -355,4 +360,8 @@ select:focus:not(:focus-visible) {
 
 .btn-container--left {
   justify-content: flex-start;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
 }

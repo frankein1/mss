@@ -1,37 +1,38 @@
 <template>
-  <div
-    ref="$el"
-    class="autocomplete fr-search-bar fr-search-bar--lg"
-    role="search"
-  >
-    <label
-      class="fr-label fr-hidden"
-      :for="name"
+  <div class="autocomplete">
+    <div
+      ref="$el"
+      class="fr-search-bar fr-search-bar--lg"
+      role="search"
     >
-      {{ label }}
-    </label>
-    <input
-      :id="name"
-      ref="combobox"
-      class="fr-input"
-      :placeholder="label"
-      type="search"
-      :name="name"
-      autocomplete="off"
-      aria-autocomplete="list"
-      aria-haspopup="listbox"
-      aria-expanded="false"
-      :aria-controls="listboxId"
-      :aria-describedby="ariaDescribedby"
-      role="combobox"
-      @input="onSearch"
-    />
-    <button
-      class="fr-btn search-btn"
-      :title="label"
-      tabindex="-1"
-    ></button>
-
+      <label
+        class="fr-label fr-hidden"
+        :for="name"
+      >
+        {{ label }}
+      </label>
+      <input
+        :id="name"
+        ref="combobox"
+        class="fr-input"
+        :placeholder="label"
+        type="search"
+        :name="name"
+        autocomplete="off"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        :aria-controls="listboxId"
+        :aria-describedby="ariaDescribedby"
+        role="combobox"
+        @input="onSearch"
+      />
+      <button
+        class="fr-btn search-btn"
+        :title="label"
+        tabindex="-1"
+      ></button>
+    </div>
     <ul
       v-show="expanded"
       :id="listboxId"
@@ -39,18 +40,19 @@
       role="listbox"
     >
       <AtomLoader
-        v-if="timeout"
+        v-if="loading"
         class="fr-mx-auto fr-my-5v"
       />
       <li
         v-for="result in results"
-        v-show="!timeout && !error"
+        v-show="!loading && !error"
         :key="result.id"
         class="menu-item"
         role="option"
       >
         <slot
           name="result"
+          :search="combobox?.value.trim()"
           :input="combobox"
           :result="result"
         >
@@ -67,8 +69,13 @@
 
 <script lang="ts" setup>
   import { inferProcedureOutput } from '@trpc/server'
+  import { useDebounceFn } from '@vueuse/core'
   import { AppRouter } from '~/server/trpc/routers'
-  import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
+  import {
+    SEARCH_DEFER_MS,
+    SEARCH_NUMBER_CHARACTERS,
+    UNKNOWN_ERROR_MESSAGE
+  } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
 
   const props = defineProps<{
@@ -80,7 +87,7 @@
   const results = ref<inferProcedureOutput<AppRouter['beneficiary']['search']>>(
     []
   )
-  const timeout = ref<NodeJS.Timeout | null>(null)
+  const loading = ref<boolean>(false)
   const error = ref<string>('')
 
   const combobox = ref<HTMLInputElement | null>(null)
@@ -92,7 +99,7 @@
   const { isFocused } = useBlurOut($el)
 
   const expanded = computed(
-    () => !!(isFocused.value && (results.value.length || timeout.value))
+    () => !!(isFocused.value && (results.value.length || loading.value))
   )
 
   const errorId = computed(() => `autocomplete-${props.name}-error-desc-error`)
@@ -108,30 +115,26 @@
     combobox.value?.setAttribute('aria-expanded', _expanded.toString())
   })
 
+  const debouncedSearchFn = useDebounceFn(async (search: string) => {
+    try {
+      results.value = await props.searchFn(search)
+    } catch {
+      error.value = UNKNOWN_ERROR_MESSAGE
+    } finally {
+      loading.value = false
+    }
+  }, SEARCH_DEFER_MS)
+
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement
     const search = input.value.trim()
-
-    if (timeout.value) {
-      clearTimeout(timeout.value)
-      timeout.value = null
-    }
-    results.value = []
     error.value = ''
-
-    if (!search) {
+    if (!search || search.length < SEARCH_NUMBER_CHARACTERS) {
+      results.value = []
       return
     }
-
-    timeout.value = setTimeout(async () => {
-      try {
-        results.value = await props.searchFn(search)
-      } catch {
-        error.value = UNKNOWN_ERROR_MESSAGE
-      } finally {
-        timeout.value = null
-      }
-    }, 400)
+    loading.value = true
+    debouncedSearchFn(search)
   }
 </script>
 
@@ -155,18 +158,19 @@
       margin-left: 0;
       margin-right: 0.5rem;
     }
-
-    .fr-search-bar--lg :not(.search-btn)::before {
-      content: none;
-    }
   }
 
   .menu {
     top: 100%;
+    padding: 0 0 1rem;
+  }
+
+  .menu-item {
+    cursor: default !important;
+    padding: 0 !important;
   }
 
   .menu-item > * {
-    width: 100%;
     border-radius: 0;
   }
 

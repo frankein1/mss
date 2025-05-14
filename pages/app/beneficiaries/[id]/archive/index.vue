@@ -30,7 +30,7 @@
       <p class="fr-text--bold fr-mb-1w">
         Agent(s) référent(s)&nbsp;: {{ referentNames }}
       </p>
-      <BeneficiaryDetailsStatus
+      <BeneficiaryStatusBadge
         class="fr-mb-2w"
         :status="beneficiary.status"
       />

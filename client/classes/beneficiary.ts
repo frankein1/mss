@@ -1,11 +1,12 @@
+import { DsfrBadgeProps } from '@gouvminint/vue-dsfr'
 import { BeneficiaryStatus } from '@prisma/client'
 
-export const beneficiaryStatusBadgeClasses: {
-  [key in BeneficiaryStatus]: string
-} = {
-  [BeneficiaryStatus.Active]: 'fr-badge--success',
-  [BeneficiaryStatus.Inactive]:
-    'inactive-status-badge fr-badge--icon-left fr-icon-zzz-line',
-  [BeneficiaryStatus.Archived]: 'fr-badge--error',
-  [BeneficiaryStatus.Deceased]: 'fr-badge--error'
+export const beneficiaryStatusBadgeType: Record<
+  BeneficiaryStatus,
+  Extract<DsfrBadgeProps['type'], 'success' | 'warning' | 'error'>
+> = {
+  [BeneficiaryStatus.Active]: 'success',
+  [BeneficiaryStatus.Inactive]: 'warning',
+  [BeneficiaryStatus.Archived]: 'error',
+  [BeneficiaryStatus.Deceased]: 'error'
 }

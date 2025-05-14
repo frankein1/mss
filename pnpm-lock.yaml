@@ -105,6 +105,9 @@ importers:
       prisma:
         specifier: ^6.6.0
         version: 6.6.0(typescript@5.8.3)
+      remove-accents:
+        specifier: ^0.5.0
+        version: 0.5.0
       superjson:
         specifier: ^2.2.2
         version: 2.2.2
@@ -6086,6 +6089,9 @@ packages:
   regjsparser@0.12.0:
     resolution: {integrity: sha512-cnE+y8bz4NhMjISKbgeVJtqNbtf5QpjZP+Bslo+UqkIt9QPnX9q095eiRRASJG1/tz6dlNr6Z5NsBiWYokp6EQ==}
     hasBin: true
+
+  remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
   request@2.88.2:
     resolution: {integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==}
@@ -14218,6 +14224,8 @@ snapshots:
   regjsparser@0.12.0:
     dependencies:
       jsesc: 3.0.2
+
+  remove-accents@0.5.0: {}
 
   request@2.88.2:
     dependencies:

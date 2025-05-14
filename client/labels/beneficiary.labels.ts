@@ -19,6 +19,10 @@ type BeneficiaryFieldLabels = Omit<
   | 'previousFamilyFileId'
   | 'splitFromFileById'
   | 'externalRdvspId'
+  | 'firstNameNormalized'
+  | 'firstNameNormalized'
+  | 'usualNameNormalized'
+  | 'birthNameNormalized'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {

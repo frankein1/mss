@@ -1651,8 +1651,11 @@ model Beneficiary {
   status                             BeneficiaryStatus
   title                              BeneficiaryTitle?
   usualName                          String?                       @map("usual_name")
+  usualNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(first_name))")) @map("usual_name_normalized")
   birthName                          String?                       @map("birth_name")
+  birthNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(birth_name))")) @map("birth_name_normalized")
   firstName                          String?                       @map("first_name")
+  firstNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(first_name))")) @map("first_name_normalized")
   birthDate                          DateTime?                     @map("birth_date") @db.Date
   birthPlace                         String?                       @map("birth_place")
   deathDate                          DateTime?                     @map("death_date") @db.Date
@@ -1739,6 +1742,9 @@ model Beneficiary {
 
   income BudgetIncome?
 
+  @@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
   @@map("beneficiary")
 }
 

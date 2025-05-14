@@ -19,7 +19,7 @@ export async function search({
 
   // TODO benchmark this and stress tes, then create indexes for case-insensitive filtering.
   // TODO check pg_trgm https://www.postgresql.org/docs/12/pgtrgm.html#id-1.11.7.40.7 for indexing
-  return await BeneficiaryRepo.findMany(ctx.user, {
+  const results = await BeneficiaryRepo.findMany(ctx.user, {
     where,
     orderBy: [{ usualName: 'asc' }, { birthName: 'asc' }],
     select: {
@@ -28,8 +28,11 @@ export async function search({
       usualName: true,
       firstName: true,
       birthName: true,
-      fileNumber: true,
+      status: true,
+      phone1: true,
       birthDate: true
-    }
+    },
+    take: 5
   })
+  return results
 }

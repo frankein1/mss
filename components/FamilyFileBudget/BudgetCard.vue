@@ -132,7 +132,7 @@
   }
 
   .budget-card__item__value {
-    font-weight: var(--bold);
+    font-weight: var(--font-weight-bold);
   }
 
   .budget-card__action {

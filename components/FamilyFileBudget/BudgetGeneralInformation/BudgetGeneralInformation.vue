@@ -189,6 +189,6 @@
   }
 
   .bold {
-    font-weight: var(--bold);
+    font-weight: var(--font-weight-bold);
   }
 </style>

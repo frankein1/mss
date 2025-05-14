@@ -25,7 +25,7 @@
             :beneficiary-id="beneficiary.id"
             :general="beneficiary.general"
           />
-          <BeneficiaryDetailsStatus :status="beneficiary.status" />
+          <BeneficiaryStatusBadge :status="beneficiary.status" />
           <BeneficiaryInfoHeader :beneficiary="beneficiary" />
           <template v-if="socialSupportSubjects.length">
             <hr />
