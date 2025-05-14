@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.42.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.2...v1.42.3) (2025-05-14)
+
+
+### Bug Fixes
+
+* **rdvsp:** erreur de chargement de l'historique lorsque l'utilisateur n'est pas connecté à RDVSP ([eeb7052](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eeb7052da9c3aaf802007dc085ededa392ff2394)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+
 ## [1.42.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.1...v1.42.2) (2025-05-13)
 
 
