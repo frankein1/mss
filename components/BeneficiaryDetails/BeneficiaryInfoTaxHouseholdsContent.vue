@@ -1,9 +1,6 @@
 <template>
   <div class="fr-grid-row">
     <div class="fr-col-12 fr-pb-1w">
-      <h5 class="fr-text--md">Situation familiale</h5>
-    </div>
-    <div class="fr-col-12 fr-pb-1w">
       <BeneficiaryInfoLabel
         :value="
           beneficiaryFamilySituationKeys.value(taxHouseholds.familySituation)

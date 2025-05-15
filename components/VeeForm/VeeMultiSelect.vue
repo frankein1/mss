@@ -36,7 +36,6 @@
       :class="{ 'fr-select--error': error }"
       autocomplete="off"
       aria-autocomplete="list"
-      aria-expanded="false"
       :aria-controls="listboxId"
       :aria-activedescendant="activeOptionValue"
       aria-haspopup="listbox"
@@ -46,10 +45,17 @@
       :placeholder="placeholder"
       @keydown="onInputKeyDown"
     />
+    <label
+      type="hidden"
+      class="fr-sr-only"
+      :for="id"
+      >{{ name }}</label
+    >
     <input
       :id="id"
       ref="hiddenInput"
       class="fr-sr-only"
+      type="hidden"
       :name="name"
       :value="currentValue"
       :disabled="disabled"

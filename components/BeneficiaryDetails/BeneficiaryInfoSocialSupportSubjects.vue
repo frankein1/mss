@@ -1,6 +1,8 @@
 <template>
   <div class="fr-container">
-    <div class="fr-col-12 fr-pb-2w fr-text--bold">Accompagnements</div>
+    <div class="fr-col-12">
+      <h5 class="fr-text--md">Accompagnements</h5>
+    </div>
     <ul class="fr-tags-group">
       <li
         v-for="subject in socialSupportSubjects"

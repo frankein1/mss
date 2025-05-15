@@ -62,7 +62,7 @@
     route.params.subject as string
   ) as FileInstructionType
   const isFinancial = subject === FileInstructionType.Financial
-  const subtitle = isFinancial ? 'Aide financière' : undefined
+  const subtitle = isFinancial ? 'Aide financière' : 'Autre'
   const subtitlePictoPath = isFinancial
     ? fileInstructionTypePictos.Financial
     : undefined

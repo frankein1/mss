@@ -9,24 +9,22 @@
       <slot name="actions"></slot>
     </div>
   </div>
-  <BeneficiaryInfoSection title="">
+
+  <div class="feature-section fr-mt-1w">
+    <h4 class="fr-sr-only">Résumé</h4>
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-  </BeneficiaryInfoSection>
-  <BeneficiaryInfoSection
-    v-if="socialSupportSubjects.length"
-    id="socialSupportSubjects"
-    title=""
-  >
+    <hr />
     <BeneficiaryInfoSocialSupportSubjects
       :social-support-subjects="socialSupportSubjects"
     />
-  </BeneficiaryInfoSection>
+  </div>
 
   <BeneficiaryInfoGeneral
     :beneficiary-id="beneficiary.id"
     :general="beneficiary.general"
   />
 
+  Situation familiale
   <BeneficiaryInfoTaxHouseholds
     v-if="hasTaxHouseholds && beneficiary.taxHouseholds"
     :beneficiary-id="beneficiary.id"

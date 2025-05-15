@@ -26,6 +26,7 @@
     </section>
 
     <section class="feature-section fr-p-5w">
+      <h2 class="fr-h5">Informations générales</h2>
       <div
         class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
       >
@@ -183,6 +184,7 @@
 
         <!-- ROW -->
         <div class="fr-col-12">
+          <h2 class="fr-h5 fr-mt-3w fr-mb-2w">Compte rendu</h2>
           <AtomTextEditor
             name="synthesis"
             :initial-value="synthesisRichTextValue || null"
@@ -221,12 +223,7 @@
             class="fr-fieldset fr-col-12"
             aria-labelledby="followup-actions-entreprises-legend"
           >
-            <legend
-              id="followup-actions-entreprises-legend"
-              class="fr-fieldset__legend fr-h6"
-            >
-              Actions entreprises
-            </legend>
+            <h2 class="fr-h5 fr-mt-3w">Actions entreprises</h2>
 
             <div class="fr-fieldset__element fr-mb-0">
               <fieldset
@@ -283,6 +280,8 @@
       </div>
 
       <div class="fr-mb-4w">
+        <h2 class="fr-h5 fr-mt-3w">Documents</h2>
+
         <BeneficiaryDocumentsSelect
           :family-file-id="familyFileId || ''"
           :beneficiary-id="beneficiaryId || ''"

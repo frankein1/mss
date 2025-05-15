@@ -52,7 +52,9 @@
     <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-grid-row">
-      <div class="fr-col-12 fr-pb-1w fr-text--bold">Adresse/Hébergement</div>
+      <div class="fr-col-12 fr-pb-1w">
+        <h5 class="fr-text--md">Adresse/Hébergement</h5>
+      </div>
     </div>
 
     <div class="fr-grid-row">

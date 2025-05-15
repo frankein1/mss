@@ -37,7 +37,7 @@
     $buildChart(chart.value, {
       type: 'pie',
       options: {
-        responsive: false
+        responsive: true
       },
       data: {
         labels: props.stats.map(({ label }) => label),

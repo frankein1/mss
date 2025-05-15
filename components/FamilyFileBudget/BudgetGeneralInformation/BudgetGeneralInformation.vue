@@ -16,7 +16,7 @@
           <img
             src="~/assets/icons/pig.svg"
             class="item-icon"
-            alt=""
+            alt="Pictogramme tirelire"
           />
           <div>
             <div class="fr-text--lg fr-m-0">Epargne</div>
@@ -51,7 +51,7 @@
           <img
             src="~/assets/icons/banquefrance.svg"
             class="item-icon"
-            alt=""
+            alt="Pictogramme banque"
           />
           <div>
             <div class="fr-text--lg fr-m-0">Banque de France</div>

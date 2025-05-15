@@ -13,7 +13,7 @@
         <img
           src="~/assets/img/register-01.svg"
           class="fr-responsive-img register-step-img"
-          alt=""
+          alt="Pictogramme webinaire"
         />
         <h2 class="fr-h3">01. Participez au prochain webinaire</h2>
         <NuxtLink
@@ -29,7 +29,7 @@
         <img
           src="~/assets/img/register-02.svg"
           class="fr-responsive-img register-step-img"
-          alt=""
+          alt="Pictogramme renseignement"
         />
         <h2 class="fr-h3">02. Renseignez vos informations</h2>
       </div>
@@ -37,7 +37,7 @@
         <img
           src="~/assets/img/register-03.svg"
           class="fr-responsive-img register-step-img"
-          alt=""
+          alt="Pictogramme connexion"
         />
         <h2 class="fr-h3">03. Connectez-vous à votre espace</h2>
       </div>

@@ -5,7 +5,9 @@
     aria-controls="global-modal"
     class="disconnect-alert"
     @click="openDisconnectAlert"
-  ></button>
+  >
+    Alerte de déconnexion
+  </button>
 </template>
 <script setup lang="ts">
   import DisconnectAlert from './DisconnectAlert.vue'

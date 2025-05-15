@@ -3,7 +3,7 @@
     <img
       src="~/assets/img/empty-notification.svg"
       class="fr-responsive-img"
-      alt=""
+      alt="Pictogramme notification vide"
     />
     <p class="fr-mb-0">{{ message }}</p>
     <p

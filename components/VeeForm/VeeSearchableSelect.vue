@@ -35,7 +35,6 @@
       aria-haspopup="listbox"
       aria-expanded="false"
       :aria-controls="listboxId"
-      :aria-activedescendant="activeOptionValue"
       :aria-describedby="ariaDescribedby"
       role="combobox"
       @input="onSearch"
@@ -43,10 +42,18 @@
       @keydown="onInputKeyDown"
       @blur="onInputBlur"
     />
+
+    <label
+      type="hidden"
+      class="fr-sr-only"
+      :for="id"
+      >{{ name }}</label
+    >
     <input
       :id="id"
       ref="hiddenInput"
       :name="name"
+      type="hidden"
       :value="currentValue"
       class="fr-sr-only"
       tabindex="-1"

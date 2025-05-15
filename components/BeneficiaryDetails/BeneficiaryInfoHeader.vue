@@ -35,7 +35,7 @@
 
       <div class="fr-grid-row">
         <div class="fr-col-12">
-          <div class="fr-pb-2w fr-text--bold">Coordonnées du bénéficiaire</div>
+          <h5 class="fr-text--md">Coordonnées du bénéficiaire</h5>
         </div>
       </div>
       <div class="fr-grid-row">

@@ -23,7 +23,7 @@
           <img
             src="/pictograms/inclusion.svg"
             class="img"
-            alt=""
+            alt="Pictogramme inclusion"
           />
         </div>
       </AtomCallout>

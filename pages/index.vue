@@ -40,7 +40,7 @@
           <img
             src="~/assets/img/home-01.svg"
             class="fr-responsive-img feature-img"
-            alt=""
+            alt="Pictogramme dossier"
           />
           <h2 class="feature-headline">Complet</h2>
           <p>Un suivi complet de vos bénéficiaires</p>
@@ -49,7 +49,7 @@
           <img
             src="~/assets/img/home-02.svg"
             class="fr-responsive-img feature-img"
-            alt=""
+            alt="Pictogramme flèche et cible"
           />
           <h2 class="feature-headline">Simple</h2>
           <p>Toutes les fonctionnalités en quelques clics</p>
@@ -58,7 +58,7 @@
           <img
             src="~/assets/img/home-03.svg"
             class="fr-responsive-img feature-img"
-            alt=""
+            alt="Pictogramme cadenas"
           />
           <h2 class="feature-headline">Sécurisé</h2>
           <p>Une sécurisation maximale de données</p>
@@ -67,7 +67,7 @@
           <img
             src="~/assets/img/home-04.svg"
             class="fr-responsive-img feature-img"
-            alt=""
+            alt="Pictogramme fusée"
           />
           <h2 class="feature-headline">Centralisé</h2>
           <p>Toutes vos infos au même endroit</p>

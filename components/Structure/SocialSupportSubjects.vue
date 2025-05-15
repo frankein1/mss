@@ -19,7 +19,7 @@
         <img
           src="/pictograms/inclusion.svg"
           class="img"
-          alt=""
+          alt="Pictogramme d’inclusion"
         />
       </div>
     </AtomCallout>
