@@ -127,10 +127,10 @@
           <tr>
             <td>Export de la base de données bénéficiaires</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>* Uniquement les coordonnées et situation familiale</td>
+            <td>* Uniquement les coordonnées et situation familiale</td>
+            <td>* Uniquement les coordonnées et situation familiale</td>
+            <td>* Uniquement les coordonnées et situation familiale</td>
           </tr>
           <tr>
             <td>Ajout de documents</td>
