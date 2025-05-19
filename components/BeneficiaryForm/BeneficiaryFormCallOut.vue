@@ -6,7 +6,7 @@
         aria-hidden="true"
       ></span>
     </div>
-    <div class="content">
+    <div>
       <p class="fr-text--bold fr-mb-1w">
         Pour suivre plusieurs personnes d’un même foyer, ajoutez-les comme
         bénéficiaires à ce dossier.
