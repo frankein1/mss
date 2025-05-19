@@ -12,64 +12,50 @@
         {{ formatTableValue(lastName) }}
       </NuxtLink>
     </td>
-    <td>{{ formatTableValue(nameOrEmpty(general.firstName)) }}</td>
+    <td>{{ formatTableValue(nameOrEmpty(beneficiary.firstName)) }}</td>
     <td>
       {{
         formatTableValue(
-          general.birthDate ? formatDate(general.birthDate) : undefined
+          beneficiary.birthDate ? formatDate(beneficiary.birthDate) : undefined
         )
       }}
     </td>
-    <td>{{ formatTableValue(general.phone1) }}</td>
+    <td>{{ formatTableValue(beneficiary.phone1) }}</td>
     <td class="address-data">
-      <template v-if="general.street || addressCodeAndCity">
-        {{ general.street }}
-        <br v-if="general.street" />
+      <template v-if="beneficiary.street || addressCodeAndCity">
+        {{ beneficiary.street }}
+        <br v-if="beneficiary.street" />
         {{ addressCodeAndCity }}
       </template>
       <template v-else>{{ EMPTY_TABLE_CELL }}</template>
-    </td>
-    <td
-      class="social-support-subjects-data"
-      :title="formatTableValue(socialSupportSubjects)"
-    >
-      <span>{{ formatTableValue(socialSupportSubjects) }}</span>
     </td>
   </tr>
 </template>
 
 <script lang="ts" setup>
-  import type { BeneficiaryPageItem } from './types'
+  import type { BeneficiaryListItem } from './types'
   import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
   import { routes } from '~/utils/routes'
   import { formatTableValue } from '~/utils/table'
 
-  const props = defineProps<{
-    item: BeneficiaryPageItem
+  const { beneficiary } = defineProps<{
+    beneficiary: BeneficiaryListItem
   }>()
 
-  const beneficiary = computed(() => props.item.beneficiary)
-  const general = computed(() => beneficiary.value.general)
-  const history = computed(() => beneficiary.value.history)
-
   const addressCodeAndCity = computed(() =>
-    [general.value.zipcode, general.value.city].filter(v => !!v).join(' ')
-  )
-
-  const socialSupportSubjects = computed(() =>
-    history.value.subjects.map(({ name }) => name).join(', ')
+    [beneficiary.zipcode, beneficiary.city].filter(v => !!v).join(' ')
   )
 
   const lastName = computed(() => {
-    if (general.value.usualName) {
-      return general.value.usualName.toUpperCase()
+    if (beneficiary.usualName) {
+      return beneficiary.usualName.toUpperCase()
     }
-    if (general.value.birthName) {
-      return `(${general.value.birthName.toUpperCase()})`
+    if (beneficiary.birthName) {
+      return `(${beneficiary.birthName.toUpperCase()})`
     }
-    return nameOrEmpty(general.value.usualName)
+    return nameOrEmpty(beneficiary.usualName)
   })
 </script>
 

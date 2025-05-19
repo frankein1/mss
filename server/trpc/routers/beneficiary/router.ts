@@ -5,9 +5,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDetails: protectedProcedure
     .input(routes.getBeneficiaryDetailsQuery.inputValidation)
     .query(routes.getBeneficiaryDetailsQuery.execute),
-  getPage: protectedProcedure
-    .input(routes.getPage.inputValidation)
-    .query(routes.getPage.execute),
+  getBeneficiaryList: protectedProcedure
+    .input(routes.getBeneficiaryListQuery.inputValidation)
+    .query(routes.getBeneficiaryListQuery.execute),
   exportBeneficiaries: protectedProcedure
     .input(routes.exportBeneficiariesQuery.inputValidation)
     .query(routes.exportBeneficiariesQuery.execute),

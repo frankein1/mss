@@ -1,6 +1,7 @@
 import { create } from './create.service'
 import { get } from './get.service'
 import { getPage } from './getPage.service'
+import getBeneficiaryList from './getBeneficiaryList.service'
 
 import { updateTaxHousehold } from './updateTaxHousehold.service'
 import { exportAll } from './export-all.service'
@@ -44,7 +45,8 @@ export const BeneficiaryService = {
   getLastActivity,
   getArchiveDate,
   getBeneficiaryLastActivity,
-  linkToFamilyFile
+  linkToFamilyFile,
+  getBeneficiaryList
 }
 
 export type { BeneficiarySecurityTarget }

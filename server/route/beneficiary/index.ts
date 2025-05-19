@@ -20,6 +20,7 @@ import { getBeneficiaryArchivePermissionsQuery } from './get-archive-permissions
 import { validateBeneficiaryMutation } from './validate.mutation'
 import { updateArchiveDateMutation } from './update-archive-date.mutation'
 import { linkToFamilyFileMutation } from './link-to-family-file.mutation'
+import getBeneficiaryListQuery from './get-list.query'
 
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
@@ -43,7 +44,8 @@ export const beneficiaryRoutes = {
   validateBeneficiaryMutation,
   createFamilyFileMemberMutation,
   updateArchiveDateMutation,
-  linkToFamilyFileMutation
+  linkToFamilyFileMutation,
+  getBeneficiaryListQuery
 }
 
 export type { SimilarBeneficiary }

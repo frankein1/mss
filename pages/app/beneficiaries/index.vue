@@ -44,7 +44,7 @@
             <template v-else>
               <BeneficiaryTable
                 v-model:sort="orderBy"
-                :items="items"
+                :beneficiary-list="items"
                 :pending="pending"
               />
               <AtomPagination
@@ -121,7 +121,7 @@
     data: pageData,
     pending,
     error
-  } = await trpcClient.beneficiary.getPage.useQuery(queryInput)
+  } = await trpcClient.beneficiary.getBeneficiaryList.useQuery(queryInput)
 
   const beneficiariesCount = computed(() => pageData.value?.count || 0)
 

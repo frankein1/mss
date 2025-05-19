@@ -34,14 +34,13 @@
             />
             <th scope="col">Téléphone</th>
             <th scope="col">Adresse</th>
-            <th scope="col">{{ beneficiaryFieldLabels.subjects }}</th>
           </tr>
         </thead>
         <tbody>
           <BeneficiaryRow
-            v-for="item in items"
-            :key="item.beneficiary.id"
-            :item="item"
+            v-for="beneficiary in beneficiaryList"
+            :key="beneficiary.id"
+            :beneficiary="beneficiary"
           />
         </tbody>
       </table>
@@ -50,12 +49,12 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryPageItems } from './types'
+  import { BeneficiaryListItems } from './types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { BeneficiarySort } from '~/types/table'
 
   const props = defineProps<{
-    items: BeneficiaryPageItems
+    beneficiaryList: BeneficiaryListItems
     pending: boolean
     sort: BeneficiarySort
   }>()

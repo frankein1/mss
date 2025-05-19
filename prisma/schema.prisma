@@ -1651,7 +1651,7 @@ model Beneficiary {
   status                             BeneficiaryStatus
   title                              BeneficiaryTitle?
   usualName                          String?                       @map("usual_name")
-  usualNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(first_name))")) @map("usual_name_normalized")
+  usualNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(usual_name))")) @map("usual_name_normalized")
   birthName                          String?                       @map("birth_name")
   birthNameNormalized                String?                       @default(dbgenerated("lower(immutable_unaccent(birth_name))")) @map("birth_name_normalized")
   firstName                          String?                       @map("first_name")
@@ -1742,9 +1742,10 @@ model Beneficiary {
 
   income BudgetIncome?
 
-  @@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
-  @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
-  @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_usual_name_normalized_idx")
+  @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_birth_name_normalized_idx")
+  @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_first_name_normalized_idx")
+  @@index(fields: [structureId], map: "beneficiary_structure_id_idx")
   @@map("beneficiary")
 }
 
