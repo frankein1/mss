@@ -32,7 +32,7 @@ export async function search({
       phone1: true,
       birthDate: true
     },
-    take: 5
+    take: 10
   })
   return results
 }
