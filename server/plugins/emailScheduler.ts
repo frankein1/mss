@@ -15,7 +15,9 @@ export default defineNitroPlugin(() => {
 
 async function sendEmails() {
   const emails = await findEmailsToSend()
-  await markAsSending(emails.map(email => email.id) || [])
+  if (emails.length > 0) {
+    await markAsSending(emails.map(email => email.id))
+  }
 
   for (const email of emails) {
     const { id, to, from, subject, text, html } = email
