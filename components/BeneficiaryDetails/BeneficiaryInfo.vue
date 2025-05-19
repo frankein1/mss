@@ -24,7 +24,7 @@
     :general="beneficiary.general"
   />
 
-  Situation familiale
+  <!-- Situation familiale -->
   <BeneficiaryInfoTaxHouseholds
     v-if="hasTaxHouseholds && beneficiary.taxHouseholds"
     :beneficiary-id="beneficiary.id"
