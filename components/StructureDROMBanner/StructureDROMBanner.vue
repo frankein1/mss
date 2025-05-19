@@ -13,7 +13,7 @@
         d'échéance, date de naissance, etc...) ont un décalage d'un jour.
       </p>
       <p>
-        Une correction sera apportée <strong>le 19 mai</strong> et vos dates
+        Une correction sera apportée <strong>le 20 mai</strong> et vos dates
         mises à jour.
         <strong
           >Continuez de saisir les dates sous le format choisi jusqu'ici et ne
