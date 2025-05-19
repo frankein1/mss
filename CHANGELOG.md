@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.43.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.42.0...v1.43.0) (2025-05-19)
+
+
+### Features
+
+* **accessibilité:** ajout de sections ([4b22bf1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4b22bf1ba3e431004bdb71677555cd7683b49801)), closes [#545](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/545)
+* **accessibilité:** ajouter un lien d'évitement ([0637455](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/06374555a5f06b6aa8980bc45c873ec21b27ee94)), closes [#340](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/340)
+
+
+### Bug Fixes
+
+* **accessibilité:** Amélioration de l'accessibilité des barres de progression ([d9c27a7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d9c27a7fe683f63a28f33de10fd7a2617961ebdc)), closes [#554](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/554)
+* **accessibilité:** amélioration du tableau de bord ([abb6363](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/abb6363928ec35b4d9495568bb298ac91f3a70d1)), closes [#801](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/801)
+* **accessibilité:** diverses améliorations ([f386fce](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f386fcea93eba75a410fbe9f57709d5177663f42)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/724#note_2501704591](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/724/issues/note_2501704591)
+* **accessibilité:** Mise à jour de la déclaration d'accessibilité ([7265086](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/72650866c46c6d9bc7151b68aea915f963481932)), closes [#809](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/809)
+* **accessibilité:** reset du focus lors de changement de page ([94eb488](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/94eb4887ac72831b4b84bcd197e0b313aa9030da))
+* **accessibilité:** Retrait des points médians ([f94c8fa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f94c8fae668c272a5b75f6857277741ece22d99d)), closes [#807](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/807)
+* amélioration des modifications d'accessibilité (1/n) ([467ed73](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/467ed736ab70d15443883a4a98f5bfbc57548a4c))
+* beneficiaire infos ([e9ac0e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e9ac0e4db6b92c3b824f79efefa00259d68f8ab6))
+* corrections sur la recherche bénéficiaires ([98beff4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/98beff435f9c0f54255769d68e9d77029c21fb99))
+* **emailScheduler:** ne pas exécuter d'action lorsqu'il n'y a pas d'emails à envoyer ([7cea64a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7cea64ab973eaa3512ef57b5d272c7690a332576))
+* extend node memory ([a38e5f2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a38e5f2da089d277ae28a66dfc37e5c9a8a13194)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+* **global:** Control flow erroné sur transactions Prisma conditionnelles du backend ([a669074](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a669074d2ab676798cbaf755133e0f897817aff1)), closes [#797](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/797)
+* **rdvsp:** erreur de chargement de l'historique lorsque l'utilisateur n'est pas connecté à RDVSP ([b02a37c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b02a37cac927f35c707fb77881a5c5ac47740099)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+* **rdvsp:** sync des rendez-vous plus récents que l'avant-veille uniquement ([be03ff6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/be03ff67c3ece2e187fb71ec7fa4bb9c75f44554)), closes [#802](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/802)
+* **sso:** autorise adresses admin en ext.anct.gouv.fr ([3fb7231](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3fb7231aa616732a32f0a275103b2d77114e7733))
+
 ## [1.42.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.41.0...v1.42.0) (2025-04-28)
 
 
