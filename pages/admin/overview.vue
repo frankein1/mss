@@ -28,25 +28,58 @@
       </div>
 
       <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--secondary"
-          @click="migrate(false)"
+        <form
+          novalidate
+          @submit.prevent="migrate"
         >
-          Informations sur le nombre de structures désactivées non anonymisées
-        </button>
-      </div>
+          <div>
+            <label for="structure-id">Identifiant de la structure</label>
+            <input
+              v-model="structureId"
+              class="fr-input"
+              name="structure-id"
+            />
+          </div>
 
-      <div class="fr-col-12 fr-mb-4w">
-        {{ info }} structures désactivées non anonymisées
-      </div>
+          <div>
+            <input
+              v-model="migrateAll"
+              type="checkbox"
+              name="migrate-all"
+            />
+            <label for="migrate-all">Migrer tous les champs</label>
+          </div>
 
-      <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--secondary"
-          @click="migrate(true)"
-        >
-          Migration des structures désactivées
-        </button>
+          <div>
+            <input
+              v-model="migrateBirthDate"
+              type="checkbox"
+              name="migrate-birth-date"
+            />
+            <label for="migrate-birth-date"
+              >Migrer champ date de naissance</label
+            >
+          </div>
+
+          <div>
+            <input
+              v-model="migrateBirthDateAndFileOpeningDate"
+              type="checkbox"
+              name="migrate-birth-date-file-opening-date"
+            />
+            <label for="migrate-birth-date-file-opening-date"
+              >Migrer champ date de naissance et date d'ouverture du
+              dossier</label
+            >
+          </div>
+
+          <button
+            class="fr-btn fr-btn--secondary"
+            type="submit"
+          >
+            Migration des dates de la structure
+          </button>
+        </form>
       </div>
     </div>
   </PageContainer>
@@ -61,14 +94,28 @@
 
   const data = await useTrpcClient().admin.getOverview.query()
 
-  const info = ref<any>(undefined)
+  const structureId = ref('')
+  const migrateAll = ref(false)
+  const migrateBirthDate = ref(false)
+  const migrateBirthDateAndFileOpeningDate = ref(false)
 
-  async function migrate(exec = false) {
-    const res = await $fetch(`/api/migrate`, {
+  async function migrate() {
+    console.log(
+      'in migrate',
+      structureId.value,
+      migrateAll.value,
+      migrateBirthDate.value,
+      migrateBirthDateAndFileOpeningDate.value
+    )
+    await $fetch(`/api/migrate`, {
       method: 'POST',
-      body: { exec }
+      body: {
+        structureId: structureId.value,
+        migrateAll: migrateAll.value,
+        migrateBirthDate: migrateBirthDate.value,
+        migrateBirthDateAndFileOpeningDate:
+          migrateBirthDateAndFileOpeningDate.value
+      }
     })
-
-    info.value = (res as any).length
   }
 </script>

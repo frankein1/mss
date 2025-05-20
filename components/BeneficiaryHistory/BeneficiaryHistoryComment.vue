@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
   import { CommentItem, CommentData } from './types'
-  import { formatDate } from '~/utils/formatDate'
+  import { formatDateToLocalTimezone } from '~/utils/formatDateToLocalTimezone'
   import { formatUserDisplayName } from '~/utils/user'
 
   const props = defineProps<{
@@ -56,7 +56,7 @@
   const isEditing = ref(false)
 
   const commentDate = computed(() =>
-    formatDate(comment.value.updated ?? comment.value.created)
+    formatDateToLocalTimezone(comment.value.updated ?? comment.value.created)
   )
 
   const authorName = computed(() =>

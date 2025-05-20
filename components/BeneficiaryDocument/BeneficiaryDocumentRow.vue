@@ -29,7 +29,7 @@
         NOUVEAU
       </span>
     </td>
-    <td>{{ formatDate(document.created) }}</td>
+    <td>{{ formatDateToLocalTimezone(document.created) }}</td>
     <td class="tags-data">
       <span
         v-if="document.tags.length"

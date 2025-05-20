@@ -243,6 +243,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
+    // Ideally it should be converted into timezone of the user
     updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm')
   }
 }

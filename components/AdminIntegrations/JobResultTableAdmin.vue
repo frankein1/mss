@@ -52,11 +52,20 @@
                 >{{ jobResultStatusKeys.value(job.status) }}</span
               >
             </td>
-            <td>{{ formatDate(job.startDate, 'DD/MM/YYYY HH:mm') }}</td>
-            <td>{{ formatDate(job.endDate, 'DD/MM/YYYY HH:mm') }}</td>
+            <td>
+              {{ formatDateToLocalTimezone(job.startDate, 'DD/MM/YYYY HH:mm') }}
+            </td>
+            <td>
+              {{ formatDateToLocalTimezone(job.endDate, 'DD/MM/YYYY HH:mm') }}
+            </td>
             <td>{{ job.durationInSeconds }}</td>
             <td>
-              {{ formatDate(job.result.exportStartDate, 'DD/MM/YYYY HH:mm') }}
+              {{
+                formatDateToLocalTimezone(
+                  job.result.exportStartDate,
+                  'DD/MM/YYYY HH:mm'
+                )
+              }}
             </td>
             <td>{{ job.result.nImported }}</td>
             <td>{{ job.result.nCreated }}</td>

@@ -84,6 +84,7 @@ export async function exportFollowups({
           structureName: followup.structureName || '',
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
+          // Technically it should be converted into timezone of the user
           updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)

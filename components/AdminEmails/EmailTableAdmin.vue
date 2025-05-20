@@ -40,7 +40,11 @@
                 >{{ emailStatusKeys.value(email.status) }}</span
               >
             </td>
-            <td>{{ formatDate(email.sentDate, 'DD/MM/YYYY HH:mm') }}</td>
+            <td>
+              {{
+                formatDateToLocalTimezone(email.sentDate, 'DD/MM/YYYY HH:mm')
+              }}
+            </td>
             <td>{{ email.retryNumber }}</td>
             <td>
               <ul class="fr-btns-group fr-btns-group--icon-left">

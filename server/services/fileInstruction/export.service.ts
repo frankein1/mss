@@ -154,6 +154,7 @@ export async function exportFileInstructions({
           synthesis: socialSupport.synthesis || '',
           dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
+          // Ideally it should be converted into timezone of the user
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
           ministre: socialSupport.ministre
             ? ministerKeys.byKey[socialSupport.ministre]

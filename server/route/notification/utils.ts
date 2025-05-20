@@ -6,7 +6,6 @@ import {
 } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUserDisplayName } from '~/utils/user'
-import { formatDate } from '~/utils/formatDate'
 
 export const notificationInclude = {
   beneficiary: {
@@ -141,7 +140,7 @@ export function getDateNotificationDescription(
     return `${label} hier`
   }
   if (date.isAfter(dayjs(), 'date')) {
-    return `${label} le ${formatDate(date.toDate())}`
+    return `${label} le ${formatUTCTimestamp(date.toDate())}`
   }
-  return `${pastLabel || label} passée le ${formatDate(date.toDate())}`
+  return `${pastLabel || label} passée le ${formatUTCTimestamp(date.toDate())}`
 }

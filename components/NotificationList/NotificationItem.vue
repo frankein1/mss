@@ -65,7 +65,7 @@
     </div>
     <div class="notification-item-date">
       <p class="fr-text--xs notificationitem__date">
-        {{ formatDate(notification.created) }}
+        {{ formatDateToLocalTimezone(notification.created) }}
       </p>
     </div>
     <div class="notification-item-checkbox">

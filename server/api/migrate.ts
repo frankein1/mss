@@ -1,16 +1,266 @@
 import { defineEventHandler, readBody } from 'h3'
 import { prismaClient } from '~/server/prisma'
-import {
-  AppointmentRepo,
-  BeneficiaryRepo,
-  CommentRepo,
-  SocialSupportRepo,
-  StructureRepo,
-  UserRepo
-} from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
-import { customAlphabet } from 'nanoid'
+import dayjs from 'dayjs'
+import { performance } from 'node:perf_hooks'
+
+function modifyDate(date: Date | null) {
+  return date ? dayjs(date).subtract(1, 'day').toDate() : null
+}
+
+/** Select all beneficiaries from structure */
+async function getBeneficiaries(structureId: string) {
+  const bens = await prismaClient.beneficiary.findMany({
+    where: { structureId },
+    select: {
+      id: true,
+      birthDate: true,
+      deathDate: true,
+      weddingDate: true,
+      divorceDate: true,
+      relatives: {
+        select: {
+          id: true,
+          birthDate: true
+        }
+      },
+      socialSupports: {
+        select: {
+          id: true,
+          date: true,
+          dueDate: true,
+          fileInstruction: {
+            select: {
+              id: true,
+              dispatchDate: true,
+              examinationDate: true,
+              decisionDate: true,
+              helpRequest: {
+                select: { id: true, paymentDate: true, handlingDate: true }
+              },
+              housingHelpRequest: {
+                select: { id: true, firstOpeningDate: true }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  return bens
+}
+
+type BeneficiariesQueryResult = Awaited<ReturnType<typeof getBeneficiaries>>
+
+/** Remove one day to all dates in beneficiary and associated social supports */
+function updateDatesForBeneficiaries(
+  bens: BeneficiariesQueryResult
+): BeneficiariesQueryResult {
+  const bensupdated = bens.map(b => {
+    return {
+      id: b.id,
+      birthDate: modifyDate(b.birthDate),
+      deathDate: modifyDate(b.deathDate),
+      weddingDate: modifyDate(b.weddingDate),
+      divorceDate: modifyDate(b.divorceDate),
+
+      relatives: b.relatives.map(r => {
+        return {
+          id: r.id,
+          birthDate: modifyDate(r.birthDate)
+        }
+      }),
+
+      socialSupports: b.socialSupports.map(ss => {
+        return {
+          id: ss.id,
+          date: modifyDate(ss.date) as Date,
+          dueDate: modifyDate(ss.dueDate),
+
+          fileInstruction: ss.fileInstruction
+            ? {
+                id: ss.fileInstruction.id,
+                dispatchDate: modifyDate(ss.fileInstruction.dispatchDate),
+                examinationDate: modifyDate(ss.fileInstruction.examinationDate),
+                decisionDate: modifyDate(ss.fileInstruction.decisionDate),
+
+                helpRequest: ss.fileInstruction.helpRequest
+                  ? {
+                      id: ss.fileInstruction.helpRequest.id,
+                      paymentDate: modifyDate(
+                        ss.fileInstruction.helpRequest.paymentDate
+                      ),
+                      handlingDate: modifyDate(
+                        ss.fileInstruction.helpRequest.handlingDate
+                      )
+                    }
+                  : null,
+
+                housingHelpRequest: ss.fileInstruction.housingHelpRequest
+                  ? {
+                      id: ss.fileInstruction.housingHelpRequest.id,
+                      firstOpeningDate: modifyDate(
+                        ss.fileInstruction.housingHelpRequest.firstOpeningDate
+                      )
+                    }
+                  : null
+              }
+            : null
+        }
+      })
+    }
+  })
+
+  return bensupdated
+}
+
+// Needs to be in a transaction to rollback all in case of failure
+// because operation not idempotent
+async function updateInDbForAllFields(bens: BeneficiariesQueryResult) {
+  const start = performance.now()
+  for (let bid = 0; bid < bens.length; bid++) {
+    try {
+      await prismaClient.$transaction(
+        async _tx => {
+          const { id, socialSupports, relatives, ...ben } = bens[bid]
+
+          await prismaClient.beneficiary.update({ where: { id }, data: ben })
+
+          for (let rid = 0; rid < relatives.length; rid++) {
+            const { id, ...r } = relatives[rid]
+            await prismaClient.beneficiaryRelative.update({
+              where: { id },
+              data: r
+            })
+          }
+
+          for (let sid = 0; sid < socialSupports.length; sid++) {
+            const { id, fileInstruction, ...ss } = socialSupports[sid]
+
+            await prismaClient.socialSupport.update({ where: { id }, data: ss })
+
+            if (fileInstruction) {
+              const { id, housingHelpRequest, helpRequest, ...fi } =
+                fileInstruction
+
+              if (housingHelpRequest) {
+                const { id: _hhrid, ...hhr } = housingHelpRequest
+                await prismaClient.fileInstruction.update({
+                  where: { id },
+                  data: { ...fi, housingHelpRequest: { update: hhr } }
+                })
+              } else if (helpRequest) {
+                const { id: _hrid, ...hr } = helpRequest
+                await prismaClient.fileInstruction.update({
+                  where: { id },
+                  data: { ...fi, helpRequest: { update: hr } }
+                })
+              }
+            }
+          }
+        },
+        { timeout: 5_000 }
+      )
+    } catch (e) {
+      console.log(
+        `could not update updateInDbForBirthDateAndSocialSupportOpeningDate for beneficiary ${bens[bid].id}`,
+        e
+      )
+    }
+  }
+  const end = performance.now()
+  console.log(` duration ${(end - start) / 1000} for updateInDbForAllFields`)
+}
+
+// Needs to be in a transaction to rollback all in case of failure
+// because operation not idempotent
+async function updateInDbForBirthDateAndSocialSupportOpeningDate(
+  bens: BeneficiariesQueryResult
+) {
+  const start = performance.now()
+  for (let bid = 0; bid < bens.length; bid++) {
+    try {
+      await prismaClient.$transaction(
+        async _tx => {
+          const { id, socialSupports, relatives, ...ben } = bens[bid]
+
+          await prismaClient.beneficiary.update({
+            where: { id },
+            data: {
+              birthDate: ben.birthDate
+            }
+          })
+
+          for (let rid = 0; rid < relatives.length; rid++) {
+            const { id, ...r } = relatives[rid]
+            await prismaClient.beneficiaryRelative.update({
+              where: { id },
+              data: { birthDate: r.birthDate }
+            })
+          }
+
+          for (let sid = 0; sid < socialSupports.length; sid++) {
+            const { id, fileInstruction, ...ss } = socialSupports[sid]
+
+            await prismaClient.socialSupport.update({
+              where: { id },
+              data: { date: ss.date }
+            })
+          }
+        },
+        { timeout: 5_000 }
+      )
+    } catch (e) {
+      console.log(
+        `could not update updateInDbForBirthDateAndSocialSupportOpeningDate for beneficiary ${bens[bid].id}`,
+        e
+      )
+    }
+  }
+  const end = performance.now()
+  console.log(
+    ` duration ${(end - start) / 1000} for updateInDbForBirthDateAndSocialSupportOpeningDate`
+  )
+}
+
+// Needs to be in a transaction to rollback all in case of failure
+// because operation not idempotent
+async function updateInDbForBirthDate(bens: BeneficiariesQueryResult) {
+  const start = performance.now()
+  for (let bid = 0; bid < bens.length; bid++) {
+    try {
+      await prismaClient.$transaction(
+        async _tx => {
+          const { id, socialSupports, relatives, ...ben } = bens[bid]
+
+          await prismaClient.beneficiary.update({
+            where: { id },
+            data: {
+              birthDate: ben.birthDate
+            }
+          })
+
+          for (let rid = 0; rid < relatives.length; rid++) {
+            const { id, ...r } = relatives[rid]
+            await prismaClient.beneficiaryRelative.update({
+              where: { id },
+              data: { birthDate: r.birthDate }
+            })
+          }
+        },
+        { timeout: 5_000 }
+      )
+    } catch (e) {
+      console.log(
+        `could not update updateInDbForBirthDate for beneficiary ${bens[bid].id}`,
+        e
+      )
+    }
+  }
+  const end = performance.now()
+  console.log(` duration ${(end - start) / 1000} for updateInDbForBirthDate`)
+}
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -18,211 +268,36 @@ export default defineEventHandler(async event => {
     throw forbiddenError()
   }
 
-  const { exec } = await readBody(event)
+  const {
+    structureId,
+    migrateAll,
+    migrateBirthDate,
+    migrateBirthDateAndFileOpeningDate
+  } = await readBody(event)
 
-  // L'anonymisation a été effectuée de manière incomplète dans la première version
-  // Les structures partiellement anonymisées sont rattrapées ici.
+  console.log(
+    structureId,
+    migrateAll,
+    migrateBirthDate,
+    migrateBirthDateAndFileOpeningDate
+  )
 
-  // 1. Compter le nombre de structures désactivées qui ont un nom non anonymisé (name non null)
-  const structures = await StructureRepo.prisma.findMany({
-    where: {
-      disabled: true,
-      name: { not: '' }
-    },
-    select: {
-      id: true,
-      created: true,
-      lastAccess: true,
-      name: true,
-      users: {
-        select: {
-          id: true,
-          status: true,
-          email: true
-        }
-      }
-    }
-  })
+  // fetch all bens with info on relatives and social supports
+  const bens = await getBeneficiaries(structureId)
 
-  // Pour ces structures
-  // - supprimer commentaires
-  // - anonymiser structure : nom adresse phone email rdvsp
-  // - anonymiser rdv
-  // - supprimer account des utilisateurs de la structure
-  // - supprimer external account
-  // - anonymuser tous les users firstname lastname email status aidantConnect accestoken validity rdvsp
+  // update the dates if exist (if not keep null)
+  const bensWithDatesUpdated = updateDatesForBeneficiaries(bens)
 
-  // exécution de la migration
-  if (exec) {
-    for (const structure of structures) {
-      await AppointmentRepo.prisma.updateMany({
-        where: {
-          socialSupport: { structureId: structure.id }
-        },
-        data: {
-          draft: false,
-          externalDraftId: null,
-          time: null,
-          durationInMin: null,
-          place: null,
-          externalRdvspId: null
-        }
-      })
-
-      const deleteComments = CommentRepo.prisma.deleteMany({
-        where: {
-          socialSupport: {
-            structureId: structure.id
-          }
-        }
-      })
-
-      const updateSocialSupports = SocialSupportRepo.prisma.updateMany({
-        where: { structureId: structure.id },
-        data: {
-          synthesis: null,
-          privateSynthesis: null,
-          synthesisRichText: null,
-          privateSynthesisRichText: null,
-          numeroPegase: '',
-          ministre: null,
-          dueDate: null
-        }
-      })
-
-      const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
-        where: { structureId: structure.id },
-        data: {
-          // no need to update this, it has already been done, we simply clean the fields
-          // archivedById: ctx.user.id,
-          // archived: new Date(),
-          title: null,
-          pensionOrganisations: {
-            set: []
-          },
-          usualName: null,
-          birthName: null,
-          firstName: null,
-          birthPlace: null,
-          deathDate: null,
-          gender: null,
-          nationality: null,
-          relationship: null,
-          aidantConnectAuthorized: false,
-          accommodationMode: null,
-          accommodationName: null,
-          accommodationAdditionalInformation: null,
-          street: null,
-          addressComplement: null,
-          zipcode: null,
-          city: null,
-          department: null,
-          region: null,
-          qpv: null,
-          noPhone: false,
-          phone1: null,
-          phone2: null,
-          email: null,
-          familySituation: null,
-          weddingDate: null,
-          divorceDate: null,
-          caregiver: false,
-          minorChildren: null,
-          majorChildren: null,
-          mobility: null,
-          vulnerablePerson: false,
-          ministereCategorie: null,
-          ministereDepartementServiceAc: null,
-          ministereStructure: null,
-          gir: null,
-          doctor: null,
-          healthAdditionalInformation: null,
-          socialSecurityNumber: null,
-          insurance: null,
-          socioProfessionalCategory: null,
-          studyLevel: null,
-          occupation: null,
-          employer: null,
-          employerSiret: null,
-          unemploymentNumber: null,
-          otherPensionOrganisations: null,
-          cafNumber: null,
-          bank: null,
-          funeralContract: null,
-          protectionMeasure: null,
-          representative: null,
-          prescribingStructure: null,
-          orientationType: null,
-          orientationStructure: null,
-          serviceProviders: null,
-          involvedPartners: null,
-          additionalInformation: null,
-          numeroPegase: null,
-          accommodationZone: null
-        }
-      })
-
-      const updateStructure = StructureRepo.prisma.update({
-        where: { id: structure.id },
-        data: {
-          name: '',
-          address: '',
-          phone: '',
-          email: '',
-          dpoFirstName: null,
-          dpoLastName: null,
-          dpoEmail: null,
-          externalRdvspActive: false,
-          externalRdvspId: null
-        }
-      })
-
-      await prismaClient.$transaction([
-        deleteComments,
-        updateSocialSupports,
-        updateBeneficiaries,
-        updateStructure
-      ])
-
-      // Deactivate and anonymize all users of the structure while keeping the uniqueness of the email
-      const nanoid = customAlphabet('123456789abcdefghijk', 5)
-      const anonstructure = nanoid()
-
-      for (const user of structure.users) {
-        const deleteAccount = prismaClient.account.deleteMany({
-          where: {
-            userId: user.id
-          }
-        })
-
-        const deleteExternalAccount = prismaClient.externalAccount.deleteMany({
-          where: {
-            userId: user.id
-          }
-        })
-
-        const updateUser = UserRepo.prisma.update({
-          where: { id: user.id },
-          data: {
-            firstName: '',
-            lastName: '',
-            email: `${nanoid()}@disabled-structure-${anonstructure}.org`,
-            status: 'Disabled',
-            aidantConnectAuthorisation: null,
-            accessToken: null,
-            accessTokenValidity: null,
-            externalRdvspId: null
-          }
-        })
-
-        await prismaClient.$transaction([
-          deleteAccount,
-          deleteExternalAccount,
-          updateUser
-        ])
-      }
-    }
+  // update all bens and related quantities in DB
+  if (migrateAll) {
+    await updateInDbForAllFields(bensWithDatesUpdated)
+  } else if (migrateBirthDateAndFileOpeningDate) {
+    await updateInDbForBirthDateAndSocialSupportOpeningDate(
+      bensWithDatesUpdated
+    )
+  } else if (migrateBirthDate) {
+    await updateInDbForBirthDate(bensWithDatesUpdated)
   }
 
-  return structures
+  return
 })

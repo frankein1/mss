@@ -2,7 +2,6 @@ import { JobStatus, Structure, User, UserStatus } from '@prisma/client'
 import { UserRepo } from '~/server/database'
 import { brevoClient } from '~/server/lib'
 import { JobResultService } from '~/server/services'
-import { formatDate } from '~/utils/formatDate'
 
 const JOB_NAME = 'brevo-export'
 
@@ -116,16 +115,16 @@ function buildJson(
         TYPE_STRUCTURE: structure?.type || '',
         SIRET_STRUCTURE: structure?.siret || '',
         NOM_STRUCTURE: structure?.name || '',
-        DERNIERE_CONNEXION_STRUCTURE: formatDate(
+        DERNIERE_CONNEXION_STRUCTURE: formatUTCTimestamp(
           structure?.lastAccess,
           'DD-MM-YYYY'
         ),
         ACCES_MSS: status === UserStatus.Active ? 'Yes' : 'No',
         STRUCTURE_AVEC_1_SUIVI:
           (structure?._count.socialSupports || 0) > 0 ? 'Yes' : 'No',
-        CREATION_DATE: formatDate(created, 'DD-MM-YYYY'),
-        PREMIERE_CONNEXION: formatDate(firstAccess, 'DD-MM-YYYY'),
-        DERNIERE_CONNEXION: formatDate(lastAccess, 'DD-MM-YYYY'),
+        CREATION_DATE: formatUTCTimestamp(created, 'DD-MM-YYYY'),
+        PREMIERE_CONNEXION: formatUTCTimestamp(firstAccess, 'DD-MM-YYYY'),
+        DERNIERE_CONNEXION: formatUTCTimestamp(lastAccess, 'DD-MM-YYYY'),
         UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0 ? 'Yes' : 'No'
       }
     })

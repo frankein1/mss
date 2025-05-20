@@ -4,7 +4,6 @@
       :title="title"
       class="fr-mt-2w"
     />
-    <StructureDROMBanner />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12 fr-col-sm-7 fr-col-lg-8">
