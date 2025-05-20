@@ -81,6 +81,7 @@
 <script setup lang="ts">
   import { inferProcedureOutput } from '@trpc/server'
   import { AppRouter } from '~/server/trpc/routers'
+  import { routes } from '~/utils/routes'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { commonRelationshipKeys } from '~/client/options'
   import { RelativeRelationship } from '@prisma/client'
@@ -157,10 +158,12 @@
             'getFamilyFile.budget'
           ])
         )
-        .then(() => {
-          navigateTo({
-            query: { beneficiary_id: linked_beneficiary.value?.id }
-          })
+        .then(async () => {
+          await navigateTo(
+            routes.file.AppFile.path(props.familyFileId, {
+              beneficiaryId: linked_beneficiary.value?.id
+            })
+          )
         })
         .then(() => emit('goToSuccessPage', linked_beneficiary.value?.id))
         .then(() =>

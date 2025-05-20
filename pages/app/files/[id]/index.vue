@@ -125,7 +125,7 @@
 
   const { familyFile, familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     ff
-  const { error, refresh: refreshFamilyFile } = familyFile
+  const { error } = familyFile
 
   const si = await useGetStructureInfo()
   provide(getStructureInfoInjectionKey, si)
@@ -207,7 +207,6 @@
       beneficiaryId
     })
     navigateTo(navRoute)
-    getBeneficiaryDetails(beneficiaryId)
   }
 
   function openDeleteModal() {
@@ -220,11 +219,15 @@
         snackbar.error('La suppression a échoué.', fn)
       },
       success: async () => {
-        await refreshFamilyFile()
-        if (!familyFileIdentification.value?.length) {
-          await navigateTo(routes.beneficiary.AppBeneficiaries.path())
+        const beneficiaryCount = familyFileIdentification.value?.length ?? 0
+        if (beneficiaryCount > 1) {
+          // Refresh family file data: beneficiaries, budget etc...
+          // We have to do this because deleting a beneficiary changes
+          // family file data, and the client can't detect it by itself.
+          await reloadData()
+          await navigateTo(routes.file.AppFile.path(familyFileId))
         } else {
-          await reloadData(familyFileIdentification.value[0].id)
+          await navigateTo(routes.beneficiary.AppBeneficiaries.path())
         }
         snackbar.success('Le bénéficiaire a été supprimé.')
       }
@@ -271,7 +274,12 @@
         isSubmitting,
         onSuccess: async ({ id }) => {
           beneficiaryID = id
-          await reloadData(id)
+          // Refresh family file data so that the new beneficiary can be
+          // visible in the UI (and refresh data like the budget, socialSupports...)
+          await reloadData()
+          await navigateTo(
+            routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
+          )
         },
         onFailure: () => {
           snackbar.error("L'ajout d'un membre au foyer a échoué.")
@@ -306,8 +314,7 @@
       mutationSplit: () => trpcClient.file.split.mutate({ id }),
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
-      reloadData: () =>
-        reloadData(familyFileIdentification.value?.[0]?.id || '')
+      reloadData
     })
   }
 
@@ -406,10 +413,9 @@
     }
   }
 
-  async function reloadData(id: string) {
-    await refreshFamilyFile()
-    openBeneficiary(id)
+  async function reloadData() {
     await refreshNuxtData([
+      'getFamilyFile.minimalInfo',
       'getFamilyFile.documents',
       'getFamilyFile.history',
       'getFamilyFile.budget'

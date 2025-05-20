@@ -1,9 +1,41 @@
 import { BeneficiaryStatus, PrismaClient } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
+import { ArrayElement } from '~/types/utils'
 
 const prismaClient = new PrismaClient()
-const STRUCTURE_COUNT = 100
+const STRUCTURE_COUNT = 1
 const FAMILY_FILE_PER_STRUCTURE_COUNT = 1000
+
+type SocialSupportSubjectsCreateInput = Omit<
+  ArrayElement<
+    NonNullable<
+      Parameters<typeof prismaClient.socialSupportSubject.createMany>[0]
+    >['data']
+  >,
+  'ownedByStructureId'
+>
+
+const socialSupportSubjects: SocialSupportSubjectsCreateInput[] = [
+  {
+    name: 'Inclusion numérique',
+    default: 'InclusionNumerique',
+    used: true
+  },
+  {
+    name: 'Domiciliation',
+    default: 'Domiciliation',
+    used: true
+  },
+  {
+    name: 'Aide sociale',
+    default: 'AideSociale',
+    used: true
+  },
+  {
+    name: 'Aides financières non remboursables',
+    used: true
+  }
+]
 
 function randomStatus(): BeneficiaryStatus {
   const int = faker.number.int({ min: 0, max: 10 })
@@ -30,7 +62,8 @@ async function main() {
         city: faker.location.city(),
         address: faker.location.streetAddress(),
         phone: faker.phone.number(),
-        email: faker.internet.email()
+        email: faker.internet.email(),
+        socialSupportSubjects: { createMany: { data: socialSupportSubjects } }
       }
     })
 
@@ -48,23 +81,30 @@ async function main() {
       }))
     })
 
-    await prismaClient.beneficiary.createMany({
-      data: families.map(({ id }) => ({
-        firstName: faker.person.firstName(),
-        birthName: faker.person.lastName(),
-        usualName: faker.person.lastName(),
-        birthDate: faker.date.birthdate(),
-        structureId: structure.id,
-        fileNumber: faker.string.ulid(),
-        status: randomStatus(),
-        familyFileId: id,
-        zipcode: faker.location.zipCode(),
-        city: faker.location.city(),
-        street: faker.location.streetAddress(),
-        phone1: faker.phone.number(),
-        email: faker.internet.email()
-      }))
-    })
+    await Promise.all([
+      prismaClient.budget.createMany({
+        data: families.map(({ id }) => ({
+          familyFileId: id
+        }))
+      }),
+      prismaClient.beneficiary.createMany({
+        data: families.map(({ id }) => ({
+          firstName: faker.person.firstName(),
+          birthName: faker.person.lastName(),
+          usualName: faker.person.lastName(),
+          birthDate: faker.date.birthdate(),
+          structureId: structure.id,
+          fileNumber: faker.string.ulid(),
+          status: randomStatus(),
+          familyFileId: id,
+          zipcode: faker.location.zipCode(),
+          city: faker.location.city(),
+          street: faker.location.streetAddress(),
+          phone1: faker.phone.number(),
+          email: faker.internet.email()
+        }))
+      })
+    ])
   }
 }
 
