@@ -17,7 +17,10 @@
               title="En savoir plus sur les rôles et habilitations"
               :expanded-id="undefined"
             >
-              <RoleTable id="roles-details" />
+              <RoleTable
+                id="roles-details"
+                :permissions="application"
+              />
             </DsfrAccordion>
           </DsfrAccordionsGroup>
         </section>

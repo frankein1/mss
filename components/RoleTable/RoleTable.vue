@@ -316,22 +316,42 @@
             <td></td>
             <td>* les dossiers dont il est référent</td>
           </tr>
-          <tr>
-            <td>Visualiser les statistiques</td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-          </tr>
-          <tr>
-            <td>Exporter les statistiques</td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td></td>
-            <td>* les dossiers dont il est référent</td>
-          </tr>
+          <template v-if="permissions.module.ministere">
+            <tr>
+              <td>Visualiser les statistiques</td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+            </tr>
+            <tr>
+              <td>Exporter les statistiques</td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>* les dossiers dont il est référent</td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr>
+              <td>Visualiser les statistiques</td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+            </tr>
+            <tr>
+              <td>Exporter les statistiques</td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td class="fr-icon-check-line allowed-action-bg"></td>
+              <td></td>
+              <td>* les dossiers dont il est référent</td>
+            </tr>
+          </template>
           <tr>
             <td>
               Annuaire des partenaires&nbsp;: créer et supprimer un organisme
@@ -366,6 +386,9 @@
 
 <script lang="ts" setup>
   import { nonAdminUserRoleKeys } from '~/client/options'
+  import type { AppContextPermissions } from '~/server/security'
+
+  defineProps<{ permissions: AppContextPermissions }>()
 </script>
 
 <style scoped>
