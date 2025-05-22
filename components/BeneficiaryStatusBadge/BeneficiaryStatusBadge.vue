@@ -7,6 +7,13 @@
   >
     <span>{{ label }}</span>
   </p>
+  <p
+    v-else-if="status === BeneficiaryStatus.Archived"
+    class="fr-badge fr-badge--error"
+    :class="{ 'fr-badge--sm': small }"
+  >
+    <span>{{ label }}</span>
+  </p>
   <DsfrBadge
     v-else
     :type="type"
@@ -28,9 +35,8 @@
   const { status, small = false } = defineProps<Props>()
 
   const type = computed(() => beneficiaryStatusBadgeType[status])
-  const label = computed(() =>
-    !small && status === BeneficiaryStatus.Inactive
-      ? 'Ancien dossier "archivé"'
-      : beneficiaryStatusDetailedKeys.byKey[status]
+
+  const label = computed(
+    () => beneficiaryStatusDetailedKeys.value(status) || ''
   )
 </script>

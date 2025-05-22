@@ -201,4 +201,8 @@
   .btns-groups {
     justify-content: flex-end;
   }
+
+  .result {
+    width: 100%;
+  }
 </style>
