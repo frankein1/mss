@@ -18,6 +18,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
 
   const { user, key, object, objectId, activity, content } = input
 
+  console.log('\n\nSTART USER ACTIVITY LAST AUDIT LOG FETCHING')
   const lastAuditLog = await prismaClient.userActivity.findFirst({
     orderBy: {
       date: 'desc'
@@ -27,14 +28,17 @@ export async function addUserActivity(input: AddUserActivityInput) {
       content: true
     },
     where: {
+      // Key, objectId and content should be enough to filter on activity
       key,
       object,
       objectId,
+      // If the information on content should be indexed then it would be better to add a boolean field 'isLast'
       content: {
         not: Prisma.JsonNull
       }
     }
   })
+  console.log('END USER ACTIVITY LAST AUDIT LOG FETCHING\n\n')
 
   let diff
   if (lastAuditLog) {

@@ -6,6 +6,7 @@ import {
 } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import { ArrayElement } from '~/types/utils'
+import { fixturesUsers, FixtureUserRole } from './fixtures'
 
 const prismaClient = new PrismaClient()
 const STRUCTURE_COUNT = 200
@@ -99,6 +100,29 @@ function randomMobility(): BeneficiaryMobility {
   return 'None'
 }
 
+// FIXME: Temporary tests for user activity
+function randomUserActivityKey(): string {
+  const int = faker.number.int({ min: 0, max: 10 })
+  if (int >= 5) {
+    return 'beneficiary.updateGeneralInformation'
+  }
+  return 'beneficiary.create'
+}
+
+// FIXME: Temporary tests for user activity
+function randomUserActivityContent(): Record<string, string> | undefined {
+  const int = faker.number.int({ min: 0, max: 10 })
+  if (int >= 3) {
+    return undefined
+  }
+  return new Array(20)
+    .fill(null)
+    .reduce<Record<string, string>>((acc, _cur) => {
+      acc[faker.word.noun()] = faker.lorem.paragraph()
+      return acc
+    }, {})
+}
+
 async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
     console.log('starting seed', i)
@@ -129,13 +153,13 @@ async function main() {
       }))
     })
 
-    await Promise.all([
+    const [_, bens] = await Promise.all([
       prismaClient.budget.createMany({
         data: families.map(({ id }) => ({
           familyFileId: id
         }))
       }),
-      prismaClient.beneficiary.createMany({
+      prismaClient.beneficiary.createManyAndReturn({
         data: families.map(({ id }) => ({
           firstName: faker.person.firstName(),
           birthName: faker.person.lastName(),
@@ -162,6 +186,24 @@ async function main() {
         }
       })
     ])
+
+    // FIXME: Temporary tests for user activity
+    for (let iben = 0; iben < bens.length; iben++) {
+      console.log('create user activity for ben', iben)
+      const b = bens[iben]
+
+      await prismaClient.userActivity.createMany({
+        data: new Array(500).fill(null).map(() => ({
+          userId: fixturesUsers[FixtureUserRole.StructureManager].id,
+          key: randomUserActivityKey(),
+          structureId: structure.id,
+          object: 'Beneficiary',
+          objectId: b.id,
+          activity: 'UPDATE',
+          content: randomUserActivityContent()
+        }))
+      })
+    }
   }
 }
 

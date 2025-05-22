@@ -35,6 +35,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 if (shouldLogPrisma) {
   prismaClient.$on('query', event => {
+    if (!event.query.includes('user_activity')) {
+      return
+    }
+
     // eslint-disable-next-line no-console
     console.log(
       picocolors.bgMagenta(picocolors.whiteBright(picocolors.bold(' Prisma '))),

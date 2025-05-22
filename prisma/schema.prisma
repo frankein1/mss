@@ -2037,6 +2037,7 @@ model UserActivity {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   structure Structure? @relation(fields: [structureId], references: [id], onDelete: Cascade)
 
+  @@index(fields: [objectId, key], map: "user_activity_object_id_key_idx")
   @@map("user_activity")
 }
 
