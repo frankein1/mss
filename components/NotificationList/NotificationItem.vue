@@ -218,8 +218,8 @@
     }
 
     .notification-item-date {
-      align-self: end;
       grid-area: 3 / 1 / 4 / 3;
+      place-self: end start;
     }
 
     .notification-item-checkbox {
@@ -244,7 +244,7 @@
 
       .notification-item-date {
         grid-area: 1 / 4 / 2 / 5;
-        align-self: start;
+        place-self: start end;
       }
 
       .notification-item-checkbox {
