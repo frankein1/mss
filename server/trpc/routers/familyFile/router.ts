@@ -14,9 +14,6 @@ export const fileRouter = router({
   getExaminationDates: protectedProcedure
     .input(routes.getExaminationDatesQuery.inputValidation)
     .query(routes.getExaminationDatesQuery.execute),
-  getBeneficiaryId: protectedProcedure
-    .input(routes.getBeneficiaryId.inputValidation)
-    .query(routes.getBeneficiaryId.execute),
   split: protectedProcedure
     .input(routes.split.inputValidation)
     .mutation(routes.split.execute)

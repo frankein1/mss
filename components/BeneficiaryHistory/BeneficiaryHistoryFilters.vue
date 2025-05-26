@@ -37,23 +37,43 @@
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const props = defineProps<{
-    resultsLabel: string
-    values: FamilyFileHistoryFilterInput
-  }>()
+  const { familyFileIdentification, familyFileId, values, resultsLabel } =
+    defineProps<{
+      resultsLabel: string
+      values: FamilyFileHistoryFilterInput
+      familyFileId: string
+      familyFileIdentification: BeneficiaryFileIdentification[]
+    }>()
 
   const authState = useAuthState()
   const isReferent = authState.isReferent()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
+  const trpcClient = useTrpcClient()
+  const { application } = usePermissions()
 
   const emit = defineEmits<{
     'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
 
-  const { familyFileIdentification, examinationDates } = inject(
-    getFamilyFileInjectionKey
-  ) as GetFamilyFile
+  const {
+    data: examinationDateOptions,
+    pending: examinationDateOptionsPending,
+    error: examinationDateOptionsError
+  } = await (application.value.module.helpRequest
+    ? trpcClient.file.getExaminationDates.useQuery(
+        { id: familyFileId },
+        {
+          transform: dates =>
+            dates.map(({ examinationDate: date }) => ({
+              value: date?.toString() || '',
+              label: formatDate(date)
+            })),
+          queryKey: 'getFamilyFile.fileInstructions.examinationDates'
+        }
+      )
+    : { data: ref([]), pending: ref(false), error: ref(null) })
 
   const { agents, subjects } = inject(
     getStructureInfoInjectionKey
@@ -70,14 +90,6 @@
     pending: socialSupportSubjectOptionsPending,
     error: socialSupportSubjectOptionsError
   } = subjects
-
-  const {
-    data: examinationDateOptions,
-    pending: examinationDateOptionsPending,
-    error: examinationDateOptionsError
-  } = examinationDates
-
-  const { application } = usePermissions()
 
   const pending = computed(
     () =>
@@ -99,7 +111,7 @@
     return ''
   })
 
-  const typeSuiviValue = computed(() => props.values.typeSuivi)
+  const typeSuiviValue = computed(() => values.typeSuivi)
 
   const isFilteringHelpRequests = computed(
     () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
@@ -110,7 +122,7 @@
   )
 
   const beneficiaryOptions = computed(() =>
-    (familyFileIdentification.value || []).map(m => ({
+    familyFileIdentification.map(m => ({
       label: formatBeneficiaryShortenedName(m),
       value: m.id
     }))
@@ -121,7 +133,7 @@
       !socialSupportSubjectOptions.value ||
       !examinationDateOptions.value ||
       !agentOptions.value ||
-      !familyFileIdentification.value
+      !familyFileIdentification
     ) {
       return null
     }
@@ -208,7 +220,7 @@
       })
     }
 
-    if ((familyFileIdentification.value || []).length > 1) {
+    if (familyFileIdentification.length > 1) {
       filters.push({
         name: 'beneficiaryId',
         label: 'Bénéficiaire concerné :',

@@ -3,7 +3,7 @@ import { fakerFR as faker } from '@faker-js/faker'
 import { ArrayElement } from '~/types/utils'
 
 const prismaClient = new PrismaClient()
-const STRUCTURE_COUNT = 1
+const STRUCTURE_COUNT = 200
 const FAMILY_FILE_PER_STRUCTURE_COUNT = 1000
 
 type SocialSupportSubjectsCreateInput = Omit<

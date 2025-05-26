@@ -1746,6 +1746,7 @@ model Beneficiary {
   @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_birth_name_normalized_idx")
   @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_first_name_normalized_idx")
   @@index(fields: [structureId], map: "beneficiary_structure_id_idx")
+  @@index(fields: [structureId, familyFileId], map: "beneficiary_structure_id_family_file_id_idx")
   @@map("beneficiary")
 }
 

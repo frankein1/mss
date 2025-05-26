@@ -5,6 +5,8 @@
       <BeneficiaryHistoryFilters
         v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
+        :family-file-id="familyFileId"
+        :family-file-identification="familyFileIdentification"
       />
     </section>
     <AtomAlert
@@ -44,19 +46,32 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { FamilyFilePermissions } from '~/server/security'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { FamilyFileHistoryFilterInput } from '~/server/schema'
 
-  defineProps<{ familyFilePermissions: FamilyFilePermissions }>()
+  const trpcClient = useTrpcClient()
+  const { familyFileId, familyFilePermissions, familyFileIdentification } =
+    defineProps<{
+      familyFileId: string
+      familyFilePermissions: FamilyFilePermissions
+      familyFileIdentification: BeneficiaryFileIdentification[]
+    }>()
+  const socialSupportsFilters = ref<FamilyFileHistoryFilterInput>({})
+
+  const socialSupportsQueryInput = computed(() => ({
+    familyFileId,
+    filters: socialSupportsFilters.value
+  }))
+  const { data: socialSupports, error } =
+    await trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
+      queryKey: 'getFamilyFile.history'
+    })
 
   const emit = defineEmits<{ refresh: [] }>()
 
-  const { familyFileIdentification, socialSupports, socialSupportsFilters } =
-    inject(getFamilyFileInjectionKey) as GetFamilyFile
+  const items = computed(() => socialSupports.value?.items || [])
 
-  const { data, error } = socialSupports
-
-  const items = computed(() => data.value?.items || [])
-
-  const totalCount = computed(() => data.value?.totalCount || 0)
+  const totalCount = computed(() => socialSupports.value?.totalCount || 0)
 
   const resultsLabel = computed(() => {
     const plural = items.value.length > 1 ? 's' : ''
@@ -69,11 +84,11 @@
   })
 
   function onHistoryItemDeleted(socialSupportId: string) {
-    if (!data.value) {
+    if (!socialSupports.value) {
       return
     }
-    data.value.totalCount--
-    data.value.items = data.value.items.filter(
+    socialSupports.value.totalCount--
+    socialSupports.value.items = socialSupports.value.items.filter(
       ({ data: { id } }) => id !== socialSupportId
     )
     emit('refresh')

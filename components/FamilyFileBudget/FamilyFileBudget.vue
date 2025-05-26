@@ -26,25 +26,25 @@
       :error="Boolean(error)"
       message="Le budget du foyer n'a pas pu être chargé"
     >
-      <div v-if="data">
-        <BudgetGeneralInformation :budget="data" />
+      <div v-if="budget">
+        <BudgetGeneralInformation :budget="budget" />
         <div class="fr-container--fluid fr-mt-5w">
           <div class="fr-grid-row fr-grid-row--gutters">
             <section class="fr-col-12 fr-col-md-6">
               <BudgetIncomes
-                v-if="data.incomes"
+                v-if="budget.incomes"
                 :family-file-id="familyFileId"
-                :incomes="data.incomes"
-                :budget-id="data.id"
+                :incomes="budget.incomes"
+                :budget-id="budget.id"
                 :family-file-identification="familyFileIdentification || []"
               />
             </section>
 
             <section class="fr-col-12 fr-col-md-6">
               <BudgetExpenses
-                v-if="data.expenses"
+                v-if="budget.expenses"
                 :family-file-id="familyFileId"
-                :expenses="data.expenses"
+                :expenses="budget.expenses"
               />
             </section>
           </div>
@@ -56,28 +56,31 @@
 
 <script lang="ts" setup>
   import dayjs from 'dayjs'
-  import { getFamilyFileInjectionKey } from '~/composables/useGetFamilyFile'
   import { BudgetWithExpensesAndIncomes } from '~/types/budget'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const matomo = useMatomo()
 
-  defineProps<{ familyFileId: string }>()
+  const { familyFileId, familyFileIdentification } = defineProps<{
+    familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
+  }>()
+  const { data: budget, error } = await trpcClient.budget.getBudget.useQuery(
+    { familyFileId },
+    { queryKey: 'getFamilyFile.budget' }
+  )
 
-  const { familyFileIdentification, budget } = inject(
-    getFamilyFileInjectionKey
-  ) as GetFamilyFile
-  const { data, error } = budget
-  const firstFamilyfileId = data?.value?.familyFileId
-    ? data.value.familyFileId
+  const firstFamilyfileId = budget?.value?.familyFileId
+    ? budget.value.familyFileId
     : null
 
-  const firstBeneficiary = familyFileIdentification.value
-    ? familyFileIdentification.value[0]
+  const firstBeneficiary = familyFileIdentification
+    ? familyFileIdentification[0]
     : null
 
   const clickExportBudget = async () => {
@@ -113,7 +116,7 @@
 
   // get last activity
   const bugetLastActivity = computed(() => {
-    return getBudgetLastActivity(data.value)
+    return getBudgetLastActivity(budget.value)
   })
 
   const getMostRecenttDate = (dates: Date[]): Date => {

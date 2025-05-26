@@ -32,7 +32,7 @@
       message="La liste des documents n'a pas pu être chargée."
     />
 
-    <template v-else-if="docs">
+    <template v-else-if="documents">
       <BeneficiaryDocumentTable
         v-model:sort="documentsOrderBy"
         :documents="documents"
@@ -56,20 +56,40 @@
 <script setup lang="ts">
   import { GetDocument } from './types'
   import { AlertType } from '~/utils/constants/alert'
+  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
+  import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  const trpcClient = useTrpcClient()
 
-  defineProps<{ familyFileId: string }>()
+  const { familyFileId, familyFileIdentification } = defineProps<{
+    familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
+  }>()
 
-  const {
-    familyFileIdentification,
-    documents: docs,
-    documentsFilters,
-    documentsOrderBy,
+  // Input for family file documents
+  const documentsFilters = ref<BeneficiaryDocumentFilterInput>({})
+  const documentsOrderBy = ref<BeneficiaryDocumentSort>({
+    created: SortOrder.Desc
+  })
+  const documentsPage = ref(1)
+  const documentsPerPage = ref(REQUEST_LIMIT_DEFAULT)
+  const { updatePagination: updateDocumentPagination } = usePagination(
     documentsPage,
     documentsPerPage,
-    updateDocumentPagination
-  } = inject(getFamilyFileInjectionKey) as GetFamilyFile
-
-  const { data, error, pending, refresh } = docs
+    documentsFilters
+  )
+  const documentsQueryInput = computed(() => ({
+    familyFileId,
+    filters: documentsFilters.value,
+    orderBy: documentsOrderBy.value,
+    page: documentsPage.value,
+    perPage: documentsPerPage.value
+  }))
+  const { data, error, refresh, pending } =
+    trpcClient.file.getDocuments.useQuery(documentsQueryInput, {
+      queryKey: 'getFamilyFile.documents'
+    })
 
   const documents = computed(() => data.value?.documents || [])
 

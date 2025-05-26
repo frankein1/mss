@@ -4,6 +4,7 @@ import { verifyJwt } from '../lib/jwt'
 import { UserRepo } from '~/server/database'
 
 export const structureContextQuery = () => ({
+  // FIXME: move 'externalRdvspActive' to the token
   select: { id: true, type: true, externalRdvspActive: true }
 })
 
@@ -29,6 +30,7 @@ export const createContext = async (event: H3Event) => {
   const { user: userData } = verifyJwt(sessionToken, jwtKey)
 
   try {
+    // FIXME: remove this call & retrieve info directly from the token
     const user = await UserRepo.prisma.findUniqueOrThrow({
       where: { id: userData.id },
       select: {

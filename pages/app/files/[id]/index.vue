@@ -63,13 +63,16 @@
 
         <template #[tabTitles.at(1)?.panelId]>
           <BeneficiaryDocumentList
-            :family-file-id="selectedBeneficiary.familyFileId"
+            :family-file-id="familyFileId"
+            :family-file-identification="familyFileIdentification"
           />
         </template>
 
         <template #[tabTitles.at(2)?.panelId]>
           <BeneficiaryHistory
             v-if="selectedPermissions"
+            :family-file-id="familyFileId"
+            :family-file-identification="familyFileIdentification"
             :family-file-permissions="selectedPermissions"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
@@ -79,7 +82,10 @@
           v-if="application?.module.budget"
           #[tabTitles.at(3)?.panelId]
         >
-          <FamilyFileBudget :family-file-id="familyFileId" />
+          <FamilyFileBudget
+            :family-file-id="familyFileId"
+            :family-file-identification="familyFileIdentification"
+          />
         </template>
       </AtomTabs>
     </div>
@@ -87,10 +93,6 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    useGetFamilyFile,
-    getFamilyFileInjectionKey
-  } from '~/composables/useGetFamilyFile'
   import {
     useGetStructureInfo,
     getStructureInfoInjectionKey
@@ -120,17 +122,19 @@
 
   const familyFileId = route.params.id as string
 
-  const ff = await useGetFamilyFile(familyFileId)
-  provide(getFamilyFileInjectionKey, ff)
+  const { data: beneficiaries, error } =
+    await trpcClient.beneficiary.getByFamilyFileId.useQuery(
+      { familyFileId },
+      { queryKey: 'beneficiary.getByFamilyFileId' }
+    )
 
-  const { familyFile, familyFileIdentification, getBeneficiaryIdOnPageLoad } =
-    ff
-  const { error } = familyFile
+  const familyFileIdentification = computed(() => beneficiaries.value ?? [])
 
   const si = await useGetStructureInfo()
   provide(getStructureInfoInjectionKey, si)
-
-  const title = routes.file.AppFile.title(familyFileIdentification.value)
+  const title = routes.file.AppFile.title(
+    familyFileIdentification.value ?? null
+  )
   useHead({ title })
 
   // Tabs
@@ -194,9 +198,19 @@
 
   watch(
     () => route.query.beneficiaryId,
-    () => {
-      // Fetch new data based on the beneficiary id
-      getBeneficiaryDetails(getBeneficiaryIdOnPageLoad())
+    async () => {
+      if (!route.query.beneficiaryId) {
+        await navigateTo(
+          routes.file.AppFile.path(familyFileId, {
+            beneficiaryId: familyFileIdentification.value[0].id
+          })
+        )
+        return
+      }
+      if (typeof route.query.beneficiaryId === 'string') {
+        // Fetch new data based on the beneficiary id
+        getBeneficiaryDetails(route.query.beneficiaryId)
+      }
     },
     { immediate: true }
   )
@@ -414,11 +428,6 @@
   }
 
   async function reloadData() {
-    await refreshNuxtData([
-      'getFamilyFile.minimalInfo',
-      'getFamilyFile.documents',
-      'getFamilyFile.history',
-      'getFamilyFile.budget'
-    ])
+    await refreshNuxtData(['beneficiary.getByFamilyFileId'])
   }
 </script>

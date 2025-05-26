@@ -24,6 +24,7 @@ import {
   getLastActivity
 } from './get-last-activity.service'
 import { linkToFamilyFile } from './linkToFamilyFile.service'
+import getByFamileFileId from './get-by-family-file-id'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -46,7 +47,8 @@ export const BeneficiaryService = {
   getArchiveDate,
   getBeneficiaryLastActivity,
   linkToFamilyFile,
-  getBeneficiaryList
+  getBeneficiaryList,
+  getByFamileFileId
 }
 
 export type { BeneficiarySecurityTarget }

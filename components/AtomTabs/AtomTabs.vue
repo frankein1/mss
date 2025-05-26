@@ -26,13 +26,12 @@
     </template>
 
     <DsfrTabContent
-      v-for="(tab, index) of tabTitles"
-      :key="index"
+      v-if="activeTabContent"
+      :panel-id="activeTabContent.panelId"
+      :tab-id="activeTabContent.tabId"
       class="fr-transition-none"
-      :panel-id="tab.panelId"
-      :tab-id="tab.tabId"
     >
-      <slot :name="tab.panelId" />
+      <slot :name="activeTabContent.panelId" />
     </DsfrTabContent>
   </DsfrTabs>
 </template>
@@ -50,6 +49,9 @@
   )
 
   const activeTab = ref(0)
+  const activeTabContent = computed(() => {
+    return props.tabTitles[activeTab.value]
+  })
   const tabs = ref<InstanceType<typeof DsfrTabs> | null>(null)
 
   function onTabChange() {

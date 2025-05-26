@@ -150,14 +150,7 @@
       isSubmitting.value = true
       await trpcClient.beneficiary.linkToFamilyFile
         .mutate(payload)
-        .then(() =>
-          refreshNuxtData([
-            'getFamilyFile.minimalInfo',
-            'getFamilyFile.documents',
-            'getFamilyFile.history',
-            'getFamilyFile.budget'
-          ])
-        )
+        .then(() => refreshNuxtData(['beneficiary.getByFamilyFileId']))
         .then(async () => {
           await navigateTo(
             routes.file.AppFile.path(props.familyFileId, {
