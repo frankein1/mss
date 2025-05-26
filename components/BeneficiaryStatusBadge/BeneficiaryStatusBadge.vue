@@ -1,15 +1,10 @@
 <template>
-  <!--  DSFR doesn't allow custom icons, outside of the automatic status icons-->
+  <!--  DSFR doesn't allow custom icons, outside of the automatic status icons.
+    The inactive status uses an icon outside of the DSFR, hence the need of a
+    customized version of the component -->
   <p
     v-if="status === BeneficiaryStatus.Inactive"
     class="fr-badge fr-badge--purple-glycine fr-badge--icon-left fr-icon-zzz-line"
-    :class="{ 'fr-badge--sm': small }"
-  >
-    <span>{{ label }}</span>
-  </p>
-  <p
-    v-else-if="status === BeneficiaryStatus.Archived"
-    class="fr-badge fr-badge--error"
     :class="{ 'fr-badge--sm': small }"
   >
     <span>{{ label }}</span>
@@ -36,7 +31,10 @@
 
   const type = computed(() => beneficiaryStatusBadgeType[status])
 
-  const label = computed(
-    () => beneficiaryStatusDetailedKeys.value(status) || ''
+  const label = computed(() =>
+    !small && status === BeneficiaryStatus.Archived
+      ? // Use a longer label when the badge is not small
+        'Ancien dossier "archivé"'
+      : beneficiaryStatusDetailedKeys.byKey[status]
   )
 </script>

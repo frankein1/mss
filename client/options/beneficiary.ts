@@ -44,7 +44,7 @@ export const beneficiaryStatusKeys = buildKeys({
 export const beneficiaryStatusDetailedKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Actif',
   [BeneficiaryStatus.Inactive]: 'Inactif',
-  [BeneficiaryStatus.Archived]: 'Ancien dossier archivé',
+  [BeneficiaryStatus.Archived]: 'Archivé',
   [BeneficiaryStatus.Deceased]: 'Décédé'
 })
 
