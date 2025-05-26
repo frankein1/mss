@@ -42,7 +42,7 @@ describe('Beneficiary - Add Member to Family File - StructureManager', () => {
 
     await expect(() =>
       trpc.structureManager.beneficiary.createFamilyFileMember(input)
-    ).rejects.toThrowError(/budget[\s\S]*?expected a record, found none/im)
+    ).rejects.toThrowError(/budget[\s\S]*?no record/im)
   })
 
   test('should add member when family belongs to structure', async ({
