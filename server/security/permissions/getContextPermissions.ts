@@ -87,7 +87,9 @@ function getUserContextPermissions(
   return {
     export: {
       history: manager || socialWorker || referent || instructor,
-      stats: manager || socialWorker || referent || instructor
+      stats: ministryAgent
+        ? manager || referent
+        : manager || socialWorker || instructor || referent
     },
     edit: {
       structure: manager,
