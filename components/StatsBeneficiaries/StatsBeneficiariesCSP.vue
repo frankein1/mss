@@ -10,7 +10,7 @@
   />
 
   <StatsList
-    v-if="CSPStats.length"
+    v-if="CSPStats != null"
     :total-count="beneficiaryCount"
     :stats="CSPStats"
     stats-bar
@@ -40,6 +40,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -48,21 +49,36 @@
     filters: StatFilterInput
   }>()
 
-  const {
-    data: CSPCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getCSPStats.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const CSPStats = ref<StatsListPropType | null>(null)
+  const router = trpcClient.stat
+  const updatedCSP = router.getCSPStatsPost.useMutation()
 
-  const CSPStats = computed(
-    () =>
-      CSPCounts.value?.map(({ _count, socioProfessionalCategory }) => ({
-        key: socioProfessionalCategory || 'null',
-        label: getStatLabel(
-          beneficiarySocioProfessionalCategoryKeys.byKey,
-          socioProfessionalCategory
-        ),
-        count: _count
-      })) || []
-  )
+  onMounted(async () => {
+    pending.value = true
+    useTrpcMutation({
+      mutation: () => updatedCSP.mutate(props.filters),
+      onSuccess: data => {
+        console.log(data)
+        if (updatedCSP.error.value) {
+          error.value = true
+          return
+        }
+        pending.value = false
+        CSPStats.value =
+          data?.map(({ _count, socioProfessionalCategory }) => ({
+            key: socioProfessionalCategory || 'null',
+            label: getStatLabel(
+              beneficiarySocioProfessionalCategoryKeys.byKey,
+              socioProfessionalCategory
+            ),
+            count: _count
+          })) || []
+      },
+      onFailure: () => {
+        error.value = true
+      }
+    })
+  })
 </script>

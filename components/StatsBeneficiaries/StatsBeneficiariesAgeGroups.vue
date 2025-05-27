@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des tranches d'âge n'ont pas pu être chargées."
   />
   <StatsPie
-    v-if="ageStats.length"
+    v-if="ageStats"
     pie-label="Répartition des tranches d'âge"
     :stats="ageStats"
     :total-count="beneficiaryCount"
@@ -55,19 +55,33 @@
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ageCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getAgeStats.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const ageStats = ref<StatsPiePropType | null>(null)
+  const router = trpcClient.stat
+  const updatedAge = router.getAgeStatsPost.useMutation()
 
-  const ageStats = computed(
-    () =>
-      (ageCounts.value?.map(({ _count, ageGroup }) => ({
-        key: ageGroup,
-        label: getStatLabel(ageGroupKeys.byKey, ageGroup),
-        color: getStatColor(AgeGroupColors, ageGroup),
-        count: _count
-      })) || []) as StatsPiePropType
-  )
+  onMounted(async () => {
+    pending.value = true
+    useTrpcMutation({
+      mutation: () => updatedAge.mutate(props.filters),
+      onSuccess: data => {
+        console.log(data)
+        if (updatedAge.error.value) {
+          error.value = true
+          return
+        }
+        pending.value = false
+        ageStats.value = (data?.map(({ _count, ageGroup }) => ({
+          key: ageGroup,
+          label: getStatLabel(ageGroupKeys.byKey, ageGroup),
+          color: getStatColor(AgeGroupColors, ageGroup),
+          count: _count
+        })) || []) as StatsPiePropType
+      },
+      onFailure: () => {
+        error.value = true
+      }
+    })
+  })
 </script>

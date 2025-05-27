@@ -10,7 +10,7 @@
   />
 
   <StatsList
-    v-if="accommodationZoneStats.length"
+    v-if="accommodationZoneStats"
     :total-count="beneficiaryCount"
     :stats="accommodationZoneStats"
     stats-bar
@@ -39,29 +39,65 @@
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: accommodationZoneCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getAccommodationZoneStats.useQuery(
-    props.filters
-  )
+  const trpcClient = useTrpcClient()
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const accommodationZoneStats = ref<StatsListPropType | null>(null)
+  const router = trpcClient.stat
+  const updatedAccommodationZone =
+    router.getAccommodationZoneStatsPost.useMutation()
 
-  const accommodationZoneStats = computed(
-    () =>
-      accommodationZoneCounts.value?.map(({ _count, accommodationZone }) => ({
-        key: accommodationZone || 'null',
-        label: getStatLabel(
-          beneficiaryAccommodationZoneKeys.byKey,
-          accommodationZone
-        ),
-        count: _count
-      })) || []
-  )
+  onMounted(async () => {
+    pending.value = true
+    useTrpcMutation({
+      mutation: () => updatedAccommodationZone.mutate(props.filters),
+      onSuccess: data => {
+        console.log(data)
+        if (updatedAccommodationZone.error.value) {
+          error.value = true
+          return
+        }
+        pending.value = false
+        accommodationZoneStats.value =
+          data?.map(({ _count, accommodationZone }) => ({
+            key: accommodationZone || 'null',
+            label: getStatLabel(
+              beneficiaryAccommodationZoneKeys.byKey,
+              accommodationZone
+            ),
+            count: _count
+          })) || []
+      },
+      onFailure: () => {
+        error.value = true
+      }
+    })
+  })
+
+  // const {
+  //   data: accommodationZoneCounts,
+  //   pending,
+  //   error
+  // } = await useTrpcClient().stat.getAccommodationZoneStats.useQuery(
+  //   props.filters
+  // )
+
+  // const accommodationZoneStats = computed(
+  //   () =>
+  //     accommodationZoneCounts.value?.map(({ _count, accommodationZone }) => ({
+  //       key: accommodationZone || 'null',
+  //       label: getStatLabel(
+  //         beneficiaryAccommodationZoneKeys.byKey,
+  //         accommodationZone
+  //       ),
+  //       count: _count
+  //     })) || []
+  // )
 </script>
