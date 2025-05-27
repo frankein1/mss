@@ -8,7 +8,7 @@
     @submit.prevent="onSubmit"
   >
     <BeneficiaryEditFormNavigation
-      class="content beneficiaryformlayout__navigation fr-col-3"
+      class="beneficiary-form-content content beneficiaryformlayout__navigation fr-col-3"
       :permissions="permissions"
       :current-route="currentRoute"
       :beneficiary-id="beneficiaryIdentification.id"
@@ -20,7 +20,7 @@
     />
     <div
       ref="beneficiaryFormLayoutMainContainer"
-      class="content fr-col-9 fr-container"
+      class="beneficiary-form-content content fr-col-9 fr-container"
     >
       <AtomBreadcrumb
         :links="
@@ -180,8 +180,14 @@
 </script>
 
 <style lang="scss" scoped>
+  @use '~/assets/style/variables' as *;
+
   .beneficiaryformlayout__navigation {
     border-right: 1px solid var(--border-default-grey);
+  }
+
+  main form .beneficiary-form-content {
+    height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
   }
 </style>
 <style lang="scss">
