@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    :draft
     :family-file-id="beneficiary?.familyFileId || ''"
     :family-identification="familyIdentification"
     :beneficiary-identification="beneficiaryIdentification"
@@ -43,7 +42,6 @@
   const {
     beneficiary,
     permissions,
-    draft,
     beneficiaryIdentification,
     familyIdentification,
     pending,
@@ -66,27 +64,18 @@
 
   function onSaveBeneficiary(
     ben: UpdateBeneficiaryExternalOrganisationsInput,
-    target: string | undefined,
-    validate: boolean
+    target: string | undefined
   ) {
     if (!beneficiary.value) {
       return
     }
 
     const router = trpcClient.beneficiary
-    const validateBeneficiary = router.validate.useMutation()
     const updateBeneficiary = router.updateExternalOrganisations.useMutation()
     const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
 
     useTrpcMutation({
-      mutation: () => {
-        const mutations = []
-        if (validate && draft.value) {
-          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
-        }
-        mutations.push(updateBeneficiary.mutate(ben))
-        return Promise.all(mutations)
-      },
+      mutation: () => updateBeneficiary.mutate(ben),
       isSubmitting,
       onSuccess: () => {
         if (updateBeneficiary.error.value) {

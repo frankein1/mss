@@ -125,39 +125,45 @@
       </div>
     </section>
 
-    <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-5w">
-      <AtomCallout
-        class="complete-callout"
-        title="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
-        :button="{
-          label: 'Compléter',
-          className: 'fr-btn--secondary',
-          icon: 'fr-icon-edit-line',
-          onClick: () => {
-            complete = true
-          }
-        }"
+    <div class="fr-col-12">
+      <ul
+        class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--lg fr-btns-group--right"
       >
-        <p>
-          Renseignez des informations complémentaires concernant le bénéficiaire
-          dès maintenant.
-        </p>
-        <p>
-          Vous pourrez également les compléter plus tard via sa fiche
-          bénéficiaire.
-        </p>
-      </AtomCallout>
+        <li>
+          <button
+            class="fr-btn fr-btn--secondary"
+            type="button"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+            @click="emit('cancel')"
+          >
+            Annuler
+          </button>
+        </li>
+        <li>
+          <button
+            class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
+            type="submit"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+            @click="complete = true"
+          >
+            Enregistrer et compléter
+          </button>
+        </li>
+        <li>
+          <button
+            class="fr-btn"
+            type="submit"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+            @click="complete = false"
+          >
+            Enregistrer
+          </button>
+        </li>
+      </ul>
     </div>
-
-    <button
-      class="fr-btn fr-btn--lg submit-btn"
-      type="submit"
-      :submitting="isSubmitting"
-      :disabled="isSubmitting"
-      @click="complete = false"
-    >
-      Enregistrer
-    </button>
   </form>
 </template>
 
@@ -180,6 +186,7 @@
 
   const emit = defineEmits<{
     saveBeneficiary: [beneficiary: CreateBeneficiaryInput, complete: boolean]
+    cancel: []
   }>()
 
   const complete = ref<boolean>(false)
@@ -246,8 +253,17 @@
     font-weight: bold;
   }
 
-  .fr-btns-group {
-    align-items: center;
+  /* overide fr-btn-group rules on button with icon */
+  .fr-btn--icon-left {
+    max-width: 100% !important;
+    padding: 0.5rem 1rem !important;
+
+    &::before {
+      --icon-size: 1.5rem !important;
+
+      margin-left: 0.5rem !important;
+      margin-right: 0.5rem !important;
+    }
   }
 
   .complete-callout {

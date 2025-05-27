@@ -13,11 +13,9 @@ import { updateOccupationIncomeMutation } from './update-occupation-income.mutat
 import { updateTaxHouseholdMutation } from './update-tax-household.mutation'
 import { createBeneficiaryMutation } from './create.mutation'
 import { deleteBeneficiaryMutation } from './delete.mutation'
-import { deleteBeneficiaryDraftMutation } from './delete-draft.mutation'
 import { getBeneficiaryTaxHouseholdsQuery } from './get-taxhouseholds'
 import { SimilarBeneficiary, getSimilarBeneficiaryQuery } from './get-similar'
 import { getBeneficiaryArchivePermissionsQuery } from './get-archive-permissions.query'
-import { validateBeneficiaryMutation } from './validate.mutation'
 import { updateArchiveDateMutation } from './update-archive-date.mutation'
 import { linkToFamilyFileMutation } from './link-to-family-file.mutation'
 import getBeneficiaryListQuery from './get-list.query'
@@ -41,8 +39,6 @@ export const beneficiaryRoutes = {
   updateTaxHouseholdMutation,
   createBeneficiaryMutation,
   deleteBeneficiaryMutation,
-  deleteBeneficiaryDraftMutation,
-  validateBeneficiaryMutation,
   createFamilyFileMemberMutation,
   updateArchiveDateMutation,
   linkToFamilyFileMutation,

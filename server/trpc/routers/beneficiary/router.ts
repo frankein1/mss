@@ -29,9 +29,6 @@ export const beneficiaryRouter = router({
   delete: protectedProcedure
     .input(routes.deleteBeneficiaryMutation.inputValidation)
     .mutation(routes.deleteBeneficiaryMutation.execute),
-  deleteDraft: protectedProcedure
-    .input(routes.deleteBeneficiaryDraftMutation.inputValidation)
-    .mutation(routes.deleteBeneficiaryDraftMutation.execute),
   archiveBeneficiary: protectedProcedure
     .input(routes.archiveBeneficiaryMutation.inputValidation)
     .query(routes.archiveBeneficiaryMutation.execute),
@@ -59,9 +56,6 @@ export const beneficiaryRouter = router({
   create: protectedProcedure
     .input(routes.createBeneficiaryMutation.inputValidation)
     .mutation(routes.createBeneficiaryMutation.execute),
-  validate: protectedProcedure
-    .input(routes.validateBeneficiaryMutation.inputValidation)
-    .mutation(routes.validateBeneficiaryMutation.execute),
   createFamilyFileMember: protectedProcedure
     .input(routes.createFamilyFileMemberMutation.inputValidation)
     .mutation(routes.createFamilyFileMemberMutation.execute),

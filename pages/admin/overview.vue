@@ -27,6 +27,10 @@
         </div>
       </div>
 
+      <hr class="fr-col-12 fr-mt-5v" />
+      <div class="fr-col-12">
+        <h2>Migration dates de structure</h2>
+      </div>
       <div class="fr-col-12">
         <form
           novalidate
@@ -81,6 +85,72 @@
           </button>
         </form>
       </div>
+
+      <hr class="fr-col-12 fr-mt-5v" />
+      <div class="fr-col-12">
+        <h2>Migration des dossiers draft</h2>
+      </div>
+
+      <div class="fr-col-6">
+        <div class="fr-card">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">
+                <span>{{
+                  draftData ? draftData.withSocialSupportCount : '-'
+                }}</span>
+              </h3>
+              <div>
+                Dossiers draft qui ont au moins un accompagnement (dossiers non
+                vide)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fr-col-6">
+        <div class="fr-card">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">
+                <span>{{ draftData ? draftData.allCount : '-' }}</span>
+              </h3>
+              <div>Dossier en draft total</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fr-col-12">
+        <button
+          class="fr-btn fr-btn--secondary fr-mr-1w"
+          @click="getDraftBeneficiaries"
+        >
+          Recalculer le nombre de dossier
+        </button>
+        <button
+          class="fr-btn fr-mr-1w"
+          @click="updateWithSocialSupport(true)"
+        >
+          1. Mettre à jour le draft des dossiers non vide
+        </button>
+
+        <button
+          :disabled="!deleteReady"
+          class="fr-btn fr-btn--danger fr-mr-1w"
+          @click="deleteDraft(true)"
+        >
+          2. Supprimer tous les dossiers en draft
+        </button>
+      </div>
+
+      <div class="fr-col-12">
+        <p v-if="migrationDraftData">
+          Nombre de dossiers mis à jour :
+          {{ migrationDraftData.updatedCount }}
+        </p>
+      </div>
     </div>
   </PageContainer>
 </template>
@@ -117,5 +187,46 @@
           migrateBirthDateAndFileOpeningDate.value
       }
     })
+  }
+
+  // Draft beneficiaries
+  const draftData = ref<any | null>(null)
+  const migrationDraftData = ref<any | null>(null)
+  const deleteReady = ref<boolean>(false)
+
+  onMounted(() => {
+    getDraftBeneficiaries()
+  })
+
+  // Get count
+  const getDraftBeneficiaries = async () => {
+    const response = await $fetch(`/api/beneficiary/draft-count`, {
+      method: 'GET'
+    })
+    if (response) {
+      draftData.value = response
+    }
+  }
+
+  // update
+  const deleteDraft = async (exec = false) => {
+    const response = await $fetch('/api/migrate/delete-all-draft', {
+      method: 'POST',
+      body: { exec }
+    })
+    if (response) {
+      migrationDraftData.value = { updatedCount: response.updatedCount }
+    }
+  }
+  // Delete
+  const updateWithSocialSupport = async (exec = false) => {
+    const response = await $fetch('/api/migrate/update-socialsupport-draft', {
+      method: 'POST',
+      body: { exec }
+    })
+    if (response) {
+      deleteReady.value = true
+      migrationDraftData.value = { updatedCount: response.updatedCount }
+    }
   }
 </script>

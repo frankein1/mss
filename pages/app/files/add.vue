@@ -21,6 +21,7 @@
       v-else-if="agents?.length"
       :agents="agents"
       :is-submitting="isSubmitting"
+      @cancel="onCancel"
       @save-beneficiary="onCreateBeneficiary"
     />
   </PageContainer>
@@ -50,23 +51,23 @@
 
   const isSubmitting = ref(false)
 
+  const onCancel = () => {
+    useRouter().back()
+  }
+
   function onCreateBeneficiary(
     beneficiary: CreateBeneficiaryInput,
-    draft: boolean
+    complete: boolean
   ) {
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.create.mutate({
-          ...beneficiary,
-          draft
-        }),
+      mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
       isSubmitting,
       onSuccess: ({ id, familyFileId }) => {
         matomo.trackEvent(
           EventCategory.CreateBeneficiary,
           CreateBeneficiaryEventAction.SavePartialForm
         )
-        if (draft) {
+        if (complete) {
           navigateTo(routes.beneficiary.AppBeneficiaryEditInfo.path(id))
         } else {
           navigateTo(

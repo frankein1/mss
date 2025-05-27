@@ -24,13 +24,11 @@
     >
       <AtomBreadcrumb
         :links="
-          draft
-            ? breadcrumbs.file.AppFileAdd()
-            : breadcrumbs.file.AppFileBeneficiaryEdit(
-                familyFileId,
-                familyIdentification,
-                beneficiaryIdentification
-              )
+          breadcrumbs.file.AppFileBeneficiaryEdit(
+            familyFileId,
+            familyIdentification,
+            beneficiaryIdentification
+          )
         "
       />
       <PageTitle
@@ -89,7 +87,6 @@
 
   const props = withDefaults(
     defineProps<{
-      draft: boolean
       familyFileId: string
       familyIdentification: BeneficiaryFileIdentification[]
       beneficiaryIdentification: BeneficiaryIdentification | null
@@ -110,17 +107,10 @@
   )
 
   const emit = defineEmits<{
-    save: [
-      beneficiary: SubmitType,
-      target: string | undefined,
-      validate: boolean
-    ]
+    save: [beneficiary: SubmitType, target: string | undefined]
   }>()
 
-  const trpcClient = useTrpcClient()
-
   const saveTarget = ref<string | undefined>(undefined)
-  const validate = ref<boolean>(false)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
@@ -156,25 +146,18 @@
 
   function onSave() {
     saveTarget.value = undefined
-    validate.value = true
   }
 
   const isFormDirty = computed(() => meta.value.dirty)
 
   const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
-    isFormDirty: props.draft ? ref(true) : isFormDirty,
-    onLeave: async () => {
-      if (props.beneficiaryIdentification && props.draft) {
-        const id = props.beneficiaryIdentification.id
-        await trpcClient.beneficiary.deleteDraft.mutate({ id })
-      }
-    }
+    isFormDirty
   })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('save', values, saveTarget.value, validate.value)
+      emit('save', values, saveTarget.value)
       isNavigatingWithFormActions.value = true
     }
   )
@@ -186,17 +169,12 @@
 
   function onCancel() {
     if (props.beneficiaryIdentification) {
-      const id = props.beneficiaryIdentification.id
-      if (props.draft) {
-        navigateTo(routes.beneficiary.AppBeneficiaries.path())
-      } else if (props.beneficiaryIdentification) {
-        navigateTo(
-          routes.file.AppFile.path(props.familyFileId, {
-            beneficiaryId: id,
-            tab: originTab
-          })
-        )
-      }
+      navigateTo(
+        routes.file.AppFile.path(props.familyFileId, {
+          beneficiaryId: props.beneficiaryIdentification.id,
+          tab: originTab
+        })
+      )
     }
   }
 </script>

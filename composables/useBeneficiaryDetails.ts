@@ -7,9 +7,7 @@ export const useBeneficiaryDetails = async (beneficiaryId: string) => {
     })
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
-  const draft = computed(() =>
-    beneficiary.value ? beneficiary.value.draft : true
-  )
+
   const permissions = computed(() => data.value?.permissions)
 
   const beneficiaryIdentification = computed(() =>
@@ -30,7 +28,6 @@ export const useBeneficiaryDetails = async (beneficiaryId: string) => {
 
   return {
     beneficiary,
-    draft,
     permissions,
     beneficiaryIdentification,
     familyIdentification,

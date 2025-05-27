@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    :draft
     :family-file-id="beneficiary?.familyFileId || ''"
     :family-identification="familyIdentification"
     :beneficiary-identification="beneficiaryIdentification"
@@ -61,7 +60,6 @@
   const {
     beneficiary,
     permissions,
-    draft,
     beneficiaryIdentification,
     familyIdentification,
     pending: beneficiaryPending,
@@ -119,45 +117,35 @@
 
   const onSaveBeneficiary = (
     beneficiary: UpdateBeneficiaryGeneralInformationInput,
-    target: string | undefined,
-    validate: boolean
+    target: string | undefined
   ) => {
     if (
       similarBeneficiary.value &&
       beneficiaryIdentification.value?.id !== similarBeneficiary.value.id
     ) {
       useBeneficiaryFormSimilarModal(similarBeneficiary.value, () => {
-        saveBeneficiary(beneficiary, target, validate)
+        saveBeneficiary(beneficiary, target)
       })
       return
     }
 
-    saveBeneficiary(beneficiary, target, validate)
+    saveBeneficiary(beneficiary, target)
   }
 
   function saveBeneficiary(
     ben: UpdateBeneficiaryGeneralInformationInput,
-    target: string | undefined,
-    validate: boolean
+    target: string | undefined
   ) {
     if (!beneficiary.value) {
       return
     }
 
     const router = trpcClient.beneficiary
-    const validateBeneficiary = router.validate.useMutation()
     const updateBeneficiary = router.updateGeneralInformation.useMutation()
     const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
 
     useTrpcMutation({
-      mutation: () => {
-        const mutations = []
-        if (validate && draft.value) {
-          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
-        }
-        mutations.push(updateBeneficiary.mutate(ben))
-        return Promise.all(mutations)
-      },
+      mutation: () => updateBeneficiary.mutate(ben),
       isSubmitting,
       onSuccess: () => {
         if (updateBeneficiary.error.value) {
