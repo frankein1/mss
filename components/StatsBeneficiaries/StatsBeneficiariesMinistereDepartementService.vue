@@ -10,9 +10,9 @@
   />
 
   <StatsList
-    v-if="ministereDepartementServiceStats"
+    v-if="ministereDepartementServiceAcStats"
     :total-count="beneficiaryCount"
-    :stats="ministereDepartementServiceStats"
+    :stats="ministereDepartementServiceAcStats"
     stats-bar
     :not-filled-route="
       routes.beneficiary.AppBeneficiaries.path({
@@ -49,7 +49,7 @@
 
   const error = ref<boolean>(false)
   const pending = ref<boolean>(false)
-  const ministereDepartementServiceStats = ref<StatsListPropType | null>(null)
+  const ministereDepartementServiceAcStats = ref<StatsListPropType | null>(null)
 
   onMounted(async () => {
     pending.value = true
@@ -64,7 +64,7 @@
       error.value = true
       return
     }
-    ministereDepartementServiceStats.value =
+    ministereDepartementServiceAcStats.value =
       data.map(({ _count, ministereDepartementServiceAc }) => ({
         key: ministereDepartementServiceAc || 'null',
         label: getStatLabel(
