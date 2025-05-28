@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client'
-import replaceSQLParamsInPreparedStatements from '../utils/replaceSQLParamsInPreparedStatements.ts'
 import { DefaultArgs } from '@prisma/client/runtime/library'
+import { shouldLog, formatPrismaQueryLog } from '~/server/utils/logging.js'
+import picocolors from 'picocolors'
 
 declare global {
   // allow global `var` declarations
@@ -8,29 +9,13 @@ declare global {
   var prismaClient: PrismaClient | undefined
 }
 
-type LogEnvironment = 'DEBUG' | 'DEVELOPMENT' | 'PRODUCTION'
+const shouldLogPrisma = shouldLog('prisma')
 
-const prismaLogLevels: Record<
-  LogEnvironment,
-  (Prisma.LogLevel | Prisma.LogDefinition)[]
-> = {
-  DEBUG: [{ emit: 'event', level: 'query' }, 'error', 'warn'],
-  DEVELOPMENT: ['warn', 'error'],
-  PRODUCTION: ['error']
+const prismaLogLevels: (Prisma.LogLevel | Prisma.LogDefinition)[] =
+  process.env.NODE_ENV === 'production' ? ['error'] : ['warn', 'error']
+if (shouldLogPrisma) {
+  prismaLogLevels.push({ emit: 'event', level: 'query' })
 }
-
-function getLogEnvironment(): LogEnvironment {
-  if (process.env.NODE_ENV === 'production') {
-    return 'PRODUCTION'
-  }
-  if (process.env.MSS_DEBUG === 'true' || process.env.MSS_DEBUG === '1') {
-    return 'DEBUG'
-  }
-  return 'DEVELOPMENT'
-}
-
-const logEnvironment = getLogEnvironment()
-const prismaLogLevel = prismaLogLevels[logEnvironment]
 
 export const prismaClient: PrismaClient<
   Prisma.PrismaClientOptions,
@@ -39,7 +24,7 @@ export const prismaClient: PrismaClient<
 > =
   global.prismaClient ||
   new PrismaClient({
-    log: prismaLogLevel
+    log: prismaLogLevels
   })
 
 export * from '@prisma/client'
@@ -48,17 +33,14 @@ if (process.env.NODE_ENV !== 'production') {
   global.prismaClient = prismaClient
 }
 
-if (logEnvironment === 'DEBUG') {
+if (shouldLogPrisma) {
   prismaClient.$on('query', event => {
     // eslint-disable-next-line no-console
     console.log(
-      '[PRISMA]',
-      event.duration,
-      'ms :',
-      replaceSQLParamsInPreparedStatements(
-        event.query,
-        JSON.parse(event.params)
-      )
+      picocolors.bgMagenta(picocolors.whiteBright(picocolors.bold(' Prisma '))),
+      picocolors.bold(event.duration + 'ms'),
+      event.duration > 100 ? '❌' : event.duration > 50 ? '⚠️' : '✅'
     )
+    console.log(picocolors.italic(formatPrismaQueryLog(event)))
   })
 }

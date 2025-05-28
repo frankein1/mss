@@ -15,6 +15,8 @@ type SocialSupportSubjectsCreateInput = Omit<
   'ownedByStructureId'
 >
 
+const ID_JEANNE_RESPONSABLE = '7e5c1734-35cb-4047-9035-a944961a67a4'
+
 const socialSupportSubjects: SocialSupportSubjectsCreateInput[] = [
   {
     name: 'Inclusion numérique',
@@ -71,7 +73,7 @@ async function main() {
       console.log('Linking Jeanne Responsable to a structure...')
       await prismaClient.user.update({
         data: { structureId: structure.id },
-        where: { id: '7e5c1734-35cb-4047-9035-a944961a67a4' }
+        where: { id: ID_JEANNE_RESPONSABLE }
       })
     }
 
@@ -103,6 +105,12 @@ async function main() {
           phone1: faker.phone.number(),
           email: faker.internet.email()
         }))
+      }),
+      prismaClient.user.update({
+        where: { id: ID_JEANNE_RESPONSABLE },
+        data: {
+          referentFor: { connect: families }
+        }
       })
     ])
   }

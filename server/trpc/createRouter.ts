@@ -1,3 +1,4 @@
+import picocolors from 'picocolors'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { H3Event } from 'h3'
@@ -8,6 +9,7 @@ import {
 } from '../security/rules/types'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
+import { shouldLog } from '~/server/utils/logging'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson,
@@ -34,11 +36,32 @@ export const { router, createCallerFactory } = t
  * */
 export const publicProcedure = t.procedure
 
+export const loggingMidleware = t.middleware(async opts => {
+  const start = Date.now()
+  const result = await opts.next()
+  const durationMs = Date.now() - start
+  // eslint-disable-next-line no-console
+  console.log(
+    picocolors.bgCyan(picocolors.bold(picocolors.whiteBright(' tRPC '))),
+    picocolors.dim(opts.type.charAt(0).toUpperCase() + opts.type.slice(1)),
+    '|',
+    picocolors.underline(opts.path),
+    '|',
+    picocolors.bold(durationMs + 'ms'),
+    durationMs > 100 ? '❌' : durationMs > 50 ? '⚠️' : '✅'
+  )
+  return result
+})
+
+const baseMiddleware = shouldLog('trpc')
+  ? loggingMidleware.unstable_pipe
+  : t.middleware
+
 /**
  * Reusable middleware to ensure
  * users are logged in
  */
-const userMiddleware = t.middleware(({ ctx, next }) => {
+const userMiddleware = baseMiddleware(({ ctx, next }) => {
   if (!ctx.user) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
