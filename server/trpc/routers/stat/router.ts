@@ -94,6 +94,9 @@ export const statRouter = router({
   getMobilityStats: protectedProcedure
     .input(routes.getMobilityStatsQ.inputValidation)
     .query(routes.getMobilityStatsQ.execute),
+  getMobilityStatsPost: protectedProcedure
+    .input(routes.getMobilityStatsPost.inputValidation)
+    .mutation(routes.getMobilityStatsPost.execute),
   getCityStats: protectedProcedure
     .input(routes.getCityStatsQ.inputValidation)
     .query(routes.getCityStatsQ.execute),
@@ -105,10 +108,13 @@ export const statRouter = router({
     .query(routes.getDepartmentStatsQ.execute),
   getDepartmentStatsPost: protectedProcedure
     .input(routes.getDepartmentStatsPost.inputValidation)
-    .query(routes.getDepartmentStatsPost.execute),
+    .mutation(routes.getDepartmentStatsPost.execute),
   getRegionStats: protectedProcedure
     .input(routes.getRegionStatsQ.inputValidation)
     .query(routes.getRegionStatsQ.execute),
+  getRegionStatsPost: protectedProcedure
+    .input(routes.getRegionStatsPost.inputValidation)
+    .mutation(routes.getRegionStatsPost.execute),
   getFollowupSubjectStats: protectedProcedure
     .input(routes.getFollowupSubjectsStatsQ.inputValidation)
     .query(routes.getFollowupSubjectsStatsQ.execute),

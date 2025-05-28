@@ -10,7 +10,7 @@
   />
 
   <StatsList
-    v-if="citiesStats.length"
+    v-if="citiesStats"
     :total-count="beneficiaryCount"
     :stats="citiesStats"
     stats-bar
@@ -35,26 +35,34 @@
   import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: citiesCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getCityStats.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const citiesStats = ref<StatsListPropType | null>(null)
 
-  const citiesStats = computed(
-    () =>
-      citiesCounts.value?.map(({ _count, city }) => ({
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getCityStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+
+    citiesStats.value =
+      data.map(({ _count, city }) => ({
         key: city || 'null',
         label: city || STATS_NULL_LABEL,
         count: _count
       })) || []
-  )
+    pending.value = false
+  })
 </script>

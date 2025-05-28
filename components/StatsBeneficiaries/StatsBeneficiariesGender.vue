@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des genres n'ont pas pu être chargées."
   />
   <StatsPie
-    v-if="genderStats.length"
+    v-if="genderStats"
     pie-label="Répartion des genres"
     :stats="genderStats"
     :total-count="beneficiaryCount"
@@ -45,26 +45,32 @@
     [Gender.Other]: ChartColor.Yellow
   }
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: genderCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getGenderStats.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const genderStats = ref<StatsPiePropType | null>(null)
 
-  const genderStats = computed(
-    () =>
-      (genderCounts.value?.map(({ _count, gender }) => ({
-        key: gender,
-        label: getStatLabel(beneficiaryGenderKeys.byKey, gender),
-        color: getStatColor(GenderColor, gender),
-        count: _count
-      })) || []) as StatsPiePropType
-  )
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getGenderStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+
+    genderStats.value = (data.map(({ _count, gender }) => ({
+      key: gender,
+      label: getStatLabel(beneficiaryGenderKeys.byKey, gender),
+      color: getStatColor(GenderColor, gender),
+      count: _count
+    })) || []) as StatsPiePropType
+    pending.value = false
+  })
 </script>

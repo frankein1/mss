@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des données mobilité n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="mobilityStats.length"
+    v-if="mobilityStats"
     :total-count="beneficiaryCount"
     :stats="mobilityStats"
     stats-bar
@@ -35,26 +35,33 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: mobilityCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getMobilityStats.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const mobilityStats = ref<StatsListPropType | null>(null)
 
-  const mobilityStats = computed(
-    () =>
-      mobilityCounts.value?.map(({ _count, mobility }) => ({
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMobilityStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    mobilityStats.value =
+      data.map(({ _count, mobility }) => ({
         key: mobility || 'null',
         label: getStatLabel(beneficiaryMobilityKeys.byKey, mobility),
         count: _count
       })) || []
-  )
+    pending.value = false
+  })
 </script>
