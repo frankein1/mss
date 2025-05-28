@@ -1,5 +1,5 @@
 import { StructureType } from '@prisma/client'
-import { createQuery } from '~/server/route'
+import { createMutation } from '~/server/route'
 import {
   beneficiaryAccommodationModeKeys,
   beneficiaryAccommodationZoneKeys,
@@ -279,7 +279,7 @@ const handler = async ({
   return { data: stream.toString('base64') }
 }
 
-export const exportBeneficiaryStatsQuery = createQuery({
+export const exportBeneficiaryStatsPost = createMutation({
   inputValidation: statFilterSchema,
   securityCheck,
   handler

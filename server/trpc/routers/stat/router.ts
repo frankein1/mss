@@ -157,15 +157,12 @@ export const statRouter = router({
   getMinistereDepartementServiceAcStatsPost: protectedProcedure
     .input(routes.getMinistereDepartementServiceAcStatsPost.inputValidation)
     .mutation(routes.getMinistereDepartementServiceAcStatsPost.execute),
-  // TODO: Delete if unused
-  exportBeneficiaryStats: protectedProcedure
-    .input(routes.exportBeneficiaryStatsQuery.inputValidation)
-    .query(routes.exportBeneficiaryStatsQuery.execute),
-  // TODO: Delete if unused
+  exportBeneficiaryStatsPost: protectedProcedure
+    .input(routes.exportBeneficiaryStatsPost.inputValidation)
+    .mutation(routes.exportBeneficiaryStatsPost.execute),
   exportHelpRequestStats: protectedProcedure
     .input(routes.exportHelpRequestStatsQuery.inputValidation)
     .query(routes.exportHelpRequestStatsQuery.execute),
-  // TODO: Delete if unused
   exportFollowupStats: protectedProcedure
     .input(routes.exportFollowupStatsQuery.inputValidation)
     .query(routes.exportFollowupStatsQuery.execute),

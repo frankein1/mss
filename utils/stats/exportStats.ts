@@ -131,7 +131,8 @@ export const exportStats = async (
         exportedFile = await client.stat.exportHelpRequestStats.query(filters)
         break
       case 'stats_beneficiaires':
-        exportedFile = await client.stat.exportBeneficiaryStats.query(filters)
+        exportedFile =
+          await client.stat.exportBeneficiaryStatsPost.mutate(filters)
         break
     }
     if (!exportedFile?.data) {
