@@ -4,10 +4,12 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getAccommodationModeStats']>
+type Input = inferProcedureInput<
+  AppRouter['stat']['getAccommodationModeStatsPost']
+>
 
 type Output = inferProcedureOutput<
-  AppRouter['stat']['getAccommodationModeStats']
+  AppRouter['stat']['getAccommodationModeStatsPost']
 >
 
 const parseStats = (stats: Output) =>
@@ -26,7 +28,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
     const input: Input = {}
 
     const stats =
-      await trpc.structureManager.stat.getAccommodationModeStats(input)
+      await trpc.structureManager.stat.getAccommodationModeStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 11,
@@ -41,7 +43,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
     const input: Input = {}
 
     await expect(() =>
-      trpc.receptionAgent.stat.getAccommodationModeStats(input)
+      trpc.receptionAgent.stat.getAccommodationModeStatsPost(input)
     ).rejects.toThrowError(/not allowed to access route/)
   })
 
@@ -50,7 +52,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.referent.stat.getAccommodationModeStats(input)
+    const stats = await trpc.referent.stat.getAccommodationModeStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,

@@ -4,30 +4,32 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getRegionStats']>
+type Input = inferProcedureInput<AppRouter['stat']['getGenderStatsPost']>
 
-type Output = inferProcedureOutput<AppRouter['stat']['getRegionStats']>
+type Output = inferProcedureOutput<AppRouter['stat']['getGenderStatsPost']>
 
 const parseStats = (stats: Output) =>
   stats.reduce<Record<string, number>>(
-    (acc, { region, _count }) => ({
+    (acc, { gender, _count }) => ({
       ...acc,
-      [region || 'Non renseigné']: _count
+      [gender || 'Non renseigné']: _count
     }),
     {}
   )
 
-describe('Statistics - Beneficiary - Region', () => {
+describe('Statistics - Beneficiary - Gender', () => {
   test('should compute stats as a structure manager with no filters', async ({
     trpc
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.structureManager.stat.getRegionStats(input)
+    const stats = await trpc.structureManager.stat.getGenderStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 12,
-      'Bourgogne-Franche-Comté': 1
+      'Female': 5,
+      'Male': 3,
+      'Non renseigné': 4,
+      'Other': 1
     })
   })
 })

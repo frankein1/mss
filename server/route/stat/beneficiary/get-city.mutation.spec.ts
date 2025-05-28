@@ -4,9 +4,9 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getCityStats']>
+type Input = inferProcedureInput<AppRouter['stat']['getCityStatsPost']>
 
-type Output = inferProcedureOutput<AppRouter['stat']['getCityStats']>
+type Output = inferProcedureOutput<AppRouter['stat']['getCityStatsPost']>
 
 const parseStats = (stats: Output) =>
   stats.reduce<Record<string, number>>(
@@ -23,7 +23,7 @@ describe('Statistics - Beneficiary - City', () => {
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.structureManager.stat.getCityStats(input)
+    const stats = await trpc.structureManager.stat.getCityStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 12,

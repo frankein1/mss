@@ -4,7 +4,7 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getFamilyFileCount']>
+type Input = inferProcedureInput<AppRouter['stat']['getFamilyFileCountPost']>
 
 describe('Statistics - Beneficiary - Family File Count', () => {
   test('should compute stats as a structure manager with no filters', async ({
@@ -12,7 +12,7 @@ describe('Statistics - Beneficiary - Family File Count', () => {
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
+    const stats = await trpc.structureManager.stat.getFamilyFileCountPost(input)
 
     expect(stats).toEqual({ family: 1, beneficiary: 11 })
   })

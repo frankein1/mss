@@ -4,31 +4,31 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getMobilityStats']>
+type Input = inferProcedureInput<AppRouter['stat']['getFamilyStatsPost']>
 
-type Output = inferProcedureOutput<AppRouter['stat']['getMobilityStats']>
+type Output = inferProcedureOutput<AppRouter['stat']['getFamilyStatsPost']>
 
 const parseStats = (stats: Output) =>
   stats.reduce<Record<string, number>>(
-    (acc, { mobility, _count }) => ({
+    (acc, { familySituation, _count }) => ({
       ...acc,
-      [mobility || 'Non renseigné']: _count
+      [familySituation || 'Non renseigné']: _count
     }),
     {}
   )
 
-describe('Statistics - Beneficiary - Mobility', () => {
+describe('Statistics - Beneficiary - Family Situation', () => {
   test('should compute stats as a structure manager with no filters', async ({
     trpc
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.structureManager.stat.getMobilityStats(input)
+    const stats = await trpc.structureManager.stat.getFamilyStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
-      'BikeOrEquivalent': 1,
-      'PublicTransport': 1
+      'CoupleWithChildren': 1,
+      'Divorced': 2,
+      'Non renseigné': 10
     })
   })
 })

@@ -4,30 +4,30 @@ import { test } from '~/test/server/test-utils'
 
 import { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getDepartmentStats']>
+type Input = inferProcedureInput<AppRouter['stat']['getCSPStatsPost']>
 
-type Output = inferProcedureOutput<AppRouter['stat']['getDepartmentStats']>
+type Output = inferProcedureOutput<AppRouter['stat']['getCSPStatsPost']>
 
 const parseStats = (stats: Output) =>
   stats.reduce<Record<string, number>>(
-    (acc, { department, _count }) => ({
+    (acc, { socioProfessionalCategory, _count }) => ({
       ...acc,
-      [department || 'Non renseigné']: _count
+      [socioProfessionalCategory || 'Non renseigné']: _count
     }),
     {}
   )
 
-describe('Statistics - Beneficiary - Department', () => {
+describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
   test('should compute stats as a structure manager with no filters', async ({
     trpc
   }) => {
     const input: Input = {}
 
-    const stats = await trpc.structureManager.stat.getDepartmentStats(input)
+    const stats = await trpc.structureManager.stat.getCSPStatsPost(input)
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 12,
-      "Côte-d'Or": 1
+      'Employed': 1
     })
   })
 })

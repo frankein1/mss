@@ -2,45 +2,24 @@ import { statRoutes as routes } from '~/server/route'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({
-  getAccommodationZoneStats: protectedProcedure
-    .input(routes.getAccommodationZoneStatsQ.inputValidation)
-    .query(routes.getAccommodationZoneStatsQ.execute),
   getAccommodationZoneStatsPost: protectedProcedure
     .input(routes.getAccommodationZoneStatsPost.inputValidation)
     .mutation(routes.getAccommodationZoneStatsPost.execute),
-  getAccommodationModeStats: protectedProcedure
-    .input(routes.getAccommodationModeStatsQ.inputValidation)
-    .query(routes.getAccommodationModeStatsQ.execute),
   getAccommodationModeStatsPost: protectedProcedure
     .input(routes.getAccommodationModeStatsPost.inputValidation)
     .mutation(routes.getAccommodationModeStatsPost.execute),
-  getAgeStats: protectedProcedure
-    .input(routes.getAgeStatsQ.inputValidation)
-    .query(routes.getAgeStatsQ.execute),
   getAgeStatsPost: protectedProcedure
     .input(routes.getAgeStatsPost.inputValidation)
     .mutation(routes.getAgeStatsPost.execute),
-  getBeneficiaryCount: protectedProcedure
-    .input(routes.getBeneficiaryCountQ.inputValidation)
-    .query(routes.getBeneficiaryCountQ.execute),
   getBeneficiaryCountPost: protectedProcedure
     .input(routes.getBeneficiaryCountPost.inputValidation)
     .mutation(routes.getBeneficiaryCountPost.execute),
-  getFamilyFileCount: protectedProcedure
-    .input(routes.getFamilyFileCountQ.inputValidation)
-    .query(routes.getFamilyFileCountQ.execute),
   getFamilyFileCountPost: protectedProcedure
     .input(routes.getFamilyFileCountPost.inputValidation)
     .mutation(routes.getFamilyFileCountPost.execute),
-  getCSPStats: protectedProcedure
-    .input(routes.getCSPStatsQ.inputValidation)
-    .query(routes.getCSPStatsQ.execute),
   getCSPStatsPost: protectedProcedure
     .input(routes.getCSPStatsPost.inputValidation)
     .mutation(routes.getCSPStatsPost.execute),
-  getFamilyStats: protectedProcedure
-    .input(routes.getFamilyStatsQ.inputValidation)
-    .query(routes.getFamilyStatsQ.execute),
   getFamilyStatsPost: protectedProcedure
     .input(routes.getFamilyStatsPost.inputValidation)
     .mutation(routes.getFamilyStatsPost.execute),
@@ -62,9 +41,6 @@ export const statRouter = router({
   getFollowupStatusStats: protectedProcedure
     .input(routes.getFollowupStatusStatsQ.inputValidation)
     .query(routes.getFollowupStatusStatsQ.execute),
-  getGenderStats: protectedProcedure
-    .input(routes.getGenderStatsQ.inputValidation)
-    .query(routes.getGenderStatsQ.execute),
   getGenderStatsPost: protectedProcedure
     .input(routes.getGenderStatsPost.inputValidation)
     .mutation(routes.getGenderStatsPost.execute),
@@ -97,27 +73,15 @@ export const statRouter = router({
   getHistoryCounts: protectedProcedure
     .input(routes.getHistoryCountsQuery.inputValidation)
     .query(routes.getHistoryCountsQuery.execute),
-  getMobilityStats: protectedProcedure
-    .input(routes.getMobilityStatsQ.inputValidation)
-    .query(routes.getMobilityStatsQ.execute),
   getMobilityStatsPost: protectedProcedure
     .input(routes.getMobilityStatsPost.inputValidation)
     .mutation(routes.getMobilityStatsPost.execute),
-  getCityStats: protectedProcedure
-    .input(routes.getCityStatsQ.inputValidation)
-    .query(routes.getCityStatsQ.execute),
   getCityStatsPost: protectedProcedure
     .input(routes.getCityStatsPost.inputValidation)
     .mutation(routes.getCityStatsPost.execute),
-  getDepartmentStats: protectedProcedure
-    .input(routes.getDepartmentStatsQ.inputValidation)
-    .query(routes.getDepartmentStatsQ.execute),
   getDepartmentStatsPost: protectedProcedure
     .input(routes.getDepartmentStatsPost.inputValidation)
     .mutation(routes.getDepartmentStatsPost.execute),
-  getRegionStats: protectedProcedure
-    .input(routes.getRegionStatsQ.inputValidation)
-    .query(routes.getRegionStatsQ.execute),
   getRegionStatsPost: protectedProcedure
     .input(routes.getRegionStatsPost.inputValidation)
     .mutation(routes.getRegionStatsPost.execute),
@@ -133,27 +97,15 @@ export const statRouter = router({
   getHelpRequestSubjectStats: protectedProcedure
     .input(routes.getHelpRequestSubjectsStatsQ.inputValidation)
     .query(routes.getHelpRequestSubjectsStatsQ.execute),
-  getMinistereStructure: protectedProcedure
-    .input(routes.getMinistereStructureStatsQ.inputValidation)
-    .query(routes.getMinistereStructureStatsQ.execute),
   getMinistereStructureStatsPost: protectedProcedure
     .input(routes.getMinistereStructureStatsPost.inputValidation)
     .mutation(routes.getMinistereStructureStatsPost.execute),
-  getMinistereCategorie: protectedProcedure
-    .input(routes.getMinistereCategorieStatsQ.inputValidation)
-    .query(routes.getMinistereCategorieStatsQ.execute),
   getMinistereCategorieStatsPost: protectedProcedure
     .input(routes.getMinistereCategorieStatsPost.inputValidation)
     .mutation(routes.getMinistereCategorieStatsPost.execute),
-  getMinistereInterpellation: protectedProcedure
-    .input(routes.getMinistereInterpellationStatsQ.inputValidation)
-    .query(routes.getMinistereInterpellationStatsQ.execute),
   getMinistereInterpellationStatsPost: protectedProcedure
     .input(routes.getMinistereInterpellationStatsPost.inputValidation)
     .mutation(routes.getMinistereInterpellationStatsPost.execute),
-  getMinistereDepartementServiceAc: protectedProcedure
-    .input(routes.getMinistereDepartementServiceAcStatsQ.inputValidation)
-    .query(routes.getMinistereDepartementServiceAcStatsQ.execute),
   getMinistereDepartementServiceAcStatsPost: protectedProcedure
     .input(routes.getMinistereDepartementServiceAcStatsPost.inputValidation)
     .mutation(routes.getMinistereDepartementServiceAcStatsPost.execute),
