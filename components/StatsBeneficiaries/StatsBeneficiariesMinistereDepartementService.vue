@@ -10,9 +10,9 @@
   />
 
   <StatsList
-    v-if="ministereDepartementServiceAcStats.length"
+    v-if="ministereDepartementServiceStats"
     :total-count="beneficiaryCount"
-    :stats="ministereDepartementServiceAcStats"
+    :stats="ministereDepartementServiceStats"
     stats-bar
     :not-filled-route="
       routes.beneficiary.AppBeneficiaries.path({
@@ -40,31 +40,39 @@
     getStatLabel
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministereDepartementServiceAcCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getMinistereDepartementServiceAc.useQuery(
-    props.filters
-  )
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const ministereDepartementServiceStats = ref<StatsListPropType | null>(null)
 
-  const ministereDepartementServiceAcStats = computed(
-    () =>
-      ministereDepartementServiceAcCounts.value?.map(
-        ({ _count, ministereDepartementServiceAc }) => ({
-          key: ministereDepartementServiceAc || 'null',
-          label: getStatLabel(
-            ministereDepartmentServiceAcKeys.byKey,
-            ministereDepartementServiceAc
-          ),
-          count: _count
-        })
-      ) || []
-  )
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data =
+      await trpc.stat.getMinistereDepartementServiceAcStatsPost.mutate(
+        props.filters
+      )
+    if (data == null) {
+      error.value = true
+      return
+    }
+    ministereDepartementServiceStats.value =
+      data.map(({ _count, ministereDepartementServiceAc }) => ({
+        key: ministereDepartementServiceAc || 'null',
+        label: getStatLabel(
+          ministereDepartmentServiceAcKeys.byKey,
+          ministereDepartementServiceAc
+        ),
+        count: _count
+      })) || []
+    pending.value = false
+  })
 </script>

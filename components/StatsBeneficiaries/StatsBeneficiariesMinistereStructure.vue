@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des structures de rattachement n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="ministereStructureStats.length"
+    v-if="ministereStructureStats"
     :total-count="beneficiaryCount"
     :stats="ministereStructureStats"
     stats-bar
@@ -35,24 +35,35 @@
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereStructureKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministereStructureCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getMinistereStructure.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const ministereStructureStats = ref<StatsListPropType | null>(null)
 
-  const ministereStructureStats = computed(
-    () =>
-      ministereStructureCounts.value?.map(({ _count, ministereStructure }) => ({
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMinistereStructureStatsPost.mutate(
+      props.filters
+    )
+    if (data == null) {
+      error.value = true
+      return
+    }
+    ministereStructureStats.value =
+      data.map(({ _count, ministereStructure }) => ({
         key: ministereStructure || 'null',
         label: getStatLabel(ministereStructureKeys.byKey, ministereStructure),
         count: _count
       })) || []
-  )
+    pending.value = false
+  })
 </script>

@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4>Nombre de dossiers concernés</h4>
     <AtomLoader
-      v-if="status === 'pending'"
+      v-if="pending"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -10,12 +10,12 @@
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de foyers concernés n'ont pas pu être chargées."
     />
-    <template v-else-if="data !== null">
+    <template v-else-if="beneficiaryCount !== null">
       <StatsBeneficiaryNumber
-        v-if="data.beneficiary"
-        :beneficiary-counts="data.beneficiary"
+        v-if="beneficiaryCount"
+        :beneficiary-counts="beneficiaryCount"
+        :family-counts="familyFileCount"
         :history-type
-        :family-counts="data.family"
       />
       <p v-else>
         Commencez à créer des instructions de dossier dans les fiches de
@@ -30,15 +30,30 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     filters: StatFilterInput
     historyType?: 'beneficiary'
   }>()
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const beneficiaryCount = ref<number | null>(null)
+  const familyFileCount = ref<number | undefined>(undefined)
 
-  const { data, error, status } =
-    await trpcClient.stat.getFamilyFileCount.useQuery(props.filters)
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFamilyFileCountPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    beneficiaryCount.value = data.beneficiary
+    familyFileCount.value = data.family
+
+    pending.value = false
+  })
 </script>
 
 <style lang="scss" scoped>

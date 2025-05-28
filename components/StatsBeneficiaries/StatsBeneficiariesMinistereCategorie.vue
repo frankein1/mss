@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des catégories n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="ministereCategorieStats.length"
+    v-if="ministereCategorieStats"
     :total-count="beneficiaryCount"
     :stats="ministereCategorieStats"
     stats-bar
@@ -34,24 +34,35 @@
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereCategorieKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministereCategorieCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getMinistereCategorie.useQuery(props.filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const ministereCategorieStats = ref<StatsListPropType | null>(null)
 
-  const ministereCategorieStats = computed(
-    () =>
-      ministereCategorieCounts.value?.map(({ _count, ministereCategorie }) => ({
+  onMounted(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMinistereCategorieStatsPost.mutate(
+      props.filters
+    )
+    if (data == null) {
+      error.value = true
+      return
+    }
+    ministereCategorieStats.value =
+      data.map(({ _count, ministereCategorie }) => ({
         key: ministereCategorie || 'null',
         label: getStatLabel(ministereCategorieKeys.byKey, ministereCategorie),
         count: _count
       })) || []
-  )
+    pending.value = false
+  })
 </script>

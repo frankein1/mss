@@ -23,9 +23,15 @@ export const statRouter = router({
   getBeneficiaryCount: protectedProcedure
     .input(routes.getBeneficiaryCountQ.inputValidation)
     .query(routes.getBeneficiaryCountQ.execute),
+  getBeneficiaryCountPost: protectedProcedure
+    .input(routes.getBeneficiaryCountPost.inputValidation)
+    .mutation(routes.getBeneficiaryCountPost.execute),
   getFamilyFileCount: protectedProcedure
     .input(routes.getFamilyFileCountQ.inputValidation)
     .query(routes.getFamilyFileCountQ.execute),
+  getFamilyFileCountPost: protectedProcedure
+    .input(routes.getFamilyFileCountPost.inputValidation)
+    .mutation(routes.getFamilyFileCountPost.execute),
   getCSPStats: protectedProcedure
     .input(routes.getCSPStatsQ.inputValidation)
     .query(routes.getCSPStatsQ.execute),
@@ -130,15 +136,27 @@ export const statRouter = router({
   getMinistereStructure: protectedProcedure
     .input(routes.getMinistereStructureStatsQ.inputValidation)
     .query(routes.getMinistereStructureStatsQ.execute),
+  getMinistereStructureStatsPost: protectedProcedure
+    .input(routes.getMinistereStructureStatsPost.inputValidation)
+    .mutation(routes.getMinistereStructureStatsPost.execute),
   getMinistereCategorie: protectedProcedure
     .input(routes.getMinistereCategorieStatsQ.inputValidation)
     .query(routes.getMinistereCategorieStatsQ.execute),
+  getMinistereCategorieStatsPost: protectedProcedure
+    .input(routes.getMinistereCategorieStatsPost.inputValidation)
+    .mutation(routes.getMinistereCategorieStatsPost.execute),
   getMinistereInterpellation: protectedProcedure
     .input(routes.getMinistereInterpellationStatsQ.inputValidation)
     .query(routes.getMinistereInterpellationStatsQ.execute),
+  getMinistereInterpellationStatsPost: protectedProcedure
+    .input(routes.getMinistereInterpellationStatsPost.inputValidation)
+    .mutation(routes.getMinistereInterpellationStatsPost.execute),
   getMinistereDepartementServiceAc: protectedProcedure
     .input(routes.getMinistereDepartementServiceAcStatsQ.inputValidation)
     .query(routes.getMinistereDepartementServiceAcStatsQ.execute),
+  getMinistereDepartementServiceAcStatsPost: protectedProcedure
+    .input(routes.getMinistereDepartementServiceAcStatsPost.inputValidation)
+    .mutation(routes.getMinistereDepartementServiceAcStatsPost.execute),
   // TODO: Delete if unused
   exportBeneficiaryStats: protectedProcedure
     .input(routes.exportBeneficiaryStatsQuery.inputValidation)
