@@ -48,8 +48,6 @@
     [AgeGroup.More65]: ChartColor.Green
   }
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
@@ -58,30 +56,23 @@
   const error = ref<boolean>(false)
   const pending = ref<boolean>(false)
   const ageStats = ref<StatsPiePropType | null>(null)
-  const router = trpcClient.stat
-  const updatedAge = router.getAgeStatsPost.useMutation()
 
   onMounted(async () => {
     pending.value = true
-    useTrpcMutation({
-      mutation: () => updatedAge.mutate(props.filters),
-      onSuccess: data => {
-        console.log(data)
-        if (updatedAge.error.value) {
-          error.value = true
-          return
-        }
-        pending.value = false
-        ageStats.value = (data?.map(({ _count, ageGroup }) => ({
-          key: ageGroup,
-          label: getStatLabel(ageGroupKeys.byKey, ageGroup),
-          color: getStatColor(AgeGroupColors, ageGroup),
-          count: _count
-        })) || []) as StatsPiePropType
-      },
-      onFailure: () => {
-        error.value = true
-      }
-    })
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getAgeStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    ageStats.value = (data.map(({ _count, ageGroup }) => ({
+      key: ageGroup,
+      label: getStatLabel(ageGroupKeys.byKey, ageGroup),
+      color: getStatColor(AgeGroupColors, ageGroup),
+      count: _count
+    })) || []) as StatsPiePropType
+    pending.value = false
   })
 </script>

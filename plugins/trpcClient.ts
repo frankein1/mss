@@ -1,12 +1,16 @@
 import { httpBatchLink, createTRPCNuxtClient } from 'trpc-nuxt/client'
 import superjson from 'superjson'
 import type { AppRouter } from '~/server/trpc/routers'
+import { loggerLink } from '@trpc/client'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
   const headers = useRequestHeaders()
   const client = createTRPCNuxtClient<AppRouter>({
     links: [
+      loggerLink({
+        enabled: () => true
+      }),
       httpBatchLink({
         url: `${config.public.appUrl}/api/trpc`,
         headers() {

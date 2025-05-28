@@ -38,8 +38,6 @@
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { StatsListPropType } from '~/types/stat'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
@@ -48,34 +46,23 @@
   const error = ref<boolean>(false)
   const pending = ref<boolean>(false)
   const familySituationsStats = ref<StatsListPropType | null>(null)
-  const router = trpcClient.stat
-  const updatedFamilySituationStats = router.getFamilyStatsPost.useMutation()
 
   onMounted(async () => {
     pending.value = true
-    useTrpcMutation({
-      mutation: () => updatedFamilySituationStats.mutate(props.filters),
-      onSuccess: data => {
-        console.log(data)
-
-        if (updatedFamilySituationStats.error.value) {
-          error.value = true
-          return
-        }
-        pending.value = false
-        familySituationsStats.value =
-          data?.map(({ _count, familySituation }) => ({
-            key: familySituation || 'null',
-            label: getStatLabel(familySituationKeys.byKey, familySituation),
-            count: _count
-          })) || []
-      },
-      /*************  ✨ Windsurf Command ⭐  *************/
-      // Called if the mutation fails. Sets `error.value` to `true`.
-      /*******  83b2ae6d-6af6-4f84-bdc8-04b8960af9b7  *******/
-      onFailure: () => {
-        error.value = true
-      }
-    })
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFamilyStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    familySituationsStats.value =
+      data.map(({ _count, familySituation }) => ({
+        key: familySituation || 'null',
+        label: getStatLabel(familySituationKeys.byKey, familySituation),
+        count: _count
+      })) || []
+    pending.value = false
   })
 </script>

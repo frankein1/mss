@@ -42,8 +42,6 @@
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { StatsListPropType } from '~/types/stat'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
@@ -52,33 +50,26 @@
   const error = ref<boolean>(false)
   const pending = ref<boolean>(false)
   const CSPStats = ref<StatsListPropType | null>(null)
-  const router = trpcClient.stat
-  const updatedCSP = router.getCSPStatsPost.useMutation()
 
   onMounted(async () => {
     pending.value = true
-    useTrpcMutation({
-      mutation: () => updatedCSP.mutate(props.filters),
-      onSuccess: data => {
-        console.log(data)
-        if (updatedCSP.error.value) {
-          error.value = true
-          return
-        }
-        pending.value = false
-        CSPStats.value =
-          data?.map(({ _count, socioProfessionalCategory }) => ({
-            key: socioProfessionalCategory || 'null',
-            label: getStatLabel(
-              beneficiarySocioProfessionalCategoryKeys.byKey,
-              socioProfessionalCategory
-            ),
-            count: _count
-          })) || []
-      },
-      onFailure: () => {
-        error.value = true
-      }
-    })
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getCSPStatsPost.mutate(props.filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    CSPStats.value =
+      data.map(({ _count, socioProfessionalCategory }) => ({
+        key: socioProfessionalCategory || 'null',
+        label: getStatLabel(
+          beneficiarySocioProfessionalCategoryKeys.byKey,
+          socioProfessionalCategory
+        ),
+        count: _count
+      })) || []
+    pending.value = false
   })
 </script>

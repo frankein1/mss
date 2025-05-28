@@ -46,58 +46,31 @@
     filters: StatFilterInput
   }>()
 
-  const trpcClient = useTrpcClient()
   const error = ref<boolean>(false)
   const pending = ref<boolean>(false)
   const accommodationZoneStats = ref<StatsListPropType | null>(null)
-  const router = trpcClient.stat
-  const updatedAccommodationZone =
-    router.getAccommodationZoneStatsPost.useMutation()
 
   onMounted(async () => {
     pending.value = true
-    useTrpcMutation({
-      mutation: () => updatedAccommodationZone.mutate(props.filters),
-      onSuccess: data => {
-        console.log(data)
-        if (updatedAccommodationZone.error.value) {
-          error.value = true
-          return
-        }
-        pending.value = false
-        accommodationZoneStats.value =
-          data?.map(({ _count, accommodationZone }) => ({
-            key: accommodationZone || 'null',
-            label: getStatLabel(
-              beneficiaryAccommodationZoneKeys.byKey,
-              accommodationZone
-            ),
-            count: _count
-          })) || []
-      },
-      onFailure: () => {
-        error.value = true
-      }
-    })
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getAccommodationZoneStatsPost.mutate(
+      props.filters
+    )
+    if (data == null) {
+      error.value = true
+      return
+    }
+    accommodationZoneStats.value =
+      data.map(({ _count, accommodationZone }) => ({
+        key: accommodationZone || 'null',
+        label: getStatLabel(
+          beneficiaryAccommodationZoneKeys.byKey,
+          accommodationZone
+        ),
+        count: _count
+      })) || []
+    pending.value = false
   })
-
-  // const {
-  //   data: accommodationZoneCounts,
-  //   pending,
-  //   error
-  // } = await useTrpcClient().stat.getAccommodationZoneStats.useQuery(
-  //   props.filters
-  // )
-
-  // const accommodationZoneStats = computed(
-  //   () =>
-  //     accommodationZoneCounts.value?.map(({ _count, accommodationZone }) => ({
-  //       key: accommodationZone || 'null',
-  //       label: getStatLabel(
-  //         beneficiaryAccommodationZoneKeys.byKey,
-  //         accommodationZone
-  //       ),
-  //       count: _count
-  //     })) || []
-  // )
 </script>
