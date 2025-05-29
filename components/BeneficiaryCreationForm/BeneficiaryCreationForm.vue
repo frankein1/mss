@@ -6,126 +6,129 @@
   <form
     ref="form"
     novalidate
-    class="fr-p-3v"
     @submit.prevent="onSubmit"
   >
-    <BeneficiaryFormFileInformation :agents />
+    <div class="fr-container beneficiary-short-form-container">
+      <div class="fr-p-3v">
+        <BeneficiaryFormFileInformation :agents />
 
-    <section
-      class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
-    >
-      <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
-        Identité du bénéficiaire
-      </h2>
-      <div class="fr-col-12">
-        <VeeRadioButtons
-          class="fr-mb-0"
-          name="title"
-          :label="beneficiaryFieldLabels.title"
-          :options="beneficiaryTitleKeys.options"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="usualName"
-          :label="beneficiaryFieldLabels.usualName"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="birthName"
-          :label="beneficiaryFieldLabels.birthName"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="firstName"
-          :label="beneficiaryFieldLabels.firstName"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="birthDate"
-          :label="beneficiaryFieldLabels.birthDate"
-          type="date"
-        />
-      </div>
-      <BeneficiaryFormSimilarAlert
-        v-model:similar-beneficiary="similarBeneficiary"
-        :usual-name="controlledValues.usualName"
-        :birth-name="controlledValues.birthName"
-        :first-name="controlledValues.firstName"
-        :birth-date="controlledValues.birthDate"
-      />
-      <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
-        Coordonnées
-      </h2>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="phone1"
-          :label="beneficiaryFieldLabels.phone1"
-          type="tel"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <VeeInput
-          name="email"
-          :label="beneficiaryFieldLabels.email"
-          type="email"
-        />
-      </div>
-      <div class="fr-col-12">
-        <VeeAddressInput
-          name="street"
-          :label="beneficiaryFieldLabels.street"
-          :zip-code="zipcode"
-          hint="Numéro et voie"
-          @address-selected="onAddressSelected"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-md-3">
-        <VeeInput
-          name="zipcode"
-          :label="beneficiaryFieldLabels.zipcode"
-          @change-value="setFieldValue('zipcode', $event)"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-md-9">
-        <VeeCityInput
-          name="city"
-          :label="beneficiaryFieldLabels.city"
-          :zip-code="zipcode"
-          @city-selected="onCitySelected"
-        />
-      </div>
-      <!-- masqué -->
+        <section
+          class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
+        >
+          <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
+            Identité du bénéficiaire
+          </h2>
+          <div class="fr-col-12">
+            <VeeRadioButtons
+              class="fr-mb-0"
+              name="title"
+              :label="beneficiaryFieldLabels.title"
+              :options="beneficiaryTitleKeys.options"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="usualName"
+              :label="beneficiaryFieldLabels.usualName"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="birthName"
+              :label="beneficiaryFieldLabels.birthName"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="firstName"
+              :label="beneficiaryFieldLabels.firstName"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="birthDate"
+              :label="beneficiaryFieldLabels.birthDate"
+              type="date"
+            />
+          </div>
+          <BeneficiaryFormSimilarAlert
+            v-model:similar-beneficiary="similarBeneficiary"
+            :usual-name="controlledValues.usualName"
+            :birth-name="controlledValues.birthName"
+            :first-name="controlledValues.firstName"
+            :birth-date="controlledValues.birthDate"
+          />
+          <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
+            Coordonnées
+          </h2>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="phone1"
+              :label="beneficiaryFieldLabels.phone1"
+              type="tel"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeInput
+              name="email"
+              :label="beneficiaryFieldLabels.email"
+              type="email"
+            />
+          </div>
+          <div class="fr-col-12">
+            <VeeAddressInput
+              name="street"
+              :label="beneficiaryFieldLabels.street"
+              :zip-code="zipcode"
+              hint="Numéro et voie"
+              @address-selected="onAddressSelected"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-3">
+            <VeeInput
+              name="zipcode"
+              :label="beneficiaryFieldLabels.zipcode"
+              @change-value="setFieldValue('zipcode', $event)"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-9">
+            <VeeCityInput
+              name="city"
+              :label="beneficiaryFieldLabels.city"
+              :zip-code="zipcode"
+              @city-selected="onCitySelected"
+            />
+          </div>
+          <!-- masqué -->
 
-      <div class="fr-col-12 fr-hidden">
-        <VeeDepartmentInput
-          name="department"
-          :label="beneficiaryFieldLabels.department"
-        />
+          <div class="fr-col-12 fr-hidden">
+            <VeeDepartmentInput
+              name="department"
+              :label="beneficiaryFieldLabels.department"
+            />
+          </div>
+          <div class="fr-col-12 fr-hidden">
+            <VeeRegionInput
+              name="region"
+              :label="beneficiaryFieldLabels.region"
+            />
+          </div>
+          <!-- masqué -->
+          <div
+            v-if="application.module.ministere"
+            class="fr-col-12 fr-col-lg-6"
+          >
+            <VeeInput
+              name="numeroPegase"
+              :label="beneficiaryFieldLabels.numeroPegase"
+              hint="Format attendu : A-00-000000"
+            />
+          </div>
+        </section>
       </div>
-      <div class="fr-col-12 fr-hidden">
-        <VeeRegionInput
-          name="region"
-          :label="beneficiaryFieldLabels.region"
-        />
-      </div>
-      <!-- masqué -->
-      <div
-        v-if="application.module.ministere"
-        class="fr-col-12 fr-col-lg-6"
-      >
-        <VeeInput
-          name="numeroPegase"
-          :label="beneficiaryFieldLabels.numeroPegase"
-          hint="Format attendu : A-00-000000"
-        />
-      </div>
-    </section>
+    </div>
 
-    <div class="fr-col-12">
+    <AtomActionsBar class="sticky">
       <ul
         class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--lg fr-btns-group--right"
       >
@@ -163,7 +166,7 @@
           </button>
         </li>
       </ul>
-    </div>
+    </AtomActionsBar>
   </form>
 </template>
 
@@ -249,6 +252,15 @@
 </script>
 
 <style scoped>
+  .beneficiary-short-form-container {
+    max-width: 58rem;
+  }
+
+  .sticky {
+    position: sticky;
+    bottom: 0;
+  }
+
   .formgroup__title {
     font-weight: bold;
   }

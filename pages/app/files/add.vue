@@ -1,30 +1,32 @@
 <template>
-  <PageContainer class="page-container">
-    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiariesAdd()" />
-    <PageTitle
-      :title="title"
-      icon="fr-icon-user-add-line"
-    >
-      <RequiredFields />
-    </PageTitle>
-    <AtomAlert
-      v-if="error"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
-      message="La liste des référents n'a pas pu être chargée."
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
+  <div>
+    <div class="fr-container beneficiary-short-form-container">
+      <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiariesAdd()" />
+      <PageTitle
+        :title="title"
+        icon="fr-icon-user-add-line"
+      >
+        <RequiredFields />
+      </PageTitle>
+      <AtomAlert
+        v-if="error"
+        class="fr-mb-2w"
+        :alert-type="AlertType.Error"
+        message="La liste des référents n'a pas pu être chargée."
+      />
+      <AtomLoader
+        v-else-if="pending"
+        class="fr-mx-auto"
+      />
+    </div>
     <BeneficiaryCreationForm
-      v-else-if="agents?.length"
+      v-if="!pending && !error && agents?.length"
       :agents="agents"
       :is-submitting="isSubmitting"
       @cancel="onCancel"
       @save-beneficiary="onCreateBeneficiary"
     />
-  </PageContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -83,8 +85,7 @@
 </script>
 
 <style scoped>
-  .page-container {
-    padding-left: 10em;
-    padding-right: 10em;
+  .beneficiary-short-form-container {
+    max-width: 58rem;
   }
 </style>
