@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.45.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.44.0...v1.45.0) (2025-06-02)
+
+
+### Features
+
+* amélioration des logs en mode développeur ([d6b8b00](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d6b8b001a1fb9142ab3565c93be5080e5f0a0805))
+
+
+### Bug Fixes
+
+* **bénéficiaire:** suppression du mode brouillon ([f8debdf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f8debdf224ca9b54ce3d99aa3d9c79d95a216552)), closes [#798](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/798)
+* **beneficiary:** amélioration visuelle du formulaire court bénéficiaire ([e98dd81](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e98dd8147c4c317b8ab3d24a9f0cc8717e6ac3e0)), closes [#798](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/798)
+* content height ([6f38c34](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f38c34006a197aff00225d120592cdec86b1b49))
+* correction sur le layout ([9b1e985](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9b1e985dfbf30adabb8d90cea48656e0ae3b2e21))
+* décalage date de notification ([8c143aa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8c143aad2ecf8939d052a649aa5f9fc86055238e)), closes [#822](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/822)
+* fix status badge label ([6d5b0c7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6d5b0c7c48a1e5659781d8be96c40a9d1e9cee1a))
+* **followups:** correction des liens de la page Accompagnements vers un dossier foyer ([57d558e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/57d558ef06f56f6178b59df5bba119484beb484d))
+* **permission:** permissions des exports en back pour les ministères ([c2e6e16](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c2e6e16db43af27d68bbeff67bf150ac69417f9e)), closes [#818](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/818)
+
 ## [1.44.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.43.1...v1.44.0) (2025-05-22)
 
 
