@@ -57,7 +57,8 @@
       tab: BeneficiaryTab.History,
       item: followup.value.socialSupportId,
       originPage: routes.file.AppHistory.name,
-      originTab: HistoryTab.Followups
+      originTab: HistoryTab.Followups,
+      beneficiaryId: followup.value.beneficiary.id
     })
   )
 

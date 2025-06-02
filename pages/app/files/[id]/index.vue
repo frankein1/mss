@@ -113,6 +113,7 @@
   import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
   import BeneficiaryPlanAppointmentModal from '~/components/BeneficiaryPlanAppointment/BeneficiaryPlanAppointmentModal.vue'
 
+  const router = useRouter()
   const route = useRoute()
   const snackbar = useSnackbar()
   const modal = useModal()
@@ -200,11 +201,12 @@
     () => route.query.beneficiaryId,
     async () => {
       if (!route.query.beneficiaryId) {
-        await navigateTo(
-          routes.file.AppFile.path(familyFileId, {
+        await router.replace({
+          query: {
+            ...route.query,
             beneficiaryId: familyFileIdentification.value[0].id
-          })
-        )
+          }
+        })
         return
       }
       if (typeof route.query.beneficiaryId === 'string') {
