@@ -71,6 +71,13 @@ Si besoin, il est possible d'alimenter la base de donnée avec des données de t
 pnpm prisma db seed
 ```
 
+### Envoi de mails en local
+
+L'envoi de mail peut être configuré via l'outil [Mailtrap](https://mailtrap.io/email-sandbox/).
+
+Une fois le compte créé, compléter les variables d'environnement `EMAIL_SMTP_USER`et `EMAIL_SMTP_PASSWORD` avec les
+identifiants utilisateurs fournis par mailtrap.
+
 ## Tests
 
 La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
@@ -98,19 +105,15 @@ pnpm test:e2e
 
 ## Déploiement
 
-- Construire l'image docker
+Mon Suivi Social est hébergé sur Scalingo. Le déploiement d'effectue en local depuis la branche main à jour.
 
-  ```sh
-  docker build . -t monsuivisocial
-  ```
+```
+pnpm release --no-verify
+git push --follow-tags origin main
+```
 
-- Démarrer l'image docker
-
-  ```sh
-  docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
-  ```
-
-### Déploiement avec scalingo
+La création d'un tag génère une action de de déploiement sur l'environnement de demo. Le
+déploiement en production est une action manuelle à réaliser depuis le pipeline de CI.
 
 ## Antisèche
 
