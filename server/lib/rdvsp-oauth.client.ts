@@ -27,12 +27,6 @@ interface RdvspAuthError {
   error_description: string
 }
 
-// FIXME does is exist or is it RdvspMutationError ?
-interface RdvspError {
-  status: boolean
-  errors: string[]
-}
-
 interface RdvspMutationError {
   success: boolean
   errors: string[]
@@ -143,7 +137,12 @@ async function getWrapper<T>(
 ) {
   const headers = { Authorization: `Bearer ${accessToken}` }
   try {
-    const res = await ofetch(`${cfg.issuer}${path}`, { headers })
+    const res = await ofetch(`${cfg.issuer}${path}`, {
+      headers,
+      onRequest: () => console.log('rdvsp: request', path),
+      onRequestError: req => console.log('rdvsp: request error', req.error),
+      onResponseError: res => console.log('rdvsp: response error', res.error)
+    })
     if ('error' in res) {
       console.log('rdvsp: fetch error api internal error', res)
       throw invalidError('rdvsp: could not retrieve element requested')
