@@ -156,8 +156,7 @@ const adminHandler = async ({
       | 'birthNameNormalized'
     >
   > = {
-    archivedById: ctx.user.id,
-    archived: new Date(),
+    disabledById: ctx.user.id,
     title: null,
     pensionOrganisations: {
       set: []

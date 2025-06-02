@@ -144,8 +144,6 @@ const filter = (
     createdById: beneficiary.createdById,
     created: beneficiary.created,
     updated: beneficiary.updated,
-    archivedById: beneficiary.archivedById,
-    archived: beneficiary.archived,
     archiveDueDate: beneficiary.archiveDueDate,
     archiveDueDateHistory: beneficiary.archiveDueDateHistory,
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,

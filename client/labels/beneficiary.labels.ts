@@ -12,8 +12,7 @@ type BeneficiaryFieldLabels = Omit<
     relationship: string
   },
   | 'createdById'
-  | 'archivedById'
-  | 'archived'
+  | 'disabledById'
   | 'created'
   | 'draft'
   | 'previousFamilyFileId'

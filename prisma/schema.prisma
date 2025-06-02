@@ -114,7 +114,7 @@ model User {
   itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
 
   createdBeneficiaries       Beneficiary[]         @relation(name: "created_beneficiaries")
-  archivedBeneficiaries      Beneficiary[]         @relation(name: "archived_beneficiaries")
+  disabledBeneficiaries      Beneficiary[]         @relation(name: "disabled_beneficiaries")
   referentFor                FamilyFile[]          @relation(name: "family_file_referents")
   splitFromFileBeneficiaries Beneficiary[]         @relation(name: "split_from_file_beneficiaries")
   archivedBeneficiaries2     ArchivedBeneficiary[] @relation(name: "archived_beneficiaries_2")
@@ -1635,9 +1635,8 @@ model Beneficiary {
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_beneficiaries", fields: [createdById], references: [id])
 
-  archivedBy   User?     @relation(name: "archived_beneficiaries", fields: [archivedById], references: [id])
-  archivedById String?   @map("archived_by_id") @db.Uuid
-  archived     DateTime?
+  disabledBy   User?   @relation(name: "disabled_beneficiaries", fields: [disabledById], references: [id])
+  disabledById String? @map("disabled_by_id") @db.Uuid
 
   splitFromFileBy   User?   @relation(name: "split_from_file_beneficiaries", fields: [splitFromFileById], references: [id])
   splitFromFileById String? @map("split_from_file_by_id") @db.Uuid

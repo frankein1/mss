@@ -9,8 +9,7 @@ const get = (user: SecurityRuleGrantee) => {
   }
   Object.assign(where, {
     structureId: user.structureId,
-    draft: false,
-    archived: null
+    draft: false
   })
 
   if (isReferent(user)) {
@@ -28,8 +27,7 @@ const getNoDraftCondition = (user: SecurityRuleGrantee) => {
     return where
   }
   Object.assign(where, {
-    structureId: user.structureId,
-    archived: null
+    structureId: user.structureId
   })
 
   if (isReferent(user)) {
