@@ -16,7 +16,7 @@
     <AtomLazyComponent
       :pending
       :error="Boolean(error)"
-      message="Les informations du bénéficiaires n'ont pas pu être chargées."
+      message="Les informations du bénéficiaire n'ont pas pu être chargées."
     >
       <BeneficiaryFormFamilySituation
         v-if="bindedValues"

@@ -16,28 +16,29 @@
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
-  const props = withDefaults(
-    defineProps<{
-      id?: string
-      members: BeneficiaryFileIdentification[]
-      modelValue: string
-    }>(),
-    { id: 'seg-control' + useId() }
-  )
+  const {
+    id = 'seg-control' + useId(),
+    members,
+    modelValue
+  } = defineProps<{
+    id?: string
+    members: BeneficiaryFileIdentification[]
+    modelValue: string
+  }>()
 
   const emit = defineEmits<{
     (e: 'update:modelValue', payload: string): void
   }>()
 
   const options = computed(() =>
-    props.members.map(m => ({
+    members.map(m => ({
       label: formatBeneficiaryShortenedName(m),
       value: m.id
     }))
   )
 
   function onChange($event: string | number) {
-    if ($event === props.modelValue) {
+    if ($event === modelValue) {
       return
     }
 

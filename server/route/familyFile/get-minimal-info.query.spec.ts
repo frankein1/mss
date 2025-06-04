@@ -3,7 +3,8 @@ import { inferProcedureInput } from '@trpc/server'
 import {
   fixtureStructures,
   fixturesBeneficiaries,
-  FixtureBeneficiary
+  FixtureBeneficiary,
+  fixturesUsers
 } from '~/prisma/fixtures'
 import { test } from '~/test/server/test-utils'
 
@@ -57,6 +58,42 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
           birthName: 'FIRTH',
           birthDate: null,
           relationship: null
+        }
+      ],
+
+      permissions: {
+        create: {
+          comment: true,
+          document: true,
+          followup: true,
+          helpRequest: true
+        },
+        delete: true,
+        edit: {
+          externalOrganisations: true,
+          general: true,
+          health: true,
+          occupationIncome: true,
+          relatives: true
+        },
+        view: {
+          documents: true,
+          externalOrganisations: true,
+          general: true,
+          health: true,
+          history: true,
+          occupationIncome: true,
+          relatives: true
+        }
+      },
+      referents: [
+        {
+          email: 'jeanne.responsable@yopmail.com',
+          firstName: 'Jeanne',
+          id: fixturesUsers[4].id,
+          lastName: 'Responsable',
+          role: 'StructureManager',
+          status: 'Active'
         }
       ]
     })

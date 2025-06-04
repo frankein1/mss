@@ -15,10 +15,10 @@
       />
       <hr />
       <BeneficiaryDetailsHistoryActions
-        v-if="selectedBeneficiary"
-        :beneficiary-id="selectedBeneficiary.id"
+        v-if="beneficiaryId"
+        :beneficiary-id="beneficiaryId"
         :family-file-id="familyFileId"
-        :permissions="selectedPermissions"
+        :permissions="familyFile?.permissions"
         :family-file="familyFileIdentification.length > 1"
         :is-submitting-appointment-plan
         class="fr-pb-3w"
@@ -32,7 +32,7 @@
       />
 
       <AtomTabs
-        v-else-if="selectedBeneficiary"
+        v-else-if="beneficiaryId"
         tab-list-name="Détails du dossier foyer"
         :tab-titles="tabTitles"
         :heading-level="2"
@@ -41,17 +41,14 @@
           <FamilyFileSegmentedControl
             v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
-            :model-value="selectedBeneficiary.id"
+            :model-value="beneficiaryId"
             @update:model-value="openBeneficiary"
           />
-          <BeneficiaryInfo
-            :beneficiary="selectedBeneficiary"
-            :social-support-subjects="socialSupportSubjects"
-          >
+          <BeneficiaryInfo :beneficiary-id="beneficiaryId">
             <template #actions>
               <BeneficiaryDetailsActions
-                :beneficiary-id="selectedBeneficiary.id"
-                :permissions="selectedPermissions"
+                :beneficiary-id="beneficiaryId"
+                :permissions="familyFile?.permissions"
                 :family-file="familyFileIdentification.length > 1"
                 @delete="openDeleteModal"
                 @split="openSplitModal"
@@ -70,11 +67,11 @@
 
         <template #[tabTitles.at(2)?.panelId]>
           <BeneficiaryHistory
-            v-if="selectedPermissions"
+            v-if="familyFile?.permissions"
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
-            :family-file-permissions="selectedPermissions"
-            @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
+            :family-file-permissions="familyFile.permissions"
+            @refresh="getBeneficiaryDetails(beneficiaryId)"
           />
         </template>
 
@@ -100,7 +97,6 @@
   import { TRPCClientError, TRPCClientErrorLike } from '@trpc/client'
   import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { FamilyFilePermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
@@ -121,15 +117,20 @@
   const { application } = usePermissions()
   const matomo = useMatomo()
 
-  const familyFileId = route.params.id as string
+  const familyFileId = computed(() => route.params.id as string)
+  const beneficiaryId = computed(
+    () => route.query.beneficiaryId as string | null
+  )
 
-  const { data: beneficiaries, error } =
-    await trpcClient.beneficiary.getByFamilyFileId.useQuery(
-      { familyFileId },
-      { queryKey: 'beneficiary.getByFamilyFileId' }
+  const { data: familyFile, error } =
+    await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
+      { id: familyFileId.value },
+      { queryKey: 'file.getFamilyFileMinimalInfo' }
     )
 
-  const familyFileIdentification = computed(() => beneficiaries.value ?? [])
+  const familyFileIdentification = computed(
+    () => familyFile.value?.beneficiaries ?? []
+  )
 
   const si = await useGetStructureInfo()
   provide(getStructureInfoInjectionKey, si)
@@ -180,19 +181,13 @@
 
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
-  const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
   const selectedPending = ref(true)
   const selectedError = ref<TRPCClientErrorLike<any> | null>(null)
-  const socialSupportSubjects = computed(
-    () => selectedBeneficiary?.value?.history?.subjects || []
-  )
 
   // Get beneficiaryDetails
   const getBeneficiaryDetails = async (id: string): Promise<void> => {
-    const { beneficiary, permissions, pending, error } =
-      await useBeneficiaryDetails(id)
+    const { beneficiary, pending, error } = await useBeneficiaryDetails(id)
     selectedBeneficiary.value = beneficiary.value
-    selectedPermissions.value = permissions.value
     selectedPending.value = pending.value
     selectedError.value = error.value
   }
@@ -219,7 +214,7 @@
 
   // Segmented Family
   const openBeneficiary = (beneficiaryId: string): void => {
-    const navRoute = routes.file.AppFile.path(familyFileId, {
+    const navRoute = routes.file.AppFile.path(familyFileId.value, {
       beneficiaryId
     })
     navigateTo(navRoute)
@@ -241,7 +236,7 @@
           // We have to do this because deleting a beneficiary changes
           // family file data, and the client can't detect it by itself.
           await reloadData()
-          await navigateTo(routes.file.AppFile.path(familyFileId))
+          await navigateTo(routes.file.AppFile.path(familyFileId.value))
         } else {
           await navigateTo(routes.beneficiary.AppBeneficiaries.path())
         }
@@ -253,12 +248,12 @@
   // Open modal to add beneficiary
   const isSubmitting = ref(false)
   const openAddBeneficiaryModal = (): void => {
-    if (familyFileId) {
+    if (familyFileId.value) {
       modal.open(BeneficiaryAddForm, {
         size: 'lg',
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
-        familyFileId,
+        familyFileId: familyFileId.value,
         add: onAddBeneficiary,
         editBeneficiary: async (newBeneficiaryId: string) => {
           await navigateTo(
@@ -273,9 +268,9 @@
     newBeneficiary: CreateFamilyFileMemberInput
   ) => {
     let beneficiaryID
-    if (familyFileId) {
+    if (familyFileId.value) {
       const payload = {
-        familyFileId,
+        familyFileId: familyFileId.value,
         title: newBeneficiary.title,
         usualName: newBeneficiary.usualName,
         firstName: newBeneficiary.firstName,
@@ -294,7 +289,7 @@
           // visible in the UI (and refresh data like the budget, socialSupports...)
           await reloadData()
           await navigateTo(
-            routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
+            routes.file.AppFile.path(familyFileId.value, { beneficiaryId: id })
           )
         },
         onFailure: () => {
@@ -430,6 +425,6 @@
   }
 
   async function reloadData() {
-    await refreshNuxtData(['beneficiary.getByFamilyFileId'])
+    await refreshNuxtData(['file.getFamilyFileMinimalInfo'])
   }
 </script>

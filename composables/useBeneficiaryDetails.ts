@@ -1,10 +1,17 @@
-export const useBeneficiaryDetails = async (beneficiaryId: string) => {
+export const useBeneficiaryDetails = async (
+  beneficiaryId: MaybeRef<string>
+) => {
   const trpcClient = useTrpcClient()
+  const idRef = isRef(beneficiaryId) ? beneficiaryId : ref(beneficiaryId)
+
+  // Make sure the query input is reactive, so that useQuery
+  // is run in watch mode (refetch when the input changes)
+  const queryInput = computed(() => ({
+    id: idRef.value
+  }))
 
   const { data, pending, error } =
-    await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
+    await trpcClient.beneficiary.getBeneficiaryDetails.useQuery(queryInput)
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
