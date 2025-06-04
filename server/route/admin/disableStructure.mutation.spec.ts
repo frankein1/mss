@@ -210,7 +210,6 @@ test('Structure - Disable - Administrator should be able to deactivate structure
     expect(u.lastName).toBe('')
     expect(u.email).toMatch(/@disabled-structure-.*\.org$/)
     expect(u.status).toBe('Disabled')
-    expect(u.accessToken).toBeNull()
     expect(u.firstAccess).not.toBeNull()
     expect(u.lastAccess).not.toBeNull()
   })

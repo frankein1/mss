@@ -92,8 +92,6 @@ model User {
   aidantConnectAuthorisation Boolean?  @default(false) @map("aidant_connect_authorisation")
   firstAccess                DateTime? @map("first_access")
   lastAccess                 DateTime? @map("last_access")
-  accessToken                String?   @map("access_token")
-  accessTokenValidity        DateTime? @map("access_token_validity")
 
   authorizationCode         String?   @map("authorization_code")
   authorizationCodeValidity DateTime? @map("authorization_code_validity")

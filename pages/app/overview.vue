@@ -21,12 +21,9 @@
 </template>
 
 <script setup lang="ts">
-  import DpoRedirectModal from '~/components/DpoRedirectModal/DpoRedirectModal.vue'
   import { routes } from '~/utils/routes'
 
   const title = routes.user.AppOverview.title
-  const route = useRoute()
-  const modal = useModal()
   const { application } = usePermissions()
 
   useHead({ title })
@@ -35,19 +32,5 @@
     name: routes.user.AppOverview.name
   })
 
-  const unwatch = watch(modal.isReady, () => {
-    if (modal.isReady) {
-      if (route.query.shouldFillDPO === 'true') {
-        modal.open(DpoRedirectModal, {
-          triggerOpen: true,
-          title: 'Compléter les informations de votre structure',
-          content:
-            'Conformément aux conditions générales d’utilisation, vous devez renseigner les coordonnées du délégué ou de la personne référente à la protection de données.'
-        })
-      }
-      unwatch()
-    }
-  })
-
-  // useBrevoChatbot()
+  useDPOCheckOnStartup()
 </script>

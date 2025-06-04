@@ -14,8 +14,6 @@ export const userFieldLabels: FieldLabels<User> = {
   created: 'Date de création',
   updated: 'Date de mise à jour',
   structureId: 'Identifiant de la structure',
-  accessToken: "Token d'accès",
-  accessTokenValidity: "Date d'expiration du token",
   externalRdvspId: 'Identifiant Rendez-vous Service Public',
   authorizationCode: "Code d'autorisation",
   authorizationCodeValidity: "Validité du code d'autorisation",

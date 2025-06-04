@@ -2,10 +2,23 @@ import { createMutation } from '../createRoute'
 import { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserService } from '~/server/services'
+import { UserRepo } from '~/server/database'
 
 const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
-  return await UserService.acceptCGU({ ctx })
+  const {
+    public: { cguVersion }
+  } = useRuntimeConfig()
+
+  await UserRepo.prisma.update({
+    where: { id: ctx.user.id },
+    data: {
+      CGUHistory: {
+        create: {
+          version: cguVersion
+        }
+      }
+    }
+  })
 }
 
 export const acceptCGUMutation = createMutation({

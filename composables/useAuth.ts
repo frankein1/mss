@@ -6,13 +6,6 @@ export function useAuth() {
   const state = useAuthState()
   const { application, reset } = usePermissions()
 
-  function login(params: {
-    user: JwtUser
-    permissions: AppContextPermissions
-  }) {
-    state.user.value = params.user
-    application.value = params.permissions
-  }
   function logout() {
     state.user.value = null
     reset()
@@ -36,5 +29,5 @@ export function useAuth() {
     }
   }
 
-  return { login, logout, refreshToken, getSession }
+  return { logout, refreshToken, getSession }
 }

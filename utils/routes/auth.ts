@@ -4,11 +4,6 @@ export const routes = {
     title: 'Se connecter à ma structure',
     path: () => '/auth/login'
   },
-  AuthValidateToken: {
-    name: 'AuthValidateToken',
-    title: 'Jeton en cours de vérification',
-    path: () => '/auth/validate-token'
-  },
   AuthLogout: {
     name: 'AuthLogout',
     title: 'Déconnexion effectuée',

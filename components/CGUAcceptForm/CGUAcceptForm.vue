@@ -31,6 +31,8 @@
         <button
           class="fr-btn"
           type="submit"
+          :submitting="isSubmitting"
+          :disabled="isSubmitting"
         >
           Enregistrer
         </button>
@@ -46,22 +48,23 @@
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const auth = useAuth()
+  const { getSession } = useAuth()
 
   const { handleSubmit } = useForm<AcceptCGUInput>({
     validationSchema: toTypedSchema(acceptCGUSchema)
   })
 
-  const onSubmit = handleSubmit(() => {
-    useTrpcMutation({
-      mutation: () => trpcClient.user.acceptCGU.mutate(),
-      onSuccess: data => {
-        auth.login(data)
-        navigateTo(routes.user.AppOverview.path())
-      },
-      onFailure: () => {
-        snackbar.error("L'acceptation des CGU a échoué.")
-      }
-    })
+  const isSubmitting = ref(false)
+
+  const onSubmit = handleSubmit(async () => {
+    isSubmitting.value = true
+    try {
+      await trpcClient.user.acceptCGU.mutate()
+      await getSession()
+      await navigateTo(routes.user.AppOverview.path())
+    } catch {
+      snackbar.error("L'acceptation des CGU a échoué.")
+    }
+    isSubmitting.value = false
   })
 </script>

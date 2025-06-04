@@ -1,4 +1,4 @@
-import { JwtPayload, decode } from 'jsonwebtoken'
+import { JwtPayload } from 'jsonwebtoken'
 import { routes, apiRoutes } from '~/utils/routes'
 
 export type ProConnectToken = {
@@ -129,26 +129,15 @@ export class ProConnectClient {
     accessToken
   }: {
     accessToken: string
-  }): Promise<ProConnectUserInfo> {
+  }): Promise<string> {
     const response = await fetch(`${this.issuer}/userinfo`, {
       method: 'post',
       headers: { Authorization: `Bearer ${accessToken}` }
     })
 
     const jwt = await response.text()
-    const userinfo = decode(jwt, {
-      json: true
-    })
-    if (!userinfo) {
-      throw new Error('user info is null')
-    }
-    if (!userinfo.email) {
-      throw new Error('user info email is null')
-    }
-    if (!userinfo.sub) {
-      throw new Error('user info sub is null')
-    }
-    return userinfo as ProConnectUserInfo
+
+    return jwt
   }
 
   public getSigninUrl(args: { nonce: string; state: string }) {

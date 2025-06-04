@@ -313,8 +313,6 @@ const adminHandler = async ({
       email: `${nanoid()}@disabled-structure-${anonstructure}.org`,
       status: UserStatus.Disabled,
       aidantConnectAuthorisation: null,
-      accessToken: null,
-      accessTokenValidity: null,
       externalRdvspId: null,
       authorizationCode: null,
       authorizationCodeValidity: null,

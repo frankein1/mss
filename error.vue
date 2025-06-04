@@ -80,11 +80,9 @@
       case 503:
         return 'Service indisponible'
       case 401:
-        return 'Accès interdit'
+        return "L'authentification a échoué"
       case 403:
-        return props.error.message.match(/unknown user/i)
-          ? 'Utilisateur inconnu'
-          : 'Accès interdit'
+        return manage403Error().pageTitle
       default:
         return 'Erreur inattendue'
     }
@@ -113,16 +111,9 @@
       case 404:
         return 'La page que vous cherchez est introuvable. Excusez-nous pour la gène occasionnée.'
       case 401:
-        return "Les informations d'authentification sont incorrectes."
-      case 403: {
-        if (props.error.message.match(/mfa necessary/i)) {
-          return "L'authentification double facteur est nécessaire pour accéder à l'application."
-        }
-        if (props.error.message.match(/unknown user/i)) {
-          return "Aucun compte Mon Suivi Social n'est rattaché à votre compte ProConnect."
-        }
-        return "Vous n'avez pas les droits suffisants pour accéder à cette page."
-      }
+        return "Vos informations d'authentification sont invalides ou expirées."
+      case 403:
+        return manage403Error().intro
       default:
         return 'Désolé, le service rencontre un problème, nous travaillons pour le résoudre le plus rapidement possible.'
     }
@@ -142,41 +133,11 @@
         ]
       case 401:
         return [
-          'Merci de réessayer.',
-          "Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
+          'Veuillez vous authentifier à nouveau.',
+          "En cas d'échec répété, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
         ]
-      case 403: {
-        if (props.error.message.match(/mfa necessary/i)) {
-          const devInstructions = [
-            "En démo et développement, l'instance de Proconnect Identité est :",
-            {
-              type: 'url',
-              content: 'https://identite-sandbox.proconnect.gouv.fr/'
-            }
-          ]
-          return [
-            "Configurez votre second facteur à l'aide des instructions suivantes :",
-            {
-              type: 'url',
-              content:
-                'https://proconnect.crisp.help/fr/article/quest-ce-que-la-double-authentification-1m5mpmj/.'
-            },
-            ...(mssEnvironment !== 'production' ? devInstructions : [])
-          ]
-        }
-        if (props.error.message.match(/unknown user/i)) {
-          return [
-            'Vous avez accédé à Mon Suivi Social avec ProConnect mais votre compte ProConnect est inconnu de nos services.',
-            "Si votre structure a un espace Mon Suivi Social, veuillez vous rapprocher de votre responsable de structure pour qu'un compte Mon Suivi Social rattaché à votre compte ProConnect vous soit créé.",
-            'Si votre structure n\'a pas d\'espace Mon Suivi Social, vous trouverez toutes les informations nécessaires pour créer un espace sur notre service sur la page "Créer un espace".',
-            "Sinon, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
-          ]
-        }
-        return [
-          'Vérifiez que vous avez bien le rôle nécessaire pour accéder à la page souhaitée et que votre compte Proconnect est bien configuré.',
-          "Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
-        ]
-      }
+      case 403:
+        return manage403Error().solutions
       default:
         return [
           "Essayez de rafraichir la page, sinon merci de réessayer plus tard. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
@@ -188,4 +149,67 @@
   const hasSignoutLink = computed(
     () => props.error.statusCode === 403 || props.error.statusCode === 401
   )
+
+  function manage403Error() {
+    if (props.error.message.match(/unknown user/i)) {
+      return {
+        pageTitle: 'Utilisateur inconnu',
+        intro:
+          "Aucun compte Mon Suivi Social n'est rattaché à votre compte ProConnect.",
+        solutions: [
+          'Vous avez accédé à Mon Suivi Social avec ProConnect mais votre compte ProConnect est inconnu de nos services.',
+          "Si votre structure a un espace Mon Suivi Social, veuillez vous rapprocher de votre responsable de structure pour qu'un compte Mon Suivi Social rattaché à votre compte ProConnect vous soit créé.",
+          'Si votre structure n\'a pas d\'espace Mon Suivi Social, vous trouverez toutes les informations nécessaires pour créer un espace sur notre service sur la page "Créer un espace".',
+          "Sinon, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
+        ]
+      }
+    }
+
+    if (
+      props.error.message.match(/deactivated user/i) ||
+      props.error.message.match(/deactivated structure/i)
+    ) {
+      return {
+        pageTitle: 'Accès interdit',
+        intro: 'Votre accès à Mon Suivi Social a été désactivé.',
+        solutions: [
+          "Si vous êtes le ou la responsable de votre structure, contactez-nous pour que nous puissions solutionner vos problèmes d'accès.",
+          'Sinon, veuillez vous rapprocher de votre responsable de structure pour rétablir votre accès.'
+        ]
+      }
+    }
+
+    if (props.error.message.match(/mfa necessary/i)) {
+      const devInstructions = [
+        "En démo et développement, l'instance de Proconnect Identité est :",
+        {
+          type: 'url',
+          content: 'https://identite-sandbox.proconnect.gouv.fr/'
+        }
+      ]
+      return {
+        pageTitle: 'Accès interdit',
+        intro:
+          "L'authentification double facteur est nécessaire pour accéder à l'application.",
+        solutions: [
+          "Configurez votre second facteur à l'aide des instructions suivantes :",
+          {
+            type: 'url',
+            content:
+              'https://proconnect.crisp.help/fr/article/quest-ce-que-la-double-authentification-1m5mpmj/.'
+          },
+          ...(mssEnvironment !== 'production' ? devInstructions : [])
+        ]
+      }
+    }
+
+    return {
+      pageTitle: 'Accès interdit',
+      intro: "Vous n'avez pas les droits suffisants pour accéder à cette page.",
+      solutions: [
+        'Vérifiez que vous avez bien le rôle nécessaire pour accéder à la page souhaitée et que votre compte Proconnect est bien configuré.',
+        "Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
+      ]
+    }
+  }
 </script>

@@ -1,8 +1,7 @@
-import pkg, { JwtPayload } from 'jsonwebtoken'
+import pkg, { type JwtPayload } from 'jsonwebtoken'
 import { JwtUser } from '~/types/user'
 import { minutesToSeconds } from '~/utils/time'
 
-// eslint-disable-next-line import/no-named-as-default-member
 const { sign, verify } = pkg
 
 export function verifyJwt(token: string, jwtKey: string): JwtPayload {

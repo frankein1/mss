@@ -129,7 +129,8 @@ export default defineNuxtConfig({
         '@tiptap/starter-kit',
         '@tiptap/extension-link',
         '@tiptap/pm/model',
-        '@braintree/sanitize-url'
+        '@braintree/sanitize-url',
+        'remove-accents'
       ]
     },
     css: {
@@ -168,6 +169,8 @@ export default defineNuxtConfig({
       proconnectIssuer: process.env.AUTH_PROCONNECT_ISSUER_URL,
       proconnectClientId: process.env.AUTH_PROCONNECT_CLIENT_ID,
       proconnectClientSecret: process.env.AUTH_PROCONNECT_CLIENT_SECRET,
+      proconnectSigningAlgorithm:
+        process.env.AUTH_PROCONNECT_SIGNING_ALGORITHM || 'HS256',
       proconnectProvider: 'ProConnect',
       proconnectLabel: 'proconnect'
     },

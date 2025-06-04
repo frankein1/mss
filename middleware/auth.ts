@@ -13,7 +13,10 @@ export default defineNuxtRouteMiddleware(to => {
   }
 
   if (!authState.isActive()) {
-    return navigateTo(routes.error.ErrorDisabledAccount.path())
+    throw createError({
+      statusCode: 403,
+      message: 'deactivated user'
+    })
   }
   if (
     (isAdminRoute && !authState.isAdmin()) ||

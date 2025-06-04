@@ -3,7 +3,6 @@ import { routes as auth, apiProConnectRoutes, apiRdvspRoutes } from './auth'
 import { routes as beneficiary } from './beneficiary'
 import { routes as budget } from './budget'
 import { routes as cgu } from './cgu'
-import { routes as error } from './error'
 import { routes as file } from './file'
 import { routes as followup } from './followup'
 import { routes as helpRequest } from './help-request'
@@ -19,7 +18,6 @@ export const routes = {
   beneficiary,
   budget,
   cgu,
-  error,
   file,
   followup,
   helpRequest,

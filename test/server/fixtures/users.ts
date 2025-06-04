@@ -53,8 +53,6 @@ export async function createUsers(date: Date, structureId: string) {
       aidantConnectAuthorisation: true,
       firstAccess: date,
       lastAccess: date,
-      accessToken: 'mss-random-token-value',
-      accessTokenValidity: date,
       externalRdvspId: null,
       createdSocialSupportSubjects: {
         create: [
@@ -128,7 +126,6 @@ export async function createUsers(date: Date, structureId: string) {
       aidantConnectAuthorisation: true,
       firstAccess: date,
       lastAccess: date,
-      accessToken: 'mss-other-random-token-value',
       accounts: {
         createMany: {
           data: [
