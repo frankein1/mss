@@ -213,7 +213,7 @@ export async function getRdvsStartingAfter(
       meta: { next_page: number | null }
     }>(
       cfg,
-      `/api/v1/organisations/${organisationId}/rdvs?starts_after=${starts_after}`,
+      `/api/v1/organisations/${organisationId}/rdvs?starts_after=${starts_after}&page=${nPages}`,
       accessToken
     )
     if (res.meta.next_page === null) {
