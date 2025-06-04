@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.45.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.45.0...v1.45.1) (2025-06-04)
+
+
+### Bug Fixes
+
+* **rdvsp:** passer le paramètre page aux appels rdvsp ([319da53](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/319da535a5164515011f8e482dbbfe8a589d9663))
+
 ## [1.45.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.44.0...v1.45.0) (2025-06-02)
 
 
