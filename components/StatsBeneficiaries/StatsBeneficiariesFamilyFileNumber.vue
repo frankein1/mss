@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4>Nombre de dossiers concernés</h4>
     <AtomLoader
-      v-if="status === 'pending'"
+      v-if="pending"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -29,16 +29,17 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     filters: StatFilterInput
     historyType?: 'beneficiary'
   }>()
 
-  const { data, error, status } =
-    await trpcClient.stat.getFamilyFileCount.useQuery(props.filters)
+  const { data, error, pending } = await useLoadStatisticsWithPost(
+    'getFamilyFileCount',
+    toRef(props.filters)
+  )
 </script>
 
 <style lang="scss" scoped>

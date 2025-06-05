@@ -37,8 +37,7 @@
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { ChartColor } from '~/utils/color/chartColors'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -49,7 +48,10 @@
     data: followupDuration,
     pending,
     error
-  } = await trpcClient.stat.getFollowupDurationStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getFollowupDurationStats',
+    toRef(props.filters)
+  )
 
   const durationStats = computed(
     () =>

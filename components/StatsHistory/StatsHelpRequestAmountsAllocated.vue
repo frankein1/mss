@@ -41,8 +41,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
@@ -50,8 +49,9 @@
     data: amounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestAmountsAllocated.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getHelpRequestAmountsAllocated',
+    toRef(props.filters)
   )
 
   const count = computed(() =>

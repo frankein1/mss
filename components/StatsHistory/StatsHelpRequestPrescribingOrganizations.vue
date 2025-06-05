@@ -50,8 +50,7 @@
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { StatsListPropType } from '~/types/stat'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -62,8 +61,9 @@
     data: prescribingOrganizationCounts,
     pending,
     error
-  } = await trpcClient.stat.getHelpRequestPrescribingOrganizationStats.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getHelpRequestPrescribingOrganizationStats',
+    toRef(props.filters)
   )
 
   const prescribingOrganizationStats = computed(

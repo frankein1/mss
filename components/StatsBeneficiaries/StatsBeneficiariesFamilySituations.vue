@@ -36,8 +36,7 @@
   import { routes } from '~/utils/routes'
   import { getStatLabel, familySituationKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -48,7 +47,7 @@
     data: familySituationsCounts,
     pending,
     error
-  } = await trpcClient.stat.getFamilyStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost('getFamilyStats', toRef(props.filters))
 
   const familySituationsStats = computed(
     () =>

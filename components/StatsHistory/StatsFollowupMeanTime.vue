@@ -55,8 +55,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors'
   import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -67,7 +66,10 @@
     data: followupMeanTime,
     pending,
     error
-  } = await trpcClient.stat.getFollowupMeanTimeStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getFollowupMeanTimeStats',
+    toRef(props.filters)
+  )
 
   const meanTimeStats = computed(
     () =>

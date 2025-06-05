@@ -25,8 +25,8 @@
   import { StatFilterInput } from '~/server/schema'
   import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
-  const trpcClient = useTrpcClient()
   const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const props = defineProps<{
@@ -38,7 +38,10 @@
     data: statusCounts,
     error,
     pending
-  } = await trpcClient.stat.getFollowupStatusStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getFollowupStatusStats',
+    toRef(props.filters)
+  )
 
   const statusStats = computed(
     () =>

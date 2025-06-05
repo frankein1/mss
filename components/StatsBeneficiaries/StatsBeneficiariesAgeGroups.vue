@@ -37,6 +37,7 @@
   import { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { ChartColor } from '~/utils/color/chartColors'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const AgeGroupColors = {
     [AgeGroup.Less18]: ChartColor.LightPink,
@@ -48,8 +49,6 @@
     [AgeGroup.More65]: ChartColor.Green
   }
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
@@ -59,7 +58,7 @@
     data: ageCounts,
     pending,
     error
-  } = await trpcClient.stat.getAgeStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost('getAgeStats', toRef(props.filters))
 
   const ageStats = computed(
     () =>

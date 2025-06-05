@@ -35,8 +35,7 @@
   import { routes } from '~/utils/routes'
   import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -47,7 +46,10 @@
     data: departmentsCounts,
     pending,
     error
-  } = await trpcClient.stat.getDepartmentStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getDepartmentStats',
+    toRef(props.filters)
+  )
 
   const departmentsStats = computed(
     () =>

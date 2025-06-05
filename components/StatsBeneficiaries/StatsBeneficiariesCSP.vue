@@ -40,8 +40,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -52,7 +51,7 @@
     data: CSPCounts,
     pending,
     error
-  } = await trpcClient.stat.getCSPStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost('getCSPStats', toRef(props.filters))
 
   const CSPStats = computed(
     () =>

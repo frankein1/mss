@@ -37,8 +37,7 @@
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
@@ -51,8 +50,9 @@
     data: amounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestAmountsByInstructorOrganization.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getHelpRequestAmountsByInstructorOrganization',
+    toRef(props.filters)
   )
 
   const stats = computed(() =>

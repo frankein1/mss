@@ -35,8 +35,7 @@
     fileInstructionTypeFilterKeys
   } from '~/client/options'
   import { ChartColor } from '~/utils/color/chartColors'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -47,7 +46,10 @@
     data: subjectCounts,
     error,
     pending
-  } = await trpcClient.stat.getFileInstructionTypeStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getFileInstructionTypeStats',
+    toRef(props.filters)
+  )
 
   const subjectStats = computed(
     () =>

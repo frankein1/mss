@@ -35,6 +35,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereStructureKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -45,7 +46,10 @@
     data: ministereStructureCounts,
     pending,
     error
-  } = await useTrpcClient().stat.getMinistereStructure.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getMinistereStructure',
+    toRef(props.filters)
+  )
 
   const ministereStructureStats = computed(
     () =>

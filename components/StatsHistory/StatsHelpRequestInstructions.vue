@@ -53,8 +53,7 @@
   import { routes } from '~/utils/routes'
   import { HistoryTab } from '~/utils/constants/history'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -65,8 +64,9 @@
     data: fileInstructions,
     pending,
     error
-  } = await trpcClient.stat.getHelpRequestInstructionsStats.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getHelpRequestInstructionsStats',
+    toRef(props.filters)
   )
 
   const distribution: ComputedRef<StatsListPropType> = computed(() => [

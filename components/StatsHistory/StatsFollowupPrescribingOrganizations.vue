@@ -50,8 +50,7 @@
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -62,8 +61,9 @@
     data: prescribingOrganizationCounts,
     pending,
     error
-  } = await trpcClient.stat.getFollowupPrescribingOrganizationStats.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getFollowupPrescribingOrganizationStats',
+    toRef(props.filters)
   )
 
   const prescribingOrganizationStats = computed(

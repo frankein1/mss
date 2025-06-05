@@ -38,14 +38,13 @@
   import { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { ChartColor } from '~/utils/color/chartColors'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const GenderColor = {
     [Gender.Female]: ChartColor.Peach,
     [Gender.Male]: ChartColor.LightBlue,
     [Gender.Other]: ChartColor.Yellow
   }
-
-  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -56,7 +55,7 @@
     data: genderCounts,
     pending,
     error
-  } = await trpcClient.stat.getGenderStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost('getGenderStats', toRef(props.filters))
 
   const genderStats = computed(
     () =>

@@ -30,6 +30,7 @@
   import { routes } from '~/utils/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministerKeys } from '~/client/options'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -40,8 +41,9 @@
     data: ministereInterpellationCounts,
     pending,
     error
-  } = await useTrpcClient().stat.getMinistereInterpellation.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getMinistereInterpellation',
+    toRef(props.filters)
   )
 
   const ministereInterpellationStats = computed(

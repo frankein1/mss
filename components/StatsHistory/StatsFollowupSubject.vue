@@ -31,8 +31,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     totalCount: number
@@ -43,7 +42,10 @@
     data: subjectCounts,
     error,
     pending
-  } = await trpcClient.stat.getFollowupSubjectStats.useQuery(props.filters)
+  } = await useLoadStatisticsWithPost(
+    'getFollowupSubjectStats',
+    toRef(props.filters)
+  )
 
   const subjectsStats = computed(
     () =>

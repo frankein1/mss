@@ -228,6 +228,7 @@
   import { StatsCardConfig, StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const alertClose = ref<boolean>(true)
 
@@ -255,7 +256,7 @@
     data: beneficiaryCount,
     pending,
     error
-  } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
+  } = await useLoadStatisticsWithPost('getBeneficiaryCount', filters)
 
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`

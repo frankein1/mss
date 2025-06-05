@@ -28,8 +28,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     filters: StatFilterInput
@@ -40,8 +39,9 @@
     data: beneficiaryCounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getHelpRequestBeneficiaryNumber',
+    toRef(props.filters)
   )
 </script>
 

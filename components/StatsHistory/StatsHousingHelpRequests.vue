@@ -50,16 +50,16 @@
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
-
-  const trpcClient = useTrpcClient()
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     filters: StatFilterInput
   }>()
 
-  const { data, pending, error } =
-    await trpcClient.stat.getHousingHelpRequestsStats.useQuery(props.filters)
-
+  const { data, pending, error } = await useLoadStatisticsWithPost(
+    'getHousingHelpRequestsStats',
+    toRef(props.filters)
+  )
   const housingHelpRequestCount = computed(
     () => data.value?.housingHelpRequestCount || 0
   )

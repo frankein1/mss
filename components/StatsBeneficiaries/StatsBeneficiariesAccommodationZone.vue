@@ -39,6 +39,7 @@
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -49,8 +50,9 @@
     data: accommodationZoneCounts,
     pending,
     error
-  } = await useTrpcClient().stat.getAccommodationZoneStats.useQuery(
-    props.filters
+  } = await useLoadStatisticsWithPost(
+    'getAccommodationZoneStats',
+    toRef(props.filters)
   )
 
   const accommodationZoneStats = computed(
