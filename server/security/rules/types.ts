@@ -1,9 +1,6 @@
 import { Structure, User } from '@prisma/client'
 
-export type SecurityRuleStructure = Pick<
-  Structure,
-  'id' | 'type' | 'externalRdvspActive'
->
+export type SecurityRuleStructure = Pick<Structure, 'id' | 'type'>
 
 export type SecurityRuleGrantee = Pick<
   User,

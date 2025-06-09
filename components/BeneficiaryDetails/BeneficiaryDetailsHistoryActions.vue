@@ -29,7 +29,7 @@
         </button>
       </li>
       <li
-        v-if="application.module.rdv"
+        v-if="integrations.rdv"
         id="action-rdv"
       >
         <button
@@ -74,7 +74,7 @@
 
   const emit = defineEmits<{ planAppointment: [] }>()
 
-  const { application } = usePermissions()
+  const { integrations } = usePermissionsForIntegrations()
 
   function onAddHelpRequest() {
     useModal().open(HelpRequestModal, {

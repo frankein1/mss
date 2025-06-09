@@ -1,6 +1,7 @@
 import { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
 import { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
+import { StructureRepo } from '~/server/database'
 
 export type AppContextPermissions = {
   export: {
@@ -23,7 +24,6 @@ export type AppContextPermissions = {
     partner: boolean
     vulnerablePerson: boolean
     budget: boolean
-    rdv: boolean
   }
 }
 
@@ -61,8 +61,7 @@ function getAdminContextPermissions(): AppContextPermissions {
       helpRequest: false,
       partner: false,
       vulnerablePerson: false,
-      budget: false,
-      rdv: false
+      budget: false
     }
   }
 }
@@ -82,7 +81,6 @@ function getUserContextPermissions(
     ccas,
     city
   } = getGranteRole(ctx)
-  const hasRdvAccess = ctx.structure.externalRdvspActive || false
 
   return {
     export: {
@@ -108,8 +106,29 @@ function getUserContextPermissions(
       helpRequest: manager || socialWorker || instructor || referent,
       partner: manager || socialWorker,
       vulnerablePerson: !ngo && !ministryAgent,
-      budget: !receptionAgent,
-      rdv: hasRdvAccess
+      budget: !receptionAgent
     }
   }
+}
+
+export type IntegrationContextPermissions = {
+  rdv: boolean
+}
+
+export async function getIntegrationContextPermissions({
+  user,
+  structure
+}: {
+  user: SecurityRuleGrantee
+  structure: SecurityRuleStructure | null | undefined
+}): Promise<IntegrationContextPermissions> {
+  if (structure && user.role !== 'Administrator') {
+    const s = await StructureRepo.findUniqueOrThrow(user, {
+      where: { id: structure.id },
+      select: { externalRdvspActive: true }
+    })
+    return { rdv: s.externalRdvspActive || false }
+  }
+
+  return { rdv: false }
 }

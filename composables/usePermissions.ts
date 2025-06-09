@@ -21,8 +21,7 @@ export function usePermissions() {
         helpRequest: false,
         partner: false,
         vulnerablePerson: false,
-        budget: false,
-        rdv: false
+        budget: false
       }
     })
   )
@@ -46,8 +45,7 @@ export function usePermissions() {
         helpRequest: false,
         partner: false,
         vulnerablePerson: false,
-        budget: false,
-        rdv: false
+        budget: false
       }
     }
   }

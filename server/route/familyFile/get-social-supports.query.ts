@@ -319,17 +319,6 @@ function formatResult(
   })
 }
 
-async function getRdvspOrganisationId(ctx: ProtectedAppContext) {
-  if (!ctx.structure.externalRdvspActive) {
-    return ''
-  }
-  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: ctx.structure.id },
-    select: { externalRdvspId: true }
-  })
-  return structure.externalRdvspId || ''
-}
-
 const handler = async ({
   input,
   ctx
@@ -339,19 +328,27 @@ const handler = async ({
 }) => {
   const { familyFileId, filters } = input
 
-  try {
-    await RdvspService.validateDraftAppointmentsForFamilyFile({
-      ctx,
-      input: { familyFileId }
-    })
-  } catch (e: unknown) {
-    console.log(
-      'rdvsp: synchronization failed in get social supports, should fail silently',
-      e
-    )
-  }
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: ctx.structure.id },
+    select: { externalRdvspId: true, externalRdvspActive: true }
+  })
 
-  const rdvspOrganisationId = await getRdvspOrganisationId(ctx)
+  const hasRdvspIntegrationActive =
+    structure.externalRdvspActive && structure.externalRdvspId
+
+  if (hasRdvspIntegrationActive) {
+    try {
+      await RdvspService.validateDraftAppointmentsForFamilyFile({
+        ctx,
+        input: { familyFileId }
+      })
+    } catch (e: unknown) {
+      console.log(
+        'rdvsp: synchronization failed in get social supports, should fail silently',
+        e
+      )
+    }
+  }
 
   const [totalCount, socialSupports, familyFile] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
@@ -368,7 +365,12 @@ const handler = async ({
   ])
 
   return {
-    items: formatResult(socialSupports, ctx, familyFile, rdvspOrganisationId),
+    items: formatResult(
+      socialSupports,
+      ctx,
+      familyFile,
+      structure.externalRdvspId || ''
+    ),
     totalCount
   }
 }

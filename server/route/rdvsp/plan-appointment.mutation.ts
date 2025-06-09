@@ -2,18 +2,19 @@ import { UserActivityObject, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { PlanAppointmentInput, planAppointmentSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { RdvspService } from '~/server/services'
+import { StructureRepo } from '~/server/database'
 
-const securityCheck = (ctx: SecurityRuleContext, _: PlanAppointmentInput) => {
-  const permissions = getAppContextPermissions({
-    user: ctx.user,
-    structure: ctx.structure
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  _: PlanAppointmentInput
+) => {
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: ctx.structure.id },
+    select: { externalRdvspActive: true }
   })
-  return permissions.module.rdv
+  return structure.externalRdvspActive || false
 }
 
 const handler = ({

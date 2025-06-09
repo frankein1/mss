@@ -4,8 +4,7 @@ import { verifyJwt } from '../lib/jwt'
 import { UserRepo } from '~/server/database'
 
 export const structureContextQuery = () => ({
-  // FIXME: move 'externalRdvspActive' to the token
-  select: { id: true, type: true, externalRdvspActive: true }
+  select: { id: true, type: true }
 })
 
 export const userContextQuery = () => ({

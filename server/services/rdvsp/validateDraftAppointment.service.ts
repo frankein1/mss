@@ -338,14 +338,14 @@ async function addUsagerIdToBeneficiary(
 }
 
 async function prepare({ ctx }: { ctx: SecurityRuleContext }) {
-  if (!ctx.structure.externalRdvspActive) {
-    return false
-  }
-
   const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
     where: { id: ctx.structure.id },
     select: { externalRdvspId: true, externalRdvspActive: true }
   })
+
+  if (!structure.externalRdvspActive) {
+    return false
+  }
 
   try {
     checkIntegrationSetupForStructure(structure)
