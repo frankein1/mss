@@ -2,15 +2,14 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { RdvspService } from '~/server/services'
-import type { SecurityRuleContext } from '~/server/security'
-import { StructureRepo } from '~/server/database'
+import {
+  getIntegrationContextPermissions,
+  type SecurityRuleContext
+} from '~/server/security'
 
 const securityCheck = async (ctx: SecurityRuleContext) => {
-  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: ctx.structure.id },
-    select: { externalRdvspActive: true }
-  })
-  return structure.externalRdvspActive || false
+  const integrations = await getIntegrationContextPermissions(ctx)
+  return integrations.rdv
 }
 
 const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
