@@ -125,6 +125,12 @@
             v-if="application.edit.structure"
             :to="routes.structure.AppStructure.path()"
             class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+            @click="
+              matomo.trackEvent(
+                EventCategory.FollowupForm,
+                FollowupFormAction.SocialSupportSubjectLink
+              )
+            "
           >
             Je personnalise les objets d'accompagnement de ma structure
           </NuxtLink>
@@ -176,6 +182,12 @@
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
             class="fr-link fr-icon-info-fill fr-link--icon-left"
+            @click="
+              matomo.trackEvent(
+                EventCategory.FollowupForm,
+                FollowupFormAction.PartnersLink
+              )
+            "
           >
             Données issues de l'annuaire de partenaires
           </NuxtLink>
@@ -327,6 +339,7 @@
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
+  import { EventCategory, FollowupFormAction } from '~/types/matomo'
 
   const props = withDefaults(
     defineProps<{
@@ -344,6 +357,7 @@
   )
 
   const { application } = usePermissions()
+  const matomo = useMatomo()
 
   const emit = defineEmits<{
     submit: [payload: Event]
