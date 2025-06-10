@@ -38,7 +38,7 @@
         message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
       />
       <AtomLoader
-        v-if="pending"
+        v-if="reloadStatistics"
         class="fr-mx-auto"
       />
 
@@ -175,6 +175,7 @@
   import { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
+  import { RouterOutput } from '~/server/trpc/routers'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -198,11 +199,31 @@
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
-  const {
-    data: historyCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
+  const error = ref<Error | null>(null)
+  const reloadStatistics = ref(false)
+  const historyCounts = ref<RouterOutput['stat']['getHistoryCounts'] | null>(
+    null
+  )
+
+  watch(
+    filters,
+    async () => {
+      try {
+        reloadStatistics.value = true
+        error.value = null
+
+        historyCounts.value = await trpcClient.stat.getHistoryCounts.mutate(
+          filters.value
+        )
+      } catch (e: unknown) {
+        error.value = e as Error
+        historyCounts.value = null
+      } finally {
+        reloadStatistics.value = false
+      }
+    },
+    { immediate: true }
+  )
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests.total || 0

@@ -45,7 +45,7 @@
         message="Le nombre total de bénéficiaires n'a pas pu être chargé."
       />
       <AtomLoader
-        v-if="pending"
+        v-if="reloadStatistics"
         class="fr-mx-auto"
       />
 
@@ -228,7 +228,7 @@
   import { StatsCardConfig, StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
-  import { useLoadStatisticsWithPost } from '~/composables/useLoadStatisticsWithPost'
+  import { RouterOutput } from '~/server/trpc/routers'
 
   const alertClose = ref<boolean>(true)
 
@@ -252,11 +252,30 @@
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
-  const {
-    data: beneficiaryCount,
-    pending,
-    error
-  } = await useLoadStatisticsWithPost('getBeneficiaryCount', filters)
+  const error = ref<Error | null>(null)
+  const reloadStatistics = ref(false)
+  const beneficiaryCount = ref<
+    RouterOutput['stat']['getBeneficiaryCount'] | null
+  >(null)
+
+  watch(
+    filters,
+    async () => {
+      try {
+        reloadStatistics.value = true
+        error.value = null
+
+        beneficiaryCount.value =
+          await trpcClient.stat.getBeneficiaryCount.mutate(filters.value)
+      } catch (e: unknown) {
+        error.value = e as Error
+        beneficiaryCount.value = null
+      } finally {
+        reloadStatistics.value = false
+      }
+    },
+    { immediate: true }
+  )
 
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`
