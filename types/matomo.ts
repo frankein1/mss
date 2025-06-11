@@ -108,9 +108,8 @@ export enum DocumentEventAction {
 }
 
 export enum CreateBeneficiaryEventAction {
-  Complete = 'Compléter',
-  SavePartialForm = 'Enregistrer Formulaire partiel',
-  SaveCompleteForm = 'Enregistrer Formulaire complet'
+  SaveForm = 'Enregistrer Formulaire',
+  SaveAndCompleteForm = 'Enregistrer Formulaire et compléter'
 }
 
 export enum UserActivityEventAction {

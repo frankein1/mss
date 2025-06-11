@@ -65,13 +65,17 @@
       mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
       isSubmitting,
       onSuccess: ({ id, familyFileId }) => {
-        matomo.trackEvent(
-          EventCategory.CreateBeneficiary,
-          CreateBeneficiaryEventAction.SavePartialForm
-        )
         if (complete) {
+          matomo.trackEvent(
+            EventCategory.CreateBeneficiary,
+            CreateBeneficiaryEventAction.SaveForm
+          )
           navigateTo(routes.beneficiary.AppBeneficiaryEditInfo.path(id))
         } else {
+          matomo.trackEvent(
+            EventCategory.CreateBeneficiary,
+            CreateBeneficiaryEventAction.SaveAndCompleteForm
+          )
           navigateTo(
             routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
           )
