@@ -25,7 +25,12 @@ export const createHelpRequestSchemaBase = z.object({
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
-  subjectId: z.string(errorMessages).uuid(),
+  subjectId: z
+    .string({
+      required_error: requiredErrorMessage,
+      invalid_type_error: requiredErrorMessage
+    })
+    .uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
   externalStructure: kindOfBooleanSchema(true),
   status: requiredNativeEnum(SocialSupportStatus),

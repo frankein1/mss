@@ -78,7 +78,7 @@
 
       <!-- ROW -->
       <div class="fr-col-12 fr-col-md-6">
-        <VeeSearchableSelect
+        <VeeCombobox
           :label="helpRequestFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(partnerOrganizationOptions)"
@@ -99,31 +99,29 @@
 
     <template v-else>
       <div class="fr-col-12">
-        <VeeSearchableSelect
+        <VeeCombobox
           :label="helpRequestFieldLabels.subjectId"
           name="subjectId"
           :options="socialSupportSubjectOptions"
           required
-          hint
-        >
-          <template #hint>
-            <NuxtLink
-              v-if="application.edit.structure"
-              :to="routes.structure.AppStructure.path()"
-              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-              >Je personnalise les objets d'accompagnement de ma structure
-            </NuxtLink>
-            <template v-else>
-              Les responsables de votre structure peuvent personnaliser les
-              objets d'accompagnement
-            </template>
-          </template>
-        </VeeSearchableSelect>
+        />
+      </div>
+      <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <NuxtLink
+          v-if="application.edit.structure"
+          :to="routes.structure.AppStructure.path()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+          >Je personnalise les objets d'accompagnement de ma structure
+        </NuxtLink>
+        <p v-else>
+          Les responsables de votre structure peuvent personnaliser les objets
+          d'accompagnement
+        </p>
       </div>
 
       <!-- ROW -->
       <div class="fr-col-12 fr-col-md-6">
-        <VeeSearchableSelect
+        <VeeCombobox
           :label="helpRequestFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(partnerOrganizationOptions)"
@@ -165,7 +163,7 @@
 
     <template v-if="isExternalSupport">
       <div class="fr-col-12 fr-col-md-6">
-        <VeeSearchableSelect
+        <VeeCombobox
           :label="helpRequestFieldLabels.instructorOrganizationId"
           name="instructorOrganizationId"
           :options="partnerOrganizationOptions"

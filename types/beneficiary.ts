@@ -135,6 +135,7 @@ export type BeneficiaryFileInformation = Pick<
 
 type BeneficiaryDetails = RouterOutput['beneficiary']['getBeneficiaryDetails']
 type BeneficiaryHistory = BeneficiaryDetails['beneficiary']['history']
+export type BeneficiarySearchResult = RouterOutput['beneficiary']['search'][0]
 
 export type GetBeneficiaryOutput = Pick<
   Beneficiary,

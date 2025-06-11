@@ -4,6 +4,11 @@
       <h1 class="fr-col-12">Composants UI</h1>
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
+      <h2 class="fr-col-12">Combobox</h2>
+      <div class="fr-col-12">
+        <VeeComboboxStory />
+      </div>
+
       <h2 class="fr-col-12">Multiselect + tags</h2>
       <div class="fr-col-12">
         <VeeMultiselectStory />
@@ -68,6 +73,7 @@
   import FamilyFileSegmentedControlStory from '~/components/FamilyFileSegmentedControl/FamilyFileSegmentedControl.story.vue'
   import MultiSelectStory from '~/components/MultiSelect/MultiSelect.story.vue'
   import VeeMultiselectStory from '~/components/VeeForm/VeeMultiSelect.story.vue'
+  import VeeComboboxStory from '~/components/VeeForm/VeeCombobox.story.vue'
 
   definePageMeta({
     layout: 'landing'

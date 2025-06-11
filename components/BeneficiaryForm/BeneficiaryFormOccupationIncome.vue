@@ -102,7 +102,7 @@
           />
         </div>
         <div class="fr-col-12">
-          <VeeSearchableSelect
+          <VeeCombobox
             name="ministereDepartementServiceAc"
             :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
             :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"

@@ -16,7 +16,8 @@ export enum EventCategory {
   ExportBudget = 'Export du budget',
   BeneficiaryArchive = 'Archive Bénéficiaire',
   FamilyFile = 'Dossier Foyer',
-  FollowupForm = 'Formulaire Entretien'
+  FollowupForm = 'Formulaire Entretien',
+  CreateFollowup = 'Créer une synthèse'
 }
 
 export enum FamilyFileAction {
@@ -84,6 +85,9 @@ export enum FollowupFilterEventAction {
 export enum FollowupFormAction {
   SocialSupportSubjectLink = "Vers page Personnalisation d'objet d'accompagnement",
   PartnersLink = 'Vers page Annuaire de partenaires'
+}
+export enum FollowupAction {
+  CreateFromBeneficiarySearch = 'Depuis la recherche bénéficiaire'
 }
 
 export enum HelpRequestFilterEventAction {
@@ -159,6 +163,7 @@ export type EventAction =
   | BeneficiaryArchiveAction
   | FamilyFileAction
   | FollowupFormAction
+  | FollowupAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

@@ -14,29 +14,21 @@
       </div>
       <div class="fr-col-12">
         <label
-          class="fr-label"
+          class="fr-label fr-mb-1w"
           :class="{ 'color-red': linkToFamilyFileError !== null }"
           for="beneficiary-search"
         >
           Sélectionner un dossier bénéficiaire
           <span class="color-red">*</span>
         </label>
-        <BeneficiarySearchbarInput
-          class="beneficiary-search fr-mr-2w fr-col-12"
-          label="Jeanne DUMONT"
+        <BeneficiarySearchCombobox
+          class="beneficiary-search"
+          label="Rechercher un dossier bénéficiaire"
           name="beneficiary-search"
           :search-fn="searchBeneficiaries"
-        >
-          <template #result="{ result: beneficiary, input }">
-            <a
-              href="#"
-              class="fr-btn fr-btn--tertiary-no-outline result"
-              @click="() => onSelect({ beneficiary, input })"
-            >
-              {{ formatBeneficiarySearchDisplayName(beneficiary) }}
-            </a>
-          </template>
-        </BeneficiarySearchbarInput>
+          :select-only="true"
+          @on-select="onSelect"
+        />
         <span
           v-if="linkToFamilyFileError !== null"
           class="color-red"
@@ -48,8 +40,8 @@
       <AtomCallout
         >Attention, les agents référents du bénéficiaire sélectionné seront
         ajoutés comme référents à ce dossier foyer (et donc à l'ensemble des
-        bénéficiaires présents dans le dossier).</AtomCallout
-      >
+        bénéficiaires présents dans le dossier).
+      </AtomCallout>
     </div>
     <div class="fr-col-12">
       <ul class="fr-btns-group fr-btns-group--inline-md btns-groups">
@@ -127,18 +119,9 @@
     }
   }
 
-  function onSelect({
-    input,
-    beneficiary
-  }: {
-    input: HTMLInputElement | null
-    beneficiary: BeneficiarySearchResult
-  }) {
+  const onSelect = (beneficiary: BeneficiarySearchResult) => {
     linked_beneficiary.value = beneficiary
     linkToFamilyFileError.value = null
-    if (input !== null) {
-      input.value = formatBeneficiarySearchDisplayName(beneficiary)
-    }
   }
 
   async function onSubmit() {
@@ -186,7 +169,15 @@
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query
     })
-    return beneficiaries
+    return beneficiaries.map(beneficiary => ({
+      familyFileId: beneficiary.familyFileId,
+      id: beneficiary.id,
+      firstName: beneficiary.firstName,
+      status: beneficiary.status,
+      usualName: beneficiary.usualName,
+      birthDate: beneficiary.birthDate,
+      birthName: beneficiary.birthName
+    }))
   }
 </script>
 

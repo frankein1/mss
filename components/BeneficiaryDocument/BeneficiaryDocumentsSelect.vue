@@ -17,9 +17,9 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
+  import MultiSelect from '../MultiSelect/MultiSelect.vue'
 
-  const selectDocInput = ref<typeof VeeSearchableSelect | null>(null)
+  const selectDocInput = ref<typeof MultiSelect | null>(null)
 
   const snackbar = useSnackbar()
 

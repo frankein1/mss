@@ -33,7 +33,7 @@
         />
       </div>
       <div class="fr-col-6">
-        <VeeSearchableSelect
+        <VeeCombobox
           name="structureId"
           :label="userFieldLabels.structureId"
           :options="withEmptyValue(structureOptions)"

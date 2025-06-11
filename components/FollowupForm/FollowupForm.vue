@@ -157,16 +157,15 @@
             type="date"
           />
         </div>
-
         <!-- ROW -->
         <div class="fr-col-6">
-          <VeeSearchableSelect
+          <VeeCombobox
             :label="followupFieldLabels.prescribingOrganizationId"
+            placeholder="Saisir le nom de l'organisme"
             name="prescribingOrganizationId"
             :options="withEmptyValue(partnerOrganizationOptions)"
             @change-value="onPrescribingOrganization"
-          >
-          </VeeSearchableSelect>
+          />
         </div>
         <div class="fr-col-6">
           <VeeSelect

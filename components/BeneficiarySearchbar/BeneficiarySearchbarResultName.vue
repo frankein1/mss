@@ -1,8 +1,10 @@
 <template>
   <div class="fr-grid-row">
+    <span class="fr-sr-only"> {{ name }} </span>
     <span
       v-for="span in weightTexts"
       :key="span.text"
+      aria-hidden="true"
       class="whitespace-pre-wrap"
       :class="{
         'fr-text--bold': span.weight === 'bold'
