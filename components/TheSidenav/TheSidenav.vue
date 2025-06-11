@@ -7,6 +7,7 @@
   >
     <div class="fr-sidemenu__inner fr-p-0">
       <button
+        ref="menuButton"
         class="fr-sidemenu__btn"
         hidden
         aria-controls="fr-sidemenu-wrapper"
@@ -48,7 +49,12 @@
                 :href="href"
                 class="fr-sidemenu__link"
                 :aria-current="isActive ? 'page' : undefined"
-                @click="navigate"
+                @click="
+                  () => {
+                    navigate()
+                    closeMenu()
+                  }
+                "
               >
                 <span
                   class="fr-mr-1w"
@@ -139,6 +145,17 @@
   const { version, sourceCode } = useClientVersion()
   const { application } = usePermissions()
 
+  const menuButton = ref(null)
+
+  const closeMenu = () => {
+    if (
+      menuButton.value &&
+      menuButton.value.getAttribute('aria-expanded') === 'true'
+    ) {
+      menuButton.value.click()
+    }
+  }
+
   const menuItems = computed(() => {
     const items = []
     if (authState.isAdmin()) {
@@ -212,8 +229,13 @@
     box-shadow: none;
   }
 
-  fr-sidemenu__btn {
+  .fr-sidemenu__btn {
+    background-color: var(--background-action-high-blue-france);
     color: white;
+
+    &:hover {
+      background-color: var(--primary-hover);
+    }
   }
 
   .fr-sidemenu__list {
