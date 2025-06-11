@@ -20,7 +20,6 @@
   import MultiSelect from '../MultiSelect/MultiSelect.vue'
 
   const selectDocInput = ref<typeof MultiSelect | null>(null)
-
   const snackbar = useSnackbar()
 
   const props = withDefaults(
@@ -51,7 +50,9 @@
   function onNewDocument(key: string, name: string) {
     documentOptions.value.push({ value: key, label: name })
     selectDocInput.value?.triggerSelectValue(key)
-    snackbar.success(props.snackbarSuccessMessage)
+    snackbar.success(props.snackbarSuccessMessage, () =>
+      document?.querySelector<HTMLElement>('#documentAddButton')?.focus()
+    )
   }
 </script>
 

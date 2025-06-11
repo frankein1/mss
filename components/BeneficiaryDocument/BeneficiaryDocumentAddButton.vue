@@ -1,5 +1,6 @@
 <template>
   <button
+    id="documentAddButton"
     class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line open-modal-btn"
     data-fr-opened="false"
     aria-controls="global-modal"
@@ -54,6 +55,16 @@
     emit('newDocument', key, name)
     modal.close()
   }
+
+  // reset focus on button
+  const stopWatchingIsOpen = watch(modal.isOpen, value => {
+    if (!value) {
+      document?.querySelector<HTMLElement>('#documentAddButton')?.focus()
+    }
+  })
+  onUnmounted(() => {
+    stopWatchingIsOpen()
+  })
 </script>
 
 <style scoped>
