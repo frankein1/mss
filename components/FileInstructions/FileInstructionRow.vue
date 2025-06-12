@@ -1,53 +1,52 @@
 <template>
-  <NuxtLink
-    v-slot="{ navigate }"
-    custom
-    :to="helpRequestPath"
-  >
-    <tr
-      class="clickable-row"
-      @click="navigate"
+  <tr class="clickable-row">
+    <td>
+      <span
+        class="fr-badge fr-badge--sm"
+        :class="[socialSupportStatusClasses[socialSupport.status]]"
+      >
+        {{ socialSupportStatusKeys.value(socialSupport.status) }}
+      </span>
+    </td>
+    <td>{{ formatDate(socialSupport.date) }}</td>
+    <td>
+      {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
+    </td>
+    <td
+      v-if="fileInstructionTypeFilter !== 'Housing'"
+      class="social-support-subjects-data"
     >
-      <td>
-        <span
-          class="fr-badge fr-badge--sm"
-          :class="[socialSupportStatusClasses[socialSupport.status]]"
-        >
-          {{ socialSupportStatusKeys.value(socialSupport.status) }}
-        </span>
-      </td>
-      <td>{{ formatDate(socialSupport.date) }}</td>
-      <td>
-        {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
-      </td>
-      <td
-        v-if="fileInstructionTypeFilter !== 'Housing'"
-        class="social-support-subjects-data"
+      <NuxtLink
+        :aria-label="
+          formatBeneficiaryDisplayName(socialSupport.beneficiary, true) +
+          ' ' +
+          fileInstructionObject
+        "
+        :to="helpRequestPath"
+        class="table-row-link"
       >
         {{ fileInstructionObject }}
-      </td>
-      <td v-else>
-        {{ roomCounts }}
-      </td>
-      <td>
-        <template v-if="socialSupport.createdBy">
-          {{ formatUserDisplayName(socialSupport.createdBy) }}
-        </template>
-      </td>
-      <td>
-        <template v-if="socialSupport.dueDate">{{
-          formatDate(socialSupport.dueDate)
-        }}</template>
-      </td>
-    </tr>
-  </NuxtLink>
+      </NuxtLink>
+    </td>
+    <td v-else>
+      {{ roomCounts }}
+    </td>
+    <td>
+      <template v-if="socialSupport.createdBy">
+        {{ formatUserDisplayName(socialSupport.createdBy) }}
+      </template>
+    </td>
+    <td>
+      <template v-if="socialSupport.dueDate">{{
+        formatDate(socialSupport.dueDate)
+      }}</template>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
   import { FileInstruction } from '~/server/trpc/routers'
-  import { HistoryTab } from '~/utils/constants/history'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
@@ -55,6 +54,7 @@
   import { FileInstructionFilterInput } from '~/server/schema'
   import { roomCountKeys } from '~/client/options'
   import { routes } from '~/utils/routes'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const props = defineProps<{
     fileInstruction: FileInstruction
@@ -74,10 +74,9 @@
 
   const helpRequestPath = computed(() =>
     routes.file.AppFile.path(socialSupport.value.familyFile.id, {
-      tab: BeneficiaryTab.History,
       item: socialSupport.value.id,
-      originPage: routes.file.AppHistory.name,
-      originTab: HistoryTab.FileInstructions
+      beneficiaryId: socialSupport.value.beneficiary.id,
+      tab: BeneficiaryTab.History
     })
   )
 
