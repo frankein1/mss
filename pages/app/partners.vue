@@ -42,7 +42,10 @@
           </div>
         </template>
       </div>
-      <div class="partner-catalog">
+      <div
+        class="partner-catalog"
+        aria-live="polite"
+      >
         <PartnerOrganizationCard
           v-for="partner in partners"
           :key="partner.id"

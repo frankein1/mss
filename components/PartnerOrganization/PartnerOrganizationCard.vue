@@ -56,7 +56,7 @@
         type="button"
         @click="emit('edit', partner.id)"
       >
-        Modifier la Organisme partenaire
+        Modifier l'organisme partenaire
       </button>
       <button
         v-if="application.module.partner"
@@ -101,11 +101,11 @@
 
   .partner-card__action-bar {
     display: flex;
-    flex-flow: row-reverse wrap;
+    justify-content: flex-end;
   }
 
   .partner-card__action-bar__delete {
-    color: red;
+    color: var(--text-default-error);
   }
 
   .partner-card-content__info {
