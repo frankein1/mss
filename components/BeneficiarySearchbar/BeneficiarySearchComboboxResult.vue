@@ -1,8 +1,8 @@
 <template>
   <div class="result">
     <div class="name-status">
-      <BeneficiarySearchbarResultName
-        class="fr-text--regular fr-text--lg fr-mr-1w text--primary result-name"
+      <AtomTextEmphasis
+        class="fr-text--regular fr-text--lg fr-mr-1w fr-mb-0 text--primary result-name"
         :name="formatBeneficiarySearchDisplayName(beneficiary)"
         :input="search"
       />
@@ -40,8 +40,8 @@
   .result {
     .name-status {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      justify-content: flex-start;
+      align-items: baseline;
     }
   }
 </style>

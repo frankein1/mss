@@ -66,7 +66,10 @@
               'focused-cell': rowIndex === activeRow
             }"
           >
-            {{ item.label }}
+            <AtomTextEmphasis
+              :name="item.label"
+              :input="displayedValue"
+            />
           </div>
         </li>
       </ul>

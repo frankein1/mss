@@ -105,7 +105,7 @@
                   }
                 )
               "
-              class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line fr-btn--sm"
+              class="create-btn fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line fr-btn--sm"
               :title="`Créer une synthèse d'entretien pour ${formatBeneficiarySearchDisplayName(result)}`"
               @click="handleCreateFollowup()"
             >
@@ -311,6 +311,7 @@
 </script>
 
 <style lang="scss" scoped>
+  /* stylelint-disable no-descending-specificity */
   @use '~/assets/style/variables' as *;
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
@@ -365,14 +366,27 @@
   }
 
   .result-row {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     cursor: default;
     margin: 0;
     padding: 0 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
+
+    > div:first-child {
+      flex: 1;
+    }
+
+    > div:last-child {
+      flex: 0;
+    }
+
+    @include dsfr-media-query.respond-from('lg') {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   .result-cell {
@@ -380,22 +394,35 @@
     cursor: default;
     margin: 0;
     padding: 0.75rem 0;
+    width: auto;
   }
 
   .followup-cell {
     min-width: fit-content;
   }
 
-  .result-row:hover,
-  .result-row.focused {
-    background-color: var(--primary-light-hover);
-  }
-
   .focused-cell {
-    outline: dotted 1px rgb(0 0 0 / 32%);
+    outline: dashed 1px rgb(0 0 0 / 100%);
   }
 
   .fr-select {
     box-shadow: inset 0 -2px 0 0 var(--primary);
+  }
+</style>
+
+<style lang="scss">
+  .result-row:hover,
+  .result-row.focused {
+    .result-name {
+      text-decoration: underline;
+    }
+  }
+
+  .result-cell:hover,
+  .result-cell.focused,
+  .focused-cell {
+    .create-btn {
+      background-color: var(--hover-tint);
+    }
   }
 </style>

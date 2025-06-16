@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-grid-row">
+  <div>
     <span class="fr-sr-only"> {{ name }} </span>
     <span
       v-for="span in weightTexts"
