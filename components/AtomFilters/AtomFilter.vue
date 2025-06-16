@@ -71,6 +71,10 @@
 </script>
 
 <style lang="scss">
+  .filter-radio {
+    align-items: flex-start;
+  }
+
   .filter-radio--as-tag {
     .fr-fieldset__element {
       padding-right: 0;
