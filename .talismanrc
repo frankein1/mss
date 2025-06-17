@@ -12,5 +12,7 @@ fileignoreconfig:
     checksum: b08a1d41a7cdb910caef92137160081588189b02fc3688fb02bfd1bfdbe2b0ae
   - filename: components/Auth/SsoButton.vue
     checksum: 9142fbefbd6c201d71d74683b6cf385203ddbbed3ebfcfcd67dd8403cc136e02
+  - filename: assets/img/logo-landing.svg
+    checksum: 35450d589b24c061f2896d415cfa0ed1c8ecce6069211491abedbd22d852d0cf
 
 version: ''

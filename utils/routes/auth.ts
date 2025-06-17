@@ -1,7 +1,7 @@
 export const routes = {
   AuthLogin: {
     name: 'AuthLogin',
-    title: 'Se connecter à ma structure',
+    title: 'Se connecter à son espace de travail',
     path: () => '/auth/login'
   },
   AuthLogout: {

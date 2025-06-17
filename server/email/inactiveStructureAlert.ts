@@ -1,9 +1,15 @@
+import { routes } from '~/utils/routes'
+
 export function getInactiveStructureAlert() {
+  const {
+    public: { landingPageUrl }
+  } = useRuntimeConfig()
+
   const text = `Bonjour,
 
 Après plusieurs mois d'inactivité sur votre espace de travail Mon suivi Social celui-ci va être supprimé ainsi que l'ensemble des données consignées si vous ne vous connectez pas dans les prochains jours.
 
-Rendez-vous sur https://monsuivisocial.incubateur.anct.gouv.fr/auth/login pour consigner les informations de vos bénéficiaires et conserver les données déjà saisies.
+Rendez-vous sur ${routes.landing.SeConnecter.path(landingPageUrl)} pour consigner les informations de vos bénéficiaires et conserver les données déjà saisies.
 
 Pour toute question, vous pouvez nous contacter par retour de mail.
 
@@ -17,7 +23,7 @@ L'équipe Mon Suivi Social`
 <br/><br/>  
 Après plusieurs mois d'inactivité sur votre espace de travail Mon suivi Social celui-ci va être supprimé ainsi que l'ensemble des données consignées si vous ne vous connectez pas dans les prochains jours.
 <br/><br/>
-Rendez-vous sur <a href="https://monsuivisocial.incubateur.anct.gouv.fr/auth/login" rel="noopener noreferrer">https://monsuivisocial.incubateur.anct.gouv.fr/auth/login</a> pour consigner les informations de vos bénéficiaires et conserver les données déjà saisies.
+Rendez-vous sur <a href="${routes.landing.SeConnecter.path(landingPageUrl)}" rel="noopener noreferrer">${routes.landing.SeConnecter.path(landingPageUrl)}</a> pour consigner les informations de vos bénéficiaires et conserver les données déjà saisies.
 <br/><br/>
 Pour toute question, vous pouvez nous contacter par retour de mail.
 <br/><br/>

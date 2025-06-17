@@ -1,4 +1,5 @@
 import { apiRoutes } from '~/utils/routes'
+import { SUPPORT_EMAIL } from '~/utils/constants'
 
 export function getStructureCreationEmailContent() {
   const {
@@ -26,7 +27,7 @@ Vous pourrez voir différents rôles qui autorisent ou contraignent l'accès à 
 
 3- Trouvez de l'aide. Si vous rencontrez des difficultés sur la prise en main de l'outil, vous pouvez :
 - Consulter notre documentation en ligne sur ce lien : https://mon-suivi-social.gitbook.io/mon-suivi-social/configuration-au-demarrage/se-connecter-a-mon-suivi-social-responsable-de-structure ;
-- Nous écrire à  l'adresse mail de support : support@monsuivisocial.incubateur.anct.gouv.fr.
+- Nous écrire à  l'adresse mail de support : ${SUPPORT_EMAIL}.
 
 Bonne journée,
 L'équipe Mon Suivi Social`
@@ -52,7 +53,7 @@ Vous pourrez ainsi commencer à créer les fiches de vos bénéficiaires et cons
 <b>3- Trouvez de l'aide.</b> Si vous rencontrez des difficultés sur la prise en main de l'outil, vous pouvez :
 <ul>
 <li>Consulter notre documentation en ligne sur ce lien : <a href="https://mon-suivi-social.gitbook.io/mon-suivi-social/configuration-au-demarrage/se-connecter-a-mon-suivi-social-responsable-de-structure" rel="noopener noreferrer">lire la documentation et trouver mes réponses</a> ;
-<li>Nous écrire à  l'adresse mail de support : support@monsuivisocial.incubateur.anct.gouv.fr.
+<li>Nous écrire à  l'adresse mail de support : ${SUPPORT_EMAIL}.
 </ul>
 Bonne journée,
 <br/><br/><br/>

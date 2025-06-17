@@ -111,7 +111,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="routes.landing.DeclarationAccessibilite.path()"
+              :to="routes.landing.DeclarationAccessibilite.path(landingPageUrl)"
             >
               Accessibilité: non conforme
             </NuxtLink>
@@ -138,6 +138,10 @@
 
 <script setup>
   import { routes } from '~/utils/routes'
+
+  const {
+    public: { landingPageUrl }
+  } = useRuntimeConfig()
 
   const homePage = useHomePage()
   const authState = useAuthState()

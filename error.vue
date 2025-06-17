@@ -89,21 +89,7 @@
   })
 
   useHead({
-    title: pageTitle.value,
-    bodyAttrs: {
-      class: computed(() => {
-        if (mssEnvironment === 'demo') {
-          return 'ribbon ribbon-demo'
-        }
-        if (mssEnvironment === 'development') {
-          return 'ribbon ribbon-development'
-        }
-        if (mssEnvironment === 'local') {
-          return 'ribbon ribbon-local'
-        }
-        return ''
-      })
-    }
+    title: pageTitle.value
   })
 
   const intro = computed(() => {

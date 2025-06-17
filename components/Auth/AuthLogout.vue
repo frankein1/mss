@@ -1,20 +1,18 @@
 <template>
-  <h1
+  <h2
     v-if="pending"
-    class="logout-title fr-h2 fr-mb-2w"
+    class="logout-title"
   >
     En cours de déconnexion
-  </h1>
-  <h1
+  </h2>
+  <h2
     v-else-if="error"
-    class="logout-title fr-h2 fr-mb-2w"
+    class="logout-title"
   >
     Erreur lors de la déconnexion
-  </h1>
+  </h2>
   <div v-else-if="data?.success">
-    <h1 class="logout-title fr-h2 fr-mb-2w">
-      {{ routes.auth.AuthLogout.title }}
-    </h1>
+    <h2 class="logout-title">Se connecter à nouveau à son espace de travail</h2>
     <div
       v-if="inactive"
       class="fr-grid-row fr-grid-row--gutters logout-inactive"
@@ -27,13 +25,17 @@
       </div>
     </div>
   </div>
-  <div class="fr-pt-6w">
-    <SsoButton />
+  <div class="fr-container">
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--left fr-mb-2w">
+      <div class="fr-col-12 fr-col-md-4">
+        <SsoButton class="fr-my-4w" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { routes, apiRoutes } from '~/utils/routes'
+  import { apiRoutes } from '~/utils/routes'
 
   const props = defineProps<{
     inactive: boolean
@@ -82,7 +84,6 @@
   }
 
   .logout-title {
-    text-align: center;
     color: $primary;
   }
 </style>

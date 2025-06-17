@@ -225,28 +225,6 @@ select:focus:not(:focus-visible) {
   outline-style: solid !important;
 }
 
-.landing-subtitle {
-  display: block;
-  font-weight: normal;
-  text-align: center;
-
-  @include dsfr.title-style(h5);
-}
-
-.landing-video {
-  background: none !important;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background: none !important;
-  }
-
-  &::after {
-    display: none;
-  }
-}
-
 .social-support-subjects-data > span {
   overflow: hidden;
   display: -webkit-box;

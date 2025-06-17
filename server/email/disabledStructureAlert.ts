@@ -1,9 +1,15 @@
+import { routes } from '~/utils/routes'
+
 export function getDisabledStructureAlert() {
+  const {
+    public: { landingPageUrl }
+  } = useRuntimeConfig()
+
   const text = `Bonjour,
   
 Suite aux relances effectuées nous vous informons que votre espace de travail sur Mon Suivi Social  a été supprimé ainsi que l'ensemble des informations consignées.
 
-Certaines données anonymisées alimentent les statistiques d'usage (https://monsuivisocial.incubateur.anct.gouv.fr/statistiques) de Mon Suivi Social.
+Certaines données anonymisées alimentent les statistiques d'usage (${routes.landing.Statistiques.path(landingPageUrl)}) de Mon Suivi Social.
 
 Nous restons à votre disposition pour davantage d'informations.
 
@@ -15,7 +21,7 @@ L'équipe Mon Suivi Social`
 <br/><br/>
 Suite aux relances effectuées nous vous informons que votre espace de travail sur Mon Suivi Social  a été supprimé ainsi que l'ensemble des informations consignées.
 <br/><br/>
-Certaines données anonymisées alimentent <a href="https://monsuivisocial.incubateur.anct.gouv.fr/statistiques" rel="noopener noreferrer">les statistiques d'usage</a> de Mon Suivi Social.
+Certaines données anonymisées alimentent <a href="${routes.landing.Statistiques.path(landingPageUrl)}" rel="noopener noreferrer">les statistiques d'usage</a> de Mon Suivi Social.
 <br/><br/>
 Nous restons à votre disposition pour davantage d'informations.
 <br/><br/>

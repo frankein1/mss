@@ -1,3 +1,5 @@
+import { CODE_URL } from '~/utils/constants'
+
 export function useClientVersion() {
   const {
     public: {
@@ -5,11 +7,8 @@ export function useClientVersion() {
     }
   } = useRuntimeConfig()
 
-  const repo =
-    'https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2'
-
-  const commitUrl = `${repo}/-/commit/${commitSha}`
-  const branchUrl = `${repo}/-/tree/${commitRefName}`
+  const commitUrl = `${CODE_URL}/-/commit/${commitSha}`
+  const branchUrl = `${CODE_URL}/-/tree/${commitRefName}`
 
   const sourceCode = commitTag ? branchUrl : commitUrl
   const version = commitTag || commitSha.substring(0, 8)

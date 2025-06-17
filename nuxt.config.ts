@@ -197,6 +197,7 @@ export default defineNuxtConfig({
       },
       cguVersion: '1.1',
       appUrl: process.env.APP_URL,
+      landingPageUrl: process.env.LANDING_PAGE_URL,
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',
         tokenValidationInMinutes: parseInt(

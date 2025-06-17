@@ -3,24 +3,18 @@
     <div class="proconnect-section">
       <div>
         <NuxtLink
+          class="proconnect-link"
           :href="signinUrl"
           external
         >
-          <div class="proconnect-button">
+          <div
+            class="proconnect-button"
+            style="width: 288px; height: 81px; background-size: 100% 100%"
+          >
             <span class="proconnect-sr-only">S'identifier avec ProConnect</span>
           </div>
         </NuxtLink>
       </div>
-      <p>
-        <NuxtLink
-          href="https://www.proconnect.gouv.fr"
-          external
-          target="_blank"
-          title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
-        >
-          Qu’est-ce que ProConnect ?
-        </NuxtLink>
-      </p>
     </div>
   </div>
 </template>
@@ -47,6 +41,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .proconnect-link:focus,
+  .proconnect-link:focus-visible {
+    outline-style: auto;
   }
 
   .proconnect-section {
