@@ -7,7 +7,10 @@
       </div>
       <div class="fr-col-12 fr-col-md-10 main-column">
         <PageTopBar />
-        <main id="main-content">
+        <main
+          id="main-content"
+          role="main"
+        >
           <slot></slot>
         </main>
       </div>
