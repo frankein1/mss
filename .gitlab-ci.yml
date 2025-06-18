@@ -3,6 +3,7 @@ stages:
   - test
   - deploy
   - dast
+  - post-deploy
 
 include:
   - project: vigigloo/gitlab-pipeline-fragments
@@ -153,7 +154,7 @@ pnpm:test:e2e:
   script:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
-    - pnpm run --if-present test:e2e
+    - pnpm playwright test --grep-invert "a11y.spec.ts"
 
 deploy:scalingo-dev:
   stage: deploy
@@ -192,3 +193,42 @@ deploy:scalingo-prod:
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
     - git push scalingo latest:main -f
+
+pnpm:test:e2e:accessibility:
+  extends: .playwright:test
+  stage: post-deploy
+  needs: ['playwright:install'] # ou autres jobs si nécessaires
+  allow_failure: true
+  services:
+    - name: postgres:${POSTGRES_VERSION}-alpine
+      alias: database
+      variables:
+        POSTGRES_DB: mss
+        POSTGRES_USER: mss
+        POSTGRES_PASSWORD: password
+        POSTGRES_PORT: 5432
+  variables:
+    DATABASE_URL: postgresql://mss:password@database:5432/mss
+    APP_URL: http://localhost:3000
+    AUTH_PROCONNECT_ISSUER_URL: https://fca.integ01.dev-agentconnect.fr/api/v2
+    AUTH_PROCONNECT_CLIENT_ID: ${E2E_AUTH_PROCONNECT_CLIENT_ID}
+    AUTH_PROCONNECT_CLIENT_SECRET: ${E2E_AUTH_PROCONNECT_CLIENT_SECRET}
+    STRUCTURE_MANAGER_EMAIL: jeanne.responsable@yopmail.com
+    STRUCTURE_MANAGER_PASSWORD: ${E2E_STRUCTURE_MANAGER_PASSWORD}
+    SOCIAL_WORKER_EMAIL: jean.travailleur-social@yopmail.com
+    SOCIAL_WORKER_PASSWORD: ${E2E_SOCIAL_WORKER_PASSWORD}
+    RECEPTION_AGENT_EMAIL: jean.agent@yopmail.com
+    RECEPTION_AGENT_PASSWORD: ${E2E_RECEPTION_AGENT_PASSWORD}
+    STRUCTURE_MANAGER_NEW_USER_EMAIL: anita.responsable@yopmail.com
+    STRUCTURE_MANAGER_NEW_USER_PASSWORD: ${E2E_STRUCTURE_MANAGER_NEW_USER_PASSWORD}
+    SOCIAL_WORKER_NEW_USER_EMAIL: mehdi.travailleur-social@yopmail.com
+    SOCIAL_WORKER_NEW_USER_PASSWORD: ${E2E_SOCIAL_WORKER_NEW_USER_PASSWORD}
+    STRUCTURE_MANAGER_MINISTERE_EMAIL: laura.responsable@yopmail.com
+    STRUCTURE_MANAGER_MINISTERE_PASSWORD: ${E2E_STRUCTURE_MANAGER_MINISTERE_PASSWORD}
+
+  script:
+    - pnpm prisma migrate deploy
+    - pnpm prisma db seed
+    - pnpm run --if-present test:e2e -- e2e/a11y.spec.ts
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG'
