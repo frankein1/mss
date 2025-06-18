@@ -151,6 +151,7 @@
         {
           tab: getItemTab(),
           item: getItemId(),
+          beneficiaryId: props.notification.beneficiary.id,
           originPage: routes.user.AppOverview.name
         }
       )
