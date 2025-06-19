@@ -27,7 +27,8 @@
       <li v-if="hasHomeLink">
         <NuxtLink
           class="fr-btn"
-          :to="routes.user.AppOverview.path()"
+          :to="landingPageUrl"
+          external
         >
           Retourner à l'accueil
         </NuxtLink>
@@ -45,11 +46,11 @@
 </template>
 
 <script setup lang="ts">
-  import { apiRoutes, routes } from '~/utils/routes'
+  import { apiRoutes } from '~/utils/routes'
   import { APP_NAME } from '~/utils/constants'
 
   const {
-    public: { mssEnvironment }
+    public: { mssEnvironment, landingPageUrl }
   } = useRuntimeConfig()
 
   const props = defineProps<{
