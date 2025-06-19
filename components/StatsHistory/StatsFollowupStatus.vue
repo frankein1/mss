@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des statuts n'ont pas pu être chargées."
   />
   <StatsPie
-    v-if="statusStats.length"
+    v-if="statusStats"
     pie-label="Répartion des statuts"
     :stats="statusStats"
     :total-count="totalCount"
@@ -23,10 +23,10 @@
 <script lang="ts" setup>
   import { SocialSupportStatus } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
+  import { StatsPiePropType } from '~/types/stat'
   import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'
 
-  const trpcClient = useTrpcClient()
   const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const props = defineProps<{
@@ -34,21 +34,27 @@
     filters: StatFilterInput
   }>()
 
-  const {
-    data: statusCounts,
-    error,
-    pending
-  } = await trpcClient.stat.getFollowupStatusStats.useQuery(props.filters)
-
-  const statusStats = computed(
-    () =>
-      statusCounts.value?.map(({ _count, status }) => ({
-        key: status,
-        label: socialSupportStatusKeys.value.value(status) || '',
-        color: getColor(status),
-        count: _count
-      })) || []
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const statusStats = ref<StatsPiePropType | null>(null)
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupStatusStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    statusStats.value = (data.map(({ _count, status }) => ({
+      key: status,
+      label: socialSupportStatusKeys.value.value(status) || '',
+      color: getColor(status),
+      count: _count
+    })) || []) as StatsPiePropType
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 
   function getColor(status: SocialSupportStatus) {
     if (status === SocialSupportStatus.Todo) {

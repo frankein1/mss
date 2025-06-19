@@ -28,23 +28,29 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{ filters: StatFilterInput }>()
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const stats = ref<StatsListPropType | null>(null)
 
-  const {
-    data: amounts,
-    error,
-    pending
-  } = await trpcClient.stat.getHelpRequestAmountsBySubject.useQuery(
-    props.filters
-  )
-
-  const stats = computed(() =>
-    (amounts.value || []).map(amount => ({
+  try {
+    const trpc = useTrpcClient()
+    const amounts = await trpc.stat.getHelpRequestAmountsBySubject.mutate(
+      props.filters
+    )
+    if (amounts == null) {
+      throw new Error('no data')
+    }
+    stats.value = (amounts || []).map(amount => ({
       ...amount,
       color: SupportColor.helpRequests
     }))
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

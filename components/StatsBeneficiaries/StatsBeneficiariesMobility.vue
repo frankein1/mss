@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des données mobilité n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="mobilityStats.length"
+    v-if="mobilityStats"
     :total-count="beneficiaryCount"
     :stats="mobilityStats"
     stats-bar
@@ -35,26 +35,32 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: mobilityCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getMobilityStats.useQuery(props.filters)
-
-  const mobilityStats = computed(
-    () =>
-      mobilityCounts.value?.map(({ _count, mobility }) => ({
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const mobilityStats = ref<StatsListPropType | null>(null)
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMobilityStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    mobilityStats.value =
+      data.map(({ _count, mobility }) => ({
         key: mobility || 'null',
         label: getStatLabel(beneficiaryMobilityKeys.byKey, mobility),
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

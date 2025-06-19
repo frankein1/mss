@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des ministres n'ont pas pu être chargées."
   />
-  <template v-else-if="ministreStats.length">
+  <template v-else-if="ministreStats">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total d'instructions de dossier
     </p>
@@ -30,27 +30,36 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministreCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getHelpRequestMinistreStats.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const ministreStats = ref<StatsListPropType | null>(null)
 
-  const ministreStats = computed(
-    () =>
-      ministreCounts.value?.map(({ _count, ministre }) => ({
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getHelpRequestMinistreStats.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    ministreStats.value =
+      data.map(({ _count, ministre }) => ({
         key: ministre || 'null',
         label: getStatLabel(ministerKeys.byKey, ministre),
         color: SupportColor.helpRequests,
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

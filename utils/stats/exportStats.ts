@@ -125,13 +125,13 @@ export const exportStats = async (
     let exportedFile: { data: string } | null = null
     switch (exportType) {
       case 'stats_entretiens':
-        exportedFile = await client.stat.exportFollowupStats.query(filters)
+        exportedFile = await client.stat.exportFollowupStats.mutate(filters)
         break
       case 'stats_instructions_dossier':
-        exportedFile = await client.stat.exportHelpRequestStats.query(filters)
+        exportedFile = await client.stat.exportHelpRequestStats.mutate(filters)
         break
       case 'stats_beneficiaires':
-        exportedFile = await client.stat.exportBeneficiaryStats.query(filters)
+        exportedFile = await client.stat.exportBeneficiaryStats.mutate(filters)
         break
     }
     if (!exportedFile?.data) {

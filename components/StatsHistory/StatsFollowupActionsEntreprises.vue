@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques des actions entreprises n'ont pas pu être chargées."
   />
-  <template v-else-if="followupActionsEntreprisesStats.length">
+  <template v-else-if="followupActionsEntreprisesStats">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
       synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme des
@@ -30,31 +30,36 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-
-  const trpcClient = useTrpcClient()
+  import { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: followupActionsEntreprises,
-    error,
-    pending
-  } = await trpcClient.stat.getFollowupActionsEntreprisesStats.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const followupActionsEntreprisesStats = ref<StatsPiePropType | null>(null)
 
-  const followupActionsEntreprisesStats = computed(
-    () =>
-      followupActionsEntreprises.value?.map(
-        ({ _count, actionEntrepriseId, actionEntreprise }) => ({
-          key: actionEntrepriseId,
-          label: actionEntreprise,
-          color: SupportColor.followups,
-          count: _count
-        })
-      ) || []
-  )
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupActionsEntreprisesStats.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    followupActionsEntreprisesStats.value =
+      data.map(({ _count, actionEntrepriseId, actionEntreprise }) => ({
+        key: actionEntrepriseId,
+        label: actionEntreprise,
+        color: SupportColor.followups,
+        count: _count
+      })) || []
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

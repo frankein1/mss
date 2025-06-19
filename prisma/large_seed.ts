@@ -1,4 +1,9 @@
-import { BeneficiaryStatus, PrismaClient } from '@prisma/client'
+import {
+  BeneficiaryMobility,
+  BeneficiaryStatus,
+  Gender,
+  PrismaClient
+} from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import { ArrayElement } from '~/types/utils'
 
@@ -52,6 +57,47 @@ function randomStatus(): BeneficiaryStatus {
   }
   return 'Active'
 }
+function randomGender(): Gender {
+  const int = faker.number.int({ min: 0, max: 2 })
+  if (int === 0) {
+    return 'Male'
+  }
+  if (int === 1) {
+    return 'Female'
+  }
+  return 'Other'
+}
+function randomMobility(): BeneficiaryMobility {
+  const int = faker.number.int({ min: 0, max: 9 })
+  if (int === 0) {
+    return 'PermitWithVehicle'
+  }
+  if (int === 1) {
+    return 'PermitWithoutVehicle'
+  }
+  if (int === 2) {
+    return 'Code'
+  }
+  if (int === 3) {
+    return 'PermitPending'
+  }
+  if (int === 4) {
+    return 'OtherPermit'
+  }
+  if (int === 5) {
+    return 'PublicTransport'
+  }
+  if (int === 6) {
+    return 'BikeOrEquivalent'
+  }
+  if (int === 7) {
+    return 'InvalidPermit'
+  }
+  if (int === 8) {
+    return 'VehicleWithoutPermit'
+  }
+  return 'None'
+}
 
 async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
@@ -95,6 +141,7 @@ async function main() {
           birthName: faker.person.lastName(),
           usualName: faker.person.lastName(),
           birthDate: faker.date.birthdate(),
+          gender: randomGender(),
           structureId: structure.id,
           fileNumber: faker.string.ulid(),
           status: randomStatus(),
@@ -102,8 +149,10 @@ async function main() {
           zipcode: faker.location.zipCode(),
           city: faker.location.city(),
           street: faker.location.streetAddress(),
+          region: faker.location.state(),
           phone1: faker.phone.number(),
-          email: faker.internet.email()
+          email: faker.internet.email(),
+          mobility: randomMobility()
         }))
       }),
       prismaClient.user.update({

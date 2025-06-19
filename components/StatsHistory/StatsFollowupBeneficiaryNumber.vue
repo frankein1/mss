@@ -10,10 +10,10 @@
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées."
     />
-    <template v-else-if="beneficiaryCounts !== null">
+    <template v-else-if="beneficiaryFollowupCounts !== null">
       <StatsBeneficiaryNumber
-        v-if="beneficiaryCounts"
-        :beneficiary-counts
+        v-if="beneficiaryFollowupCounts"
+        :beneficiary-counts="beneficiaryFollowupCounts"
         :history-type
       />
       <p v-else>
@@ -35,11 +35,25 @@
     historyType?: 'followup'
   }>()
 
-  const {
-    data: beneficiaryCounts,
-    error,
-    pending
-  } = await trpcClient.stat.getFollowupBeneficiaryNumber.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const beneficiaryFollowupCounts = ref<number | null>(null)
+
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupBeneficiaryNumber.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    beneficiaryFollowupCounts.value = data
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des thématiques d'instruction n'ont pas pu être chargées."
   />
-  <template v-else-if="subjectStats.length">
+  <template v-else-if="subjectStats">
     <p class="fr-text--xs text--muted">
       Les instructions de dossiers de demande de logement réalisées avant le 15
       février 2024 sont comptabilisées dans la thématique "Autre".
@@ -35,30 +35,39 @@
     fileInstructionTypeFilterKeys
   } from '~/client/options'
   import { ChartColor } from '~/utils/color/chartColors'
-
-  const trpcClient = useTrpcClient()
+  import { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: subjectCounts,
-    error,
-    pending
-  } = await trpcClient.stat.getFileInstructionTypeStats.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const subjectStats = ref<StatsPiePropType | null>(null)
 
-  const subjectStats = computed(
-    () =>
-      subjectCounts.value?.map(({ _count, subject }) => ({
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFileInstructionTypeStats.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    subjectStats.value =
+      data.map(({ _count, subject }) => ({
         key: subject,
         label: fileInstructionTypeFilterKeys.value(subject) || '',
         color: getColor(subject),
         count: _count,
         picto: fileInstructionTypePictos[subject]
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 
   function getColor(subject: FileInstructionType) {
     if (subject === FileInstructionType.Housing) {

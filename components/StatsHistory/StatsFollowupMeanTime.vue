@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques sur la durée moyenne des entretiens n'ont pas pu être chargées."
   />
-  <template v-else-if="followupMeanTime && followupMeanTime.length">
+  <template v-else-if="meanTimeStats">
     <p class="fr-text--xs text--muted">
       Seuls les entretiens avec une durée renseignée sont comptabilisés. Les
       durées “plus de 1 heure” sont comptabilisés comme “1h30”.
@@ -17,7 +17,7 @@
     </p>
 
     <StatsList
-      v-if="followupMeanTime.length"
+      v-if="meanTime"
       :total-count="totalCount"
       :stats="[
         {
@@ -34,7 +34,7 @@
       :with-sum="false"
     />
     <StatsList
-      v-if="followupMeanTime.length"
+      v-if="meanTimeStats"
       :total-count="totalCount"
       :stats="meanTimeStats"
       :stats-percentage="false"
@@ -55,23 +55,24 @@
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors'
   import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
-
-  const trpcClient = useTrpcClient()
+  import { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: followupMeanTime,
-    pending,
-    error
-  } = await trpcClient.stat.getFollowupMeanTimeStats.useQuery(props.filters)
-
-  const meanTimeStats = computed(
-    () =>
-      followupMeanTime.value?.map(item => {
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const meanTimeStats = ref<StatsPiePropType | null>(null)
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupMeanTimeStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    meanTimeStats.value =
+      data.map(item => {
         return {
           key: item.id || 'null',
           label: item.name,
@@ -79,10 +80,15 @@
           color: SupportColor.followups
         }
       }) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 
   const meanTime = computed(() => {
-    if (meanTimeStats.value.length === 0) {
+    if (meanTimeStats.value == null || meanTimeStats.value?.length === 0) {
       return 0
     }
     return (

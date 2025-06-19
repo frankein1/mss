@@ -10,7 +10,7 @@
   />
 
   <StatsList
-    v-if="accommodationZoneStats.length"
+    v-if="accommodationZoneStats"
     :total-count="beneficiaryCount"
     :stats="accommodationZoneStats"
     stats-bar
@@ -39,23 +39,25 @@
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: accommodationZoneCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getAccommodationZoneStats.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const accommodationZoneStats = ref<StatsListPropType | null>(null)
 
-  const accommodationZoneStats = computed(
-    () =>
-      accommodationZoneCounts.value?.map(({ _count, accommodationZone }) => ({
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getAccommodationZoneStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    accommodationZoneStats.value =
+      data.map(({ _count, accommodationZone }) => ({
         key: accommodationZone || 'null',
         label: getStatLabel(
           beneficiaryAccommodationZoneKeys.byKey,
@@ -63,5 +65,10 @@
         ),
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

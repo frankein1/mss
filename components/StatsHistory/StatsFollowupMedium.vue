@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des types d'entretiens n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="followupMediumStats.length"
+    v-if="followupMediumStats"
     :total-count="totalCount"
     :stats="followupMediumStats"
   />
@@ -25,27 +25,34 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: followupMediumCounts,
-    error,
-    pending
-  } = await trpcClient.stat.getFollowupMediumStats.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const followupMediumStats = ref<StatsListPropType | null>(null)
 
-  const followupMediumStats = computed(
-    () =>
-      followupMediumCounts.value?.map(({ _count, medium }) => ({
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupMediumStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    followupMediumStats.value =
+      data.map(({ _count, medium }) => ({
         key: medium,
         label: followupMediumKeys.value(medium) || '',
         color: SupportColor.followups,
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

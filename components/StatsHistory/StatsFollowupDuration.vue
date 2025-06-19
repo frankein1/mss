@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la durée des entretiens n'ont pas pu être chargées."
   />
-  <template v-else-if="followupDuration && followupDuration.length">
+  <template v-else-if="durationStats">
     <StatsPie
       pie-label="Répartion des durées des entretiens"
       :stats="durationStats"
@@ -37,31 +37,37 @@
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { ChartColor } from '~/utils/color/chartColors'
-
-  const trpcClient = useTrpcClient()
+  import { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: followupDuration,
-    pending,
-    error
-  } = await trpcClient.stat.getFollowupDurationStats.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const durationStats = ref<StatsPiePropType | null>(null)
 
-  const durationStats = computed(
-    () =>
-      followupDuration.value?.map(({ _count, duration }) => {
-        return {
-          key: duration || 'null',
-          label: getStatLabel(followupDurationKeys.byKey, duration),
-          color: getColor(duration),
-          count: _count
-        }
-      }) || []
-  )
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFollowupDurationStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    durationStats.value = (data.map(({ _count, duration }) => {
+      return {
+        key: duration || 'null',
+        label: getStatLabel(followupDurationKeys.byKey, duration),
+        color: getColor(duration),
+        count: _count
+      }
+    }) || []) as StatsPiePropType
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 
   function getColor(duration: FollowupDuration | null) {
     if (duration === FollowupDuration.Half) {

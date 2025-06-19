@@ -175,6 +175,7 @@
   import { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
+  import { HistoryCounts } from '~/types/fileInstruction'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -198,11 +199,29 @@
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
-  const {
-    data: historyCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
+  const pending = ref<boolean>(true)
+  const error = ref<boolean>(false)
+  const historyCounts = ref<HistoryCounts | null>(null)
+
+  const getHistorycount = async (filters: StatFilterInput) => {
+    pending.value = true
+    const data = await trpcClient.stat.getHistoryCounts.mutate(filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    historyCounts.value = data
+    pending.value = false
+  }
+  // Use watcher to update historyCounts
+  // historyCounts is used to update child components
+  getHistorycount({})
+  const stopWatchingIsOpen = watch(filters, value => {
+    getHistorycount(value)
+  })
+  onUnmounted(() => {
+    stopWatchingIsOpen()
+  })
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests.total || 0

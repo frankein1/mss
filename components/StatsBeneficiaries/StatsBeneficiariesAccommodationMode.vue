@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des modes d'hébergement n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="accommodationModesStats.length"
+    v-if="accommodationModesStats"
     :total-count="beneficiaryCount"
     :stats="accommodationModesStats"
     stats-bar
@@ -38,23 +38,25 @@
     beneficiaryAccommodationModeKeys
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: accommodationModesCounts,
-    pending,
-    error
-  } = await trpcClient.stat.getAccommodationModeStats.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const accommodationModesStats = ref<StatsListPropType | null>(null)
 
-  const accommodationModesStats = computed(
-    () =>
-      accommodationModesCounts.value?.map(({ _count, accommodationMode }) => ({
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getAccommodationModeStats.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    accommodationModesStats.value =
+      data.map(({ _count, accommodationMode }) => ({
         key: accommodationMode || 'null',
         label: getStatLabel(
           beneficiaryAccommodationModeKeys.byKey,
@@ -62,5 +64,10 @@
         ),
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

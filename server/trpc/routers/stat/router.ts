@@ -4,127 +4,124 @@ import { protectedProcedure, router } from '~/server/trpc'
 export const statRouter = router({
   getAccommodationZoneStats: protectedProcedure
     .input(routes.getAccommodationZoneStatsQ.inputValidation)
-    .query(routes.getAccommodationZoneStatsQ.execute),
+    .mutation(routes.getAccommodationZoneStatsQ.execute),
   getAccommodationModeStats: protectedProcedure
     .input(routes.getAccommodationModeStatsQ.inputValidation)
-    .query(routes.getAccommodationModeStatsQ.execute),
+    .mutation(routes.getAccommodationModeStatsQ.execute),
   getAgeStats: protectedProcedure
     .input(routes.getAgeStatsQ.inputValidation)
-    .query(routes.getAgeStatsQ.execute),
+    .mutation(routes.getAgeStatsQ.execute),
   getBeneficiaryCount: protectedProcedure
     .input(routes.getBeneficiaryCountQ.inputValidation)
-    .query(routes.getBeneficiaryCountQ.execute),
+    .mutation(routes.getBeneficiaryCountQ.execute),
   getFamilyFileCount: protectedProcedure
     .input(routes.getFamilyFileCountQ.inputValidation)
-    .query(routes.getFamilyFileCountQ.execute),
+    .mutation(routes.getFamilyFileCountQ.execute),
   getCSPStats: protectedProcedure
     .input(routes.getCSPStatsQ.inputValidation)
-    .query(routes.getCSPStatsQ.execute),
+    .mutation(routes.getCSPStatsQ.execute),
   getFamilyStats: protectedProcedure
     .input(routes.getFamilyStatsQ.inputValidation)
-    .query(routes.getFamilyStatsQ.execute),
+    .mutation(routes.getFamilyStatsQ.execute),
   getHousingHelpRequestsStats: protectedProcedure
     .input(routes.getHousingHelpRequestsStatsQ.inputValidation)
-    .query(routes.getHousingHelpRequestsStatsQ.execute),
+    .mutation(routes.getHousingHelpRequestsStatsQ.execute),
   getFollowupActionsEntreprisesStats: protectedProcedure
     .input(routes.getFollowupActionsEntreprisesStatsQ.inputValidation)
-    .query(routes.getFollowupActionsEntreprisesStatsQ.execute),
+    .mutation(routes.getFollowupActionsEntreprisesStatsQ.execute),
   getFollowupMediumStats: protectedProcedure
     .input(routes.getFollowupMediumStatsQ.inputValidation)
-    .query(routes.getFollowupMediumStatsQ.execute),
+    .mutation(routes.getFollowupMediumStatsQ.execute),
   getFollowupMinistreStats: protectedProcedure
     .input(routes.getFollowupMinistreStatsQ.inputValidation)
-    .query(routes.getFollowupMinistreStatsQ.execute),
+    .mutation(routes.getFollowupMinistreStatsQ.execute),
   getFollowupPrescribingOrganizationStats: protectedProcedure
     .input(routes.getFollowupPrescribingOrganizationStatsQ.inputValidation)
-    .query(routes.getFollowupPrescribingOrganizationStatsQ.execute),
+    .mutation(routes.getFollowupPrescribingOrganizationStatsQ.execute),
   getFollowupStatusStats: protectedProcedure
     .input(routes.getFollowupStatusStatsQ.inputValidation)
-    .query(routes.getFollowupStatusStatsQ.execute),
+    .mutation(routes.getFollowupStatusStatsQ.execute),
   getGenderStats: protectedProcedure
     .input(routes.getGenderStatsQ.inputValidation)
-    .query(routes.getGenderStatsQ.execute),
+    .mutation(routes.getGenderStatsQ.execute),
   getHelpRequestMinistreStats: protectedProcedure
     .input(routes.getHelpRequestMinistreStatsQ.inputValidation)
-    .query(routes.getHelpRequestMinistreStatsQ.execute),
+    .mutation(routes.getHelpRequestMinistreStatsQ.execute),
   getHelpRequestPrescribingOrganizationStats: protectedProcedure
     .input(routes.getHelpRequestPrescribingOrganizationStatsQ.inputValidation)
-    .query(routes.getHelpRequestPrescribingOrganizationStatsQ.execute),
+    .mutation(routes.getHelpRequestPrescribingOrganizationStatsQ.execute),
   getHelpRequestAmountsBySubject: protectedProcedure
     .input(routes.getHelpRequestAmountsBySubjectQ.inputValidation)
-    .query(routes.getHelpRequestAmountsBySubjectQ.execute),
+    .mutation(routes.getHelpRequestAmountsBySubjectQ.execute),
   getHelpRequestInstructionsStats: protectedProcedure
     .input(routes.getHelpRequestInstructionsStatsQ.inputValidation)
-    .query(routes.getHelpRequestInstructionsStatsQ.execute),
+    .mutation(routes.getHelpRequestInstructionsStatsQ.execute),
   getHelpRequestStatusStats: protectedProcedure
     .input(routes.getHelpRequestStatusStatsQ.inputValidation)
-    .query(routes.getHelpRequestStatusStatsQ.execute),
+    .mutation(routes.getHelpRequestStatusStatsQ.execute),
   getHelpRequestAmountsByInstructorOrganization: protectedProcedure
     .input(
       routes.getHelpRequestAmountsByInstructorOrganizationQ.inputValidation
     )
-    .query(routes.getHelpRequestAmountsByInstructorOrganizationQ.execute),
+    .mutation(routes.getHelpRequestAmountsByInstructorOrganizationQ.execute),
   getHelpRequestAmountsAllocated: protectedProcedure
     .input(routes.getHelpRequestAmountsAllocatedQ.inputValidation)
-    .query(routes.getHelpRequestAmountsAllocatedQ.execute),
+    .mutation(routes.getHelpRequestAmountsAllocatedQ.execute),
   getFileInstructionTypeStats: protectedProcedure
     .input(routes.getFileInstructionTypeStatsQ.inputValidation)
-    .query(routes.getFileInstructionTypeStatsQ.execute),
+    .mutation(routes.getFileInstructionTypeStatsQ.execute),
   getHistoryCounts: protectedProcedure
     .input(routes.getHistoryCountsQuery.inputValidation)
-    .query(routes.getHistoryCountsQuery.execute),
+    .mutation(routes.getHistoryCountsQuery.execute),
   getMobilityStats: protectedProcedure
     .input(routes.getMobilityStatsQ.inputValidation)
-    .query(routes.getMobilityStatsQ.execute),
+    .mutation(routes.getMobilityStatsQ.execute),
   getCityStats: protectedProcedure
     .input(routes.getCityStatsQ.inputValidation)
-    .query(routes.getCityStatsQ.execute),
+    .mutation(routes.getCityStatsQ.execute),
   getDepartmentStats: protectedProcedure
     .input(routes.getDepartmentStatsQ.inputValidation)
-    .query(routes.getDepartmentStatsQ.execute),
+    .mutation(routes.getDepartmentStatsQ.execute),
   getRegionStats: protectedProcedure
     .input(routes.getRegionStatsQ.inputValidation)
-    .query(routes.getRegionStatsQ.execute),
+    .mutation(routes.getRegionStatsQ.execute),
   getFollowupSubjectStats: protectedProcedure
     .input(routes.getFollowupSubjectsStatsQ.inputValidation)
-    .query(routes.getFollowupSubjectsStatsQ.execute),
+    .mutation(routes.getFollowupSubjectsStatsQ.execute),
   getFollowupDurationStats: protectedProcedure
     .input(routes.getFollowupDurationStatsQ.inputValidation)
-    .query(routes.getFollowupDurationStatsQ.execute),
+    .mutation(routes.getFollowupDurationStatsQ.execute),
   getFollowupMeanTimeStats: protectedProcedure
     .input(routes.getFollowupMeanTimeStatsQ.inputValidation)
-    .query(routes.getFollowupMeanTimeStatsQ.execute),
+    .mutation(routes.getFollowupMeanTimeStatsQ.execute),
   getHelpRequestSubjectStats: protectedProcedure
     .input(routes.getHelpRequestSubjectsStatsQ.inputValidation)
-    .query(routes.getHelpRequestSubjectsStatsQ.execute),
+    .mutation(routes.getHelpRequestSubjectsStatsQ.execute),
   getMinistereStructure: protectedProcedure
     .input(routes.getMinistereStructureStatsQ.inputValidation)
-    .query(routes.getMinistereStructureStatsQ.execute),
+    .mutation(routes.getMinistereStructureStatsQ.execute),
   getMinistereCategorie: protectedProcedure
     .input(routes.getMinistereCategorieStatsQ.inputValidation)
-    .query(routes.getMinistereCategorieStatsQ.execute),
+    .mutation(routes.getMinistereCategorieStatsQ.execute),
   getMinistereInterpellation: protectedProcedure
     .input(routes.getMinistereInterpellationStatsQ.inputValidation)
-    .query(routes.getMinistereInterpellationStatsQ.execute),
+    .mutation(routes.getMinistereInterpellationStatsQ.execute),
   getMinistereDepartementServiceAc: protectedProcedure
     .input(routes.getMinistereDepartementServiceAcStatsQ.inputValidation)
-    .query(routes.getMinistereDepartementServiceAcStatsQ.execute),
-  // TODO: Delete if unused
+    .mutation(routes.getMinistereDepartementServiceAcStatsQ.execute),
   exportBeneficiaryStats: protectedProcedure
     .input(routes.exportBeneficiaryStatsQuery.inputValidation)
-    .query(routes.exportBeneficiaryStatsQuery.execute),
-  // TODO: Delete if unused
+    .mutation(routes.exportBeneficiaryStatsQuery.execute),
   exportHelpRequestStats: protectedProcedure
     .input(routes.exportHelpRequestStatsQuery.inputValidation)
-    .query(routes.exportHelpRequestStatsQuery.execute),
-  // TODO: Delete if unused
+    .mutation(routes.exportHelpRequestStatsQuery.execute),
   exportFollowupStats: protectedProcedure
     .input(routes.exportFollowupStatsQuery.inputValidation)
-    .query(routes.exportFollowupStatsQuery.execute),
+    .mutation(routes.exportFollowupStatsQuery.execute),
   getHelpRequestBeneficiaryNumber: protectedProcedure
     .input(routes.getHelpRequestBeneficiaryNumberQ.inputValidation)
-    .query(routes.getHelpRequestBeneficiaryNumberQ.execute),
+    .mutation(routes.getHelpRequestBeneficiaryNumberQ.execute),
   getFollowupBeneficiaryNumber: protectedProcedure
     .input(routes.getFollowupBeneficiaryNumberQ.inputValidation)
-    .query(routes.getFollowupBeneficiaryNumberQ.execute)
+    .mutation(routes.getFollowupBeneficiaryNumberQ.execute)
 })

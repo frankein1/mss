@@ -10,7 +10,7 @@
   />
 
   <StatsList
-    v-if="ministereDepartementServiceAcStats.length"
+    v-if="ministereDepartementServiceAcStats"
     :total-count="beneficiaryCount"
     :stats="ministereDepartementServiceAcStats"
     stats-bar
@@ -40,31 +40,38 @@
     getStatLabel
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministereDepartementServiceAcCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getMinistereDepartementServiceAc.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const ministereDepartementServiceAcStats = ref<StatsListPropType | null>(null)
 
-  const ministereDepartementServiceAcStats = computed(
-    () =>
-      ministereDepartementServiceAcCounts.value?.map(
-        ({ _count, ministereDepartementServiceAc }) => ({
-          key: ministereDepartementServiceAc || 'null',
-          label: getStatLabel(
-            ministereDepartmentServiceAcKeys.byKey,
-            ministereDepartementServiceAc
-          ),
-          count: _count
-        })
-      ) || []
-  )
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMinistereDepartementServiceAc.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    ministereDepartementServiceAcStats.value =
+      data.map(({ _count, ministereDepartementServiceAc }) => ({
+        key: ministereDepartementServiceAc || 'null',
+        label: getStatLabel(
+          ministereDepartmentServiceAcKeys.byKey,
+          ministereDepartementServiceAc
+        ),
+        count: _count
+      })) || []
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

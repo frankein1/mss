@@ -251,11 +251,32 @@
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
-  const {
-    data: beneficiaryCount,
-    pending,
-    error
-  } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const beneficiaryCount = ref<{ count: number; new: number } | null>(null)
+
+  const getBeneficiarycount = async (filters: StatFilterInput) => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const data = await trpcClient.stat.getBeneficiaryCount.mutate(filters)
+    if (data == null) {
+      error.value = true
+      return
+    }
+    beneficiaryCount.value = data
+    pending.value = false
+  }
+
+  // Use watcher to update beneficiaryCount
+  // beneficiaryCount is used to update child components
+  getBeneficiarycount({})
+  const stopWatchingIsOpen = watch(filters, value => {
+    getBeneficiarycount(value)
+  })
+  onUnmounted(() => {
+    stopWatchingIsOpen()
+  })
 
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`

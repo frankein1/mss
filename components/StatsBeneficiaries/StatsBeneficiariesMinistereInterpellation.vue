@@ -9,7 +9,7 @@
     message="Les statistiques de la répartion des interpellations des ministres n'ont pas pu être chargées."
   />
   <StatsList
-    v-if="ministereInterpellationStats.length"
+    v-if="ministereInterpellationStats"
     :total-count="beneficiaryCount"
     :stats="ministereInterpellationStats"
     stats-bar
@@ -30,26 +30,34 @@
   import { routes } from '~/utils/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministerKeys } from '~/client/options'
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const {
-    data: ministereInterpellationCounts,
-    pending,
-    error
-  } = await useTrpcClient().stat.getMinistereInterpellation.useQuery(
-    props.filters
-  )
-
-  const ministereInterpellationStats = computed(
-    () =>
-      ministereInterpellationCounts.value?.map(({ _count, ministre }) => ({
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const ministereInterpellationStats = ref<StatsListPropType | null>(null)
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getMinistereInterpellation.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    ministereInterpellationStats.value =
+      data.map(({ _count, ministre }) => ({
         key: ministre,
         label: getStatLabel(ministerKeys.byKey, ministre),
         count: _count
       })) || []
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

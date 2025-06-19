@@ -37,8 +37,7 @@
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
@@ -47,18 +46,27 @@
     tab: HistoryTab.FileInstructions
   })
 
-  const {
-    data: amounts,
-    error,
-    pending
-  } = await trpcClient.stat.getHelpRequestAmountsByInstructorOrganization.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const stats = ref<StatsListPropType | null>(null)
 
-  const stats = computed(() =>
-    (amounts.value || []).map(amount => ({
+  try {
+    const trpc = useTrpcClient()
+    const amounts =
+      await trpc.stat.getHelpRequestAmountsByInstructorOrganization.mutate(
+        props.filters
+      )
+    if (amounts == null) {
+      throw new Error('no data')
+    }
+    stats.value = (amounts || []).map(amount => ({
       ...amount,
       color: SupportColor.helpRequests
     }))
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>

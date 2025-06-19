@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4>Nombre de dossiers concernés</h4>
     <AtomLoader
-      v-if="status === 'pending'"
+      v-if="pending"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -10,12 +10,12 @@
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de foyers concernés n'ont pas pu être chargées."
     />
-    <template v-else-if="data !== null">
+    <template v-else-if="beneficiaryCount !== null">
       <StatsBeneficiaryNumber
-        v-if="data.beneficiary"
-        :beneficiary-counts="data.beneficiary"
+        v-if="beneficiaryCount"
+        :beneficiary-counts="beneficiaryCount"
+        :family-counts="familyFileCount"
         :history-type
-        :family-counts="data.family"
       />
       <p v-else>
         Commencez à créer des instructions de dossier dans les fiches de
@@ -30,15 +30,30 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     filters: StatFilterInput
     historyType?: 'beneficiary'
   }>()
 
-  const { data, error, status } =
-    await trpcClient.stat.getFamilyFileCount.useQuery(props.filters)
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const beneficiaryCount = ref<number | null>(null)
+  const familyFileCount = ref<number | undefined>(undefined)
+
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getFamilyFileCount.mutate(props.filters)
+    if (data == null) {
+      throw new Error('no data')
+    }
+    beneficiaryCount.value = data.beneficiary
+    familyFileCount.value = data.family
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>
 
 <style lang="scss" scoped>

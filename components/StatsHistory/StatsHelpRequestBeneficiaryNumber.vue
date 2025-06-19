@@ -29,20 +29,29 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     filters: StatFilterInput
     historyType?: 'helprequest'
   }>()
 
-  const {
-    data: beneficiaryCounts,
-    error,
-    pending
-  } = await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const beneficiaryCounts = ref<number | null>(null)
+  try {
+    const trpc = useTrpcClient()
+    const data = await trpc.stat.getHelpRequestBeneficiaryNumber.mutate(
+      props.filters
+    )
+    if (data == null) {
+      throw new Error('no data')
+    }
+    beneficiaryCounts.value = data
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>
 
 <style lang="scss" scoped>

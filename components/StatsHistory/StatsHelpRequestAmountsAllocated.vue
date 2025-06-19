@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartition des montants accordés n'ont pas pu être chargées.`"
   />
-  <template v-else-if="amounts?.count.count">
+  <template v-else-if="stats && count">
     <StatsList
       v-if="count"
       :stats="count"
@@ -41,35 +41,38 @@
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const trpcClient = useTrpcClient()
+  import { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
-  const {
-    data: amounts,
-    error,
-    pending
-  } = await trpcClient.stat.getHelpRequestAmountsAllocated.useQuery(
-    props.filters
-  )
+  const pending = ref<boolean>(true)
+  const error = ref<Error | null>(null)
+  const count = ref<StatsListPropType | null>(null)
+  const stats = ref<StatsListPropType | null>(null)
 
-  const count = computed(() =>
-    amounts.value
-      ? [
-          {
-            ...amounts.value.count,
-            color: SupportColor.helpRequests,
-            emphasis: true
-          }
-        ]
-      : null
-  )
-
-  const stats = computed(() =>
-    (amounts.value?.breakdown || []).map(amount => ({
+  try {
+    const trpc = useTrpcClient()
+    const amounts = await trpc.stat.getHelpRequestAmountsAllocated.mutate(
+      props.filters
+    )
+    if (amounts == null) {
+      throw new Error('no data')
+    }
+    count.value = [
+      {
+        ...amounts.count,
+        color: SupportColor.helpRequests,
+        emphasis: true
+      }
+    ]
+    stats.value = (amounts.breakdown || []).map(amount => ({
       ...amount,
       color: SupportColor.helpRequests
     }))
-  )
+  } catch (err: unknown) {
+    console.error(err)
+    error.value = err as Error
+  } finally {
+    pending.value = false
+  }
 </script>
