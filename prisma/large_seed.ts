@@ -16,7 +16,6 @@ type SocialSupportSubjectsCreateInput = Omit<
 >
 
 const ID_JEANNE_RESPONSABLE = '7e5c1734-35cb-4047-9035-a944961a67a4'
-const ID_JEANNE_REFERENTE = 'ddd586d1-d747-4a54-896d-3e7cf90ea91f'
 
 const socialSupportSubjects: SocialSupportSubjectsCreateInput[] = [
   {
@@ -72,9 +71,9 @@ async function main() {
 
     if (i === 0) {
       console.log('Linking Jeanne Responsable to a structure...')
-      await prismaClient.user.updateMany({
+      await prismaClient.user.update({
         data: { structureId: structure.id },
-        where: { id: { in: [ID_JEANNE_RESPONSABLE, ID_JEANNE_REFERENTE] } }
+        where: { id: ID_JEANNE_RESPONSABLE }
       })
     }
 
@@ -83,16 +82,6 @@ async function main() {
         structureId: structure.id
       }))
     })
-
-    if (i === 0) {
-      console.log('Marking Jeanne Referente as referent to families...')
-      await prismaClient.user.update({
-        data: {
-          referentFor: { connect: families }
-        },
-        where: { id: ID_JEANNE_REFERENTE }
-      })
-    }
 
     await Promise.all([
       prismaClient.budget.createMany({

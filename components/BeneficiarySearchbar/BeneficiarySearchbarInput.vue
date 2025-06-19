@@ -77,6 +77,7 @@
     UNKNOWN_ERROR_MESSAGE
   } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
+  import sortBeneficiarySearchResults from '~/utils/beneficiary/sortBeneficiarySearchResults'
 
   const props = defineProps<{
     label: string
@@ -117,7 +118,9 @@
 
   const debouncedSearchFn = useDebounceFn(async (search: string) => {
     try {
-      results.value = await props.searchFn(search)
+      results.value = await props
+        .searchFn(search)
+        .then(results => results.sort(sortBeneficiarySearchResults(search)))
     } catch {
       error.value = UNKNOWN_ERROR_MESSAGE
     } finally {
