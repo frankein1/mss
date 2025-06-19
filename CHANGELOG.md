@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.46.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.45.0...v1.46.0) (2025-06-19)
+
+
+### Features
+
+* **bénéficiaire:** amélioration de la recherche (tolérance aux fautes de frappes) ([14711c5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14711c5b22b0986c1646089699d3a9246bd2d3a6)), closes [#691](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/691)
+* **bénéficiaire:** tri des résultats de la recherche bénéficiaire ([465dcce](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/465dcceb517ab8841cf7ae47883813538648141b))
+* **matomo:** ajout de tracker matomo sur les liens du formulaire synthèse d'entretien ([342ed78](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/342ed7818b662bc082d05b9cdb74e6c8671bb7da)), closes [#826](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/826)
+* **matomo:** nouveaux trackers sur formulaire création bénéficiaire ([fd6b09e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fd6b09ed594e0187a06c5cc8eba8bbec3e76dfcf))
+
+
+### Bug Fixes
+
+* **accessibilité:** amélioration de l'accessibilité de la page partenaires ([8d9aa19](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8d9aa19be06e02edc8bc604b2b521e45a1ba9194))
+* **accessibilité:** amélioration du menu principal sur petit écran ([8937ec5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8937ec5012885c7e52c7a2e2071c9bf5d36f1161))
+* **accessibilité:** Refonte composant SearchableSelect ([af0743b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/af0743bc74c3a6bf805d5671898a403898907829)), closes [#828](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/828)
+* **accessibilité:** repositionement du focus sur modale ajout de document ([1b00a73](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1b00a7314472a15d895610282d190efdc036535a))
+* **accompagnement:** résolution des liens du tableau et améliorations d'accessibilité du tableau ([a766bb6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a766bb622bcf165434d45b6aabe1976060949d88))
+* **bénéficiaire:** supprime la réactivité des titres des tabs ([59e35ee](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/59e35ee24c0bc2b7073ced83fb14e8ef40104c25)), closes [/github.com/dnum-mi/vue-dsfr/blob/43e228d6b20c751b1af36eeda6f0b49840c7c65f/src/components/DsfrTabs/DsfrTabs.vue#L88](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//github.com/dnum-mi/vue-dsfr/blob/43e228d6b20c751b1af36eeda6f0b49840c7c65f/src/components/DsfrTabs/DsfrTabs.vue/issues/L88) [#844](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/844)
+* layout de la page d'erreur ([935fc40](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/935fc40d19a25281f056a88f5f60330c6bb7556d)), closes [#679](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/679)
+* **notification:** correction des liens vers les bénéficiaires ([6220213](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6220213224083e0f1ce459a821fd55bd139f73b9)), closes [#847](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/847)
+* **rdvsp:** passer le paramètre page aux appels rdvsp ([771fa3b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/771fa3befaaff5306f617d2781d893d4a3a4fda7))
+* **statistiques:** supprimer la limite du nombre de filtres maximum ([47e2686](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/47e2686232a3ff68ade152225d5f801cd972eb7c)), closes [#740](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/740)
+
 ## [1.45.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.44.0...v1.45.0) (2025-06-02)
 
 
