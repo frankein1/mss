@@ -126,7 +126,6 @@
     UNKNOWN_ERROR_MESSAGE
   } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
-  import sortBeneficiarySearchResults from '~/utils/beneficiary/sortBeneficiarySearchResults'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import BeneficiarySearchComboboxResult from './BeneficiarySearchComboboxResult.vue'
   import { BeneficiaryStatus } from '@prisma/client'
@@ -287,9 +286,7 @@
 
   const debouncedSearchFn = useDebounceFn(async (search: string) => {
     try {
-      results.value = await props
-        .searchFn(search)
-        .then(results => results.sort(sortBeneficiarySearchResults(search)))
+      results.value = await props.searchFn(search)
     } catch {
       error.value = UNKNOWN_ERROR_MESSAGE
     } finally {
