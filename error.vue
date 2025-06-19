@@ -27,9 +27,9 @@
       <li v-if="hasHomeLink">
         <NuxtLink
           class="fr-btn"
-          to="/"
+          :to="routes.user.AppOverview.path()"
         >
-          Page d'accueil
+          Retourner à l'accueil
         </NuxtLink>
       </li>
       <li v-if="hasSignoutLink">
@@ -40,26 +40,16 @@
           >Réessayer une connexion</NuxtLink
         >
       </li>
-      <li>
-        <NuxtLink
-          class="fr-btn fr-btn--secondary"
-          :to="`mailto:${supportEmail}`"
-        >
-          Contactez-nous
-        </NuxtLink>
-      </li>
     </ul>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-  import { apiRoutes } from '~/utils/routes'
+  import { apiRoutes, routes } from '~/utils/routes'
+  import { APP_NAME } from '~/utils/constants'
 
   const {
-    public: {
-      email: { from: supportEmail },
-      mssEnvironment
-    }
+    public: { mssEnvironment }
   } = useRuntimeConfig()
 
   const props = defineProps<{
@@ -89,13 +79,13 @@
   })
 
   useHead({
-    title: pageTitle.value
+    title: `Erreur ${props.error.statusCode} — ${pageTitle.value} — ${APP_NAME}`
   })
 
   const intro = computed(() => {
     switch (props.error.statusCode) {
       case 404:
-        return 'La page que vous cherchez est introuvable. Excusez-nous pour la gène occasionnée.'
+        return 'La page que vous cherchez est introuvable. Veuillez nous excuser pour la gêne occasionnée.'
       case 401:
         return "Vos informations d'authentification sont invalides ou expirées."
       case 403:
@@ -110,8 +100,7 @@
       case 404:
         return [
           "Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n'est peut-être plus disponible.",
-          "Dans ce cas, pour continuer votre visite vous pouvez consulter notre page d'accueil.",
-          "Sinon, contactez-nous pour que l'on puisse vous rediriger vers la bonne information."
+          "Dans ce cas, pour continuer votre visite, vous pouvez consulter notre page d'accueil."
         ]
       case 503:
         return [
