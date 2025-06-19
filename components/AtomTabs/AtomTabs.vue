@@ -1,10 +1,8 @@
 <template>
   <DsfrTabs
-    ref="tabs"
     v-model="activeTab"
     tab-list-name="Détails du dossier foyer"
     :tab-titles
-    @select-tab="onTabChange"
   >
     <template #tab-items>
       <DsfrTabItem
@@ -49,16 +47,7 @@
   )
 
   const activeTab = ref(0)
-  const activeTabContent = computed(() => {
-    return props.tabTitles[activeTab.value]
-  })
-  const tabs = ref<InstanceType<typeof DsfrTabs> | null>(null)
-
-  function onTabChange() {
-    if (tabs.value) {
-      tabs.value.renderTabs()
-    }
-  }
+  const activeTabContent = computed(() => props.tabTitles[activeTab.value])
 
   function setActiveTabFromUrl() {
     const initialTabName = window.location.hash.slice(1)

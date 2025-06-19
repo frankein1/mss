@@ -75,14 +75,13 @@
           />
         </template>
 
-        <template
-          v-if="application?.module.budget"
-          #[tabTitles.at(3)?.panelId]
-        >
-          <FamilyFileBudget
-            :family-file-id="familyFileId"
-            :family-file-identification="familyFileIdentification"
-          />
+        <template #[tabTitles.at(3)?.panelId]>
+          <template v-if="application?.module.budget">
+            <FamilyFileBudget
+              :family-file-id="familyFileId"
+              :family-file-identification="familyFileIdentification"
+            />
+          </template>
         </template>
       </AtomTabs>
     </div>
@@ -147,37 +146,35 @@
     Budget = 'Budget'
   }
 
-  const tabTitles = computed(() => {
-    const tabs = [
+  const tabTitles = [
+    {
+      tabId: FamilyFileTab.Details,
+      panelId: panelId(FamilyFileTab.Details),
+      title: 'Informations',
+      icon: 'fr-icon-information-line'
+    },
+    {
+      tabId: FamilyFileTab.Documents,
+      panelId: panelId(FamilyFileTab.Documents),
+      title: 'Documents',
+      icon: 'fr-icon-folder-2-line'
+    },
+    {
+      tabId: FamilyFileTab.History,
+      panelId: panelId(FamilyFileTab.History),
+      title: 'Historique',
+      icon: 'fr-icon-history-line'
+    },
+    ...((application.value.module.budget && [
       {
-        tabId: FamilyFileTab.Details,
-        panelId: panelId(FamilyFileTab.Details),
-        title: 'Informations',
-        icon: 'fr-icon-information-line'
-      },
-      {
-        tabId: FamilyFileTab.Documents,
-        panelId: panelId(FamilyFileTab.Documents),
-        title: 'Documents',
-        icon: 'fr-icon-folder-2-line'
-      },
-      {
-        tabId: FamilyFileTab.History,
-        panelId: panelId(FamilyFileTab.History),
-        title: 'Historique',
-        icon: 'fr-icon-history-line'
-      }
-    ]
-    if (application.value.module.budget) {
-      tabs.push({
         tabId: FamilyFileTab.Budget,
         panelId: panelId(FamilyFileTab.Budget),
         title: 'Budget',
         icon: 'fr-icon-money-euro-circle-line'
-      })
-    }
-    return tabs
-  })
+      }
+    ]) ||
+      [])
+  ]
 
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
