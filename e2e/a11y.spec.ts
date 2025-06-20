@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { test, expect, Page } from '@playwright/test'
+import { routes } from '~/utils/routes'
 
 type Options = {
   exclude?: string[]
@@ -13,7 +14,7 @@ const siteFacileDisableRules = ['color-contrast']
 // for local test only, exclude nuxt additional elements in DOM
 const appExcludeElements = ['#nuxt-devtools-container']
 
-const WEBSITE_URL = 'https://monsuivisocial.incubateur.anct.gouv.fr/'
+const WEBSITE_URL = 'https://monsuivisocial.incubateur.anct.gouv.fr'
 
 async function analyze(page: Page, { exclude, disableRules }: Options) {
   const results = await new AxeBuilder({ page })
@@ -39,14 +40,14 @@ test.describe('a11y - Website', () => {
     })
   })
   test('Create account', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'creation-compte/')
+    await page.goto(routes.landing.Sinscrire.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
     })
   })
   test('Contact', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'contactez-nous/')
+    await page.goto(routes.landing.Contact.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
@@ -54,7 +55,7 @@ test.describe('a11y - Website', () => {
   })
 
   test('Budget', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'budget/')
+    await page.goto(routes.landing.Budget.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
@@ -62,7 +63,7 @@ test.describe('a11y - Website', () => {
   })
 
   test('Legals', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'mentions-legales/')
+    await page.goto(routes.landing.MentionsLegales.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
@@ -70,7 +71,7 @@ test.describe('a11y - Website', () => {
   })
 
   test('Accessibility', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'accessibilite/')
+    await page.goto(routes.landing.DeclarationAccessibilite.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
@@ -78,7 +79,7 @@ test.describe('a11y - Website', () => {
   })
 
   test('Site map', async ({ page }) => {
-    await page.goto(WEBSITE_URL + 'plan-du-site/')
+    await page.goto(routes.landing.PlanDuSite.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
       disableRules: siteFacileDisableRules
