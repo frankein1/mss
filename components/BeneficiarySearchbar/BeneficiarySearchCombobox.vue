@@ -378,7 +378,7 @@
       flex: 1;
     }
 
-    > div:last-child {
+    > div + div {
       flex: 0;
     }
 
@@ -395,6 +395,7 @@
     margin: 0;
     padding: 0.75rem 0;
     width: auto;
+    flex: 1;
   }
 
   .followup-cell {
