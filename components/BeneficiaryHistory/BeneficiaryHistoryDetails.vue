@@ -26,7 +26,6 @@
   import type { SocialSupportItem } from './types'
   import { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { focusAndScrollTo } from '~/utils/focusAndScrollTo'
 
   const route = useRoute()
 
@@ -69,15 +68,17 @@
   onMounted(() => {
     const tab = route.hash.slice(1)
     const { item } = route.query
-
     if (
       $el.value &&
       tab === BeneficiaryTab.History &&
       item === socialSupportId.value
     ) {
-      focusAndScrollTo($el.value)
+      setTimeout(() => {
+        if ($el.value != null) {
+          $el.value.scrollIntoView({ block: 'nearest' })
+        }
+      }, 400)
     }
-
     collapseContainer.value =
       $el.value?.querySelector<HTMLDivElement>(`#${collapseId.value}`) || null
 
