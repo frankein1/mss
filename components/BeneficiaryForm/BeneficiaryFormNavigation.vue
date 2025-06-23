@@ -4,6 +4,7 @@
     class="fr-sidemenu"
     role="navigation"
     aria-labelledby="secondarymenu-title"
+    tabindex="-1"
   >
     <div class="fr-sidemenu__inner">
       <button

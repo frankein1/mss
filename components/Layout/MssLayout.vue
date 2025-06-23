@@ -10,6 +10,7 @@
         <main
           id="main-content"
           role="main"
+          tabindex="-1"
         >
           <slot></slot>
         </main>

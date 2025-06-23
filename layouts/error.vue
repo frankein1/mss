@@ -13,7 +13,7 @@
           <img
             class="fr-responsive-img"
             src="/pictograms/technical-error.svg"
-            alt="Dissocier"
+            alt=""
           />
         </div>
       </div>

@@ -21,7 +21,7 @@
         <template #icon>
           <img
             src="~/assets/img/avatar.svg"
-            alt="Bénéficiaire"
+            alt=""
           />
         </template>
         <template #title>

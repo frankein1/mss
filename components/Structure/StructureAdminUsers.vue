@@ -2,7 +2,7 @@
   <div class="feature-section bg-color-white">
     <h2 class="fr-h4">Informations administrateur</h2>
     <div class="fr-table fr-table--bordered">
-      <table>
+      <table aria-label="Détails des informations administrateur">
         <thead>
           <tr>
             <th scope="col">{{ userFieldLabels.lastName }}</th>

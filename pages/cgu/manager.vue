@@ -372,11 +372,11 @@
       <h3>Description du traitement de données à caractère personnel</h3>
       <p>Sont concernées par le traitement les données suivantes&nbsp;:</p>
       <div class="fr-table fr-table--no-caption">
-        <table>
+        <table aria-label="Données traitées">
           <thead>
             <tr>
-              <th>Catégorie de données</th>
-              <th>Description des données</th>
+              <th scope="col">Catégorie de données</th>
+              <th scope="col">Description des données</th>
             </tr>
           </thead>
 

@@ -15,6 +15,7 @@
       role="navigation"
       class="fr-pagination"
       aria-label="Pagination"
+      tabindex="-1"
     >
       <ul class="fr-pagination__list">
         <li>

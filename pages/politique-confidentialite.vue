@@ -242,12 +242,12 @@
         <p>Les données à caractère personnel sont conservées&nbsp;:</p>
 
         <div class="fr-table fr-table--no-caption">
-          <table>
+          <table aria-label="Conservation des données">
             <thead>
               <tr>
-                <th>Catégorie de données traitées</th>
-                <th>Données à caractère personnel traitées</th>
-                <th>Durée de conservation des données</th>
+                <th scope="col">Catégorie de données traitées</th>
+                <th scope="col">Données à caractère personnel traitées</th>
+                <th scope="col">Durée de conservation des données</th>
               </tr>
             </thead>
 
@@ -577,13 +577,13 @@
         </p>
 
         <div class="fr-table fr-table--no-caption">
-          <table>
+          <table aria-label="Sous-traitants">
             <thead>
               <tr>
-                <th>Partenaire</th>
-                <th>Traitement</th>
-                <th>Pays destinataire</th>
-                <th>Garanties</th>
+                <th scope="col">Partenaire</th>
+                <th scope="col">Traitement</th>
+                <th scope="col">Pays destinataire</th>
+                <th scope="col">Garanties</th>
               </tr>
             </thead>
 

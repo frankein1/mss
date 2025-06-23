@@ -3,7 +3,7 @@
     <img
       src="~/assets/img/empty-social-subject-list.svg"
       class="fr-responsive-img"
-      alt="Objet d’accompagnement vide"
+      alt=""
     />
     <div class="text">Vous n’avez aucun objet d’accompagnement configuré.</div>
   </div>

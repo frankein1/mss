@@ -33,7 +33,7 @@
         <img
           class="fr-mr-1w"
           src="~/assets/icons/retirer.svg"
-          alt="Dissocier"
+          alt="Dissocier du dossier"
         />
         Dissocier du dossier
       </button>

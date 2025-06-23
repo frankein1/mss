@@ -3,7 +3,7 @@
     <img
       src="~/assets/img/redirection-rdvsp.svg"
       class="fr-responsive-img"
-      alt="Pictogramme redirection RDV Service Public"
+      alt=""
     />
     <h1 class="fr-h1 fr-text--xl">
       Redirection en cours vers RDV Service Public

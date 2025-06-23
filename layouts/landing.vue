@@ -20,7 +20,7 @@
           style="max-width: 5.5rem"
           src="/public/logo-landing.svg"
           class="fr-responsive-img"
-          alt="mon suivi social"
+          alt="Mon Suivi Social"
         />
       </template>
       <template #mainnav>
@@ -33,6 +33,7 @@
     <main
       id="main-content"
       role="main"
+      tabindex="-1"
     >
       <DsfrNotice
         v-if="mssEnvironment !== 'production'"

@@ -22,7 +22,7 @@
             v-if="picto"
             :src="picto"
             width="48px"
-            alt="Pictogramme"
+            alt=""
           />
           <NuxtLink
             v-if="label === STATS_NULL_LABEL"

@@ -3,6 +3,7 @@
     role="navigation"
     class="fr-breadcrumb"
     aria-label="vous êtes ici :"
+    tabindex="-1"
   >
     <button
       class="fr-breadcrumb__button"

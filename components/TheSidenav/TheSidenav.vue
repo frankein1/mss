@@ -4,6 +4,7 @@
     class="fr-sidemenu fr-sidemenu--sticky-full-height fr-p-0"
     role="navigation"
     aria-labelledby="sidemenu-title"
+    tabindex="-1"
   >
     <div class="fr-sidemenu__inner fr-p-0">
       <button
