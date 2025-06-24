@@ -11,6 +11,7 @@ import { routes as stats } from './stats'
 import { routes as structure } from './structure'
 import { routes as user } from './user'
 import { routes as rdvsp } from './rdvsp'
+import { routes as workshop } from './workshop'
 
 export const routes = {
   admin,
@@ -25,7 +26,8 @@ export const routes = {
   structure,
   stats,
   user,
-  rdvsp
+  rdvsp,
+  workshop
 }
 
 export const apiRoutes = {

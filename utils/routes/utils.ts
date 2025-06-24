@@ -1,5 +1,6 @@
 export const AppRoute = '/app'
 export const FilesRoute = '/app/files'
+export const WorkshopsRoute = '/app/workshops'
 export const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 export const RdvspRoute = `${AppRoute}/integrations/rdvsp`
 

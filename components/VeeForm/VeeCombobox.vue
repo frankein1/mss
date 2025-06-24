@@ -200,6 +200,7 @@
   }
 
   function selectItem(value: OptionType) {
+    console.log(value)
     currentValue.value = value.value
     displayedValue.value = value.label
     activeRow.value = -1

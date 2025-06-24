@@ -23,6 +23,12 @@
         {{ label }}
       </span>
     </label>
+    <p
+      v-if="hint"
+      class="fr-hint-text"
+    >
+      {{ hint }}
+    </p>
   </div>
 </template>
 
@@ -36,11 +42,13 @@
       noLabel?: boolean
       labelledBy?: string
       checkedLabel?: boolean
+      hint?: string
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
-      checkedLabel: true
+      checkedLabel: true,
+      hint: undefined
     }
   )
 
@@ -58,8 +66,16 @@
   const { id } = useFormFieldId(name)
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .fr-toggle__label.no-label {
     padding-left: 0;
+  }
+
+  .fr-label {
+    width: calc(100% - 40px - 1rem);
+  }
+
+  .fr-hint-text {
+    margin-top: 0.25em;
   }
 </style>

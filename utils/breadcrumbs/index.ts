@@ -6,6 +6,7 @@ import { breadcrumbs as helpRequest } from './help-request'
 import { breadcrumbs as stats } from './stats'
 import { breadcrumbs as structure } from './structure'
 import { breadcrumbs as user } from './user'
+import { breadcrumbs as workshop } from './workshop'
 
 export const breadcrumbs = {
   beneficiary,
@@ -15,5 +16,6 @@ export const breadcrumbs = {
   helpRequest,
   stats,
   structure,
-  user
+  user,
+  workshop
 }

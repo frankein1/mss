@@ -377,7 +377,9 @@
   >('prescribingOrganizationContactId')
 
   const onPrescribingOrganization = (id: string[] | string) => {
+    console.log(id)
     if (!id) {
+      console.log(null)
       setPrescribingOrganizationContactId(null)
     }
   }
