@@ -17,7 +17,10 @@ const appExcludeElements = ['#nuxt-devtools-container']
 const WEBSITE_URL = 'https://monsuivisocial.incubateur.anct.gouv.fr'
 
 async function analyze(page: Page, { exclude, disableRules }: Options) {
+  // "RGAA est conforme aux 50 critères de succès des niveaux A et AA de la norme internationale WCAG 2.1"
+  const wcagRules = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
   const results = await new AxeBuilder({ page })
+    .withTags(wcagRules)
     .exclude(exclude ? exclude : [])
     .disableRules(disableRules ? disableRules : [])
     .analyze()
