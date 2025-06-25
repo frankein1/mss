@@ -24,7 +24,6 @@
     <div>
       <input
         :id="displayInputId"
-        ref="input"
         v-model="displayedValue"
         :placeholder
         autocomplete="off"
@@ -38,7 +37,7 @@
         :aria-describedby="ariaDescribedby"
         @keydown="handleKeydown"
         @focus="onFocus"
-        @blur="onBlur"
+        @focusout="onFocusOut"
         @input="onInput"
       />
       <ul
@@ -119,6 +118,7 @@
   const activeRow = ref(-1)
   const activeCol = ref(0)
   const openList = ref(false)
+  const listClicked = ref(false)
   const name = toRef(() => props.name)
 
   const props = withDefaults(
@@ -155,11 +155,11 @@
   const hiddenInput = ref<HTMLInputElement | null>(null)
   const currentValue = ref(initialValueId) // get current from form
   const displayedValue = ref('')
+  const { id, errorId } = useFormFieldId(name)
+
   onMounted(() => {
     displayedValue.value = getDislayValue(currentValue.value)
   })
-
-  const { id, errorId } = useFormFieldId(name)
 
   const onInput = (_event: Event) => {
     if (props.required && displayedValue.value == '') {
@@ -179,13 +179,16 @@
     if (!displayedValue.value) {
       return props.options
     }
-    const response = props.options.filter(obj => {
+    return filterItems()
+  })
+
+  const filterItems = () => {
+    return props.options.filter(obj => {
       return obj.label
         .toLowerCase()
         .includes(displayedValue.value.toLowerCase())
     })
-    return response
-  })
+  }
 
   const activeDescendant = computed(() => {
     if (activeRow.value >= 0) {
@@ -200,7 +203,7 @@
   }
 
   function selectItem(value: OptionType) {
-    console.log(value)
+    listClicked.value = true //listen click on list
     currentValue.value = value.value
     displayedValue.value = value.label
     activeRow.value = -1
@@ -213,23 +216,29 @@
     openList.value = true
     updateResults()
   }
-  const onBlur = () => {
-    // TODO: improve this.
-    // If the mouse is not over the grid, close the list
-    let gridisActive = false
-    const listelements = document.getElementsByClassName('result-row')
-    Array.from(listelements).forEach((element: Element) => {
-      if (element.matches(':hover')) {
-        gridisActive = true
+
+  const onFocusOut = (_e: FocusEvent) => {
+    // wait for the event on listItems
+    setTimeout(() => {
+      let gridisActive = false
+      const listelements = document.getElementsByClassName('result-row')
+      Array.from(listelements).forEach((element: Element) => {
+        if (element.matches(':hover')) {
+          gridisActive = true
+        }
+      })
+      if (!gridisActive) {
+        openList.value = false
+        activeRow.value = -1
       }
-    })
-    if (!gridisActive) {
-      openList.value = false
-      activeRow.value = -1
-    }
-    if (currentValue.value == '' || currentValue.value == null) {
-      displayedValue.value = ''
-    }
+      if (
+        (currentValue.value == '' || currentValue.value == null) &&
+        !listClicked.value
+      ) {
+        displayedValue.value = ''
+      }
+    }, 200)
+    listClicked.value = false // reset click on list
   }
 
   function handleKeydown(e: KeyboardEvent) {
