@@ -25,6 +25,7 @@ import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
 import { rdvspRouter } from './rdvspRouter'
 import { router } from '~/server/trpc'
+import { workshopRouter } from './workshop/router'
 
 export const appRouter = router({
   admin: adminRouter,
@@ -48,7 +49,8 @@ export const appRouter = router({
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,
   file: fileRouter,
-  rdvsp: rdvspRouter
+  rdvsp: rdvspRouter,
+  worshop: workshopRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

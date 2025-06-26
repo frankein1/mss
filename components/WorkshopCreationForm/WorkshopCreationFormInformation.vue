@@ -3,7 +3,7 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <h2 class="fr-text--sm fr-text--bold uppercase">
+      <h2 class="fr-text--sm fr-text--bold text--uppercase">
         Informations pratiques
       </h2>
     </div>
@@ -12,7 +12,7 @@
         type="date"
         :label="workshopLabels.date"
         name="date"
-        :disabled="pending"
+        :disabled="isSubmitting"
         required
       />
     </div>
@@ -20,16 +20,16 @@
       <VeeSelect
         :label="workshopLabels.startTime"
         name="startTime"
-        :disabled="pending"
-        :options="withEmptyValue(hourOptions)"
+        :disabled="isSubmitting"
+        :options="withEmptyValue(timeGroupKeys.options, '')"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
       <VeeSelect
         :label="workshopLabels.endTime"
         name="endTime"
-        :disabled="pending"
-        :options="withEmptyValue(hourOptions)"
+        :disabled="isSubmitting"
+        :options="withEmptyValue(timeGroupKeys.options, '')"
       />
     </div>
 
@@ -38,16 +38,16 @@
         type="text"
         :label="workshopLabels.location"
         name="location"
-        :disabled="pending"
+        :disabled="isSubmitting"
       />
     </div>
     <div class="fr-col-12">
       <VeeCombobox
         class="fr-mb-1w"
-        :label="workshopLabels.partner"
-        name="partner"
-        :options="partnerOptions"
-        :disabled="pending"
+        :label="workshopLabels.partnerOrganizationId"
+        name="partnerOrganizationId"
+        :options="withEmptyValue(partnerOrganizationOptions)"
+        :disabled="isSubmitting"
       />
       <NuxtLink
         :to="routes.structure.AppPartners.path()"
@@ -59,9 +59,9 @@
     <div class="fr-col-12">
       <VeeInput
         type="text"
-        :label="workshopLabels.contractor"
-        name="contractor"
-        :disabled="pending"
+        :label="workshopLabels.host"
+        name="host"
+        :disabled="isSubmitting"
       />
     </div>
   </section>
@@ -70,11 +70,24 @@
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
   import { routes } from '~/utils/routes'
+  import { PartnerOrganizationIdName } from '~/types/partner'
+  import { timeGroupKeys } from '~/client/options'
 
-  defineProps<{
-    isSubmitting: boolean
-    pending: boolean
-    partnerOptions: Options
-    hourOptions: Options
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      isSubmitting: boolean
+      partnerOrganizations: Array<PartnerOrganizationIdName>
+    }>(),
+    {}
+  )
+
+  const partnerOrganizationOptions = computed(() => {
+    const partnerOrganizationsWithStringId = props.partnerOrganizations.map(
+      ({ id, ...rest }) => ({
+        id: String(id),
+        ...rest
+      })
+    )
+    return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
 </script>

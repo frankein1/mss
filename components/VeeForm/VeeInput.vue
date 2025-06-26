@@ -36,8 +36,6 @@
         :name="name"
         :placeholder="placeholder"
         :type="type"
-        :min="min"
-        :max="max"
         :disabled
         :readonly
         :aria-describedby="ariaDescribedby"
@@ -78,8 +76,6 @@
         | 'email'
         | 'social-security-number'
       hint?: string
-      min?: number
-      max?: number
       placeholder?: string
       noLabel?: boolean
       labelledBy?: string
@@ -97,9 +93,7 @@
       required: false,
       noHint: false,
       disabled: false,
-      readonly: false,
-      min: undefined,
-      max: undefined
+      readonly: false
     }
   )
 

@@ -15,30 +15,28 @@
         />
       </div>
       <RequiredFields />
-
-      <AtomAlert
-        v-if="error"
-        class="fr-mb-2w"
-        :alert-type="AlertType.Error"
-        message="La liste des référents n'a pas pu être chargée."
-      />
-      <AtomLoader
-        v-else-if="pending"
-        class="fr-mx-auto"
-      />
     </div>
-    <WorkshopCreationForm
-      :is-submitting="false"
-      @save-workshop="onCreateWorkshop"
-      @cancel="onCancel"
-    />
+
+    <AtomLazyComponent
+      :pending
+      :error="Boolean(error)"
+      message="La page n'a pas pu être chargée."
+    >
+      <WorkshopCreationForm
+        v-if="partnerOrganizations"
+        :is-submitting="false"
+        :partner-organizations="partnerOrganizations"
+        @save-workshop="onCreateWorkshop"
+        @cancel="onCancel"
+      />
+    </AtomLazyComponent>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { CreateWorkshopSchemaInput } from '~/server/schema'
 
   const title = routes.workshop.AppWorkshopAdd.title
 
@@ -46,17 +44,41 @@
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const matomo = useMatomo()
   const isSubmitting = ref(false)
-  const pending = ref(false)
-  const error = ref(false)
+
+  // Get partners organisations
+  const {
+    data: partnerOrganizations,
+    pending,
+    error
+  } = await trpcClient.partner.getAll.useQuery()
 
   const onCancel = () => {
     useRouter().back()
   }
 
-  const onCreateWorkshop = (input: any) => {
-    console.log(input)
+  const onCreateWorkshop = async (input: CreateWorkshopSchemaInput) => {
+    const router = trpcClient.worshop
+    const createWorkshop = router.createWorkshop.useMutation()
+    const errMessage = "La création de l'atelier a échoué."
+
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => createWorkshop.mutate(input),
+      onSuccess: workshopCreated => {
+        if (createWorkshop.error.value || workshopCreated == null) {
+          snackbar.error(errMessage, snackbar.focus('form', 'select'))
+          return
+        }
+        const workshopRoute = routes.workshop.AppWorkshop.path(
+          workshopCreated.id
+        )
+        navigateTo(workshopRoute)
+      },
+      onFailure: () => {
+        snackbar.error(errMessage, snackbar.focus('form', 'select'))
+      }
+    })
   }
 </script>
 

@@ -322,6 +322,10 @@ select:focus:not(:focus-visible) {
   color: var(--grey-425-625);
 }
 
+.text--uppercase {
+  text-transform: uppercase;
+}
+
 .btn-container,
 .btn-container--right,
 .btn-container--left {

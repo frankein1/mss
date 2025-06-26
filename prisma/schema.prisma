@@ -174,6 +174,7 @@ model Structure {
   externalRdvspId     String?  @map("external_rdvsp_id")
 
   archivedBeneficiaries ArchivedBeneficiary[]
+  Workshop              Workshop[]
 
   @@map("structure")
 }
@@ -1894,6 +1895,7 @@ model PartnerOrganization {
   fileInstructionsInstructed    FileInstruction[]            @relation("file_instruction_instructor_organization")
   helpRequestsPrescribed        HelpRequest[]                @relation("help_request_prescribing_organization")
   housingHelpRequestsPrescribed HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
+  workshops                     Workshop[]
 
   @@unique([structureId, siret])
   @@map("partner_organization")
@@ -2012,6 +2014,7 @@ enum UserActivityObject {
   PartnerOrganization
   Appointment
   FileInstruction
+  Workshop
 }
 
 model UserActivity {
@@ -2116,4 +2119,30 @@ model ApiToken {
 
   @@unique([token])
   @@map("api_token")
+}
+
+model Workshop {
+  id                    String               @id @default(uuid()) @db.Uuid
+  name                  String
+  structure             Structure            @relation(fields: [structureId], references: [id])
+  structureId           String               @db.Uuid
+  date                  DateTime             @db.Date
+  startTime             String?              @map("start_time")
+  endTime               String?              @map("end_time")
+  location              String?
+  partnerOrganizationId String?              @map("partner_organization_id") @db.Uuid
+  partnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
+  host                  String?
+  sessionName           String?              @map("session_name")
+  description           String?
+  attendeeLimit         Int?                 @map("attendee_limit")
+  ageLimitCondition     AgeLimitCondition?   @map("ageLimitCondition")
+  ageLimit              Int?                 @map("ageLimit")
+
+  @@map("workshop")
+}
+
+enum AgeLimitCondition {
+  GreaterThan
+  LowerThan
 }

@@ -3,46 +3,41 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <h2 class="fr-text--sm fr-text--bold uppercase">
+      <h2 class="fr-text--sm fr-text--bold text--uppercase">
         Conditions de participation
       </h2>
     </div>
     <div class="workshop-form-toggle fr-col-12 fr-col-sm-8">
-      <VeeToggle
-        :label="workshopLabels.rateLimit"
-        name="rateLimit"
-        :checked-label="false"
+      <DsfrToggleSwitch
+        v-model="hasAttendeeLimit"
+        label="Limiter le nombre de personnes participantes"
         hint="Les personnes supplémentaires seront inscrites sur liste d’attente."
+        no-text
       />
     </div>
     <div class="fr-col-12 fr-col-sm-4">
       <VeeInput
         type="number"
-        :min="1"
-        :label="workshopLabels.attendeeNumber"
+        :label="workshopLabels.attendeeLimit"
         :no-label="true"
-        name="attendeeNumber"
-        :disabled="pending || formValues.rateLimit == false"
+        name="attendeeLimit"
+        :disabled="isSubmitting || hasAttendeeLimit === false"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-8">
       <VeeSelect
-        :label="workshopLabels.ageCondition"
-        name="ageCondition"
+        :label="workshopLabels.ageLimitCondition"
+        name="ageLimitCondition"
         :options="withEmptyValue(ageConditionOptions)"
-        :disabled="pending"
+        :disabled="isSubmitting"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-4">
       <VeeInput
         type="number"
-        :label="workshopLabels.age"
-        name="age"
-        :disabled="
-          pending ||
-          formValues.ageCondition == null ||
-          formValues.ageCondition === ''
-        "
+        :label="workshopLabels.ageLimit"
+        name="ageLimit"
+        :disabled="isSubmitting || !ageLimitCondition"
       />
     </div>
   </section>
@@ -51,16 +46,39 @@
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
 
+  const hasAttendeeLimit = ref(false)
+
   defineProps<{
     isSubmitting: boolean
-    pending: boolean
     ageConditionOptions: Options
   }>()
 
-  const { values: formValues } = useForm({
-    initialValues: {
-      ageCondition: undefined,
-      rateLimit: false
+  const { value: ageLimitCondition } = useField('ageLimitCondition')
+  const { value: attendeeLimit } = useField('attendeeLimit')
+  const { value: ageLimit } = useField('ageLimit')
+
+  watch(hasAttendeeLimit, () => {
+    if (!hasAttendeeLimit.value) {
+      attendeeLimit.value = null
+    }
+  })
+  watch(ageLimitCondition, () => {
+    if (ageLimitCondition.value == '') {
+      ageLimit.value = null
     }
   })
 </script>
+
+<style scoped lang="scss">
+  .workshop-form-toggle {
+    :deep(.fr-toggle) {
+      .fr-hint-text {
+        margin-top: 4px;
+      }
+
+      label::before {
+        margin-right: 1rem;
+      }
+    }
+  }
+</style>

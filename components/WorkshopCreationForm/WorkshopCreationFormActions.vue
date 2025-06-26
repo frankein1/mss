@@ -19,6 +19,7 @@
         type="submit"
         :submitting="isSubmitting"
         :disabled="isSubmitting"
+        @click="emit('submit')"
       >
         Enregistrer
       </button>
@@ -29,10 +30,10 @@
 <script setup lang="ts">
   defineProps<{
     isSubmitting: boolean
-    pending: boolean
   }>()
 
   const emit = defineEmits<{
     cancel: []
+    submit: []
   }>()
 </script>
