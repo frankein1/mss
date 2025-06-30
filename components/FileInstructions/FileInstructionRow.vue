@@ -9,24 +9,24 @@
       </span>
     </td>
     <td>{{ formatDate(socialSupport.date) }}</td>
-    <td>
-      {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
-    </td>
+    <NuxtLink
+      :aria-label="
+        formatBeneficiaryDisplayName(socialSupport.beneficiary, true) +
+        ' ' +
+        fileInstructionObject
+      "
+      :to="helpRequestPath"
+      class="table-row-link"
+    >
+      <td>
+        {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
+      </td>
+    </NuxtLink>
     <td
       v-if="fileInstructionTypeFilter !== 'Housing'"
       class="social-support-subjects-data"
     >
-      <NuxtLink
-        :aria-label="
-          formatBeneficiaryDisplayName(socialSupport.beneficiary, true) +
-          ' ' +
-          fileInstructionObject
-        "
-        :to="helpRequestPath"
-        class="table-row-link"
-      >
-        {{ fileInstructionObject }}
-      </NuxtLink>
+      {{ fileInstructionObject }}
     </td>
     <td v-else>
       {{ roomCounts }}
