@@ -3,12 +3,14 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <VeeInput
+      <VeeCombobox
         type="text"
         :label="workshopLabels.name"
         name="name"
         :disabled="isSubmitting"
         required
+        :options="nameOptions"
+        :with-creation="true"
       />
       <DsfrAccordionsGroup class="fr-mt-2w">
         <DsfrAccordion
@@ -43,6 +45,7 @@
 
   defineProps<{
     isSubmitting: boolean
+    nameOptions: Options
   }>()
 </script>
 

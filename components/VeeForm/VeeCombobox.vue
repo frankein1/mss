@@ -27,8 +27,9 @@
         v-model="displayedValue"
         :placeholder
         autocomplete="off"
-        class="fr-select fr-mt-1w"
-        type="search"
+        class="fr-mt-1w"
+        :class="withCreation ? 'fr-input' : 'fr-select'"
+        :type="withCreation ? 'text' : 'search'"
         role="combobox"
         aria-autocomplete="list"
         :aria-expanded="openList"
@@ -129,11 +130,13 @@
       options: Options
       required?: boolean
       hint?: string
+      withCreation?: boolean
     }>(),
     {
       required: false,
       hint: undefined,
-      placeholder: undefined
+      placeholder: undefined,
+      withCreation: false
     }
   )
 
@@ -162,6 +165,11 @@
   })
 
   const onInput = (_event: Event) => {
+    if (props.withCreation) {
+      emit('changeValue', displayedValue.value)
+      handleChange(displayedValue.value)
+      return
+    }
     if (props.required && displayedValue.value == '') {
       // Display an error if input is empty but required
       emit('changeValue', '')
@@ -233,7 +241,8 @@
       }
       if (
         (currentValue.value == '' || currentValue.value == null) &&
-        !listClicked.value
+        !listClicked.value &&
+        !props.withCreation
       ) {
         displayedValue.value = ''
       }

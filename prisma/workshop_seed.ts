@@ -15,7 +15,7 @@ const getRandomDate = () => {
     start.getTime() + Math.random() * (end.getTime() - start.getTime())
   return new Date(randomTime)
 }
-const workshops = [
+export const workshops = [
   {
     name: 'Atelier dessin d’observation',
     structureId: fixtureStructures[0].id,

@@ -9,7 +9,10 @@
     @submit.prevent="onSubmit"
   >
     <div class="fr-container">
-      <WorkshopCreationFormName :is-submitting="isSubmitting" />
+      <WorkshopCreationFormName
+        :is-submitting="isSubmitting"
+        :name-options="nameOptions"
+      />
       <WorkshopCreationFormInformation
         :is-submitting="isSubmitting"
         :partner-organizations="partnerOrganizations"
@@ -41,6 +44,7 @@
   import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
+  import { workshops } from '~/prisma/workshop_seed'
 
   defineProps<{
     isSubmitting: boolean
@@ -52,6 +56,11 @@
     cancel: []
   }>()
 
+  const nameOptions: Options = workshops.map(w => ({
+    label: w.name,
+    value: w.name
+  }))
+
   const errors = ref<
     {
       name: string
@@ -60,8 +69,11 @@
   >([])
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<CreateWorkshopInput>({
+  const { handleSubmit, values } = useForm<CreateWorkshopInput>({
     validationSchema: toTypedSchema(createWorkshopSchema)
+  })
+  watch(values, () => {
+    console.log(values)
   })
   const onSubmit = handleSubmit(values => {
     emit('saveWorkshop', values)
