@@ -11,5 +11,10 @@ export const routes = {
     name: 'AppWorkshop',
     title: (workshop: Workshop) => workshop.name,
     path: (id?: string) => `${WorkshopsRoute}/${id}`
+  },
+  AppWorkshops: {
+    name: 'AppWorkshops',
+    title: 'Ateliers collectifs, animations...',
+    path: () => WorkshopsRoute
   }
 }

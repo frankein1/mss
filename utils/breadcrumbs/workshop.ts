@@ -11,5 +11,10 @@ function getBread<T extends RouteName>(name: T) {
 }
 
 export const breadcrumbs = {
-  AppWorkshopAdd: () => [...user.AppOverview(), ...getBread('AppWorkshopAdd')]
+  AppWorkshopAdd: () => [
+    ...user.AppOverview(),
+    ...getBread('AppWorkshops'),
+    ...getBread('AppWorkshopAdd')
+  ],
+  AppWorkshops: () => [...user.AppOverview(), ...getBread('AppWorkshops')]
 }
