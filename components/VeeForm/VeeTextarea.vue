@@ -32,6 +32,7 @@
       :class="{ 'fr-input--error': error }"
       :name="name"
       :disabled
+      :placeholder="placeholder"
       @input="onInput"
       @change="handleChange"
       @paste.stop.prevent="onPaste"
@@ -62,13 +63,15 @@
       labelIcon?: string
       noLabel?: boolean
       disabled?: boolean
+      placeholder?: string
     }>(),
     {
       required: false,
       labelIcon: '',
       readonly: false,
       noLabel: false,
-      disabled: false
+      disabled: false,
+      placeholder: ''
     }
   )
 

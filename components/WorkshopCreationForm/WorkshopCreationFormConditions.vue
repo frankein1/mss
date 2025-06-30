@@ -3,41 +3,44 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <h2 class="fr-text--sm fr-text--bold text--uppercase">
+      <h2 class="fr-text--sm fr-text--bold text--uppercase fr-mb-1w">
         Conditions de participation
       </h2>
+      <p class="fr-mb-1v">Fonctionnalité à venir.</p>
     </div>
-    <div class="workshop-form-toggle fr-col-12 fr-col-sm-8">
+    <div class="workshop-form-toggle fr-col-12">
       <DsfrToggleSwitch
         v-model="hasAttendeeLimit"
         label="Limiter le nombre de personnes participantes"
         hint="Les personnes supplémentaires seront inscrites sur liste d’attente."
         no-text
+        :disabled="true"
       />
     </div>
-    <div class="fr-col-12 fr-col-sm-4">
+    <div class="fr-col-12 fr-col-sm-6">
       <VeeInput
         type="number"
+        hint="Saisisez un nombre entier"
         :label="workshopLabels.attendeeLimit"
-        :no-label="true"
         name="attendeeLimit"
-        :disabled="isSubmitting || hasAttendeeLimit === false"
+        :disabled="true"
       />
     </div>
-    <div class="fr-col-12 fr-col-sm-8">
+    <div class="fr-col-12 fr-col-sm-8 flex-end">
       <VeeSelect
         :label="workshopLabels.ageLimitCondition"
         name="ageLimitCondition"
         :options="withEmptyValue(ageConditionOptions)"
-        :disabled="isSubmitting"
+        :disabled="true"
       />
     </div>
-    <div class="fr-col-12 fr-col-sm-4">
+    <div class="fr-col-12 fr-col-sm-4 flex-end">
       <VeeInput
         type="number"
+        hint="Saisisez un nombre entier"
         :label="workshopLabels.ageLimit"
         name="ageLimit"
-        :disabled="isSubmitting || !ageLimitCondition"
+        :disabled="true"
       />
     </div>
   </section>
@@ -80,5 +83,9 @@
         margin-right: 1rem;
       }
     }
+  }
+
+  .flex-end {
+    align-self: flex-end;
   }
 </style>

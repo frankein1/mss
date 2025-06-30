@@ -43,9 +43,9 @@
 </template>
 
 <script setup lang="ts">
-  import { WorkshopsPageItems } from '~/server/route/workshop/getPage.query'
   import { AlertType } from '~/utils/constants/alert'
   import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import { WorkshopsPageItems } from '~/server/services/workshops/getPage.service'
 
   const page = ref(1)
   const perPage = ref(WORKSHOPS_REQUEST_LIMIT_DEFAULT)

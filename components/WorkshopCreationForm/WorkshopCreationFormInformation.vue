@@ -3,7 +3,7 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <h2 class="fr-text--sm fr-text--bold text--uppercase">
+      <h2 class="fr-text--sm fr-text--bold text--uppercase fr-mb-1v">
         Informations pratiques
       </h2>
     </div>
@@ -45,6 +45,7 @@
       <VeeCombobox
         class="fr-mb-1w"
         :label="workshopLabels.partnerOrganizationId"
+        placeholder="Rechercher un organisme"
         name="partnerOrganizationId"
         :options="withEmptyValue(partnerOrganizationOptions)"
         :disabled="isSubmitting"

@@ -3,7 +3,9 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <h2 class="fr-text--sm fr-text--bold text--uppercase">Description</h2>
+      <h2 class="fr-text--sm fr-text--bold text--uppercase fr-mb-1v">
+        Description
+      </h2>
     </div>
     <div class="fr-col-12">
       <VeeInput
@@ -17,6 +19,7 @@
     <div class="fr-col-12">
       <VeeTextarea
         :label="workshopLabels.description"
+        placeholder=" Ex : Matériel, programme, gratuité, etc..."
         name="description"
         :disabled="isSubmitting"
       />
