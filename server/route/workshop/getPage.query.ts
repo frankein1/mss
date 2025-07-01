@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'

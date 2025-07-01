@@ -1,5 +1,9 @@
 import { AgeLimitCondition, PrismaClient } from '@prisma/client'
-import { fixtureStructures, fixturesPartnerOrganizations } from './fixtures'
+import {
+  fixtureStructures,
+  fixturesPartnerOrganizations,
+  fixturesUsers
+} from './fixtures'
 
 const prismaClient = new PrismaClient()
 
@@ -15,9 +19,8 @@ const getRandomDate = () => {
     start.getTime() + Math.random() * (end.getTime() - start.getTime())
   return new Date(randomTime)
 }
-export const workshops = [
+export const workshopInputs = [
   {
-    name: 'Atelier dessin d’observation',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:00',
@@ -32,7 +35,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier robotique enfants',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '10:00',
@@ -47,7 +49,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier couture débutant',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '15:00',
@@ -62,7 +63,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier méditation guidée',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '18:00',
@@ -77,7 +77,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier d’origami',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:30',
@@ -87,7 +86,6 @@ export const workshops = [
     description: 'Papier fourni'
   },
   {
-    name: 'Atelier photo smartphone',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '16:00',
@@ -100,7 +98,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Danse africaine',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '17:00',
@@ -115,7 +112,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.LowerThan
   },
   {
-    name: 'Atelier sculpture argile',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '10:30',
@@ -130,7 +126,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier astronomie pour tous',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '21:00',
@@ -145,7 +140,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Club de tricot',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '16:00',
@@ -160,7 +154,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Jeux de société en famille',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:00',
@@ -175,7 +168,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier peinture intuitive',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '11:00',
@@ -186,7 +178,6 @@ export const workshops = [
     description: 'Tout le matériel est sur place'
   },
   {
-    name: 'Atelier danse contemporaine',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '18:00',
@@ -201,7 +192,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.LowerThan
   },
   {
-    name: 'Randonnée guidée',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '09:00',
@@ -216,7 +206,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Club d’échecs',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:00',
@@ -226,7 +215,6 @@ export const workshops = [
     description: 'Plateaux disponibles sur place'
   },
   {
-    name: 'Atelier compost et écogestes',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '10:00',
@@ -240,7 +228,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier jeux de rôle',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '19:00',
@@ -255,7 +242,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier poterie sur tour',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '13:00',
@@ -269,7 +255,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier théâtre d’impro',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '18:30',
@@ -284,7 +269,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Initiation à la permaculture',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '09:00',
@@ -299,7 +283,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier initiation au chant',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '17:00',
@@ -314,7 +297,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier initiation au coding',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '15:00',
@@ -329,7 +311,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier sophrologie',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '11:00',
@@ -344,7 +325,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier écriture créative',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:00',
@@ -359,7 +339,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier éveil musical',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '10:00',
@@ -374,7 +353,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Club de lecture science-fiction',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '18:00',
@@ -389,7 +367,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier fabrication de cosmétiques naturels',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:30',
@@ -404,7 +381,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier self-défense féminin',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '17:00',
@@ -419,7 +395,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier cuisine végétarienne',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '09:30',
@@ -434,7 +409,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier peinture sur soie',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '14:00',
@@ -449,7 +423,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier fabrication de jeux en bois',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '13:00',
@@ -464,7 +437,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Atelier théâtre d’ombres',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '10:00',
@@ -479,7 +451,6 @@ export const workshops = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    name: 'Club de bridge senior',
     structureId: fixtureStructures[0].id,
     date: getRandomDate(),
     startTime: '15:00',
@@ -495,12 +466,59 @@ export const workshops = [
   }
 ]
 
+const workshopNameInputs = [
+  'Atelier dessin d’observation',
+  'Atelier robotique enfants',
+  'Atelier couture débutant',
+  'Atelier méditation guidée',
+  'Atelier d’origami',
+  'Atelier photo smartphone',
+  'Danse africaine',
+  'Atelier sculpture argile',
+  'Atelier astronomie pour tous',
+  'Club de tricot',
+  'Jeux de société en famille',
+  'Atelier peinture intuitive',
+  'Atelier danse contemporaine',
+  'Randonnée guidée',
+  'Club d’échecs',
+  'Atelier compost et écogestes',
+  'Atelier jeux de rôle',
+  'Atelier poterie sur tour',
+  'Atelier théâtre d’impro',
+  'Initiation à la permaculture',
+  'Atelier initiation au chant',
+  'Atelier initiation au coding',
+  'Atelier sophrologie',
+  'Atelier écriture créative',
+  'Atelier éveil musical',
+  'Club de lecture science-fiction',
+  'Atelier fabrication de cosmétiques naturels',
+  'Atelier self-défense féminin',
+  'Atelier cuisine végétarienne',
+  'Atelier peinture sur soie',
+  'Atelier fabrication de jeux en bois',
+  'Atelier théâtre d’ombres',
+  'Club de bridge senior'
+]
+
 async function main() {
   console.log('starting seed')
 
-  const workshps = await prismaClient.workshop.createMany({
-    data: workshops,
-    skipDuplicates: true
+  const workshopNames = await prismaClient.workshopName.createManyAndReturn({
+    data: workshopNameInputs.map(name => ({
+      name,
+      structureId: fixtureStructures[0].id,
+      createdById: fixturesUsers[4].id
+    }))
+  })
+
+  await prismaClient.workshop.createMany({
+    data: workshopInputs.map(input => ({
+      ...input,
+      createdById: fixturesUsers[4].id,
+      workshopNameId: workshopNames[0].id
+    }))
   })
 }
 main()

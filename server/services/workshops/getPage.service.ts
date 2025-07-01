@@ -61,6 +61,9 @@ const getWorkshops = async (
   passed: boolean
 ) => {
   return await WorkshopRepo.findMany(ctx.user, {
+    include: {
+      workshopName: true
+    },
     where: args.where,
     take: args.take,
     skip: args.skip,

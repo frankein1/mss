@@ -36,7 +36,7 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { CreateWorkshopSchemaInput } from '~/server/schema'
+  import { CreateWorkshopInput } from '~/server/schema'
 
   const title = routes.workshop.AppWorkshopAdd.title
 
@@ -57,7 +57,7 @@
     useRouter().back()
   }
 
-  const onCreateWorkshop = async (input: CreateWorkshopSchemaInput) => {
+  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
     const router = trpcClient.worshop
     const createWorkshop = router.createWorkshop.useMutation()
     const errMessage = "La création de l'atelier a échoué."

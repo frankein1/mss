@@ -2,8 +2,13 @@ import { Workshop } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type WorkshopFieldLabels = Omit<
-  Workshop & {},
-  'partnerOrganization' | 'structure' | 'structureId'
+  Workshop & { name: string },
+  | 'partnerOrganization'
+  | 'structure'
+  | 'structureId'
+  | 'createdAt'
+  | 'createdById'
+  | 'workshopNameId'
 >
 
 export const workshopLabels: FieldLabels<WorkshopFieldLabels> = {

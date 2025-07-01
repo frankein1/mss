@@ -52,6 +52,7 @@ export const WorkshopRepo = {
   prisma: {
     groupBy: prismaClient.workshop.groupBy,
     findMany: prismaClient.workshop.findMany,
+    findUniqueOrThrow: prismaClient.workshop.findUniqueOrThrow,
     updateMany: prismaClient.workshop.updateMany,
     create: prismaClient.workshop.create
   }

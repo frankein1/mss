@@ -70,7 +70,7 @@
     return date.format('DD')
   })
   const title = computed(() => {
-    const base = props.workshop.name
+    const base = props.workshop.workshopName.name
     const suffix = props.workshop.sessionName
       ? ' – ' + props.workshop.sessionName
       : ''

@@ -1,4 +1,4 @@
-import { Workshop } from '@prisma/client'
+import { Workshop, WorkshopName } from '@prisma/client'
 import { WorkshopsRoute } from './utils'
 
 export const routes = {
@@ -9,7 +9,8 @@ export const routes = {
   },
   AppWorkshop: {
     name: 'AppWorkshop',
-    title: (workshop: Workshop) => workshop.name,
+    title: (workshop: Workshop & { workshopName: WorkshopName }) =>
+      workshop.workshopName.name,
     path: (id?: string) => `${WorkshopsRoute}/${id}`
   },
   AppWorkshops: {

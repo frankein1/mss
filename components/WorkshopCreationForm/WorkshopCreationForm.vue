@@ -44,7 +44,6 @@
   import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
-  import { workshops } from '~/prisma/workshop_seed'
 
   defineProps<{
     isSubmitting: boolean
@@ -56,7 +55,7 @@
     cancel: []
   }>()
 
-  const nameOptions: Options = workshops.map(w => ({
+  const nameOptions: Options = [{ name: 'FIXME' }].map(w => ({
     label: w.name,
     value: w.name
   }))

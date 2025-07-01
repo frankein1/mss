@@ -9,7 +9,7 @@ import { WorkshopRepo } from '~/server/database'
 const securityCheck = AllowSecurityCheck
 
 const handler = ({
-  input,
+  input: { partnerOrganizationId, name, ...input },
   ctx
 }: {
   input: CreateWorkshopInput
@@ -19,7 +19,24 @@ const handler = ({
     select: { id: true },
     data: {
       ...input,
-      structureId: ctx.structure.id
+      partnerOrganization: { connect: { id: partnerOrganizationId } },
+      workshopName: {
+        connectOrCreate: {
+          where: {
+            structureId_name: {
+              name,
+              structureId: ctx.structure.id
+            }
+          },
+          create: {
+            name,
+            structureId: ctx.structure.id,
+            createdById: ctx.user.id
+          }
+        }
+      },
+      createdBy: { connect: { id: ctx.user.id } },
+      structure: { connect: { id: ctx.structure.id } }
     }
   })
 

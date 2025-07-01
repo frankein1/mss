@@ -10,29 +10,27 @@ import {
 } from '../helpers.schema'
 import { AgeLimitCondition } from '@prisma/client'
 
-export type CreateWorkshopSchemaInput = z.infer<typeof createWorkshopSchema>
-
 export const createWorkshopSchema = z.object({
   name: stringConstraint.max(100, maxStringLengthMessage(100)),
   date: z.coerce.date(errorMessages),
-  startTime: z.string().nullish(),
-  endTime: z.string().nullish(),
-  location: stringConstraint.max(200, maxStringLengthMessage(200)).nullish(),
-  partnerOrganizationId: z.string().uuid().nullish(),
-  host: z.string().nullish(),
-  sessionName: z.string().nullish(),
-  description: z.string().nullish(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+  location: stringConstraint.max(200, maxStringLengthMessage(200)).optional(),
+  partnerOrganizationId: z.string().uuid().optional(),
+  host: z.string().optional(),
+  sessionName: z.string().optional(),
+  description: z.string().optional(),
   attendeeLimit: z.coerce
     .number()
     .int(validIntNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish(),
+    .optional(),
   ageLimitCondition: withEmptyValueOptionalNativeEnum(AgeLimitCondition),
   ageLimit: z.coerce
     .number()
     .int(validIntNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish()
+    .optional()
 })
 
 export type CreateWorkshopInput = z.infer<typeof createWorkshopSchema>

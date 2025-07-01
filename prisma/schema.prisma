@@ -125,6 +125,8 @@ model User {
 
   CGUHistory     CGUHistory[]
   userActivities UserActivity[]
+  WorkshopName   WorkshopName[]
+  Workshop       Workshop[]
 
   @@map("user")
 }
@@ -175,6 +177,7 @@ model Structure {
 
   archivedBeneficiaries ArchivedBeneficiary[]
   Workshop              Workshop[]
+  WorkshopName          WorkshopName[]
 
   @@map("structure")
 }
@@ -2123,9 +2126,10 @@ model ApiToken {
 
 model Workshop {
   id                    String               @id @default(uuid()) @db.Uuid
-  name                  String
+  workshopName          WorkshopName         @relation(fields: [workshopNameId], references: [id])
+  workshopNameId        String               @map("workshop_name_id") @db.Uuid
   structure             Structure            @relation(fields: [structureId], references: [id])
-  structureId           String               @db.Uuid
+  structureId           String               @map("structure_id") @db.Uuid
   date                  DateTime             @db.Date
   startTime             String?              @map("start_time")
   endTime               String?              @map("end_time")
@@ -2138,8 +2142,25 @@ model Workshop {
   attendeeLimit         Int?                 @map("attendee_limit")
   ageLimitCondition     AgeLimitCondition?   @map("ageLimitCondition")
   ageLimit              Int?                 @map("ageLimit")
+  createdBy             User                 @relation(fields: [createdById], references: [id])
+  createdById           String               @map("created_by_id") @db.Uuid
+  createdAt             DateTime             @default(now()) @map("created_at")
 
   @@map("workshop")
+}
+
+model WorkshopName {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String
+  structure   Structure  @relation(fields: [structureId], references: [id])
+  structureId String     @map("structure_id") @db.Uuid
+  createdBy   User       @relation(fields: [createdById], references: [id])
+  createdById String     @map("created_by_id") @db.Uuid
+  createdAt   DateTime   @default(now()) @map("created_by")
+  Workshop    Workshop[]
+
+  @@unique([structureId, name])
+  @@map("workshop_name")
 }
 
 enum AgeLimitCondition {
