@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.46.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.1...v1.46.2) (2025-07-02)
+
+
+### Bug Fixes
+
+* **accompagnement:** lien des demandes de logement dans liste accompagnement ([3d0ec2d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3d0ec2d0fd654ff39d89dd964c0836b3c4b86689))
+* **formulaire:** sélection recherchable corrigé ([53e14ac](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/53e14acd1bdd66d01209a6b12913c6dff4c78d75))
+
 ## [1.46.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.0...v1.46.1) (2025-06-23)
 
 
