@@ -21,10 +21,10 @@
         :heading-level="2"
       >
         <template #[tabTitles.at(0)?.panelId]>
-          <WorkshopsList />
+          <WorkshopList />
         </template>
         <template #[tabTitles.at(1)?.panelId]>
-          <WorkshopsList :passed="true" />
+          <WorkshopList :passed="true" />
         </template>
       </AtomTabs>
     </PageContainer>

@@ -50,7 +50,7 @@ export const appRouter = router({
   housingHelpRequest: housingHelpRequestRouter,
   file: fileRouter,
   rdvsp: rdvspRouter,
-  worshop: workshopRouter
+  workshop: workshopRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

@@ -58,7 +58,7 @@
   }
 
   const onCreateWorkshop = async (input: CreateWorkshopInput) => {
-    const router = trpcClient.worshop
+    const router = trpcClient.workshop
     const createWorkshop = router.createWorkshop.useMutation()
     const errMessage = "La création de l'atelier a échoué."
 

@@ -9,10 +9,7 @@
     @submit.prevent="onSubmit"
   >
     <div class="fr-container">
-      <WorkshopCreationFormName
-        :is-submitting="isSubmitting"
-        :name-options="nameOptions"
-      />
+      <WorkshopCreationFormName :is-submitting="isSubmitting" />
       <WorkshopCreationFormInformation
         :is-submitting="isSubmitting"
         :partner-organizations="partnerOrganizations"
@@ -54,11 +51,6 @@
     saveWorkshop: [workshop: CreateWorkshopInput]
     cancel: []
   }>()
-
-  const nameOptions: Options = [{ name: 'FIXME' }].map(w => ({
-    label: w.name,
-    value: w.name
-  }))
 
   const errors = ref<
     {

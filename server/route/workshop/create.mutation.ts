@@ -19,7 +19,9 @@ const handler = ({
     select: { id: true },
     data: {
       ...input,
-      partnerOrganization: { connect: { id: partnerOrganizationId } },
+      partnerOrganization: partnerOrganizationId
+        ? { connect: { id: partnerOrganizationId } }
+        : {},
       workshopName: {
         connectOrCreate: {
           where: {

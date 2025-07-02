@@ -9,7 +9,7 @@
         name="name"
         :disabled="isSubmitting"
         required
-        :options="nameOptions"
+        :options="options"
         :with-creation="true"
       />
       <DsfrAccordionsGroup class="fr-mt-2w">
@@ -43,9 +43,17 @@
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
 
+  const { data: workshopNames } =
+    await useTrpcClient().workshop.getWorkshopNameList.useQuery()
+
+  const options: Ref<Options> = computed(
+    () =>
+      workshopNames.value?.map(({ name }) => ({ label: name, value: name })) ??
+      []
+  )
+
   defineProps<{
     isSubmitting: boolean
-    nameOptions: Options
   }>()
 </script>
 

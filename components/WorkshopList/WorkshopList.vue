@@ -9,24 +9,24 @@
     v-if="pending"
     class="fr-mx-auto"
   />
-  <WorkshopsListEmpty
-    v-if="workshopsList.length === 0"
+  <WorkshopListEmpty
+    v-if="workshopList.length === 0"
     :passed="passed"
   />
   <template v-else>
     <p>{{ data?.count }} ateliers à venir</p>
-    <ul class="workshops-list">
+    <ul class="workshop-list">
       <li
-        v-for="mounth in groupAndSortWorkshops(workshopsList, !passed)"
-        :key="mounth[0]"
+        v-for="month in groupAndSortWorkshops(workshopList, !passed)"
+        :key="month[0]"
       >
-        <p class="workshop-mounth">{{ mounth[0] }}</p>
-        <ul class="workshops-list">
+        <p class="workshop-month">{{ month[0] }}</p>
+        <ul class="workshop-list">
           <li
-            v-for="workshop in mounth[1]"
+            v-for="workshop in month[1]"
             :key="workshop.id"
           >
-            <WorkshopsListItem :workshop="workshop" />
+            <WorkshopListItem :workshop="workshop" />
           </li>
         </ul>
       </li>
@@ -58,7 +58,7 @@
   )
 
   const totalPages = computed(() => data.value?.totalPages || 0)
-  // @ts-expect-error // will be fixed with filters
+  // @ts-expect-error // FIXME: will be fixed with filters
   const { updatePagination } = usePagination(page, perPage, null)
 
   const queryInput = computed(() => ({
@@ -69,16 +69,16 @@
     }
   }))
 
-  const getWorkshopsList = async () => {
+  const getWorkshopList = async () => {
     const trpcClient = useTrpcClient()
     const { data, pending, error } =
-      await trpcClient.worshop.getPage.useQuery(queryInput)
+      await trpcClient.workshop.getPage.useQuery(queryInput)
 
     return { pending, error, data }
   }
-  const { pending, error, data } = await getWorkshopsList()
+  const { pending, error, data } = await getWorkshopList()
 
-  const workshopsList: ComputedRef<WorkshopsPageItems> = computed(
+  const workshopList: ComputedRef<WorkshopsPageItems> = computed(
     () => data.value?.items || []
   )
 
@@ -138,13 +138,13 @@
 </script>
 
 <style scoped lang="scss">
-  .workshops-list {
+  .workshop-list {
     --ul-start: 0;
     --xl-block: 0;
     --ul-type: none;
   }
 
-  .workshop-mounth {
+  .workshop-month {
     font-size: 1.25rem;
     font-weight: 700;
     text-transform: uppercase;
