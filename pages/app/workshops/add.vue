@@ -12,19 +12,19 @@
         <PageTitle
           :title="title"
           no-margin
-        />
+        >
+        </PageTitle>
       </div>
       <RequiredFields />
     </div>
 
     <AtomLazyComponent
-      :pending
-      :error="Boolean(error)"
+      :error="Boolean(errorPartner)"
       message="La page n'a pas pu être chargée."
     >
       <WorkshopCreationForm
         v-if="partnerOrganizations"
-        :is-submitting="false"
+        :is-submitting="status === 'pending'"
         :partner-organizations="partnerOrganizations"
         @save-workshop="onCreateWorkshop"
         @cancel="onCancel"
@@ -44,41 +44,30 @@
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const isSubmitting = ref(false)
 
   // Get partners organisations
-  const {
-    data: partnerOrganizations,
-    pending,
-    error
-  } = await trpcClient.partner.getAll.useQuery()
+  const { data: partnerOrganizations, error: errorPartner } =
+    await trpcClient.partner.getAll.useQuery()
 
   const onCancel = () => {
     useRouter().back()
   }
 
-  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
-    const router = trpcClient.workshop
-    const createWorkshop = router.createWorkshop.useMutation()
-    const errMessage = "La création de l'atelier a échoué."
+  const router = trpcClient.workshop
+  const { mutate, error, status } = router.createWorkshop.useMutation()
 
-    useTrpcMutation({
-      isSubmitting,
-      mutation: () => createWorkshop.mutate(input),
-      onSuccess: workshopCreated => {
-        if (createWorkshop.error.value || workshopCreated == null) {
-          snackbar.error(errMessage, snackbar.focus('form', 'select'))
-          return
-        }
-        const workshopRoute = routes.workshop.AppWorkshop.path(
-          workshopCreated.id
-        )
-        navigateTo(workshopRoute)
-      },
-      onFailure: () => {
-        snackbar.error(errMessage, snackbar.focus('form', 'select'))
-      }
-    })
+  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
+    const workshopCreated = await mutate(input)
+
+    if (error.value || workshopCreated === null) {
+      snackbar.error(
+        "La création de l'atelier a échoué.",
+        snackbar.focus('form', 'select')
+      )
+      return
+    }
+    const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)
+    navigateTo(workshopRoute)
   }
 </script>
 

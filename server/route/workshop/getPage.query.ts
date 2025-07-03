@@ -2,8 +2,8 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import z from 'zod'
-import { WorkshopService } from '~/server/services/workshops'
-import { GetWorkshopsInput } from '~/server/services/workshops/getPage.service'
+import { WorkshopService } from '~/server/services/workshop'
+import { GetWorkshopsInput } from '~/server/services/workshop/getPage.service'
 
 const getWorkshopsSchema = z.object({
   filter: z.object({

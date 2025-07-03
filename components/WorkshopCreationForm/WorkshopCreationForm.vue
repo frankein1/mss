@@ -1,8 +1,10 @@
 <template>
-  <FormErrors
-    v-if="errors.length > 1"
-    :errors="errors"
-  />
+  <div class="fr-container">
+    <FormErrors
+      v-if="errors.length > 1"
+      :errors
+    />
+  </div>
   <form
     ref="form"
     novalidate
@@ -41,6 +43,7 @@
   import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
+  import { workshopLabels } from '~/client/labels'
 
   defineProps<{
     isSubmitting: boolean
@@ -52,20 +55,14 @@
     cancel: []
   }>()
 
-  const errors = ref<
-    {
-      name: string
-      message: string
-    }[]
-  >([])
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit, values } = useForm<CreateWorkshopInput>({
+  const { handleSubmit, errors: formErrors } = useForm<CreateWorkshopInput>({
     validationSchema: toTypedSchema(createWorkshopSchema)
   })
-  watch(values, () => {
-    console.log(values)
-  })
+
+  const { errors } = useDisplayFormErrors(form, formErrors, workshopLabels)
+
   const onSubmit = handleSubmit(values => {
     emit('saveWorkshop', values)
   })

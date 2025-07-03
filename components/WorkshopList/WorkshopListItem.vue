@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
   import dayjs from 'dayjs'
-  import { WorkshopsPageItem } from '~/server/services/workshops/getPage.service'
+  import { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{
