@@ -7,6 +7,7 @@ import { createEmail } from '~/server/query'
 import { getStructureCreationEmailContent } from '~/server/email'
 import { socialSupportSubjectKeys } from '~/client/options'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
 
 const adminHandler = async ({
   ctx: _ctx,
@@ -39,6 +40,9 @@ const adminHandler = async ({
     to: input.email,
     subject: createEmailSubject('Mon Suivi Social - Votre espace a été créé'),
     ...getStructureCreationEmailContent()
+  })
+  createOrUpdateStructure(createdStructure.id).catch(error => {
+    console.error(error)
   })
 
   return createdStructure

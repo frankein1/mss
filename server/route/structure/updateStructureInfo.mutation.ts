@@ -9,6 +9,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { StructureRepo } from '~/server/database'
+import { UserActivityObject, UserActivityType } from '@prisma/client'
 
 const handler = async ({
   input,
@@ -34,5 +35,13 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 export const updateStructureInfo = createMutation({
   handler,
   inputValidation: editStructureInfoSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'user.update',
+    target: UserActivityObject.Structure,
+    targetId: ({ ctx }) => {
+      return ctx.structure.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

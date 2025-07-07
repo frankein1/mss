@@ -1,5 +1,9 @@
 import { Prisma, UserActivityType, UserActivityObject } from '@prisma/client'
 import { diff as diffJson } from 'json-diff'
+import {
+  createOrUpdateStructure,
+  createOrUpdateUser
+} from '~/server/integrations/brevo/service'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -64,6 +68,32 @@ export async function addUserActivity(input: AddUserActivityInput) {
     content,
     diff
   }
+  // Do not await, failure shouldn't cause the entire mutation to fail
+  createOrUpdateUser(user.id).catch(error => {
+    console.error(error)
+  })
+  if (
+    object === UserActivityObject.User &&
+    activity === UserActivityType.UPDATE
+  ) {
+    // If the operation is a mutation targeting another user,
+    // then we must update the targeted user on Brevo
+    // (eg. an administrator changed a user's email)
+    createOrUpdateUser(objectId).catch(error => {
+      console.error(error)
+    })
+  }
+  if (
+    object === UserActivityObject.Structure &&
+    activity === UserActivityType.UPDATE
+  ) {
+    // If the operation is a mutation targeting a structure,
+    // then we must update the targeted structure on Brevo
+    // (eg. an administrator changed a structure's name or address)
+    createOrUpdateStructure(objectId).catch(error => {
+      console.error(error)
+    })
+  }
   if (user.structureId) {
     await conn.structure.update({
       where: { id: user.structureId },
@@ -75,6 +105,10 @@ export async function addUserActivity(input: AddUserActivityInput) {
           create: activityData
         }
       }
+    })
+    // Do not await, failure shouldn't cause the entire mutation to fail
+    createOrUpdateStructure(user.structureId).catch(error => {
+      console.error(error)
     })
   } else {
     await conn.userActivity.create({
