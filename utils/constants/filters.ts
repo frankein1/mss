@@ -34,3 +34,9 @@ export enum FilterFollowupNotFilled {
   PrescribingOrganization = 'prescribingOrganization',
   Duration = 'duration'
 }
+
+export enum FilterWorkshopPeriod {
+  All = 'all',
+  Future = 'future',
+  Past = 'past'
+}

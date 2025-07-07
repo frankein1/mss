@@ -11,13 +11,16 @@
   />
   <WorkshopListEmpty
     v-if="workshopList.length === 0"
-    :passed="passed"
+    :period="FilterWorkshopPeriod.Past"
   />
   <template v-else>
     <p>{{ data?.count }} ateliers à venir</p>
     <ul class="workshop-list">
       <li
-        v-for="month in groupAndSortWorkshops(workshopList, !passed)"
+        v-for="month in groupAndSortWorkshops(
+          workshopList,
+          period != FilterWorkshopPeriod.Past
+        )"
         :key="month[0]"
       >
         <p class="workshop-month">{{ month[0] }}</p>
@@ -46,15 +49,16 @@
   import { AlertType } from '~/utils/constants/alert'
   import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { WorkshopsPageItems } from './types'
+  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
 
   const page = ref(1)
   const perPage = ref(WORKSHOPS_REQUEST_LIMIT_DEFAULT)
 
   const props = withDefaults(
     defineProps<{
-      passed?: boolean
+      period?: FilterWorkshopPeriod
     }>(),
-    { passed: false }
+    { period: FilterWorkshopPeriod.Future }
   )
 
   const totalPages = computed(() => data.value?.totalPages || 0)
@@ -65,7 +69,7 @@
     page: page.value,
     perPage: perPage.value,
     filter: {
-      passed: props.passed
+      period: props.period
     }
   }))
 

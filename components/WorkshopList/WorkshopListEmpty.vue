@@ -9,9 +9,13 @@
     </div>
     <div class="workshops-empty-content">
       <p class="fr-h4">
-        {{ passed ? 'Aucun atelier passé' : 'Aucun atelier à venir' }}
+        {{
+          period === FilterWorkshopPeriod.Past
+            ? 'Aucun atelier passé'
+            : 'Aucun atelier à venir'
+        }}
       </p>
-      <p v-if="passed">
+      <p v-if="period === FilterWorkshopPeriod.Past">
         Retrouvez ici la liste de tous les ateliers terminés. <br />Vous pourrez
         mettre à jour la liste des présences depuis cette page.
       </p>
@@ -44,11 +48,13 @@
 </template>
 
 <script setup lang="ts">
+  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+
   withDefaults(
     defineProps<{
-      passed?: boolean
+      period?: FilterWorkshopPeriod
     }>(),
-    { passed: false }
+    { period: FilterWorkshopPeriod.Future }
   )
 </script>
 

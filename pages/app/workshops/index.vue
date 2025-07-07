@@ -24,7 +24,7 @@
           <WorkshopList />
         </template>
         <template #[tabTitles.at(1)?.panelId]>
-          <WorkshopList :passed="true" />
+          <WorkshopList :period="FilterWorkshopPeriod.Past" />
         </template>
       </AtomTabs>
     </PageContainer>
@@ -34,6 +34,7 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
 
   const title = routes.workshop.AppWorkshops.title
   useHead({ title })
