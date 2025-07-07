@@ -41,6 +41,7 @@ function count(user: SecurityRuleGrantee, params: Prisma.UserCountArgs) {
 
 export const UserRepo = {
   prisma: {
+    count: prismaClient.user.count,
     update: prismaClient.user.update,
     updateMany: prismaClient.user.updateMany,
     findUnique: prismaClient.user.findUnique,

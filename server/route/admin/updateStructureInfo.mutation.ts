@@ -5,6 +5,7 @@ import {
   EditStructureAdminInfoInput
 } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
+import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
 
 const adminHandler = async ({
   input,
@@ -19,6 +20,10 @@ const adminHandler = async ({
     select: {
       id: true
     }
+  })
+
+  createOrUpdateStructure(updatedStructure.id).catch(error => {
+    console.error(error)
   })
 
   return updatedStructure

@@ -7,6 +7,11 @@ import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
+import {
+  createOrUpdateStructure,
+  createOrUpdateUser,
+  linkUserToStructure
+} from '~/server/integrations/brevo/service'
 
 const adminHandler = async ({
   ctx,
@@ -45,6 +50,8 @@ const adminHandler = async ({
     subject: createEmailSubject('Mon Suivi Social - Ouverture de votre compte'),
     ...getUserCreationEmailContent(createdUser)
   })
+  // Do not await, as this should not make the user creation fail in case of failure
+  createOrUpdateUser(createdUser.id).catch(error => console.error(error))
 
   return createdUser
 }

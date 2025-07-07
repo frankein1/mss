@@ -1,4 +1,9 @@
-import { UserRole, UserStatus } from '@prisma/client'
+import {
+  UserActivityObject,
+  UserActivityType,
+  UserRole,
+  UserStatus
+} from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { UserEditionInput, editUserSchema } from '~/server/schema'
@@ -35,5 +40,13 @@ const securityCheck = (ctx: SecurityRuleContext, input: UserEditionInput) => {
 export const updateUserMutation = createMutation({
   handler,
   inputValidation: editUserSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'user.update',
+    target: UserActivityObject.User,
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })
