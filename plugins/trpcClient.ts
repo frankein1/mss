@@ -9,13 +9,13 @@ export default defineNuxtPlugin(() => {
     links: [
       httpBatchLink({
         url: `${config.public.appUrl}/api/trpc`,
+        transformer: superjson,
         headers() {
           // You can add more custom headers here
           return headers
         }
       })
-    ],
-    transformer: superjson
+    ]
   })
 
   return {

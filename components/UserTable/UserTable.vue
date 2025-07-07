@@ -80,7 +80,7 @@
 <script lang="ts" setup>
   import { User } from '@prisma/client'
   import { TRPCClientErrorBase } from '@trpc/client'
-  import { DefaultErrorShape } from '@trpc/server'
+  import { TRPCDefaultErrorShape } from '@trpc/server'
   import { AlertType } from '~/utils/constants/alert'
   import { nonAdminUserRoleKeys } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'
@@ -90,7 +90,7 @@
   defineProps<{
     users: User[] | null
     pending: boolean
-    error: TRPCClientErrorBase<DefaultErrorShape> | null
+    error: TRPCClientErrorBase<TRPCDefaultErrorShape> | null
   }>()
 
   const authState = useAuthState()
