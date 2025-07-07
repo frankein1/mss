@@ -9,15 +9,12 @@ import { URLSearchParams } from 'url'
 // Use direct HTTP calls for now.
 
 const API_HOST = 'https://api.brevo.com/v3'
-if (
-  !(process.env.CI || process.env.NODE_ENV === 'test') &&
-  !process.env.BREVO_API_KEY
-) {
-  throw new Error('process.env.BREVO_API_KEY is not defined')
-}
 const BREVO_API_KEY = process.env.BREVO_API_KEY ?? ''
 
 export async function getContact(userId: string) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   const result = await fetch(
     `${API_HOST}/contacts/${userId}?identifierType=ext_id`,
     {
@@ -34,6 +31,9 @@ export async function getContact(userId: string) {
 export async function createOrUpdateContact(
   contact: ReturnType<typeof mapUserToBrevoContact>
 ) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/contacts`, {
     method: 'POST',
     headers: {
@@ -45,6 +45,9 @@ export async function createOrUpdateContact(
 }
 
 export async function createCompany(structure: Pick<Structure, 'id' | 'name'>) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   const { id, name } = structure
   const result = await fetch(`${API_HOST}/companies`, {
     method: 'POST',
@@ -62,6 +65,9 @@ export async function updateCompany(
   id: string,
   company: ReturnType<typeof mapStructureToBrevoCompany>
 ) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/companies/${id}`, {
     method: 'PATCH',
     headers: {
@@ -79,6 +85,9 @@ export async function linkContactToCompany({
   companyId: string
   contactId: string
 }) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/companies/link-unlink/${companyId}`, {
     method: 'PATCH',
     headers: {
@@ -90,6 +99,9 @@ export async function linkContactToCompany({
 }
 
 export async function getCompanyAttributes() {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/crm/attributes/companies`, {
     method: 'GET',
     headers: {
@@ -107,6 +119,9 @@ export async function createCompanyAttribute({
   type: 'text' | 'boolean' | 'date' | 'number' | 'single-select'
   options?: string[]
 }) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/crm/attributes`, {
     method: 'POST',
     headers: {
@@ -131,6 +146,9 @@ export async function createContactAttribute({
   type: 'id' | 'text' | 'boolean' | 'date' | 'float' | 'category'
   options?: string[]
 }) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(
     `${API_HOST}/contacts/attributes/${type === 'category' ? 'category' : 'normal'}/${name}`,
     {
@@ -154,6 +172,9 @@ export async function createContactAttribute({
 }
 
 export async function getCompanies() {
+  if (!BREVO_API_KEY) {
+    return
+  }
   await fetch(`${API_HOST}/companies`, {
     method: 'GET',
     headers: {
@@ -163,6 +184,9 @@ export async function getCompanies() {
 }
 
 export async function getCompanyByStructureId(structure_id: string) {
+  if (!BREVO_API_KEY) {
+    return
+  }
   const queryParams = new URLSearchParams({
     filters: JSON.stringify({ 'attributes.ext_id': structure_id })
   })
