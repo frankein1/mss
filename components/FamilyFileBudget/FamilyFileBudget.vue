@@ -4,10 +4,12 @@
       <div class="beneficiary-budget--title">
         <AtomPictogram path="/pictograms/money.svg" />
         <div>
-          <h2 class="fr-mb-1v">Budget mensuel du foyer fiscal</h2>
+          <h2 :class="{ 'fr-mb-1v': bugetLastActivity }">
+            Budget mensuel du foyer fiscal
+          </h2>
           <p
             v-if="bugetLastActivity"
-            class="fr-m-0 fr-text--bold"
+            class="fr-m-0"
           >
             Dernière mise à jour : {{ bugetLastActivity.toLocaleDateString() }}
           </p>
@@ -162,7 +164,13 @@
       : []
 
     // Date de migration de le fonctionalité Budget.
-    const migrationDate = new Date('2024-06-03T23:06:59.476Z')
+    // 1. exclure toutes les migrations avant le 2024-06-04 00:00:00
+    // migrationDate Prod = '2024-06-03T23:06:59.476Z'
+    // migrationDate Dev = '2024-06-03 07:54:17.475'
+    // 2. exclure toutes les dates correspondant à la date de création du budget
+    const migrationDate = new Date('2024-06-04T00:00:00Z')
+    const creationDate = dayjs(budget.created).add(1, 'minute').toDate()
+
     const activities = [
       budget.updated,
       budget.expenses?.updated,
@@ -171,7 +179,12 @@
       ...debtsActivities,
       ...customExpenseActivities,
       ...customIncomeActivities
-    ].filter(date => date != null && date.getTime() !== migrationDate.getTime())
+    ].filter(
+      date =>
+        date != null &&
+        date.getTime() >= migrationDate.getTime() &&
+        date.getTime() >= creationDate.getTime()
+    )
 
     if (activities.length === 0) {
       return null
@@ -212,8 +225,7 @@
     }
   }
 
-  .beneficiary-budget--title h2,
-  .beneficiary-budget--title p {
+  .beneficiary-budget--title h2 {
     color: var(--primary);
   }
 </style>
