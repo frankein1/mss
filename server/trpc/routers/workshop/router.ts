@@ -10,5 +10,8 @@ export const workshopRouter = router({
     .query(routes.getPageQuery.execute),
   getWorkshopNameList: protectedProcedure
     .input(routes.getWorkshopNameList.inputValidation)
-    .query(routes.getWorkshopNameList.execute)
+    .query(routes.getWorkshopNameList.execute),
+  getOne: protectedProcedure
+    .input(routes.getQuery.inputValidation)
+    .query(routes.getQuery.execute)
 })

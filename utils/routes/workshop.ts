@@ -1,5 +1,6 @@
 import { Workshop, WorkshopName } from '@prisma/client'
 import { WorkshopsRoute } from './utils'
+import { WorkshopDetails } from '~/types/workshop'
 
 export const routes = {
   AppWorkshopAdd: {
@@ -9,8 +10,8 @@ export const routes = {
   },
   AppWorkshop: {
     name: 'AppWorkshop',
-    title: (workshop: Workshop & { workshopName: WorkshopName }) =>
-      workshop.workshopName.name,
+    title: (workshop: WorkshopDetails | null) =>
+      workshop ? workshop.workshopName.name : 'Atelier',
     path: (id?: string) => `${WorkshopsRoute}/${id}`
   },
   AppWorkshops: {
