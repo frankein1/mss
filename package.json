@@ -98,7 +98,7 @@
     "typescript": "~5.8.3",
     "vitest": "^3.2.0",
     "vue-dsfr-nuxt-module": "^2.0.0",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^2.2.12"
   },
   "overrides": {
     "h3": "1.11.1"
