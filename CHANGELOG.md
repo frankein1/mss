@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.46.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.2...v1.46.3) (2025-07-08)
+
+
+### Bug Fixes
+
+* fix Brevo API key not set ([412a5c8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/412a5c853e0e7973440c7d670389eb3ad6cdd146))
+* mise à jour auto des attributs Brevo ([c2fb1c7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c2fb1c782a23e6c3d680480d207cd5b0b09871f2))
+
 ## [1.46.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.1...v1.46.2) (2025-07-02)
 
 
