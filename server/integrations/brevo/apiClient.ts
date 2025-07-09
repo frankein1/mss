@@ -2,6 +2,8 @@ import { Structure } from '@prisma/client'
 import { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import { URLSearchParams } from 'url'
 
+const runtimeConfig = useRuntimeConfig()
+
 // Do not use Brevo's official TypeScript SDK under any circumstances.
 // It was obviously poorly auto-generated from another language, is not maintained,
 // and even the simplest example from the README doesn't work.
@@ -9,7 +11,7 @@ import { URLSearchParams } from 'url'
 // Use direct HTTP calls for now.
 
 const API_HOST = 'https://api.brevo.com/v3'
-const BREVO_API_KEY = process.env.BREVO_API_KEY ?? ''
+const BREVO_API_KEY = runtimeConfig?.brevo?.apiKey
 
 export async function getContact(userId: string) {
   if (!BREVO_API_KEY) {

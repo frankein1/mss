@@ -96,7 +96,8 @@ export default defineNuxtConfig({
     'nuxt-scheduler',
     'nuxt-security',
     'vue-dsfr-nuxt-module',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    '@nuxt/test-utils/module'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
