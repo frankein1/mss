@@ -55,6 +55,14 @@
         role="tooltip"
         >Fonctionnalité à venir</span
       >
+
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-delete-line btn-delete-action fr-mb-0"
+        type="button"
+        @click="$emit('delete')"
+      >
+        Supprimer
+      </button>
     </div>
   </div>
 </template>
@@ -67,6 +75,10 @@
 
   const props = defineProps<{
     workshop: WorkshopDetails
+  }>()
+
+  defineEmits<{
+    delete: []
   }>()
 
   const dateDetails = computed(() => {

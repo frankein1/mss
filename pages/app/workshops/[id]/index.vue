@@ -18,7 +18,10 @@
         >
           Retour
         </NuxtLink>
-        <WorkshopHeader :workshop="workshop" />
+        <WorkshopHeader
+          :workshop="workshop"
+          @delete="onDeleteWorkshop"
+        />
       </PageContainer>
     </div>
     <div class="fr-container--fluid container-middle">
@@ -41,6 +44,7 @@
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
+  const snackbar = useSnackbar()
   const workshopId = route.params.id as string
 
   const {
@@ -54,6 +58,17 @@
   useHead({
     title: routes.workshop.AppWorkshop.title(workshop.value || null)
   })
+
+  const onDeleteWorkshop = async () => {
+    const { mutate, error, status } = trpcClient.workshop.delete.useMutation()
+    const workshopCreated = await mutate({ id: workshopId })
+    if (error.value || workshopCreated === null) {
+      snackbar.error("La suppression de l'atelier a échoué.")
+      return
+    }
+    snackbar.success("L'atelier a été supprimé avec succès.")
+    navigateTo(routes.workshop.AppWorkshops.path())
+  }
 </script>
 
 <style lang="scss" scoped>
