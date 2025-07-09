@@ -13,6 +13,7 @@ export default defineVitestConfig({
     }
   },
   test: {
+    environment: 'nuxt',
     exclude: [...configDefaults.exclude, 'e2e/**'],
     coverage: {
       exclude: [
