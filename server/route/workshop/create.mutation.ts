@@ -2,11 +2,26 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { WorkshopRepo } from '~/server/database'
+import { WorkshopRepo, PartnerOrganizationRepo } from '~/server/database'
+import { SecurityRuleContext } from '~/server/security'
 
-// FIXME: Requires additional checks?
-const securityCheck = AllowSecurityCheck
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: CreateWorkshopInput
+) => {
+  if (!input.partnerOrganizationId) {
+    return true
+  }
+  try {
+    await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {
+      where: { id: input.partnerOrganizationId },
+      select: { id: true }
+    })
+  } catch {
+    return false
+  }
+  return true
+}
 
 const handler = ({
   input: { partnerOrganizationId, name, ...input },
@@ -15,7 +30,7 @@ const handler = ({
   input: CreateWorkshopInput
   ctx: ProtectedAppContext
 }) =>
-  WorkshopRepo.prisma.create({
+  WorkshopRepo.create(ctx.user, {
     select: { id: true },
     data: {
       ...input,

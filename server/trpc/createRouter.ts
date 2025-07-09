@@ -81,6 +81,9 @@ const userMiddleware = baseMiddleware(({ ctx, next }) => {
 
 const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role === 'Administrator' || !ctx.user.structure?.id) {
+    throw forbiddenError('User routes are not available to admins')
+  }
+  if (!ctx.user.structure?.id) {
     throw forbiddenError('User is not part of any structure')
   }
   return next({
