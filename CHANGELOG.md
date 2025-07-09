@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.46.4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.3...v1.46.4) (2025-07-09)
+
+
+### Bug Fixes
+
+* **Brevo:** use runtime config for API key ([ffc48e5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ffc48e519904356ef04b6edff8a58dfbd688f903))
+
 ## [1.46.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.2...v1.46.3) (2025-07-08)
 
 
