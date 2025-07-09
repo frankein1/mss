@@ -4,10 +4,13 @@
 
     <div class="input-wrapper">
       <BeneficiarySearchCombobox
+        :key="rerendervalue"
         class="beneficiary-search fr-mr-2w"
         label="Rechercher un dossier bénéficiaire"
         name="beneficiary-search"
         :select-only="true"
+        :show-status="false"
+        :show-age="true"
         :search-fn="searchBeneficiaries"
         @on-select="onSelect"
       />
@@ -32,6 +35,8 @@
 
 <script setup lang="ts">
   import { BeneficiarySearchResult } from '~/types/beneficiary'
+  const snackbar = useSnackbar()
+  const rerendervalue = ref(0) // force rerender combobox
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
@@ -42,6 +47,14 @@
 
   const onSelect = (beneficiary: BeneficiarySearchResult) => {
     console.log(beneficiary)
+    rerendervalue.value++
+    snackbar.success(
+      'Personne ajoutée avec succès',
+      () => {
+        console.log('Personne ajoutée avec succès')
+      },
+      3000
+    )
   }
 </script>
 

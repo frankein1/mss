@@ -5,13 +5,14 @@ import {
   validIntNumber
 } from '~/utils/zod'
 import {
+  requiredLimitedStringConstraint,
   stringConstraint,
   withEmptyValueOptionalNativeEnum
 } from '../helpers.schema'
 import { AgeLimitCondition } from '@prisma/client'
 
 export const createWorkshopSchema = z.object({
-  name: stringConstraint.max(100, maxStringLengthMessage(100)),
+  name: requiredLimitedStringConstraint(100),
   date: z.coerce.date(errorMessages),
   startTime: z.string().optional(),
   endTime: z.string().optional(),

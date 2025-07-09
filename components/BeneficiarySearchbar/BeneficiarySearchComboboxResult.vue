@@ -7,6 +7,7 @@
         :input="search"
       />
       <BeneficiaryStatusBadge
+        v-if="showStatus"
         :status="beneficiary.status"
         small
       />
@@ -15,8 +16,11 @@
       v-if="beneficiary.birthDate || beneficiary.phone1"
       class="fr-grid-row text--muted fr-text--regular fr-text--sm whitespace-pre-wrap fr-mt-1v"
     >
-      <span v-if="beneficiary.birthDate">{{
+      <span v-if="beneficiary.birthDate && !showAge">{{
         formatDate(beneficiary.birthDate)
+      }}</span>
+      <span v-if="beneficiary.birthDate && showAge">{{
+        calculateAge(beneficiary.birthDate) + ' ans'
       }}</span>
       <template v-if="beneficiary.phone1">
         <span v-if="beneficiary.birthDate"> – </span>
@@ -32,6 +36,8 @@
 
   defineProps<{
     search: string | undefined
+    showStatus?: boolean
+    showAge?: boolean
     beneficiary: BeneficiarySearchResult
   }>()
 </script>

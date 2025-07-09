@@ -10,12 +10,13 @@
           />
         </div>
         <PageTitle
+          class="title"
           :title="title"
           no-margin
         >
         </PageTitle>
+        <RequiredFields class="required" />
       </div>
-      <RequiredFields />
     </div>
 
     <AtomLazyComponent
@@ -77,18 +78,28 @@
   }
 
   .page-title-container {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 1rem;
 
     .page-title-image {
+      grid-area: 1 / 1 / 3 / 2;
       border-radius: 0.5rem;
       background-color: #fff;
-      margin-right: 1rem;
       width: 6rem;
       height: 6rem;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .title {
+      grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .required {
+      grid-area: 2 / 2 / 3 / 3;
     }
   }
 </style>

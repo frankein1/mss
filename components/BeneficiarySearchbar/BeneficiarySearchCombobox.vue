@@ -67,6 +67,8 @@
               :id="`beneficiary-search-file-link-${rowIndex}`"
               :beneficiary="result"
               :search="displayedValue"
+              :show-status
+              :show-age
               @click="handleSelect(result)"
             />
             <NuxtLink
@@ -81,6 +83,8 @@
               <BeneficiarySearchComboboxResult
                 :id="`beneficiary-search-file-link-${rowIndex}`"
                 :beneficiary="result"
+                :show-status="showStatus"
+                :show-age="showAge"
                 :search="displayedValue"
               />
             </NuxtLink>
@@ -133,16 +137,19 @@
   import { routes } from '~/utils/routes'
   import { EventCategory, FollowupAction } from '~/types/matomo'
 
-  const props = withDefaults(
-    defineProps<{
-      label: string
-      selectOnly?: boolean
-      searchFn: (search: string) => Promise<any[]>
-    }>(),
-    {
-      selectOnly: false
-    }
-  )
+  const {
+    selectOnly = false,
+    showStatus = true,
+    showAge = false,
+    searchFn
+  } = defineProps<{
+    label: string
+    selectOnly?: boolean
+    showStatus?: boolean
+    showAge?: boolean
+    searchFn: (search: string) => Promise<any[]>
+  }>()
+
   const emit = defineEmits<{
     onSelect: [beneficiary: BeneficiarySearchResult]
   }>()
@@ -258,7 +265,7 @@
   }
 
   function selectItem(value: any) {
-    if (props.selectOnly) {
+    if (selectOnly) {
       handleSelect(value)
       return
     }
@@ -287,9 +294,9 @@
 
   const debouncedSearchFn = useDebounceFn(async (search: string) => {
     try {
-      results.value = await props
-        .searchFn(search)
-        .then(results => results.sort(sortBeneficiarySearchResults(search)))
+      results.value = await searchFn(search).then(results =>
+        results.sort(sortBeneficiarySearchResults(search))
+      )
     } catch {
       error.value = UNKNOWN_ERROR_MESSAGE
     } finally {
