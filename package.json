@@ -110,7 +110,7 @@
     }
   },
   "engines": {
-    "pnpm": ">=9 <=9.15.0"
+    "pnpm": ">=10 <11"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -120,5 +120,5 @@
     "*.{css,scss,sass,html,vue}": "stylelint",
     "*.**": "prettier --check {.,**/*.prisma}"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@10.13.1"
 }

@@ -12,7 +12,6 @@ include:
 
 variables:
   NODE_VERSION: 22
-  PNPM_VERSION: 9
   # A synchroniser avec la version présente dans package.json
   PLAYWRIGHT_VERSION: 1.53.2
   #A synchroniser avec la version présente en production
@@ -44,7 +43,7 @@ pnpm:install:
   before_script:
     - npm install --global corepack@latest
     - corepack enable
-    - corepack prepare pnpm@latest-${PNPM_VERSION} --activate
+    - corepack prepare pnpm@latest --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile --prefer-offline
   script:
@@ -52,6 +51,7 @@ pnpm:install:
   cache:
     key:
       files:
+        - package.json
         - pnpm-lock.yaml
     paths:
       - .pnpm-store
@@ -80,10 +80,6 @@ pnpm:install:
       then
         scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
       fi
-
-.vigigloo:pnpm:install:
-  image:
-    name: registry.gitlab.com/vigigloo/tools/pnpm:node-${NODE_VERSION}_pnpm-${PNPM_VERSION}
 
 pnpm:lint:
   extends: pnpm:install
