@@ -1744,6 +1744,8 @@ model Beneficiary {
 
   income BudgetIncome?
 
+  workshopAttendees WorkshopAttendee[]
+
   @@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_usual_name_normalized_idx")
   @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_birth_name_normalized_idx")
   @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_first_name_normalized_idx")
@@ -2146,6 +2148,8 @@ model Workshop {
   createdById           String               @map("created_by_id") @db.Uuid
   createdAt             DateTime             @default(now()) @map("created_at")
 
+  workshopAttendees WorkshopAttendee[]
+
   @@map("workshop")
 }
 
@@ -2166,4 +2170,62 @@ model WorkshopName {
 enum AgeLimitCondition {
   GreaterThan
   LowerThan
+}
+
+model WorkshopAttendee {
+  id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  workshopId String   @map("workshop_id") @db.Uuid
+
+  attendance WorkshopAttendeeAttendance?
+  type       WorkshopAttendeeType
+  listType   WorkshopAttendeeListType    @map("list_type")
+  comment    String?
+
+  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
+
+  workshopExternalAttendee   WorkshopExternalAttendee? @relation(fields: [workshopExternalAttendeeId], references: [id], onDelete: Cascade)
+  workshopExternalAttendeeId String?                   @unique @map("workshop_external_attendee_id") @db.Uuid
+
+  @@map("workshop_attendee")
+}
+
+enum WorkshopAttendeeAttendance {
+  Seen
+  NoShow
+  Excused
+}
+
+enum WorkshopAttendeeType {
+  Beneficiary
+  External
+  Accompanying
+}
+
+enum WorkshopAttendeeListType {
+  Main
+  Waiting
+}
+
+model WorkshopExternalAttendee {
+  id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
+  firstName String?   @map("first_name")
+  lastName  String?   @map("last_name")
+  gender    Gender?
+  email     String?
+  phone     String?
+  birthDate DateTime? @map("birth_date") @db.Date
+
+  workshopAttendee WorkshopAttendee?
+
+  @@map("workshop_external_attendee")
 }

@@ -35,26 +35,41 @@
 
 <script setup lang="ts">
   import { BeneficiarySearchResult } from '~/types/beneficiary'
+
+  const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+  const route = useRoute()
+
+  const workshopId = route.params.id as string
+
   const rerendervalue = ref(0) // force rerender combobox
 
   async function searchBeneficiaries(query: string) {
-    const beneficiaries = await useTrpcClient().beneficiary.search.query({
+    const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
     return beneficiaries
   }
 
-  const onSelect = (beneficiary: BeneficiarySearchResult) => {
-    console.log(beneficiary)
+  const onSelect = async (beneficiary: BeneficiarySearchResult) => {
+    const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+
+    const created = await mutate({
+      beneficiaryId: beneficiary.id,
+      workshopId: workshopId || ''
+    })
+
     rerendervalue.value++
-    snackbar.success(
-      'Personne ajoutée avec succès',
-      () => {
-        console.log('Personne ajoutée avec succès')
-      },
-      3000
-    )
+
+    if (error.value || !created) {
+      snackbar.error(
+        "L'ajout de la personne participante à échoué.",
+        snackbar.focus('.input-wrapper', "input[type='search']" as FocusHTMLTag)
+      )
+      return
+    }
+
+    snackbar.success('Personne ajoutée avec succès')
   }
 </script>
 

@@ -6,7 +6,8 @@ import { AppContext } from '~/server/trpc'
 import {
   fixturesUsers,
   fixtureStructures,
-  FixtureUserRole
+  FixtureUserRole,
+  FixtureStructure
 } from '~/prisma/fixtures'
 
 const setupFactory = t.createCallerFactory(appRouter)
@@ -26,6 +27,12 @@ const createCaller = (user: AppContext['user']) => {
 const structure = {
   id: fixtureStructures[0].id,
   type: fixtureStructures[0].type,
+  externalRdvspActive: null
+}
+
+const structureMinistere = {
+  id: fixtureStructures[FixtureStructure.Ministère].id,
+  type: fixtureStructures[FixtureStructure.Ministère].type,
   externalRdvspActive: null
 }
 
@@ -60,6 +67,12 @@ const users = {
     structure,
     role: fixturesUsers[FixtureUserRole.Administrator].role,
     status: fixturesUsers[FixtureUserRole.Administrator].status
+  },
+  structureManagerMinistere: {
+    id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id,
+    structure: structureMinistere,
+    role: fixturesUsers[FixtureUserRole.StructureManagerMinistere].role,
+    status: fixturesUsers[FixtureUserRole.StructureManagerMinistere].status
   }
 }
 
@@ -69,7 +82,8 @@ const trpc = {
   receptionAgent: createCaller(users.receptionAgent),
   socialWorker: createCaller(users.socialWorker),
   referent: createCaller(users.referent),
-  administrator: createCaller(users.administrator)
+  administrator: createCaller(users.administrator),
+  structureManagerMinistere: createCaller(users.structureManagerMinistere)
 }
 
 interface Fixtures {
