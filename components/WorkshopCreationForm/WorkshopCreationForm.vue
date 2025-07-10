@@ -43,6 +43,7 @@
         :is-submitting="isSubmitting"
         :update
         @cancel="emit('cancel')"
+        @delete="emit('delete')"
       />
     </AtomActionsBar>
   </form>
@@ -72,6 +73,7 @@
   const emit = defineEmits<{
     submit: [payload: Event]
     cancel: []
+    delete: []
   }>()
 
   const form = ref<HTMLFormElement | null>(null)

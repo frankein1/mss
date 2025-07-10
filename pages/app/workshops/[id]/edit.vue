@@ -20,6 +20,7 @@
         :workshop-name="workshop.workshopName.name"
         @submit="onSubmit"
         @cancel="onCancel"
+        @delete="onDelete"
       />
     </AtomLazyComponent>
   </div>
@@ -29,11 +30,13 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { UpdateWorkShopInput, updateWorkshopSchema } from '~/server/schema'
+  import WorkshopDeleteModal from '~/components/Workshop/WorkshopDeleteModal.vue'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
   const workshopId = route.params.id as string
+  const modal = useModal()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
@@ -95,6 +98,25 @@
     snackbar.success("L'atelier a été modifié avec succès.")
     const workshopRoute = routes.workshop.AppWorkshop.path(workshopUpdated.id)
     navigateTo(workshopRoute)
+  }
+
+  const onDelete = () => {
+    modal.open(WorkshopDeleteModal, {
+      title: `Supprimer l'atelier ${workshop.value?.workshopName.name}`,
+      onDelete: async () => await deleteWorkshop()
+    })
+  }
+
+  const deleteWorkshop = async () => {
+    const { mutate, error } = trpcClient.workshop.delete.useMutation()
+    const workshopCreated = await mutate({ id: workshopId })
+    if (error.value || workshopCreated === null) {
+      snackbar.error("La suppression de l'atelier a échoué.")
+      return
+    }
+    modal.close()
+    snackbar.success("L'atelier a été supprimé avec succès.")
+    navigateTo(routes.workshop.AppWorkshops.path())
   }
 
   const onCancel = () => {

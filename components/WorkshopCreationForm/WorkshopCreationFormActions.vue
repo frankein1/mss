@@ -17,8 +17,9 @@
       <button
         class="fr-btn fr-btn--secondary btn-delete-action"
         type="button"
-        :submitting="isSubmitting"
-        :disabled="isSubmitting"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        @click="emit('delete')"
       >
         Supprimer
       </button>
@@ -46,5 +47,6 @@
   const emit = defineEmits<{
     cancel: []
     submit: []
+    delete: []
   }>()
 </script>
