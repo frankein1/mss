@@ -23,7 +23,7 @@
     </div>
     <div class="fr-container--fluid container-middle">
       <PageContainer>
-        <WorkshopAddAttendee class="add-participant" />
+        <WorkshopCreateAttendee class="add-participant" />
       </PageContainer>
     </div>
     <div class="fr-container--fluid">
