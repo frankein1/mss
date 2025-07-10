@@ -16,5 +16,8 @@ export const workshopRouter = router({
     .query(routes.getQuery.execute),
   delete: protectedProcedure
     .input(routes.deleteWorkshop.inputValidation)
-    .mutation(routes.deleteWorkshop.execute)
+    .mutation(routes.deleteWorkshop.execute),
+  updateWorkshop: protectedProcedure
+    .input(routes.updateWorkshop.inputValidation)
+    .mutation(routes.updateWorkshop.execute)
 })

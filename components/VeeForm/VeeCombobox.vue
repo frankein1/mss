@@ -175,6 +175,9 @@
       emit('changeValue', '')
       handleChange(null)
     }
+    if (!props.required && displayedValue.value == '') {
+      currentValue.value = ''
+    }
   }
 
   const getDislayValue = (id: string) => {

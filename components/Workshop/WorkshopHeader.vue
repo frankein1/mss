@@ -32,9 +32,8 @@
       {{ workshop.description }}
     </p>
     <div class="action-wrapper fr-mt-2w">
-      <!-- TODO: create edit page -->
       <NuxtLink
-        :to="routes.workshop.AppWorkshopAdd.path()"
+        :to="routes.workshop.AppWorkshopEdit.path(workshop.id)"
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line fr-mb-0 edit-btn"
       >
         Modifier

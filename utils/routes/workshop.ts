@@ -1,4 +1,3 @@
-import { Workshop, WorkshopName } from '@prisma/client'
 import { WorkshopsRoute } from './utils'
 import { WorkshopDetails } from '~/types/workshop'
 
@@ -13,6 +12,14 @@ export const routes = {
     title: (workshop: WorkshopDetails | null) =>
       workshop ? workshop.workshopName.name : 'Atelier',
     path: (id?: string) => `${WorkshopsRoute}/${id}`
+  },
+  AppWorkshopEdit: {
+    name: 'AppWorkshopEdit',
+    title: (workshop: WorkshopDetails | null) =>
+      workshop
+        ? "Modifier l'atelier " + workshop.workshopName.name
+        : "Modifier l'atelier",
+    path: (id?: string) => `${WorkshopsRoute}/${id}/edit`
   },
   AppWorkshops: {
     name: 'AppWorkshops',

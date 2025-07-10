@@ -8,10 +8,18 @@
   <form
     ref="form"
     novalidate
-    @submit.prevent="onSubmit"
+    @submit.prevent="emit('submit', $event)"
   >
     <div class="fr-container">
-      <WorkshopCreationFormName :is-submitting="isSubmitting" />
+      <WorkshopFormNameUpdate
+        v-if="update && workshopName"
+        :workshop-name="workshopName"
+        :is-submitting="isSubmitting"
+      />
+      <WorkshopCreationFormName
+        v-else
+        :is-submitting="isSubmitting"
+      />
       <WorkshopCreationFormInformation
         :is-submitting="isSubmitting"
         :partner-organizations="partnerOrganizations"
@@ -22,7 +30,7 @@
         :age-condition-options="ageConditionKeys.options"
       />
 
-      <AtomCallout>
+      <AtomCallout v-if="!update">
         <p>
           Vous pourrez inscrire des participants et participantes sur la page
           suivante.
@@ -33,6 +41,7 @@
     <AtomActionsBar class="sticky">
       <WorkshopCreationFormActions
         :is-submitting="isSubmitting"
+        :update
         @cancel="emit('cancel')"
       />
     </AtomActionsBar>
@@ -40,32 +49,38 @@
 </template>
 
 <script setup lang="ts">
-  import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
+  import { CreateWorkshopInput, UpdateWorkShopInput } from '~/server/schema'
   import { workshopLabels } from '~/client/labels'
+  import type { FormErrors } from 'vee-validate'
 
-  defineProps<{
+  const {
+    isSubmitting,
+    update,
+    workshopName = undefined,
+    partnerOrganizations,
+    caughtErrors
+  } = defineProps<{
     isSubmitting: boolean
+    update?: boolean
+    workshopName?: string
     partnerOrganizations: Array<PartnerOrganizationIdName>
+    caughtErrors: FormErrors<CreateWorkshopInput | UpdateWorkShopInput>
   }>()
 
   const emit = defineEmits<{
-    saveWorkshop: [workshop: CreateWorkshopInput]
+    submit: [payload: Event]
     cancel: []
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit, errors: formErrors } = useForm<CreateWorkshopInput>({
-    validationSchema: toTypedSchema(createWorkshopSchema)
-  })
-
-  const { errors } = useDisplayFormErrors(form, formErrors, workshopLabels)
-
-  const onSubmit = handleSubmit(values => {
-    emit('saveWorkshop', values)
-  })
+  const { errors } = useDisplayFormErrors(
+    form,
+    toRef(() => caughtErrors),
+    workshopLabels
+  )
 </script>
 
 <style scoped>

@@ -1,24 +1,11 @@
 <template>
   <div>
     <div class="fr-container">
-      <AtomBreadcrumb :links="breadcrumbs.workshop.AppWorkshopAdd()" />
-      <div class="page-title-container fr-mb-4w">
-        <div class="page-title-image">
-          <img
-            src="/pictograms/calendar.svg"
-            alt=""
-          />
-        </div>
-        <PageTitle
-          class="title"
-          :title="title"
-          no-margin
-        >
-        </PageTitle>
-        <RequiredFields class="required" />
-      </div>
+      <WorkshopFormHeader
+        :title="title"
+        :breadcrumbs="breadcrumbs.workshop.AppWorkshopAdd()"
+      />
     </div>
-
     <AtomLazyComponent
       :error="Boolean(errorPartner)"
       message="La page n'a pas pu être chargée."
@@ -27,7 +14,8 @@
         v-if="partnerOrganizations"
         :is-submitting="status === 'pending'"
         :partner-organizations="partnerOrganizations"
-        @save-workshop="onCreateWorkshop"
+        :caught-errors
+        @submit="onSubmit"
         @cancel="onCancel"
       />
     </AtomLazyComponent>
@@ -37,7 +25,7 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { CreateWorkshopInput } from '~/server/schema'
+  import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
 
   const title = routes.workshop.AppWorkshopAdd.title
 
@@ -50,9 +38,17 @@
   const { data: partnerOrganizations, error: errorPartner } =
     await trpcClient.partner.getAll.useQuery()
 
-  const onCancel = () => {
-    useRouter().back()
-  }
+  // Form
+  const { handleSubmit } = useForm<CreateWorkshopInput>({
+    validationSchema: toTypedSchema(createWorkshopSchema)
+  })
+
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      onCreateWorkshop(values)
+    }
+  )
 
   const router = trpcClient.workshop
   const { mutate, error, status } = router.createWorkshop.useMutation()
@@ -69,6 +65,10 @@
     }
     const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)
     navigateTo(workshopRoute)
+  }
+
+  const onCancel = () => {
+    useRouter().back()
   }
 </script>
 

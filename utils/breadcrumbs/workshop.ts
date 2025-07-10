@@ -22,6 +22,11 @@ export const breadcrumbs = {
     ...getBread('AppWorkshops'),
     ...getBread('AppWorkshopAdd')
   ],
+  AppWorkshopEdit: (workshop: WorkshopDetails) => [
+    ...user.AppOverview(),
+    ...getBread('AppWorkshops'),
+    ...getAppWorkshopBread(workshop)
+  ],
   AppWorkshop: (workshop: WorkshopDetails) => [
     ...user.AppOverview(),
     ...getBread('AppWorkshops'),

@@ -3,11 +3,13 @@ import { getPageQuery } from './getPage.query'
 import { getQuery } from './get.query'
 import { getWorkshopNameList } from './getWorkshopNameList'
 import { deleteWorkshop } from './deleteWorkshop.mutation'
+import { updateWorkshop } from './update.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
   getWorkshopNameList,
   getPageQuery,
   getQuery,
-  deleteWorkshop
+  deleteWorkshop,
+  updateWorkshop
 }

@@ -13,6 +13,16 @@
         Annuler
       </button>
     </li>
+    <li v-if="update">
+      <button
+        class="fr-btn fr-btn--secondary btn-delete-action"
+        type="button"
+        :submitting="isSubmitting"
+        :disabled="isSubmitting"
+      >
+        Supprimer
+      </button>
+    </li>
     <li>
       <button
         class="fr-btn"
@@ -21,7 +31,7 @@
         :disabled="isSubmitting"
         @click="emit('submit')"
       >
-        Enregistrer
+        {{ update ? 'Confirmer' : 'Enregistrer' }}
       </button>
     </li>
   </ul>
@@ -30,6 +40,7 @@
 <script setup lang="ts">
   defineProps<{
     isSubmitting: boolean
+    update: boolean
   }>()
 
   const emit = defineEmits<{
