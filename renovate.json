@@ -28,6 +28,14 @@
     {
       "groupName": "tRPC",
       "matchPackagePatterns": ["@trpc/client", "@trpc/server", "trpc-nuxt"]
+    },
+    {
+      "groupName": "vee-validate",
+      "matchPackagePatterns": [
+        "vee-validate",
+        "@vee-validate/zod",
+        "@vee-validate/nuxt"
+      ]
     }
   ],
   "timezone": "Europe/Paris",
