@@ -2020,6 +2020,7 @@ enum UserActivityObject {
   Appointment
   FileInstruction
   Workshop
+  WorkshopName
 }
 
 model UserActivity {
