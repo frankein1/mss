@@ -5,6 +5,9 @@ export const workshopRouter = router({
   createWorkshop: protectedProcedure
     .input(routes.createWorkshop.inputValidation)
     .mutation(routes.createWorkshop.execute),
+  updateWorkshopName: protectedProcedure
+    .input(routes.updateWorkshopName.inputValidation)
+    .mutation(routes.updateWorkshopName.execute),
   getPage: protectedProcedure
     .input(routes.getPageQuery.inputValidation)
     .query(routes.getPageQuery.execute),
