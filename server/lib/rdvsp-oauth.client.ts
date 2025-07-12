@@ -4,7 +4,7 @@ import { apiRoutes } from '~/utils/routes'
 import { formatDate } from '~/utils/formatDate'
 import { ofetch, FetchError } from 'ofetch'
 import { invalidError, unauthorizedError } from '~/server/trpc'
-import dayjs from 'dayjs'
+import { logger } from '~/server/plugins/logger'
 
 interface RdvspConfig {
   clientId: string
@@ -139,12 +139,18 @@ async function getWrapper<T>(
   try {
     const res = await ofetch(`${cfg.issuer}${path}`, {
       headers,
-      onRequest: () => console.log('rdvsp: request', path),
-      onRequestError: req => console.log('rdvsp: request error', req.error),
-      onResponseError: res => console.log('rdvsp: response error', res.error)
+      onRequest: () => {
+        logger.verbose('rdvsp: request', path)
+      },
+      onRequestError: req => {
+        logger.warn('rdvsp: request error', req.error)
+      },
+      onResponseError: res => {
+        logger.warn('rdvsp: response error', res.error)
+      }
     })
     if ('error' in res) {
-      console.log('rdvsp: fetch error api internal error', res)
+      logger.warn('rdvsp: fetch error api internal error', res)
       throw invalidError('rdvsp: could not retrieve element requested')
     }
 
@@ -154,12 +160,12 @@ async function getWrapper<T>(
       if (e.status === 401) {
         throw unauthorizedError('rdvsp: not authenticated')
       } else {
-        console.log('rdvsp: fetch error status', e.status)
+        logger.warn('rdvsp: fetch error status', e.status)
         throw invalidError('rdvsp: could not process request')
       }
     }
 
-    console.log('rdvsp: fetch error status', e)
+    logger.warn('rdvsp: fetch error status', e)
     throw invalidError('rdvsp: unknown error')
   }
 }
@@ -223,8 +229,10 @@ export async function getRdvsStartingAfter(
     nPages += 1
   }
 
-  console.log(`rdvsp: ${list.length} rdvs for organisation ${organisationId}`)
-  console.log(`rdvsp: ${nPages} pages for paginated rdvs request`)
+  logger.verbose(
+    `rdvsp: ${list.length} rdvs for organisation ${organisationId}`
+  )
+  logger.verbose(`rdvsp: ${nPages} pages for paginated rdvs request`)
 
   return list
 }
@@ -283,13 +291,13 @@ export async function createRdvPlan(
   try {
     res = await response.json()
   } catch {
-    console.log('rdvsp: other error', response.statusText)
+    logger.warn('rdvsp: other error', response.statusText)
     return { status: response.status, statusText: response.statusText }
   }
 
   if (response.ok) {
     return { id: res.rdv_plan.id as number, url: res.rdv_plan.url as string }
   }
-  console.log('rdvsp: draft rdv creation failed', res)
+  logger.warn('rdvsp: draft rdv creation failed', res)
   return res as RdvspMutationError
 }

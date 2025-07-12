@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { BeneficiaryRepo, NotificationRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 import { performance } from 'node:perf_hooks'
+import { logger } from '~/server/plugins/logger'
 
 type InactiveBeneficiary = Awaited<ReturnType<typeof inactiveQuery>>[0]
 
@@ -40,7 +41,7 @@ async function inactiveQuery() {
   })
   const end = performance.now()
   const duration = (end - start) / 1000
-  console.log(
+  logger.verbose(
     `    inactive query [${new Date()}]: time: ${duration}s - nb : ${res.length}`
   )
   return res

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { describe, it, beforeEach, afterEach, vi } from 'vitest'
 import { prismaClient } from '~/server/prisma'
 import { getInactiveBeneficiaries } from './helper'

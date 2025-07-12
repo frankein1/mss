@@ -6,6 +6,7 @@ import {
 } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
+import { logger } from '~/server/plugins/logger'
 
 const adminHandler = async ({
   input,
@@ -23,7 +24,7 @@ const adminHandler = async ({
   })
 
   createOrUpdateStructure(updatedStructure.id).catch(error => {
-    console.error(error)
+    logger.error(error)
   })
 
   return updatedStructure

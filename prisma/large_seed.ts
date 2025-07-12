@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   BeneficiaryMobility,
   BeneficiaryStatus,
@@ -101,7 +102,7 @@ function randomMobility(): BeneficiaryMobility {
 
 async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
-    console.log('starting seed', i)
+    console.info('starting seed', i)
     const structure = await prismaClient.structure.create({
       data: {
         type: 'Ccas',
@@ -116,7 +117,7 @@ async function main() {
     })
 
     if (i === 0) {
-      console.log('Linking Jeanne Responsable to a structure...')
+      console.info('Linking Jeanne Responsable to a structure...')
       await prismaClient.user.update({
         data: { structureId: structure.id },
         where: { id: ID_JEANNE_RESPONSABLE }

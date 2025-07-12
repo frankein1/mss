@@ -25,6 +25,7 @@ import {
 } from '~/server/services/helper'
 import { TypeSuivi } from '~/client/options'
 import { getAppointmentRdvspUrl } from '~/server/services/rdvsp/helper'
+import { logger } from '~/server/plugins/logger'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -345,7 +346,7 @@ const handler = async ({
       input: { familyFileId }
     })
   } catch (e: unknown) {
-    console.log(
+    logger.warn(
       'rdvsp: synchronization failed in get social supports, should fail silently',
       e
     )

@@ -227,7 +227,8 @@ export default defineNuxtConfig({
       },
       metabase: {
         publicUrl: process.env.METABASE_PUBLIC_URL
-      }
+      },
+      logLevel: process.env.LOG_LEVEL || 'info'
     }
   },
 

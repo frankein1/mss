@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { AgeLimitCondition, PrismaClient } from '@prisma/client'
 import {
   fixtureStructures,
@@ -503,7 +504,7 @@ const workshopNameInputs = [
 ]
 
 async function main() {
-  console.log('starting seed')
+  console.info('starting seed')
 
   const workshopNames = await prismaClient.workshopName.createManyAndReturn({
     data: workshopNameInputs.map(name => ({

@@ -1,5 +1,6 @@
 import { UserRepo } from '~/server/database'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
+import { logger } from '~/server/plugins/logger'
 import { createMutation } from '~/server/route'
 import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
@@ -18,7 +19,7 @@ const adminHandler = async ({
     data: user
   })
   createOrUpdateUser(updatedUser.id).catch(error => {
-    console.error(error)
+    logger.error(error)
   })
 
   return updatedUser

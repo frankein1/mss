@@ -19,7 +19,7 @@ import {
 const prismaClient = new PrismaClient()
 
 function loadFixtureStructure() {
-  console.log('🏛 Structure...')
+  console.info('🏛 Structure...')
 
   return prismaClient.structure.createMany({
     data: fixtureStructures,
@@ -28,7 +28,7 @@ function loadFixtureStructure() {
 }
 
 function loadFixturesSocialSupportSubjects() {
-  console.log('🔷 Social support subjects...')
+  console.info('🔷 Social support subjects...')
 
   return prismaClient.socialSupportSubject.createMany({
     data: fixturesSocialSupportSubjects,
@@ -37,7 +37,7 @@ function loadFixturesSocialSupportSubjects() {
 }
 
 function loadFixturesUsers() {
-  console.log('👤 Users...')
+  console.info('👤 Users...')
 
   return prismaClient.user.createMany({
     data: fixturesUsers,
@@ -46,7 +46,7 @@ function loadFixturesUsers() {
 }
 
 function loadFixturesCGUHistory() {
-  console.log('👩‍⚖️ CGU History for users...')
+  console.info('👩‍⚖️ CGU History for users...')
 
   return prismaClient.cGUHistory.createMany({
     data: fixturesCGUHistory,
@@ -55,7 +55,7 @@ function loadFixturesCGUHistory() {
 }
 
 function loadFixturesFamilyFiles() {
-  console.log('👨‍👩‍👧‍👧 Family Files...')
+  console.info('👨‍👩‍👧‍👧 Family Files...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesFamilyFiles.map(({ id, ...data }) => {
@@ -68,7 +68,7 @@ function loadFixturesFamilyFiles() {
 }
 
 function loadFixturesBeneficiaries() {
-  console.log('👥 Beneficiaries...')
+  console.info('👥 Beneficiaries...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesBeneficiaries.map(({ id, ...data }) => {
@@ -81,7 +81,7 @@ function loadFixturesBeneficiaries() {
 }
 
 function loadFixturesSocialSupports() {
-  console.log('🤝 Social supports...')
+  console.info('🤝 Social supports...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesSocialSupports.map(({ id, ...data }) => {
@@ -94,7 +94,7 @@ function loadFixturesSocialSupports() {
 }
 
 function loadFixturesBeneficiaryRelatives() {
-  console.log('🫂 Beneficiary Relatives...')
+  console.info('🫂 Beneficiary Relatives...')
 
   return prismaClient.beneficiaryRelative.createMany({
     data: fixturesBeneficiaryRelatives,
@@ -103,7 +103,7 @@ function loadFixturesBeneficiaryRelatives() {
 }
 
 function loadFixturesBudgets() {
-  console.log('📊 Budgets...')
+  console.info('📊 Budgets...')
 
   return prismaClient.budget.createMany({
     data: fixturesBudgets,
@@ -112,7 +112,7 @@ function loadFixturesBudgets() {
 }
 
 function loadFixturesBudgetIncomes() {
-  console.log('💰 Budget Incomes...')
+  console.info('💰 Budget Incomes...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesBudgetIncomes.map(item => {
@@ -125,7 +125,7 @@ function loadFixturesBudgetIncomes() {
 }
 
 function loadFixturesBudgetExpenses() {
-  console.log('💸 Budget Expenses...')
+  console.info('💸 Budget Expenses...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesBudgetExpenses.map(item => {
@@ -138,7 +138,7 @@ function loadFixturesBudgetExpenses() {
 }
 
 function loadFixturesPartnerOrganizations() {
-  console.log('🏙️ Partner Organizations...')
+  console.info('🏙️ Partner Organizations...')
 
   return prismaClient.partnerOrganization.createMany({
     data: fixturesPartnerOrganizations,
@@ -147,7 +147,7 @@ function loadFixturesPartnerOrganizations() {
 }
 
 function loadFixturesPartnerOrganizationContacts() {
-  console.log('🕴️ Partner Organization Contacts...')
+  console.info('🕴️ Partner Organization Contacts...')
 
   return prismaClient.partnerOrganizationContact.createMany({
     data: fixturesPartnerOrganizationContacts,
@@ -174,11 +174,11 @@ function loadFixtures() {
 }
 
 async function main() {
-  console.log('⏱️ Loading fixtures...')
+  console.info('⏱️ Loading fixtures...')
 
   await prismaClient.$transaction(loadFixtures())
 
-  console.log('👍 Done!')
+  console.info('👍 Done!')
 }
 
 main()

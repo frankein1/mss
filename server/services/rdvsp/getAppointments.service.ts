@@ -2,6 +2,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { SocialSupportRepo, StructureRepo } from '~/server/database/repository'
 import { validateDraftAppointmentsForAgent } from './validateDraftAppointment.service'
 import { getAppointmentRdvspUrl } from './helper'
+import { logger } from '~/server/plugins/logger'
 
 export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
   const {
@@ -11,7 +12,7 @@ export async function getAppointments({ ctx }: { ctx: SecurityRuleContext }) {
   try {
     await validateDraftAppointmentsForAgent({ ctx })
   } catch (e: unknown) {
-    console.log(
+    logger.warn(
       'rdvsp: synchronization failed in get appointments, should fail silently',
       e
     )

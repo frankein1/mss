@@ -12,6 +12,7 @@ import {
   createOrUpdateUser,
   linkUserToStructure
 } from '~/server/integrations/brevo/service'
+import logger from '~/server/plugins/logger'
 
 const adminHandler = async ({
   ctx,
@@ -51,7 +52,7 @@ const adminHandler = async ({
     ...getUserCreationEmailContent(createdUser)
   })
   // Do not await, as this should not make the user creation fail in case of failure
-  createOrUpdateUser(createdUser.id).catch(error => console.error(error))
+  createOrUpdateUser(createdUser.id).catch(error => logger.error(error))
 
   return createdUser
 }

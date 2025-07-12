@@ -4,6 +4,7 @@ import { NotificationRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { getInactiveBeneficiaries } from './helper'
 import { performance } from 'node:perf_hooks'
+import { logger } from '~/server/plugins/logger'
 
 /** Notifications for inactive beneficiaries due to be archived in 1 month */
 export const createArchiveDueOneMonthNotifications = async () => {
@@ -13,7 +14,7 @@ export const createArchiveDueOneMonthNotifications = async () => {
 
   const end = performance.now()
   const duration = (end - start) / 1000
-  console.log(
+  logger.verbose(
     `createArchiveDueOneMonthNotifications [${new Date()}]: notifications created: ${number} - time: ${duration}s`
   )
 }

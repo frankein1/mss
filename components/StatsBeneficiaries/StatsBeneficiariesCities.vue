@@ -37,6 +37,8 @@
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { StatsListPropType } from '~/types/stat'
 
+  // const { $logger } = useNuxtApp()
+
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
@@ -59,7 +61,7 @@
         count: _count
       })) || []
   } catch (err: unknown) {
-    console.error(err)
+    // $logger.error(err)
     error.value = err as Error
   } finally {
     pending.value = false

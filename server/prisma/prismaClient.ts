@@ -36,11 +36,12 @@ if (process.env.NODE_ENV !== 'production') {
 if (shouldLogPrisma) {
   prismaClient.$on('query', event => {
     // eslint-disable-next-line no-console
-    console.log(
+    console.info(
       picocolors.bgMagenta(picocolors.whiteBright(picocolors.bold(' Prisma '))),
       picocolors.bold(event.duration + 'ms'),
       event.duration > 100 ? '❌' : event.duration > 50 ? '⚠️' : '✅'
     )
-    console.log(picocolors.italic(formatPrismaQueryLog(event)))
+    // eslint-disable-next-line no-console
+    console.info(picocolors.italic(formatPrismaQueryLog(event)))
   })
 }

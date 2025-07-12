@@ -8,6 +8,7 @@ import { getStructureCreationEmailContent } from '~/server/email'
 import { socialSupportSubjectKeys } from '~/client/options'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
+import logger from '~/server/plugins/logger'
 
 const adminHandler = async ({
   ctx: _ctx,
@@ -42,7 +43,7 @@ const adminHandler = async ({
     ...getStructureCreationEmailContent()
   })
   createOrUpdateStructure(createdStructure.id).catch(error => {
-    console.error(error)
+    logger.error(error)
   })
 
   return createdStructure

@@ -6,6 +6,7 @@ import {
 } from '~/server/integrations/brevo/service'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
+import { logger } from '~/server/plugins/logger'
 
 export type AddUserActivityInput = {
   transaction?: Prisma.TransactionClient
@@ -70,7 +71,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
   }
   // Do not await, failure shouldn't cause the entire mutation to fail
   createOrUpdateUser(user.id).catch(error => {
-    console.error(error)
+    logger.error(error)
   })
   if (
     object === UserActivityObject.User &&
@@ -80,7 +81,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
     // then we must update the targeted user on Brevo
     // (eg. an administrator changed a user's email)
     createOrUpdateUser(objectId).catch(error => {
-      console.error(error)
+      logger.error(error)
     })
   }
   if (
@@ -91,7 +92,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
     // then we must update the targeted structure on Brevo
     // (eg. an administrator changed a structure's name or address)
     createOrUpdateStructure(objectId).catch(error => {
-      console.error(error)
+      logger.error(error)
     })
   }
   if (user.structureId) {
@@ -108,7 +109,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
     })
     // Do not await, failure shouldn't cause the entire mutation to fail
     createOrUpdateStructure(user.structureId).catch(error => {
-      console.error(error)
+      logger.error(error)
     })
   } else {
     await conn.userActivity.create({

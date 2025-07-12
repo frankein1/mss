@@ -4,6 +4,7 @@ import { forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import dayjs from 'dayjs'
 import { performance } from 'node:perf_hooks'
+import { logger } from '~/server/plugins/logger'
 
 function modifyDate(date: Date | null) {
   return date ? dayjs(date).subtract(1, 'day').toDate() : null
@@ -163,14 +164,14 @@ async function updateInDbForAllFields(bens: BeneficiariesQueryResult) {
         { timeout: 5_000 }
       )
     } catch (e) {
-      console.log(
+      logger.verbose(
         `could not update updateInDbForBirthDateAndSocialSupportOpeningDate for beneficiary ${bens[bid].id}`,
         e
       )
     }
   }
   const end = performance.now()
-  console.log(` duration ${(end - start) / 1000} for updateInDbForAllFields`)
+  logger.verbose(` duration ${(end - start) / 1000} for updateInDbForAllFields`)
 }
 
 // Needs to be in a transaction to rollback all in case of failure
@@ -212,14 +213,14 @@ async function updateInDbForBirthDateAndSocialSupportOpeningDate(
         { timeout: 5_000 }
       )
     } catch (e) {
-      console.log(
+      logger.verbose(
         `could not update updateInDbForBirthDateAndSocialSupportOpeningDate for beneficiary ${bens[bid].id}`,
         e
       )
     }
   }
   const end = performance.now()
-  console.log(
+  logger.verbose(
     ` duration ${(end - start) / 1000} for updateInDbForBirthDateAndSocialSupportOpeningDate`
   )
 }
@@ -252,14 +253,14 @@ async function updateInDbForBirthDate(bens: BeneficiariesQueryResult) {
         { timeout: 5_000 }
       )
     } catch (e) {
-      console.log(
+      logger.verbose(
         `could not update updateInDbForBirthDate for beneficiary ${bens[bid].id}`,
         e
       )
     }
   }
   const end = performance.now()
-  console.log(` duration ${(end - start) / 1000} for updateInDbForBirthDate`)
+  logger.verbose(` duration ${(end - start) / 1000} for updateInDbForBirthDate`)
 }
 
 export default defineEventHandler(async event => {
@@ -275,7 +276,7 @@ export default defineEventHandler(async event => {
     migrateBirthDateAndFileOpeningDate
   } = await readBody(event)
 
-  console.log(
+  logger.verbose(
     structureId,
     migrateAll,
     migrateBirthDate,

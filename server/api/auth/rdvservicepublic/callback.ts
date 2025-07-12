@@ -7,6 +7,8 @@ import { JwtUser } from '~/types/user'
 import { checkUserIsAuthenticated } from '~/utils/api/checkUserIsAuthenticated'
 import { unauthorized, badrequest } from '~/utils/api/errors'
 
+import { logger } from '~/server/plugins/logger'
+
 const { auth } = useRuntimeConfig()
 
 /** RDVSP Oauth callback endpoint
@@ -14,7 +16,7 @@ const { auth } = useRuntimeConfig()
  * which will handle the action to be performed after signin
  */
 export default defineEventHandler(async event => {
-  console.log('in rdvsp callback for auth')
+  logger.verbose('in rdvsp callback for auth')
   const { code, state } = getQuery(event)
 
   if (!code || !state) {
@@ -77,7 +79,7 @@ async function createOrUpdateToken(
   // FIXME nonce verification could be implemented here
 
   const agent = await client.getAgentInfo(cfg, token.access_token)
-  console.log(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
+  logger.verbose(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
 
   if ('error' in agent || !agent) {
     throw badrequest('Could not retrieve agent info')
@@ -109,7 +111,7 @@ async function createOrUpdateToken(
   })
 
   if (!account) {
-    console.log('create account')
+    logger.verbose('create account')
 
     if (!structure.externalRdvspId) {
       await importRdvspOrganisationId(structureId, token.access_token)
@@ -137,7 +139,7 @@ async function createOrUpdateToken(
       })
     ])
   } else {
-    console.log('update account', account.id)
+    logger.verbose('update account', account.id)
     await prismaClient.externalAccount.update({
       where: { id: account.id },
       data: {
@@ -157,7 +159,7 @@ async function importRdvspOrganisationId(
   structureId: string,
   accessToken: string
 ) {
-  console.log('import organization')
+  logger.verbose('import organization')
   const cfg = client.getConfig()
 
   const org = await client.getOrganisation(cfg, accessToken)

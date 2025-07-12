@@ -18,6 +18,7 @@ import dayjs from 'dayjs'
 import { SocialSupportStatus } from '@prisma/client'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
 import { TRPCError } from '@trpc/server'
+import { logger } from '~/server/plugins/logger'
 
 /** Sync validated appointments from RDVSP and remove draft status
  *
@@ -58,7 +59,7 @@ export async function validateDraftAppointmentsForFamilyFile({
       // Since refresh tokens are not used yet, the synchronization
       // is not done when the user is not authenticated to RDVSP.
       // The validation of draft appointments should fail silently in this case
-      console.log(
+      logger.verbose(
         'rdvsp: not authenticated in  validateDraftAppointmentsForFamilyFile'
       )
       return
@@ -131,7 +132,7 @@ export async function validateDraftAppointmentsForAgent({
       // Since refresh tokens are not used yet, the synchronization
       // is not done when the user is not authenticated to RDVSP.
       // The validation of draft appointments should fail silently in this case
-      console.log(
+      logger.verbose(
         'rdvsp: not authenticated in  validateDraftAppointmentsForAgent'
       )
       return
@@ -202,7 +203,7 @@ async function validateDraftAppointment({
     return
   }
 
-  console.log('rdvsp: success', rdv)
+  logger.verbose('rdvsp: success', rdv)
 
   const users = await UserRepo.findMany(ctx.user, {
     select: { id: true, externalRdvspId: true },
@@ -297,10 +298,10 @@ async function getRdvspRdvFromList(
     throw invalidError('Could not retrieve rdv in rdvsp')
   }
 
-  console.log('rdv.starts_at', rdv.starts_at)
-  console.log('date', getDateWithoutTimezoneInformation(rdv.starts_at))
-  console.log('now', new Date())
-  console.log('tz guess', dayjs.tz.guess())
+  logger.verbose('rdv.starts_at', rdv.starts_at)
+  logger.verbose('date', getDateWithoutTimezoneInformation(rdv.starts_at))
+  logger.verbose('now', new Date())
+  logger.verbose('tz guess', dayjs.tz.guess())
 
   return {
     id: rdv.id,

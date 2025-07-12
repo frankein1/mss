@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { NotificationRepo } from '~/server/database'
 import { getInactiveBeneficiariesWithOneMonthNotification } from './helper'
 import { performance } from 'node:perf_hooks'
+import { logger } from '~/server/plugins/logger'
 
 /** Reminder notifications for inactive beneficiaries :
  * - due to be archived in 7 days
@@ -17,7 +18,7 @@ export const createArchiveDueRemindersNotifications = async () => {
 
   const end = performance.now()
   const duration = (end - start) / 1000
-  console.log(
+  logger.verbose(
     `createArchiveDueRemindersNotifications [${new Date()}]: notifications created: ${number} - time: ${duration}s`
   )
 }

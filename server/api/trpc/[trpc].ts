@@ -1,6 +1,7 @@
 import { createTRPCNuxtHandler } from 'trpc-nuxt/server'
 import { appRouter } from '~/server/trpc/routers'
 import { createContext } from '~/server/trpc'
+import { logger } from '~/server/plugins/logger'
 
 // export API handler
 export default createTRPCNuxtHandler({
@@ -15,7 +16,7 @@ export default createTRPCNuxtHandler({
     req: _req
   }) {
     if (error.code === 'INTERNAL_SERVER_ERROR') {
-      console.error(error.message)
+      logger.error(error.message)
       throw createError({
         statusCode: 500,
         message: "Si l'erreur persiste, merci de prevenir l'équipe support"
