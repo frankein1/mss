@@ -3,9 +3,11 @@ import pkg from 'jsonwebtoken'
 import { signJwt } from '~/server/lib/jwt'
 import {
   getProConnectClient,
-  ProConnectClient,
-  type ProConnectToken,
-  type ProConnectUserInfo
+  ProConnectClient
+} from '~/server/lib/proconnect.client'
+import type {
+  ProConnectToken,
+  ProConnectUserInfo
 } from '~/server/lib/proconnect.client'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'

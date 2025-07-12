@@ -14,7 +14,6 @@ export default withNuxt({
     'nuxt/prefer-import-meta': 'off',
     // rules set
     'no-console': 'warn',
-    'import/no-named-as-default-member': 'error',
     'curly': ['error', 'all'],
     'no-else-return': ['error', { allowElseIf: false }],
     'vue/require-default-prop': 'warn',

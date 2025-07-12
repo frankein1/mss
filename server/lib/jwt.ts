@@ -1,4 +1,5 @@
-import pkg, { type JwtPayload } from 'jsonwebtoken'
+import pkg from 'jsonwebtoken'
+import type { JwtPayload } from 'jsonwebtoken'
 import { JwtUser } from '~/types/user'
 import { minutesToSeconds } from '~/utils/time'
 

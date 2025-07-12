@@ -8,7 +8,8 @@ import {
   test,
   expect
 } from 'vitest'
-import { type VueWrapper, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
+import type { VueWrapper } from '@vue/test-utils'
 
 import MultiSelect from './MultiSelect.vue'
 

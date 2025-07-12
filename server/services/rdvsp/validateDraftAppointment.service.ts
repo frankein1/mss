@@ -9,9 +9,9 @@ import {
 import {
   getAgentAuthInfo,
   APPOINTMENT_STATUS,
-  type RdvspStatus,
   checkIntegrationSetupForStructure
 } from './helper'
+import type { RdvspStatus } from './helper'
 import { invalidError } from '~/server/trpc'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import dayjs from 'dayjs'
