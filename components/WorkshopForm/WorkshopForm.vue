@@ -16,16 +16,16 @@
         :workshop-name="workshopName"
         :is-submitting="isSubmitting"
       />
-      <WorkshopCreationFormName
+      <WorkshopFormName
         v-else
         :is-submitting="isSubmitting"
       />
-      <WorkshopCreationFormInformation
+      <WorkshopFormInformation
         :is-submitting="isSubmitting"
         :partner-organizations="partnerOrganizations"
       />
-      <WorkshopCreationFormDescription :is-submitting="isSubmitting" />
-      <WorkshopCreationFormConditions
+      <WorkshopFormDescription :is-submitting="isSubmitting" />
+      <WorkshopFormConditions
         :is-submitting="isSubmitting"
         :age-condition-options="ageConditionKeys.options"
       />
@@ -39,7 +39,7 @@
     </div>
 
     <AtomActionsBar class="sticky">
-      <WorkshopCreationFormActions
+      <WorkshopFormActions
         :is-submitting="isSubmitting"
         :update
         @cancel="emit('cancel')"

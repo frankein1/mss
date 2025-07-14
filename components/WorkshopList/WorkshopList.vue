@@ -11,7 +11,7 @@
   />
   <WorkshopListEmpty
     v-if="workshopList.length === 0"
-    :period="FilterWorkshopPeriod.Past"
+    :period
   />
   <template v-else>
     <p>{{ data?.count }} ateliers à venir</p>

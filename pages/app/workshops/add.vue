@@ -10,7 +10,7 @@
       :error="Boolean(errorPartner)"
       message="La page n'a pas pu être chargée."
     >
-      <WorkshopCreationForm
+      <WorkshopForm
         v-if="partnerOrganizations"
         :is-submitting="status === 'pending'"
         :partner-organizations="partnerOrganizations"

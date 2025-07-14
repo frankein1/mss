@@ -61,6 +61,7 @@
 <script setup lang="ts">
   import dayjs from 'dayjs'
   import { WorkshopDetails } from '~/types/workshop'
+  import { getDurationInHoursAndMinutes } from '~/utils/duration/getDuration'
   import { routes } from '~/utils/routes'
   import { capitalizeFirstLetter } from '~/utils/text/capitalizeFirstLetter'
 
@@ -89,8 +90,7 @@
       props.workshop.date.toDateString() + ' ' + props.workshop.endTime
     const start =
       props.workshop.date.toDateString() + ' ' + props.workshop.startTime
-    const diff = dayjs(end, 'HH:mm').diff(dayjs(start, 'HH:mm'), 'hour')
-    return diff + ' h'
+    return getDurationInHoursAndMinutes(new Date(start), new Date(end))
   })
 </script>
 

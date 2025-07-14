@@ -11,7 +11,7 @@
       :error="Boolean(fetchError)"
       :message="fetchError"
     >
-      <WorkshopCreationForm
+      <WorkshopForm
         v-if="partnerOrganizations && workshop"
         :is-submitting="status === 'pending'"
         :partner-organizations="partnerOrganizations"
