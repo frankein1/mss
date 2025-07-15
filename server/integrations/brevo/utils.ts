@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
 
 const BREVO_LIST_ID = 10
+const runtimeConfig = useRuntimeConfig()
 
 export function mapUserToBrevoContact(
   user: Pick<
@@ -23,7 +24,7 @@ export function mapUserToBrevoContact(
         })
       | null
   } & {
-    _count: { createdBeneficiaries: number; createdSocialSupports: number }
+    _count: { overseenBeneficiaries: number; createdSocialSupports: number }
   }
 ) {
   const {
@@ -37,7 +38,7 @@ export function mapUserToBrevoContact(
     firstAccess,
     lastAccess,
     status,
-    _count: { createdBeneficiaries, createdSocialSupports }
+    _count: { overseenBeneficiaries, createdSocialSupports }
   } = user
   return {
     ext_id: id,
@@ -59,7 +60,7 @@ export function mapUserToBrevoContact(
       PREMIERE_CONNEXION: formatUTCTimestamp(firstAccess, 'DD-MM-YYYY'),
       DERNIERE_CONNEXION: formatUTCTimestamp(lastAccess, 'DD-MM-YYYY'),
       UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0,
-      NOMBRE_BENEFICIAIRES_UTILISATEUR: createdBeneficiaries,
+      NOMBRE_BENEFICIAIRES_UTILISATEUR: overseenBeneficiaries,
       NOMBRE_SUIVIS_UTILISATEUR: createdSocialSupports,
       NOMBRE_BENEFICIAIRES_STRUCTURE: structure?._count.beneficiaries,
       NOMBRE_SUIVIS_STRUCTURE: structure?._count.socialSupports
@@ -117,7 +118,7 @@ export function mapStructureToBrevoCompany(
       ext_id: id,
       number_of_employees: structure._count.users,
       phone,
-      domain: `${process.env.APP_URL}/admin/structures/${id}`,
+      domain: `${runtimeConfig.public.appUrl}/admin/structures/${id}`,
       action_30_derniers_jours: dayjs().diff(lastActivity, 'day') <= 30,
       adresse_mail_structure: email,
       creation_compte: formatUTCTimestamp(created, ''),
