@@ -53,6 +53,7 @@ export const BeneficiaryRepo = {
   count,
   update,
   prisma: {
+    count: prismaClient.beneficiary.count,
     groupBy: prismaClient.beneficiary.groupBy,
     create: prismaClient.beneficiary.create,
     update: prismaClient.beneficiary.update,

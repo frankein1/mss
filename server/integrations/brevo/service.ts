@@ -1,4 +1,4 @@
-import { StructureRepo, UserRepo } from '~/server/database'
+import { BeneficiaryRepo, StructureRepo, UserRepo } from '~/server/database'
 import { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import {
   createCompany,
@@ -14,50 +14,62 @@ import { structureTypeKeys, userRoleKeys } from '~/client/options'
 
 const ID_STRUCTURE_TEST = 'a32bec0c-ced6-45a8-a217-8c7a2ff51094'
 
-export async function createOrUpdateUser(user_id: string) {
+export async function createOrUpdateUser(userId: string) {
   if (process.env.NODE_ENV === 'test') {
     return
   }
-  const user = await UserRepo.prisma.findUniqueOrThrow({
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true,
-      role: true,
-      created: true,
-      firstAccess: true,
-      lastAccess: true,
-      status: true,
-      structure: {
-        select: {
-          id: true,
-          lastAccess: true,
-          type: true,
-          siret: true,
-          name: true,
-          _count: {
-            select: {
-              beneficiaries: true,
-              socialSupports: true
+  const [user, overseenBeneficiaryCount] = await Promise.all([
+    UserRepo.prisma.findUniqueOrThrow({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        created: true,
+        firstAccess: true,
+        lastAccess: true,
+        status: true,
+        structure: {
+          select: {
+            id: true,
+            lastAccess: true,
+            type: true,
+            siret: true,
+            name: true,
+            _count: {
+              select: {
+                beneficiaries: true,
+                socialSupports: true
+              }
             }
+          }
+        },
+        _count: {
+          select: {
+            createdSocialSupports: true
           }
         }
       },
-      _count: {
-        select: {
-          createdBeneficiaries: true,
-          createdSocialSupports: true
+      where: { id: userId }
+    }),
+    BeneficiaryRepo.prisma.count({
+      where: {
+        familyFile: {
+          referents: { some: { id: userId } }
         }
       }
-    },
-    where: { id: user_id }
-  })
+    })
+  ])
+
   // For now, only allow Brevo updates on the test structure
   if (user.structure?.id !== ID_STRUCTURE_TEST) {
     return
   }
-  const contact = mapUserToBrevoContact(user)
+  const contact = mapUserToBrevoContact({
+    ...user,
+    _count: { ...user._count, overseenBeneficiaries: overseenBeneficiaryCount }
+  })
   await createOrUpdateContact(contact)
   if (user.structure?.id) {
     // In the future, this shouldn't be necessary anymore,
@@ -72,12 +84,12 @@ export async function createOrUpdateUser(user_id: string) {
   }
 }
 
-export async function createOrUpdateStructure(structure_id: string) {
+export async function createOrUpdateStructure(structureId: string) {
   if (process.env.NODE_ENV === 'test') {
     return
   }
   // For now, only allow Brevo updates on the test structure
-  if (structure_id !== ID_STRUCTURE_TEST) {
+  if (structureId !== ID_STRUCTURE_TEST) {
     return
   }
   const [structure, deactivatedUserCount, managerCount] = await Promise.all([
@@ -102,17 +114,17 @@ export async function createOrUpdateStructure(structure_id: string) {
           }
         }
       },
-      where: { id: structure_id }
+      where: { id: structureId }
     }),
     UserRepo.prisma.count({
       where: {
-        structureId: structure_id,
+        structureId,
         status: 'Disabled'
       }
     }),
     UserRepo.prisma.count({
       where: {
-        structureId: structure_id,
+        structureId,
         role: 'StructureManager'
       }
     })
@@ -126,7 +138,7 @@ export async function createOrUpdateStructure(structure_id: string) {
       deactivatedUsers: deactivatedUserCount
     }
   })
-  const result = await getCompanyByStructureId(structure_id)
+  const result = await getCompanyByStructureId(structureId)
   if (result) {
     await updateCompany(result.id, company)
   } else {
