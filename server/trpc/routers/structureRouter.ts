@@ -11,9 +11,9 @@ export const structureRouter = router({
   updateStructureInfo: protectedProcedure
     .input(structureRoutes.updateStructureInfo.inputValidation)
     .mutation(structureRoutes.updateStructureInfo.execute),
-  findSocialSupportSubject: protectedProcedure
-    .input(structureRoutes.findSocialSupportSubject.inputValidation)
-    .query(structureRoutes.findSocialSupportSubject.execute),
+  searchSocialSupportSubjects: protectedProcedure
+    .input(structureRoutes.searchSocialSupportSubjects.inputValidation)
+    .query(structureRoutes.searchSocialSupportSubjects.execute),
   updateSocialSupportSubjects: protectedProcedure
     .input(structureRoutes.updateSocialSupportSubjects.inputValidation)
     .mutation(structureRoutes.updateSocialSupportSubjects.execute),

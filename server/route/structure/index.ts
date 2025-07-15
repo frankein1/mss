@@ -1,4 +1,4 @@
-import { findSocialSupportSubject } from './findSocialSupportSubject.query'
+import { searchSocialSupportSubjects } from './search-social-support-subjects.query'
 import { getActiveSocialSupportSubjects } from './getActiveSocialSupportSubjects.query'
 import { getActiveOrUsedSocialSupportSubjects } from './getActiveOrUsedSocialSupportSubjects.query'
 
@@ -11,7 +11,7 @@ import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
 import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutation'
 
 export const structureRoutes = {
-  findSocialSupportSubject,
+  searchSocialSupportSubjects,
   getActiveSocialSupportSubjects,
   getActiveOrUsedSocialSupportSubjects,
   getSocialSupportSubjects,

@@ -79,12 +79,23 @@
   const isSubmittingModification = ref(false)
   const isSubmittingDeletion = ref(false)
 
-  const nameCanBeUpdated = async (name: string) => {
-    const subjectWithSameNameExists =
-      await trpcClient.structure.findSocialSupportSubject.query({
-        name: name.trim().toLocaleLowerCase()
-      })
-    return !subjectWithSameNameExists
+  const nameCanBeUpdated = async (id: string, name: string) => {
+    const existingNames =
+      await trpcClient.structure.searchSocialSupportSubjects.query([
+        {
+          name: name.trim().toLocaleLowerCase()
+        }
+      ])
+
+    // Name can be updated if target value does not already exist in DB
+    if (existingNames.length === 0) {
+      return true
+    }
+
+    // If target value already exists but is the same as subject currently being
+    // modified, authorize the modification
+    // Allows to deal with change of case ('aidE AlimentaIRE' to 'Aide alimentaire')
+    return existingNames[0].id === id
   }
 
   function editSubject(id: string, name: string) {
@@ -93,7 +104,7 @@
       id,
       name,
       isSubmitting: isSubmittingModification.value,
-      validate: (name: string) => nameCanBeUpdated(name),
+      validate: (name: string) => nameCanBeUpdated(id, name),
       update: onUpdateStructureSubject
     })
   }

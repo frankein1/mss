@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { stringConstraint, phoneConstraint } from '../helpers.schema'
+import {
+  stringConstraint,
+  phoneConstraint,
+  requiredLimitedStringConstraint
+} from '../helpers.schema'
 import {
   errorMessages,
   minStringLengthMessage,
@@ -41,4 +45,14 @@ export const getSocialSupportSubjectSchema = z.object({
 
 export type GetSocialSupportSubjectInput = z.infer<
   typeof getSocialSupportSubjectSchema
+>
+
+export const searchSocialSupportSubjectsSchema = z.array(
+  z.object({
+    name: requiredLimitedStringConstraint(300)
+  })
+)
+
+export type SearchSocialSupportSubjectsInput = z.infer<
+  typeof searchSocialSupportSubjectsSchema
 >

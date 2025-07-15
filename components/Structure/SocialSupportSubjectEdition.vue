@@ -73,6 +73,7 @@
       setErrors({
         name: "Cet objet d'accompagnement existe déjà, modification impossible"
       })
+      setFocusAfterClose()()
       return
     }
     props.update(values)
