@@ -22,7 +22,10 @@
           :key="idx"
           class="fr-mb-1w"
         >
-          <WorkshopAttendeeItem :attendee="attendee" />
+          <WorkshopAttendeeItem
+            :attendee="attendee"
+            @delete-attendee="emit('deleteAttendee', $event)"
+          />
         </li>
       </ul>
       <WorkshopAttendeeEmpty v-else />
@@ -36,6 +39,10 @@
 
   const { workshop } = defineProps<{
     workshop: WorkshopWithAttendeesDetails
+  }>()
+
+  const emit = defineEmits<{
+    deleteAttendee: [id: string]
   }>()
 
   const attendees = computed(() => {

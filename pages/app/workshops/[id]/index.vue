@@ -32,7 +32,10 @@
     </div>
     <div class="fr-container--fluid">
       <PageContainer class="fr-pb-1w fr-pt-1w">
-        <WorkshopAttendeeList :workshop="workshop" />
+        <WorkshopAttendeeList
+          :workshop="workshop"
+          @delete-attendee="onDeleteAttendee"
+        />
       </PageContainer>
     </div>
   </div>
@@ -46,6 +49,7 @@
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
+  const snackbar = useSnackbar()
   const workshopId = route.params.id as string
 
   const { data, pending, error, refresh } =
@@ -59,6 +63,20 @@
   useHead({
     title: routes.workshop.AppWorkshop.title(workshop.value || null)
   })
+
+  // Delete an attendee
+  const router = trpcClient.workshop
+  const { mutate, error: deleteAttendeeError } =
+    router.deleteAttendee.useMutation()
+  const onDeleteAttendee = async (attendeeId: string) => {
+    const deletedAttendee = await mutate({ id: attendeeId })
+    if (deleteAttendeeError.value || deletedAttendee === null) {
+      snackbar.error('La suppression du participant a échoué.')
+      return
+    }
+    refresh()
+    snackbar.success('La suppression du participant a réussi.')
+  }
 </script>
 
 <style lang="scss" scoped>

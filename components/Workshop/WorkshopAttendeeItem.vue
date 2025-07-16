@@ -116,6 +116,10 @@
     attendee: WorkshopAttendee
   }>()
 
+  const emit = defineEmits<{
+    deleteAttendee: [id: string]
+  }>()
+
   const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
 
   const attendeeDetails = computed(() => {
@@ -150,11 +154,10 @@
   })
 
   // Option button dropdown
-  // TODO: create actions
   const menus: Menu[] = [
     {
       label: "Retirer de l'atelier",
-      callback: () => console.log("Retirer de l'atelier"),
+      callback: () => emit('deleteAttendee', props.attendee.id),
       icon: 'ri-user-unfollow-line'
     }
   ]
