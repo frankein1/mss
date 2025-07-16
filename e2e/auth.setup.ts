@@ -1,85 +1,142 @@
-import { test as setup, Page } from '@playwright/test'
+import { test as setup } from '@playwright/test'
+import type { BrowserContext } from '@playwright/test'
+import { StructureType, UserRole, UserStatus } from '@prisma/client'
+import {
+  fixturesCGUHistory,
+  FixtureStructure,
+  fixtureStructures,
+  fixturesUsers,
+  FixtureUserRole
+} from '~/prisma/fixtures'
+import { signJwt } from '~/server/lib/jwt'
+import { minutesToMillis } from '~/utils/time'
 
-async function authenticate(
-  page: Page,
-  username: string,
-  password: string,
-  newUser = false
+async function setAuthenticationToken(
+  context: BrowserContext,
+  user: {
+    firstName: string
+    lastName: string
+    email: string
+    id: string
+    role: UserRole
+    status: UserStatus
+    CGUHistoryVersion: string | null
+    structureId: string
+    structureType: StructureType
+  }
 ) {
-  await page.goto('/auth/login')
-  await page
-    .getByRole('link', { name: /s'identifier avec proconnect/i })
-    .click()
+  const token = signJwt(
+    user,
+    process.env.AUTH_JWT_KEY || 'secretJWT',
+    parseInt(process.env.TOKEN_VALIDATION_IN_MINUTES || '30')
+  )
 
-  // Auth system redirection : ProConnect
-  await page.waitForURL(/dev-agentconnect.fr/i, { waitUntil: 'networkidle' })
-  await page.getByLabel('Email professionnel').fill(username)
-  await page.getByRole('button', { name: /^continuer$/i }).click()
-
-  // Identity provider redirection : Proconnect Identité
-  await page.waitForURL(/identite-sandbox.proconnect.gouv.fr/i)
-  await page.getByLabel('Renseignez votre mot de passe').fill(password)
-  await page.getByRole('button', { name: /identifier/i }).click()
-
-  // Sometimes login flow sets cookies in the process of several redirects.
-  // Wait for the final URL to ensure that the cookies are actually set.
-  await page.waitForURL(newUser ? /\/cgu/ : /\/app\/overview/)
+  const expires = parseInt(
+    ((new Date().getTime() + minutesToMillis(30)) / 1000).toFixed(0)
+  )
+  await context.addCookies([
+    {
+      name: 'MSS_SESSION_TOKEN',
+      value: token,
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+      secure: true,
+      expires
+    }
+  ])
 }
 
-setup.slow()
-
-setup('authenticate as Structure Manager Jeanne', async ({ page }) => {
+setup('authenticate as Structure Manager Jeanne', async ({ context }) => {
   const managerFile = 'playwright/.auth/structure-manager.json'
-  const username = process.env.STRUCTURE_MANAGER_EMAIL || ''
-  const pwd = process.env.STRUCTURE_MANAGER_PASSWORD || ''
 
-  await authenticate(page, username, pwd)
-  await page.context().storageState({ path: managerFile })
+  const user = fixturesUsers[FixtureUserRole.StructureManager]
+  const CGUHistoryVersion =
+    fixturesCGUHistory[FixtureUserRole.StructureManager].version
+  const structure = fixtureStructures[FixtureStructure.Test]
+  await setAuthenticationToken(context, {
+    ...user,
+    structureId: structure.id,
+    structureType: structure.type,
+    CGUHistoryVersion
+  })
+  await context.storageState({ path: managerFile })
 })
 
-setup('authenticate as Social Worker Jean', async ({ page }) => {
+setup('authenticate as Social Worker Jean', async ({ context }) => {
   const workerFile = 'playwright/.auth/social-worker.json'
-  const username = process.env.SOCIAL_WORKER_EMAIL || ''
-  const pwd = process.env.SOCIAL_WORKER_PASSWORD || ''
 
-  await authenticate(page, username, pwd)
-  await page.context().storageState({ path: workerFile })
+  const user = fixturesUsers[FixtureUserRole.SocialWorker]
+  const CGUHistoryVersion =
+    fixturesCGUHistory[FixtureUserRole.SocialWorker].version
+  const structure = fixtureStructures[FixtureStructure.Test]
+  await setAuthenticationToken(context, {
+    ...user,
+    structureId: structure.id,
+    structureType: structure.type,
+    CGUHistoryVersion
+  })
+  await context.storageState({ path: workerFile })
 })
 
-setup('authenticate as Reception Agent Jean', async ({ page }) => {
+setup('authenticate as Reception Agent Jean', async ({ context }) => {
   const agentFile = 'playwright/.auth/reception-agent.json'
-  const username = process.env.RECEPTION_AGENT_EMAIL || ''
-  const pwd = process.env.RECEPTION_AGENT_PASSWORD || ''
 
-  await authenticate(page, username, pwd)
-  await page.context().storageState({ path: agentFile })
+  const user = fixturesUsers[FixtureUserRole.ReceptionAgent]
+  const CGUHistoryVersion =
+    fixturesCGUHistory[FixtureUserRole.ReceptionAgent].version
+  const structure = fixtureStructures[FixtureStructure.Test]
+  await setAuthenticationToken(context, {
+    ...user,
+    structureId: structure.id,
+    structureType: structure.type,
+    CGUHistoryVersion
+  })
+  await context.storageState({ path: agentFile })
 })
 
-setup('authenticate as Structure Manager Anita', async ({ page }) => {
+setup('authenticate as Structure Manager Anita', async ({ context }) => {
   const managerFile = 'playwright/.auth/structure-manager-new-user.json'
-  const username = process.env.STRUCTURE_MANAGER_NEW_USER_EMAIL || ''
-  const pwd = process.env.STRUCTURE_MANAGER_NEW_USER_PASSWORD || ''
-  const newUser = true
 
-  await authenticate(page, username, pwd, newUser)
-  await page.context().storageState({ path: managerFile })
+  const user = fixturesUsers[FixtureUserRole.StructureManagerNew]
+  const structure = fixtureStructures[FixtureStructure.Autun]
+  await setAuthenticationToken(context, {
+    ...user,
+    structureId: structure.id,
+    structureType: structure.type,
+    CGUHistoryVersion: null
+  })
+  await context.storageState({ path: managerFile })
 })
 
-setup('authenticate as Social Worker Mehdi', async ({ page }) => {
+setup('authenticate as Social Worker Mehdi', async ({ context }) => {
   const workerFile = 'playwright/.auth/social-worker-new-user.json'
-  const username = process.env.SOCIAL_WORKER_NEW_USER_EMAIL || ''
-  const pwd = process.env.SOCIAL_WORKER_NEW_USER_PASSWORD || ''
-  const newUser = true
 
-  await authenticate(page, username, pwd, newUser)
-  await page.context().storageState({ path: workerFile })
+  const user = fixturesUsers[FixtureUserRole.SocialWorkerNew]
+  const structure = fixtureStructures[FixtureStructure.Autun]
+  await setAuthenticationToken(context, {
+    ...user,
+    structureId: structure.id,
+    structureType: structure.type,
+    CGUHistoryVersion: null
+  })
+  await context.storageState({ path: workerFile })
 })
 
-setup('authenticate as Structure Manager Ministère Laura', async ({ page }) => {
-  const managerFile = 'playwright/.auth/structure-manager-ministere.json'
-  const username = process.env.STRUCTURE_MANAGER_MINISTERE_EMAIL || ''
-  const pwd = process.env.STRUCTURE_MANAGER_MINISTERE_PASSWORD || ''
+setup(
+  'authenticate as Structure Manager Ministère Laura',
+  async ({ context }) => {
+    const managerFile = 'playwright/.auth/structure-manager-ministere.json'
 
-  await authenticate(page, username, pwd)
-  await page.context().storageState({ path: managerFile })
-})
+    const user = fixturesUsers[FixtureUserRole.StructureManagerMinistere]
+    const CGUHistoryVersion = fixturesCGUHistory[6].version
+    const structure = fixtureStructures[FixtureStructure.Ministère]
+    await setAuthenticationToken(context, {
+      ...user,
+      structureId: structure.id,
+      structureType: structure.type,
+      CGUHistoryVersion
+    })
+    await context.storageState({ path: managerFile })
+  }
+)
