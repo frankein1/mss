@@ -1,5 +1,4 @@
 import { Prisma, UserActivityType, UserActivityObject } from '@prisma/client'
-import { diff as diffJson } from 'json-diff'
 import {
   createOrUpdateStructure,
   createOrUpdateUser
@@ -18,44 +17,7 @@ export type AddUserActivityInput = {
 }
 
 export async function addUserActivity(input: AddUserActivityInput) {
-  const conn = input.transaction ? input.transaction : prismaClient
-
   const { user, key, object, objectId, activity, content } = input
-
-  const lastAuditLog = await prismaClient.userActivity.findFirst({
-    orderBy: {
-      date: 'desc'
-    },
-    select: {
-      id: true,
-      content: true
-    },
-    where: {
-      key,
-      object,
-      objectId,
-      content: {
-        not: Prisma.JsonNull
-      }
-    }
-  })
-
-  let diff
-  if (lastAuditLog) {
-    const { id: lastId, content: lastContent } = lastAuditLog
-    const { content } = input
-    diff = diffJson(lastContent, content)
-
-    // only to minimise database size
-    await conn.userActivity.update({
-      data: {
-        content: Prisma.JsonNull
-      },
-      where: {
-        id: lastId
-      }
-    })
-  }
 
   const activityDate = new Date()
   const activityData = {
@@ -65,9 +27,9 @@ export async function addUserActivity(input: AddUserActivityInput) {
     objectId,
     activity,
     date: activityDate,
-    content,
-    diff
+    content
   }
+
   // Do not await, failure shouldn't cause the entire mutation to fail
   createOrUpdateUser(user.id).catch(error => {
     console.error(error)
@@ -95,11 +57,9 @@ export async function addUserActivity(input: AddUserActivityInput) {
     })
   }
   if (user.structureId) {
-    await conn.structure.update({
+    await prismaClient.structure.update({
       where: { id: user.structureId },
       data: {
-        // Forced to use an external field `lastActivity`, used by orderBy (in admin section's structures table)
-        // Cf. https://github.com/prisma/prisma/issues/5837 & https://github.com/prisma/prisma/issues/7593 (no orderBy for relations)
         lastActivity: activityDate,
         userActivities: {
           create: activityData
@@ -111,7 +71,7 @@ export async function addUserActivity(input: AddUserActivityInput) {
       console.error(error)
     })
   } else {
-    await conn.userActivity.create({
+    await prismaClient.userActivity.create({
       data: {
         structureId: user.structureId,
         ...activityData
