@@ -24,10 +24,15 @@
         <BeneficiarySearchCombobox
           class="beneficiary-search"
           label="Rechercher un dossier bénéficiaire"
+          placeholder="Rechercher un dossier bénéficiaire"
+          :label-visible="false"
           name="beneficiary-search"
           :search-fn="searchBeneficiaries"
           :select-only="true"
-          @on-select="onSelect"
+          :action="{
+            title: `Ajouter ce bénéficiaire`
+          }"
+          @on-action-click="onSelect($event)"
         />
         <span
           v-if="linkToFamilyFileError !== null"

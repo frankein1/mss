@@ -4,9 +4,18 @@
       <p class="fr-text--bold">
         {{ attendeeName }}
         <span
+          v-if="attendee.type === WorkshopAttendeeType.Beneficiary"
+          :aria-describedby="BENEFICIARY_TOOLTIP_ID"
           class="fr-icon--sm fr-icon-user-line fr-ml-1v"
           aria-hidden="true"
-        ></span>
+        >
+        </span>
+        <span
+          :id="BENEFICIARY_TOOLTIP_ID"
+          class="fr-tooltip fr-placement"
+          role="tooltip"
+          >Bénéficiaire enregistré sur Mon Suivi Social
+        </span>
       </p>
       <AtomDropdown
         label="Options"
@@ -16,29 +25,36 @@
       />
     </div>
     <div class="info">
-      <template v-if="attendee.phone1 || attendee.email || attendee.birthDate">
+      <template
+        v-if="
+          attendeeDetails &&
+          (attendeeDetails.phone1 ||
+            attendeeDetails.email ||
+            attendeeDetails.birthDate)
+        "
+      >
         <p
-          v-if="attendee.phone1"
+          v-if="attendee.beneficiary?.phone1"
           class="fr-text--sm telephone"
         >
           <span
             class="fr-icon--sm fr-icon-phone-line"
             aria-hidden="true"
           ></span>
-          {{ attendee.phone1 }}
+          {{ attendeeDetails.phone1 }}
         </p>
         <p
-          v-if="attendee.email"
+          v-if="attendeeDetails.email"
           class="fr-text--sm email"
         >
           <span
             class="fr-icon--sm fr-icon-mail-line"
             aria-hidden="true"
           ></span>
-          {{ attendee.email }}
+          {{ attendeeDetails.email }}
         </p>
         <p
-          v-if="attendee.birthDate"
+          v-if="attendeeDetails.birthDate"
           class="fr-text--sm age"
         >
           <span
@@ -46,7 +62,7 @@
             aria-hidden="true"
           >
           </span>
-          {{ calculateAge(attendee.birthDate) }}&nbsp;ans
+          {{ calculateAge(attendeeDetails.birthDate) }}&nbsp;ans
         </p>
       </template>
     </div>
@@ -62,13 +78,16 @@
         {{ attendeeAddress }}
       </p>
     </div>
-    <div class="comments">
+    <div
+      v-if="attendee.comment"
+      class="comments"
+    >
       <p class="fr-text--sm">
         <span
           class="fr-icon--sm fr-icon-message-2-line"
           aria-hidden="true"
         ></span>
-        Difficultés à s’exprimer
+        {{ attendee.comment }}
       </p>
     </div>
     <div class="presence">
@@ -89,26 +108,45 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import type { Menu } from '~/types/menu'
+  import { WorkshopAttendee } from '~/types/workshop'
+  import { WorkshopAttendeeType } from '@prisma/client'
 
-  // TODO replace with Attendee type
   const props = defineProps<{
-    attendee: GetBeneficiaryGeneral
+    attendee: WorkshopAttendee
   }>()
 
-  const attendeeName = computed(() => formatBeneficiaryName(props.attendee))
+  const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
+
+  const attendeeDetails = computed(() => {
+    if (props.attendee.beneficiary) {
+      return props.attendee.beneficiary
+    }
+    return null
+  })
+
+  const attendeeName = computed(() => {
+    if (attendeeDetails.value == null) {
+      return ''
+    }
+    return formatBeneficiaryName(attendeeDetails.value)
+  })
 
   const attendeeAddress = computed(() => {
     if (
-      !props.attendee.street &&
-      !props.attendee.zipcode &&
-      !props.attendee.city &&
-      !props.attendee.region
+      !attendeeDetails.value ||
+      (!attendeeDetails.value?.street &&
+        !attendeeDetails.value?.zipcode &&
+        !attendeeDetails.value?.city)
     ) {
       return null
     }
-    return formatAddress(props.attendee)
+    return formatAddress({
+      street: attendeeDetails.value.street,
+      zipcode: attendeeDetails.value.zipcode,
+      city: attendeeDetails.value.city,
+      region: null
+    })
   })
 
   // Option button dropdown
@@ -240,7 +278,7 @@
 
   // small radio buttons
   .radio-buttons {
-    margin-top: 1rem;
+    margin-top: 0;
 
     @include dsfr-media-query.respond-from('md') {
       grid-area: 3 / 2 / 6 / 3;

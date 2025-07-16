@@ -2195,6 +2195,7 @@ model WorkshopAttendee {
   /// workshopExternalAttendeeId will be defined if type is not 'beneficiary', and null otherwise. Enforced by 'check_attendee_type_and_ids'
   workshopExternalAttendeeId String?                   @unique @map("workshop_external_attendee_id") @db.Uuid
 
+  @@unique([workshopId, beneficiaryId])
   @@map("workshop_attendee")
 }
 

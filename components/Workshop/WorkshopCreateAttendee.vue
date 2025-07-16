@@ -4,15 +4,19 @@
 
     <div class="input-wrapper">
       <BeneficiarySearchCombobox
-        :key="rerendervalue"
         class="beneficiary-search fr-mr-2w"
-        label="Rechercher un dossier bénéficiaire"
+        label="Rechercher parmi vos bénéficiaires enregistrés"
+        placeholder="Ex : Clara Dumont"
+        :label-visible="true"
         name="beneficiary-search"
-        :select-only="true"
         :show-status="false"
         :show-age="true"
         :search-fn="searchBeneficiaries"
-        @on-select="onSelect"
+        :select-only="true"
+        :action="{
+          title: `Ajouter à l'atelier`
+        }"
+        @on-action-click="onSelect($event)"
       />
       <p class="separator">ou</p>
       <button
@@ -35,6 +39,10 @@
 
 <script setup lang="ts">
   import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import { WorkshopAttendee } from '~/types/workshop'
+
+  const { attendees } = defineProps<{ attendees: WorkshopAttendee[] }>()
+  const emit = defineEmits<{ refresh: [] }>()
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -42,13 +50,24 @@
 
   const workshopId = route.params.id as string
 
-  const rerendervalue = ref(0) // force rerender combobox
+  const beneficiaryAttendeeIds = computed(() => {
+    return attendees.map(attendee => attendee.beneficiaryId)
+  })
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
-    return beneficiaries
+    return beneficiaries.map(beneficiary => ({
+      id: beneficiary.id,
+      firstName: beneficiary.firstName,
+      usualName: beneficiary.usualName,
+      birthDate: beneficiary.birthDate,
+      birthName: beneficiary.birthName,
+      status: beneficiary.status,
+      disabled:
+        beneficiaryAttendeeIds.value.find(id => id === beneficiary.id) ?? false
+    }))
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
@@ -59,17 +78,18 @@
       workshopId: workshopId || ''
     })
 
-    rerendervalue.value++
-
     if (error.value || !created) {
       snackbar.error(
         "L'ajout de la personne participante à échoué.",
-        snackbar.focus('.input-wrapper', "input[type='search']" as FocusHTMLTag)
+        snackbar.focus('.combobox-wrapper')
       )
       return
     }
-
-    snackbar.success('Personne ajoutée avec succès')
+    emit('refresh')
+    snackbar.success(
+      'Personne ajoutée avec succès',
+      snackbar.focus('.combobox-wrapper')
+    )
   }
 </script>
 
@@ -147,6 +167,12 @@
       @include dsfr-media-query.respond-from('lg') {
         max-width: 40rem;
       }
+    }
+  }
+
+  .beneficiary-search {
+    :deep(label) {
+      color: white;
     }
   }
 </style>

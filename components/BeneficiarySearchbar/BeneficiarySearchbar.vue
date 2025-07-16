@@ -4,8 +4,14 @@
       <BeneficiarySearchCombobox
         class="beneficiary-search fr-mr-2w"
         label="Rechercher un dossier bénéficiaire"
+        :label-visible="false"
+        placeholder="Rechercher un dossier bénéficiaire"
         name="beneficiary-search"
         :search-fn="searchBeneficiaries"
+        :action="{
+          title: `Créer une synthèse`
+        }"
+        @on-action-click="onActionClick($event)"
       />
     </div>
     <div class="toolbar-create">
@@ -23,10 +29,12 @@
 <script setup lang="ts">
   import {
     AccessBeneficiaryAddEventAction,
-    EventCategory
+    EventCategory,
+    FollowupAction
   } from '~/types/matomo'
   import BeneficiarySearchCombobox from './BeneficiarySearchCombobox.vue'
   import { routes } from '~/utils/routes'
+  import { BeneficiarySearchResult } from '~/types/beneficiary'
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
@@ -41,6 +49,21 @@
       EventCategory.AccessBeneficiaryAdd,
       AccessBeneficiaryAddEventAction.FromOverview
     )
+  }
+
+  const onActionClick = (beneficiary: BeneficiarySearchResult) => {
+    const matomo = useMatomo()
+    matomo.trackEvent(
+      EventCategory.CreateFollowup,
+      FollowupAction.CreateFromBeneficiarySearch
+    )
+    const path = routes.followup.AppBeneficiaryFollowupAdd.path(
+      beneficiary.familyFileId,
+      {
+        beneficiaryId: beneficiary.id
+      }
+    )
+    navigateTo(path)
   }
 </script>
 

@@ -4,28 +4,65 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
-import { idSchema } from '~/server/schema'
 import { WorkshopRepo } from '~/server/database'
+import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
 
 export const handler = async ({
   ctx: { user },
   input
 }: {
   ctx: ProtectedAppContext
-  input: { id: string }
+  input: { id: string; includeAttendees?: boolean }
 }) => {
+  if (input.includeAttendees) {
+    return await getOneWithAttendees(user, input.id)
+  }
   return await getOne(user, input.id)
 }
 
 export const getOne = async (user: SecurityRuleGrantee, id: string) => {
   return await WorkshopRepo.findUniqueOrThrow(user, {
     where: { id },
-    include: { workshopName: true }
+    include: {
+      workshopName: true
+    }
+  })
+}
+export const getOneWithAttendees = async (
+  user: SecurityRuleGrantee,
+  id: string
+) => {
+  return await WorkshopRepo.findUniqueOrThrow(user, {
+    where: { id },
+    include: {
+      workshopName: true,
+      workshopAttendees: {
+        include: {
+          beneficiary: {
+            select: {
+              id: true,
+              birthDate: true,
+              birthName: true,
+              firstName: true,
+              usualName: true,
+              title: true,
+              status: true,
+              street: true,
+              city: true,
+              zipcode: true,
+              phone1: true,
+              email: true
+            }
+          },
+          workshopExternalAttendee: true
+        }
+      }
+    }
   })
 }
 
 export const getQuery = createQuery({
   handler,
   securityCheck: AllowSecurityCheck,
-  inputValidation: idSchema
+  inputValidation: getWorkshopSchema
 })

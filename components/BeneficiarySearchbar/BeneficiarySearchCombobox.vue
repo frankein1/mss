@@ -6,7 +6,8 @@
     <label
       :id="LABEL_ID"
       :for="INPUT_ID"
-      class="fr-label fr-sr-only"
+      class="fr-label fr-mb-1w"
+      :class="{ 'fr-sr-only': !labelVisible }"
     >
       {{ label }}
     </label>
@@ -15,7 +16,7 @@
         :id="INPUT_ID"
         ref="input"
         v-model="displayedValue"
-        :placeholder="label"
+        :placeholder="placeholder"
         autocomplete="off"
         class="fr-select"
         type="search"
@@ -69,10 +70,12 @@
               :search="displayedValue"
               :show-status
               :show-age
+              :select-only
               @click="handleSelect(result)"
             />
             <NuxtLink
               v-else
+              class="name-link"
               :to="
                 routes.file.AppFile.path(result.familyFileId, {
                   originPage: routeName,
@@ -86,11 +89,12 @@
                 :show-status="showStatus"
                 :show-age="showAge"
                 :search="displayedValue"
+                :select-only="false"
               />
             </NuxtLink>
           </div>
           <div
-            v-if="!selectOnly"
+            v-if="action"
             :id="'result-link-' + rowIndex"
             class="result-cell followup-cell"
             role="gridcell"
@@ -98,23 +102,19 @@
               'focused-cell': rowIndex === activeRow && activeCol === 1
             }"
           >
-            <NuxtLink
-              v-if="result.status !== BeneficiaryStatus.Archived"
-              :id="`beneficiary-search-followup-link-${rowIndex}`"
-              :to="
-                routes.followup.AppBeneficiaryFollowupAdd.path(
-                  result.familyFileId,
-                  {
-                    beneficiaryId: result.id
-                  }
-                )
+            <button
+              type="button"
+              :disabled="result.disabled"
+              class="action-btn fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line fr-btn--sm"
+              :title="`${action.title} pour ${formatBeneficiarySearchDisplayName(result)}`"
+              @click="
+                (emit('onActionClick', result),
+                (displayedValue = formatBeneficiarySearchDisplayName(result)),
+                (openList = false))
               "
-              class="create-btn fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line fr-btn--sm"
-              :title="`Créer une synthèse d'entretien pour ${formatBeneficiarySearchDisplayName(result)}`"
-              @click="handleCreateFollowup()"
             >
-              Créer une synthèse
-            </NuxtLink>
+              {{ action.title }}
+            </button>
           </div>
         </li>
       </ul>
@@ -133,25 +133,32 @@
   import sortBeneficiarySearchResults from '~/utils/beneficiary/sortBeneficiarySearchResults'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import BeneficiarySearchComboboxResult from './BeneficiarySearchComboboxResult.vue'
-  import { BeneficiaryStatus } from '@prisma/client'
   import { routes } from '~/utils/routes'
-  import { EventCategory, FollowupAction } from '~/types/matomo'
 
   const {
-    selectOnly = false,
+    placeholder = '',
     showStatus = true,
+    labelVisible = true,
     showAge = false,
+    action = undefined,
+    selectOnly = false,
     searchFn
   } = defineProps<{
     label: string
-    selectOnly?: boolean
+    placeholder?: string
+    labelVisible?: boolean
     showStatus?: boolean
     showAge?: boolean
+    selectOnly?: boolean
+    action?: {
+      title: string
+    }
     searchFn: (search: string) => Promise<any[]>
   }>()
 
   const emit = defineEmits<{
-    onSelect: [beneficiary: BeneficiarySearchResult]
+    onSelect: [beneficiary: BeneficiarySearchResult] // To do replace with on click-link
+    onActionClick: [beneficiary: BeneficiarySearchResult]
   }>()
 
   const results = ref<BeneficiarySearchResult[]>([])
@@ -177,13 +184,6 @@
     emit('onSelect', beneficiary)
     openList.value = false
     displayedValue.value = formatBeneficiarySearchDisplayName(beneficiary)
-  }
-  const handleCreateFollowup = () => {
-    const matomo = useMatomo()
-    matomo.trackEvent(
-      EventCategory.CreateFollowup,
-      FollowupAction.CreateFromBeneficiarySearch
-    )
   }
 
   const onFocus = () => {
@@ -381,6 +381,10 @@
     padding: 0 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
 
+    &:last-child {
+      box-shadow: none;
+    }
+
     > div:first-child {
       flex: 1;
     }
@@ -416,20 +420,11 @@
   .fr-select {
     box-shadow: inset 0 -2px 0 0 var(--primary);
   }
-</style>
-
-<style lang="scss">
-  .result-row:hover,
-  .result-row.focused {
-    .result-name {
-      text-decoration: underline;
-    }
-  }
 
   .result-cell:hover,
   .result-cell.focused,
   .focused-cell {
-    .create-btn {
+    .action-btn {
       background-color: var(--hover-tint);
     }
   }

@@ -23,7 +23,11 @@
     </div>
     <div class="fr-container--fluid container-middle">
       <PageContainer>
-        <WorkshopCreateAttendee class="add-participant" />
+        <WorkshopCreateAttendee
+          class="add-participant"
+          :attendees="workshop.workshopAttendees"
+          @refresh="refresh"
+        />
       </PageContainer>
     </div>
     <div class="fr-container--fluid">
@@ -38,18 +42,19 @@
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
+  import { WorkshopWithAttendeesDetails } from '~/types/workshop'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const workshopId = route.params.id as string
 
-  const {
-    data: workshop,
-    pending,
-    error
-  } = await trpcClient.workshop.getOne.useQuery({
-    id: workshopId
-  })
+  const { data, pending, error, refresh } =
+    await trpcClient.workshop.getOne.useQuery({
+      id: workshopId,
+      includeAttendees: true
+    })
+
+  const workshop = computed(() => data.value as WorkshopWithAttendeesDetails)
 
   useHead({
     title: routes.workshop.AppWorkshop.title(workshop.value || null)

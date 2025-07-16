@@ -1,5 +1,8 @@
 <template>
-  <div class="result">
+  <div
+    class="result"
+    :class="{ 'active-link': !selectOnly }"
+  >
     <div class="name-status">
       <AtomTextEmphasis
         class="fr-text--regular fr-text--lg fr-mr-1w fr-mb-0 text--primary result-name"
@@ -39,6 +42,7 @@
     showStatus?: boolean
     showAge?: boolean
     beneficiary: BeneficiarySearchResult
+    selectOnly: boolean
   }>()
 </script>
 
@@ -48,6 +52,13 @@
       display: flex;
       justify-content: flex-start;
       align-items: baseline;
+    }
+  }
+
+  .result.active-link:hover,
+  .result.active-link.focused {
+    .result-name {
+      text-decoration: underline;
     }
   }
 </style>
