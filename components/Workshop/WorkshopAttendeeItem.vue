@@ -92,17 +92,24 @@
     </div>
     <div class="presence">
       <VeeRadioButtons
+        :aria-describedby="ATTENDANCE_TOOLTIP_ID"
         name="presence"
         class="radio-buttons fr-mb-0"
         :options="[
-          { value: 'present', label: 'Présence' },
-          { value: 'absent', label: 'Absence' },
-          { value: 'excused', label: 'Absence excusée' }
+          { value: 'present', label: 'Présence', disabled: true },
+          { value: 'absent', label: 'Absence', disabled: true },
+          { value: 'excused', label: 'Absence excusée', disabled: true }
         ]"
         label="Présence"
         no-label
         inline
       />
+      <span
+        :id="ATTENDANCE_TOOLTIP_ID"
+        class="fr-tooltip fr-placement"
+        role="tooltip"
+        >Fonctionnalité à venir</span
+      >
     </div>
   </div>
 </template>
@@ -121,6 +128,7 @@
   }>()
 
   const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
+  const ATTENDANCE_TOOLTIP_ID = 'attendance-tooltip-' + useId()
 
   const attendeeDetails = computed(() => {
     if (props.attendee.beneficiary) {
@@ -327,6 +335,14 @@
           var(--background-active-blue-france) 3px,
           transparent 4px
         );
+    }
+
+    :deep(input[type='radio']:disabled + label) {
+      background-image: radial-gradient(
+        transparent 6px,
+        var(--background-disabled-grey) 7px,
+        transparent 8px
+      );
     }
 
     :deep(input[type='radio'] + label::before) {
