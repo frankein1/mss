@@ -2188,9 +2188,11 @@ model WorkshopAttendee {
   comment    String?
 
   beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  /// beneficiaryId will be defined if type is 'beneficiary', and null otherwise. Enforced by 'check_attendee_type_and_ids'
   beneficiaryId String?      @map("beneficiary_id") @db.Uuid
 
   workshopExternalAttendee   WorkshopExternalAttendee? @relation(fields: [workshopExternalAttendeeId], references: [id], onDelete: Cascade)
+  /// workshopExternalAttendeeId will be defined if type is not 'beneficiary', and null otherwise. Enforced by 'check_attendee_type_and_ids'
   workshopExternalAttendeeId String?                   @unique @map("workshop_external_attendee_id") @db.Uuid
 
   @@map("workshop_attendee")
