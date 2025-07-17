@@ -12,6 +12,12 @@
       "options": {
         "plugins": ["prettier-plugin-prisma"]
       }
+    },
+    {
+      "files": [".talismanrc"],
+      "options": {
+        "parser": "yaml"
+      }
     }
   ]
 }
