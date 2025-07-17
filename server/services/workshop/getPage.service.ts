@@ -70,12 +70,12 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
   return period === FilterWorkshopPeriod.Past
     ? {
         date: {
-          lte: dayjs().toDate()
+          lt: dayjs().toDate()
         }
       }
     : {
         date: {
-          gt: dayjs().toDate()
+          gte: dayjs().toDate()
         }
       }
 }
