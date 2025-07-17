@@ -50,7 +50,8 @@
   const activeTabContent = computed(() => props.tabTitles[activeTab.value])
 
   function setActiveTabFromUrl() {
-    const initialTabName = window.location.hash.slice(1)
+    const route = useRoute()
+    const initialTabName = route.hash.slice(1)
     const initialTabIndex = props.tabTitles.findIndex(
       el => el.tabId === initialTabName
     )
@@ -58,8 +59,5 @@
       activeTab.value = initialTabIndex
     }
   }
-
-  if (import.meta.client) {
-    setActiveTabFromUrl()
-  }
+  setActiveTabFromUrl()
 </script>

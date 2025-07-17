@@ -13,7 +13,7 @@
       <PageContainer class="fr-pb-1w fr-pt-1w">
         <AtomBreadcrumb :links="breadcrumbs.workshop.AppWorkshop(workshop)" />
         <NuxtLink
-          :to="routes.workshop.AppWorkshops.path()"
+          :to="backLink"
           class="fr-btn fr-btn--tertiary-no-outline fr-icon-arrow-left-line fr-btn--icon-left"
         >
           Retour
@@ -46,6 +46,8 @@
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
+  import dayjs from 'dayjs'
+  import { WorkshopTab } from '~/utils/constants/workshop'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -59,6 +61,16 @@
     })
 
   const workshop = computed(() => data.value as WorkshopWithAttendeesDetails)
+
+  const backLink = computed(() => {
+    const isPassed = dayjs(workshop.value.date).isBefore(new Date())
+    const link = routes.workshop.AppWorkshops.path({
+      tab: isPassed
+        ? WorkshopTab.PassedWorkshops
+        : WorkshopTab.UpcomingWorkshops
+    })
+    return link
+  })
 
   useHead({
     title: routes.workshop.AppWorkshop.title(workshop.value || null)

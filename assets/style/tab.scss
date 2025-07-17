@@ -10,6 +10,7 @@ $tab-border-bottom-size: 3px;
 
 .fr-tabs {
   box-shadow: none;
+  min-height: max-content;
 }
 
 .fr-tabs::before {

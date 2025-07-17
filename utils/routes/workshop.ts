@@ -1,5 +1,29 @@
+import { WorkshopTab } from '../constants/workshop'
 import { WorkshopsRoute } from './utils'
 import { WorkshopDetails } from '~/types/workshop'
+
+function createSuffixUrl(options?: WorkshopRouteOptions) {
+  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
+
+  if (hasDefinedOptions) {
+    const { tab, ...params } = options
+    const tabHash = tab ? `#${tab}` : ''
+
+    if (Object.keys(params).length) {
+      const urlParams = new URLSearchParams(params)
+      return `?${urlParams}${tabHash}`
+    }
+
+    return tabHash
+  }
+
+  return ''
+}
+
+const getWorkshopRoute = (options?: WorkshopRouteOptions) => {
+  const suffix = createSuffixUrl(options)
+  return `${WorkshopsRoute}${suffix}`
+}
 
 export const routes = {
   AppWorkshopAdd: {
@@ -24,6 +48,10 @@ export const routes = {
   AppWorkshops: {
     name: 'AppWorkshops',
     title: 'Ateliers collectifs, animations...',
-    path: () => WorkshopsRoute
+    path: getWorkshopRoute
   }
+}
+
+type WorkshopRouteOptions = {
+  tab?: WorkshopTab
 }

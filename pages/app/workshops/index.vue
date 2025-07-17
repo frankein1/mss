@@ -35,19 +35,20 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+  import { WorkshopTab } from '~/utils/constants/workshop'
 
   const title = routes.workshop.AppWorkshops.title
   useHead({ title })
 
   const tabTitles = [
     {
-      tabId: 'UpcomingWorkshops',
-      panelId: 'UpcomingWorkshops',
+      tabId: WorkshopTab.UpcomingWorkshops,
+      panelId: panelId(WorkshopTab.UpcomingWorkshops),
       title: 'Ateliers à venir'
     },
     {
-      tabId: 'PassedWorkshops',
-      panelId: 'PassedWorkshops',
+      tabId: WorkshopTab.PassedWorkshops,
+      panelId: panelId(WorkshopTab.PassedWorkshops),
       title: 'Ateliers passés'
     }
   ]
