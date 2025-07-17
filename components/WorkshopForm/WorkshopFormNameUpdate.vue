@@ -10,6 +10,10 @@
         <button
           class="fr-btn fr-btn--tertiary-no-outline"
           type="button"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          title="Modifier le nom"
+          @click="emit('openModalName')"
         >
           Modifier le nom
         </button>
@@ -25,6 +29,10 @@
 
   defineProps<{
     workshopName: string
+  }>()
+
+  const emit = defineEmits<{
+    openModalName: []
   }>()
 </script>
 

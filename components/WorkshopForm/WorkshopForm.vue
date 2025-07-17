@@ -13,8 +13,9 @@
     <div class="fr-container">
       <WorkshopFormNameUpdate
         v-if="update && workshopName"
-        :workshop-name="workshopName"
-        :is-submitting="isSubmitting"
+        :workshop-name
+        :is-submitting
+        @open-modal-name="emit('openModalName')"
       />
       <WorkshopFormName
         v-else
@@ -74,6 +75,7 @@
     submit: [payload: Event]
     cancel: []
     delete: []
+    openModalName: []
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
