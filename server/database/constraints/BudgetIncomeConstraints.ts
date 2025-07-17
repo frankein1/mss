@@ -34,5 +34,7 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const BudgetIncomeConstraints = {
-  get
+  get,
+  delete: get,
+  update: get
 }

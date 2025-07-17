@@ -18,15 +18,23 @@ function update<T extends Prisma.BudgetIncomeUpdateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BudgetIncomeUpdateArgs>
 ) {
-  appendConstraints(user, params, BudgetIncomeConstraints.get)
+  appendConstraints(user, params, BudgetIncomeConstraints.update)
   return prismaClient.budgetIncome.update(params)
+}
+
+function deleteIncome<T extends Prisma.BudgetIncomeDeleteArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BudgetIncomeDeleteArgs>
+) {
+  appendConstraints(user, params, BudgetIncomeConstraints.delete)
+  return prismaClient.budgetIncome.delete(params)
 }
 
 export const BudgetIncomeRepo = {
   findUniqueOrThrow,
   update,
+  delete: deleteIncome,
   prisma: {
-    create: prismaClient.budgetIncome.create,
-    delete: prismaClient.budgetIncome.delete
+    create: prismaClient.budgetIncome.create
   }
 }

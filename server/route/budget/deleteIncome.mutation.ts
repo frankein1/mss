@@ -1,10 +1,9 @@
 import { UserActivityType } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { idSchema, IdInput } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { BudgetIncomeRepo } from '~/server/database'
+import { BudgetIncomeRepo, BudgetRepo } from '~/server/database'
 
 const handler = async ({
   input,
@@ -13,21 +12,21 @@ const handler = async ({
   input: IdInput
   ctx: ProtectedAppContext
 }) => {
-  const deleteIncome = BudgetIncomeRepo.prisma.delete({
-    where: { id: input.id }
-  })
-  const updateBudget = BudgetIncomeRepo.update(ctx.user, {
+  const deletedIncome = await BudgetIncomeRepo.delete(ctx.user, {
     where: { id: input.id },
-    data: {
-      budget: {
-        update: {
-          updated: new Date()
-        }
-      }
+    select: {
+      budgetId: true
     }
   })
+  const updatedBudget = await BudgetRepo.update(ctx.user, {
+    where: { id: deletedIncome.budgetId },
+    data: {
+      updated: new Date()
+    },
+    select: { id: true }
+  })
 
-  return await prismaClient.$transaction([deleteIncome, updateBudget])
+  return updatedBudget
 }
 
 export const deleteIncome = createMutation({
