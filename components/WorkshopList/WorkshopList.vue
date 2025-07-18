@@ -3,7 +3,7 @@
   <AtomAlert
     v-if="error"
     :alert-type="AlertType.Error"
-    message="Le nombre total de bénéficiaires n'a pas pu être chargé."
+    message="La liste des ateliers n'a pas pu être chargée."
   />
   <AtomLoader
     v-if="pending"

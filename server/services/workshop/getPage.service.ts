@@ -53,7 +53,12 @@ const getWorkshops = async (
 ) => {
   return await WorkshopRepo.findMany(ctx.user, {
     include: {
-      workshopName: true
+      workshopName: true,
+      _count: {
+        select: {
+          workshopAttendees: true
+        }
+      }
     },
     where: args.where,
     take: args.take,

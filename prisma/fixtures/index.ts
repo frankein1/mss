@@ -13,3 +13,8 @@ export { fixturesSocialSupports } from './socialSupports'
 export { fixturesBudgets } from './budgets'
 export { fixturesBudgetIncomes } from './budgetIncomes'
 export { fixturesBudgetExpenses } from './budgetExpenses'
+export {
+  fixturesWorkshopNames,
+  fixturesWorkshops,
+  fixturesWorkshopAttendees
+} from './workshops'

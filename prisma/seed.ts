@@ -13,7 +13,10 @@ import {
   fixturesSocialSupports,
   fixturesBudgets,
   fixturesBudgetIncomes,
-  fixturesBudgetExpenses
+  fixturesBudgetExpenses,
+  fixturesWorkshopNames,
+  fixturesWorkshops,
+  fixturesWorkshopAttendees
 } from './fixtures'
 
 const prismaClient = new PrismaClient()
@@ -155,6 +158,33 @@ function loadFixturesPartnerOrganizationContacts() {
   })
 }
 
+function loadWorkshopNames() {
+  console.log('📑 Workshop names...')
+
+  return prismaClient.workshopName.createMany({
+    data: fixturesWorkshopNames,
+    skipDuplicates: true
+  })
+}
+
+function loadWorkshops() {
+  console.log('👩‍🏫 Workshops...')
+
+  return prismaClient.workshop.createMany({
+    data: fixturesWorkshops,
+    skipDuplicates: true
+  })
+}
+
+function loadWorkshopAttendees() {
+  console.log('🕺 Workshops attendees...')
+
+  return prismaClient.workshopAttendee.createMany({
+    data: fixturesWorkshopAttendees,
+    skipDuplicates: true
+  })
+}
+
 function loadFixtures() {
   return [
     loadFixtureStructure(),
@@ -169,7 +199,10 @@ function loadFixtures() {
     loadFixturesBeneficiaryRelatives(),
     loadFixturesBudgets(),
     ...loadFixturesBudgetIncomes(),
-    ...loadFixturesBudgetExpenses()
+    ...loadFixturesBudgetExpenses(),
+    loadWorkshopNames(),
+    loadWorkshops(),
+    loadWorkshopAttendees()
   ]
 }
 

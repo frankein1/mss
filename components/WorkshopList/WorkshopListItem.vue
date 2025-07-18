@@ -88,7 +88,11 @@
   // TODO (émargement/sign-in)
   // if workshop date is not yet passed status badge is null
   // instead, display registration text
-  const registrations = computed(() => '0 inscription(s)')
+
+  const plural = (n: number, w: string) => (n > 1 ? `${n} ${w}s` : `${n} ${w}`)
+  const registrations = computed(() =>
+    plural(props.workshop._count.workshopAttendees, 'inscription')
+  )
 
   const statusBadge = computed(() => {
     if (props.workshop.date > new Date()) {
