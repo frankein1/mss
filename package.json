@@ -79,7 +79,7 @@
     "commit-and-tag-version": "^12.5.1",
     "dotenv": "^17.2.0",
     "eslint": "^9.31.0",
-    "happy-dom": "^17.6.3",
+    "happy-dom": "^18.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "nuxt": "^3.16.1",
