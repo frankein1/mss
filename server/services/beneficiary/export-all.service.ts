@@ -250,12 +250,11 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
 
 function formatRelative(relative: GetBeneficiaryRelative) {
   const displayName = formatRelativeName(relative)
-  if (relative.relationship) {
-    return `${displayName} (${relativeRelationshipKeys.value(
-      relative.relationship
-    )})`
-  }
-  return displayName
+  return `${displayName}${
+    relative.relationship
+      ? ' (' + relativeRelationshipKeys.value(relative.relationship) + ')'
+      : ''
+  }${relative.phone ? ' tel: ' + relative.phone : ''}`
 }
 
 function formatRelativeName(
@@ -263,5 +262,5 @@ function formatRelativeName(
 ): string {
   return `${nameOrEmpty(
     beneficiaryRelative.firstName
-  )} ${beneficiaryRelative.lastName?.toUpperCase()}`
+  )} ${nameOrEmpty(beneficiaryRelative.lastName?.toUpperCase())}`
 }
