@@ -21,7 +21,8 @@
         :label="workshopLabels.startTime"
         name="startTime"
         :disabled="isSubmitting"
-        :options="withEmptyValue(timeGroupKeys.options, '')"
+        :options="withEmptyValue(startTimeKeys, '')"
+        @change-value="onChangeStart($event)"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
@@ -29,7 +30,7 @@
         :label="workshopLabels.endTime"
         name="endTime"
         :disabled="isSubmitting"
-        :options="withEmptyValue(timeGroupKeys.options, '')"
+        :options="withEmptyValue(endTimeKeys, '')"
       />
     </div>
 
@@ -72,7 +73,23 @@
   import { workshopLabels } from '~/client/labels'
   import { routes } from '~/utils/routes'
   import { PartnerOrganizationIdName } from '~/types/partner'
-  import { timeGroupKeys } from '~/client/options'
+  import { timeGroup } from '~/client/options'
+
+  const startTimeKeys = ref(
+    timeGroup.map(time => ({ label: time, value: time }))
+  )
+  const calculateTimeValue = (startValue: string) => {
+    const index = timeGroup.findIndex(time => time === startValue)
+    return timeGroup
+      .slice(index + 1)
+      .map(time => ({ label: time, value: time }))
+  }
+  const initialStartValue = useField<string>('startTime').value
+  const endTimeKeys = ref(calculateTimeValue(initialStartValue.value))
+
+  const onChangeStart = (startValue: string) => {
+    endTimeKeys.value = calculateTimeValue(startValue)
+  }
 
   const props = withDefaults(
     defineProps<{

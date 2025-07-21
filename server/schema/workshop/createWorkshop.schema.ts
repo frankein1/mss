@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z, ZodObject } from 'zod'
 import {
   errorMessages,
   maxStringLengthMessage,
@@ -10,8 +10,9 @@ import {
   withEmptyValueOptionalNativeEnum
 } from '../helpers.schema'
 import { AgeLimitCondition } from '@prisma/client'
+import { timeGroup } from '~/client/options'
 
-export const createWorkshopSchema = z.object({
+export const createWorkshopSchemaBase = z.object({
   name: requiredLimitedStringConstraint(100),
   date: z.coerce.date(errorMessages),
   startTime: z.string().nullish(),
@@ -33,5 +34,34 @@ export const createWorkshopSchema = z.object({
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
     .nullish()
 })
+
+export const createWorkshopSchema = createWorkshopSchemaBase
+  .refine(
+    data => {
+      if (!data.startTime || !data.endTime) {
+        return true
+      }
+      const startIndex = timeGroup.indexOf(data.startTime)
+      const endIndex = timeGroup.indexOf(data.endTime)
+      return endIndex > startIndex
+    },
+    {
+      message: "L'heure de fin doit être supérieure à l'heure de début",
+      path: ['endTime']
+    }
+  )
+  .refine(
+    data => {
+      if (!data.endTime) {
+        return true
+      }
+
+      return data.startTime != null
+    },
+    {
+      message: 'Veuillez saisir une heure de début',
+      path: ['endTime']
+    }
+  )
 
 export type CreateWorkshopInput = z.infer<typeof createWorkshopSchema>
