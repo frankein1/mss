@@ -14,7 +14,14 @@
     :period
   />
   <template v-else>
-    <p>{{ data?.count }} ateliers à venir</p>
+    <p>
+      {{ data?.count }}
+      {{
+        period === FilterWorkshopPeriod.Future
+          ? 'ateliers à venir'
+          : 'ateliers passés'
+      }}
+    </p>
     <ul class="workshop-list">
       <li
         v-for="month in groupAndSortWorkshops(
