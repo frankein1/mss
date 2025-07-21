@@ -6,6 +6,7 @@ import {
 } from '~/server/security/rules/types'
 import { WorkshopRepo } from '~/server/database'
 import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
+import { isReferent } from '~/server/security'
 
 export const handler = async ({
   ctx: { user },
@@ -55,7 +56,22 @@ export const getOneWithAttendees = async (
             }
           },
           workshopExternalAttendee: true
-        }
+        },
+        // TODO: add this to WorkshopConstraint
+        ...(isReferent(user) && {
+          where: {
+            OR: [
+              {
+                type: { not: 'Beneficiary' }
+              },
+              {
+                beneficiary: {
+                  familyFile: { referents: { some: { id: user.id } } }
+                }
+              }
+            ]
+          }
+        })
       }
     }
   })
