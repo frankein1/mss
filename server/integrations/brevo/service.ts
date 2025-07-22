@@ -61,11 +61,6 @@ export async function createOrUpdateUser(userId: string) {
       }
     })
   ])
-
-  // For now, only allow Brevo updates on the test structure
-  if (user.structure?.id !== ID_STRUCTURE_TEST) {
-    return
-  }
   const contact = mapUserToBrevoContact({
     ...user,
     _count: { ...user._count, overseenBeneficiaries: overseenBeneficiaryCount }
@@ -86,10 +81,6 @@ export async function createOrUpdateUser(userId: string) {
 
 export async function createOrUpdateStructure(structureId: string) {
   if (process.env.NODE_ENV === 'test') {
-    return
-  }
-  // For now, only allow Brevo updates on the test structure
-  if (structureId !== ID_STRUCTURE_TEST) {
     return
   }
   const [structure, deactivatedUserCount, managerCount] = await Promise.all([
@@ -209,9 +200,6 @@ export async function linkUserToStructure({
   structureId: string
 }) {
   // For now, only allow Brevo updates on the test structure
-  if (structureId !== ID_STRUCTURE_TEST) {
-    return
-  }
   const [{ id: contactId }, { id: companyId, linkedContactsIds }] =
     await Promise.all([
       getContact(userId),
