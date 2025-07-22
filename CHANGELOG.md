@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.46.6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.5...v1.46.6) (2025-07-22)
+
+
+### Bug Fixes
+
+* **brevo:** active les MàJ auto pour toutes les structures ([b9464de](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b9464def13d0ed2e3b3499d8184eddabc6c9e4de))
+
 ## [1.46.5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.4...v1.46.5) (2025-07-15)
 
 
