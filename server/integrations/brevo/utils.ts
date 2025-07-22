@@ -50,15 +50,15 @@ export function mapUserToBrevoContact(
       TYPE_STRUCTURE: structure?.type || '',
       SIRET_STRUCTURE: structure?.siret || '',
       NOM_STRUCTURE: structure?.name || '',
-      DERNIERE_CONNEXION_STRUCTURE: formatUTCTimestamp(
-        structure?.lastAccess,
-        'DD-MM-YYYY'
-      ),
+      DERNIERE_CONNEXION_STRUCTURE:
+        formatUTCTimestamp(structure?.lastAccess, 'DD-MM-YYYY') || undefined,
       ACCES_MSS: status === UserStatus.Active,
       STRUCTURE_AVEC_1_SUIVI: (structure?._count.socialSupports ?? 0) > 0,
-      CREATION_DATE: formatUTCTimestamp(created, 'DD-MM-YYYY'),
-      PREMIERE_CONNEXION: formatUTCTimestamp(firstAccess, 'DD-MM-YYYY'),
-      DERNIERE_CONNEXION: formatUTCTimestamp(lastAccess, 'DD-MM-YYYY'),
+      CREATION_DATE: formatUTCTimestamp(created, 'DD-MM-YYYY') || undefined,
+      PREMIERE_CONNEXION:
+        formatUTCTimestamp(firstAccess, 'DD-MM-YYYY') || undefined,
+      DERNIERE_CONNEXION:
+        formatUTCTimestamp(lastAccess, 'DD-MM-YYYY') || undefined,
       UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0,
       NOMBRE_BENEFICIAIRES_UTILISATEUR: overseenBeneficiaries,
       NOMBRE_SUIVIS_UTILISATEUR: createdSocialSupports,
@@ -121,8 +121,8 @@ export function mapStructureToBrevoCompany(
       domain: `${runtimeConfig.public.appUrl}/admin/structures/${id}`,
       action_30_derniers_jours: dayjs().diff(lastActivity, 'day') <= 30,
       adresse_mail_structure: email,
-      creation_compte: formatUTCTimestamp(created, ''),
-      derniere_connexion: formatUTCTimestamp(lastAccess, ''),
+      creation_compte: formatUTCTimestamp(created, '') || undefined,
+      derniere_connexion: formatUTCTimestamp(lastAccess, '') || undefined,
       dpo_renseigne: [dpoEmail, dpoFirstName, dpoLastName].every(
         value => value != null && value !== ''
       ),
