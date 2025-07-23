@@ -72,15 +72,44 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
   if (!period) {
     return {}
   }
+  const now = dayjs()
+  const todayDate = new Date(now.format('YYYY-MM-DD'))
+  const nowString = now.format('HH:mm')
   return period === FilterWorkshopPeriod.Past
     ? {
-        date: {
-          lt: dayjs().toDate()
-        }
+        OR: [
+          {
+            date: {
+              equals: todayDate
+            },
+            startTime: {
+              lt: nowString
+            }
+          },
+          {
+            date: {
+              lt: todayDate
+            },
+            startTime: null
+          }
+        ]
       }
     : {
-        date: {
-          gte: dayjs().toDate()
-        }
+        OR: [
+          {
+            date: {
+              equals: todayDate
+            },
+            startTime: {
+              gte: nowString
+            }
+          },
+          {
+            startTime: null,
+            date: {
+              gte: todayDate
+            }
+          }
+        ]
       }
 }
