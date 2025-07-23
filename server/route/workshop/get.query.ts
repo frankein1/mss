@@ -37,6 +37,9 @@ export const getOneWithAttendees = async (
     where: { id },
     include: {
       workshopName: true,
+      partnerOrganization: {
+        select: { id: true, name: true }
+      },
       workshopAttendees: {
         include: {
           beneficiary: {

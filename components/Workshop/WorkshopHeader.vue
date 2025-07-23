@@ -20,10 +20,17 @@
       </p>
     </div>
     <p
-      v-if="workshop.host"
+      v-if="workshop.host || workshop.partnerOrganization"
       class="host fr-text--sm"
     >
-      Personne intervenante : {{ workshop.host }}
+      <span v-if="workshop.host"
+        >Personne intervenante : {{ workshop.host }}</span
+      >
+      <span v-if="workshop.host && workshop.partnerOrganization"> • </span>
+      <span v-if="workshop.partnerOrganization"
+        >Organisme financeur/partenaire :
+        {{ workshop.partnerOrganization.name }}</span
+      >
     </p>
     <p
       v-if="workshop.description"
@@ -60,13 +67,13 @@
 
 <script setup lang="ts">
   import dayjs from 'dayjs'
-  import { WorkshopDetails } from '~/types/workshop'
+  import { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import { getDurationInHoursAndMinutes } from '~/utils/duration/getDuration'
   import { routes } from '~/utils/routes'
   import { capitalizeFirstLetter } from '~/utils/text/capitalizeFirstLetter'
 
   const props = defineProps<{
-    workshop: WorkshopDetails
+    workshop: WorkshopWithAttendeesDetails
   }>()
 
   const dateDetails = computed(() => {
@@ -122,7 +129,7 @@
   h2 {
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5rem;
     text-align: center;
   }
 

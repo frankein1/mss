@@ -6,7 +6,7 @@
       <BeneficiarySearchCombobox
         class="beneficiary-search fr-mr-2w"
         label="Rechercher parmi vos bénéficiaires enregistrés"
-        placeholder="Ex : Clara Dumont"
+        placeholder="Marie Dupont"
         :label-visible="true"
         name="beneficiary-search"
         :show-status="false"

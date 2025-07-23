@@ -348,3 +348,7 @@ select:focus:not(:focus-visible) {
 .whitespace-pre-wrap {
   white-space: pre-wrap;
 }
+
+textarea {
+  resize: vertical;
+}

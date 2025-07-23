@@ -140,7 +140,11 @@
     const result = new Map<string, typeof workshops>()
     for (const key of sortedKeys) {
       const group = tempGroups[key]
-      group.items.sort((a, b) => a.date.getTime() - b.date.getTime())
+      group.items.sort((a, b) =>
+        asc
+          ? a.date.getTime() - b.date.getTime()
+          : b.date.getTime() - a.date.getTime()
+      )
       result.set(group.label, group.items)
     }
 

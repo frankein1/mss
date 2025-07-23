@@ -1,4 +1,4 @@
-import { z, ZodObject } from 'zod'
+import { z } from 'zod'
 import {
   errorMessages,
   maxStringLengthMessage,
@@ -19,9 +19,11 @@ export const createWorkshopSchemaBase = z.object({
   endTime: z.string().nullish(),
   location: stringConstraint.max(200, maxStringLengthMessage(200)).nullish(),
   partnerOrganizationId: z.string().nullish(),
-  host: z.string().nullish(),
-  sessionName: z.string().nullish(),
-  description: z.string().nullish(),
+  host: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  sessionName: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  description: stringConstraint
+    .max(1000, maxStringLengthMessage(1000))
+    .nullish(),
   attendeeLimit: z.coerce
     .number()
     .int(validIntNumber)
