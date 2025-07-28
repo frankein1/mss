@@ -3,20 +3,10 @@
     <h3 class="text--uppercase">Ajouter des personnes partcipantes</h3>
 
     <div class="input-wrapper">
-      <BeneficiarySearchCombobox
-        class="beneficiary-search fr-mr-2w"
+      <ComboBox
         label="Rechercher parmi vos bénéficiaires enregistrés"
-        placeholder="Marie Dupont"
-        :label-visible="true"
-        name="beneficiary-search"
-        :show-status="false"
-        :show-age="true"
-        :search-fn="searchBeneficiaries"
-        :select-only="true"
-        :action="{
-          title: `Ajouter à l'atelier`
-        }"
-        @on-action-click="onSelect($event)"
+        :results="results"
+        :on-search="searchBeneficiaries"
       />
       <p class="separator">ou</p>
       <button
@@ -47,6 +37,7 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
+  const results = ref([])
 
   const workshopId = route.params.id as string
 
@@ -54,11 +45,16 @@
     return attendees.map(attendee => attendee.beneficiaryId)
   })
 
-  async function searchBeneficiaries(query: string) {
+  async function searchBeneficiaries(event: Event) {
+    console.log('event', event)
+    const input = event.target?.value
+    if (!input) {
+      return
+    }
     const beneficiaries = await trpcClient.beneficiary.search.query({
-      query
+      query: input
     })
-    return beneficiaries.map(beneficiary => ({
+    const rez = beneficiaries.map(beneficiary => ({
       id: beneficiary.id,
       firstName: beneficiary.firstName,
       usualName: beneficiary.usualName,
@@ -68,6 +64,7 @@
       disabled:
         beneficiaryAttendeeIds.value.find(id => id === beneficiary.id) ?? false
     }))
+    results.value = rez
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
