@@ -60,7 +60,7 @@ export function getUserCreationEmailContent(
     }
   } = useRuntimeConfig()
 
-  const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}`
+  const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}?mtm_campaign=Scalingo`
 
   return getMailContentFromProConnect(
     user.email,
