@@ -22,16 +22,16 @@
         type="search"
         role="combobox"
         aria-autocomplete="list"
-        :aria-expanded="results.length > 0"
+        :aria-expanded="options.length > 0"
         :aria-controls="GRID_ID"
         :aria-activedescendant="activeDescendant"
         @keydown="handleKeydown"
         @focus="onFocus"
         @blur="onBlur"
-        @input="onSearch"
+        @input="handleInput"
       />
       <ul
-        v-if="results.length || loading"
+        v-if="options.length || loading"
         v-show="openList || loading"
         :id="GRID_ID"
         class="grid"
@@ -48,12 +48,13 @@
           :message="error"
         />
         <li
-          v-for="(result, rowIndex) in results"
+          v-for="(option, rowIndex) in options"
           :id="'result-row-' + rowIndex"
           :key="rowIndex"
           class="result-row"
           role="row"
           :class="{ focused: rowIndex === activeRow }"
+          @click="handleSelect(option)"
         >
           <div
             :id="'result-item-' + rowIndex"
@@ -63,7 +64,7 @@
               'focused-cell': rowIndex === activeRow && activeCol === 0
             }"
           >
-            <slot :item="result"></slot>
+            <slot :option="option"></slot>
           </div>
         </li>
       </ul>
@@ -71,7 +72,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="Option">
   import { AlertType } from '~/utils/constants/alert'
 
   const {
@@ -79,27 +80,28 @@
     labelVisible = true,
     selectOnly = false,
     formatDisplayValue = String,
-    results,
-    onSearch
+    options
   } = defineProps<{
     label: string
     placeholder?: string
     labelVisible?: boolean
     selectOnly?: boolean
     formatDisplayValue?: (result: any) => string
-    results: any[]
-    onSearch: (event: Event) => void
+    options: Option[]
   }>()
 
+  defineSlots<{ default(props: { option: Option }): unknown }>()
+
   const emit = defineEmits<{
-    onSelect: [result: any] // To do replace with on click-link
+    select: [option: Option]
+    input: [input: string]
   }>()
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
-  const LABEL_ID = computed(() => `beneficiary-search-label-${useId()}`)
-  const INPUT_ID = computed(() => `beneficiary-search-input-${useId()}`)
-  const GRID_ID = computed(() => `beneficiary-search-grid-${useId()}`)
+  const LABEL_ID = computed(() => `combobox-label-${useId()}`)
+  const INPUT_ID = computed(() => `combobox-input-${useId()}`)
+  const GRID_ID = computed(() => `combobox-grid-${useId()}`)
 
   const openList = ref(false)
   const displayedValue = ref('')
@@ -112,20 +114,25 @@
     return ''
   })
 
-  const handleSelect = (result: any) => {
-    emit('onSelect', result)
+  const handleInput = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    emit('input', target.value)
+  }
+
+  const handleSelect = (option: Option) => {
     openList.value = false
-    displayedValue.value = formatDisplayValue(result)
+    displayedValue.value = formatDisplayValue(option)
+    emit('select', option)
   }
 
   const onFocus = () => {
     if (displayedValue.value != null) {
       openList.value = true
     }
-    updateResults()
+    updateOptions()
   }
 
-  const updateResults = () => {
+  const updateOptions = () => {
     activeRow.value = -1
     activeCol.value = 0
   }
@@ -151,12 +158,12 @@
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        activeRow.value = (activeRow.value + 1) % results.length
+        activeRow.value = (activeRow.value + 1) % options.length
         break
       case 'ArrowUp':
         e.preventDefault()
         activeRow.value =
-          activeRow.value <= 0 ? results.length - 1 : activeRow.value - 1
+          activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
         break
       case 'ArrowLeft':
         e.preventDefault()
@@ -169,13 +176,13 @@
       case 'Enter':
         e.preventDefault()
         if (activeRow.value >= 0) {
-          selectItem(results[activeRow.value])
+          selectItem(options[activeRow.value])
           openList.value = false
         }
         break
       case ' ':
         if (activeRow.value >= 0) {
-          selectItem(results[activeRow.value])
+          selectItem(options[activeRow.value])
           openList.value = false
         }
         break
@@ -194,17 +201,6 @@
     if (selectOnly) {
       handleSelect(value)
       return
-    }
-    // TODO: improve this
-    // find a better way to simulate a click on child element
-    if (activeCol.value === 0) {
-      document
-        .getElementById(`beneficiary-search-file-link-${activeRow.value}`)
-        ?.click()
-    } else if (activeCol.value === 1) {
-      document
-        .getElementById(`beneficiary-search-followup-link-${activeRow.value}`)
-        ?.click()
     }
     displayedValue.value = value.label
     activeRow.value = -1
@@ -282,6 +278,7 @@
     margin: 0;
     padding: 0 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
+    color: black;
 
     &:last-child {
       box-shadow: none;
