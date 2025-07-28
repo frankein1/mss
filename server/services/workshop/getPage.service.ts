@@ -80,6 +80,11 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
         OR: [
           {
             date: {
+              lt: todayDate
+            }
+          },
+          {
+            date: {
               equals: todayDate
             },
             startTime: {
@@ -88,7 +93,7 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
           },
           {
             date: {
-              lt: todayDate
+              equals: todayDate
             },
             startTime: null
           }
@@ -98,6 +103,11 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
         OR: [
           {
             date: {
+              gt: todayDate
+            }
+          },
+          {
+            date: {
               equals: todayDate
             },
             startTime: {
@@ -105,9 +115,11 @@ const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
             }
           },
           {
-            startTime: null,
             date: {
-              gte: todayDate
+              equals: todayDate
+            },
+            startTime: {
+              equals: null
             }
           }
         ]
