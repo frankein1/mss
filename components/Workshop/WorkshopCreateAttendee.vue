@@ -4,10 +4,14 @@
 
     <div class="input-wrapper">
       <ComboBox
+        v-slot="{ option }"
         label="Rechercher parmi vos bénéficiaires enregistrés"
-        :results="results"
-        :on-search="searchBeneficiaries"
-      />
+        :options="results"
+        @input="searchBeneficiaries"
+        @select="onSelect"
+      >
+        <div>{{ formatBeneficiarySearchDisplayName(option) }}</div>
+      </ComboBox>
       <p class="separator">ou</p>
       <button
         aria-describedby="add-attendee-tooltip"
@@ -28,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+  import { inferProcedureOutput } from '@trpc/server'
+  import { AppRouter } from '~/server/trpc/routers'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { WorkshopAttendee } from '~/types/workshop'
 
@@ -37,7 +43,9 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
-  const results = ref([])
+  const results = ref<inferProcedureOutput<AppRouter['beneficiary']['search']>>(
+    []
+  )
 
   const workshopId = route.params.id as string
 
@@ -45,29 +53,16 @@
     return attendees.map(attendee => attendee.beneficiaryId)
   })
 
-  async function searchBeneficiaries(event: Event) {
-    console.log('event', event)
-    const input = event.target?.value
-    if (!input) {
-      return
-    }
+  async function searchBeneficiaries(query: string) {
     const beneficiaries = await trpcClient.beneficiary.search.query({
-      query: input
+      query
     })
-    const rez = beneficiaries.map(beneficiary => ({
-      id: beneficiary.id,
-      firstName: beneficiary.firstName,
-      usualName: beneficiary.usualName,
-      birthDate: beneficiary.birthDate,
-      birthName: beneficiary.birthName,
-      status: beneficiary.status,
-      disabled:
-        beneficiaryAttendeeIds.value.find(id => id === beneficiary.id) ?? false
-    }))
-    results.value = rez
+    results.value = beneficiaries
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
+    console.log('select', beneficiary)
+    return
     const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
 
     const created = await mutate({
@@ -161,19 +156,17 @@
       margin: 0 !important;
       width: 90%;
 
+      .fr-label {
+        color: white;
+      }
+
+      .fr-select {
+        background-color: white;
+      }
+
       @include dsfr-media-query.respond-from('lg') {
         max-width: 40rem;
       }
-    }
-  }
-
-  .beneficiary-search {
-    :deep(label) {
-      color: white;
-    }
-
-    :deep(.fr-select) {
-      background-color: white;
     }
   }
 </style>
