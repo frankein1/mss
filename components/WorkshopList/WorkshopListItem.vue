@@ -8,28 +8,29 @@
         <p class="day">{{ letterDay }}</p>
         <p class="day-number">{{ numberDay }}</p>
       </div>
-      <div class="item-name">
-        <p>{{ title }}</p>
+      <div class="item-description">
+        <p class="title">{{ title }}</p>
+        <div
+          v-if="hour || workshop.location"
+          class="item-hours"
+        >
+          <p v-if="hour">
+            <span
+              aria-hidden="true"
+              class="icon fr-icon-time-line"
+            ></span>
+            {{ hour }}
+          </p>
+          <p v-if="workshop.location">
+            <span
+              class="icon fr-icon-map-pin-2-line"
+              aria-hidden="true"
+            ></span
+            >{{ workshop.location }}
+          </p>
+        </div>
       </div>
-      <div
-        v-if="hour || workshop.location"
-        class="item-hours"
-      >
-        <p v-if="hour">
-          <span
-            aria-hidden="true"
-            class="icon fr-icon-time-line"
-          ></span>
-          {{ hour }}
-        </p>
-        <p v-if="workshop.location">
-          <span
-            class="icon fr-icon-map-pin-2-line"
-            aria-hidden="true"
-          ></span
-          >{{ workshop.location }}
-        </p>
-      </div>
+
       <div class="item-registrations">
         <AtomBadge
           v-if="statusBadge"
@@ -179,38 +180,39 @@
       }
     }
 
-    .item-name {
+    .item-description {
       grid-area: 1 / 2 / 2 / 4;
 
       @include dsfr-media-query.respond-from('md') {
-        grid-area: 1 / 2 / 2 / 5;
+        grid-area: 1 / 2 / 3 / 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
 
-      p {
+      p.title {
         color: var(--primary);
         font-size: 1.25rem;
         font-weight: 700;
       }
-    }
 
-    .item-hours {
-      grid-area: 2 / 2 / 3 / 4;
-      display: flex;
-      overflow: auto;
-      flex-wrap: nowrap;
-      gap: 0.75rem;
+      .item-hours {
+        display: flex;
+        overflow: auto;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.75rem;
+        margin-top: 0.5rem;
 
-      @include dsfr-media-query.respond-from('md') {
-        grid-area: 2 / 2 / 3 / 3;
-      }
+        p {
+          font-weight: 400;
+          color: var(--text-default-grey);
+          text-wrap: nowrap;
+          font-size: 0.875rem;
+        }
 
-      p {
-        text-wrap: nowrap;
-        font-size: 0.875rem;
-      }
-
-      .icon::before {
-        --icon-size: 1.25em;
+        .icon::before {
+          --icon-size: 1.25em;
+        }
       }
     }
 

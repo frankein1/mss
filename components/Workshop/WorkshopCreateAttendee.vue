@@ -174,5 +174,9 @@
     :deep(label) {
       color: white;
     }
+
+    :deep(.fr-select) {
+      background-color: white;
+    }
   }
 </style>
