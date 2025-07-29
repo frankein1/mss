@@ -18,14 +18,16 @@
       :key="optionValue"
       class="fr-fieldset__element"
       :class="{
-        'fr-fieldset__element--inline': inline
+        'fr-fieldset__element--inline': inline,
+        'fr-fieldset__element--small': small
       }"
     >
       <div
         class="fr-radio-group"
         :class="{
           'fr-radio-rich': rich || pictos,
-          'fr-radio-rich--only-pictos': !rich && pictos
+          'fr-radio-rich--only-pictos': !rich && pictos,
+          'fr-radio-small': small
         }"
       >
         <input
@@ -93,13 +95,15 @@
       noLabel?: boolean
       asTag?: boolean
       rich?: boolean
+      small?: boolean
     }>(),
     {
       pictos: undefined,
       inline: true,
       asTag: false,
       noLabel: false,
-      rich: false
+      rich: false,
+      small: false
     }
   )
 
@@ -155,6 +159,63 @@
     + button.fr-tag {
       outline: #0a76f6 solid 2px;
       outline-offset: 2px;
+    }
+  }
+
+  .fr-fieldset__element--small {
+    margin-bottom: 0.5rem;
+  }
+
+  .fr-fieldset__element--inline.fr-fieldset__element--small {
+    margin-bottom: 0;
+  }
+
+  .fr-radio-small input[type='radio'] {
+    + label {
+      font-size: 1rem;
+      line-height: 1rem;
+      background-image: radial-gradient(
+        transparent 6px,
+        var(--border-action-high-blue-france) 7px,
+        transparent 8px
+      );
+      background-position:
+        0 50%,
+        0 50%;
+      background-repeat: no-repeat, no-repeat;
+      background-size:
+        1.125rem 1.125rem,
+        1.125rem 1.125rem;
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    + label::before {
+      height: 1rem;
+      width: 1rem;
+      margin-left: -1.45rem;
+      top: 0.5rem;
+    }
+
+    &:checked + label {
+      background-image:
+        radial-gradient(
+          transparent 6px,
+          var(--border-active-blue-france) 7px,
+          transparent 8px
+        ),
+        radial-gradient(
+          var(--background-active-blue-france) 3px,
+          transparent 4px
+        );
+    }
+
+    &:disabled + label {
+      background-image: radial-gradient(
+        transparent 6px,
+        var(--background-disabled-grey) 7px,
+        transparent 8px
+      );
     }
   }
 

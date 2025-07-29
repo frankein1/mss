@@ -94,7 +94,7 @@
       <VeeRadioButtons
         :aria-describedby="ATTENDANCE_TOOLTIP_ID"
         name="presence"
-        class="radio-buttons fr-mb-0"
+        class="fr-mb-0"
         :options="[
           { value: 'present', label: 'Présence', disabled: true },
           { value: 'absent', label: 'Absence', disabled: true },
@@ -103,6 +103,7 @@
         label="Présence"
         no-label
         inline
+        small
       />
       <span
         :id="ATTENDANCE_TOOLTIP_ID"
@@ -285,71 +286,5 @@
     width: var(--icon-size);
     margin-right: 0.5em;
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M14 14.252V16.3414C13.3744 16.1203 12.7013 16 12 16C8.68629 16 6 18.6863 6 22H4C4 17.5817 7.58172 14 12 14C12.6906 14 13.3608 14.0875 14 14.252ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM12 11C14.21 11 16 9.21 16 7C16 4.79 14.21 3 12 3C9.79 3 8 4.79 8 7C8 9.21 9.79 11 12 11ZM19 17.5858L21.1213 15.4645L22.5355 16.8787L20.4142 19L22.5355 21.1213L21.1213 22.5355L19 20.4142L16.8787 22.5355L15.4645 21.1213L17.5858 19L15.4645 16.8787L16.8787 15.4645L19 17.5858Z'%3E%3C/path%3E%3C/svg%3E");
-  }
-
-  // small radio buttons
-  .radio-buttons {
-    margin-top: 0;
-
-    @include dsfr-media-query.respond-from('md') {
-      grid-area: 3 / 2 / 6 / 3;
-      align-self: center;
-    }
-
-    :deep(input) {
-      height: 1rem;
-      width: 1rem;
-    }
-
-    :deep(.fr-fieldset__element) {
-      margin-bottom: 0;
-    }
-
-    :deep(.fr-label) {
-      font-size: 1rem;
-      line-height: 1rem;
-      background-image: radial-gradient(
-        transparent 6px,
-        var(--border-action-high-blue-france) 7px,
-        transparent 8px
-      );
-      background-position:
-        0 50%,
-        0 50%;
-      background-repeat: no-repeat, no-repeat;
-      background-size:
-        1.125rem 1.125rem,
-        1.125rem 1.125rem;
-      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
-      padding-left: 1.5rem;
-    }
-
-    :deep(input[type='radio']:checked + label) {
-      background-image:
-        radial-gradient(
-          transparent 6px,
-          var(--border-active-blue-france) 7px,
-          transparent 8px
-        ),
-        radial-gradient(
-          var(--background-active-blue-france) 3px,
-          transparent 4px
-        );
-    }
-
-    :deep(input[type='radio']:disabled + label) {
-      background-image: radial-gradient(
-        transparent 6px,
-        var(--background-disabled-grey) 7px,
-        transparent 8px
-      );
-    }
-
-    :deep(input[type='radio'] + label::before) {
-      height: 1rem;
-      width: 1rem;
-      margin-left: -1.45rem;
-      top: 0.5rem;
-    }
   }
 </style>
