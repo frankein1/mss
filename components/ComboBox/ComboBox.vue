@@ -56,7 +56,10 @@
           :class="{ focused: rowIndex === activeRow }"
           @click="handleSelect(option)"
         >
-          <slot :option="option"></slot>
+          <slot
+            :option="option"
+            :input="displayedValue"
+          ></slot>
         </li>
       </ul>
     </div>
@@ -79,7 +82,7 @@
     options: Option[]
   }>()
 
-  defineSlots<{ default(props: { option: Option }): unknown }>()
+  defineSlots<{ default(props: { option: Option; input: string }): unknown }>()
 
   const emit = defineEmits<{
     select: [option: Option]
@@ -177,6 +180,9 @@
     }
   }
 
+  // Used when the user is is navigating in the dropdown
+  // using the keyboard, to make sure the selected option
+  // is visible.
   watch(activeRow, newIndex => {
     if (newIndex >= 0) {
       const el = document.getElementById(`option-${newIndex}`)
@@ -250,14 +256,11 @@
   }
 
   .option {
-    cursor: default;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    cursor: pointer;
     margin: 0;
     padding: 0.75rem 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
-    color: black;
+    color: var(--text-action-high-grey);
 
     &:hover {
       background-color: var(--background-default-grey-hover);

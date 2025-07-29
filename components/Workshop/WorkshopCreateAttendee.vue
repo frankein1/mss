@@ -5,7 +5,7 @@
     <div class="input-wrapper">
       <ComboBox
         ref="attendee-combobox"
-        v-slot="{ option }"
+        v-slot="{ option, input }"
         v-model="selectedBeneficiary"
         label="Rechercher parmi vos bénéficiaires enregistrés"
         :options="results"
@@ -13,14 +13,30 @@
         @input="searchBeneficiaries"
         @select="onSelect"
       >
-        <span class="beneficiary-result-name">{{
-          formatBeneficiarySearchDisplayName(option)
-        }}</span>
-        <span
-          v-if="beneficiaryAttendeeIds.includes(option.id)"
-          class="already-invited"
-          ><span class="fr-icon-check-line"></span>Déjà ajouté</span
-        >
+        <div class="beneficiary">
+          <div class="beneficiary-info">
+            <span class="beneficiary-name">
+              <AtomTextEmphasis
+                :name="formatBeneficiarySearchDisplayName(option)"
+                :input="input"
+              ></AtomTextEmphasis>
+            </span>
+            <span
+              v-if="option.birthDate"
+              class="beneficiary-age"
+            >
+              {{ calculateAge(option.birthDate) + ' ans' }}</span
+            >
+          </div>
+
+          <div
+            v-if="beneficiaryAttendeeIds.includes(option.id)"
+            class="beneficiary-already-invited"
+          >
+            <span class="fr-icon-check-line"></span>
+            <span>Déjà ajouté</span>
+          </div>
+        </div>
       </ComboBox>
       <p class="separator">ou</p>
       <button
@@ -171,11 +187,24 @@
         background-color: white;
       }
 
-      .beneficiary-result-name {
-        flex: 1;
+      .beneficiary {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
       }
 
-      .already-invited {
+      .beneficiary-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.875rem;
+      }
+
+      .beneficiary-age {
+        color: var(--text-mention-grey);
+      }
+
+      .beneficiary-already-invited {
         font-size: 0.875rem;
         color: green;
       }
