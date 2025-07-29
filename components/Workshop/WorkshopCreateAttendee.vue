@@ -4,13 +4,23 @@
 
     <div class="input-wrapper">
       <ComboBox
+        ref="attendee-combobox"
         v-slot="{ option }"
+        v-model="selectedBeneficiary"
         label="Rechercher parmi vos bénéficiaires enregistrés"
         :options="results"
+        :format-display-value="formatBeneficiarySearchDisplayName"
         @input="searchBeneficiaries"
         @select="onSelect"
       >
-        <div>{{ formatBeneficiarySearchDisplayName(option) }}</div>
+        <span class="beneficiary-result-name">{{
+          formatBeneficiarySearchDisplayName(option)
+        }}</span>
+        <span
+          v-if="beneficiaryAttendeeIds.includes(option.id)"
+          class="already-invited"
+          ><span class="fr-icon-check-line"></span>Déjà ajouté</span
+        >
       </ComboBox>
       <p class="separator">ou</p>
       <button
@@ -32,8 +42,6 @@
 </template>
 
 <script setup lang="ts">
-  import { inferProcedureOutput } from '@trpc/server'
-  import { AppRouter } from '~/server/trpc/routers'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { WorkshopAttendee } from '~/types/workshop'
 
@@ -43,15 +51,15 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
-  const results = ref<inferProcedureOutput<AppRouter['beneficiary']['search']>>(
-    []
-  )
-
-  const workshopId = route.params.id as string
-
+  const selectedBeneficiary = ref<BeneficiarySearchResult | null>(null)
+  const results = ref<BeneficiarySearchResult[]>([])
+  const comboboxRef = useTemplateRef('attendee-combobox')
   const beneficiaryAttendeeIds = computed(() => {
     return attendees.map(attendee => attendee.beneficiaryId)
   })
+  const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+
+  const workshopId = route.params.id as string
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await trpcClient.beneficiary.search.query({
@@ -61,13 +69,12 @@
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
-    console.log('select', beneficiary)
-    return
-    const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+    comboboxRef.value?.reset()
+    results.value = []
 
     const created = await mutate({
       beneficiaryId: beneficiary.id,
-      workshopId: workshopId || ''
+      workshopId: workshopId
     })
 
     if (error.value || !created) {
@@ -162,6 +169,15 @@
 
       .fr-select {
         background-color: white;
+      }
+
+      .beneficiary-result-name {
+        flex: 1;
+      }
+
+      .already-invited {
+        font-size: 0.875rem;
+        color: green;
       }
 
       @include dsfr-media-query.respond-from('lg') {
