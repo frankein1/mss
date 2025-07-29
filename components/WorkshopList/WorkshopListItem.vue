@@ -45,11 +45,7 @@
           {{ registrations }}
         </p>
       </div>
-      <div class="item-arrow">
-        <NuxtLink :to="routes.workshop.AppWorkshop.path(workshop.id)"
-          >→</NuxtLink
-        >
-      </div>
+      <div class="item-arrow">→</div>
     </div>
   </NuxtLink>
 </template>
