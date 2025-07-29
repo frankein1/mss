@@ -128,7 +128,6 @@
   }
 
   const onBlur = () => {
-    console.log('onBlur')
     // TODO: improve this.
     // If the mouse is not over the grid, close the list
     let gridisActive = false
