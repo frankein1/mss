@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.47.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.46.0...v1.47.0) (2025-07-29)
+
+
+### Features
+
+* **ateliers:** page liste des ateliers ([2b75801](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2b75801f5a26c49e8ba32e82174953fb442d6d19))
+* **brevo:** active les MàJ auto pour toutes les structures ([694b611](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/694b611d41b6fc40d796deee13abf3b292e6d123))
+* **export:** ajout téléphone entourage export bénéficiaire RS ([eb76408](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eb764080a14ffdd74adb82120fff3b67106bb6cf)), closes [#867](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/867)
+* mise à jour auto des attributs Brevo ([9b3fae3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9b3fae363d33281e9ab0706d15e2470a0a37dd47))
+* **workshop:** add type check constraint for workshop attendees ([ef3fdec](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ef3fdecccec3f8094baa8aa88f2517068eb3bd8b))
+* **workshop:** ajout de la liste de noms d'ateliers déjà existants ([63b5f1a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/63b5f1a37d340f7920dc9ab4a4e61c3e8afa2bde))
+* **workshop:** ajout du modèle de données pour les ateliers ([74778b6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/74778b67866bab1d402272afb9c711818009ec39))
+* **workshop:** ajout permissions à la création et tests API ([368b1f3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/368b1f3dc6a28151433d8ea82a6147c73690af86)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshop:** ajout résumé erreurs formulaire de création ([57e52e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/57e52e4605a33f507ff4c7eddb1153256a90d15d)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshop:** intégration front de la page Atelier ([cc6e6a4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cc6e6a4ad859ec0e9f25e6d646c804c201fc46d0))
+* **workshop:** modale de modification du nom d'atelier ([e41af54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e41af548b50c004d77b696b2e2168fbdc81512c8)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshop:** modèle de participant atelier et API ajout suppression, maj statut participant ([ca2f62f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ca2f62fcf72534479fcdc0329347f6a5ebaf7fcb)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshops:** affichage de la liste des participants ([2aebf87](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2aebf87b0f9e601e3ea53f249742966e1ce317e0))
+* **workshops:** modifier un atelier ([f242d23](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f242d23f6bdbaaa14dd279651e5c056c09d71428))
+* **workshop:** suppression d'un atelier ([f0c10d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f0c10d6490ccc00eaf018746b39eb1542e6331ac))
+* **workshop:** suppression de participant ([c84d9cf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c84d9cf678b8a942e719fed3bbee45385284055d))
+* **workshop:** update workshop name (backend) ([ba072b9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ba072b99768233dd3466d4794c058879103b2829))
+
+
+### Bug Fixes
+
+* **accessibilité:** diverses améliorations techniques ([b212104](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b2121046bae013fc1e506520c8bf2cb5569a2025))
+* **accompagnement:** lien des demandes de logement dans liste accompagnement ([7927008](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7927008a61a0908b92c90477d064234903bd2604))
+* **ateliers:** amélioration de l'affichage des tuiles ateliers ([8898997](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/88989972278ee2fbdd6a4e16cbb76dac6422f002))
+* **ateliers:** badges en fonction de l'heure des ateliers ([4ed1a53](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4ed1a531852dcdcbcf1455e03c13b8ce13be733e)), closes [#862](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/862)
+* **ateliers:** Contraindre l'heure de fin en fonction de l'heure de début ([9b7541e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9b7541e7770e78374409913df966106a3b43b870))
+* **ateliers:** les ateliers du jour passent dans onglet 'à venir' ([c306fe3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c306fe3acf2cc2aca26b440a05cde6e86641947e)), closes [#862](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/862)
+* **atelier:** suppression des liens imbriqués ([c9a02ee](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c9a02ee4714edada896cdf4221d12c2eebf1ee28))
+* **brevo:** correction du calcul d'un attribut utilisateur ([3b1bdcb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3b1bdcb213fd10bed13232d61e9bd1b08387e755))
+* **Brevo:** use runtime config for API key ([4d4db4e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4d4db4e50866d6ac51b04b3b4f29f1ba46a2e782))
+* **budget:** fix delete income mutation ([e15518c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e15518ccae593aa378187396b85a174238ba9d0b))
+* **budget:** La suppression d'un revenu compte dans le calcul de la date... ([96554fc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/96554fcf281a00e977c7c7317ed1b9f582e385cc)), closes [#659](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/659)
+* fix Brevo API key not set ([f47829f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f47829f0156ad3cc863fd81df1632dd060605479))
+* **formulaire:** sélection recherchable corrigé ([54b1f50](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/54b1f502f333df895ba0adac73800054f542a8ee))
+* **historique:** la page scroll jusqu'à l'accompagnement séléctionné ([d430579](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d4305792c486c1cab8090bbe3ebc3a39c3c2d127))
+* **recherche bénéficiaire:** ajustement visuel des résultats de recherche ([a16c345](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a16c345a732e9f3cb536f9495fae0e1225264677))
+* **workshop:** corrige le filtre date de la query des ateliers ([8dcea55](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8dcea55452ecf469fdc5a7dff50dcb5093929d96))
+* **workshop:** désactivation de l'émargement ([b4121cd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b4121cd720e27f801e5e8b32b4039ac060f35939))
+* **workshop:** filtre les participants pour le rôle référent ([228000a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/228000a3b058d113166c1a619f51ec6f71666a0b)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshop:** gestion des noms partagés ([639ff7e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/639ff7e80f8a5b34817cf6bea94916bb9cd20974))
+* **workshop:** mise à jour nombre d'inscriptions ([082b89b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/082b89bfde4390ab7d362b56eda25a3929b4b59e)), closes [#856](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/856)
+* **workshop:** prendre en compte le startTime dans la liste des ateliers ([461b46a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/461b46aa23e6fcd5dab6f172a3b700ad7d1a9108))
+* **workshop:** réinstaure l'encart de recherche ([fbd8b7b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fbd8b7b59baac36579103be9047927e69b0190ed))
+* **workshop:** rôle référent ne peut accéder qu'aux participants dont il est référent ([4bf7f95](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4bf7f954740f4c4b396ae43855c765bafc616a47)), closes [#791](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/791)
+* **workshops:** amélioration des pages front ([988ff79](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/988ff79043b8087aec316f47fc1522c780f35392))
+* **workshops:** déplacement de suppression dans form de modification ([cbceb9a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cbceb9a1c82e824ae37796bba35c7c898172ad4d))
+* **workshops:** diverses améliorations front ([15e40bb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/15e40bb2c735c68d02a6287ec0bccc9a37a7afad))
+* **workshops:** intitulé sous-titre ateliers ([7c92987](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c92987078efbaf80da77f454e9821524aee2f31))
+* **workshops:** le retour vers la liste des atelier affiche le bon onglet ([bc52af6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bc52af6f1183d8ba1c1ef4c89ed4dc0d3779365d))
+* **workshops:** premières corrections après tests internes ([3dfbbb0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3dfbbb0149a11ca64cfeea053665307326222a74))
+
 ## [1.46.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.45.0...v1.46.0) (2025-06-19)
 
 
