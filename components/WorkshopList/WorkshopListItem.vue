@@ -54,31 +54,31 @@
   import dayjs from 'dayjs'
   import { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
+  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
 
-  const props = defineProps<{
+  const { workshop, period } = defineProps<{
     workshop: WorkshopsPageItem
+    period: FilterWorkshopPeriod
   }>()
   const letterDay = computed(() => {
-    const date = dayjs(new Date(props.workshop.date))
+    const date = dayjs(new Date(workshop.date))
     return date.format('ddd').toUpperCase().slice(0, -1)
   })
   const numberDay = computed(() => {
-    const date = dayjs(new Date(props.workshop.date))
+    const date = dayjs(new Date(workshop.date))
     return date.format('DD')
   })
   const title = computed(() => {
-    const base = props.workshop.workshopName.name
-    const suffix = props.workshop.sessionName
-      ? ' – ' + props.workshop.sessionName
-      : ''
+    const base = workshop.workshopName.name
+    const suffix = workshop.sessionName ? ' – ' + workshop.sessionName : ''
     return base + suffix
   })
   const hour = computed(() => {
-    if (!props.workshop.startTime) {
+    if (!workshop.startTime) {
       return
     }
-    const hour = props.workshop.startTime.split(':')[0]
-    const minute = props.workshop.startTime?.split(':')[1]
+    const hour = workshop.startTime.split(':')[0]
+    const minute = workshop.startTime?.split(':')[1]
     return hour + 'h' + minute
   })
 
@@ -88,11 +88,11 @@
 
   const plural = (n: number, w: string) => (n > 1 ? `${n} ${w}s` : `${n} ${w}`)
   const registrations = computed(() =>
-    plural(props.workshop._count.workshopAttendees, 'inscription')
+    plural(workshop._count.workshopAttendees, 'inscription')
   )
 
   const statusBadge = computed(() => {
-    if (props.workshop.date > new Date()) {
+    if (period === FilterWorkshopPeriod.Future) {
       return null
     }
     return {

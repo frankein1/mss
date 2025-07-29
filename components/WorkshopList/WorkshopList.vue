@@ -36,7 +36,10 @@
             v-for="workshop in month[1]"
             :key="workshop.id"
           >
-            <WorkshopListItem :workshop="workshop" />
+            <WorkshopListItem
+              :workshop="workshop"
+              :period
+            />
           </li>
         </ul>
       </li>
