@@ -49,23 +49,14 @@
         />
         <li
           v-for="(option, rowIndex) in options"
-          :id="'result-row-' + rowIndex"
+          :id="'option-' + rowIndex"
           :key="rowIndex"
-          class="result-row"
+          class="option"
           role="row"
           :class="{ focused: rowIndex === activeRow }"
           @click="handleSelect(option)"
         >
-          <div
-            :id="'result-item-' + rowIndex"
-            class="result-cell"
-            role="gridcell"
-            :class="{
-              'focused-cell': rowIndex === activeRow && activeCol === 0
-            }"
-          >
-            <slot :option="option"></slot>
-          </div>
+          <slot :option="option"></slot>
         </li>
       </ul>
     </div>
@@ -78,15 +69,13 @@
   const {
     placeholder = '',
     labelVisible = true,
-    selectOnly = false,
     formatDisplayValue = String,
     options
   } = defineProps<{
     label: string
     placeholder?: string
     labelVisible?: boolean
-    selectOnly?: boolean
-    formatDisplayValue?: (result: any) => string
+    formatDisplayValue?: (option: Option) => string
     options: Option[]
   }>()
 
@@ -96,6 +85,12 @@
     select: [option: Option]
     input: [input: string]
   }>()
+  const model = defineModel<Option | null>({ required: true })
+  function reset() {
+    model.value = null
+    displayedValue.value = ''
+  }
+  defineExpose({ reset })
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
@@ -106,10 +101,9 @@
   const openList = ref(false)
   const displayedValue = ref('')
   const activeRow = ref(-1)
-  const activeCol = ref(0)
   const activeDescendant = computed(() => {
     if (activeRow.value >= 0) {
-      return `result-item-${activeRow.value}x${activeCol.value}`
+      return `option-${activeRow.value}`
     }
     return ''
   })
@@ -122,6 +116,7 @@
   const handleSelect = (option: Option) => {
     openList.value = false
     displayedValue.value = formatDisplayValue(option)
+    model.value = option
     emit('select', option)
   }
 
@@ -129,19 +124,15 @@
     if (displayedValue.value != null) {
       openList.value = true
     }
-    updateOptions()
-  }
-
-  const updateOptions = () => {
     activeRow.value = -1
-    activeCol.value = 0
   }
 
   const onBlur = () => {
+    console.log('onBlur')
     // TODO: improve this.
     // If the mouse is not over the grid, close the list
     let gridisActive = false
-    const listelements = document.getElementsByClassName('result-row')
+    const listelements = document.getElementsByClassName('option')
     Array.from(listelements).forEach((element: Element) => {
       if (element.matches(':hover')) {
         gridisActive = true
@@ -165,25 +156,15 @@
         activeRow.value =
           activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
         break
-      case 'ArrowLeft':
-        e.preventDefault()
-        activeCol.value = activeCol.value <= 0 ? 1 : activeCol.value - 1
-        break
-      case 'ArrowRight':
-        e.preventDefault()
-        activeCol.value = (activeCol.value + 1) % 2
-        break
       case 'Enter':
         e.preventDefault()
         if (activeRow.value >= 0) {
-          selectItem(options[activeRow.value])
-          openList.value = false
+          handleSelect(options[activeRow.value])
         }
         break
       case ' ':
         if (activeRow.value >= 0) {
-          selectItem(options[activeRow.value])
-          openList.value = false
+          handleSelect(options[activeRow.value])
         }
         break
       case 'Escape':
@@ -197,20 +178,16 @@
     }
   }
 
-  function selectItem(value: any) {
-    if (selectOnly) {
-      handleSelect(value)
-      return
-    }
-    displayedValue.value = value.label
-    activeRow.value = -1
-    openList.value = false
-  }
-
   watch(activeRow, newIndex => {
     if (newIndex >= 0) {
-      const el = document.getElementById(`result-row-${newIndex}`)
+      const el = document.getElementById(`option-${newIndex}`)
       el?.scrollIntoView({ block: 'nearest' })
+    }
+  })
+
+  watch(displayedValue, newVal => {
+    if (newVal === '' && model.value !== null) {
+      reset()
     }
   })
 </script>
@@ -270,61 +247,30 @@
     margin: 0;
   }
 
-  .result-row {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  .option {
     cursor: default;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin: 0;
-    padding: 0 1rem;
+    padding: 0.75rem 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
     color: black;
+
+    &:hover {
+      background-color: var(--background-default-grey-hover);
+    }
 
     &:last-child {
       box-shadow: none;
     }
-
-    > div:first-child {
-      flex: 1;
-    }
-
-    > div + div {
-      flex: 0;
-    }
-
-    @include dsfr-media-query.respond-from('lg') {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
   }
 
-  .result-cell {
-    display: inline-block;
-    cursor: default;
-    margin: 0;
-    padding: 0.75rem 0;
-    width: auto;
-    flex: 1;
-  }
-
-  .followup-cell {
-    min-width: fit-content;
-  }
-
-  .focused-cell {
+  .focused {
     outline: dashed 1px rgb(0 0 0 / 100%);
   }
 
   .fr-select {
     box-shadow: inset 0 -2px 0 0 var(--primary);
-  }
-
-  .result-cell:hover,
-  .result-cell.focused,
-  .focused-cell {
-    .action-btn {
-      background-color: var(--hover-tint);
-    }
   }
 </style>
