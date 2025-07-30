@@ -23,7 +23,7 @@
         role="combobox"
         aria-autocomplete="list"
         :aria-expanded="options.length > 0"
-        :aria-controls="GRID_ID"
+        :aria-controls="LISTBOX_ID"
         :aria-activedescendant="activeDescendant"
         @keydown="handleKeydown"
         @focus="onFocus"
@@ -33,9 +33,9 @@
       <ul
         v-if="options.length || loading"
         v-show="openList || loading"
-        :id="GRID_ID"
-        class="grid"
-        role="grid"
+        :id="LISTBOX_ID"
+        class="listbox"
+        role="listbox"
         :aria-labelledby="LABEL_ID"
       >
         <AtomLoader
@@ -52,7 +52,7 @@
           :id="'option-' + rowIndex"
           :key="rowIndex"
           class="option"
-          role="row"
+          role="option"
           :class="{ focused: rowIndex === activeRow }"
           @click="handleSelect(option)"
         >
@@ -99,7 +99,7 @@
 
   const LABEL_ID = computed(() => `combobox-label-${useId()}`)
   const INPUT_ID = computed(() => `combobox-input-${useId()}`)
-  const GRID_ID = computed(() => `combobox-grid-${useId()}`)
+  const LISTBOX_ID = computed(() => `combobox-listbox-${useId()}`)
 
   const openList = ref(false)
   const displayedValue = ref('')
@@ -132,15 +132,15 @@
 
   const onBlur = () => {
     // TODO: improve this.
-    // If the mouse is not over the grid, close the list
-    let gridisActive = false
+    // If the mouse is not over the listbox, close the list
+    let listboxIsActive = false
     const listelements = document.getElementsByClassName('option')
     Array.from(listelements).forEach((element: Element) => {
       if (element.matches(':hover')) {
-        gridisActive = true
+        listboxIsActive = true
       }
     })
-    if (!gridisActive) {
+    if (!listboxIsActive) {
       openList.value = false
       activeRow.value = -1
     }
@@ -238,7 +238,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 10.5858L9.17157 7.75736L7.75736 9.17157L10.5858 12L7.75736 14.8284L9.17157 16.2426L12 13.4142L14.8284 16.2426L16.2426 14.8284L13.4142 12L16.2426 9.17157L14.8284 7.75736L12 10.5858Z'%3E%3C/path%3E%3C/svg%3E");
   }
 
-  ul.grid {
+  ul.listbox {
     min-width: 230px;
     width: 100%;
     border: 1px solid #ccc;
