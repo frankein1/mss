@@ -81,7 +81,7 @@
     "eslint": "^9.31.0",
     "happy-dom": "^18.0.1",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.1.2",
     "nuxt": "^3.16.1",
     "nuxt-scheduler": "^0.1.9",
     "picocolors": "^1.1.1",
