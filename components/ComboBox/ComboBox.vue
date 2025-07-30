@@ -163,12 +163,12 @@
         break
       case 'Enter':
         e.preventDefault()
-        if (activeRow.value >= 0) {
+        if (activeRow.value >= 0 && !options[activeRow.value].disabled) {
           handleSelect(options[activeRow.value])
         }
         break
       case ' ':
-        if (activeRow.value >= 0) {
+        if (activeRow.value >= 0 && !options[activeRow.value].disabled) {
           handleSelect(options[activeRow.value])
         }
         break
