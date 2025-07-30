@@ -53,8 +53,11 @@
           :key="rowIndex"
           class="option"
           role="option"
-          :class="{ focused: rowIndex === activeRow }"
-          @click="handleSelect(option)"
+          :class="{
+            focused: rowIndex === activeRow,
+            disabled: option.disabled
+          }"
+          v-on="!option.disabled ? { click: () => handleSelect(option) } : {}"
         >
           <slot
             :option="option"
@@ -66,7 +69,7 @@
   </div>
 </template>
 
-<script lang="ts" setup generic="Option">
+<script lang="ts" setup generic="Option extends { disabled?: boolean }">
   import { AlertType } from '~/utils/constants/alert'
 
   const {
@@ -256,14 +259,21 @@
   }
 
   .option {
-    cursor: pointer;
     margin: 0;
     padding: 0.75rem 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
-    color: var(--text-action-high-grey);
 
-    &:hover {
-      background-color: var(--background-default-grey-hover);
+    &:not(.disabled) {
+      color: var(--text-action-high-grey);
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--background-default-grey-hover);
+      }
+    }
+
+    &.disabled {
+      color: var(--text-mention-grey);
     }
 
     &:last-child {

@@ -24,6 +24,7 @@
             <span
               v-if="option.birthDate"
               class="beneficiary-age"
+              :class="{ disabled: option.disabled }"
             >
               {{ calculateAge(option.birthDate) + ' ans' }}</span
             >
@@ -67,8 +68,10 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
-  const selectedBeneficiary = ref<BeneficiarySearchResult | null>(null)
-  const results = ref<BeneficiarySearchResult[]>([])
+  const selectedBeneficiary = ref<
+    (BeneficiarySearchResult & { disabled: boolean }) | null
+  >(null)
+  const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
   const comboboxRef = useTemplateRef('attendee-combobox')
   const beneficiaryAttendeeIds = computed(() => {
     return attendees.map(attendee => attendee.beneficiaryId)
@@ -81,7 +84,10 @@
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
-    results.value = beneficiaries
+    results.value = beneficiaries.map(beneficiary => ({
+      ...beneficiary,
+      disabled: beneficiaryAttendeeIds.value.includes(beneficiary.id)
+    }))
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
@@ -202,6 +208,10 @@
 
       .beneficiary-age {
         color: var(--text-mention-grey);
+
+        &.disabled {
+          color: var(--text-disabled-grey);
+        }
       }
 
       .beneficiary-already-invited {
