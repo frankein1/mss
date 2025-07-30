@@ -3,21 +3,42 @@
     <h3 class="text--uppercase">Ajouter des personnes partcipantes</h3>
 
     <div class="input-wrapper">
-      <BeneficiarySearchCombobox
-        class="beneficiary-search fr-mr-2w"
+      <ComboBox
+        ref="attendee-combobox"
+        v-slot="{ option, input }"
+        v-model="selectedBeneficiary"
         label="Rechercher parmi vos bénéficiaires enregistrés"
-        placeholder="Marie Dupont"
-        :label-visible="true"
-        name="beneficiary-search"
-        :show-status="false"
-        :show-age="true"
-        :search-fn="searchBeneficiaries"
-        :select-only="true"
-        :action="{
-          title: `Ajouter à l'atelier`
-        }"
-        @on-action-click="onSelect($event)"
-      />
+        :options="results"
+        :format-display-value="formatBeneficiarySearchDisplayName"
+        @input="searchBeneficiaries"
+        @select="onSelect"
+      >
+        <div class="beneficiary">
+          <div class="beneficiary-info">
+            <span class="beneficiary-name">
+              <AtomTextEmphasis
+                :name="formatBeneficiarySearchDisplayName(option)"
+                :input="input"
+              ></AtomTextEmphasis>
+            </span>
+            <span
+              v-if="option.birthDate"
+              class="beneficiary-age"
+              :class="{ disabled: option.disabled }"
+            >
+              {{ calculateAge(option.birthDate) + ' ans' }}</span
+            >
+          </div>
+
+          <div
+            v-if="beneficiaryAttendeeIds.includes(option.id)"
+            class="beneficiary-already-invited"
+          >
+            <span class="fr-icon-check-line"></span>
+            <span>Déjà ajouté</span>
+          </div>
+        </div>
+      </ComboBox>
       <p class="separator">ou</p>
       <button
         aria-describedby="add-attendee-tooltip"
@@ -47,35 +68,35 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
-
-  const workshopId = route.params.id as string
-
+  const selectedBeneficiary = ref<
+    (BeneficiarySearchResult & { disabled: boolean }) | null
+  >(null)
+  const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
+  const comboboxRef = useTemplateRef('attendee-combobox')
   const beneficiaryAttendeeIds = computed(() => {
     return attendees.map(attendee => attendee.beneficiaryId)
   })
+  const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+
+  const workshopId = route.params.id as string
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
-    return beneficiaries.map(beneficiary => ({
-      id: beneficiary.id,
-      firstName: beneficiary.firstName,
-      usualName: beneficiary.usualName,
-      birthDate: beneficiary.birthDate,
-      birthName: beneficiary.birthName,
-      status: beneficiary.status,
-      disabled:
-        beneficiaryAttendeeIds.value.find(id => id === beneficiary.id) ?? false
+    results.value = beneficiaries.map(beneficiary => ({
+      ...beneficiary,
+      disabled: beneficiaryAttendeeIds.value.includes(beneficiary.id)
     }))
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
-    const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+    comboboxRef.value?.reset()
+    results.value = []
 
     const created = await mutate({
       beneficiaryId: beneficiary.id,
-      workshopId: workshopId || ''
+      workshopId: workshopId
     })
 
     if (error.value || !created) {
@@ -164,19 +185,43 @@
       margin: 0 !important;
       width: 90%;
 
+      .fr-label {
+        color: white;
+      }
+
+      .fr-select {
+        background-color: white;
+      }
+
+      .beneficiary {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .beneficiary-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.875rem;
+      }
+
+      .beneficiary-age {
+        color: var(--text-mention-grey);
+
+        &.disabled {
+          color: var(--text-disabled-grey);
+        }
+      }
+
+      .beneficiary-already-invited {
+        font-size: 0.875rem;
+        color: green;
+      }
+
       @include dsfr-media-query.respond-from('lg') {
         max-width: 40rem;
       }
-    }
-  }
-
-  .beneficiary-search {
-    :deep(label) {
-      color: white;
-    }
-
-    :deep(.fr-select) {
-      background-color: white;
     }
   }
 </style>
