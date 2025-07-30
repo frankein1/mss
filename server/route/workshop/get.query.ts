@@ -40,6 +40,11 @@ export const getOneWithAttendees = async (
       partnerOrganization: {
         select: { id: true, name: true }
       },
+      _count: {
+        select: {
+          workshopAttendees: true
+        }
+      },
       workshopAttendees: {
         include: {
           beneficiary: {

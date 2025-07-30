@@ -7,10 +7,22 @@
           alt=""
         />
         <p class="registration-count">
-          <span class="cont-emphasis">{{ attendees.length }}</span>
-          inscription<span v-if="attendees.length > 1">s</span>
+          <span class="cont-emphasis">{{
+            workshop._count.workshopAttendees
+          }}</span>
+          inscription<span v-if="workshop._count.workshopAttendees > 1">s</span>
         </p>
       </div>
+    </div>
+    <div
+      v-if="isReferent()"
+      class="fr-col-12"
+    >
+      <DsfrAlert
+        description='Votre compte est associé à un rôle utilisateur "référent" qui vous permet de voir uniquement les informations des personnes pour lesquelles vous êtes référent du dossier. Certaines personnes inscrites sont donc peut-être masquées.'
+        title="Tous les participants ne sont peut-être pas visibles"
+        type="warning"
+      />
     </div>
     <div class="fr-col-12">
       <ul
@@ -44,6 +56,8 @@
   const emit = defineEmits<{
     deleteAttendee: [id: string]
   }>()
+
+  const { isReferent } = useAuthState()
 
   const attendees = computed(() => {
     return workshop.workshopAttendees
