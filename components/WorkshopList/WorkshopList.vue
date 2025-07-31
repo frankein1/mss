@@ -122,11 +122,10 @@
     > = {}
 
     for (const workshop of workshops) {
-      const date = workshop.date
-      const year = date.getFullYear()
-      const monthIndex = date.getMonth()
-      const key = `${year}-${String(monthIndex + 1).padStart(2, '0')}` // ex: "2025-03"
-      const label = `${months[monthIndex]} ${year}` // ex: "mars 2025"
+      const year = formatDate(workshop.date, 'YYYY')
+      const monthIndex = parseInt(formatDate(workshop.date, 'M'))
+      const key = `${year}-${formatDate(workshop.date, 'MM')}` // ex: "2025-03"
+      const label = `${months[monthIndex - 1]} ${year}` // ex: "mars 2025"
 
       if (!tempGroups[key]) {
         tempGroups[key] = { label, items: [] }

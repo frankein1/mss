@@ -51,7 +51,6 @@
 </template>
 
 <script setup lang="ts">
-  import dayjs from 'dayjs'
   import { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
   import { FilterWorkshopPeriod } from '~/utils/constants/filters'
@@ -61,12 +60,10 @@
     period: FilterWorkshopPeriod
   }>()
   const letterDay = computed(() => {
-    const date = dayjs(new Date(workshop.date))
-    return date.format('ddd').toUpperCase().slice(0, -1)
+    return formatDate(workshop.date, 'ddd').toUpperCase().slice(0, -1)
   })
   const numberDay = computed(() => {
-    const date = dayjs(new Date(workshop.date))
-    return date.format('DD')
+    return formatDate(workshop.date, 'DD')
   })
   const title = computed(() => {
     const base = workshop.workshopName.name

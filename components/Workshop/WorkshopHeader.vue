@@ -66,7 +66,6 @@
 </template>
 
 <script setup lang="ts">
-  import dayjs from 'dayjs'
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import { getDurationInHoursAndMinutes } from '~/utils/duration/getDuration'
   import { routes } from '~/utils/routes'
@@ -78,7 +77,7 @@
 
   const dateDetails = computed(() => {
     let formatedDate = capitalizeFirstLetter(
-      dayjs(props.workshop.date).format('dddd DD MMMM YYYY')
+      formatDate(props.workshop.date, 'dddd DD MMMM YYYY')
     )
     if (props.workshop.startTime) {
       formatedDate =
