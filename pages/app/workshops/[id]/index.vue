@@ -35,6 +35,7 @@
         <WorkshopAttendeeList
           :workshop="workshop"
           @delete-attendee="onDeleteAttendee"
+          @change-attendance="onChangeAttendance"
         />
       </PageContainer>
     </div>
@@ -46,13 +47,20 @@
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
-  import dayjs from 'dayjs'
   import { WorkshopTab } from '~/utils/constants/workshop'
+  import { WorkshopAttendeeAttendance } from '@prisma/client'
+  import { isWorkshopPassed } from '~/utils/workshops/isWorkshopPassed'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
   const workshopId = route.params.id as string
+
+  const router = trpcClient.workshop
+  const { mutate, error: deleteAttendeeError } =
+    router.deleteAttendee.useMutation()
+  const { mutate: mutateAttendance, error: attendanceError } =
+    router.updateAttendeeAttendance.useMutation()
 
   const { data, pending, error, refresh } =
     await trpcClient.workshop.getOne.useQuery({
@@ -63,7 +71,11 @@
   const workshop = computed(() => data.value as WorkshopWithAttendeesDetails)
 
   const backLink = computed(() => {
-    const isPassed = dayjs(workshop.value.date).isBefore(new Date())
+    const isPassed = isWorkshopPassed(
+      workshop.value.date,
+      workshop.value?.startTime,
+      workshop.value?.endTime
+    )
     const link = routes.workshop.AppWorkshops.path({
       tab: isPassed
         ? WorkshopTab.PassedWorkshops
@@ -77,9 +89,6 @@
   })
 
   // Delete an attendee
-  const router = trpcClient.workshop
-  const { mutate, error: deleteAttendeeError } =
-    router.deleteAttendee.useMutation()
   const onDeleteAttendee = async (attendeeId: string) => {
     const deletedAttendee = await mutate({ id: attendeeId })
     if (deleteAttendeeError.value || deletedAttendee === null) {
@@ -88,6 +97,20 @@
     }
     refresh()
     snackbar.success('La suppression du participant a réussi.')
+  }
+  const onChangeAttendance = async (
+    attendeeId: string,
+    attendance: WorkshopAttendeeAttendance
+  ) => {
+    const result = await mutateAttendance({
+      id: attendeeId,
+      attendance: attendance
+    })
+    if (attendanceError.value || result === null) {
+      snackbar.error('La modification du participant a échoué.')
+      return
+    }
+    snackbar.success('La modification du participant a réussi.')
   }
 </script>
 

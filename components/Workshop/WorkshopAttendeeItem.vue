@@ -91,26 +91,29 @@
       </p>
     </div>
     <div class="presence">
-      <VeeRadioButtons
-        :aria-describedby="ATTENDANCE_TOOLTIP_ID"
-        name="presence"
-        class="fr-mb-0"
-        :options="[
-          { value: 'present', label: 'Présence', disabled: true },
-          { value: 'absent', label: 'Absence', disabled: true },
-          { value: 'excused', label: 'Absence excusée', disabled: true }
-        ]"
-        label="Présence"
-        no-label
-        inline
-        small
-      />
-      <span
-        :id="ATTENDANCE_TOOLTIP_ID"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        >Fonctionnalité à venir</span
+      <form
+        ref="attendeeForm"
+        novalidate
       >
+        <VeeRadioButtons
+          :id="ATTENDEE_PRESENCE_ID"
+          name="attendance"
+          class="radio-buttons fr-mb-0"
+          :options="[
+            { value: WorkshopAttendeeAttendance.Seen, label: 'Présence' },
+            { value: WorkshopAttendeeAttendance.NoShow, label: 'Absence' },
+            {
+              value: WorkshopAttendeeAttendance.Excused,
+              label: 'Absence excusée'
+            }
+          ]"
+          label="Présence"
+          no-label
+          inline
+          small
+          @change-value="onChangeAttendance($event)"
+        />
+      </form>
     </div>
   </div>
 </template>
@@ -118,7 +121,12 @@
 <script setup lang="ts">
   import type { Menu } from '~/types/menu'
   import { WorkshopAttendee } from '~/types/workshop'
-  import { WorkshopAttendeeType } from '@prisma/client'
+  import {
+    WorkshopAttendeeAttendance,
+    WorkshopAttendeeType
+  } from '@prisma/client'
+
+  const attendeeForm = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
     attendee: WorkshopAttendee
@@ -126,10 +134,11 @@
 
   const emit = defineEmits<{
     deleteAttendee: [id: string]
+    changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
   }>()
 
   const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
-  const ATTENDANCE_TOOLTIP_ID = 'attendance-tooltip-' + useId()
+  const ATTENDEE_PRESENCE_ID = 'beneficiary-presence-' + useId()
 
   const attendeeDetails = computed(() => {
     if (props.attendee.beneficiary) {
@@ -170,6 +179,20 @@
       icon: 'ri-user-unfollow-line'
     }
   ]
+
+  useForm({
+    initialValues: {
+      attendance: props.attendee.attendance
+    }
+  })
+
+  const onChangeAttendance = (attendance: string) => {
+    emit(
+      'changeAttendance',
+      props.attendee.id,
+      attendance as WorkshopAttendeeAttendance
+    )
+  }
 </script>
 
 <style scoped lang="scss">

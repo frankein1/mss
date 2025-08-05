@@ -37,6 +37,7 @@
           <WorkshopAttendeeItem
             :attendee="attendee"
             @delete-attendee="emit('deleteAttendee', $event)"
+            @change-attendance="onChangeAttendance"
           />
         </li>
       </ul>
@@ -48,6 +49,7 @@
 <script setup lang="ts">
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import WorkshopAttendeeItem from './WorkshopAttendeeItem.vue'
+  import { WorkshopAttendeeAttendance } from '@prisma/client'
 
   const { workshop } = defineProps<{
     workshop: WorkshopWithAttendeesDetails
@@ -55,6 +57,7 @@
 
   const emit = defineEmits<{
     deleteAttendee: [id: string]
+    changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
   }>()
 
   const { isReferent } = useAuthState()
@@ -62,6 +65,13 @@
   const attendees = computed(() => {
     return workshop.workshopAttendees
   })
+
+  const onChangeAttendance = (
+    attendeeId: string,
+    attendance: WorkshopAttendeeAttendance
+  ) => {
+    emit('changeAttendance', attendeeId, attendance)
+  }
 </script>
 
 <style scoped lang="scss">
