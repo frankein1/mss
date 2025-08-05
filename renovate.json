@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "github>nuxt/renovate-config-nuxt"],
+  "extends": ["github>nuxt/renovate-config-nuxt", "schedule:daily"],
   "docker-compose": {
     "enabled": false
   },
@@ -11,7 +11,7 @@
   "packageRules": [
     {
       "groupName": "Playwright",
-      "matchPackagePatterns": ["@playwright/test"]
+      "matchPackagePatterns": ["@playwright/test", "@axe-core/playwright"]
     },
     {
       "groupName": "dsfr",
@@ -36,10 +36,13 @@
         "@vee-validate/zod",
         "@vee-validate/nuxt"
       ]
+    },
+    {
+      "groupName": "nuxt-dev",
+      "matchPackagePatterns": ["@nuxt/eslint", "@nuxt/test-utils"]
     }
   ],
   "timezone": "Europe/Paris",
-  "schedule": ["* * * * 0,1,6"],
   "updateNotScheduled": false,
   "prConcurrentLimit": 5
 }
