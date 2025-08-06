@@ -2,12 +2,12 @@
   <div>
     <h3>Vee Combobox</h3>
 
-    <h4>Sélection avec recherche</h4>
     <form
       ref="form"
       novalidate
       class="fr-container--fluid"
     >
+      <h4>Sélection avec recherche</h4>
       <VeeCombobox
         label="Département"
         name="default"
@@ -15,19 +15,32 @@
         :options
         @change-value="onChangeValue"
       />
-      <button
-        type="submit"
-        class="fr-btn"
-      >
-        Valider
-      </button>
+
+      <h4>Champ libre avec recherche</h4>
+      <VeeCombobox
+        label="Département"
+        name="withCreation"
+        required
+        with-creation
+        :options
+        @change-value="onChangeValue"
+      />
     </form>
+    <div>Valeurs sélectionnées : {{ values }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
   import VeeCombobox from './VeeCombobox.vue'
   import type { Options } from '~/utils/options'
+
+  type InitialValue = { value: string; label: string }
+  const { values } = useForm<{
+    default: InitialValue
+    withCreation: InitialValue
+  }>({
+    validationSchema: null
+  })
 
   const onChangeValue = (value: string) => {
     console.log(value)

@@ -7,7 +7,6 @@ import { deleteWorkshop } from './deleteWorkshop.mutation'
 import { updateWorkshop } from './update.mutation'
 import { updateAttendeeAttendance } from './update-attendee-attendance.mutation'
 import { deleteAttendee } from './delete-attendee.mutation'
-import { updateWorkshopName } from './updateWorkshopName.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
@@ -18,6 +17,5 @@ export const workshopRoutes = {
   updateWorkshop,
   createAttendee,
   deleteAttendee,
-  updateAttendeeAttendance,
-  updateWorkshopName
+  updateAttendeeAttendance
 }

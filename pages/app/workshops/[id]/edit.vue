@@ -16,12 +16,10 @@
         :is-submitting="status === 'pending'"
         :partner-organizations="partnerOrganizations"
         :caught-errors
-        :update="true"
-        :workshop-name="workshop.workshopName.name"
+        update
         @submit="onSubmit"
         @cancel="onCancel"
         @delete="onDelete"
-        @open-modal-name="onNameUpdate"
       />
     </AtomLazyComponent>
   </div>
@@ -32,8 +30,7 @@
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { UpdateWorkShopInput, updateWorkshopSchema } from '~/server/schema'
   import WorkshopDeleteModal from '~/components/Workshop/WorkshopDeleteModal.vue'
-  import WorkshopNameUpdateModal from '~/components/Workshop/WorkshopNameUpdateModal.vue'
-  import { UpdateWorkshopNameInput } from '~/server/schema/workshop/updateWorkshopName.schema'
+  import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -42,13 +39,10 @@
   const modal = useModal()
 
   // Get initial workshop
-  const {
-    data: workshop,
-    error: errorInitialWorkshop,
-    refresh
-  } = await trpcClient.workshop.getOne.useQuery({
-    id: workshopId
-  })
+  const { data: workshop, error: errorInitialWorkshop } =
+    await trpcClient.workshop.getOne.useQuery({
+      id: workshopId
+    })
 
   // Get partners organisations
   const { data: partnerOrganizations, error: errorPartner } =
@@ -72,6 +66,7 @@
     validationSchema: toTypedSchema(updateWorkshopSchema),
     initialValues: {
       id: workshop.value?.id,
+      name: workshop.value?.workshopName.name,
       date: workshop.value?.date,
       startTime: workshop.value?.startTime,
       endTime: workshop.value?.endTime,
@@ -127,47 +122,6 @@
 
   const onCancel = () => {
     useRouter().back()
-  }
-
-  async function onNameUpdate() {
-    if (!workshop.value) {
-      throw createError('missing workshop entity')
-    }
-    modal.open(WorkshopNameUpdateModal, {
-      title: `Modifier le nom de l'atelier`,
-      initialValues: { name: workshop.value.workshopName.name },
-      isSubmitting: statusName.value === 'pending',
-      onUpdate: async (values: { name: string }) => {
-        if (!workshop.value) {
-          throw createError('missing workshop entity')
-        }
-        await updateWorkshopName({
-          id: workshop.value.workshopNameId,
-          ...values
-        })
-      }
-    })
-  }
-
-  const {
-    mutate: mutateName,
-    error: errorName,
-    status: statusName
-  } = trpcClient.workshop.updateWorkshopName.useMutation()
-
-  async function updateWorkshopName(values: UpdateWorkshopNameInput) {
-    const updated = await mutateName(values)
-
-    if (errorName.value || !updated) {
-      snackbar.error(
-        "La modification du nom de l'atelier à échoué",
-        snackbar.focus()
-      )
-      return
-    }
-    modal.close()
-    await refresh()
-    snackbar.success("Le nom de l'atelier a été modifié avec succès.")
   }
 </script>
 

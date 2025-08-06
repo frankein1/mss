@@ -3,37 +3,68 @@
     class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-2w fr-mt-2w"
   >
     <div class="fr-col-12">
-      <div class="title-wrapper">
-        <h2 class="fr-text--sm fr-text--bold text--uppercase fr-mb-1v">
-          Nom de l’atelier / thématique
-        </h2>
-        <button
-          class="fr-btn fr-btn--tertiary-no-outline"
-          type="button"
-          data-fr-opened="false"
-          aria-controls="global-modal"
-          title="Modifier le nom"
-          @click="emit('openModalName')"
+      <AtomLazyComponent
+        :error="Boolean(error)"
+        message="Les éléments pour le changement de nom de l'atelier n'ont pas pu être chargés."
+      >
+        <VeeCombobox
+          type="text"
+          :label="workshopLabels.name"
+          name="name"
+          :disabled="isSubmitting"
+          required
+          with-creation
+          :options
+        />
+
+        <VeeRadioButtons
+          name="mode"
+          label="Modifier le nom :"
+          :disabled="!isModified"
+          :inline="false"
+          :options="[
+            {
+              label: 'de cet atelier uniquement',
+              value: UpdateWorkshopNameMode.current
+            },
+            {
+              label: 'de tous les ateliers ayant ce nom',
+              value: UpdateWorkshopNameMode.all
+            }
+          ]"
         >
-          Modifier le nom
-        </button>
-      </div>
-      <p class="fr-text--md fr-text--bold fr-h6">{{ workshopName }}</p>
-      <WorkshopFormNameHelper />
+        </VeeRadioButtons>
+        <WorkshopFormNameHelper />
+      </AtomLazyComponent>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+  import { workshopLabels } from '~/client/labels'
   import WorkshopFormNameHelper from './WorkshopFormNameHelper.vue'
+  import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
-  defineProps<{
-    workshopName: string
+  const { isSubmitting } = defineProps<{
+    isSubmitting: boolean
   }>()
 
-  const emit = defineEmits<{
-    openModalName: []
-  }>()
+  const { data: workshopNames, error } =
+    await useTrpcClient().workshop.getWorkshopNameList.useQuery()
+
+  // Only the name field and not the id field is used in the combobox with-creation
+  const options =
+    workshopNames.value?.map(({ name }) => ({
+      label: name,
+      value: name
+    })) ?? []
+
+  const {
+    value: workshopName,
+    meta: { initialValue: initialWorkshopName }
+  } = useField<string | null | undefined>('name')
+
+  const isModified = computed(() => workshopName.value !== initialWorkshopName)
 </script>
 
 <style scoped>

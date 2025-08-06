@@ -22,6 +22,14 @@ function count(
   return prismaClient.workshopName.count(params)
 }
 
+function findUnique<T extends Prisma.WorkshopNameFindUniqueArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.WorkshopNameFindUniqueArgs>
+) {
+  appendConstraints(user, params, WorkshopNameConstraints.get)
+  return prismaClient.workshopName.findUnique(params)
+}
+
 function findUniqueOrThrow<T extends Prisma.WorkshopNameFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.WorkshopNameFindUniqueOrThrowArgs>
@@ -49,13 +57,13 @@ function update<T extends Prisma.WorkshopNameUpdateArgs>(
 export const WorkshopNameRepo = {
   findMany,
   count,
+  findUnique,
   findUniqueOrThrow,
   delete: deleteWorkshopName,
   update,
   prisma: {
     groupBy: prismaClient.workshop.groupBy,
     findMany: prismaClient.workshop.findMany,
-    findUniqueOrThrow: prismaClient.workshop.findUniqueOrThrow,
     updateMany: prismaClient.workshop.updateMany,
     create: prismaClient.workshop.create
   }

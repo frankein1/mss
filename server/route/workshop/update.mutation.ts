@@ -2,8 +2,13 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { updateWorkshopSchema, UpdateWorkShopInput } from '~/server/schema'
-import { WorkshopRepo, PartnerOrganizationRepo } from '~/server/database'
+import {
+  WorkshopRepo,
+  WorkshopNameRepo,
+  PartnerOrganizationRepo
+} from '~/server/database'
 import { SecurityRuleContext } from '~/server/security'
+import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -23,15 +28,20 @@ const securityCheck = async (
   return true
 }
 
-const handler = ({
-  input: { partnerOrganizationId, ...input },
+const handler = async ({
+  input: { partnerOrganizationId, mode, name, id, ...input },
   ctx
 }: {
   input: UpdateWorkShopInput
   ctx: ProtectedAppContext
-}) =>
-  WorkshopRepo.update(ctx.user, {
-    where: { id: input.id },
+}) => {
+  if (mode && name) {
+    await updateWorkshopName(ctx, { mode, name, id })
+  }
+
+  return await WorkshopRepo.update(ctx.user, {
+    select: { id: true },
+    where: { id },
     data: {
       ...input,
       partnerOrganization: partnerOrganizationId
@@ -39,6 +49,136 @@ const handler = ({
         : { disconnect: true }
     }
   })
+}
+
+async function updateWorkshopName(
+  ctx: ProtectedAppContext,
+  input: Required<Pick<UpdateWorkShopInput, 'mode' | 'name' | 'id'>>
+) {
+  const { workshopName: currentWorkshopName } =
+    await WorkshopRepo.findUniqueOrThrow(ctx.user, {
+      select: {
+        workshopName: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      },
+      where: { id: input.id }
+    })
+
+  if (currentWorkshopName.name === input.name) {
+    return { case: 'no-change', value: undefined }
+  }
+
+  if (input.mode === UpdateWorkshopNameMode.current) {
+    const value = await updateNameForCurrentWorkshop(ctx, input.id, input.name)
+    return { case: 'update-current', value }
+  }
+
+  const targetWorkshopName = await WorkshopNameRepo.findUnique(ctx.user, {
+    select: { id: true },
+    where: {
+      structureId_name: { structureId: ctx.structure.id, name: input.name }
+    }
+  })
+
+  if (targetWorkshopName === null) {
+    // update workshop name to a new value for all workshops sharing same name'
+    const value = await updateNameForAllWorkshops(
+      ctx,
+      currentWorkshopName.id,
+      input.name
+    )
+    return { case: 'update-all-to-new', value }
+  }
+
+  // unlink all workshops from current name and connect then to another existing workshop name'
+  const value = await linkWorkshopsToExistingWorkshopName(
+    ctx,
+    currentWorkshopName.id,
+    targetWorkshopName.id
+  )
+  return { case: 'update-all-to-existing', value }
+}
+
+/**
+ * Only the identified workshop is modified and linked to another workshop name.
+ * If the worskhop name does not exist it is created, otherwise the
+ * workshop is connected to the target existing workshop name
+ */
+async function updateNameForCurrentWorkshop(
+  ctx: ProtectedAppContext,
+  id: string,
+  name: string
+) {
+  return await WorkshopRepo.update(ctx.user, {
+    select: { id: true },
+    where: {
+      id,
+      structureId: ctx.structure.id
+    },
+    data: {
+      workshopName: {
+        connectOrCreate: {
+          where: {
+            structureId_name: {
+              name,
+              structureId: ctx.structure.id
+            }
+          },
+          create: {
+            name,
+            structureId: ctx.structure.id,
+            createdById: ctx.user.id
+          }
+        }
+      }
+    }
+  })
+}
+
+async function updateNameForAllWorkshops(
+  ctx: ProtectedAppContext,
+  currentWorkshopNameId: string,
+  name: string
+) {
+  return await WorkshopNameRepo.update(ctx.user, {
+    select: { id: true },
+    data: { name },
+    where: { id: currentWorkshopNameId }
+  })
+}
+
+/** All workshops with same workshop name as `workshopId` are connected
+ * to the existing workshop name `name`.
+ * Then the orphan workshop name is deleted
+ */
+async function linkWorkshopsToExistingWorkshopName(
+  ctx: ProtectedAppContext,
+  previousWorkshopNameId: string,
+  targetWorkshopNameId: string
+) {
+  const workshopsWithSameName = await WorkshopRepo.findMany(ctx.user, {
+    select: { id: true },
+    where: { workshopNameId: previousWorkshopNameId }
+  })
+
+  const targetWorkshopName = await prismaClient?.$transaction([
+    WorkshopRepo.updateMany(ctx.user, {
+      where: { id: { in: workshopsWithSameName.map(w => w.id) } },
+      data: {
+        workshopNameId: targetWorkshopNameId
+      }
+    }),
+    WorkshopNameRepo.delete(ctx.user, {
+      where: { id: previousWorkshopNameId }
+    })
+  ])
+
+  return targetWorkshopName
+}
 
 export const updateWorkshop = createMutation({
   inputValidation: updateWorkshopSchema,

@@ -46,6 +46,14 @@ function update<T extends Prisma.WorkshopUpdateArgs>(
   return prismaClient.workshop.update(params)
 }
 
+function updateMany<T extends Prisma.WorkshopUpdateManyArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.WorkshopUpdateManyArgs>
+) {
+  appendConstraints(user, params, WorkshopConstraints.update)
+  return prismaClient.workshop.updateMany(params)
+}
+
 function create<T extends Prisma.WorkshopCreateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.WorkshopCreateArgs>
@@ -60,11 +68,9 @@ export const WorkshopRepo = {
   findUniqueOrThrow,
   delete: deleteWorkshop,
   update,
+  updateMany,
   create,
   prisma: {
-    groupBy: prismaClient.workshop.groupBy,
-    findMany: prismaClient.workshop.findMany,
-    findUniqueOrThrow: prismaClient.workshop.findUniqueOrThrow,
-    updateMany: prismaClient.workshop.updateMany
+    groupBy: prismaClient.workshop.groupBy
   }
 }

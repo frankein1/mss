@@ -2162,7 +2162,7 @@ model WorkshopName {
   createdBy   User       @relation(fields: [createdById], references: [id])
   createdById String     @map("created_by_id") @db.Uuid
   createdAt   DateTime   @default(now()) @map("created_by")
-  Workshop    Workshop[]
+  workshops   Workshop[]
 
   @@unique([structureId, name])
   @@map("workshop_name")

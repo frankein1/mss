@@ -12,10 +12,8 @@
   >
     <div class="fr-container">
       <WorkshopFormNameUpdate
-        v-if="update && workshopName"
-        :workshop-name
+        v-if="update"
         :is-submitting
-        @open-modal-name="emit('openModalName')"
       />
       <WorkshopFormName
         v-else
@@ -57,25 +55,18 @@
   import { workshopLabels } from '~/client/labels'
   import type { FormErrors } from 'vee-validate'
 
-  const {
-    isSubmitting,
-    update,
-    workshopName = undefined,
-    partnerOrganizations,
-    caughtErrors
-  } = defineProps<{
-    isSubmitting: boolean
-    update?: boolean
-    workshopName?: string
-    partnerOrganizations: Array<PartnerOrganizationIdName>
-    caughtErrors: FormErrors<CreateWorkshopInput | UpdateWorkShopInput>
-  }>()
+  const { isSubmitting, update, partnerOrganizations, caughtErrors } =
+    defineProps<{
+      isSubmitting: boolean
+      update?: boolean
+      partnerOrganizations: Array<PartnerOrganizationIdName>
+      caughtErrors: FormErrors<CreateWorkshopInput | UpdateWorkShopInput>
+    }>()
 
   const emit = defineEmits<{
     submit: [payload: Event]
     cancel: []
     delete: []
-    openModalName: []
   }>()
 
   const form = ref<HTMLFormElement | null>(null)

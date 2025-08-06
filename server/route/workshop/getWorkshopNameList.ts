@@ -8,6 +8,7 @@ const securityCheck = AllowSecurityCheck
 
 const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
   WorkshopNameRepo.findMany(ctx.user, {
+    select: { id: true, name: true },
     where: { structureId: ctx.structure.id }
   })
 

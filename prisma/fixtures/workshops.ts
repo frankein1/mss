@@ -52,8 +52,12 @@ export const fixturesWorkshops = new Array(WORKSHOP_COUNT)
       faker.number.int({ min: 0, max: 45, multipleOf: 15 })
     )
     const duration = faker.number.int({ min: 30, max: 180, multipleOf: 15 })
-    const startTime = anytime.format('HH:mm')
-    const endTime = anytime.add(duration, 'minute').format('HH:mm')
+    const hasStartTime = Math.random() > 0.5
+    const startTime = hasStartTime ? anytime.format('HH:mm') : undefined
+    const endTime =
+      hasStartTime && Math.random() > 0.5
+        ? anytime.add(duration, 'minute').format('HH:mm')
+        : undefined
 
     // Choose random workshop name from list
     const nameIndex = faker.number.int({
