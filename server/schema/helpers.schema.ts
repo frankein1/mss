@@ -1,4 +1,6 @@
+import { Minister } from '@prisma/client'
 import { z } from 'zod/v4'
+import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 import {
   maxStringLengthMessage,
   minStringLengthMessage,
@@ -6,7 +8,9 @@ import {
   validEmailMessage,
   requiredErrorMessage,
   errorMessages,
-  validYear
+  validYear,
+  validEnum,
+  validDate
 } from '~/utils/zod'
 
 export const paginatedSchema = z.object({
@@ -86,30 +90,30 @@ export const phoneConstraint = stringConstraint.regex(
   'Veuillez renseigner un numéro de téléphone valide.'
 )
 
-export const stringOrEmpty = (schema: z.ZodString) =>
+export const stringOrEmpty = (schema: z.ZodString | z.ZodEmail) =>
   schema.nullish().or(z.literal(''))
 
-export const emailOrEmpty = () =>
-  stringOrEmpty(z.email())
+export const emailOrEmpty = () => stringOrEmpty(z.email(validEmailMessage))
 
-export const requiredNativeEnum = <T extends z.EnumLike>(nativeEnum: T) =>
-  z.enum(nativeEnum, {
-      error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
-})
-
-export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
+export const requiredNativeEnum = <T extends z.core.util.EnumLike>(
   nativeEnum: T
 ) =>
-  z.preprocess(
-    arg => (arg === '' ? null : arg),
-    z.enum(nativeEnum).nullish()
-  )
+  z.enum(nativeEnum, {
+    error: iss =>
+      [undefined, null, ''].includes(iss.input as any)
+        ? requiredErrorMessage
+        : validEnum
+  })
+
+export const withEmptyValueOptionalNativeEnum = <
+  T extends z.core.util.EnumLike
+>(
+  en: T
+) => z.preprocess(arg => (arg === '' ? null : arg), z.enum(en).nullish())
 
 export const kindOfBooleanSchema = (required = false) => {
   if (required) {
-    return z.enum(['true', 'false'], {
-        error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
-    })
+    return z.enum(['true', 'false'], errorMessages)
   }
 
   return z.preprocess(
@@ -120,33 +124,22 @@ export const kindOfBooleanSchema = (required = false) => {
 
 export const amountNumberCanBeNegative = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
-  z.coerce.number({
-      error: (issue) => issue.input === undefined ? undefined : validNumber
-})
+  z.coerce.number(validNumber)
 )
 
 export const amountNumber = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
   z.coerce
-    .number({
-        error: (issue) => issue.input === undefined ? undefined : validNumber
-    })
+    .number(validNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
 export const dateOrEmpty = z.preprocess(
   val => (val === '' || val === undefined ? null : val),
-  z
-    .date({ coerce: true })
+  z.coerce
+    .date(validDate)
     .nullish()
-    .refine(
-      date => {
-        return !date || date.getFullYear() <= 9999
-      },
-      {
-        message: validYear
-      }
-    )
+    .refine(date => !date || date.getFullYear() <= 9999, validYear)
 )
 
 export const openText = (maxLength: number) =>

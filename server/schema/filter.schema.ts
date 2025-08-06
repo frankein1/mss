@@ -39,7 +39,8 @@ const statFilterSchema = z.object({
         return v
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
-    }),
+    })
+    .optional(),
   socialSupportSubjects: z.array(z.uuid()).nullish(),
   cities: z
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
