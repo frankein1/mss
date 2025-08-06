@@ -17,7 +17,7 @@ import {
   Gender,
   Nationality
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createOrUpdateEntourageSchema } from '../relative.schema'
 import {
   requiredNativeEnum,
@@ -45,15 +45,15 @@ import {
 } from '~/utils/zod'
 
 export const updateBeneficiaryGeneralInformationSchema = z.object({
-  id: z.string().uuid(),
-  structureId: z.string().uuid(),
+  id: z.uuid(),
+  structureId: z.uuid(),
   referents: z
-    .array(z.string().uuid(), {
-      required_error: requiredErrorMessage
+    .array(z.uuid(), {
+        error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
     })
     .min(1, requiredErrorMessage),
-  aidantConnectAuthorized: z.boolean().default(false),
-  vulnerablePerson: z.boolean().default(false),
+  aidantConnectAuthorized: z.boolean().prefault(false),
+  vulnerablePerson: z.boolean().prefault(false),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
   firstName: beneficiaryFirstNameOrEmptySchema,
@@ -83,8 +83,8 @@ export const updateBeneficiaryGeneralInformationSchema = z.object({
   addressComplement: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  qpv: z.boolean().default(false),
-  noPhone: z.boolean().default(false),
+  qpv: z.boolean().prefault(false),
+  noPhone: z.boolean().prefault(false),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
@@ -97,7 +97,7 @@ export type UpdateBeneficiaryGeneralInformationInput = z.infer<
 >
 
 export const updateBeneficiaryTaxHouseholdSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
   weddingDate: dateOrEmpty,
   divorceDate: dateOrEmpty,
@@ -111,7 +111,7 @@ export const updateBeneficiaryTaxHouseholdSchema = z.object({
     .int(validIntNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
     .nullish(),
-  caregiver: z.boolean().default(false)
+  caregiver: z.boolean().prefault(false)
 })
 
 export type UpdateBeneficiaryTaxHouseholdInput = z.infer<
@@ -119,7 +119,7 @@ export type UpdateBeneficiaryTaxHouseholdInput = z.infer<
 >
 
 export const updateBeneficiaryEntourageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   entourages: z.array(createOrUpdateEntourageSchema).nullish()
 })
 
@@ -128,7 +128,7 @@ export type UpdateBeneficiaryEntourageInput = z.infer<
 >
 
 export const updateBeneficiaryHealthSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
   doctor: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   healthAdditionalInformation: openText(200).nullish(),
@@ -141,19 +141,19 @@ export type UpdateBeneficiaryHealthInput = z.infer<
 >
 
 export const updateBeneficiaryOccupationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
     BeneficiarySocioProfessionalCategory
   ),
   schoolName: stringConstraint.max(200, maxStringLengthMessage(200)).nullish(),
-  isSchoolInQPV: z.boolean().default(false),
+  isSchoolInQPV: z.boolean().prefault(false),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   employerSiret: stringOrEmpty(siretConstraint),
   unemploymentNumber: unemploymentNumberConstraint.nullish(),
   pensionOrganisations: z.array(
-    z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
+    z.enum(BeneficiaryPensionOrganisation, errorMessages)
   ),
   otherPensionOrganisations: stringConstraint
     .max(200, maxStringLengthMessage(200))
@@ -179,7 +179,7 @@ export type UpdateBeneficiaryOccupationInput = z.infer<
 >
 
 export const updateBeneficiaryExternalOrganisationsSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   protectionMeasure: withEmptyValueOptionalNativeEnum(
     BeneficiaryProtectionMeasure
   ),
@@ -202,7 +202,7 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
 })
 
 export const updateBeneficiaryArchiveDate = z.object({
-  id: z.string().uuid()
+  id: z.uuid()
 })
 
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<

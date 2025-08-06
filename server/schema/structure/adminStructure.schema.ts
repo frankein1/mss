@@ -1,5 +1,5 @@
 import { StructureType } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   requiredNativeEnum,
   stringConstraint,
@@ -35,7 +35,7 @@ export const createStructureSchema = z.object({
     .max(100, maxStringLengthMessage(100))
     .min(2, minStringLengthMessage(2)),
   phone: phoneConstraint,
-  email: z.string(errorMessages).email(validEmailMessage),
+  email: z.email(errorMessages),
   dpoFirstName: stringConstraint
     .max(50, maxStringLengthMessage(50))
     .min(2, minStringLengthMessage(2)),
@@ -43,13 +43,13 @@ export const createStructureSchema = z.object({
     .min(2, minStringLengthMessage(2))
     .max(50, maxStringLengthMessage(50))
     .toUpperCase(),
-  dpoEmail: z.string(errorMessages).email(validEmailMessage)
+  dpoEmail: z.email(errorMessages)
 })
 
 export type CreateStructureInput = z.infer<typeof createStructureSchema>
 
 export const editStructureAdminInfoSchema = createStructureSchema.extend({
-  id: z.string().uuid()
+  id: z.uuid()
 })
 
 export type EditStructureAdminInfoInput = z.infer<

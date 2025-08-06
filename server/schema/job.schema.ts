@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { Prisma, JobStatus } from '@prisma/client'
 import { maxStringLengthMessage } from '~/utils/zod'
 import {
@@ -82,9 +82,9 @@ export const adminGetJobResultsSchema = z
     // search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
     filters: jobResultAdminFilterSchema,
     orderBy: z.object({
-      startDate: z.nativeEnum(Prisma.SortOrder).optional()
+      startDate: z.enum(Prisma.SortOrder).optional()
     })
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type AdminGetJobResultsInput = z.infer<typeof adminGetJobResultsSchema>

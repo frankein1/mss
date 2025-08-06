@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   Minister,
   SocialSupportStatus,
@@ -14,19 +14,19 @@ import { withEmptyValueOptionalNativeEnum } from '../helpers.schema'
 import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
 
 export const fileInstructionFilterSchema = z.object({
-  fileInstructionType: z.nativeEnum(FileInstructionType).nullish(),
-  status: z.nativeEnum(SocialSupportStatus).nullish(),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
-  createdById: z.array(z.string().uuid()).nullish(),
+  fileInstructionType: z.enum(FileInstructionType).nullish(),
+  status: z.enum(SocialSupportStatus).nullish(),
+  socialSupportSubjects: z.array(z.uuid()).nullish(),
+  createdById: z.array(z.uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministre: z.array(z.enum(Minister)).nullish(),
   ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .enum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
-  roomCount: z.nativeEnum(HousingRoomCount).nullish(),
-  lowIncomeHousingType: z.nativeEnum(LowIncomeHousingType).nullish(),
-  notFilled: z.nativeEnum(FilterFileInstructionNotFilled).nullish(),
+  ministereStructure: z.enum(BeneficiaryMinistereStructure).nullish(),
+  roomCount: z.enum(HousingRoomCount).nullish(),
+  lowIncomeHousingType: z.enum(LowIncomeHousingType).nullish(),
+  notFilled: z.enum(FilterFileInstructionNotFilled).nullish(),
   period: withEmptyValueOptionalNativeEnum(FileInstructionPeriodFilter),
   fromDate: z.coerce.date().nullish(),
   toDate: z.coerce

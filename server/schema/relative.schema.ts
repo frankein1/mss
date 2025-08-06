@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { RelativeRelationship } from '@prisma/client'
 import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiary/beneficiaryFirstName.schema'
@@ -14,7 +14,7 @@ import {
 import { maxStringLengthMessage } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   lastName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
   birthDate: dateOrEmpty,
@@ -22,8 +22,8 @@ export const createOrUpdateEntourageSchema = z.object({
   city: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   email: emailOrEmpty(),
   phone: stringOrEmpty(phoneConstraint),
-  caregiver: z.boolean().default(false),
-  hosted: z.boolean().default(false),
+  caregiver: z.boolean().prefault(false),
+  hosted: z.boolean().prefault(false),
   additionalInformation: openText(200).nullish()
 })
 

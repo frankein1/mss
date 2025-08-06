@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { RelativeRelationship } from '@prisma/client'
 import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
 import { beneficiaryFirstNameSchema } from './beneficiary/beneficiaryFirstName.schema'
@@ -11,13 +11,13 @@ import {
 } from '.'
 
 export const getBudgetSchema = z.object({
-  familyFileId: z.string().uuid()
+  familyFileId: z.uuid()
 })
 
 export type GetBudgetInput = z.infer<typeof getBudgetSchema>
 
 export const updateBudgetInfoSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   numberHouseholdMembers: amountNumber.nullish(),
   remainingAfterExpenses: amountNumberCanBeNegative.nullish(),
   savings: amountNumber.nullish(),
@@ -29,7 +29,7 @@ export const updateBudgetInfoSchema = z.object({
 export type UpdateBudgetInfoInput = z.infer<typeof updateBudgetInfoSchema>
 
 const updateLoanOrDebtSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   type: stringConstraint.nullish(),
   amountTotal: amountNumber.nullish(),
   amountPerMonth: amountNumber.nullish(),
@@ -37,7 +37,7 @@ const updateLoanOrDebtSchema = z.object({
 })
 
 const updateCustomSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   type: stringConstraint.nullish(),
   amount: amountNumber.nullish()
 })
@@ -45,7 +45,7 @@ const updateCustomSchema = z.object({
 export type UpdateLoanOrDebtInput = z.infer<typeof updateLoanOrDebtSchema>
 
 export const updateBudgetExpensesSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   rent: amountNumber.nullish(),
   expenses: amountNumber.nullish(),
   water: amountNumber.nullish(),
@@ -85,7 +85,7 @@ export type UpdateBudgetExpensesInput = z.infer<
 >
 
 export const updateBudgetIncomeSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   salary: amountNumber.nullish(),
   primeActivite: amountNumber.nullish(),
 
@@ -115,7 +115,7 @@ export const updateBudgetIncomeSchema = z.object({
 export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>
 
 export const createBudgetIncomeSchema = z.object({
-  budgetId: z.string().uuid(),
+  budgetId: z.uuid(),
   beneficiaryId: z.string().optional(),
   member: z
     .object({

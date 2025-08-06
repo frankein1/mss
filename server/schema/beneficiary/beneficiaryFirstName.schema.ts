@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { stringConstraint, stringOrEmpty } from '../helpers.schema'
 import { maxStringLengthMessage, minStringLengthMessage } from '~/utils/zod'
 

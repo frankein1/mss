@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import dayjs from 'dayjs'
 import {
   BeneficiaryStatus,
@@ -40,19 +40,19 @@ const statFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
+  socialSupportSubjects: z.array(z.uuid()).nullish(),
   cities: z
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
     .nullish(),
   referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministre: z.array(z.enum(Minister)).nullish(),
   ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .enum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
-  createdById: z.array(z.string().uuid()).nullish(),
-  beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish()
+  ministereStructure: z.enum(BeneficiaryMinistereStructure).nullish(),
+  createdById: z.array(z.uuid()).nullish(),
+  beneficiaryStatus: z.enum(BeneficiaryStatus).nullish(),
+  ageGroup: z.enum(AgeGroup).nullish()
 })
 
 type StatFilterInput = Omit<
@@ -66,14 +66,14 @@ type StatFilterInput = Omit<
 
 const beneficiaryFilterSchema = z.object({
   search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
-  referents: z.array(z.string().uuid()).nullish(),
-  status: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.array(z.nativeEnum(AgeGroup)).nullish(),
+  socialSupportSubjects: z.array(z.uuid()).nullish(),
+  referents: z.array(z.uuid()).nullish(),
+  status: z.enum(BeneficiaryStatus).nullish(),
+  ageGroup: z.array(z.enum(AgeGroup)).nullish(),
   ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .enum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
+  ministereStructure: z.enum(BeneficiaryMinistereStructure).nullish(),
   vulnerablePerson: z
     .string()
     .nullish()
@@ -82,16 +82,16 @@ const beneficiaryFilterSchema = z.object({
     .string()
     .nullish()
     .transform(val => (val ? val === 'true' : undefined)),
-  notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
+  notFilled: z.enum(FilterBeneficiaryNotFilled).nullish()
 })
 
 type BeneficiaryFilterInput = z.input<typeof beneficiaryFilterSchema>
 type BeneficiaryFilterServerInput = z.output<typeof beneficiaryFilterSchema>
 
 const beneficiaryDocumentFilterSchema = z.object({
-  type: z.nativeEnum(DocumentType).nullish(),
+  type: z.enum(DocumentType).nullish(),
   tags: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  beneficiaryId: z.string().uuid().nullish()
+  beneficiaryId: z.uuid().nullish()
 })
 
 type BeneficiaryDocumentFilterInput = z.infer<
@@ -99,10 +99,10 @@ type BeneficiaryDocumentFilterInput = z.infer<
 >
 
 const followupFilterSchema = z.object({
-  status: z.nativeEnum(SocialSupportStatus).nullish(),
-  medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
-  createdById: z.array(z.string().uuid()).nullish(),
+  status: z.enum(SocialSupportStatus).nullish(),
+  medium: z.array(z.enum(FollowupMedium)).nullish(),
+  socialSupportSubjects: z.array(z.uuid()).nullish(),
+  createdById: z.array(z.uuid()).nullish(),
   period: withEmptyValueOptionalNativeEnum(FollowupPeriodFilter),
   fromDate: z.coerce.date().nullish(),
   toDate: z.coerce
@@ -114,26 +114,26 @@ const followupFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministre: z.array(z.enum(Minister)).nullish(),
   ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+    .enum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
-  notFilled: z.nativeEnum(FilterFollowupNotFilled).nullish()
+  ministereStructure: z.enum(BeneficiaryMinistereStructure).nullish(),
+  notFilled: z.enum(FilterFollowupNotFilled).nullish()
 })
 
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>
 
 const familyFileHistoryFilterSchema = z.object({
-  status: z.nativeEnum(SocialSupportStatus).nullish(),
-  typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
-  medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
+  status: z.enum(SocialSupportStatus).nullish(),
+  typeSuivi: z.enum(TypeSuivi).nullish(),
+  medium: z.array(z.enum(FollowupMedium)).nullish(),
+  socialSupportSubjects: z.array(z.uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
   handlingDate: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
-  referents: z.array(z.string().uuid()).nullish(),
-  beneficiaryId: z.string().uuid().nullish() // exemple
+  referents: z.array(z.uuid()).nullish(),
+  beneficiaryId: z.uuid().nullish() // exemple
 })
 
 type FamilyFileHistoryFilterInput = z.infer<
@@ -141,19 +141,19 @@ type FamilyFileHistoryFilterInput = z.infer<
 >
 
 const userAdminFilterSchema = z.object({
-  role: z.nativeEnum(UserRole).nullish()
+  role: z.enum(UserRole).nullish()
 })
 
 type UserAdminFilterInput = z.infer<typeof userAdminFilterSchema>
 
 const emailAdminFilterSchema = z.object({
-  status: z.nativeEnum(EmailStatus).nullish()
+  status: z.enum(EmailStatus).nullish()
 })
 
 type EmailAdminFilterInput = z.infer<typeof emailAdminFilterSchema>
 
 const jobResultAdminFilterSchema = z.object({
-  status: z.nativeEnum(JobStatus).nullish()
+  status: z.enum(JobStatus).nullish()
 })
 
 type JobResultAdminFilterInput = z.infer<typeof jobResultAdminFilterSchema>

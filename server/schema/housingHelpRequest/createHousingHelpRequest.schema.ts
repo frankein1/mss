@@ -8,7 +8,7 @@ import {
   HousingRoomCount,
   LowIncomeHousingType
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   numeroPegaseContraint,
   withEmptyValueOptionalNativeEnum,
@@ -28,10 +28,10 @@ import {
 } from '~/utils/zod'
 
 export const createHousingHelpRequestSchemaBase = z.object({
-  familyFileId: z.string().uuid(),
-  beneficiaryId: z.string().uuid(),
+  familyFileId: z.uuid(),
+  beneficiaryId: z.uuid(),
   date: z.coerce.date(errorMessages),
-  documents: z.array(z.string(), errorMessages).default([]),
+  documents: z.array(z.string(), errorMessages).prefault([]),
   synthesis: openText(6000).nullish(),
   synthesisRichText: openRichText().nullish(),
   privateSynthesis: openText(6000).nullish(),
@@ -50,21 +50,21 @@ export const createHousingHelpRequestSchemaBase = z.object({
   decisionDate: dateOrEmpty,
   refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   dispatchDate: dateOrEmpty,
-  fullFile: z.boolean().default(false),
+  fullFile: z.boolean().prefault(false),
   isFirst: kindOfBooleanSchema(),
   firstOpeningDate: dateOrEmpty,
-  [AskedHousing.HebergementTemporaire]: z.boolean().default(false),
-  [AskedHousing.ParcPrive]: z.boolean().default(false),
-  [AskedHousing.ParcSocial]: z.boolean().default(false),
+  [AskedHousing.HebergementTemporaire]: z.boolean().prefault(false),
+  [AskedHousing.ParcPrive]: z.boolean().prefault(false),
+  [AskedHousing.ParcSocial]: z.boolean().prefault(false),
   reason: withEmptyValueOptionalNativeEnum(HousingReason),
   uniqueId: stringConstraint.max(150, maxStringLengthMessage(50)).nullish(),
   taxHouseholdAdditionalInformation: openText(200).nullish(),
   maxRent: amountNumber.nullish(),
   maxCharges: amountNumber.nullish(),
-  housingType: z.array(z.nativeEnum(HousingType)).nullish(),
-  roomCount: z.array(z.nativeEnum(HousingRoomCount)).nullish(),
-  isPmr: z.boolean().default(false),
-  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish()
+  housingType: z.array(z.enum(HousingType)).nullish(),
+  roomCount: z.array(z.enum(HousingRoomCount)).nullish(),
+  isPmr: z.boolean().prefault(false),
+  lowIncomeHousingType: z.array(z.enum(LowIncomeHousingType)).nullish()
 })
 
 export const createHousingHelpRequestSchema =

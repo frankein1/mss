@@ -1,11 +1,11 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createHelpRequestSchemaBase } from './createHelpRequest.schema'
 import { requiredErrorMessage } from '~/utils/zod'
 
 export const editHelpRequestSchema = createHelpRequestSchemaBase
   .extend({
-    id: z.string().uuid(),
-    socialSupportId: z.string().uuid()
+    id: z.uuid(),
+    socialSupportId: z.uuid()
   })
   .omit({
     financialSupport: true

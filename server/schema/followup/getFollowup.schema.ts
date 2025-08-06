@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { paginatedSchema } from '../helpers.schema'
 import { exportFollowupsSchema } from './exportFollowup.schema'
 

@@ -1,10 +1,10 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createWorkshopSchemaBase } from './createWorkshop.schema'
 import { timeGroup } from '~/client/options'
 
 export const updateWorkshopSchema = createWorkshopSchemaBase
   .extend({
-    id: z.string().uuid()
+    id: z.uuid()
   })
   .omit({
     name: true

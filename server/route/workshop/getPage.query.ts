@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import z from 'zod'
+import z from 'zod/v4'
 import {
   GetWorkshopsInput,
   workshopFilterSchema

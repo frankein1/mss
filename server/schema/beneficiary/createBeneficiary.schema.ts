@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 
 export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
@@ -19,10 +19,10 @@ export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
     region: true,
     birthDate: true
   })
-  .merge(
+  .extend(
     z.object({
-      draft: z.boolean().default(false)
-    })
+          draft: z.boolean().prefault(false)
+        }).shape
   )
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>

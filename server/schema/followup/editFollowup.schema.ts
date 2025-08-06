@@ -1,11 +1,11 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { addFollowupSchemaBase } from './addFollowup.schema'
 import { requiredErrorMessage } from '~/utils/zod'
 
 export const editFollowupSchema = addFollowupSchemaBase
   .extend({
-    id: z.string().uuid(),
-    socialSupportId: z.string().uuid()
+    id: z.uuid(),
+    socialSupportId: z.uuid()
   })
   .refine(val => !val.isMinistry || val.ministre, {
     message: requiredErrorMessage,

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { DefaultSocialSupportSubject } from '@prisma/client'
 import { stringConstraint } from './helpers.schema'
 import { minStringLengthMessage, maxStringLengthMessage } from '~/utils/zod'
@@ -7,8 +7,8 @@ const createSocialSupportSubjectSchema = z.object({
   name: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .min(2, minStringLengthMessage(2)),
-  default: z.nativeEnum(DefaultSocialSupportSubject).nullish(),
-  ownedByStructureId: z.string().uuid()
+  default: z.enum(DefaultSocialSupportSubject).nullish(),
+  ownedByStructureId: z.uuid()
 })
 
 const createCustomSocialSupportSubjectSchema =

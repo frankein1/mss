@@ -103,7 +103,7 @@ export const createRoute = <
     input
   }: {
     ctx: RouteHandlerContext<Grantee>
-    input: Validation
+    input: z.Infer<Validation>
   }) => {
     if (!ctx.structure) {
       throw forbiddenError('No structure found is the trpc context')
@@ -148,7 +148,7 @@ export const createRoute = <
     input
   }: {
     ctx: AdminRouteHandlerContext<Grantee>
-    input: Validation
+    input: z.infer<Validation>
   }) => {
     if (!adminHandler) {
       throw forbiddenError('Use adminHandler function to handle the request')

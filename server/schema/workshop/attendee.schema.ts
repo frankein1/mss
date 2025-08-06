@@ -1,16 +1,16 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { WorkshopAttendeeAttendance } from '@prisma/client'
 
 export const createAttendeeSchema = z.object({
-  workshopId: z.string().uuid(),
-  beneficiaryId: z.string().uuid()
+  workshopId: z.uuid(),
+  beneficiaryId: z.uuid()
 })
 
 export type CreateAttendeeInput = z.infer<typeof createAttendeeSchema>
 
 export const updateAttendeeAttendanceSchema = z.object({
-  id: z.string().uuid(),
-  attendance: z.nativeEnum(WorkshopAttendeeAttendance)
+  id: z.uuid(),
+  attendance: z.enum(WorkshopAttendeeAttendance)
 })
 
 export type UpdateAttendeeAttendanceInput = z.infer<

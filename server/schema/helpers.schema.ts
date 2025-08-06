@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   maxStringLengthMessage,
   minStringLengthMessage,
@@ -10,8 +10,8 @@ import {
 } from '~/utils/zod'
 
 export const paginatedSchema = z.object({
-  page: z.number().int().gte(1),
-  perPage: z.number().int().gte(5)
+  page: z.int().gte(1),
+  perPage: z.int().gte(5)
 })
 
 export const optionalPaginatedSchema = z.object({
@@ -22,7 +22,7 @@ export const optionalPaginatedSchema = z.object({
 export type PaginatedInput = z.infer<typeof paginatedSchema>
 
 export const idSchema = z.object({
-  id: z.string().uuid()
+  id: z.uuid()
 })
 
 export type IdInput = z.infer<typeof idSchema>
@@ -90,22 +90,26 @@ export const stringOrEmpty = (schema: z.ZodString) =>
   schema.nullish().or(z.literal(''))
 
 export const emailOrEmpty = () =>
-  stringOrEmpty(z.string().email(validEmailMessage))
+  stringOrEmpty(z.email())
 
 export const requiredNativeEnum = <T extends z.EnumLike>(nativeEnum: T) =>
-  z.nativeEnum(nativeEnum, { required_error: requiredErrorMessage })
+  z.enum(nativeEnum, {
+      error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
+})
 
 export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
   nativeEnum: T
 ) =>
   z.preprocess(
     arg => (arg === '' ? null : arg),
-    z.nativeEnum(nativeEnum).nullish()
+    z.enum(nativeEnum).nullish()
   )
 
 export const kindOfBooleanSchema = (required = false) => {
   if (required) {
-    return z.enum(['true', 'false'], { required_error: requiredErrorMessage })
+    return z.enum(['true', 'false'], {
+        error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
+    })
   }
 
   return z.preprocess(
@@ -116,13 +120,17 @@ export const kindOfBooleanSchema = (required = false) => {
 
 export const amountNumberCanBeNegative = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
-  z.coerce.number({ invalid_type_error: validNumber })
+  z.coerce.number({
+      error: (issue) => issue.input === undefined ? undefined : validNumber
+})
 )
 
 export const amountNumber = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
   z.coerce
-    .number({ invalid_type_error: validNumber })
+    .number({
+        error: (issue) => issue.input === undefined ? undefined : validNumber
+    })
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
@@ -157,7 +165,7 @@ export const openRichText = () => {
 }
 
 export const beneficiaryIdSchema = z.object({
-  beneficiaryId: z.string().uuid()
+  beneficiaryId: z.uuid()
 })
 
 export type BeneficiaryIdInput = z.infer<typeof beneficiaryIdSchema>

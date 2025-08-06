@@ -1,11 +1,11 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { stringConstraint } from '../helpers.schema'
 import { maxStringLengthMessage, minStringLengthMessage } from '~/utils/zod'
 
 export const updateSocialSupportSubjectsSchema = z.object({
   selected: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.uuid(),
       active: z.boolean(),
       name: z.string()
     })
@@ -25,7 +25,7 @@ export type UpdateSocialSupportSubjectsInput = z.infer<
 
 export const updateAdminStructureSubjectsSchema =
   updateSocialSupportSubjectsSchema.extend({
-    structureId: z.string().uuid()
+    structureId: z.uuid()
   })
 
 export type UpdateAdminStructureSubjectsInput = z.infer<

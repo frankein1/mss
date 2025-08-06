@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { Prisma } from '@prisma/client'
 import { fileInstructionFilterSchema } from './filter.schema'
 import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
@@ -8,10 +8,10 @@ export const exportFileInstructionsSchema = z.object({
   orderBy: z.object({
     socialSupport: z
       .object({
-        date: z.nativeEnum(Prisma.SortOrder).optional(),
+        date: z.enum(Prisma.SortOrder).optional(),
         beneficiary: z
           .object({
-            usualName: z.nativeEnum(Prisma.SortOrder).optional()
+            usualName: z.enum(Prisma.SortOrder).optional()
           })
           .optional()
       })

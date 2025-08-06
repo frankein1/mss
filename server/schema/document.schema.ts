@@ -1,5 +1,5 @@
 import { DocumentType } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { File } from 'node-fetch-native'
 import { stringConstraint, requiredNativeEnum } from './helpers.schema'
 import { documentFileMaxSize, documentFileAllowedTypes } from '~/client/options'
@@ -20,17 +20,15 @@ export const documentMimeTypeValidation = z
   .string()
   .refine(value => documentFileAllowedTypes.includes(value))
 
-export const documentSizeValidation = z
-  .number()
-  .int()
+export const documentSizeValidation = z.int()
   .max(documentFileMaxSize, documentSizeValidationErrorMessage)
 
 export const uploadBrowserDocumentSchema = z.object({
-  familyFileId: z.string(errorMessages).uuid(),
-  beneficiaryId: z.string(errorMessages).uuid(),
+  familyFileId: z.uuid(errorMessages),
+  beneficiaryId: z.uuid(errorMessages),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
-  confidential: z.boolean().default(false),
+  confidential: z.boolean().prefault(false),
   file: z
     .instanceof(File, { message: requiredErrorMessage })
     .refine(
@@ -40,11 +38,11 @@ export const uploadBrowserDocumentSchema = z.object({
 })
 
 export const addDocumentSchema = z.object({
-  familyFileId: z.string(errorMessages).uuid(),
-  beneficiaryId: z.string(errorMessages).uuid(),
+  familyFileId: z.uuid(errorMessages),
+  beneficiaryId: z.uuid(errorMessages),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
-  confidential: z.boolean().default(false),
+  confidential: z.boolean().prefault(false),
   file: z.object({
     name: z.string(),
     mimeType: documentMimeTypeValidation,
@@ -61,16 +59,16 @@ export const editDocumentSchema = z.object({
   name: stringConstraint
     .min(2, minStringLengthMessage(2))
     .max(150, maxStringLengthMessage(150)),
-  beneficiaryId: z.string(errorMessages).uuid(),
+  beneficiaryId: z.uuid(errorMessages),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
-  confidential: z.boolean().default(false)
+  confidential: z.boolean().prefault(false)
 })
 
 export const createUploadUrlSchema = z.object({
   name: stringConstraint.max(150, maxStringLengthMessage(150)),
   mimeType: stringConstraint.max(50, maxStringLengthMessage(50)),
-  beneficiaryId: z.string().uuid()
+  beneficiaryId: z.uuid()
 })
 
 export const createViewUrlSchema = z.object({ key: z.string() })
@@ -91,7 +89,7 @@ export type {
   UploadBrowserDocumentInput
 }
 export const getDocumentKeySchema = z.object({
-  key: z.string().uuid()
+  key: z.uuid()
 })
 
 export type GetDocumentKeyInput = z.infer<typeof getDocumentKeySchema>

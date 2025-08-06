@@ -4,7 +4,7 @@ import {
   Minister,
   PaymentMethod
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   numeroPegaseContraint,
   withEmptyValueOptionalNativeEnum,
@@ -20,18 +20,15 @@ import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 
 export const createHelpRequestSchemaBase = z.object({
   isMinistry: z.boolean(),
-  familyFileId: z.string().uuid(),
-  beneficiaryId: z.string().uuid(),
+  familyFileId: z.uuid(),
+  beneficiaryId: z.uuid(),
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
-  subjectId: z
-    .string({
-      required_error: requiredErrorMessage,
-      invalid_type_error: requiredErrorMessage
-    })
-    .uuid(),
-  documents: z.array(z.string(), errorMessages).default([]),
+  subjectId: z.uuid({
+          error: (issue) => issue.input === undefined ? requiredErrorMessage : requiredErrorMessage
+      }),
+  documents: z.array(z.string(), errorMessages).prefault([]),
   externalStructure: kindOfBooleanSchema(true),
   status: requiredNativeEnum(SocialSupportStatus),
   askedAmount: amountNumber.nullish(),
@@ -52,7 +49,7 @@ export const createHelpRequestSchemaBase = z.object({
   privateSynthesis: openText(1000).nullish(),
   privateSynthesisRichText: openRichText().nullish(),
   dueDate: dateOrEmpty,
-  fullFile: z.boolean().default(false),
+  fullFile: z.boolean().prefault(false),
   financialSupport: z.boolean(),
   isRefundable: kindOfBooleanSchema()
 })

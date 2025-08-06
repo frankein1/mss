@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { emailAdminFilterSchema } from '../filter.schema'
 import { paginatedSchema, stringConstraint } from '../helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
@@ -9,9 +9,9 @@ export const adminGetEmailsSchema = z
     search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
     filters: emailAdminFilterSchema,
     orderBy: z.object({
-      sentDate: z.nativeEnum(Prisma.SortOrder).optional()
+      sentDate: z.enum(Prisma.SortOrder).optional()
     })
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type AdminGetEmailsInput = z.infer<typeof adminGetEmailsSchema>

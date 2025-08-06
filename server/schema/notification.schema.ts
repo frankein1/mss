@@ -1,9 +1,9 @@
 import { NotificationType } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { paginatedSchema } from './helpers.schema'
 
 const updateNotificationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   read: z.boolean()
 })
 
@@ -16,9 +16,9 @@ export type { UpdateNotificationInput }
 const getNotificationsSchema = z
   .object({
     onlyUnread: z.boolean(),
-    types: z.array(z.nativeEnum(NotificationType)).nullish()
+    types: z.array(z.enum(NotificationType)).nullish()
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 type GetNotificationsInput = z.infer<typeof getNotificationsSchema>
 

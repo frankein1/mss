@@ -1,8 +1,8 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { requiredLimitedStringConstraint } from '../helpers.schema'
 
 export const updateWorkshopNameSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: requiredLimitedStringConstraint(100)
 })
 

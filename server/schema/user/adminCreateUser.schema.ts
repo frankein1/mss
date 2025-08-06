@@ -1,5 +1,5 @@
 import { UserRole, UserStatus } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import {
   errorMessages,
@@ -16,14 +16,13 @@ const adminCreateUserSchema = z.object({
   lastName: stringConstraint
     .max(30, maxStringLengthMessage(30))
     .min(2, minStringLengthMessage(2)),
-  email: z.string(errorMessages).email(validEmailMessage),
+  email: z.email(errorMessages),
   role: requiredNativeEnum(UserRole).refine(role => role !== 'Administrator', {
-    message:
-      "Un administrateur ne peut pas être créé via l'interface d'administration"
-  }),
+      error: "Un administrateur ne peut pas être créé via l'interface d'administration"
+}),
   status: requiredNativeEnum(UserStatus),
   aidantConnectAuthorisation: z.coerce.boolean().nullish(),
-  structureId: z.string(errorMessages).uuid({ message: requiredErrorMessage })
+  structureId: z.uuid(errorMessages)
 })
 
 type AdminCreateUserInput = z.infer<typeof adminCreateUserSchema>

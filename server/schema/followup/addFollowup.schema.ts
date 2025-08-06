@@ -4,7 +4,7 @@ import {
   Minister,
   FollowupDuration
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
@@ -24,15 +24,15 @@ import {
 // TODO: etre plus restrictif sur synthesisRichText et privateSynthesisRichText
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
-  familyFileId: z.string().uuid(),
-  beneficiaryId: z.string().uuid(),
+  familyFileId: z.uuid(),
+  beneficiaryId: z.uuid(),
   subjects: z
-    .array(z.string().uuid(), {
+    .array(z.uuid(), {
       ...errorMessages,
-      required_error: requiredErrorMessage
+        error: (issue) => issue.input === undefined ? requiredErrorMessage : undefined
     })
     .min(1, requiredErrorMessage),
-  documents: z.array(z.string(), errorMessages).default([]),
+  documents: z.array(z.string(), errorMessages).prefault([]),
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
@@ -41,9 +41,9 @@ export const addFollowupSchemaBase = z.object({
   privateSynthesis: openText(1000).nullish(),
   privateSynthesisRichText: openRichText().nullish(),
   status: requiredNativeEnum(SocialSupportStatus),
-  helpRequested: z.boolean().default(false),
+  helpRequested: z.boolean().prefault(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  redirected: z.boolean().default(false),
+  redirected: z.boolean().prefault(false),
   structureName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
@@ -51,12 +51,12 @@ export const addFollowupSchemaBase = z.object({
   thirdPersonName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  firstFollowup: z.boolean().default(false),
+  firstFollowup: z.boolean().prefault(false),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
   prescribingOrganizationContactId: z.string().nullish(),
-  classified: z.boolean().default(false),
-  forwardedToJustice: z.boolean().default(false),
+  classified: z.boolean().prefault(false),
+  forwardedToJustice: z.boolean().prefault(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
 })
 

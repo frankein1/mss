@@ -1,12 +1,16 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 export const acceptCGUSchema = z.object({
   read: z.coerce
     .boolean()
-    .refine(value => value === true, { message: 'Veuillez lire les CGU.' }),
+    .refine(value => value === true, {
+        error: 'Veuillez lire les CGU.'
+    }),
   accept: z.coerce
     .boolean()
-    .refine(value => value === true, { message: 'Veuillez accepter les CGU.' })
+    .refine(value => value === true, {
+        error: 'Veuillez accepter les CGU.'
+    })
 })
 
 type AcceptCGUInput = z.infer<typeof acceptCGUSchema>

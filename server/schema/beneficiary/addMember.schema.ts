@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { RelativeRelationship } from '@prisma/client'
 import { requiredNativeEnum } from '../helpers.schema'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
@@ -11,12 +11,12 @@ export const createFamilyFileMemberSchema =
       firstName: true,
       birthDate: true
     })
-    .merge(
+    .extend(
       z.object({
-        familyFileId: z.string().uuid(),
-        relationship: requiredNativeEnum(RelativeRelationship),
-        usualName: beneficiaryLastNameSchema
-      })
+                familyFileId: z.uuid(),
+                relationship: requiredNativeEnum(RelativeRelationship),
+                usualName: beneficiaryLastNameSchema
+              }).shape
     )
 
 export type CreateFamilyFileMemberInput = z.infer<

@@ -1,16 +1,16 @@
 import { UserRole } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { requiredNativeEnum } from '../helpers.schema'
 
 const editUserRoleSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   role: requiredNativeEnum(UserRole)
 })
 
 type UserRoleEditionInput = z.infer<typeof editUserRoleSchema>
 
 const editUserAidantConnectAuthorisationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   aidantConnectAuthorisation: z.boolean()
 })
 
@@ -19,7 +19,7 @@ type UserAidantConnectAuthorisationEditionInput = z.infer<
 >
 
 const editUserStatusSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: z.boolean()
 })
 

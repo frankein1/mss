@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   addDataInclusionPartnerOrganizationSchema,
   addCustomPartnerOrganizationSchema
@@ -6,12 +6,12 @@ import {
 
 export const editDataInclusionPartnerOrganizationSchema =
   addDataInclusionPartnerOrganizationSchema.extend({
-    id: z.string().uuid()
+    id: z.uuid()
   })
 
 export const editCustomPartnerOrganizationSchema =
   addCustomPartnerOrganizationSchema.extend({
-    id: z.string().uuid()
+    id: z.uuid()
   })
 
 export const editPartnerOrganizationSchema = z.union([

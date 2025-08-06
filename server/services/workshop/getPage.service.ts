@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import z from 'zod'
+import z from 'zod/v4'
 import { WorkshopRepo } from '~/server/database'
 import { SecurityRuleContext } from '~/server/security'
 import { FilterWorkshopPeriod } from '~/utils/constants/filters'
