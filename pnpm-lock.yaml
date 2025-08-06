@@ -16,11 +16,11 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0
       '@gouvfr/dsfr':
-        specifier: ~1.13.2
-        version: 1.13.2
+        specifier: ~1.14.0
+        version: 1.14.0
       '@gouvminint/vue-dsfr':
-        specifier: ^8.4.0
-        version: 8.4.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))
+        specifier: ^8.6.0
+        version: 8.6.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))
       '@prisma/client':
         specifier: ^6.13.0
         version: 6.13.0(prisma@6.13.0(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
@@ -228,7 +228,7 @@ importers:
         version: 3.2.4(@types/node@22.17.0)(happy-dom@18.0.1)(jiti@2.4.2)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(yaml@2.8.0)
       vue-dsfr-nuxt-module:
         specifier: ^2.0.0
-        version: 2.0.0(@gouvfr/dsfr@1.13.2)(@gouvminint/vue-dsfr@8.4.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2)))(magicast@0.3.5)
+        version: 2.0.0(@gouvfr/dsfr@1.14.0)(@gouvminint/vue-dsfr@8.6.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2)))(magicast@0.3.5)
       vue-tsc:
         specifier: ^2.2.12
         version: 2.2.12(typescript@5.9.2)
@@ -884,8 +884,12 @@ packages:
     resolution: {integrity: sha512-4Q9ggFFzwD/KFr37sJO1hFH9PcqlZ7F3jMiFJXnBLJfkH1+s28vnQp/oXoY8TosWsLMSjdhNCrxvrUdm5XzBlg==}
     engines: {node: '>=18.16.1'}
 
-  '@gouvminint/vue-dsfr@8.4.0':
-    resolution: {integrity: sha512-PyFnA9REL6ZYjPyxfF1kRw53nr8ANT/m67qPPG/lAExvbT7yq7xwHtGRALPJquDKHmb+QXUwpyWuaDD7IJnbKw==}
+  '@gouvfr/dsfr@1.14.0':
+    resolution: {integrity: sha512-lF02JujHsr4J39gnC7y+qe0LLnh01cb6JwbMIKK2YcNjzvmfb26C0uW0+gyugD41wjFQQcIFWz07g6ynqxjNzA==}
+    engines: {node: '>=22.14.0'}
+
+  '@gouvminint/vue-dsfr@8.6.0':
+    resolution: {integrity: sha512-XE8DO285iFR+3yVk6f94jO4BCT6TMLqGVreDK+1hdrA+m0Es+gTohzX/+XfKMD28bK0/sRcJKN3kR2NimHPDMA==}
     engines: {node: '>=20.x.x', npm: '>=10.x.x'}
     hasBin: true
     peerDependencies:
@@ -8454,7 +8458,9 @@ snapshots:
 
   '@gouvfr/dsfr@1.13.2': {}
 
-  '@gouvminint/vue-dsfr@8.4.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))':
+  '@gouvfr/dsfr@1.14.0': {}
+
+  '@gouvminint/vue-dsfr@8.6.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))':
     dependencies:
       '@gouvfr/dsfr': 1.13.2
       '@iconify/vue': 4.3.0(vue@3.5.13(typescript@5.9.2))
@@ -16311,10 +16317,10 @@ snapshots:
 
   vue-devtools-stub@0.1.0: {}
 
-  vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.13.2)(@gouvminint/vue-dsfr@8.4.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2)))(magicast@0.3.5):
+  vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.14.0)(@gouvminint/vue-dsfr@8.6.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2)))(magicast@0.3.5):
     dependencies:
-      '@gouvfr/dsfr': 1.13.2
-      '@gouvminint/vue-dsfr': 8.4.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))
+      '@gouvfr/dsfr': 1.14.0
+      '@gouvminint/vue-dsfr': 8.6.0(@iconify/vue@4.3.0(vue@3.5.13(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.13(typescript@5.9.2)))(vue@3.5.13(typescript@5.9.2))
       '@nuxt/kit': 3.16.1(magicast@0.3.5)
     transitivePeerDependencies:
       - magicast
