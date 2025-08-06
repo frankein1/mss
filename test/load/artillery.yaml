@@ -1,0 +1,39 @@
+config:
+  target: http://localhost:3000
+  processor: './artillery-utils.js'
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up phase
+    # - duration: 60
+    #   arrivalRate: 5
+    #   rampTo: 10
+    #   name: Ramp up load
+    # - duration: 30
+    #   arrivalRate: 10
+    #   rampTo: 30
+    #   name: Spike phase
+  plugins:
+    ensure:
+      thresholds:
+        - http.response_time.p99: 100
+        - http.response_time.p95: 75
+    apdex:
+      threshold: 100
+    metrics-by-endpoint: {}
+
+scenarios:
+  - name: Arrive to dashboard being authenticated and access beneficiary
+    beforeScenario: setAuthenticationToken
+    flow:
+      - loop:
+          - get:
+              url: '/app/overview'
+              headers:
+                Cookie: '{{ cookie }}'
+          # - get:
+          #     url: '/pony'
+          # - get:
+          #     url: '/armadillo'
+        # count: 100
