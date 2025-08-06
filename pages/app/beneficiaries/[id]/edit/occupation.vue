@@ -30,7 +30,8 @@
   import { routes } from '~/utils/routes'
 
   definePageMeta({
-    name: routes.beneficiary.AppBeneficiaryEditOccupation.name
+    name: routes.beneficiary.AppBeneficiaryEditOccupation.name,
+    layout: 'second-navigation'
   })
 
   const trpcClient = useTrpcClient()
@@ -98,8 +99,4 @@
       }
     })
   }
-
-  definePageMeta({
-    layout: 'second-navigation'
-  })
 </script>
