@@ -283,6 +283,7 @@
           const today = new Date().getTime()
           return archiveDate < today
         })
+        .filter(notification => !notification.read)
         .map(notification => ({
           archiveDate: notification.archiveDate,
           beneficiary: notification.beneficiary,
