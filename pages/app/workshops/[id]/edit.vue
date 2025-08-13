@@ -67,6 +67,7 @@
     initialValues: {
       id: workshop.value?.id,
       name: workshop.value?.workshopName.name,
+      mode: UpdateWorkshopNameMode.current,
       date: workshop.value?.date,
       startTime: workshop.value?.startTime,
       endTime: workshop.value?.endTime,

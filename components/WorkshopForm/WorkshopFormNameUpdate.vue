@@ -20,6 +20,7 @@
         <VeeRadioButtons
           name="mode"
           label="Modifier le nom :"
+          required
           :disabled="!isModified"
           :inline="false"
           :options="[

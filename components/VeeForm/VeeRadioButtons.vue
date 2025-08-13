@@ -12,6 +12,11 @@
       :class="{ 'fr-sr-only': noLabel }"
     >
       {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
     </legend>
     <div
       v-for="{ value: optionValue, label: optionLabel, disabled } in options"
@@ -96,6 +101,7 @@
       asTag?: boolean
       rich?: boolean
       small?: boolean
+      required?: boolean
     }>(),
     {
       pictos: undefined,
@@ -103,7 +109,8 @@
       asTag: false,
       noLabel: false,
       rich: false,
-      small: false
+      small: false,
+      required: false
     }
   )
 
@@ -267,6 +274,10 @@
 
 <style lang="scss">
   fieldset[disabled] {
+    legend > span.color-red {
+      color: var(--background-disabled-grey);
+    }
+
     .fr-radio-rich__img {
       svg {
         filter: grayscale(1) opacity(0.5);

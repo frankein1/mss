@@ -89,6 +89,8 @@ describe('Workshop - Update - Update workshop data', () => {
     await expect(() =>
       trpc.structureManager.workshop.updateWorkshop({
         id: workshopIds[0],
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopNames[0],
         date,
         partnerOrganizationId: otherPartnerOrganizationId
       })
@@ -111,6 +113,8 @@ describe('Workshop - Update - Update workshop data', () => {
     await expect(() =>
       trpc.structureManager.workshop.updateWorkshop({
         id: workshopFromOtherStructure.workshops[0].id,
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopFromOtherStructure.name,
         date
       })
     ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
@@ -121,6 +125,8 @@ describe('Workshop - Update - Update workshop data', () => {
   }) => {
     const res = await trpc.receptionAgent.workshop.updateWorkshop({
       id: workshopIds[0],
+      mode: UpdateWorkshopNameMode.current,
+      name: workshopNames[0],
       date,
       attendeeLimit: 20,
       location: 'New location'
@@ -141,6 +147,8 @@ describe('Workshop - Update - Update workshop data', () => {
     await expect(() =>
       trpc.administrator.workshop.updateWorkshop({
         id: workshopIds[0],
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopNames[0],
         date
       })
     ).rejects.toThrowError(/user routes are not available to admins/i)

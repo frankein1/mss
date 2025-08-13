@@ -2,13 +2,12 @@ import { z } from 'zod'
 import { createWorkshopSchemaBase } from './createWorkshop.schema'
 import { timeGroup } from '~/client/options'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
-import { limitedStringConstraint } from '../helpers.schema'
+import { requiredNativeEnum } from '../helpers.schema'
 
 export const updateWorkshopSchema = createWorkshopSchemaBase
   .extend({
     id: z.string().uuid(),
-    mode: z.nativeEnum(UpdateWorkshopNameMode).optional(),
-    name: limitedStringConstraint(null, 100).optional()
+    mode: requiredNativeEnum(UpdateWorkshopNameMode)
   })
   .refine(
     data => {
