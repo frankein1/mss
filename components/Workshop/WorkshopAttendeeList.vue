@@ -12,6 +12,16 @@
           }}</span>
           inscription<span v-if="workshop._count.workshopAttendees > 1">s</span>
         </p>
+        <div
+          v-if="attendees.length > 0"
+          class="action"
+        >
+          <ExportDataButton
+            title="Exporter liste émargement (.xlsx)"
+            :is-downloading="isDownloading"
+            @export="getExportedAttendance"
+          />
+        </div>
       </div>
     </div>
     <div
@@ -50,6 +60,16 @@
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import WorkshopAttendeeItem from './WorkshopAttendeeItem.vue'
   import { WorkshopAttendeeAttendance } from '@prisma/client'
+  import {
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    INVALID_CODE_ERROR_MESSAGE
+  } from '~/utils/constants'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { isTRPCClientError } from '~/utils/error'
+
+  const trpcClient = useTrpcClient()
+  const isDownloading = ref(false)
 
   const { workshop } = defineProps<{
     workshop: WorkshopWithAttendeesDetails
@@ -72,6 +92,40 @@
   ) => {
     emit('changeAttendance', attendeeId, attendance)
   }
+  // get Excel file
+  const getExportedAttendance = async (code: string) => {
+    isDownloading.value = true
+
+    try {
+      const exportedFile =
+        await trpcClient.workshop.getExportedAttendance.query({
+          code,
+          workshopId: workshop.id
+        })
+      if (!exportedFile.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFile.data)
+      downloadLink.download = getExportFilename('émargement')
+      downloadLink.click()
+      downloadLink.remove()
+
+      useModal().close()
+    } catch (err: unknown) {
+      if (isTRPCClientError(err)) {
+        const msg =
+          err.data?.code === 'FORBIDDEN'
+            ? INVALID_CODE_ERROR_MESSAGE
+            : FAILED_DOWNLOAD_ERROR_MESSAGE
+        useSnackbar().error(msg)
+      } else {
+        useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+      }
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +146,11 @@
         font-size: 2.25rem;
         color: var(--primary);
       }
+    }
+
+    div.action {
+      flex-grow: 1;
+      text-align: end;
     }
   }
 
