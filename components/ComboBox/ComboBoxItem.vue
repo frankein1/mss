@@ -2,6 +2,7 @@
   <li
     :id
     class="option"
+    ref="combobox-item"
     role="option"
     :class="{
       focused: focusedItem?.value === value,
@@ -14,18 +15,20 @@
 </template>
 
 <script lang="ts" setup generic="Option extends { disabled?: boolean }">
-  import { comboBoxInjectionKey } from './utils'
+  import { comboBoxInjectionKey, Item } from './utils'
 
   const { disabled = false, value } = defineProps<{
     disabled?: boolean
     value: unknown
   }>()
 
+  const elementRef = useTemplateRef<HTMLLIElement>('combobox-item')
   const id = useId()
-  const item = computed(() => ({
+  const item = computed<Item>(() => ({
     id,
     value,
-    disabled
+    disabled,
+    elementRef
   }))
 
   const emit = defineEmits<{
@@ -39,7 +42,6 @@
     registerItem: () => {},
     unregisterItem: () => {}
   }
-
   onMounted(() => registerItem(item.value))
   onUnmounted(() => unregisterItem(item.value))
 </script>

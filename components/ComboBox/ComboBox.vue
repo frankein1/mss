@@ -80,8 +80,8 @@
   }
   defineExpose({ reset })
 
-  const items = ref<Item[]>([])
-  const focusedItem = ref<Item | null>(null)
+  const items = shallowRef<Item[]>([])
+  const focusedItem = shallowRef<Item | null>(null)
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
@@ -125,7 +125,6 @@
   }
 
   const onFocus = () => {
-    console.log('onFocus', displayedValue.value !== null)
     if (displayedValue.value !== null) {
       openList.value = true
     }
@@ -154,23 +153,18 @@
       item => item.id === focusedItem.value?.id
     )
     const itemLength = items.value.length
-    console.log({ key: e.key, focusedItemIndex, itemLength })
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        focusedItem.value = items.value[(focusedItemIndex + 1) % itemLength]
-        document
-          .getElementById(focusedItem.value.id)
-          ?.scrollIntoView({ block: 'nearest' })
+        // focusedItem.value = items.value[(focusedItemIndex + 1) % itemLength]
+        // focusedItem.value.elementRef?.scrollIntoView({ block: 'nearest' })
         //activeRow.value = (activeRow.value + 1) % options.length
         break
       case 'ArrowUp':
         e.preventDefault()
-        focusedItem.value =
-          items.value[(focusedItemIndex - 1 + itemLength) % itemLength]
-        document
-          .getElementById(focusedItem.value.id)
-          ?.scrollIntoView({ block: 'nearest' })
+        // focusedItem.value =
+        //   items.value[(focusedItemIndex - 1 + itemLength) % itemLength]
+        // focusedItem.value.elementRef?.scrollIntoView({ block: 'nearest' })
         // activeRow.value =
         //   activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
         break
@@ -187,12 +181,12 @@
         break
       }
       case 'Escape':
-        focusedItem.value = null
+        //focusedItem.value = null
         //activeRow.value = -1
         openList.value = false
         break
       case 'Tab':
-        focusedItem.value = null
+        //focusedItem.value = null
         openList.value = false
         //activeRow.value = -1
         break

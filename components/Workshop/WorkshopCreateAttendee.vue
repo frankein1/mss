@@ -112,16 +112,13 @@
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
-    console.log('searchBenef', beneficiaries)
     results.value = beneficiaries.map(beneficiary => ({
       ...beneficiary,
       disabled: beneficiaryAttendeeIds.value.includes(beneficiary.id)
     }))
-    console.log('results.value', results.value)
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
-    console.log('onSelect called')
     comboboxRef.value?.reset()
     results.value = []
 
