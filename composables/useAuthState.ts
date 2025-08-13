@@ -1,5 +1,5 @@
 import { UserRole, UserStatus } from '@prisma/client'
-import { JwtUser } from '~/types/user'
+import type { JwtUser } from '~/server/lib/jwt'
 import { formatUserDisplayName } from '~/utils/user'
 
 export function useAuthState() {

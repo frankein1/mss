@@ -1,5 +1,5 @@
-import { JwtUser } from '~/types/user'
-import { forbidden } from './errors'
+import type { JwtUser } from '~/server/lib/jwt'
+import { forbidden } from '../../utils/api/errors'
 
 export const checkUserIsAuthenticated = (user: JwtUser) => {
   if (

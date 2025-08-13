@@ -8,7 +8,7 @@ import {
   getAppContextPermissions,
   getFamilyFilePermissions
 } from '~/server/security'
-import { isObjectEmpty } from '~/utils/isObjectEmpty'
+import { isObjectEmpty } from '~/server/utils/isObjectEmpty'
 
 export const include = {
   socialSupports: {

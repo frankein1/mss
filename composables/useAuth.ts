@@ -1,6 +1,6 @@
 import { useAuthState } from './useAuthState'
 import { AppContextPermissions } from '~/server/security'
-import { JwtUser } from '~/types/user'
+import type { JwtUser } from '~/server/lib/jwt'
 
 export function useAuth() {
   const state = useAuthState()

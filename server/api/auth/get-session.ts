@@ -1,13 +1,13 @@
 import { UserRepo } from '~/server/database'
 import { signJwt } from '~/server/lib/jwt'
 import { getAppContextPermissions } from '~/server/security'
-import { JwtUser } from '~/types/user'
+import type { JwtUser } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { includeOrderedCGUHistory } from '~/server/query'
 import { structureContextQuery } from '~/server/trpc/createContext'
 
 export default defineEventHandler(async event => {
-  const authUser = event.context.auth?.user as JwtUser
+  const authUser = event.context.auth?.user
 
   const config = useRuntimeConfig()
   const { cookieKey, tokenValidationInMinutes } = config.public.auth

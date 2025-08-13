@@ -3,8 +3,7 @@ import { RdvspAuthSession } from '~/server/types/session'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'
-import { JwtUser } from '~/types/user'
-import { checkUserIsAuthenticated } from '~/utils/api/checkUserIsAuthenticated'
+import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest } from '~/utils/api/errors'
 
 const { auth } = useRuntimeConfig()
@@ -21,7 +20,11 @@ export default defineEventHandler(async event => {
     throw unauthorized('No code or state returned from RDVSP OAuth')
   }
 
-  const { user }: { user: JwtUser } = event.context.auth
+  const user = event.context.auth?.user
+
+  if (!user) {
+    throw unauthorized('No user found from RDVSP OAuth')
+  }
 
   checkUserIsAuthenticated(user)
 

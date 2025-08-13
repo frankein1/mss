@@ -3,7 +3,7 @@ import { Document, NotificationType } from '@prisma/client'
 import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
-import { JwtUser } from '~/types/user'
+import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
@@ -18,7 +18,7 @@ export interface MultiPartData {
 }
 
 export default defineEventHandler(async event => {
-  const { user }: { user: JwtUser } = event.context.auth
+  const user = event.context.auth?.user
   if (
     !user ||
     user.status !== 'Active' ||

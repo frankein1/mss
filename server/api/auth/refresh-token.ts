@@ -1,11 +1,10 @@
 import { H3Event } from 'h3'
 import { signJwt } from '~/server/lib/jwt'
-import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
 
 export default defineEventHandler(event => {
-  const user = event.context.auth?.user as JwtUser
+  const user = event.context.auth?.user
 
   const config = useRuntimeConfig()
   const { cookieKey, tokenValidationInMinutes } = config.public.auth

@@ -1,10 +1,9 @@
 import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
-import { JwtUser } from '~/types/user'
 
 export default defineEventHandler(async event => {
-  const { user }: { user: JwtUser } = event.context.auth
+  const user = event.context.auth?.user
   if (
     !user ||
     user.status !== 'Active' ||

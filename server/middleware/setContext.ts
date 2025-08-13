@@ -1,4 +1,13 @@
 import { verifyJwt } from '~/server/lib/jwt'
+import type { JwtUser } from '~/server/lib/jwt'
+
+declare module 'h3' {
+  interface H3EventContext {
+    auth?: {
+      user: JwtUser
+    }
+  }
+}
 
 export default defineEventHandler(event => {
   const cookies = parseCookies(event)

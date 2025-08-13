@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isObjectEmpty } from '~/utils/isObjectEmpty'
+import { isObjectEmpty } from '~/server/utils/isObjectEmpty'
 
 describe('isObjectEmpty', () => {
   it('computes if an object is empty', () => {

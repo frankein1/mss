@@ -1,12 +1,47 @@
 import pkg from 'jsonwebtoken'
-import type { JwtPayload } from 'jsonwebtoken'
-import { JwtUser } from '~/types/user'
 import { minutesToSeconds } from '~/utils/time'
+import { z } from 'zod'
+import { requiredNativeEnum } from '~/server/schema'
+import { StructureType, UserRole, UserStatus } from '@prisma/client'
 
 const { sign, verify } = pkg
 
-export function verifyJwt(token: string, jwtKey: string): JwtPayload {
-  return verify(token, jwtKey) as JwtPayload
+export const MSS_SIGNING_ALGORITHM = 'HS256'
+
+const jwtUserSchema = z.object({
+  id: z.string().uuid(),
+  lastName: z.string(),
+  firstName: z.string(),
+  email: z.string().email(),
+  role: requiredNativeEnum(UserRole),
+  status: requiredNativeEnum(UserStatus),
+  structureId: z.string().uuid().nullable(),
+  structureType: requiredNativeEnum(StructureType).nullable(),
+  CGUHistoryVersion: z.string().nullable()
+})
+
+export type JwtUser = z.infer<typeof jwtUserSchema>
+
+export type JwtData = {
+  user: JwtUser
+  iat: number
+  exp: number
+}
+
+export function verifyJwt(token: string, jwtKey: string) {
+  const payload = verify(token, jwtKey, {
+    algorithms: [MSS_SIGNING_ALGORITHM]
+  })
+  if (typeof payload === 'string' || payload.user === undefined) {
+    throw new Error('jwt: wrong format for token')
+  }
+
+  const parsedPayload = jwtUserSchema.safeParse(payload.user)
+  if (parsedPayload.success === false) {
+    throw new Error('jwt: wrong content for token')
+  }
+
+  return { user: parsedPayload.data }
 }
 
 export function signJwt(
@@ -14,25 +49,9 @@ export function signJwt(
   jwtKey: string,
   expiresInMinutes: number
 ) {
-  const sessionToken = sign(
-    {
-      user: {
-        email: user.email,
-        id: user.id,
-        lastName: user.lastName,
-        firstName: user.firstName,
-        role: user.role,
-        status: user.status,
-        structureId: user.structureId,
-        structureType: user.structureType,
-        CGUHistoryVersion: user.CGUHistoryVersion
-      }
-    },
-    jwtKey,
-    {
-      algorithm: 'HS256',
-      expiresIn: minutesToSeconds(expiresInMinutes)
-    }
-  )
+  const sessionToken = sign({ user }, jwtKey, {
+    algorithm: MSS_SIGNING_ALGORITHM,
+    expiresIn: minutesToSeconds(expiresInMinutes)
+  })
   return sessionToken
 }

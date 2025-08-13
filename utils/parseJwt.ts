@@ -1,4 +1,4 @@
-import { JwtData } from '~/types/user'
+import type { JwtData } from '~/server/lib/jwt'
 
 export const parseJwt = (token: string): JwtData => {
   try {

@@ -18,7 +18,7 @@ import { AuthSession } from '~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
 import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'
-import { JwtUser } from '~/types/user'
+import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
 
 const { verify } = pkg
