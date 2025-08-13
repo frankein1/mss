@@ -11,7 +11,7 @@
     <div class="input-wrapper">
       <ComboBox
         ref="attendee-combobox"
-        v-slot="{ option, input }"
+        v-slot="{ input }"
         v-model="selectedBeneficiary"
         label="Rechercher parmi vos bénéficiaires enregistrés"
         :options="results"
@@ -19,31 +19,37 @@
         @input="searchBeneficiaries"
         @select="onSelect"
       >
-        <div class="beneficiary">
-          <div class="beneficiary-info">
-            <span class="beneficiary-name">
-              <AtomTextEmphasis
-                :name="formatBeneficiarySearchDisplayName(option)"
-                :input="input"
-              ></AtomTextEmphasis>
-            </span>
-            <span
-              v-if="option.birthDate"
-              class="beneficiary-age"
-              :class="{ disabled: option.disabled }"
-            >
-              {{ calculateAge(option.birthDate) + ' ans' }}</span
-            >
-          </div>
+        <ComboBoxItem
+          v-for="option in results"
+          :disabled="option.disabled"
+          :value="option.id"
+        >
+          <div class="beneficiary">
+            <div class="beneficiary-info">
+              <span class="beneficiary-name">
+                <AtomTextEmphasis
+                  :name="formatBeneficiarySearchDisplayName(option)"
+                  :input="input"
+                ></AtomTextEmphasis>
+              </span>
+              <span
+                v-if="option.birthDate"
+                class="beneficiary-age"
+                :class="{ disabled: option.disabled }"
+              >
+                {{ calculateAge(option.birthDate) + ' ans' }}</span
+              >
+            </div>
 
-          <div
-            v-if="beneficiaryAttendeeIds.includes(option.id)"
-            class="beneficiary-already-invited"
-          >
-            <span class="fr-icon-check-line"></span>
-            <span>Déjà ajouté</span>
+            <div
+              v-if="beneficiaryAttendeeIds.includes(option.id)"
+              class="beneficiary-already-invited"
+            >
+              <span class="fr-icon-check-line"></span>
+              <span>Déjà ajouté</span>
+            </div>
           </div>
-        </div>
+        </ComboBoxItem>
       </ComboBox>
       <p class="separator">ou</p>
       <button
@@ -106,13 +112,16 @@
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
+    console.log('searchBenef', beneficiaries)
     results.value = beneficiaries.map(beneficiary => ({
       ...beneficiary,
       disabled: beneficiaryAttendeeIds.value.includes(beneficiary.id)
     }))
+    console.log('results.value', results.value)
   }
 
   const onSelect = async (beneficiary: BeneficiarySearchResult) => {
+    console.log('onSelect called')
     comboboxRef.value?.reset()
     results.value = []
 

@@ -22,7 +22,7 @@
         type="search"
         role="combobox"
         aria-autocomplete="list"
-        :aria-expanded="options.length > 0"
+        :aria-expanded="items.length > 0"
         :aria-controls="LISTBOX_ID"
         :aria-activedescendant="activeDescendant"
         @keydown="handleKeydown"
@@ -31,8 +31,7 @@
         @input="handleInput"
       />
       <ul
-        v-if="options.length || loading"
-        v-show="openList || loading"
+        v-show="(openList && items.length > 0) || loading"
         :id="LISTBOX_ID"
         class="listbox"
         role="listbox"
@@ -47,56 +46,42 @@
           :alert-type="AlertType.Error"
           :message="error"
         />
-        <li
-          v-for="(option, rowIndex) in options"
-          :id="'option-' + rowIndex"
-          :key="rowIndex"
-          class="option"
-          role="option"
-          :class="{
-            focused: rowIndex === activeRow,
-            disabled: option.disabled
-          }"
-          v-on="!option.disabled ? { click: () => handleSelect(option) } : {}"
-        >
-          <slot
-            :option="option"
-            :input="displayedValue"
-          ></slot>
-        </li>
+        <slot :input="displayedValue"></slot>
       </ul>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup generic="Option extends { disabled?: boolean }">
+<script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
+  import { comboBoxInjectionKey, Item } from './utils'
 
   const {
     placeholder = '',
     labelVisible = true,
-    formatDisplayValue = String,
-    options
+    formatDisplayValue = String
   } = defineProps<{
     label: string
     placeholder?: string
     labelVisible?: boolean
-    formatDisplayValue?: (option: Option) => string
-    options: Option[]
+    formatDisplayValue?: (value: unknown) => string
   }>()
 
-  defineSlots<{ default(props: { option: Option; input: string }): unknown }>()
+  defineSlots<{ default(props: { input: string }): unknown }>()
 
   const emit = defineEmits<{
-    select: [option: Option]
+    select: [value: unknown]
     input: [input: string]
   }>()
-  const model = defineModel<Option | null>({ required: true })
+  const model = defineModel<unknown | null>({ required: true })
   function reset() {
     model.value = null
     displayedValue.value = ''
   }
   defineExpose({ reset })
+
+  const items = ref<Item[]>([])
+  const focusedItem = ref<Item | null>(null)
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
@@ -114,20 +99,34 @@
     return ''
   })
 
+  const registerItem = (item: Item) => {
+    items.value.push(item)
+  }
+
+  const unregisterItem = (item: Item) => {
+    const index = items.value.findIndex(
+      registerdItem => registerdItem.id === item.id
+    )
+    if (index >= 0) {
+      items.value.splice(index, 1)
+    }
+  }
+
   const handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement
     emit('input', target.value)
   }
 
-  const handleSelect = (option: Option) => {
+  const handleSelect = (value: unknown) => {
     openList.value = false
-    displayedValue.value = formatDisplayValue(option)
-    model.value = option
-    emit('select', option)
+    displayedValue.value = String(value)
+    model.value = value
+    emit('select', value)
   }
 
   const onFocus = () => {
-    if (displayedValue.value != null) {
+    console.log('onFocus', displayedValue.value !== null)
+    if (displayedValue.value !== null) {
       openList.value = true
     }
     activeRow.value = -1
@@ -151,38 +150,51 @@
 
   function handleKeydown(e: KeyboardEvent) {
     openList.value = true
+    const focusedItemIndex = items.value.findIndex(
+      item => item.id === focusedItem.value?.id
+    )
+    const itemLength = items.value.length
+    console.log({ key: e.key, focusedItemIndex, itemLength })
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        activeRow.value = (activeRow.value + 1) % options.length
+        focusedItem.value = items.value[(focusedItemIndex + 1) % itemLength]
+        document
+          .getElementById(focusedItem.value.id)
+          ?.scrollIntoView({ block: 'nearest' })
+        //activeRow.value = (activeRow.value + 1) % options.length
         break
       case 'ArrowUp':
         e.preventDefault()
-        activeRow.value =
-          activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
+        focusedItem.value =
+          items.value[(focusedItemIndex - 1 + itemLength) % itemLength]
+        document
+          .getElementById(focusedItem.value.id)
+          ?.scrollIntoView({ block: 'nearest' })
+        // activeRow.value =
+        //   activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
         break
       case 'Enter': {
         e.preventDefault()
-        const ar = activeRow.value
-        if (ar >= 0 && options[ar] && !options[ar].disabled) {
-          handleSelect(options[ar])
+        if (focusedItem.value !== null && !focusedItem.value.disabled) {
+          handleSelect(focusedItem.value.value)
         }
         break
-      }
-      case ' ': {
-        const ar = activeRow.value
-        if (ar >= 0 && options[ar] !== undefined && !options[ar].disabled) {
-          handleSelect(options[ar])
+      case ' ':
+        if (focusedItem.value !== null && !focusedItem.value.disabled) {
+          handleSelect(focusedItem.value.value)
         }
         break
       }
       case 'Escape':
-        activeRow.value = -1
+        focusedItem.value = null
+        //activeRow.value = -1
         openList.value = false
         break
       case 'Tab':
+        focusedItem.value = null
         openList.value = false
-        activeRow.value = -1
+        //activeRow.value = -1
         break
     }
   }
@@ -190,12 +202,12 @@
   // Used when the user is is navigating in the dropdown
   // using the keyboard, to make sure the selected option
   // is visible.
-  watch(activeRow, newIndex => {
-    if (newIndex >= 0) {
-      const el = document.getElementById(`option-${newIndex}`)
-      el?.scrollIntoView({ block: 'nearest' })
-    }
-  })
+  // watch(focusedItem, newIndex => {
+  //   if (newIndex >= 0) {
+  //     const el = document.getElementById(`option-${newIndex}`)
+  //     el?.scrollIntoView({ block: 'nearest' })
+  //   }
+  // })
 
   // Necessary because the input control that appears on ":hover" is managed
   // by the browser directly, so we can't listen to its click event.
@@ -204,6 +216,13 @@
     if (newVal === '' && model.value !== null) {
       reset()
     }
+  })
+
+  provide(comboBoxInjectionKey, {
+    handleSelect,
+    registerItem,
+    unregisterItem,
+    focusedItem
   })
 </script>
 
