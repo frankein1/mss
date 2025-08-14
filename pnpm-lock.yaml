@@ -63,6 +63,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       exceljs:
         specifier: ^4.4.0
         version: 4.4.0
@@ -172,9 +175,6 @@ importers:
       commit-and-tag-version:
         specifier: ^12.5.2
         version: 12.5.2
-      dotenv:
-        specifier: ^17.2.1
-        version: 17.2.1
       eslint:
         specifier: ^9.33.0
         version: 9.33.0(jiti@2.4.2)
@@ -6346,7 +6346,6 @@ packages:
   puppeteer@23.11.1:
     resolution: {integrity: sha512-53uIX3KR5en8l7Vd8n5DUv90Ae9QDQsyIthaUFVzwV6yU750RjqRznEtNMBT20VthqAdemnJN+hxVdmMHKt7Zw==}
     engines: {node: '>=18'}
-    deprecated: < 24.9.0 is no longer supported
     hasBin: true
 
   pure-rand@6.1.0:
