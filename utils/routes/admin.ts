@@ -18,12 +18,12 @@ export const routes = {
   },
   AdminStructures: {
     name: 'AdminStructures',
-    title: '',
+    title: 'Structures',
     path: () => `${AdminRoute}/structures`
   },
   AdminStructure: {
     name: 'AdminStructure',
-    title: '',
+    title: 'Structure',
     path: (structureId: string) => `${AdminRoute}/structures/${structureId}`
   },
   AdminStructureSubjects: {
@@ -34,12 +34,12 @@ export const routes = {
   },
   AdminUsers: {
     name: 'AdminUsers',
-    title: '',
+    title: 'Utilisateurs',
     path: () => `${AdminRoute}/users`
   },
   AdminUsersAdd: {
     name: 'AdminUsersAdd',
-    title: '',
+    title: 'Ajouter un utilisateur',
     path: () => `${AdminRoute}/users/add`
   },
   AdminUser: {
@@ -49,12 +49,12 @@ export const routes = {
   },
   AdminEmails: {
     name: 'AdminEmails',
-    title: '',
+    title: 'E-mails',
     path: () => `${AdminRoute}/emails`
   },
   AdminIntegrations: {
     name: 'AdminIntegrations',
-    title: '',
+    title: 'Intégrations',
     path: () => `${AdminRoute}/integrations`
   }
 } as const

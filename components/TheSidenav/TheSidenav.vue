@@ -89,7 +89,10 @@
           </li>
         </ul>
         <ul class="fr-footer__bottom-list">
-          <li class="fr-footer__bottom-item">
+          <li
+            v-if="!authState.isAdmin()"
+            class="fr-footer__bottom-item"
+          >
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="
@@ -122,7 +125,7 @@
               class="fr-footer__bottom-link"
               :to="routes.landing.DeclarationAccessibilite.path(landingPageUrl)"
             >
-              Accessibilité: non conforme
+              Accessibilité&nbsp;: non conforme
             </NuxtLink>
           </li>
           <li

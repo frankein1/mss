@@ -26,7 +26,6 @@
   })
 
   definePageMeta({
-    middleware: 'auth',
     layout: 'landing'
   })
 
@@ -34,6 +33,7 @@
     const items = []
     const isManager = authState.isStructureManager()
     if (authState.isAdmin()) {
+      // Admin only
       items.push({
         to: routes.admin.AdminOverview.path(),
         label: routes.admin.AdminOverview.title
@@ -47,6 +47,10 @@
         label: routes.admin.AdminUsers.title
       })
       items.push({
+        to: routes.admin.AdminUsersAdd.path(),
+        label: routes.admin.AdminUsersAdd.title
+      })
+      items.push({
         to: routes.admin.AdminEmails.path(),
         label: routes.admin.AdminEmails.title
       })
@@ -55,6 +59,7 @@
         label: routes.admin.AdminIntegrations.title
       })
     } else {
+      // Non-admin only
       items.push({
         to: routes.user.AppOverview.path(),
         label: routes.user.AppOverview.title
@@ -77,6 +82,24 @@
           label: routes.stats.AppStats.title
         })
       }
+      items.push({
+        to: routes.structure.AppPartners.path(),
+        label: routes.structure.AppPartners.title
+      })
+      items.push({
+        to: routes.structure.AppStructure.path(),
+        label: routes.structure.AppStructure.title
+      })
+      if (application.value.module.users) {
+        items.push({
+          to: routes.structure.AppUsers.path(),
+          label: routes.structure.AppUsers.title
+        })
+        items.push({
+          to: routes.structure.AppStructureSubjects.path(),
+          label: routes.structure.AppStructureSubjects.title
+        })
+      }
       if (isManager) {
         items.push({
           to: routes.cgu.CGUManager.path(),
@@ -88,11 +111,12 @@
           label: routes.cgu.CGUUser.title
         })
       }
-      items.push({
-        to: routes.landing.PolitiqueConfidentialite.path(),
-        label: routes.landing.PolitiqueConfidentialite.title
-      })
     }
+    // All users
+    items.push({
+      to: routes.landing.PolitiqueConfidentialite.path(),
+      label: routes.landing.PolitiqueConfidentialite.title
+    })
 
     return items
   })
