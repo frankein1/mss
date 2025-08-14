@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="template-landing">
     <DsfrSkipLinks
       :links="[
         { id: 'main-content', text: 'Contenu' },
@@ -146,6 +146,17 @@
 </script>
 
 <style scoped>
+  .template-landing {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+  }
+
+  #main-content {
+    flex-grow: 1;
+  }
+
   :deep(.fr-header__tools-links .fr-btn) {
     color: var(--blue-france-sun-113-625);
   }

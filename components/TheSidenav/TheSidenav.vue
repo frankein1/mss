@@ -112,6 +112,14 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
+              :to="routes.siteMap.path()"
+            >
+              {{ routes.siteMap.title }}
+            </NuxtLink>
+          </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
               :to="routes.landing.DeclarationAccessibilite.path(landingPageUrl)"
             >
               Accessibilité: non conforme
