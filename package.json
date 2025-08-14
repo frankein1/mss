@@ -110,9 +110,6 @@
   "engines": {
     "pnpm": ">=10 <11"
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache --fix",
     "*.{css,scss,sass,html,vue}": "stylelint",
