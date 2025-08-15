@@ -11,6 +11,10 @@
         :tab-id="tab.tabId"
         :panel-id="tab.panelId"
         @click="activeTab = index"
+        @next="selectNext()"
+        @previous="selectPrevious()"
+        @first="selectFirst()"
+        @last="selectLast()"
       >
         <span :class="`fr-tabs__tab--icon-left ${tab.icon}`"></span>
         <span
@@ -48,6 +52,23 @@
 
   const activeTab = ref(0)
   const activeTabContent = computed(() => props.tabTitles[activeTab.value])
+
+  const selectPrevious = async () => {
+    const newIndex =
+      activeTab.value === 0 ? props.tabTitles.length - 1 : activeTab.value - 1
+    activeTab.value = newIndex
+  }
+  const selectNext = async () => {
+    const newIndex =
+      activeTab.value === props.tabTitles.length - 1 ? 0 : activeTab.value + 1
+    activeTab.value = newIndex
+  }
+  const selectFirst = async () => {
+    activeTab.value = 0
+  }
+  const selectLast = async () => {
+    activeTab.value = props.tabTitles.length - 1
+  }
 
   function setActiveTabFromUrl() {
     const route = useRoute()

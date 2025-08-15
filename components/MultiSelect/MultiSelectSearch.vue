@@ -24,7 +24,7 @@
         autocomplete="off"
         :aria-labelledby="ariaLabelledby"
         :aria-label="ariaLabel"
-        @focus="$emit('focus')"
+        @keydown.prevent.down="handleKeyDown"
       />
     </div>
   </div>
@@ -51,7 +51,7 @@
   // Emits
   const emit = defineEmits<{
     'update:modelValue': [modelValue: any]
-    'focus': []
+    'handleKeyDown': []
   }>()
 
   const inputId = useId()
@@ -64,6 +64,10 @@
       emit('update:modelValue', newValue)
     }
   })
+
+  const handleKeyDown = () => {
+    emit('handleKeyDown')
+  }
 </script>
 
 <style lang="scss" scoped>

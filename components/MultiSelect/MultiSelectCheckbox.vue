@@ -8,6 +8,8 @@
     :disabled
     @change="onchange(option)"
     @keydown.prevent.space="onchange(option)"
+    @keydown.prevent.down="emit('handleKeyDown')"
+    @keydown.prevent.up="emit('handleKeyUp')"
   />
   <label
     class="fr-label"
@@ -28,6 +30,8 @@
 
   const emit = defineEmits<{
     changeValue: [value: OptionType]
+    handleKeyUp: []
+    handleKeyDown: []
   }>()
 
   const onchange = (value: OptionType) => {

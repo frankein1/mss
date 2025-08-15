@@ -39,7 +39,6 @@
       :disabled="disabled"
       @click="isOpen = !isOpen"
       @keydown.prevent.space="isOpen = !isOpen"
-      @keydown.prevent.down="isOpen = !isOpen"
       @keydown.prevent.esc="isOpen = false"
     />
     <!-- dropdown -->
@@ -65,6 +64,7 @@
             :aria-labelledby="`label-search-${labelSearchId}`"
             class="fr-mt-3"
             @update:model-value="handleChangeSearchValues"
+            @handle-key-down="handleSearchInputKeyDown"
           />
 
           <!-- List des items -->
@@ -95,13 +95,15 @@
                   class="option-item"
                 >
                   <MultiSelectCheckbox
-                    :id="option.value"
+                    :id="'input-checkbox-' + option.value"
                     :option="option"
                     :checked="isOptionChecked(multiselectValue, option)"
                     :disabled="
                       disabled ? true : isDisabled(disabledOptions, option)
                     "
                     @change-value="handleOptionToggle(option)"
+                    @handle-key-down="handleFocusNextCheckbox"
+                    @handle-key-up="handleFocusPreviousCheckbox"
                   />
                 </div>
               </fieldset>
@@ -280,6 +282,41 @@
     }
     return disabledOptions.find(item => item === option.value) != null
   }
+
+  // Keyboard interactions on the expanded listbox
+  const handleSearchInputKeyDown = () => {
+    document
+      .querySelector<HTMLElement>(
+        `#input-checkbox-${displayedOptions.value[0].value}`
+      )
+      ?.focus()
+  }
+
+  const handleFocusNextCheckbox = () => {
+    const checkboxes = getAllCheckbox()
+    const activeElement = document.activeElement as HTMLElement
+    const currentIndex = Array.from(checkboxes).indexOf(activeElement)
+
+    if (currentIndex !== -1) {
+      const nextIndex = (currentIndex + 1) % checkboxes.length
+      checkboxes[nextIndex].focus()
+    }
+  }
+
+  const handleFocusPreviousCheckbox = () => {
+    const checkboxes = getAllCheckbox()
+    const activeElement = document.activeElement as HTMLElement
+    const currentIndex = Array.from(checkboxes).indexOf(activeElement)
+
+    if (currentIndex !== -1) {
+      const previousIndex =
+        (currentIndex - 1 + checkboxes.length) % checkboxes.length
+      checkboxes[previousIndex].focus()
+    }
+  }
+
+  const getAllCheckbox = (): NodeListOf<HTMLElement> =>
+    document.querySelectorAll(`[id^="input-checkbox-"]`)
 
   /** Trigger the selection of an option through the parent component */
   const triggerSelectValue = (value: string) => {

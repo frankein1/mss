@@ -1,5 +1,13 @@
 <template>
   <div class="fr-col-12">
+    <h4>Multiselect</h4>
+    <MultiSelect
+      name="county"
+      label="Rechercher un département"
+      is-searchable
+      :options="allValues"
+    />
+
     <h4>Multiselect dans des tabs</h4>
     <AtomTabs
       tab-list-name="Onglets"
