@@ -3,6 +3,8 @@
     class="combobox-wrapper fr-input-group"
     :class="{ 'fr-select-group--error': error }"
   >
+    <div>{{ focusedItemId }}</div>
+    <div>{{ focusedItemIndex }}</div>
     <label
       :id="LABEL_ID"
       :for="INPUT_ID"
@@ -75,13 +77,21 @@
   }>()
   const model = defineModel<unknown | null>({ required: true })
   function reset() {
+    focusedItemIndex.value = -1
     model.value = null
     displayedValue.value = ''
   }
   defineExpose({ reset })
 
-  const items = shallowRef<Item[]>([])
-  const focusedItem = shallowRef<Item | null>(null)
+  const items = ref<Item[]>([])
+  const focusedItemIndex = ref<number>(-1)
+  const focusableItems = computed(() =>
+    items.value.filter(item => !item.disabled)
+  )
+
+  const focusedItemId = computed(
+    () => focusableItems.value[focusedItemIndex.value]?.id ?? null
+  )
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
@@ -91,13 +101,9 @@
 
   const openList = ref(false)
   const displayedValue = ref('')
-  const activeRow = ref(-1)
-  const activeDescendant = computed(() => {
-    if (activeRow.value >= 0) {
-      return `option-${activeRow.value}`
-    }
-    return ''
-  })
+  const activeDescendant = computed(
+    () => focusableItems.value[focusedItemIndex.value]?.id
+  )
 
   const registerItem = (item: Item) => {
     items.value.push(item)
@@ -113,6 +119,7 @@
   }
 
   const handleInput = (event: Event) => {
+    focusedItemIndex.value = -1
     const target = event.target as HTMLInputElement
     emit('input', target.value)
   }
@@ -128,7 +135,7 @@
     if (displayedValue.value !== null) {
       openList.value = true
     }
-    activeRow.value = -1
+    focusedItemIndex.value = -1
   }
 
   const onBlur = () => {
@@ -143,65 +150,43 @@
     })
     if (!listboxIsActive) {
       openList.value = false
-      activeRow.value = -1
+      focusedItemIndex.value = -1
     }
   }
 
-  function handleKeydown(e: KeyboardEvent) {
+  function handleKeydown(event: KeyboardEvent) {
     openList.value = true
-    const focusedItemIndex = items.value.findIndex(
-      item => item.id === focusedItem.value?.id
-    )
-    const itemLength = items.value.length
-    switch (e.key) {
+    const itemLength = focusableItems.value.length
+    switch (event.key) {
       case 'ArrowDown':
-        e.preventDefault()
-        // focusedItem.value = items.value[(focusedItemIndex + 1) % itemLength]
-        // focusedItem.value.elementRef?.scrollIntoView({ block: 'nearest' })
-        //activeRow.value = (activeRow.value + 1) % options.length
-        break
       case 'ArrowUp':
-        e.preventDefault()
-        // focusedItem.value =
-        //   items.value[(focusedItemIndex - 1 + itemLength) % itemLength]
-        // focusedItem.value.elementRef?.scrollIntoView({ block: 'nearest' })
-        // activeRow.value =
-        //   activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
-        break
-      case 'Enter': {
-        e.preventDefault()
-        if (focusedItem.value !== null && !focusedItem.value.disabled) {
-          handleSelect(focusedItem.value.value)
+        event.preventDefault()
+        if (itemLength >= 0) {
+          focusedItemIndex.value =
+            (focusedItemIndex.value +
+              itemLength +
+              (event.key === 'ArrowDown' ? 1 : -1)) %
+            itemLength
+          focusableItems.value[
+            focusedItemIndex.value
+          ].elementRef?.scrollIntoView({ block: 'nearest' })
         }
         break
+      case 'Enter':
       case ' ':
-        if (focusedItem.value !== null && !focusedItem.value.disabled) {
-          handleSelect(focusedItem.value.value)
+        if (focusedItemIndex.value !== -1) {
+          event.preventDefault()
+          handleSelect(focusableItems.value[focusedItemIndex.value])
         }
         break
       }
       case 'Escape':
-        //focusedItem.value = null
-        //activeRow.value = -1
-        openList.value = false
-        break
       case 'Tab':
-        //focusedItem.value = null
+        focusedItemIndex.value = -1
         openList.value = false
-        //activeRow.value = -1
         break
     }
   }
-
-  // Used when the user is is navigating in the dropdown
-  // using the keyboard, to make sure the selected option
-  // is visible.
-  // watch(focusedItem, newIndex => {
-  //   if (newIndex >= 0) {
-  //     const el = document.getElementById(`option-${newIndex}`)
-  //     el?.scrollIntoView({ block: 'nearest' })
-  //   }
-  // })
 
   // Necessary because the input control that appears on ":hover" is managed
   // by the browser directly, so we can't listen to its click event.
@@ -216,7 +201,7 @@
     handleSelect,
     registerItem,
     unregisterItem,
-    focusedItem
+    focusedItemId
   })
 </script>
 

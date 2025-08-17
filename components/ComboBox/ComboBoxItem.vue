@@ -1,11 +1,11 @@
 <template>
   <li
     :id
-    class="option"
     ref="combobox-item"
+    class="option"
     role="option"
     :class="{
-      focused: focusedItem?.value === value,
+      focused: focusedItemId === id,
       disabled
     }"
     v-on="!disabled ? { click: () => handleSelect(value) } : {}"
@@ -23,19 +23,20 @@
   }>()
 
   const elementRef = useTemplateRef<HTMLLIElement>('combobox-item')
+
   const id = useId()
   const item = computed<Item>(() => ({
     id,
     value,
     disabled,
-    elementRef
+    elementRef: elementRef.value
   }))
 
   const emit = defineEmits<{
     select: [option: Option]
   }>()
 
-  const { handleSelect, registerItem, unregisterItem, focusedItem } = inject(
+  const { handleSelect, registerItem, unregisterItem, focusedItemId } = inject(
     comboBoxInjectionKey
   ) ?? {
     handleSelect: () => {},
