@@ -28,7 +28,7 @@
             >
               <img
                 id="sidemenu-title"
-                src="~/assets/img/logo-white.svg"
+                src="~/assets/img/logo-mss-bleu.png"
                 class="fr-responsive-img"
                 alt="Mon Suivi Social"
               />
@@ -302,8 +302,10 @@
     margin-right: 0.5rem;
   }
 
-  .fr-responsive-img {
-    max-height: 3.5rem;
+  .fr-sidemenu__title {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
   }
 
   footer {
