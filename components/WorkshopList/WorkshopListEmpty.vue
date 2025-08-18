@@ -10,12 +10,17 @@
     <div class="workshops-empty-content">
       <p class="fr-h4">
         {{
-          period === FilterWorkshopPeriod.Past
+          timeDirection === FilterWorkshopTimeDirection.Past
             ? 'Aucun atelier passé'
             : 'Aucun atelier à venir'
         }}
       </p>
-      <p v-if="period === FilterWorkshopPeriod.Past">
+      <p v-if="isFiltered">
+        Aucun atelier trouvé avec les filtres que vous avez sélectionnés.
+        <br />Vous pouvez essayer d‘autres filtres pour trouver plus de
+        résultats
+      </p>
+      <p v-else-if="timeDirection === FilterWorkshopTimeDirection.Past">
         Retrouvez ici la liste de tous les ateliers terminés. <br />Vous pourrez
         mettre à jour la liste des présences depuis cette page.
       </p>
@@ -27,7 +32,7 @@
             votre atelier et validez le formulaire
           </li>
           <li>
-            Ajoutez les participant.e.s depuis la page de l’atelier ou depuis
+            Ajoutez les participants depuis la page de l’atelier ou depuis
             l’historique du bénéficiaire
           </li>
         </ol>
@@ -48,14 +53,15 @@
 </template>
 
 <script setup lang="ts">
-  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+  import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
-  withDefaults(
-    defineProps<{
-      period?: FilterWorkshopPeriod
-    }>(),
-    { period: FilterWorkshopPeriod.Future }
-  )
+  const {
+    timeDirection = FilterWorkshopTimeDirection.Future,
+    isFiltered = false
+  } = defineProps<{
+    timeDirection?: FilterWorkshopTimeDirection
+    isFiltered?: boolean
+  }>()
 </script>
 
 <style scoped lang="scss">

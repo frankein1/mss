@@ -1,9 +1,10 @@
 import { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import z from 'zod'
 import { WorkshopRepo } from '~/server/database'
+import { GetWorkshopListInput } from '~/server/schema/workshop/getWorkshopList.schema'
 import { SecurityRuleContext } from '~/server/security'
-import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+import { WorkshopPeriodFilter } from '~/types/workshop'
+import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 export const getPage = async ({
@@ -11,11 +12,12 @@ export const getPage = async ({
   input
 }: {
   ctx: SecurityRuleContext
-  input: GetWorkshopsInput
+  input: GetWorkshopListInput
 }) => {
-  const where = {
+  const where: Prisma.WorkshopWhereInput = {
     structureId: ctx.structure.id,
-    ...getDateFilter(input.filter.period)
+    workshopNameId: { in: input.filter.workshopNameIds },
+    ...getDateFilter(input.filter)
   }
 
   const { take, skip } = takeAndSkipFromPagination({
@@ -34,22 +36,10 @@ export const getPage = async ({
   return { items, count, totalPages }
 }
 
-export type GetWorkshopsInput = {
-  filter: WorkshopsPageFilterInput
-  perPage: number
-  page: number
-}
-
-export const workshopFilterSchema = z.object({
-  period: z.nativeEnum(FilterWorkshopPeriod).nullish()
-})
-
-type WorkshopsPageFilterInput = z.infer<typeof workshopFilterSchema>
-
 const getWorkshops = async (
   ctx: SecurityRuleContext,
   args: Prisma.WorkshopFindManyArgs,
-  filter: WorkshopsPageFilterInput
+  filter: GetWorkshopListInput['filter']
 ) => {
   return await WorkshopRepo.findMany(ctx.user, {
     include: {
@@ -64,64 +54,98 @@ const getWorkshops = async (
     take: args.take,
     skip: args.skip,
     orderBy: {
-      date: filter.period === FilterWorkshopPeriod.Past ? 'desc' : 'asc'
+      date:
+        filter.timeDirection === FilterWorkshopTimeDirection.Past
+          ? 'desc'
+          : 'asc'
     }
   })
 }
-const getDateFilter = (period: FilterWorkshopPeriod | undefined | null) => {
-  if (!period) {
-    return {}
+
+function getStartDate(filter: GetWorkshopListInput['filter']) {
+  const { timeDirection, fromDate, period } = filter
+  const now = dayjs()
+  const todayDate = new Date(now.format('YYYY-MM-DD'))
+  if (timeDirection === FilterWorkshopTimeDirection.Future) {
+    if (!fromDate) {
+      return todayDate
+    }
+    // Get max(fromDate, today)
+    return fromDate.getTime() > now.valueOf() ? fromDate : todayDate
   }
+  switch (period) {
+    case WorkshopPeriodFilter.ThisYear:
+      return now.startOf('year').toDate()
+    case WorkshopPeriodFilter.ThisMonth:
+      return now.startOf('month').toDate()
+    case WorkshopPeriodFilter.Custom:
+      return fromDate
+    default:
+      return undefined
+  }
+}
+
+function getEndDate(filter: GetWorkshopListInput['filter']) {
+  const { period, timeDirection, toDate } = filter
+  const now = dayjs()
+  const todayDate = new Date(now.format('YYYY-MM-DD'))
+  if (timeDirection === FilterWorkshopTimeDirection.Past) {
+    if (!toDate) {
+      return todayDate
+    }
+    // Get min(toDate, today)
+    return toDate.getTime() < now.valueOf() ? toDate : todayDate
+  }
+  switch (period) {
+    case WorkshopPeriodFilter.ThisYear:
+      return now.endOf('year').toDate()
+    case WorkshopPeriodFilter.ThisMonth:
+      return now.endOf('month').toDate()
+    case WorkshopPeriodFilter.Custom:
+      return toDate
+    default:
+      return undefined
+  }
+}
+const getDateFilter = (filter: GetWorkshopListInput['filter']) => {
+  const { timeDirection } = filter
+  const startDate = getStartDate(filter)
+  const endDate = getEndDate(filter)
   const now = dayjs()
   const todayDate = new Date(now.format('YYYY-MM-DD'))
   const nowString = now.format('HH:mm')
-  return period === FilterWorkshopPeriod.Past
-    ? {
-        OR: [
-          {
-            date: {
-              lt: todayDate
-            }
-          },
-          {
-            date: {
-              equals: todayDate
-            },
-            startTime: {
-              lt: nowString
-            }
-          },
-          {
-            date: {
-              equals: todayDate
-            },
-            startTime: null
-          }
-        ]
-      }
-    : {
-        OR: [
-          {
-            date: {
-              gt: todayDate
-            }
-          },
-          {
-            date: {
-              equals: todayDate
-            },
-            startTime: {
-              gte: nowString
-            }
-          },
-          {
-            date: {
-              equals: todayDate
-            },
-            startTime: {
-              equals: null
-            }
-          }
-        ]
-      }
+  if (timeDirection === FilterWorkshopTimeDirection.Future) {
+    if (startDate && startDate > todayDate) {
+      // Don't worry about startTime
+      return { date: { gte: startDate, lte: endDate } }
+    }
+    return {
+      OR: [
+        { date: { gt: todayDate, lte: endDate } },
+        {
+          // Handle startTime when the date is today
+          date: { equals: todayDate },
+          OR: [{ startTime: { gte: nowString } }, { startTime: null }]
+        }
+      ]
+    }
+  }
+  if (timeDirection === FilterWorkshopTimeDirection.Past) {
+    if (endDate && endDate < todayDate) {
+      // Don't worry about startTime
+      return { date: { gte: startDate, lte: endDate } }
+    }
+    return {
+      OR: [
+        { date: { gte: startDate, lt: todayDate } },
+        {
+          // Handle startTime when the date is today
+          date: { equals: todayDate },
+          OR: [{ startTime: { lt: nowString } }, { startTime: null }]
+        }
+      ]
+    }
+  }
+
+  return { date: { gte: startDate, lte: endDate } }
 }

@@ -5,28 +5,31 @@
     :alert-type="AlertType.Error"
     message="La liste des ateliers n'a pas pu être chargée."
   />
+  <WorkshopListFilters v-model="listFilters" />
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <WorkshopListEmpty
     v-if="workshopList.length === 0"
-    :period
+    :is-filtered
+    :time-direction
   />
   <template v-else>
     <p>
       {{ data?.count }}
       {{
-        period === FilterWorkshopPeriod.Future
+        timeDirection === FilterWorkshopTimeDirection.Future
           ? 'ateliers à venir'
           : 'ateliers passés'
       }}
     </p>
+
     <ul class="workshop-list">
       <li
         v-for="month in groupAndSortWorkshops(
           workshopList,
-          period != FilterWorkshopPeriod.Past
+          timeDirection !== FilterWorkshopTimeDirection.Past
         )"
         :key="month[0]"
       >
@@ -38,7 +41,7 @@
           >
             <WorkshopListItem
               :workshop="workshop"
-              :period
+              :time-direction
             />
           </li>
         </ul>
@@ -59,38 +62,31 @@
   import { AlertType } from '~/utils/constants/alert'
   import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { WorkshopsPageItems } from './types'
-  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+  import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
+  const trpcClient = useTrpcClient()
   const page = ref(1)
   const perPage = ref(WORKSHOPS_REQUEST_LIMIT_DEFAULT)
+  const listFilters = ref({})
+  const filters = computed(() => ({ timeDirection, ...listFilters.value }))
+  const isFiltered = computed(() => Object.keys(listFilters.value).length > 0)
 
-  const props = withDefaults(
-    defineProps<{
-      period?: FilterWorkshopPeriod
-    }>(),
-    { period: FilterWorkshopPeriod.Future }
-  )
+  const { timeDirection = FilterWorkshopTimeDirection.Future } = defineProps<{
+    timeDirection?: FilterWorkshopTimeDirection
+  }>()
 
   const totalPages = computed(() => data.value?.totalPages || 0)
-  // @ts-expect-error // FIXME: will be fixed with filters
-  const { updatePagination } = usePagination(page, perPage, null)
+  const { updatePagination } = usePagination(page, perPage, filters)
 
-  const queryInput = computed(() => ({
+  const workshopListQueryInput = computed(() => ({
     page: page.value,
     perPage: perPage.value,
-    filter: {
-      period: props.period
-    }
+    filter: filters.value
   }))
 
-  const getWorkshopList = async () => {
-    const trpcClient = useTrpcClient()
-    const { data, pending, error } =
-      await trpcClient.workshop.getPage.useQuery(queryInput)
-
-    return { pending, error, data }
-  }
-  const { pending, error, data } = await getWorkshopList()
+  const { status, error, data } = await trpcClient.workshop.getPage.useQuery(
+    workshopListQueryInput
+  )
 
   const workshopList: ComputedRef<WorkshopsPageItems> = computed(
     () => data.value?.items || []
@@ -155,6 +151,10 @@
 </script>
 
 <style scoped lang="scss">
+  .feature-section {
+    margin-bottom: 1.5rem;
+  }
+
   .workshop-list {
     --ul-start: 0;
     --xl-block: 0;

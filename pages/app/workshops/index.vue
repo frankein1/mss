@@ -24,7 +24,7 @@
           <WorkshopList />
         </template>
         <template #[tabTitles.at(1)?.panelId]>
-          <WorkshopList :period="FilterWorkshopPeriod.Past" />
+          <WorkshopList :time-direction="FilterWorkshopTimeDirection.Past" />
         </template>
       </AtomTabs>
     </PageContainer>
@@ -34,7 +34,7 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+  import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
   import { WorkshopTab } from '~/utils/constants/workshop'
 
   const title = routes.workshop.AppWorkshops.title

@@ -53,11 +53,11 @@
 <script setup lang="ts">
   import { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
-  import { FilterWorkshopPeriod } from '~/utils/constants/filters'
+  import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
-  const { workshop, period } = defineProps<{
+  const { workshop, timeDirection } = defineProps<{
     workshop: WorkshopsPageItem
-    period: FilterWorkshopPeriod
+    timeDirection: FilterWorkshopTimeDirection
   }>()
   const letterDay = computed(() => {
     return formatDate(workshop.date, 'ddd').toUpperCase().slice(0, -1)
@@ -89,7 +89,7 @@
   )
 
   const statusBadge = computed(() => {
-    if (period === FilterWorkshopPeriod.Future) {
+    if (timeDirection === FilterWorkshopTimeDirection.Future) {
       return null
     }
     return {

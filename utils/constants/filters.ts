@@ -7,6 +7,14 @@ export enum FilterType {
   NotFilled = 'notFilled'
 }
 
+export enum PeriodFilter {
+  ThisYear = 'ThisYear',
+  LastYear = 'LastYear',
+  ThisMonth = 'ThisMonth',
+  LastMonth = 'LastMonth',
+  Custom = 'Custom'
+}
+
 export enum FilterBeneficiaryNotFilled {
   Gender = 'gender',
   AgeGroup = 'birthDate',
@@ -35,7 +43,7 @@ export enum FilterFollowupNotFilled {
   Duration = 'duration'
 }
 
-export enum FilterWorkshopPeriod {
+export enum FilterWorkshopTimeDirection {
   All = 'all',
   Future = 'future',
   Past = 'past'

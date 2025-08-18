@@ -1,31 +1,24 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import z from 'zod'
-import {
-  GetWorkshopsInput,
-  workshopFilterSchema
-} from '~/server/services/workshop/getPage.service'
 import { WorkshopService } from '~/server/services/workshop'
-
-const getWorkshopsSchema = z.object({
-  filter: workshopFilterSchema,
-  perPage: z.number(),
-  page: z.number()
-})
+import {
+  GetWorkshopListInput,
+  getWorkshopListSchema
+} from '~/server/schema/workshop/getWorkshopList.schema'
 
 const handler = async ({
   input,
   ctx
 }: {
-  input: GetWorkshopsInput
+  input: GetWorkshopListInput
   ctx: ProtectedAppContext
 }) => {
   return await WorkshopService.getPage({ input, ctx })
 }
 
 export const getPageQuery = createQuery({
-  inputValidation: getWorkshopsSchema,
+  inputValidation: getWorkshopListSchema,
   securityCheck: AllowSecurityCheck,
   handler
 })

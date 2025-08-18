@@ -7,3 +7,9 @@ export type WorkshopWithAttendeesDetails = Awaited<
 
 export type WorkshopAttendee =
   WorkshopWithAttendeesDetails['workshopAttendees'][0]
+
+export enum WorkshopPeriodFilter {
+  ThisYear = 'ThisYear',
+  ThisMonth = 'ThisMonth',
+  Custom = 'Custom'
+}

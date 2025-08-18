@@ -43,7 +43,6 @@
         :value="bindedValue"
         @input="onInput"
         @change="onChange"
-        @blur="onBlur"
       />
     </div>
     <div
@@ -199,24 +198,7 @@
     emit('changeInput', value)
   }
 
-  /**
-   * Date fields are handled differently to prevent change when change event is
-   * triggered.
-   * Indeed, in such inputs, the event is trigger while the user is moving from
-   * one date part (day, month or year) to another which can lead to weird
-   * behavior. Instead, change is only handled on blur.
-   */
   function onChange(event: Event) {
-    if (type.value === 'date') {
-      return
-    }
-    change(event)
-  }
-
-  function onBlur(event: Event) {
-    if (type.value !== 'date') {
-      return
-    }
     change(event)
   }
 
