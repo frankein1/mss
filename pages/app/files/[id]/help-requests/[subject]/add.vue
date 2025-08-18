@@ -83,7 +83,22 @@
     return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
   })
 
-  useHead({ title })
+  const headTitle = computed(() => {
+    if (
+      familyFileIdentification &&
+      familyFileIdentification.value?.length &&
+      familyFileIdentification.value?.length === 1
+    ) {
+      return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
+        familyFileIdentification.value[0],
+        subject
+      )
+    }
+    return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
+  })
+
+  useHead({ title: headTitle })
+
   const {
     data: socialSupportSubjects,
     pending: socialSupportSubjectsPending,

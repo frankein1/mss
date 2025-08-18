@@ -70,8 +70,21 @@
     }
     return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
   })
+  const headTitle = computed(() => {
+    if (
+      familyFileIdentification &&
+      familyFileIdentification.value?.length &&
+      familyFileIdentification.value?.length === 1
+    ) {
+      return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
+        familyFileIdentification.value[0],
+        FileInstructionType.Housing
+      )
+    }
+    return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
+  })
 
-  useHead({ title })
+  useHead({ title: headTitle })
 
   const {
     data: partnerOrganizations,

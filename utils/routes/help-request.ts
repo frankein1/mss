@@ -2,6 +2,7 @@ import { FileInstructionType } from '@prisma/client'
 import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+import { fileInstructionTypeFilterKeys } from '~/client/options'
 
 export interface HelpRequestAddRouteOptions {
   beneficiaryId?: string
@@ -10,9 +11,12 @@ export interface HelpRequestAddRouteOptions {
 export const routes = {
   AppBeneficiaryHelpRequestAdd: {
     name: 'AppBeneficiaryHelpRequestAdd',
-    title: (beneficiary: BeneficiaryNames | null) =>
+    title: (
+      beneficiary: BeneficiaryNames | null,
+      subject?: FileInstructionType
+    ) =>
       beneficiary
-        ? `Instruction d'un dossier pour ${formatBeneficiaryDisplayName(
+        ? `Instruction d'un dossier ${subject ? '(' + fileInstructionTypeFilterKeys.byKey[subject] + ')' : ''} pour ${formatBeneficiaryDisplayName(
             beneficiary
           )}`
         : "Instruction d'un dossier",
@@ -25,9 +29,12 @@ export const routes = {
   },
   AppBeneficiaryHelpRequestEdit: {
     name: 'AppBeneficiaryHelpRequestEdit',
-    title: (beneficiary: BeneficiaryNames | null) =>
+    title: (
+      beneficiary: BeneficiaryNames | null,
+      subject?: FileInstructionType
+    ) =>
       beneficiary
-        ? `Modifier l'instruction de dossier ${formatBeneficiaryDisplayName(
+        ? `Modifier l'instruction de dossier ${subject ? '(' + fileInstructionTypeFilterKeys.byKey[subject] + ')' : ''} ${formatBeneficiaryDisplayName(
             beneficiary
           )}`
         : "Modifier l'instruction de dossier d'une personne bénéficiaire",

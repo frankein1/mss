@@ -86,8 +86,14 @@
   const title = computed(() =>
     routes.helpRequest.AppBeneficiaryHelpRequestEdit.title(beneficiary.value)
   )
+  const headTitle = computed(() =>
+    routes.helpRequest.AppBeneficiaryHelpRequestEdit.title(
+      beneficiary.value,
+      FileInstructionType.Housing
+    )
+  )
 
-  useHead({ title })
+  useHead({ title: headTitle })
 
   const {
     data: partnerOrganizations,

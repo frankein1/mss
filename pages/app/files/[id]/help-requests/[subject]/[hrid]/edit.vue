@@ -105,8 +105,13 @@
       : undefined
   })
 
-  useHead({ title })
-
+  const headTitle = computed(() =>
+    routes.helpRequest.AppBeneficiaryHelpRequestEdit.title(
+      beneficiary.value,
+      subject.value
+    )
+  )
+  useHead({ title: headTitle })
   const {
     data: socialSupportSubjects,
     pending: socialSupportSubjectsPending,
