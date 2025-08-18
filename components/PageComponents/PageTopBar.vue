@@ -1,7 +1,9 @@
 <template>
-  <div
+  <nav
     id="topbar"
+    role="navigation"
     class="topbar__container"
+    tabindex="-1"
   >
     <AtomDropdown
       :label="getUserName()"
@@ -12,7 +14,7 @@
     <client-only>
       <DisconnectHandler />
     </client-only>
-  </div>
+  </nav>
 </template>
 
 <script lang="ts" setup>
