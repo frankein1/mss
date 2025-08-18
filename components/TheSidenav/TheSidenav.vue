@@ -20,129 +20,135 @@
         id="fr-sidemenu-wrapper"
         class="fr-collapse"
       >
-        <div class="fr-sidemenu__title fr-py-1w fr-px-2w">
-          <NuxtLink
-            :to="homePage"
-            title="Tableau de bord - Mon Suivi Social"
-          >
-            <img
-              id="sidemenu-title"
-              src="~/assets/img/logo-white.svg"
-              class="fr-responsive-img"
-              alt="Mon Suivi Social"
-            />
-          </NuxtLink>
-        </div>
-        <ul class="fr-sidemenu__list">
-          <!-- extraneous emits come from custom nuxt-link https://github.com/nuxt/nuxt/pull/28738 fixed in 3.13.1 -->
-          <NuxtLink
-            v-for="menuItem in menuItems"
-            v-slot="{ href, navigate, isActive }"
-            :key="menuItem.to"
-            custom
-            :to="menuItem.to"
-          >
+        <header>
+          <div class="fr-sidemenu__title fr-py-1w fr-px-2w">
+            <NuxtLink
+              :to="homePage"
+              title="Tableau de bord - Mon Suivi Social"
+            >
+              <img
+                id="sidemenu-title"
+                src="~/assets/img/logo-white.svg"
+                class="fr-responsive-img"
+                alt="Mon Suivi Social"
+              />
+            </NuxtLink>
+          </div>
+          <ul class="fr-sidemenu__list">
+            <!-- extraneous emits come from custom nuxt-link https://github.com/nuxt/nuxt/pull/28738 fixed in 3.13.1 -->
+            <NuxtLink
+              v-for="menuItem in menuItems"
+              v-slot="{ href, navigate, isActive }"
+              :key="menuItem.to"
+              custom
+              :to="menuItem.to"
+            >
+              <li
+                class="fr-sidemenu__item"
+                :class="{ 'fr-sidemenu__item--active': isActive }"
+              >
+                <NuxtLink
+                  :href="href"
+                  class="fr-sidemenu__link"
+                  :aria-current="isActive ? 'page' : undefined"
+                  @click="
+                    () => {
+                      navigate()
+                      closeMenu()
+                    }
+                  "
+                >
+                  <span
+                    class="fr-mr-1w"
+                    :class="[menuItem.icon]"
+                    aria-hidden="true"
+                  ></span>
+                  {{ menuItem.label }}
+                </NuxtLink>
+              </li>
+            </NuxtLink>
             <li
-              class="fr-sidemenu__item"
-              :class="{ 'fr-sidemenu__item--active': isActive }"
+              v-if="!authState.isAdmin()"
+              class="fr-mt-3w fr-mr-1w"
             >
               <NuxtLink
-                :href="href"
-                class="fr-sidemenu__link"
-                :aria-current="isActive ? 'page' : undefined"
-                @click="
-                  () => {
-                    navigate()
-                    closeMenu()
-                  }
-                "
+                class="full fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
+                :to="routes.beneficiary.AppBeneficiariesAdd.path()"
               >
-                <span
-                  class="fr-mr-1w"
-                  :class="[menuItem.icon]"
-                  aria-hidden="true"
-                ></span>
-                {{ menuItem.label }}
+                Créer un dossier
               </NuxtLink>
             </li>
-          </NuxtLink>
-          <li
-            v-if="!authState.isAdmin()"
-            class="fr-mt-3w fr-mr-1w"
-          >
-            <NuxtLink
-              class="full fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
-              :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+            <li class="fr-mt-3w fr-mr-1w">
+              <NuxtLink
+                class="fr-link fr-sidemenu__link fr-sidemenu__help"
+                to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
+                target="_blank"
+                rel="noopener external"
+                titre="Aide - nouvelle fenêtre"
+                >Aide</NuxtLink
+              >
+            </li>
+          </ul>
+        </header>
+        <footer>
+          <ul class="fr-footer__bottom-list">
+            <li
+              v-if="!authState.isAdmin()"
+              class="fr-footer__bottom-item"
             >
-              Créer un dossier
-            </NuxtLink>
-          </li>
-          <li class="fr-mt-3w fr-mr-1w">
-            <NuxtLink
-              class="fr-link fr-sidemenu__link fr-sidemenu__help"
-              to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
-              target="_blank"
-              rel="noopener external"
-              titre="Aide - nouvelle fenêtre"
-              >Aide</NuxtLink
+              <NuxtLink
+                class="fr-footer__bottom-link"
+                :to="
+                  authState.isStructureManager()
+                    ? routes.cgu.CGUManager.path({ readonly: true })
+                    : routes.cgu.CGUUser.path({ readonly: true })
+                "
+              >
+                CGU
+              </NuxtLink>
+            </li>
+            <li class="fr-footer__bottom-item">
+              <NuxtLink
+                class="fr-footer__bottom-link"
+                :to="routes.landing.PolitiqueConfidentialite.path()"
+              >
+                Politique de confidentialité
+              </NuxtLink>
+            </li>
+            <li class="fr-footer__bottom-item">
+              <NuxtLink
+                class="fr-footer__bottom-link"
+                :to="routes.siteMap.path()"
+              >
+                {{ routes.siteMap.title }}
+              </NuxtLink>
+            </li>
+            <li class="fr-footer__bottom-item">
+              <NuxtLink
+                class="fr-footer__bottom-link"
+                :to="
+                  routes.landing.DeclarationAccessibilite.path(landingPageUrl)
+                "
+              >
+                Accessibilité&nbsp;: non conforme
+              </NuxtLink>
+            </li>
+            <li
+              v-if="version"
+              class="fr-footer__bottom-item"
             >
-          </li>
-        </ul>
-        <ul class="fr-footer__bottom-list">
-          <li
-            v-if="!authState.isAdmin()"
-            class="fr-footer__bottom-item"
-          >
-            <NuxtLink
-              class="fr-footer__bottom-link"
-              :to="
-                authState.isStructureManager()
-                  ? routes.cgu.CGUManager.path({ readonly: true })
-                  : routes.cgu.CGUUser.path({ readonly: true })
-              "
-            >
-              CGU
-            </NuxtLink>
-          </li>
-          <li class="fr-footer__bottom-item">
-            <NuxtLink
-              class="fr-footer__bottom-link"
-              :to="routes.landing.PolitiqueConfidentialite.path()"
-            >
-              Politique de confidentialité
-            </NuxtLink>
-          </li>
-          <li class="fr-footer__bottom-item">
-            <NuxtLink
-              class="fr-footer__bottom-link"
-              :to="routes.siteMap.path()"
-            >
-              {{ routes.siteMap.title }}
-            </NuxtLink>
-          </li>
-          <li class="fr-footer__bottom-item">
-            <NuxtLink
-              class="fr-footer__bottom-link"
-              :to="routes.landing.DeclarationAccessibilite.path(landingPageUrl)"
-            >
-              Accessibilité&nbsp;: non conforme
-            </NuxtLink>
-          </li>
-          <li
-            v-if="version"
-            class="fr-footer__bottom-item"
-          >
-            <NuxtLink
-              class="fr-footer__bottom-link"
-              :to="sourceCode"
-              target="_blank"
-              rel="noopener external"
-              title="Code source de la version - nouvelle fenêtre"
-            >
-              Version {{ version }}
-            </NuxtLink>
-          </li>
-        </ul>
+              <NuxtLink
+                class="fr-footer__bottom-link"
+                :to="sourceCode"
+                target="_blank"
+                rel="noopener external"
+                title="Code source de la version - nouvelle fenêtre"
+              >
+                Version {{ version }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </footer>
       </div>
     </div>
   </nav>
@@ -300,6 +306,10 @@
     max-height: 3.5rem;
   }
 
+  footer {
+    margin-top: auto;
+  }
+
   .fr-footer__bottom-link {
     --underline-img: linear-gradient(0deg, currentcolor, currentcolor);
 
@@ -308,7 +318,6 @@
 
   .fr-footer__bottom-list {
     text-align: center;
-    margin-top: auto;
     margin-bottom: 1rem;
   }
 
