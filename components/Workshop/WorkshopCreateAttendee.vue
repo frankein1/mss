@@ -12,15 +12,13 @@
       <ComboBox
         ref="attendee-combobox"
         v-slot="{ input }"
-        v-model="selectedBeneficiary"
-        label="Rechercher parmi vos bénéficiaires enregistrés"
-        :options="results"
-        :format-display-value="formatBeneficiarySearchDisplayName"
+        label="Ajouter un bénéficiaire enregistré"
         @input="searchBeneficiaries"
         @select="onSelect"
       >
         <ComboBoxItem
           v-for="option in results"
+          :key="option.id"
           :disabled="option.disabled"
           :value="option.id"
         >
@@ -40,7 +38,6 @@
                 {{ calculateAge(option.birthDate) + ' ans' }}</span
               >
             </div>
-
             <div
               v-if="beneficiaryAttendeeIds.includes(option.id)"
               class="beneficiary-already-invited"
@@ -90,16 +87,11 @@
   >(null)
   const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
   const comboboxRef = useTemplateRef('attendee-combobox')
-  const beneficiaryAttendeeIds = computed(() => {
-    return attendees
-      .map(attendee =>
-        attendee.type === WorkshopAttendeeType.Beneficiary
-          ? attendee.beneficiaryId
-          : false
-      )
-      .filter(Boolean)
-  })
-
+  const beneficiaryAttendeeIds = computed(() =>
+    attendees
+      .filter(({ type }) => type === WorkshopAttendeeType.Beneficiary)
+      .map(attendee => attendee.beneficiaryId)
+  )
   const hasSessionName = computed(() => {
     return workshop.sessionName != null && workshop.sessionName !== ''
   })
@@ -118,12 +110,15 @@
     }))
   }
 
-  const onSelect = async (beneficiary: BeneficiarySearchResult) => {
+  const onSelect = async (beneficiaryId: unknown) => {
+    if (typeof beneficiaryId !== 'string') {
+      return
+    }
     comboboxRef.value?.reset()
     results.value = []
 
     const created = await mutate({
-      beneficiaryId: beneficiary.id,
+      beneficiaryId: beneficiaryId,
       workshopId: workshopId
     })
 

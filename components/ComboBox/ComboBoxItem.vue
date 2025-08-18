@@ -5,7 +5,7 @@
     class="option"
     role="option"
     :class="{
-      focused: focusedItemId === id,
+      focused: isFocused,
       disabled
     }"
     v-on="!disabled ? { click: () => handleSelect(value) } : {}"
@@ -14,7 +14,7 @@
   </li>
 </template>
 
-<script lang="ts" setup generic="Option extends { disabled?: boolean }">
+<script lang="ts" setup>
   import { comboBoxInjectionKey, Item } from './utils'
 
   const { disabled = false, value } = defineProps<{
@@ -32,41 +32,30 @@
     elementRef: elementRef.value
   }))
 
-  const emit = defineEmits<{
-    select: [option: Option]
-  }>()
-
   const { handleSelect, registerItem, unregisterItem, focusedItemId } = inject(
-    comboBoxInjectionKey
-  ) ?? {
-    handleSelect: () => {},
-    registerItem: () => {},
-    unregisterItem: () => {}
-  }
+    comboBoxInjectionKey,
+    {
+      handleSelect: () => {},
+      registerItem: () => {},
+      unregisterItem: () => {},
+      focusedItemId: ref(null)
+    }
+  )
+  const isFocused = computed(() => focusedItemId.value === id)
   onMounted(() => registerItem(item.value))
   onUnmounted(() => unregisterItem(item.value))
 </script>
 
 <style lang="scss" scoped>
-  /* stylelint-disable no-descending-specificity */
-  @use '~/assets/style/variables' as *;
-  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
-
   .option {
     margin: 0;
+    color: var(--text-action-high-grey);
+    cursor: pointer;
     padding: 0.75rem 1rem;
     box-shadow: 0 17px 0 -16px var(--border-default-grey);
 
-    &:not(.disabled) {
-      color: var(--text-action-high-grey);
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--background-default-grey-hover);
-      }
-    }
-
     &.disabled {
+      cursor: default;
       color: var(--text-mention-grey);
     }
 
@@ -76,6 +65,10 @@
 
     &:last-child {
       box-shadow: none;
+    }
+
+    &:not(.disabled):hover {
+      background-color: var(--background-default-grey-hover);
     }
   }
 </style>

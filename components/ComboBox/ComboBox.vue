@@ -3,8 +3,6 @@
     class="combobox-wrapper fr-input-group"
     :class="{ 'fr-select-group--error': error }"
   >
-    <div>{{ focusedItemId }}</div>
-    <div>{{ focusedItemIndex }}</div>
     <label
       :id="LABEL_ID"
       :for="INPUT_ID"
@@ -54,19 +52,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="SelectValue = unknown">
   import { AlertType } from '~/utils/constants/alert'
   import { comboBoxInjectionKey, Item } from './utils'
 
-  const {
-    placeholder = '',
-    labelVisible = true,
-    formatDisplayValue = String
-  } = defineProps<{
+  const { placeholder = '', labelVisible = true } = defineProps<{
     label: string
     placeholder?: string
     labelVisible?: boolean
-    formatDisplayValue?: (value: unknown) => string
   }>()
 
   defineSlots<{ default(props: { input: string }): unknown }>()
@@ -75,7 +68,7 @@
     select: [value: unknown]
     input: [input: string]
   }>()
-  const model = defineModel<unknown | null>({ required: true })
+  const model = defineModel<SelectValue | null>({ required: false })
   function reset() {
     focusedItemIndex.value = -1
     model.value = null
@@ -119,6 +112,8 @@
   }
 
   const handleInput = (event: Event) => {
+    // TODO: Improve this, as the input might be managed by the user/developer
+    // and thus, not be accessible from here
     focusedItemIndex.value = -1
     const target = event.target as HTMLInputElement
     emit('input', target.value)
@@ -127,7 +122,7 @@
   const handleSelect = (value: unknown) => {
     openList.value = false
     displayedValue.value = String(value)
-    model.value = value
+    model.value = value as SelectValue
     emit('select', value)
   }
 
@@ -258,33 +253,6 @@
     min-height: 1.5rem;
     padding: 4px;
     margin: 0;
-  }
-
-  .option {
-    margin: 0;
-    padding: 0.75rem 1rem;
-    box-shadow: 0 17px 0 -16px var(--border-default-grey);
-
-    &:not(.disabled) {
-      color: var(--text-action-high-grey);
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--background-default-grey-hover);
-      }
-    }
-
-    &.disabled {
-      color: var(--text-mention-grey);
-    }
-
-    &:last-child {
-      box-shadow: none;
-    }
-  }
-
-  .focused {
-    outline: dashed 1px rgb(0 0 0 / 100%);
   }
 
   .fr-select {
