@@ -11,42 +11,44 @@
     <div class="input-wrapper">
       <ComboBox
         ref="attendee-combobox"
-        v-slot="{ input }"
         label="Ajouter un bénéficiaire enregistré"
         @input="searchBeneficiaries"
         @select="onSelect"
       >
-        <ComboBoxItem
-          v-for="option in results"
-          :key="option.id"
-          :disabled="option.disabled"
-          :value="option.id"
+        <template #input><ComboBoxInput v-model="inputValue" /></template>
+        <template #listbox>
+          <ComboBoxItem
+            v-for="option in results"
+            :key="option.id"
+            :disabled="option.disabled"
+            :value="option.id"
+          >
+            <div class="beneficiary">
+              <div class="beneficiary-info">
+                <span class="beneficiary-name">
+                  <AtomTextEmphasis
+                    :name="formatBeneficiarySearchDisplayName(option)"
+                    :input="inputValue"
+                  ></AtomTextEmphasis>
+                </span>
+                <span
+                  v-if="option.birthDate"
+                  class="beneficiary-age"
+                  :class="{ disabled: option.disabled }"
+                >
+                  {{ calculateAge(option.birthDate) + ' ans' }}</span
+                >
+              </div>
+              <div
+                v-if="beneficiaryAttendeeIds.includes(option.id)"
+                class="beneficiary-already-invited"
+              >
+                <span class="fr-icon-check-line"></span>
+                <span>Déjà ajouté</span>
+              </div>
+            </div>
+          </ComboBoxItem></template
         >
-          <div class="beneficiary">
-            <div class="beneficiary-info">
-              <span class="beneficiary-name">
-                <AtomTextEmphasis
-                  :name="formatBeneficiarySearchDisplayName(option)"
-                  :input="input"
-                ></AtomTextEmphasis>
-              </span>
-              <span
-                v-if="option.birthDate"
-                class="beneficiary-age"
-                :class="{ disabled: option.disabled }"
-              >
-                {{ calculateAge(option.birthDate) + ' ans' }}</span
-              >
-            </div>
-            <div
-              v-if="beneficiaryAttendeeIds.includes(option.id)"
-              class="beneficiary-already-invited"
-            >
-              <span class="fr-icon-check-line"></span>
-              <span>Déjà ajouté</span>
-            </div>
-          </div>
-        </ComboBoxItem>
       </ComboBox>
       <p class="separator">ou</p>
       <button
@@ -81,10 +83,7 @@
   const snackbar = useSnackbar()
   const route = useRoute()
   const modal = useModal()
-
-  const selectedBeneficiary = ref<
-    (BeneficiarySearchResult & { disabled: boolean }) | null
-  >(null)
+  const inputValue = ref<string>('')
   const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
   const comboboxRef = useTemplateRef('attendee-combobox')
   const beneficiaryAttendeeIds = computed(() =>
@@ -101,6 +100,11 @@
   const workshopId = route.params.id as string
 
   async function searchBeneficiaries(query: string) {
+    // TODO: uncomment me
+    // if (query.length < 2) {
+    //   results.value = []
+    //   return
+    // }
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })

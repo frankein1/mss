@@ -8,16 +8,22 @@
       focused: isFocused,
       disabled
     }"
-    v-on="!disabled ? { click: () => handleSelect(value) } : {}"
+    v-on="!disabled ? { click: () => handleSelect(item) } : {}"
+    @mousedown.prevent
   >
     <slot></slot>
   </li>
 </template>
 
 <script lang="ts" setup>
-  import { comboBoxInjectionKey, Item } from './utils'
+  import { comboBoxItemInjectionKey, Item } from './utils'
 
-  const { disabled = false, value } = defineProps<{
+  const {
+    disabled = false,
+    value,
+    label
+  } = defineProps<{
+    label?: string
     disabled?: boolean
     value: unknown
   }>()
@@ -27,13 +33,14 @@
   const id = useId()
   const item = computed<Item>(() => ({
     id,
+    label: label ?? elementRef.value?.textContent,
     value,
     disabled,
     elementRef: elementRef.value
   }))
 
   const { handleSelect, registerItem, unregisterItem, focusedItemId } = inject(
-    comboBoxInjectionKey,
+    comboBoxItemInjectionKey,
     {
       handleSelect: () => {},
       registerItem: () => {},
