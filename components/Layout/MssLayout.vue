@@ -18,6 +18,7 @@
     </div>
     <AtomSnackbar />
     <AtomModal />
+    <OpenModalHack />
   </div>
 </template>
 

@@ -3,6 +3,10 @@ import { signJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
 
+/** Regenerate a new session token using the information
+ * from the former token. This does not fetch
+ * the latest user information from the database
+ */
 export default defineEventHandler(event => {
   const user = event.context.auth?.user
 
@@ -26,7 +30,7 @@ export default defineEventHandler(event => {
     newSessionToken,
     cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
-  return user
+  return { user }
 })
 
 function redirectLogOut(event: H3Event) {

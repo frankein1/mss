@@ -38,7 +38,7 @@
               <component
                 :is="modalState.component"
                 v-if="modalState"
-                v-bind="modalState.props"
+                v-bind="modalProps"
                 v-model="isOpen"
               />
             </div>
@@ -55,6 +55,17 @@
   import { Modal } from '~/types/modal'
 
   const modalState = inject(modalInjectionKey)
+
+  const modalProps = computed(() => {
+    const props = modalState?.value.props
+    if (!props) {
+      return
+    }
+
+    const { title, size, triggerOpen, ...rest } = props
+
+    return rest
+  })
 
   const modal = ref<HTMLDialogElement | null>(null)
 

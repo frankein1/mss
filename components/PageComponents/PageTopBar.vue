@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { routes } from '~/utils/routes'
+  import { routes, apiRoutes } from '~/utils/routes'
 
   const { isAuthenticated, getUserName } = useAuthState()
 
@@ -42,7 +42,7 @@
     if (isAuthenticated()) {
       menus.push({
         label: 'Déconnexion',
-        to: routes.auth.AuthLogout.path(),
+        href: apiRoutes.proConnect.ApiLogout.path(),
         icon: 'fr-icon-logout-box-r-line'
       })
     }

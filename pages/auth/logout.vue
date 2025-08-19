@@ -3,15 +3,7 @@
     <div class="fr-container fr-pt-4w">
       <TheLandingBreadcrumb :text="routes.auth.AuthLogout.title" />
 
-      <DsfrAlert
-        class="fr-mb-4w"
-        type="success"
-        :title="routes.auth.AuthLogout.title"
-      ></DsfrAlert>
-
-      <client-only>
-        <AuthLogout :inactive="inactive"></AuthLogout>
-      </client-only>
+      <AuthLogout :inactive></AuthLogout>
     </div>
 
     <div class="fr-container">
@@ -37,5 +29,5 @@
 
   const route = useRoute()
 
-  const inactive = !!route.query.inactive
+  const inactive = Object.keys(route.query).includes('inactive')
 </script>

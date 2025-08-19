@@ -1,114 +1,130 @@
 <template>
-  <button
-    ref="disconnectBtn"
-    data-fr-opened="false"
-    aria-controls="global-modal"
-    class="disconnect-alert"
-    @click="openDisconnectAlert"
-  >
-    Alerte de déconnexion
-  </button>
+  <OpenModalHack />
 </template>
 <script setup lang="ts">
-  import DisconnectAlert from './DisconnectAlert.vue'
-  import { routes } from '~/utils/routes'
-  import { minutesToMillis } from '~/utils/time'
+  // Inactivity management:
+  // - Store in local storage an inactivity countdown
+  // - Display a disconnect modal when the user has been inactive for some time
 
-  type Interval = ReturnType<typeof setInterval>
+  import DisconnectAlert from './DisconnectAlert.vue'
+  import { apiRoutes } from '~/utils/routes'
+  import { minutesToMillis } from '~/utils/time'
+  import {
+    promiseTimeout,
+    useEventListener,
+    useLocalStorage
+  } from '@vueuse/core'
+  import {
+    COUNTDOWN_INACTIVITY_LABEL,
+    DEFAULT_INTERVAL_TIME_FOR_STORAGE_REFRESH
+  } from '~/utils/constants'
 
   const {
     public: {
       disconnect: { alertThreshold, threshold }
     }
   } = useRuntimeConfig()
+
+  const { user } = useAuthState()
+  const { refreshToken } = useAuth()
   const modal = useModal()
 
-  const timeThreshold = minutesToMillis(threshold)
+  const intervalTimeInMs = DEFAULT_INTERVAL_TIME_FOR_STORAGE_REFRESH
+  const initial = minutesToMillis(threshold)
+  const alert = minutesToMillis(alertThreshold)
 
-  const counter = ref(timeThreshold)
+  // The inactivity counter is stored in local storage in order to manage several tabs
+  const countdown = useLocalStorage(COUNTDOWN_INACTIVITY_LABEL, initial)
+  resetInactivityTimer()
 
-  const disconnectBtn = ref<HTMLButtonElement>()
+  // Every mouse activity resets the inactivity counter
+  const cleanupListener = useEventListener('mousemove', resetInactivityTimer)
+  const cleanupKeydownListener = useEventListener(
+    'keydown',
+    resetInactivityTimer
+  )
 
-  let interval: Interval | null
+  // Every intervalTimeInMs the counter is decremented
+  const timer = setInterval(() => {
+    countdown.value = countdown.value - intervalTimeInMs
+  }, intervalTimeInMs)
 
-  const stopWatchingCounter = watch(counter, counter => {
-    if (counter < 0) {
-      logout()
-    } else if (
-      !modal.isOpen.value &&
-      counter < minutesToMillis(alertThreshold)
-    ) {
-      disconnectBtn.value?.click()
+  const unwatch = watch(countdown, async () => {
+    if (user.value) {
+      // If the user is inactive for more than threshold she is logged out
+      if (countdown.value < 0) {
+        cleanup()
+        logout()
+      }
+      // Show a warning disconnect modal X minutes before the disconnect limit
+      else if (countdown.value < alert) {
+        await openDisconnectAlert()
+      }
+    } else {
+      console.log('disconnect-handler: handleInactivityOnInterval no user')
+      cleanup()
     }
   })
-
-  const stopWatchingIsOpen = watch(modal.isOpen, value => {
-    if (!value) {
-      resetCountDown()
-    }
-  })
-
-  function clearCountdown() {
-    if (interval) {
-      clearInterval(interval)
-      interval = null
-    }
-  }
-
-  function startCountdown() {
-    counter.value = timeThreshold
-    interval = setInterval(() => {
-      counter.value = counter.value - 1000
-    }, 1000)
-  }
-
-  function resetCountDown() {
-    if (!modal.isOpen.value) {
-      counter.value = timeThreshold
-    }
-  }
 
   function logout() {
-    if (process.client) {
-      navigateTo(routes.auth.AuthLogout.path() + '?inactive=true')
+    if (import.meta.client) {
+      navigateTo(apiRoutes.proConnect.ApiLogout.path() + '?inactive=true', {
+        external: true
+      })
     }
   }
 
-  function disconnect() {
-    logout()
-  }
-
-  function keepConnect() {
-    counter.value = timeThreshold
-    if (counter.value < 0) {
-      logout()
+  async function openDisconnectAlert() {
+    if (!modal.isReady) {
+      throw new Error('disconnect-handler: modal not ready')
     }
-  }
 
-  function openDisconnectAlert() {
+    // If another modal is already opened, close it to reopen Disconnect alert
+    if (modal.isOpen && !modal.title.value.match(/déconnexion dans/i)) {
+      modal.close()
+
+      // FIXME: wait for the modal state component to be reset (cf. useModal.ts#close)
+      // when refactoring the modal, we should handle internally the unmount of internal component
+      // and not destroy it with a `v-if="isOpen"` like currently done in AtomModal
+      await promiseTimeout(1000)
+    }
+
     modal.open(DisconnectAlert, {
-      title: `Vous allez être déconnecté.e dans ${alertThreshold} minutes`,
-      disconnect,
-      keepConnect
+      triggerOpen: true,
+      title: `Déconnexion dans ${alertThreshold} minutes`,
+      disconnect: () =>
+        navigateTo(apiRoutes.proConnect.ApiLogout.path(), { external: true }),
+      keepConnect: async () => {
+        if (countdown.value < 0) {
+          cleanup()
+          logout()
+        } else {
+          await refreshToken()
+        }
+      }
     })
   }
 
-  onMounted(async () => {
-    await nextTick()
-    startCountdown()
-    window.addEventListener('mousemove', resetCountDown)
-  })
+  function cleanup() {
+    console.debug('disconnect-handler: cleanup')
 
-  onUnmounted(() => {
-    window.addEventListener('mousemove', resetCountDown)
-    clearCountdown()
-    stopWatchingCounter()
-    stopWatchingIsOpen()
-  })
-</script>
-
-<style lang="scss" scoped>
-  .disconnect-alert {
-    display: none;
+    if (unwatch) {
+      unwatch()
+    }
+    if (timer) {
+      clearInterval(timer)
+    }
+    if (cleanupListener) {
+      cleanupListener()
+    }
+    if (cleanupKeydownListener) {
+      cleanupKeydownListener()
+    }
+    countdown.value = undefined
+    localStorage.removeItem(COUNTDOWN_INACTIVITY_LABEL)
   }
-</style>
+
+  function resetInactivityTimer() {
+    countdown.value = initial
+  }
+</script>

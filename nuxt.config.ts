@@ -206,7 +206,7 @@ export default defineNuxtConfig({
         )
       },
       disconnect: {
-        threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '30'),
+        threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '60'),
         alertThreshold: parseInt(process.env.DISCONNECT_ALERT_THRESHOLD || '5')
       },
 

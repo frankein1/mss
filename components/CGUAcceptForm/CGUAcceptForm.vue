@@ -21,7 +21,8 @@
     >
       <li>
         <NuxtLink
-          :to="routes.auth.AuthLogout.path()"
+          :to="apiRoutes.proConnect.ApiLogout.path()"
+          external
           class="fr-btn fr-btn--secondary fr-icon-logout-box-r-line"
         >
           Déconnexion
@@ -44,7 +45,7 @@
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
   import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
-  import { routes } from '~/utils/routes'
+  import { routes, apiRoutes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

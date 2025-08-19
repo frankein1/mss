@@ -71,7 +71,7 @@
       case 503:
         return 'Service indisponible'
       case 401:
-        return "L'authentification a échoué"
+        return manage401Error().pageTitle
       case 403:
         return manage403Error().pageTitle
       default:
@@ -88,7 +88,7 @@
       case 404:
         return 'La page que vous cherchez est introuvable. Veuillez nous excuser pour la gêne occasionnée.'
       case 401:
-        return "Vos informations d'authentification sont invalides ou expirées."
+        return manage401Error().intro
       case 403:
         return manage403Error().intro
       default:
@@ -108,10 +108,7 @@
           "Merci de réessayer plus tard, vous serez en mesure de réutiliser le service très rapidement. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
         ]
       case 401:
-        return [
-          'Veuillez vous authentifier à nouveau.',
-          "En cas d'échec répété, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
-        ]
+        return manage401Error().solutions
       case 403:
         return manage403Error().solutions
       default:
@@ -125,6 +122,27 @@
   const hasSignoutLink = computed(
     () => props.error.statusCode === 403 || props.error.statusCode === 401
   )
+
+  function manage401Error() {
+    if (props.error.message.match(/logout failure/i)) {
+      return {
+        pageTitle: 'Échec de déconnexion',
+        intro:
+          "Vos informations d'authentification sont expirées ou incorrectes.",
+        solutions: [
+          "En cas d'échec répété, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
+        ]
+      }
+    }
+    return {
+      pageTitle: "L'authentification a échoué",
+      intro: "Vos informations d'authentification sont invalides ou expirées.",
+      solutions: [
+        'Veuillez vous authentifier à nouveau.',
+        "En cas d'échec répété, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
+      ]
+    }
+  }
 
   function manage403Error() {
     if (props.error.message.match(/unknown user/i)) {

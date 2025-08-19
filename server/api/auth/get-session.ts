@@ -6,6 +6,8 @@ import { cookieOptions } from '~/utils/cookie'
 import { includeOrderedCGUHistory } from '~/server/query'
 import { structureContextQuery } from '~/server/trpc/createContext'
 
+/** Renew session using most recent user information from database
+ *  and reissue a new auth token */
 export default defineEventHandler(async event => {
   const authUser = event.context.auth?.user
 
