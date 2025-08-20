@@ -1,5 +1,4 @@
 import { Ref } from 'vue'
-import { isNode } from '~/utils/nodeCheck'
 
 export function useBlurOut($el: Ref<HTMLElement | null>) {
   const isFocused = ref<boolean>(false)
@@ -8,7 +7,7 @@ export function useBlurOut($el: Ref<HTMLElement | null>) {
     isFocused.value = true
   }
 
-  function onBlurInEl(event: FocusEvent) {
+  function onBlurInEl() {
     setTimeout(() => {
       isFocused.value = false
     }, 300)

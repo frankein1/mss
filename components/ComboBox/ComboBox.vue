@@ -161,17 +161,21 @@
         activeRow.value =
           activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
         break
-      case 'Enter':
+      case 'Enter': {
         e.preventDefault()
-        if (activeRow.value >= 0 && !options[activeRow.value].disabled) {
-          handleSelect(options[activeRow.value])
+        const ar = activeRow.value
+        if (ar >= 0 && options[ar] && !options[ar].disabled) {
+          handleSelect(options[ar])
         }
         break
-      case ' ':
-        if (activeRow.value >= 0 && !options[activeRow.value].disabled) {
-          handleSelect(options[activeRow.value])
+      }
+      case ' ': {
+        const ar = activeRow.value
+        if (ar >= 0 && options[ar] !== undefined && !options[ar].disabled) {
+          handleSelect(options[ar])
         }
         break
+      }
       case 'Escape':
         activeRow.value = -1
         openList.value = false

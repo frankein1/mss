@@ -78,4 +78,18 @@ export const fixturesSocialSupportSubjects = [
     name: 'Aide au relogement',
     ownedByStructureId: fixtureStructures[0].id
   }
-] satisfies Prisma.SocialSupportSubjectCreateManyInput[]
+] satisfies [
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput,
+  Prisma.SocialSupportSubjectCreateManyInput
+]

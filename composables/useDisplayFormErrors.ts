@@ -38,7 +38,7 @@ export function useDisplayFormErrors<T extends GenericObject>(
       return
     }
 
-    if (errorsArray.length === 0) {
+    if (!errorsArray[0]) {
       return
     }
 

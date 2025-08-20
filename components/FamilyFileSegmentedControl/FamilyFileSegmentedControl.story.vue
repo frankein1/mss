@@ -15,7 +15,7 @@
   import FamilyFileSegmentedControl from './FamilyFileSegmentedControl.vue'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const members: BeneficiaryFileIdentification[] = [
+  const members = [
     {
       id: 'membre-principal',
       firstName: 'Camille',
@@ -32,7 +32,7 @@
       birthDate: new Date('1969-12-04'),
       relationship: 'Conjoint'
     }
-  ]
+  ] satisfies [BeneficiaryFileIdentification, BeneficiaryFileIdentification]
 
   const selected = ref(members[1].id)
 </script>

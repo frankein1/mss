@@ -50,6 +50,19 @@ beforeEach(async () => {
     users[TestFixtureUsers.Referent].id,
     generateFileNumber()
   )
+
+  const franceTravailId =
+    users[TestFixtureUsers.Referent].createdPartnerOrganizations[
+      TestFixturePartnerOrganizations.FranceTravail
+    ]?.id
+  const franceTravailContactId =
+    users[TestFixtureUsers.Referent].createdPartnerOrganizations[
+      TestFixturePartnerOrganizations.FranceTravail
+    ]?.contacts[TestFixturePartnerOrganizations.FranceTravail]?.id
+  if (!franceTravailId || !franceTravailContactId) {
+    throw new Error('partner: wrong index')
+  }
+
   await createSocialSupports(
     date,
     familyFile.id,
@@ -57,12 +70,8 @@ beforeEach(async () => {
     structure.id,
     users[TestFixtureUsers.Referent].id,
     users[TestFixtureUsers.StructureManager].id,
-    users[TestFixtureUsers.Referent].createdPartnerOrganizations[
-      TestFixturePartnerOrganizations.FranceTravail
-    ].id,
-    users[TestFixtureUsers.Referent].createdPartnerOrganizations[
-      TestFixturePartnerOrganizations.FranceTravail
-    ].contacts[TestFixturePartnerOrganizations.FranceTravail].id
+    franceTravailId,
+    franceTravailContactId
   )
 
   structureId = structure.id

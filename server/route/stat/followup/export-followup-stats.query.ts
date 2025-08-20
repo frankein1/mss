@@ -127,9 +127,7 @@ const handler = async ({
   const followupStatusData = await getFollowupStatusStatsQuery(user, input)
   const followupStatusRows = followupStatusData.map(item => {
     return {
-      label: item.status
-        ? socialSupportStatusKeys.byKey[item.status]
-        : STATS_NULL_LABEL,
+      label: socialSupportStatusKeys.byKey[item.status] || STATS_NULL_LABEL,
       number: item._count.toString(),
       percent: `${getPercentage(item._count, followupCount)}%`
     }

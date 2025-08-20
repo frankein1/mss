@@ -29,10 +29,8 @@ export async function getAgentAuthInfo(user: SecurityRuleGrantee) {
     acc => acc.accessToken !== null
   )
 
-  const hasToken =
-    connectedRdvspAccounts.length && connectedRdvspAccounts[0].accessToken
-
-  if (!hasToken) {
+  // no token
+  if (!connectedRdvspAccounts[0] || !connectedRdvspAccounts[0].accessToken) {
     throw unauthorizedError('rdvsp: account not connected')
   }
 

@@ -9,7 +9,7 @@ export async function getIdFromFamilyFileId(familyFileId: string) {
       id: true
     }
   })
-  if (beneficiaries.length === 0) {
+  if (beneficiaries[0] === undefined) {
     throw createError({
       statusCode: 400,
       message: `no beneficiary for familyFileId ${familyFileId}`

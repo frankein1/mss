@@ -71,6 +71,10 @@ export const fixturesWorkshops = new Array(WORKSHOP_COUNT)
     )
     const partnerIndex = Math.floor(Math.random() * partners.length)
 
+    if (!partners[partnerIndex] || !fixturesWorkshopNames[nameIndex]) {
+      throw new Error('workshop: wrong index')
+    }
+
     return {
       id: faker.string.uuid(),
       structureId,

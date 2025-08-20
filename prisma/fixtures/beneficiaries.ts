@@ -189,4 +189,19 @@ export const fixturesBeneficiaries = [
     created: new Date('2021-01-01'),
     updated: dayjs().subtract(2, 'years').add(3, 'days').toDate()
   }
-] satisfies Prisma.BeneficiaryUncheckedCreateInput[]
+] satisfies [
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput
+]

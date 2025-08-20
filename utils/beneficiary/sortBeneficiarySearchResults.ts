@@ -28,7 +28,8 @@ function getMatchScore({
     searchResult.birthName ?? '',
     searchResult.firstName ?? '',
     input
-  ].map(toSearchFormat)
+  ].map(toSearchFormat) as [string, string, string, string]
+
   if (usualNameNormalized.includes(inputNormalized)) {
     return 3
   }

@@ -37,4 +37,8 @@ export const fixtureStructures = [
     zipcode: '75004',
     phone: '+33 1 22 33 44 56'
   }
-] satisfies Prisma.StructureCreateManyInput[]
+] satisfies [
+  Prisma.StructureCreateManyInput,
+  Prisma.StructureCreateManyInput,
+  Prisma.StructureCreateManyInput
+]

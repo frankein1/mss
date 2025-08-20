@@ -82,4 +82,17 @@ export const fixturesBudgetExpenses = [
     id: 'af7fa502-6a30-46b4-a11c-a27ee518f176',
     budgetId: fixturesBudgets[11].id
   }
-] satisfies Prisma.BudgetExpensesUncheckedCreateInput[]
+] satisfies [
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput,
+  Prisma.BudgetExpensesUncheckedCreateInput
+]

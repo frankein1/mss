@@ -86,8 +86,8 @@
           <StatsCard
             v-if="application.module.ministere"
             class="fr-col-12 fr-col-md-6"
-            :card-id="followupCardsConfig.ministre.id"
-            :card-name="followupCardsConfig.ministre.name"
+            :card-id="ministereConfig.ministre.id"
+            :card-name="ministereConfig.ministre.name"
           >
             <StatsFollowupMinistre
               :total-count="followupCount"
@@ -226,7 +226,7 @@
       }`
   )
 
-  const followupCardsConfig: StatsCardConfig = {
+  const followupCardsConfig = {
     subject: {
       id: 'stats-followup-subject',
       name: "Objets d'accompagnement"
@@ -254,13 +254,14 @@
     followupMeanTime: {
       id: 'stats-followup-mean-time',
       name: 'Durée moyenne d’un entretien par objet d’accompagnement'
-    },
-    ...(application.value.module.ministere && {
-      ministre: {
-        id: 'stats-followup-ministre',
-        name: 'Ministres'
-      }
-    })
+    }
+  }
+
+  const ministereConfig = {
+    ministre: {
+      id: 'stats-followup-ministre',
+      name: 'Ministres'
+    }
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
@@ -280,7 +281,10 @@
             zipAndDownloadImages(
               "Statistiques - Synthèses d'entretiens - " +
                 date.toLocaleDateString(),
-              followupCardsConfig,
+              {
+                ...followupCardsConfig,
+                ...(application.value.module.ministere && ministereConfig)
+              },
               buttonFilter,
               closeAlert
             )

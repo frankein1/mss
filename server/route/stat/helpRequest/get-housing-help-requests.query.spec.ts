@@ -20,7 +20,7 @@ const parseStats = (stats: Output) => ({
     const label = getStatLabel(isFirstKeys.byKey, String(isFirst))
     return {
       ...acc,
-      [label]: _count
+      ...(label && { [label]: _count })
     }
   }, {}),
   housingHelpRequestReasonCount: stats.housingHelpRequestReasonCount.reduce<
@@ -29,7 +29,7 @@ const parseStats = (stats: Output) => ({
     const label = getStatLabel(housingReasonKeys.byKey, String(reason))
     return {
       ...acc,
-      [label]: _count
+      ...(label && { [label]: _count })
     }
   }, {})
 })

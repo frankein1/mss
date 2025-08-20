@@ -4,20 +4,27 @@
     <span class="fr-h4 fr-m-0 euro-symbol">{{ euros(total) }}</span>
   </div>
 
-  <BudgetCard
+  <template
     v-for="(income, idxIncome) in incomes"
     :key="idxIncome"
-    class="fr-mb-2w"
-    color="deep-blue"
-    :title="memberNames[idxIncome]"
-    :total="
-      memberDefaultIncomes[idxIncome] + getMemberTotalCustomIncome(income)
-    "
-    :items="getIncome(income)"
-    :edit-route="
-      routes.budget.AppFileBudgetIncomeEdit.path(familyFileId, income.id)
-    "
-  />
+  >
+    <BudgetCard
+      v-if="
+        memberNames[idxIncome] !== undefined &&
+        memberDefaultIncomes[idxIncome] !== undefined
+      "
+      class="fr-mb-2w"
+      color="deep-blue"
+      :title="memberNames[idxIncome]"
+      :total="
+        memberDefaultIncomes[idxIncome] + getMemberTotalCustomIncome(income)
+      "
+      :items="getIncome(income)"
+      :edit-route="
+        routes.budget.AppFileBudgetIncomeEdit.path(familyFileId, income.id)
+      "
+    />
+  </template>
 
   <BudgetIncomesAddMember
     :family-file-id="familyFileId"
@@ -87,10 +94,12 @@
   const memberDefaultIncomes = computed(() =>
     props.incomes.map(
       (income, index) =>
-        nonZeroIncomeKeys.value[index].reduce<number | null>(
-          (acc, cur) => incrementBudgetTotal(acc, income[cur as IncomeKey]),
-          null
-        ) || 0
+        (nonZeroIncomeKeys.value[index] &&
+          nonZeroIncomeKeys.value[index].reduce<number | null>(
+            (acc, cur) => incrementBudgetTotal(acc, income[cur as IncomeKey]),
+            null
+          )) ||
+        0
     )
   )
 
@@ -110,7 +119,7 @@
     props.incomes.forEach((income, idxIncome) => {
       subTotal =
         subTotal +
-        memberDefaultIncomes.value[idxIncome] +
+        (memberDefaultIncomes.value[idxIncome] || 0) +
         getMemberTotalCustomIncome(income)
     })
     return subTotal

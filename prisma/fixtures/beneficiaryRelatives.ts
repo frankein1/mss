@@ -22,4 +22,9 @@ export const fixturesBeneficiaryRelatives = [
     beneficiaryId: fixturesBeneficiaries[10].id,
     hosted: true
   }
-] satisfies Prisma.BeneficiaryRelativeUncheckedCreateInput[]
+] satisfies [
+  Prisma.BeneficiaryRelativeUncheckedCreateInput,
+  Prisma.BeneficiaryRelativeUncheckedCreateInput,
+  Prisma.BeneficiaryRelativeUncheckedCreateInput,
+  Prisma.BeneficiaryRelativeUncheckedCreateInput
+]

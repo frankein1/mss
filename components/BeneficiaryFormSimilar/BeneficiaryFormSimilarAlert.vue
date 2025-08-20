@@ -1,6 +1,10 @@
 <template>
   <template
-    v-if="similarBeneficiary && similarBeneficiary.id != initialBeneficiary?.id"
+    v-if="
+      similarBeneficiary &&
+      similarBeneficiary.familyFile &&
+      similarBeneficiary.id != initialBeneficiary?.id
+    "
   >
     <div class="fr-col-12">
       <AtomAlert

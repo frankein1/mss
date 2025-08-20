@@ -4,7 +4,6 @@ import { apiRoutes } from '~/utils/routes'
 import { formatDate } from '~/utils/formatDate'
 import { ofetch, FetchError } from 'ofetch'
 import { invalidError, unauthorizedError } from '~/server/trpc'
-import dayjs from 'dayjs'
 
 interface RdvspConfig {
   clientId: string

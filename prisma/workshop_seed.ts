@@ -7,8 +7,13 @@ import {
 
 const prismaClient = new PrismaClient()
 
+const structureId = fixtureStructures[0].id
+
 const getRandomPartnerOrganizationId = () => {
   const index = Math.floor(Math.random() * fixturesPartnerOrganizations.length)
+  if (!fixturesPartnerOrganizations[index]) {
+    throw new Error('workshop: wrong index')
+  }
   return fixturesPartnerOrganizations[index].id
 }
 
@@ -21,7 +26,7 @@ const getRandomDate = () => {
 }
 export const workshopInputs = [
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:00',
     endTime: '16:00',
@@ -35,7 +40,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '10:00',
     endTime: '12:00',
@@ -49,7 +54,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '15:00',
     endTime: '17:00',
@@ -63,7 +68,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '18:00',
     endTime: '19:00',
@@ -77,7 +82,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:30',
     endTime: '16:00',
@@ -86,7 +91,7 @@ export const workshopInputs = [
     description: 'Papier fourni'
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '16:00',
     endTime: '18:00',
@@ -98,7 +103,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '17:00',
     endTime: '18:30',
@@ -112,7 +117,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.LowerThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '10:30',
     endTime: '12:30',
@@ -126,7 +131,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '21:00',
     endTime: '23:00',
@@ -140,7 +145,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '16:00',
     endTime: '18:00',
@@ -154,7 +159,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:00',
     endTime: '16:00',
@@ -168,7 +173,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '11:00',
     endTime: '13:00',
@@ -178,7 +183,7 @@ export const workshopInputs = [
     description: 'Tout le matériel est sur place'
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '18:00',
     endTime: '19:30',
@@ -192,7 +197,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.LowerThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '09:00',
     endTime: '12:00',
@@ -206,7 +211,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:00',
     endTime: '16:00',
@@ -215,7 +220,7 @@ export const workshopInputs = [
     description: 'Plateaux disponibles sur place'
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '10:00',
     endTime: '12:00',
@@ -228,7 +233,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '19:00',
     endTime: '22:00',
@@ -242,7 +247,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '13:00',
     endTime: '15:30',
@@ -255,7 +260,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '18:30',
     endTime: '20:30',
@@ -269,7 +274,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '09:00',
     endTime: '12:00',
@@ -283,7 +288,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '17:00',
     endTime: '18:30',
@@ -297,7 +302,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '15:00',
     endTime: '17:00',
@@ -311,7 +316,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '11:00',
     endTime: '12:00',
@@ -325,7 +330,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:00',
     endTime: '16:30',
@@ -339,7 +344,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '10:00',
     endTime: '11:00',
@@ -353,7 +358,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '18:00',
     endTime: '19:30',
@@ -367,7 +372,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:30',
     endTime: '16:30',
@@ -381,7 +386,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '17:00',
     endTime: '19:00',
@@ -395,7 +400,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '09:30',
     endTime: '12:00',
@@ -409,7 +414,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '14:00',
     endTime: '17:00',
@@ -423,7 +428,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '13:00',
     endTime: '16:00',
@@ -437,7 +442,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '10:00',
     endTime: '12:00',
@@ -451,7 +456,7 @@ export const workshopInputs = [
     ageLimitCondition: AgeLimitCondition.GreaterThan
   },
   {
-    structureId: fixtureStructures[0].id,
+    structureId,
     date: getRandomDate(),
     startTime: '15:00',
     endTime: '17:00',
@@ -508,16 +513,21 @@ async function main() {
   const workshopNames = await prismaClient.workshopName.createManyAndReturn({
     data: workshopNameInputs.map(name => ({
       name,
-      structureId: fixtureStructures[0].id,
+      structureId,
       createdById: fixturesUsers[4].id
     }))
   })
+
+  const workshopName = workshopNames[0]
+  if (!workshopName) {
+    throw new Error('workshop: missing data')
+  }
 
   await prismaClient.workshop.createMany({
     data: workshopInputs.map(input => ({
       ...input,
       createdById: fixturesUsers[4].id,
-      workshopNameId: workshopNames[0].id
+      workshopNameId: workshopName.id
     }))
   })
 }

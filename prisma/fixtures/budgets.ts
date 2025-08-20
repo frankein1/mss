@@ -56,4 +56,18 @@ export const fixturesBudgets = [
     created: new Date('2021-01-01'),
     updated: new Date('2021-01-01')
   }
-] satisfies Prisma.BudgetUncheckedCreateInput[]
+] satisfies [
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput,
+  Prisma.BudgetUncheckedCreateInput
+]

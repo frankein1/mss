@@ -342,13 +342,14 @@
   })
 
   function changedValues() {
-    handleChange(
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
-    emit(
-      'changeValue',
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
+    const value = props.multiple
+      ? selectedValues.value
+      : selectedValues.value[0]
+    if (value === undefined) {
+      return
+    }
+    handleChange(value)
+    emit('changeValue', value)
   }
 
   function listenFormReset() {
@@ -399,9 +400,11 @@
     }
 
     // Keyboard interactions on the expanded listbox
+
     if (e.key === 'Enter') {
-      if (props.multiple) {
-        onToggleOption(activeOptionValue.value)
+      const av = activeOptionValue.value
+      if (props.multiple && av) {
+        onToggleOption(av)
       } else {
         onSelectActiveOption()
       }

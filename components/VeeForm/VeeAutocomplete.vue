@@ -235,8 +235,9 @@
     }
 
     // Keyboard interactions on the expanded listbox
-    if (e.key === 'Enter') {
-      onSelectOption(activeOptionValue.value)
+    const av = activeOptionValue.value
+    if (e.key === 'Enter' && av !== undefined) {
+      onSelectOption(av)
     }
   }
 

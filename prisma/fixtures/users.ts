@@ -94,7 +94,17 @@ export const fixturesUsers = [
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Ministère].id
   }
-] satisfies Prisma.UserCreateManyInput[]
+] satisfies [
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput,
+  Prisma.UserCreateManyInput
+]
 
 const CGU_VERSION = '1.1'
 

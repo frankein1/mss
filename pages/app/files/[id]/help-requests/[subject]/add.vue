@@ -72,9 +72,8 @@
 
   const title = computed(() => {
     if (
-      familyFileIdentification &&
-      familyFileIdentification.value?.length &&
-      familyFileIdentification.value?.length === 1
+      familyFileIdentification?.value?.[0] !== undefined &&
+      familyFileIdentification.value.length === 1
     ) {
       return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
         familyFileIdentification.value[0]
@@ -85,8 +84,7 @@
 
   const headTitle = computed(() => {
     if (
-      familyFileIdentification &&
-      familyFileIdentification.value?.length &&
+      familyFileIdentification?.value?.[0] !== undefined &&
       familyFileIdentification.value?.length === 1
     ) {
       return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(

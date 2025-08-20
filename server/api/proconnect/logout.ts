@@ -64,7 +64,7 @@ async function cleanAccountData(userId: string, proconnectProvider: string) {
     }
   })
 
-  if (!accounts.length) {
+  if (!accounts[0]) {
     throw unauthorized('[ProConnect] Logout failure: missing data')
   }
   if (accounts.length > 1) {

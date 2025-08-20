@@ -241,11 +241,12 @@ async function validateDraftAppointment({
     })
   ])
 
-  const isNewRdvspUsager =
+  // if isNewRdvspUsager
+  if (
     rdv.externalUsagerIds[0] &&
     ss.beneficiary &&
     rdv.externalUsagerIds[0].toString() !== ss.beneficiary.externalRdvspId
-  if (isNewRdvspUsager) {
+  ) {
     await addUsagerIdToBeneficiary(
       ss.beneficiaryId,
       rdv.externalUsagerIds[0].toString()
@@ -291,7 +292,7 @@ async function getRdvspRdvFromList(
   const filtered = rdvList.filter(
     rdv => rdv.id.toString() === rdvSummary.id.toString()
   )
-  const rdv: RdvspRdv | null = filtered.length > 0 ? filtered[0] : null
+  const rdv: RdvspRdv | null = filtered[0] || null
 
   if (rdv === null) {
     throw invalidError('Could not retrieve rdv in rdvsp')

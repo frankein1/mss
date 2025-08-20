@@ -73,6 +73,10 @@ afterEach(
     )
 )
 
+function invalidsetup() {
+  return new Error('test: invalid test data')
+}
+
 describe('Workshop - Update - Update workshop data', () => {
   test('Workshop - Update - An Agent cannot update a workshop with a partner organisation from another structure', async ({
     trpc
@@ -86,14 +90,17 @@ describe('Workshop - Update - Update workshop data', () => {
     })
     otherPartnerOrganizationId = otherPartnerOrg.id
 
-    await expect(() =>
-      trpc.structureManager.workshop.updateWorkshop({
-        id: workshopIds[0],
-        mode: UpdateWorkshopNameMode.current,
-        name: workshopNames[0],
-        date,
-        partnerOrganizationId: otherPartnerOrganizationId
-      })
+    await expect(
+      () =>
+        workshopIds[0] &&
+        workshopNames[0] &&
+        trpc.structureManager.workshop.updateWorkshop({
+          id: workshopIds[0],
+          date,
+          mode: UpdateWorkshopNameMode.current,
+          name: workshopNames[0],
+          partnerOrganizationId: otherPartnerOrganizationId
+        })
     ).rejects.toThrowError(/not allowed to access route/i)
   })
 
@@ -110,19 +117,24 @@ describe('Workshop - Update - Update workshop data', () => {
     workshopNames.push(workshopFromOtherStructure.name)
     workshopNamesIds.push(workshopFromOtherStructure.id)
 
-    await expect(() =>
-      trpc.structureManager.workshop.updateWorkshop({
-        id: workshopFromOtherStructure.workshops[0].id,
-        mode: UpdateWorkshopNameMode.current,
-        name: workshopFromOtherStructure.name,
-        date
-      })
+    await expect(
+      () =>
+        workshopFromOtherStructure.workshops[0] &&
+        trpc.structureManager.workshop.updateWorkshop({
+          id: workshopFromOtherStructure.workshops[0].id,
+          date,
+          mode: UpdateWorkshopNameMode.current,
+          name: workshopFromOtherStructure.name
+        })
     ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
   })
 
   test('Workshop - Update - An Reception Agent can update a workshop and only the id of the created entity is returned', async ({
     trpc
   }) => {
+    if (!workshopIds[0] || !workshopNames[0]) {
+      throw invalidsetup()
+    }
     const res = await trpc.receptionAgent.workshop.updateWorkshop({
       id: workshopIds[0],
       mode: UpdateWorkshopNameMode.current,
@@ -144,13 +156,16 @@ describe('Workshop - Update - Update workshop data', () => {
   test('Workshop - Update - An Administrator cannot update a workshop', async ({
     trpc
   }) => {
-    await expect(() =>
-      trpc.administrator.workshop.updateWorkshop({
-        id: workshopIds[0],
-        mode: UpdateWorkshopNameMode.current,
-        name: workshopNames[0],
-        date
-      })
+    await expect(
+      () =>
+        workshopIds[0] &&
+        workshopNames[0] &&
+        trpc.administrator.workshop.updateWorkshop({
+          id: workshopIds[0],
+          mode: UpdateWorkshopNameMode.current,
+          name: workshopNames[0],
+          date
+        })
     ).rejects.toThrowError(/user routes are not available to admins/i)
   })
 })
@@ -159,6 +174,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name For Current workshop - If the name is the same, the workshop name is not updated', async ({
     trpc
   }) => {
+    if (!workshopIds[0] || !workshopNames[0]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const workshopNameInDb = workshopNames[0]
     const mode = UpdateWorkshopNameMode.current
@@ -181,6 +199,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name For Current workshop - When name is new, a new workshop name is created and only the targeted workshop is updated', async ({
     trpc
   }) => {
+    if (!workshopIds[0]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const mode = UpdateWorkshopNameMode.current
 
@@ -204,6 +225,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name For Current workshop - When the target value is another workshop, only the targeted workshop is updated and the workshop is connected to the other workshop name', async ({
     trpc
   }) => {
+    if (!workshopIds[0] || !workshopNames[1]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const mode = UpdateWorkshopNameMode.current
 
@@ -225,6 +249,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name - All workshops with the same name are updated and the target value is new', async ({
     trpc
   }) => {
+    if (!workshopIds[0]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const mode = UpdateWorkshopNameMode.all
 
@@ -248,6 +275,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name - All workshops with the same name are updated, the target value is another workshop, the previous workshop name is deleted', async ({
     trpc
   }) => {
+    if (!workshopIds[0] || !workshopNames[0] || !workshopNames[1]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const workshopNameInDb = workshopNames[0]
     const mode = UpdateWorkshopNameMode.all
@@ -278,6 +308,9 @@ describe('Workshop - Update - Update workshop name', () => {
   test('Workshop - Update Name - All workshops with the same name are updated and the target value has the same content with a different case', async ({
     trpc
   }) => {
+    if (!workshopIds[0] || !workshopNames[0]) {
+      throw invalidsetup()
+    }
     const id = workshopIds[0]
     const workshopNameInDb = workshopNames[0]
     const mode = UpdateWorkshopNameMode.all

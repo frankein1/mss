@@ -275,19 +275,23 @@
         e.preventDefault()
         activeCol.value = (activeCol.value + 1) % 2
         break
-      case 'Enter':
+      case 'Enter': {
+        const ar = activeRow.value
         e.preventDefault()
-        if (activeRow.value >= 0) {
-          selectItem(filteredItems.value[activeRow.value])
+        if (ar >= 0 && filteredItems.value[ar]) {
+          selectItem(filteredItems.value[ar])
           openList.value = false
         }
         break
-      case ' ':
-        if (activeRow.value >= 0) {
-          selectItem(filteredItems.value[activeRow.value])
+      }
+      case ' ': {
+        const ar = activeRow.value
+        if (ar >= 0 && filteredItems.value[ar]) {
+          selectItem(filteredItems.value[ar])
           openList.value = false
         }
         break
+      }
       case 'Escape':
         activeRow.value = -1
         openList.value = false

@@ -17,7 +17,6 @@ import {
 import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
-import { usersActivityRouter } from './usersActivity/router'
 import { socialSupportRouter } from './socialSupport/router'
 import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
@@ -44,7 +43,6 @@ export const appRouter = router({
   fileInstruction: fileInstructionRouter,
   documents: documentRouter,
   comment: commentRouter,
-  usersActivity: usersActivityRouter,
   permissions: permissionsRouter,
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,
@@ -58,7 +56,6 @@ export type AppRouter = typeof appRouter
 export type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
-export * from '~/server/trpc/routers/usersActivity'
 export * from '~/server/trpc/routers/housingHelpRequest'
 export * from '~/server/trpc/routers/notification'
 export * from '~/server/trpc/routers/beneficiary'

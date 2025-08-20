@@ -28,8 +28,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     filters: StatFilterInput
     historyType?: 'followup'

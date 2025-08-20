@@ -26,6 +26,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
+import type { WorksheetType } from '~/types/export'
 
 const NOT_FILLED = 'Non renseigné'
 const securityCheck = (ctx: SecurityRuleContext) =>
@@ -38,7 +39,7 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const exportData = []
+  const exportData: WorksheetType[] = []
 
   const helpRequestCount = await getHelpRequestCountQuery(user, input)
 
@@ -99,9 +100,7 @@ const handler = async ({
   )
   const helpRequestStatusRows = helpRequestStatusData.map(item => {
     return {
-      label: item.status
-        ? socialSupportStatusKeys.byKey[item.status]
-        : NOT_FILLED,
+      label: socialSupportStatusKeys.byKey[item.status] || NOT_FILLED,
       number: item._count.toString(),
       percent: `${getPercentage(item._count, helpRequestCount.total)}%`
     }

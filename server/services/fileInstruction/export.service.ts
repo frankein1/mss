@@ -106,10 +106,9 @@ export async function exportFileInstructions({
       if (!permissions.view) {
         return fileInstructions
       }
-      const subjectId =
-        socialSupport?.subjects?.length > 0
-          ? socialSupport.subjects[0].name
-          : ''
+      // File instructions have 1 sss but in the model a social support
+      // can be linked to several sss.
+      const subjectId = socialSupport.subjects?.[0]?.name || ''
 
       return [
         ...fileInstructions,

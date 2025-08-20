@@ -142,7 +142,7 @@
     const selected = props.familyFileIdentification.filter(
       m => m.id === beneficiaryId
     )
-    if (!selected.length) {
+    if (!selected[0]) {
       return 'Non renseigné'
     }
     return formatBeneficiaryShortenedName(selected[0])

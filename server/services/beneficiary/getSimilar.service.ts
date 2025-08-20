@@ -173,6 +173,7 @@ export async function getSimilar({
   return {
     ...similarBeneficiary,
     referent:
+      similarBeneficiary?.familyFile.referents[0] &&
       similarBeneficiary.familyFile.referents[0].status === UserStatus.Active
         ? similarBeneficiary.familyFile.referents[0]
         : undefined

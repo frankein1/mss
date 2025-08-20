@@ -12,8 +12,6 @@ import {
 } from './apiClient'
 import { structureTypeKeys, userRoleKeys } from '~/client/options'
 
-const ID_STRUCTURE_TEST = 'a32bec0c-ced6-45a8-a217-8c7a2ff51094'
-
 export async function createOrUpdateUser(userId: string) {
   if (process.env.NODE_ENV === 'test') {
     return

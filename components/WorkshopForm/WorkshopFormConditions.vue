@@ -52,6 +52,7 @@
   const hasAttendeeLimit = ref(false)
 
   defineProps<{
+    // eslint-disable-next-line vue/no-unused-properties
     isSubmitting: boolean
     ageConditionOptions: Options
   }>()

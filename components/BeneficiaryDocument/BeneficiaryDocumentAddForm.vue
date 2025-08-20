@@ -96,7 +96,11 @@
   const isSubmitting = ref(false)
 
   const initialBeneficiaryId =
-    props.beneficiaryId || props.familyFileIdentification[0].id
+    props.beneficiaryId || props.familyFileIdentification[0]?.id
+
+  if (!initialBeneficiaryId) {
+    throw createError({ message: 'Echec de chargement du composant' })
+  }
 
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),

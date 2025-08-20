@@ -82,7 +82,7 @@
     housingHelpRequestContextStats.value =
       data.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
         key: String(isFirst),
-        label: getStatLabel(isFirstKeys.byKey, String(isFirst)),
+        label: getStatLabel(isFirstKeys.byKey, String(isFirst)) as string,
         color: SupportColor.helpRequests,
         count: _count
       })) || []
@@ -90,7 +90,7 @@
     housingHelpRequestReasonStats.value =
       data.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
         key: String(reason),
-        label: getStatLabel(housingReasonKeys.byKey, String(reason)),
+        label: getStatLabel(housingReasonKeys.byKey, String(reason)) as string,
         color: SupportColor.helpRequests,
         count: _count
       })) || []

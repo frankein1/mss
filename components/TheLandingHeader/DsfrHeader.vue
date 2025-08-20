@@ -91,7 +91,6 @@
     menuOpened.value = false
     searchModalOpened.value = true
   }
-  const onQuickLinkClick = hideModal
 
   const title = computed(() =>
     [props.homeLabel, props.serviceTitle].filter(x => x).join(' - ')

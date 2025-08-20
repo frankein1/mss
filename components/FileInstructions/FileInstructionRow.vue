@@ -69,7 +69,7 @@
       return 'Demande de logement'
     }
     const subjects = props.fileInstruction.socialSupport.subjects
-    return subjects.length > 0 ? subjects[0].name : ''
+    return subjects[0]?.name || ''
   })
 
   const helpRequestPath = computed(() =>

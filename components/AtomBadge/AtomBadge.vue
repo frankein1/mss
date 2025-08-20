@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-  const props = withDefaults(
+  withDefaults(
     defineProps<{
       small?: boolean
       color?: 'green' | 'purple' | 'red' | 'yellow' | 'bue' | 'orange' | 'grey'
@@ -33,7 +33,8 @@
     {
       small: false,
       color: 'grey',
-      icon: undefined
+      icon: undefined,
+      label: undefined
     }
   )
 </script>

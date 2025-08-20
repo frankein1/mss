@@ -58,9 +58,8 @@
 
   const title = computed(() => {
     if (
-      familyFileIdentification &&
-      familyFileIdentification.value?.length &&
-      familyFileIdentification.value?.length === 1
+      familyFileIdentification?.value?.[0] !== undefined &&
+      familyFileIdentification.value.length === 1
     ) {
       return routes.followup.AppBeneficiaryFollowupAdd.title(
         familyFileIdentification.value[0]

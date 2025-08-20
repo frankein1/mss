@@ -22,4 +22,9 @@ export const fixturesPartnerOrganizationContacts = [
     name: 'Elisa de la Mairie de Valence',
     partnerId: fixturesPartnerOrganizations[2].id
   }
-] as Prisma.PartnerOrganizationContactUncheckedCreateInput[]
+] as [
+  Prisma.PartnerOrganizationContactUncheckedCreateInput,
+  Prisma.PartnerOrganizationContactUncheckedCreateInput,
+  Prisma.PartnerOrganizationContactUncheckedCreateInput,
+  Prisma.PartnerOrganizationContactUncheckedCreateInput
+]

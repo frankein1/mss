@@ -100,21 +100,31 @@ afterEach(
     )
 )
 
+function invalidsetup() {
+  return new Error('test: invalid test data')
+}
+
 test('Workshop - Create Attendee - An Agent cannot delete an attendee of a workshop from another structure', async ({
   trpc
 }) => {
   // agent from a ministere structure
-  await expect(() =>
-    trpc.structureManagerMinistere.workshop.deleteAttendee({
-      id: workshopAttendeesId[0],
-      type: WorkshopAttendeeType.Beneficiary
-    })
+  await expect(
+    () =>
+      workshopAttendeesId[0] &&
+      trpc.structureManagerMinistere.workshop.deleteAttendee({
+        id: workshopAttendeesId[0],
+        type: WorkshopAttendeeType.Beneficiary
+      })
   ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
 })
 
 test('Workshop - Delete Attendee - An agent can delete an attendee that is a beneficiary and the id and type of the deleted entity is returned', async ({
   trpc
 }) => {
+  if (!workshopAttendeesId[0]) {
+    throw invalidsetup()
+  }
+
   const deleted = await trpc.receptionAgent.workshop.deleteAttendee({
     id: workshopAttendeesId[0],
     type: WorkshopAttendeeType.Beneficiary
@@ -134,6 +144,10 @@ test('Workshop - Delete Attendee - An agent can delete an attendee that is a ben
 test('Workshop - Delete Attendee - An agent can delete an external attendee and the id and type of the deleted entity is returned', async ({
   trpc
 }) => {
+  if (!workshopAttendeesId[1]) {
+    throw invalidsetup()
+  }
+
   const deleted = await trpc.receptionAgent.workshop.deleteAttendee({
     id: workshopAttendeesId[1],
     type: WorkshopAttendeeType.External
@@ -153,11 +167,13 @@ test('Workshop - Delete Attendee - An agent can delete an external attendee and 
 test('Workshop - Delete Attendee - An administrator cannot delete a workshop attendee', async ({
   trpc
 }) => {
-  await expect(() =>
-    trpc.administrator.workshop.deleteAttendee({
-      id: workshopAttendeesId[0],
-      type: WorkshopAttendeeType.Beneficiary
-    })
+  await expect(
+    () =>
+      workshopAttendeesId[0] &&
+      trpc.administrator.workshop.deleteAttendee({
+        id: workshopAttendeesId[0],
+        type: WorkshopAttendeeType.Beneficiary
+      })
   ).rejects.toThrowError(/user routes are not available to admins/i)
 })
 

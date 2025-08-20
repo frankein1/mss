@@ -287,7 +287,7 @@
   const handleSearchInputKeyDown = () => {
     document
       .querySelector<HTMLElement>(
-        `#input-checkbox-${displayedOptions.value[0].value}`
+        `#input-checkbox-${displayedOptions.value[0]?.value}`
       )
       ?.focus()
   }
@@ -299,7 +299,7 @@
 
     if (currentIndex !== -1) {
       const nextIndex = (currentIndex + 1) % checkboxes.length
-      checkboxes[nextIndex].focus()
+      checkboxes[nextIndex]?.focus()
     }
   }
 
@@ -311,7 +311,7 @@
     if (currentIndex !== -1) {
       const previousIndex =
         (currentIndex - 1 + checkboxes.length) % checkboxes.length
-      checkboxes[previousIndex].focus()
+      checkboxes[previousIndex]?.focus()
     }
   }
 

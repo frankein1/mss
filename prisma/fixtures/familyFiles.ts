@@ -134,4 +134,18 @@ export const fixturesFamilyFiles = [
       }
     }
   }
-] satisfies Prisma.FamilyFileUncheckedCreateInput[]
+] satisfies [
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput
+]

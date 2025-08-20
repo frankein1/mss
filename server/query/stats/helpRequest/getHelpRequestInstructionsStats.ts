@@ -57,7 +57,7 @@ export async function getHelpRequestInstructionsStats(
       ) => {
         const instructorOrganizationId =
           item.instructorOrganization?.id || STATS_NULL_KEY
-        if (instructorOrganizationId in instructorOrganizations) {
+        if (instructorOrganizations[instructorOrganizationId] !== undefined) {
           instructorOrganizations[instructorOrganizationId]._count++
         } else {
           instructorOrganizations[instructorOrganizationId] = {

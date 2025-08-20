@@ -134,8 +134,8 @@
         <StatsCard
           v-if="application.module.ministere"
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.accomodationZone.id"
-          :card-name="beneficiariesCardConfig.accomodationZone.name"
+          :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
+          :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
         >
           <StatsBeneficiariesAccommodationZone
             :beneficiary-count="beneficiaryCount.count"
@@ -175,8 +175,10 @@
         <template v-if="application.module.ministere">
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardConfig.ministereStructures.id"
-            :card-name="beneficiariesCardConfig.ministereStructures.name"
+            :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
+            :card-name="
+              beneficiariesCardMinistereConfig.ministereStructures.name
+            "
           >
             <StatsBeneficiariesMinistereStructure
               :beneficiary-count="beneficiaryCount.count"
@@ -185,9 +187,11 @@
 
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardConfig.ministereDepartementServices.id"
+            :card-id="
+              beneficiariesCardMinistereConfig.ministereDepartementServices.id
+            "
             :card-name="
-              beneficiariesCardConfig.ministereDepartementServices.name
+              beneficiariesCardMinistereConfig.ministereDepartementServices.name
             "
           >
             <StatsBeneficiariesMinistereDepartementService
@@ -197,8 +201,10 @@
 
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardConfig.ministereCategorie.id"
-            :card-name="beneficiariesCardConfig.ministereCategorie.name"
+            :card-id="beneficiariesCardMinistereConfig.ministereCategorie.id"
+            :card-name="
+              beneficiariesCardMinistereConfig.ministereCategorie.name
+            "
           >
             <StatsBeneficiariesMinistereCategorie
               :beneficiary-count="beneficiaryCount.count"
@@ -207,8 +213,12 @@
 
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardConfig.ministereInterpellation.id"
-            :card-name="beneficiariesCardConfig.ministereInterpellation.name"
+            :card-id="
+              beneficiariesCardMinistereConfig.ministereInterpellation.id
+            "
+            :card-name="
+              beneficiariesCardMinistereConfig.ministereInterpellation.name
+            "
           >
             <StatsBeneficiariesMinistereInterpellation
               :beneficiary-count="beneficiaryCount.count"
@@ -225,7 +235,7 @@
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
   import { Menu } from '~/types/menu'
-  import { StatsCardConfig, StatPeriodFilter } from '~/types/stat'
+  import { StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
 
@@ -312,7 +322,7 @@
     )
   }
 
-  const beneficiariesCardConfig: StatsCardConfig = {
+  const beneficiariesCardConfig = {
     gender: {
       id: 'stats-beneficiaries-gender',
       name: 'Genres'
@@ -348,29 +358,30 @@
     accomodationMode: {
       id: 'stats-beneficiaries-accomodation-mode',
       name: "Modes d'hébergement"
+    }
+  }
+
+  const beneficiariesCardMinistereConfig = {
+    accomodationZone: {
+      id: 'stats-beneficiaries-accomodation-zone',
+      name: "Zone d'hébergement"
     },
-    ...(application.value.module.ministere && {
-      accomodationZone: {
-        id: 'stats-beneficiaries-accomodation-zone',
-        name: "Zone d'hébergement"
-      },
-      ministereStructures: {
-        id: 'stats-beneficiaries-ministere-structures',
-        name: 'Structures de rattachement'
-      },
-      ministereDepartementServices: {
-        id: 'stats-beneficiaries-departement-services',
-        name: "Départements ou services de l'administration centrale"
-      },
-      ministereCategorie: {
-        id: 'stats-beneficiaries-categories',
-        name: 'Catégories'
-      },
-      ministereInterpellation: {
-        id: 'stats-beneficiaries-interpellation',
-        name: 'Bénéficiaires ayant interpellé chaque ministre'
-      }
-    })
+    ministereStructures: {
+      id: 'stats-beneficiaries-ministere-structures',
+      name: 'Structures de rattachement'
+    },
+    ministereDepartementServices: {
+      id: 'stats-beneficiaries-departement-services',
+      name: "Départements ou services de l'administration centrale"
+    },
+    ministereCategorie: {
+      id: 'stats-beneficiaries-categories',
+      name: 'Catégories'
+    },
+    ministereInterpellation: {
+      id: 'stats-beneficiaries-interpellation',
+      name: 'Bénéficiaires ayant interpellé chaque ministre'
+    }
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
@@ -389,7 +400,11 @@
           setTimeout(() => {
             zipAndDownloadImages(
               'Statistiques - Bénéficiaires - ' + date.toLocaleDateString(),
-              beneficiariesCardConfig,
+              {
+                ...beneficiariesCardConfig,
+                ...(application.value.module.ministere &&
+                  beneficiariesCardMinistereConfig)
+              },
               buttonFilter,
               closeAlert
             )

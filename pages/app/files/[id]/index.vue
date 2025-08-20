@@ -193,6 +193,11 @@
     () => route.query.beneficiaryId,
     async () => {
       if (!route.query.beneficiaryId) {
+        if (!familyFileIdentification.value[0]) {
+          // eslint-disable-next-line no-console
+          console.warn('no beneficiary retrieved')
+          return
+        }
         await router.replace({
           query: {
             ...route.query,

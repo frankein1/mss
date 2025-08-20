@@ -23,7 +23,7 @@ export function preparePrescribingOrganizationStats(
     ) => {
       const prescribingOrganizationId =
         historyItem.prescribingOrganization?.id || STATS_NULL_KEY
-      if (prescribingOrganizationId in prescribingOrganizations) {
+      if (prescribingOrganizations[prescribingOrganizationId] !== undefined) {
         prescribingOrganizations[prescribingOrganizationId]._count++
       } else {
         prescribingOrganizations[prescribingOrganizationId] = {

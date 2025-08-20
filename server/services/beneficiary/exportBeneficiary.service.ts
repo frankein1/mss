@@ -284,7 +284,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
   const subjectsNames = socialSupport.subjects.map(subject => subject.name)
   const documents = socialSupport.documents?.map(document => ({
     name: document.name,
-    type: documentTypeKeys.value(document.type)
+    type: documentTypeKeys.value(document.type) || null
   }))
   return {
     createdBy: getPrettyUserName(socialSupport.createdBy),
@@ -404,7 +404,7 @@ const getHelpRequestData = (
 ): FileInstructionData => {
   const documents = socialSupport.documents?.map(document => ({
     name: document.name,
-    type: documentTypeKeys.value(document.type)
+    type: documentTypeKeys.value(document.type) || null
   }))
 
   const commonObjects: FieldLabels<BaseFileInstruction> = {
@@ -552,9 +552,8 @@ const getBeneficiaryInfoData = (
     beneficiary => ({
       firstName: beneficiary.firstName,
       usualName: beneficiary.usualName,
-      relationship: beneficiary.relationship
-        ? relativeRelationshipKeys.value(beneficiary.relationship)
-        : null
+      relationship:
+        relativeRelationshipKeys.value(beneficiary.relationship) || null
     })
   )
   const referents = beneficiary.familyFile?.referents.map(

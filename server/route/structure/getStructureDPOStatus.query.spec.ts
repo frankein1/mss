@@ -27,7 +27,7 @@ async function setStructureCreationDate(date = new Date('2024-05-29')) {
     where: { id: structureId }
   })
 
-  if (structures.length > 0) {
+  if (structures[0] !== undefined) {
     originalStructureCreationDate = structures[0].created || new Date()
 
     await StructureRepo.prisma.update({

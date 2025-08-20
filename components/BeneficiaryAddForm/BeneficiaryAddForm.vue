@@ -12,7 +12,7 @@
         v-model="addMemberMode"
         :disabled="false"
         inline
-        :options="addMemberModeOptions"
+        :options="Array.from(addMemberModeOptions)"
         @update:model-value="onAddMemberModeUpdate"
       >
         <template #legend
@@ -156,11 +156,11 @@
       label: 'Lier un bénéficiaire existant',
       value: 'link'
     }
-  ]
+  ] as const
   const addMemberMode = ref(addMemberModeOptions[0].value)
 
   function onAddMemberModeUpdate(val: string | number | boolean) {
-    const option = addMemberModeOptions.find(({ value }) => value === val)
+    addMemberModeOptions.find(({ value }) => value === val)
   }
 
   const props = defineProps<{

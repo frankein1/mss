@@ -298,11 +298,7 @@
 
   const modal = useModal()
   const unwatch = watch([modal.isReady, beneficiariesToArchived], () => {
-    if (
-      modal.isReady &&
-      beneficiariesToArchived.value &&
-      beneficiariesToArchived.value.length > 0
-    ) {
+    if (modal.isReady && beneficiariesToArchived.value?.[0]) {
       const firstNotification = beneficiariesToArchived.value[0]
       const beneficiaryNames = beneficiariesToArchived.value.map(notification =>
         formatBeneficiaryName({

@@ -43,7 +43,7 @@ export default defineEventHandler(async event => {
     structure
   } = user
 
-  const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
+  const CGUHistoryVersion = CGUHistory[0]?.version || null
 
   const jwtUser: JwtUser = {
     firstName,

@@ -7,11 +7,7 @@ import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
-import {
-  createOrUpdateStructure,
-  createOrUpdateUser,
-  linkUserToStructure
-} from '~/server/integrations/brevo/service'
+import { createOrUpdateUser } from '~/server/integrations/brevo/service'
 
 const adminHandler = async ({
   ctx,

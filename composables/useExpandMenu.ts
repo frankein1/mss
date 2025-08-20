@@ -41,7 +41,9 @@ export function useExpandMenu(
    * The element of the active option
    */
   const activeOption = computed(
-    () => optionRefs[activeOptionValue.value]?.value || null
+    () =>
+      (activeOptionValue.value && optionRefs[activeOptionValue.value]?.value) ||
+      null
   )
 
   const isListboxScrollable = computed(
@@ -60,11 +62,9 @@ export function useExpandMenu(
     }
 
     let firstIsDisabled = true
-
-    while (firstIsDisabled && firstIndex < optionValues.value.length) {
-      firstIsDisabled = disabledOptions.value.includes(
-        optionValues.value[firstIndex]
-      )
+    const first = optionValues.value[firstIndex]
+    while (firstIsDisabled && first !== undefined) {
+      firstIsDisabled = disabledOptions.value.includes(first)
 
       if (firstIsDisabled) {
         firstIndex++
@@ -82,11 +82,9 @@ export function useExpandMenu(
     }
 
     let lastIsDisabled = true
-
-    while (lastIsDisabled && lastIndex >= 0) {
-      lastIsDisabled = disabledOptions.value.includes(
-        optionValues.value[lastIndex]
-      )
+    const last = optionValues.value[lastIndex]
+    while (lastIsDisabled && lastIndex >= 0 && last !== undefined) {
+      lastIsDisabled = disabledOptions.value.includes(last)
 
       if (lastIsDisabled) {
         lastIndex--
@@ -104,11 +102,9 @@ export function useExpandMenu(
     }
 
     let nextIsDisabled = true
-
-    while (nextIsDisabled && nextIndex < optionValues.value.length) {
-      nextIsDisabled = disabledOptions.value.includes(
-        optionValues.value[nextIndex]
-      )
+    const next = optionValues.value[nextIndex]
+    while (nextIsDisabled && next !== undefined) {
+      nextIsDisabled = disabledOptions.value.includes(next)
 
       if (nextIsDisabled) {
         nextIndex++
@@ -126,11 +122,9 @@ export function useExpandMenu(
     }
 
     let prevIsDisabled = true
-
-    while (prevIsDisabled && prevIndex >= 0) {
-      prevIsDisabled = disabledOptions.value.includes(
-        optionValues.value[prevIndex]
-      )
+    const previous = optionValues.value[prevIndex]
+    while (prevIsDisabled && prevIndex >= 0 && previous !== undefined) {
+      prevIsDisabled = disabledOptions.value.includes(previous)
 
       if (prevIsDisabled) {
         prevIndex--

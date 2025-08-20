@@ -16,7 +16,7 @@ const beneficiaryFirstNameSchemaTransform = (
       return v
     }
     const [firstLetter, ...rest] = v
-    return `${firstLetter.toUpperCase()}${rest.join('')}`
+    return `${(firstLetter as string).toUpperCase()}${rest.join('')}`
   })
 
 const beneficiaryFirstNameSchema = beneficiaryFirstNameSchemaTransform(

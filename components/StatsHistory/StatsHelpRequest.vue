@@ -57,8 +57,8 @@
           <StatsCard
             v-if="displayed.instructionType"
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.instructionType.id"
-            :card-name="helpRequestCardsConfig.instructionType.name"
+            :card-id="instructionTypeConfig.instructionType.id"
+            :card-name="instructionTypeConfig.instructionType.name"
           >
             <StatsFileInstructionType
               :total-count="helpRequestCount"
@@ -69,8 +69,8 @@
           <StatsCard
             v-if="displayed.socialSupportSubjects"
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.subjects.id"
-            :card-name="helpRequestCardsConfig.subjects.name"
+            :card-id="subjectConfig.subjects.id"
+            :card-name="subjectConfig.subjects.name"
           >
             <StatsHelpRequestSubject
               :total-count="helpRequestCount"
@@ -80,8 +80,8 @@
 
           <StatsCard
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.status.id"
-            :card-name="helpRequestCardsConfig.status.name"
+            :card-id="baseConfig.status.id"
+            :card-name="baseConfig.status.name"
           >
             <StatsHelpRequestStatus
               :total-count="helpRequestCount"
@@ -92,8 +92,8 @@
           <StatsCard
             v-if="displayed.ministere"
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.ministres.id"
-            :card-name="helpRequestCardsConfig.ministres.name"
+            :card-id="ministereConfig.ministres.id"
+            :card-name="ministereConfig.ministres.name"
           >
             <StatsHelpRequestMinistre
               :total-count="helpRequestCount"
@@ -103,8 +103,8 @@
 
           <StatsCard
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
-            :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
+            :card-id="baseConfig.prescribingOrganizations.id"
+            :card-name="baseConfig.prescribingOrganizations.name"
           >
             <StatsHelpRequestPrescribingOrganizations
               :total-count="helpRequestCount"
@@ -114,8 +114,8 @@
 
           <StatsCard
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.instructions.id"
-            :card-name="helpRequestCardsConfig.instructions.name"
+            :card-id="baseConfig.instructions.id"
+            :card-name="baseConfig.instructions.name"
           >
             <StatsHelpRequestInstructions
               :total-count="helpRequestCount"
@@ -123,40 +123,37 @@
             />
           </StatsCard>
 
-          <StatsCard
-            v-if="displayed.financial"
-            class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.amountAllocated.id"
-            :card-name="helpRequestCardsConfig.amountAllocated.name"
-          >
-            <StatsHelpRequestAmountsAllocated :filters />
-          </StatsCard>
+          <template v-if="displayed.financial">
+            <StatsCard
+              class="fr-col-12 fr-col-md-6"
+              :card-id="financialConfig.amountAllocated.id"
+              :card-name="financialConfig.amountAllocated.name"
+            >
+              <StatsHelpRequestAmountsAllocated :filters />
+            </StatsCard>
 
-          <StatsCard
-            v-if="displayed.financial"
-            class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.amountsBySubject.id"
-            :card-name="helpRequestCardsConfig.amountsBySubject.name"
-          >
-            <StatsHelpRequestAmountsBySubject :filters="filters" />
-          </StatsCard>
+            <StatsCard
+              class="fr-col-12 fr-col-md-6"
+              :card-id="financialConfig.amountsBySubject.id"
+              :card-name="financialConfig.amountsBySubject.name"
+            >
+              <StatsHelpRequestAmountsBySubject :filters="filters" />
+            </StatsCard>
 
-          <StatsCard
-            v-if="displayed.financial"
-            class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.amountByInstructorOrganization.id"
-            :card-name="
-              helpRequestCardsConfig.amountByInstructorOrganization.name
-            "
-          >
-            <StatsHelpRequestAmountsByInstructorOrganization :filters />
-          </StatsCard>
+            <StatsCard
+              class="fr-col-12 fr-col-md-6"
+              :card-id="financialConfig.amountByInstructorOrganization.id"
+              :card-name="financialConfig.amountByInstructorOrganization.name"
+            >
+              <StatsHelpRequestAmountsByInstructorOrganization :filters />
+            </StatsCard>
+          </template>
 
           <StatsCard
             v-if="displayed.housing"
             class="fr-col-12 fr-col-md-6"
-            :card-id="helpRequestCardsConfig.housingHelpRequest.id"
-            :card-name="helpRequestCardsConfig.housingHelpRequest.name"
+            :card-id="housingConfig.housingHelpRequest.id"
+            :card-name="housingConfig.housingHelpRequest.name"
           >
             <StatsHousingHelpRequests :filters="filters" />
           </StatsCard>
@@ -171,7 +168,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
-  import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
@@ -250,60 +246,63 @@
     ministere: application.value.module.ministere
   }))
 
-  const helpRequestCardsConfig: ComputedRef<StatsCardConfig> = computed(() => {
-    return {
-      ...(displayed.value.instructionType && {
-        instructionType: {
-          id: 'stats-helprequest-instruction-type',
-          name: "Thématique d'instruction"
-        }
-      }),
-      ...(displayed.value.socialSupportSubjects && {
-        subjects: {
-          id: 'stats-helprequest-subjects',
-          name: "Objets d'accompagnement"
-        }
-      }),
-      ...(displayed.value.housing && {
-        housingHelpRequest: {
-          id: 'stats-helprequest-housing-helprequest',
-          name: 'Demandes de logement'
-        }
-      }),
-      status: {
-        id: 'stats-helprequest-status',
-        name: 'Statuts'
-      },
-      ...(displayed.value.ministere && {
-        ministres: {
-          id: 'stats-helprequest-ministres',
-          name: 'Ministres'
-        }
-      }),
-      prescribingOrganizations: {
-        id: 'stats-helprequest-prescribing-organization',
-        name: 'Organismes prescripteurs'
-      },
-      instructions: {
-        id: 'stats-helprequest-instructions',
-        name: 'Instructions'
-      },
-      ...(displayed.value.financial && {
-        amountAllocated: {
-          id: 'stats-helprequest-amount-allocated',
-          name: 'Montants des aides délivrées'
-        },
-        amountByInstructorOrganization: {
-          id: 'stats-helprequest-amount-by-instructor-organization',
-          name: 'Répartition des montants accordés par organisme instructeur'
-        },
-        amountsBySubject: {
-          id: 'stats-helprequest-amounts-by-subject',
-          name: 'Répartition des montants accordés par objet d’accompagnement'
-        }
-      })
+  const baseConfig = {
+    status: {
+      id: 'stats-helprequest-status',
+      name: 'Statuts'
+    },
+    prescribingOrganizations: {
+      id: 'stats-helprequest-prescribing-organization',
+      name: 'Organismes prescripteurs'
+    },
+    instructions: {
+      id: 'stats-helprequest-instructions',
+      name: 'Instructions'
     }
-  })
+  }
+
+  const instructionTypeConfig = {
+    instructionType: {
+      id: 'stats-helprequest-instruction-type',
+      name: "Thématique d'instruction"
+    }
+  }
+
+  const housingConfig = {
+    housingHelpRequest: {
+      id: 'stats-helprequest-housing-helprequest',
+      name: 'Demandes de logement'
+    }
+  }
+
+  const subjectConfig = {
+    subjects: {
+      id: 'stats-helprequest-subjects',
+      name: "Objets d'accompagnement"
+    }
+  }
+
+  const ministereConfig = {
+    ministres: {
+      id: 'stats-helprequest-ministres',
+      name: 'Ministres'
+    }
+  }
+
+  const financialConfig = {
+    amountAllocated: {
+      id: 'stats-helprequest-amount-allocated',
+      name: 'Montants des aides délivrées'
+    },
+    amountByInstructorOrganization: {
+      id: 'stats-helprequest-amount-by-instructor-organization',
+      name: 'Répartition des montants accordés par organisme instructeur'
+    },
+    amountsBySubject: {
+      id: 'stats-helprequest-amounts-by-subject',
+      name: 'Répartition des montants accordés par objet d’accompagnement'
+    }
+  }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
     const menus: Menu[] = []
@@ -322,7 +321,14 @@
             zipAndDownloadImages(
               'Statistiques - Instructions de dossiers - ' +
                 date.toLocaleDateString(),
-              helpRequestCardsConfig.value,
+              {
+                ...baseConfig,
+                ...(displayed.value.instructionType && instructionTypeConfig),
+                ...(displayed.value.socialSupportSubjects && subjectConfig),
+                ...(displayed.value.housing && housingConfig),
+                ...(displayed.value.ministere && ministereConfig),
+                ...(displayed.value.financial && financialConfig)
+              },
               buttonFilter,
               closeAlert
             )

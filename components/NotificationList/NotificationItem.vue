@@ -89,7 +89,6 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { formatDate } from '~/utils/formatDate'
   import { routes } from '~/utils/routes'
   import { NotificationItemType } from './types'
 

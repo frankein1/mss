@@ -280,7 +280,7 @@
     ignoreBlur: Ref<boolean | undefined>
     activeIndex: Ref<number | undefined>
     activeOption: Ref<HTMLElement | null | undefined>
-    activeOptionValue: ComputedRef<string>
+    activeOptionValue: ComputedRef<string | undefined>
     listbox: Ref<HTMLElement | null>
     callFocus: Ref<boolean | undefined>
   } {
@@ -298,7 +298,7 @@
       ignoreBlur: ref<undefined>(),
       activeIndex: ref<undefined>(),
       activeOption: ref<undefined>(),
-      activeOptionValue: computed(() => ''),
+      activeOptionValue: computed(() => undefined),
       listbox: ref<HTMLUListElement | null>(null),
       callFocus: ref<undefined>()
     }
@@ -344,7 +344,10 @@
         return
       case ' ':
         e.preventDefault()
-        return onToggleOption(activeOptionValue.value)
+        return (
+          activeOptionValue.value !== undefined &&
+          onToggleOption(activeOptionValue.value)
+        )
     }
   }
 

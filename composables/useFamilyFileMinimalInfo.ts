@@ -24,8 +24,7 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     const queryBeneficiaryId = route.query.beneficiaryId as string
 
     const defaultBeneficiaryId =
-      familyFileIdentification.value &&
-      familyFileIdentification.value.length > 0
+      familyFileIdentification.value?.[0] !== undefined
         ? familyFileIdentification.value[0].id
         : ''
 

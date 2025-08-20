@@ -94,7 +94,7 @@ export default defineEventHandler(async event => {
 
   const file = multipartFormData[0]
 
-  if (!validateDocumentType(file.data)) {
+  if (!file || !validateDocumentType(file.data)) {
     throw createError({
       statusCode: 400,
       message: 'Format de fichier invalide'

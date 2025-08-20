@@ -138,6 +138,9 @@
     const result = new Map<string, typeof workshops>()
     for (const key of sortedKeys) {
       const group = tempGroups[key]
+      if (!group) {
+        continue
+      }
       group.items.sort((a, b) =>
         asc
           ? a.date.getTime() - b.date.getTime()

@@ -1,4 +1,4 @@
-import { Prisma, UserActivityType } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
