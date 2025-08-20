@@ -1,5 +1,4 @@
 import StarterKit from '@tiptap/starter-kit'
-import Link from '@tiptap/extension-link'
 
 export const tiptapExtensions = [
   StarterKit.configure({
@@ -18,9 +17,9 @@ export const tiptapExtensions = [
       HTMLAttributes: {
         class: 'text-editor-list'
       }
+    },
+    link: {
+      defaultProtocol: 'https'
     }
-  }),
-  Link.configure({
-    defaultProtocol: 'https'
   })
 ]
