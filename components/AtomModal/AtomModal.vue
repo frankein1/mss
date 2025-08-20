@@ -15,7 +15,7 @@
             <div class="fr-modal__header">
               <button
                 v-autofocus
-                class="fr-btn--close fr-btn"
+                class="fr-btn--close fr-btn force-focus-visible"
                 aria-controls="global-modal"
                 title="Fermer"
                 @click="close"

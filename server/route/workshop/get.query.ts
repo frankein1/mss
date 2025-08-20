@@ -7,6 +7,7 @@ import {
 import { WorkshopRepo } from '~/server/database'
 import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
 import { isReferent } from '~/server/security'
+import { formatWorkshopAttendees } from '~/server/services/workshop/helper'
 
 export const handler = async ({
   ctx: { user },
@@ -33,56 +34,72 @@ export const getOneWithAttendees = async (
   user: SecurityRuleGrantee,
   id: string
 ) => {
-  return await WorkshopRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include: {
-      workshopName: true,
-      partnerOrganization: {
-        select: { id: true, name: true }
-      },
-      _count: {
-        select: {
-          workshopAttendees: true
-        }
-      },
-      workshopAttendees: {
-        include: {
-          beneficiary: {
-            select: {
-              id: true,
-              birthDate: true,
-              birthName: true,
-              firstName: true,
-              usualName: true,
-              title: true,
-              status: true,
-              street: true,
-              city: true,
-              zipcode: true,
-              phone1: true,
-              email: true
+  const { workshopAttendees, ...rest } = await WorkshopRepo.findUniqueOrThrow(
+    user,
+    {
+      where: { id },
+      include: {
+        workshopName: true,
+        partnerOrganization: {
+          select: { id: true, name: true }
+        },
+        _count: {
+          select: {
+            workshopAttendees: true
+          }
+        },
+        workshopAttendees: {
+          include: {
+            beneficiary: {
+              select: {
+                birthDate: true,
+                birthName: true,
+                firstName: true,
+                usualName: true,
+                title: true,
+                street: true,
+                city: true,
+                zipcode: true,
+                phone1: true,
+                email: true
+              }
+            },
+            workshopExternalAttendee: {
+              select: {
+                firstName: true,
+                lastName: true,
+                gender: true,
+                birthDate: true,
+                email: true,
+                city: true,
+                phone: true
+              }
             }
           },
-          workshopExternalAttendee: true
-        },
-        // TODO: add this to WorkshopConstraint
-        ...(isReferent(user) && {
-          where: {
-            OR: [
-              {
-                type: { not: 'Beneficiary' }
-              },
-              {
-                beneficiary: {
-                  familyFile: { referents: { some: { id: user.id } } }
+          // TODO: add this to WorkshopConstraint
+          ...(isReferent(user) && {
+            where: {
+              OR: [
+                {
+                  type: { not: 'Beneficiary' }
+                },
+                {
+                  beneficiary: {
+                    familyFile: { referents: { some: { id: user.id } } }
+                  }
                 }
-              }
-            ]
-          }
-        })
+              ]
+            }
+          })
+        }
       }
     }
-  })
+  )
+
+  return {
+    ...rest,
+    workshopAttendees: formatWorkshopAttendees(workshopAttendees)
+  }
 }
 
 export const getQuery = createQuery({

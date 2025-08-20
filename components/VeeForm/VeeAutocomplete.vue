@@ -26,7 +26,8 @@
       v-model="modelValue"
       class="fr-input"
       :class="{ 'fr-input--error': error }"
-      :name="name"
+      :name
+      :type
       autocomplete="off"
       aria-autocomplete="list"
       aria-haspopup="listbox"
@@ -110,12 +111,14 @@
     defineProps<{
       name: string
       label: string
+      type?: string
       searchFn: (search: string) => Promise<OptionsWithDisabled>
       required?: boolean
       value?: string
       hint?: string
     }>(),
     {
+      type: 'search',
       required: false,
       value: undefined,
       hint: ''

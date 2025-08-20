@@ -7,13 +7,13 @@
           alt=""
         />
         <p class="registration-count">
-          <span class="cont-emphasis">{{
+          <span class="count-emphasis">{{
             workshop._count.workshopAttendees
           }}</span>
           inscription<span v-if="workshop._count.workshopAttendees > 1">s</span>
         </p>
         <div
-          v-if="attendees.length > 0"
+          v-if="workshop.workshopAttendees.length > 0"
           class="action"
         >
           <ExportDataButton
@@ -36,17 +36,17 @@
     </div>
     <div class="fr-col-12">
       <ul
-        v-if="attendees.length"
+        v-if="workshop.workshopAttendees.length"
         class="attendee-list"
       >
         <li
-          v-for="(attendee, idx) in attendees"
+          v-for="(attendee, idx) in workshop.workshopAttendees"
           :key="idx"
           class="fr-mb-1w"
         >
           <WorkshopAttendeeItem
-            :attendee="attendee"
-            @delete-attendee="emit('deleteAttendee', $event)"
+            :attendee
+            @delete-attendee="onDeleteAttendee"
             @change-attendance="onChangeAttendance"
           />
         </li>
@@ -58,8 +58,10 @@
 
 <script setup lang="ts">
   import { WorkshopWithAttendeesDetails } from '~/types/workshop'
-  import WorkshopAttendeeItem from './WorkshopAttendeeItem.vue'
-  import { WorkshopAttendeeAttendance } from '@prisma/client'
+  import {
+    WorkshopAttendeeAttendance,
+    WorkshopAttendeeType
+  } from '@prisma/client'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
     INVALID_CODE_ERROR_MESSAGE
@@ -69,30 +71,47 @@
   import { isTRPCClientError } from '~/utils/error'
 
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
+
   const isDownloading = ref(false)
 
   const { workshop } = defineProps<{
     workshop: WorkshopWithAttendeesDetails
   }>()
 
-  const emit = defineEmits<{
-    deleteAttendee: [id: string]
-    changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
-  }>()
+  const emit = defineEmits<{ refresh: [] }>()
 
   const { isReferent } = useAuthState()
 
-  const attendees = computed(() => {
-    return workshop.workshopAttendees
-  })
+  const onDeleteAttendee = async (id: string, type: WorkshopAttendeeType) => {
+    const { mutate, error } = trpcClient.workshop.deleteAttendee.useMutation()
 
-  const onChangeAttendance = (
-    attendeeId: string,
+    const deletedAttendee = await mutate({ id, type })
+
+    if (error.value || deletedAttendee === null) {
+      snackbar.error('La suppression du participant a échoué.')
+      return
+    }
+    emit('refresh')
+    snackbar.success('La suppression du participant a réussi.')
+  }
+
+  const onChangeAttendance = async (
+    id: string,
     attendance: WorkshopAttendeeAttendance
   ) => {
-    emit('changeAttendance', attendeeId, attendance)
+    const { mutate, error } =
+      trpcClient.workshop.updateAttendeeAttendance.useMutation()
+
+    const result = await mutate({ id, attendance })
+
+    if (error.value || result === null) {
+      snackbar.error('La modification du participant a échoué.')
+      return
+    }
+    snackbar.success('La modification du participant a réussi.')
   }
-  // get Excel file
+
   const getExportedAttendance = async (code: string) => {
     isDownloading.value = true
 
@@ -142,7 +161,7 @@
       font-size: 1.5rem;
       font-weight: 700;
 
-      .cont-emphasis {
+      .count-emphasis {
         font-size: 2.25rem;
         color: var(--primary);
       }

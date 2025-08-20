@@ -1,4 +1,5 @@
 import { createAttendee } from './create-attendee.mutation'
+import { createExternalAttendee } from './create-external-attendee.mutation'
 import { createWorkshop } from './create.mutation'
 import { getPageQuery } from './getPage.query'
 import { getQuery } from './get.query'
@@ -17,6 +18,7 @@ export const workshopRoutes = {
   deleteWorkshop,
   updateWorkshop,
   createAttendee,
+  createExternalAttendee,
   deleteAttendee,
   updateAttendeeAttendance,
   getExportedAttendance

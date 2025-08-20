@@ -1,4 +1,4 @@
-import { Workshop } from '@prisma/client'
+import { Workshop, WorkshopExternalAttendee } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type WorkshopFieldLabels = Omit<
@@ -26,3 +26,14 @@ export const workshopLabels: FieldLabels<WorkshopFieldLabels> = {
   ageLimitCondition: 'Conditions d’âge (à titre informatif)',
   ageLimit: 'Age (ans)'
 }
+
+export const workshopExternalAttendeeLabels = {
+  id: 'Identifiant',
+  firstName: 'Prénom',
+  lastName: 'Nom',
+  gender: 'Genre',
+  email: 'Email',
+  phone: 'Téléphone',
+  birthDate: 'Date de naissance',
+  city: 'Ville'
+} satisfies FieldLabels<Omit<WorkshopExternalAttendee, 'created' | 'updated'>>

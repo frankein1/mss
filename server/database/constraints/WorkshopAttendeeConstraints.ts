@@ -20,9 +20,16 @@ const get = (user: SecurityRuleGrantee) => {
       Prisma.WorkshopAttendeeWhereInput,
       Prisma.WorkshopAttendeeWhereInput
     >(where, {
-      beneficiary: {
-        familyFile: { referents: { some: { id: user.id } } }
-      }
+      OR: [
+        {
+          type: { not: 'Beneficiary' }
+        },
+        {
+          beneficiary: {
+            familyFile: { referents: { some: { id: user.id } } }
+          }
+        }
+      ]
     })
   }
   return where

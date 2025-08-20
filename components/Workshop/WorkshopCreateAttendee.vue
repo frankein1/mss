@@ -41,19 +41,14 @@
       </ComboBox>
       <p class="separator">ou</p>
       <button
-        aria-describedby="add-attendee-tooltip"
         type="button"
         class="fr-btn fr-btn--primary fr-btn--icon-left fr-icon-add-line fr-mb-0"
-        disabled
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        @click="onAddExternalAttendee"
       >
         Ajouter une nouvelle personne
       </button>
-      <span
-        id="add-attendee-tooltip"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        >Fonctionnalité à venir</span
-      >
     </div>
   </div>
 </template>
@@ -61,6 +56,8 @@
 <script setup lang="ts">
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { WorkshopAttendee } from '~/types/workshop'
+  import WorkshopAddExternalAttendeeModal from '~/components/Workshop/WorkshopAddExternalAttendeeModal.vue'
+  import { WorkshopAttendeeType } from '@prisma/client'
 
   const { attendees } = defineProps<{ attendees: WorkshopAttendee[] }>()
   const emit = defineEmits<{ refresh: [] }>()
@@ -68,13 +65,21 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const route = useRoute()
+  const modal = useModal()
+
   const selectedBeneficiary = ref<
     (BeneficiarySearchResult & { disabled: boolean }) | null
   >(null)
   const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
   const comboboxRef = useTemplateRef('attendee-combobox')
   const beneficiaryAttendeeIds = computed(() => {
-    return attendees.map(attendee => attendee.beneficiaryId)
+    return attendees
+      .map(attendee =>
+        attendee.type === WorkshopAttendeeType.Beneficiary
+          ? attendee.beneficiaryId
+          : false
+      )
+      .filter(Boolean)
   })
   const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
 
@@ -111,6 +116,15 @@
       'Personne ajoutée avec succès',
       snackbar.focus('.combobox-wrapper')
     )
+  }
+
+  function onAddExternalAttendee() {
+    modal.open(WorkshopAddExternalAttendeeModal, {
+      title: 'Ajouter une nouvelle personne',
+      size: 'lg',
+      workshopId,
+      refresh: () => emit('refresh')
+    })
   }
 </script>
 

@@ -25,36 +25,29 @@
       />
     </div>
     <div class="info">
-      <template
-        v-if="
-          attendeeDetails &&
-          (attendeeDetails.phone1 ||
-            attendeeDetails.email ||
-            attendeeDetails.birthDate)
-        "
-      >
+      <template v-if="attendee.phone || attendee.email || attendee.birthDate">
         <p
-          v-if="attendee.beneficiary?.phone1"
+          v-if="attendee.phone"
           class="fr-text--sm telephone"
         >
           <span
             class="fr-icon--sm fr-icon-phone-line"
             aria-hidden="true"
           ></span>
-          {{ attendeeDetails.phone1 }}
+          {{ attendee.phone }}
         </p>
         <p
-          v-if="attendeeDetails.email"
+          v-if="attendee.email"
           class="fr-text--sm email"
         >
           <span
             class="fr-icon--sm fr-icon-mail-line"
             aria-hidden="true"
           ></span>
-          {{ attendeeDetails.email }}
+          {{ attendee.email }}
         </p>
         <p
-          v-if="attendeeDetails.birthDate"
+          v-if="attendee.birthDate"
           class="fr-text--sm age"
         >
           <span
@@ -62,7 +55,7 @@
             aria-hidden="true"
           >
           </span>
-          {{ calculateAge(attendeeDetails.birthDate) }}&nbsp;ans
+          {{ calculateAge(attendee.birthDate) }}&nbsp;ans
         </p>
       </template>
     </div>
@@ -122,74 +115,75 @@
   import type { Menu } from '~/types/menu'
   import { WorkshopAttendee } from '~/types/workshop'
   import {
+    BeneficiaryTitle,
+    Gender,
     WorkshopAttendeeAttendance,
     WorkshopAttendeeType
   } from '@prisma/client'
+  import { beneficiaryTitleKeys } from '~/client/options'
 
   const attendeeForm = ref<HTMLFormElement | null>(null)
 
-  const props = defineProps<{
+  const { attendee } = defineProps<{
     attendee: WorkshopAttendee
   }>()
 
   const emit = defineEmits<{
-    deleteAttendee: [id: string]
+    deleteAttendee: [id: string, type: WorkshopAttendeeType]
     changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
   }>()
 
   const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
   const ATTENDEE_PRESENCE_ID = 'beneficiary-presence-' + useId()
 
-  const attendeeDetails = computed(() => {
-    if (props.attendee.beneficiary) {
-      return props.attendee.beneficiary
-    }
-    return null
-  })
-
   const attendeeName = computed(() => {
-    if (attendeeDetails.value == null) {
-      return ''
+    let title = ''
+    if (attendee.gender === Gender.Female) {
+      title = beneficiaryTitleKeys.value(BeneficiaryTitle.Miss) || ''
+    } else if (attendee.gender === Gender.Male) {
+      title = beneficiaryTitleKeys.value(BeneficiaryTitle.Mister) || ''
     }
-    return formatBeneficiaryName(attendeeDetails.value)
+
+    return `${title + ' '}${(attendee.firstName || '(non renseigné)') + ' '}${attendee.lastName || '(non renseigné)'}`
   })
 
   const attendeeAddress = computed(() => {
-    if (
-      !attendeeDetails.value ||
-      (!attendeeDetails.value?.street &&
-        !attendeeDetails.value?.zipcode &&
-        !attendeeDetails.value?.city)
-    ) {
-      return null
+    if (attendee.type === WorkshopAttendeeType.Beneficiary) {
+      if (!attendee.street && !attendee.zipcode && !attendee.city) {
+        return null
+      }
+      return formatAddress({
+        street: attendee.street,
+        zipcode: attendee.zipcode,
+        city: attendee.city,
+        region: null
+      })
     }
-    return formatAddress({
-      street: attendeeDetails.value.street,
-      zipcode: attendeeDetails.value.zipcode,
-      city: attendeeDetails.value.city,
-      region: null
-    })
+
+    if (attendee.type === WorkshopAttendeeType.External) {
+      return attendee.city
+    }
   })
 
   // Option button dropdown
   const menus: Menu[] = [
     {
       label: "Retirer de l'atelier",
-      callback: () => emit('deleteAttendee', props.attendee.id),
+      callback: () => emit('deleteAttendee', attendee.id, attendee.type),
       icon: 'ri-user-unfollow-line'
     }
   ]
 
   useForm({
     initialValues: {
-      attendance: props.attendee.attendance
+      attendance: attendee.attendance
     }
   })
 
   const onChangeAttendance = (attendance: string) => {
     emit(
       'changeAttendance',
-      props.attendee.id,
+      attendee.id,
       attendance as WorkshopAttendeeAttendance
     )
   }

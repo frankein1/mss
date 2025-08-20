@@ -1,29 +1,59 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType, WorkshopAttendeeType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { IdInput, idSchema } from '~/server/schema'
-import { WorkshopAttendeeRepo } from '~/server/database'
+import { DeleteAttendeeInput, deleteAttendeeSchema } from '~/server/schema'
+import {
+  WorkshopAttendeeRepo,
+  WorkshopExternalAttendeeRepo
+} from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { badrequest } from '~/utils/api/errors'
 
 const securityCheck = AllowSecurityCheck
 
 const handler = async ({
-  input,
+  input: { id, type },
   ctx
 }: {
-  input: IdInput
+  input: DeleteAttendeeInput
   ctx: ProtectedAppContext
-}) =>
-  WorkshopAttendeeRepo.delete(ctx.user, {
-    select: { id: true },
-    where: {
-      id: input.id,
-      workshop: { structureId: ctx.structure.id }
+}) => {
+  if (type === WorkshopAttendeeType.Beneficiary) {
+    await WorkshopAttendeeRepo.delete(ctx.user, {
+      where: {
+        id: id,
+        workshop: { structureId: ctx.structure.id }
+      }
+    })
+
+    return { id, type }
+  }
+
+  if (type === WorkshopAttendeeType.External) {
+    const { workshopExternalAttendeeId } =
+      await WorkshopAttendeeRepo.findUniqueOrThrow(ctx.user, {
+        select: { workshopExternalAttendeeId: true },
+        where: { id }
+      })
+
+    if (!workshopExternalAttendeeId) {
+      throw badrequest('workshop: external attendee id not found')
     }
-  })
+
+    await WorkshopExternalAttendeeRepo.delete(ctx.user, {
+      where: { id: workshopExternalAttendeeId }
+    })
+
+    return { id, type }
+  }
+
+  throw badrequest(
+    'workshop: request not implemented for accompanying attendee'
+  )
+}
 
 export const deleteAttendee = createMutation({
-  inputValidation: idSchema,
+  inputValidation: deleteAttendeeSchema,
   securityCheck,
   handler,
   auditLog: {

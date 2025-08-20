@@ -8,4 +8,7 @@ export { relativeFieldLabels } from './relative.labels'
 export { documentFieldLabels } from './document.labels'
 export { housingHelpRequestFieldLabels } from './housingHelpRequest.labels'
 export { partnerOrganizationFieldLabels } from './partnerOrganization.labels'
-export { workshopLabels } from './workshop.labels'
+export {
+  workshopLabels,
+  workshopExternalAttendeeLabels
+} from './workshop.labels'
