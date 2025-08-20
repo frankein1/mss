@@ -16,9 +16,10 @@
 </template>
 
 <script setup lang="ts">
-  import { User } from '@prisma/client'
+  import type { User } from '@prisma/client'
   import { nonAdminUserRoleKeys } from '~/client/options'
-  import { editUserRoleSchema, UserRoleEditionInput } from '~/server/schema'
+  import type { UserRoleEditionInput } from '~/server/schema'
+  import { editUserRoleSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()

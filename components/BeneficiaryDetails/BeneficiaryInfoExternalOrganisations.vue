@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
+  import type { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{

@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   typescript: {
     tsConfig: {
       compilerOptions: {
-        verbatimModuleSyntax: false,
+        verbatimModuleSyntax: true,
         noUncheckedIndexedAccess: true
       }
     }

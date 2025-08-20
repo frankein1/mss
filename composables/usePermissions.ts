@@ -1,4 +1,4 @@
-import { AppContextPermissions } from '~/server/security'
+import type { AppContextPermissions } from '~/server/security'
 
 export function usePermissions() {
   const application = useState<AppContextPermissions>(

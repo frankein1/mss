@@ -1,4 +1,4 @@
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { BudgetExpensesRepo } from '~/server/database/repository'
 
 export async function getExpenses({

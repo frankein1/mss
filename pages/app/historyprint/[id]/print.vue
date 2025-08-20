@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionType } from '@prisma/client'
+  import type { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { TypeSuivi } from '~/client/options'
-  import {
+  import type {
     HousingHelpRequestOutput,
     HelpRequestOutput,
     FollowupOutput

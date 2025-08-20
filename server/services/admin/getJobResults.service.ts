@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { jobConverter } from '../jobResult/jobConverter'
-import {
+import type {
   JobResultAdminFilterInput,
   AdminGetJobResultsInput
 } from '~/server/schema'

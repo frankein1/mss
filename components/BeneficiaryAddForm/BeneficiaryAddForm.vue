@@ -125,16 +125,14 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    CreateFamilyFileMemberInput,
-    createFamilyFileMemberSchema
-  } from '~/server/schema'
+  import type { CreateFamilyFileMemberInput } from '~/server/schema'
+  import { createFamilyFileMemberSchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     commonRelationshipKeys,
     beneficiaryTitleKeys
   } from '~/client/options'
-  import { SimilarBeneficiary } from '~/server/route'
+  import type { SimilarBeneficiary } from '~/server/route'
   import { EventCategory, FamilyFileAction } from '~/types/matomo'
 
   const matomo = useMatomo()

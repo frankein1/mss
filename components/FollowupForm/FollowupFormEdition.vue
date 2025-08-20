@@ -14,12 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportSubject } from '@prisma/client'
+  import type { SocialSupportSubject } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { FollowupPageItem } from './types'
-  import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { FollowupPageItem } from './types'
+  import type { EditFollowupInput } from '~/server/schema'
+  import { editFollowupSchema } from '~/server/schema'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 

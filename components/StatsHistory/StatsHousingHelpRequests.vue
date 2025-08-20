@@ -51,8 +51,8 @@
     housingReasonKeys,
     getStatLabel
   } from '~/client/options'
-  import { StatFilterInput } from '~/server/schema'
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatFilterInput } from '~/server/schema'
+  import type { StatsListPropType } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'

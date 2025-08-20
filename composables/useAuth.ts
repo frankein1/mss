@@ -1,5 +1,5 @@
 import { useAuthState } from './useAuthState'
-import { AppContextPermissions } from '~/server/security'
+import type { AppContextPermissions } from '~/server/security'
 import type { JwtUser } from '~/server/lib/jwt'
 
 interface UserSession {

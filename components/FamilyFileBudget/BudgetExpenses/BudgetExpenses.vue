@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ExpensesKey, BudgetExpenses } from '../types'
+  import type { ExpensesKey, BudgetExpenses } from '../types'
   import { budgetExpensesKeys } from '~/client/options'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incrementBudgetTotal } from '~/utils/budget'

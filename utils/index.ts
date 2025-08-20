@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 
 export function dateIsSameOrBefore(date: Dayjs, upper: Dayjs): boolean {
   return date.isSameOrBefore(upper, 'day')

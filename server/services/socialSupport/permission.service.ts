@@ -1,5 +1,8 @@
 import { SocialSupportRepo } from '~/server/database'
-import { SecurityRuleGrantee, SecurityRuleContext } from '~/server/security'
+import type {
+  SecurityRuleGrantee,
+  SecurityRuleContext
+} from '~/server/security'
 import { getSocialSupportPermissions } from '~/server/security/permissions'
 
 export function getSocialSupportSecurityTarget(

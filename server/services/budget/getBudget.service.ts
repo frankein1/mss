@@ -1,5 +1,5 @@
 import { getDeltaIncomeExpenses } from './helpers'
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 

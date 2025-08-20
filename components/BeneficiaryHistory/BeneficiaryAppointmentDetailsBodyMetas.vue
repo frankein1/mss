@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AppointmentData } from './types'
+  import type { AppointmentData } from './types'
 
   defineProps<{ appointment: AppointmentData }>()
 </script>

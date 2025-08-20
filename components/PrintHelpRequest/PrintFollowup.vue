@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { FollowupOutput } from './types'
+  import type { FollowupOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'

@@ -142,7 +142,7 @@
   import { FileInstructionType } from '@prisma/client'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { FamilyFilePermissions } from '~/server/security'
   import { TypeSuivi } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'

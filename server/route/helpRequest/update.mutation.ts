@@ -1,11 +1,10 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { EditHelpRequestInput } from '~/server/schema'
+import { editHelpRequestSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { HelpRequestService } from '~/server/services'
 
 const handler = ({

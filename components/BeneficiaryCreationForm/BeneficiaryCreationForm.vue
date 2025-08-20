@@ -173,13 +173,11 @@
 <script setup lang="ts">
   import { BeneficiaryStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { BeneficiaryReferent } from '~/types/beneficiary'
-  import {
-    CreateBeneficiaryInput,
-    createBeneficiarySchema
-  } from '~/server/schema'
+  import type { BeneficiaryReferent } from '~/types/beneficiary'
+  import type { CreateBeneficiaryInput } from '~/server/schema'
+  import { createBeneficiarySchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { beneficiaryTitleKeys } from '~/client/options'
 
   defineProps<{

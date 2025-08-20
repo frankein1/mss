@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import {
+import type {
   FileInstructionFilterInput,
   ExportFileInstructionsInput
 } from '~/server/schema'

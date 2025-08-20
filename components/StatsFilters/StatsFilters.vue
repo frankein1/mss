@@ -27,7 +27,8 @@
     ministereStructureKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
-  import { Options, withEmptyValue } from '~/utils/options'
+  import type { Options } from '~/utils/options'
+  import { withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { StatPeriodFilter } from '~/types/stat'

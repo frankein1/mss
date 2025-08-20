@@ -1,11 +1,9 @@
-import {
+import type {
   Beneficiary,
-  BeneficiaryTitle,
-  Gender,
   WorkshopAttendee,
-  WorkshopAttendeeType,
   WorkshopExternalAttendee
 } from '@prisma/client'
+import { BeneficiaryTitle, Gender, WorkshopAttendeeType } from '@prisma/client'
 
 const getGenderFromTitle = (title: BeneficiaryTitle | null | undefined) => {
   if (!title) {

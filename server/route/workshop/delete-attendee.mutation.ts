@@ -1,7 +1,8 @@
 import { UserActivityType, WorkshopAttendeeType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { DeleteAttendeeInput, deleteAttendeeSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { DeleteAttendeeInput } from '~/server/schema'
+import { deleteAttendeeSchema } from '~/server/schema'
 import {
   WorkshopAttendeeRepo,
   WorkshopExternalAttendeeRepo

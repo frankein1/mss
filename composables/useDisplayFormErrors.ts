@@ -1,4 +1,4 @@
-import { FormErrors, GenericObject } from 'vee-validate'
+import type { FormErrors, GenericObject } from 'vee-validate'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 function isDefinedError(

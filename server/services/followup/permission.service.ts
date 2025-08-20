@@ -1,9 +1,10 @@
 import { FollowupRepo } from '~/server/database'
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import {
-  FollowupPermissions,
-  getFollowupPermissions
-} from '~/server/security/permissions'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
+import type { FollowupPermissions } from '~/server/security/permissions'
+import { getFollowupPermissions } from '~/server/security/permissions'
 
 export function getFollowupSecurityTarget(
   user: SecurityRuleGrantee,

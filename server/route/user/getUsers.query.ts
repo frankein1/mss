@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { UserRepo } from '~/server/database'
 

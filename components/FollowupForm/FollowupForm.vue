@@ -320,9 +320,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
+  import type { SocialSupportSubject } from '@prisma/client'
+  import { FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
-  import { JSONContent } from '@tiptap/vue-3'
+  import type { JSONContent } from '@tiptap/vue-3'
   import {
     ministerKeys,
     followupStatusKeys,
@@ -333,9 +334,9 @@
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { routes } from '~/utils/routes'
   import { followupFieldLabels } from '~/client/labels'
-  import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { AddFollowupInput, EditFollowupInput } from '~/server/schema'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'

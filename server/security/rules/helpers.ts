@@ -1,5 +1,5 @@
 import { StructureType } from '@prisma/client'
-import {
+import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
   SecurityTargetWithCreator,

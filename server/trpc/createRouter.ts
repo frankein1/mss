@@ -1,13 +1,13 @@
 import picocolors from 'picocolors'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import { H3Event } from 'h3'
+import type { H3Event } from 'h3'
 import { UserRole } from '@prisma/client'
-import {
+import type {
   SecurityRuleGrantee,
   SecurityRuleStructure
 } from '../security/rules/types'
-import { AppContext } from './createContext'
+import type { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
 import { shouldLog } from '~/server/utils/logging'
 

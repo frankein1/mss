@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
+  import type {
     SocialSupportSubject,
     SocialSupportStatus,
     FileInstructionType
@@ -105,10 +105,13 @@
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels
   } from '~/client/labels'
-  import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
+  import type {
+    CreateHelpRequestInput,
+    EditHelpRequestInput
+  } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = withDefaults(

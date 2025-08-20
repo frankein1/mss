@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { formatBeneficiaryNameAndBirthDate } from '~/utils/beneficiary'
 
   const modal = useModal()

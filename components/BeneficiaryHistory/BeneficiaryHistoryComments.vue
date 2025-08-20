@@ -18,13 +18,13 @@
 </template>
 
 <script setup lang="ts">
-  import {
+  import type {
     SocialSupportData,
     CommentData,
     CommentItem,
     CommentItems
   } from './types'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
     items: CommentItems

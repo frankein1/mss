@@ -32,10 +32,10 @@
   import { Gender } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel, beneficiaryGenderKeys } from '~/client/options'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { ChartColor } from '~/utils/color/chartColors'
 

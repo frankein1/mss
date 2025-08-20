@@ -29,12 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    UpdateBeneficiaryGeneralInformationInput,
-    updateBeneficiaryGeneralInformationSchema
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
+  import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

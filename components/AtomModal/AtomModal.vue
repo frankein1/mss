@@ -52,7 +52,7 @@
 <script lang="ts" setup generic="M extends Component">
   import { inject } from 'vue'
   import { useModal, modalInjectionKey } from '../../composables/useModal'
-  import { Modal } from '~/types/modal'
+  import type { Modal } from '~/types/modal'
 
   const modalState = inject(modalInjectionKey)
 

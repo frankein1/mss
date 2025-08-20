@@ -54,8 +54,8 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
-  import { WorkshopAttendee } from '~/types/workshop'
+  import type { BeneficiarySearchResult } from '~/types/beneficiary'
+  import type { WorkshopAttendee } from '~/types/workshop'
   import WorkshopAddExternalAttendeeModal from '~/components/Workshop/WorkshopAddExternalAttendeeModal.vue'
   import { WorkshopAttendeeType } from '@prisma/client'
 

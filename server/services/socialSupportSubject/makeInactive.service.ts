@@ -1,5 +1,5 @@
 import { SocialSupportSubjectRepo } from '~/server/database'
-import { IdInput } from '~/server/schema'
+import type { IdInput } from '~/server/schema'
 
 export async function makeInactive({ input }: { input: IdInput }) {
   const res = await SocialSupportSubjectRepo.prisma.update({

@@ -1,4 +1,4 @@
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 export type GetDocumentsOutput = RouterOutput['file']['getDocuments']
 export type GetDocuments = GetDocumentsOutput['documents']

@@ -1,11 +1,11 @@
 import { breadcrumbs as ben, getBreadWithBeneficiary } from './beneficiary'
 import { breadcrumbs as user } from './user'
 import { routes } from '~/utils/routes'
-import {
+import type {
   BeneficiaryNames,
   BeneficiaryIdentification
 } from '~/types/beneficiary'
-import { FamilyFileUrlOptions } from '~/utils/routes/file'
+import type { FamilyFileUrlOptions } from '~/utils/routes/file'
 
 const r = routes.file
 type Routes = typeof r

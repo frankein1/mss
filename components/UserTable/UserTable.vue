@@ -78,9 +78,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { User } from '@prisma/client'
-  import { TRPCClientErrorBase } from '@trpc/client'
-  import { TRPCDefaultErrorShape } from '@trpc/server'
+  import type { User } from '@prisma/client'
+  import type { TRPCClientErrorBase } from '@trpc/client'
+  import type { TRPCDefaultErrorShape } from '@trpc/server'
   import { AlertType } from '~/utils/constants/alert'
   import { nonAdminUserRoleKeys } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'

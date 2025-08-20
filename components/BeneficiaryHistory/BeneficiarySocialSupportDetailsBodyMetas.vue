@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportData } from './types'
+  import type { SocialSupportData } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { ministerKeys } from '~/client/options'
   import { helpRequestFieldLabels } from '~/client/labels'

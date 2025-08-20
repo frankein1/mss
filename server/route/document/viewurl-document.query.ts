@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleContext } from '~/server/security'
+import type { CreateViewUrlInput } from '~/server/schema'
+import { createViewUrlSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleContext } from '~/server/security'
 import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
 

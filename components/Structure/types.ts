@@ -1,4 +1,4 @@
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 export type StructureInfo =
   RouterOutput['structure']['getStructure']['structure']

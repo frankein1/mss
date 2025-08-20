@@ -1,6 +1,6 @@
 import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { formatFamilyFileLabels } from './formatFamilyFileLabels'
-import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
 beforeEach(() => {
   vi.useFakeTimers()

@@ -43,10 +43,8 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    updateSocialSupportSubjectSchema,
-    UpdateSocialSupportSubjectNameInput
-  } from '~/server/schema'
+  import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
+  import { updateSocialSupportSubjectSchema } from '~/server/schema'
 
   const modal = useModal()
 

@@ -1,20 +1,19 @@
-import { Prisma, UserStatus, UserActivityType } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { UserStatus, UserActivityType } from '@prisma/client'
 import pkg from 'jsonwebtoken'
 import { signJwt } from '~/server/lib/jwt'
-import {
-  getProConnectClient,
-  ProConnectClient
-} from '~/server/lib/proconnect.client'
+import { getProConnectClient } from '~/server/lib/proconnect.client'
 import type {
   ProConnectToken,
-  ProConnectUserInfo
+  ProConnectUserInfo,
+  ProConnectClient
 } from '~/server/lib/proconnect.client'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
-import { AuthSession } from '~/server/types/session'
+import type { AuthSession } from '~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
 import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'

@@ -1,11 +1,11 @@
+import type { Prisma } from '@prisma/client'
 import {
   AskedHousing,
   FileInstructionType,
   HousingReason,
   HousingRoomCount,
   HousingType,
-  LowIncomeHousingType,
-  Prisma
+  LowIncomeHousingType
 } from '@prisma/client'
 import {
   fixtureStructures,

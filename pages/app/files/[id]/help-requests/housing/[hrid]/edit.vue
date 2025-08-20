@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
-  import { EditHousingHelpRequestInput } from '~/server/schema'
+  import type { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'

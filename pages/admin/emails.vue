@@ -30,7 +30,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { EmailAdminSort, SortOrder } from '~/types/table'
+  import type { EmailAdminSort } from '~/types/table'
+  import { SortOrder } from '~/types/table'
   import type { EmailAdminFilterInput } from '~/server/schema'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 

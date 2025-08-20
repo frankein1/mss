@@ -1,6 +1,6 @@
 import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
-import { BeneficiaryNames } from '~/types/beneficiary'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 
 export interface FollowupAddRouteOptions {
   beneficiaryId?: string

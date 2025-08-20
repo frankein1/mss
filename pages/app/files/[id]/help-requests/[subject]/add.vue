@@ -43,7 +43,7 @@
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { CreateHelpRequestInput } from '~/server/schema'
+  import type { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'

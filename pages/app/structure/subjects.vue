@@ -113,10 +113,8 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    updateSocialSupportSubjectsSchema,
-    UpdateSocialSupportSubjectsInput
-  } from '~/server/schema'
+  import type { UpdateSocialSupportSubjectsInput } from '~/server/schema'
+  import { updateSocialSupportSubjectsSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 

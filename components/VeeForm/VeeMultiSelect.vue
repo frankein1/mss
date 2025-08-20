@@ -125,7 +125,7 @@
 <script setup lang="ts">
   import { useField } from 'vee-validate'
   import { toRef } from 'vue'
-  import { Options } from '~/utils/options'
+  import type { Options } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{

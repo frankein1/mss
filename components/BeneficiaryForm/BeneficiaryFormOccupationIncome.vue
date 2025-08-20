@@ -139,10 +139,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    BeneficiaryPensionOrganisation
-    // BeneficiarySocioProfessionalCategory
-  } from '@prisma/client'
+  import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,
@@ -156,8 +153,6 @@
 
   const { application } = usePermissions()
 
-  // const { value: socioProfessionalCategory } =
-  //   useField<BeneficiarySocioProfessionalCategory>('socioProfessionalCategory')
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')

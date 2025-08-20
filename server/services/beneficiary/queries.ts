@@ -1,10 +1,12 @@
-import { Prisma, SocialSupportSubject } from '@prisma/client'
+import type { Prisma, SocialSupportSubject } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
-import {
+import type {
   AppContextPermissions,
   FamilyFilePermissions,
   SecurityRuleContext,
-  SecurityRuleGrantee,
+  SecurityRuleGrantee
+} from '~/server/security'
+import {
   getAppContextPermissions,
   getFamilyFilePermissions
 } from '~/server/security'

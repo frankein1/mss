@@ -1,4 +1,5 @@
-import { JobResult, dataInclusionStructureServerSchema } from '~/server/schema'
+import type { JobResult } from '~/server/schema'
+import { dataInclusionStructureServerSchema } from '~/server/schema'
 import { downloadStructures } from '~/server/lib/data-inclusion'
 import { DataInclusionService, JobResultService } from '~/server/services'
 

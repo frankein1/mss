@@ -1,5 +1,6 @@
 import { UserRepo } from '~/server/database'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
+import { forbiddenError } from '~/server/trpc'
 import dayjs from 'dayjs'
 
 export async function verifyAuthorizationCode({

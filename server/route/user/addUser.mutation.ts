@@ -1,11 +1,10 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
-import { UserCreationInput, createUserSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { UserCreationInput } from '~/server/schema'
+import { createUserSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'

@@ -45,9 +45,9 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { FamilyFilePermissions } from '~/server/security'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
-  import { FamilyFileHistoryFilterInput } from '~/server/schema'
+  import type { FamilyFilePermissions } from '~/server/security'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { FamilyFileHistoryFilterInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const { familyFileId, familyFilePermissions, familyFileIdentification } =

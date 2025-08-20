@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleContext } from '~/server/security'
-import { IdInput, idSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleContext } from '~/server/security'
+import type { IdInput } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { HelpRequestRepo } from '~/server/database'
 import { HelpRequestService } from '~/server/services'
 

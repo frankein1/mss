@@ -19,7 +19,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Menu } from '~/types/menu'
+  import type { Menu } from '~/types/menu'
 
   defineProps<{
     menus: Menu[]

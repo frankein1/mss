@@ -22,10 +22,10 @@
 
 <script lang="ts" setup>
   import { followupMediumKeys } from '~/client/options'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number

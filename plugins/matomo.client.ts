@@ -1,5 +1,5 @@
 import VueMatomo from 'vue-matomo'
-import { MatomoApi, EventCategory, EventAction } from '~/types/matomo'
+import type { MatomoApi, EventCategory, EventAction } from '~/types/matomo'
 
 export default defineNuxtPlugin(() => {
   const { public: publicConfig } = useRuntimeConfig()

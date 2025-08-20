@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~/utils/constants/alert'
+  import type { AlertType } from '~/utils/constants/alert'
 
   const props = withDefaults(
     defineProps<{

@@ -93,14 +93,15 @@
     useGetStructureInfo,
     getStructureInfoInjectionKey
   } from '~/composables/useGetStructureInfoForBeneficiary'
-  import { TRPCClientError, TRPCClientErrorLike } from '@trpc/client'
+  import type { TRPCClientErrorLike } from '@trpc/client'
+  import { TRPCClientError } from '@trpc/client'
   import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import type { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
-  import {
+  import type {
     CreateFamilyFileMemberInput,
     UpdateBeneficiaryTaxHouseholdInput
   } from '~/server/schema'

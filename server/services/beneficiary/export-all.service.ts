@@ -1,14 +1,15 @@
-import { Prisma, UserRole } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { UserRole } from '@prisma/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
-import { ExportBeneficiariesInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
-import { RowType } from '~/types/export'
+import type { ExportBeneficiariesInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { beneficiaryFieldLabels } from '~/client/labels'
-import {
+import type {
   GetBeneficiaryOutput,
   GetBeneficiaryRelative
 } from '~/types/beneficiary'

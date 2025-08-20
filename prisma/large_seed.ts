@@ -1,11 +1,11 @@
-import {
+import type {
   BeneficiaryMobility,
   BeneficiaryStatus,
-  Gender,
-  PrismaClient
+  Gender
 } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
-import { ArrayElement } from '~/types/utils'
+import type { ArrayElement } from '~/types/utils'
 
 const prismaClient = new PrismaClient()
 const STRUCTURE_COUNT = 200

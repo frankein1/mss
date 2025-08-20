@@ -1,12 +1,12 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { BeneficiaryRepo } from '~/server/database'
-import {
+import type {
   FamilyFilePermissions,
   SecurityRuleContext,
-  SecurityRuleGrantee,
-  getFamilyFilePermissions
+  SecurityRuleGrantee
 } from '~/server/security'
+import { getFamilyFilePermissions } from '~/server/security'
 import {
   getGranteRole,
   isInSameStructure,

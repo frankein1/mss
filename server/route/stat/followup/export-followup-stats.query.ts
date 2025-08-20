@@ -5,7 +5,7 @@ import {
   followupMediumKeys,
   socialSupportStatusKeys
 } from '~/client/options'
-import { WorksheetType } from '~/types/export'
+import type { WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
@@ -17,15 +17,14 @@ import {
   getFollowupDurationStatsQuery,
   getFollowupMeanTimeStatsQuery
 } from '~/server/query/stats'
-import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { StatFilterInput } from '~/server/schema'
+import { statFilterSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumns } from '~/utils/export/getColumns'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
 

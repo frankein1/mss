@@ -57,7 +57,7 @@
   import ArchiveNotificationModal from '~/components/Archive/ArchiveNotificationModal.vue'
   import { routes } from '~/utils/routes'
   import { formatBeneficiaryName } from '~/utils/beneficiary'
-  import { NotificationItemType } from './types'
+  import type { NotificationItemType } from './types'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()

@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
 
   const props = defineProps<{
     filters: StatFilterInput

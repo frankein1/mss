@@ -1,5 +1,5 @@
 import { emptySchema } from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { AdminContext } from '~/server/trpc'
 import { AdminService, JobResultService } from '~/server/services'
 import { createMutation } from '~/server/route'
 

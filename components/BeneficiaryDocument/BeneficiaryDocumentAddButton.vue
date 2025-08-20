@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentAddForm from './BeneficiaryDocumentAddForm.vue'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const modal = useModal()
 

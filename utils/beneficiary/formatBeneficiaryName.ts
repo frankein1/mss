@@ -1,4 +1,4 @@
-import { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '@prisma/client'
 import { beneficiaryTitleKeys } from '~/client/options'
 
 export function formatBeneficiaryName(

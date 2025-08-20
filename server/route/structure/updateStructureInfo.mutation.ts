@@ -1,13 +1,9 @@
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  editStructureInfoSchema,
-  EditStructureInfoInput
-} from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { EditStructureInfoInput } from '~/server/schema'
+import { editStructureInfoSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { StructureRepo } from '~/server/database'
 import { UserActivityObject, UserActivityType } from '@prisma/client'
 

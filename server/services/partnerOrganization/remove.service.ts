@@ -1,6 +1,6 @@
 import { PartnerOrganizationRepo } from '~/server/database'
-import { IdInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { IdInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 
 export async function remove({
   input,

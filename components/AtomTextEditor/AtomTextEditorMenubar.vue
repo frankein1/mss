@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Editor } from '@tiptap/vue-3'
+  import type { Editor } from '@tiptap/vue-3'
   import { sanitizeUrl } from '@braintree/sanitize-url'
 
   const props = defineProps<{

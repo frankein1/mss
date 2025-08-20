@@ -37,7 +37,7 @@
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { familyFileIdentification, familyFileId, values, resultsLabel } =
     defineProps<{

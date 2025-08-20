@@ -1,4 +1,4 @@
-import { BeneficiaryNames } from '~/types/beneficiary'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 
 export function formatFamilyFileName(
   familyFileIdentification: BeneficiaryNames[]

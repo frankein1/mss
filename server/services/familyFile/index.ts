@@ -1,10 +1,10 @@
 import { getPageDocuments } from './getPageDocuments.service'
 import { getMinimalInfo } from './getMinimalInfo.service'
+import type { FamilyFileSecurityTarget } from './permission.service'
 import {
   getCreationPermissions,
   getEditionPermissions,
-  getFamilyFileSecurityTarget,
-  FamilyFileSecurityTarget
+  getFamilyFileSecurityTarget
 } from './permission.service'
 import { split } from './split.service'
 

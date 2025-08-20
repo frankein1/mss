@@ -72,7 +72,7 @@
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
   import { routes } from '~/utils/routes'
-  import { PartnerOrganizationIdName } from '~/types/partner'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
   import { timeGroup } from '~/client/options'
 
   const startTimeKeys = ref(

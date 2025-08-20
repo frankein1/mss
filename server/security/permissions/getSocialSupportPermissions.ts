@@ -1,18 +1,14 @@
-import { SocialSupport } from '@prisma/client'
-import {
+import type { SocialSupport } from '@prisma/client'
+import type {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
   SecurityTargetWithCreator,
   SecurityRuleContext
 } from '../rules'
-import {
-  FollowupPermissions,
-  getFollowupPermissions
-} from './getFollowupPermissions'
-import {
-  FileInstructionPermissions,
-  getFileInstructionPermissions
-} from './getFileInstructionPermissions'
+import type { FollowupPermissions } from './getFollowupPermissions'
+import { getFollowupPermissions } from './getFollowupPermissions'
+import type { FileInstructionPermissions } from './getFileInstructionPermissions'
+import { getFileInstructionPermissions } from './getFileInstructionPermissions'
 
 export function getSocialSupportPermissions({
   ctx,

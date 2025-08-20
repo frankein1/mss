@@ -1,5 +1,5 @@
-import { Prisma } from '@prisma/client'
-import { SecurityRuleGrantee } from '~/server/security'
+import type { Prisma } from '@prisma/client'
+import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin, isReferent } from '~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {

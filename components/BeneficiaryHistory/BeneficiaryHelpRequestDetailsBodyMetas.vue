@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { FileInstructionData, HelpRequestData } from './types'
+  import type { FileInstructionData, HelpRequestData } from './types'
   import {
     paymentMethodKeys,
     isRefundableKeys,

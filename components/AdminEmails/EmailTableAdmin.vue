@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
   import { EmailStatus } from '@prisma/client'
-  import { Emails } from './types'
+  import type { Emails } from './types'
   import { emailStatusKeys } from '~/client/options'
   import type { EmailAdminSort } from '~/types/table'
   import { emailStatusBadgeClasses } from '~/client/classes/email'

@@ -1,5 +1,5 @@
 import { DataInclusionStructureRepo } from '~/server/database'
-import { DataInclusionStructureServerInput } from '~/server/schema'
+import type { DataInclusionStructureServerInput } from '~/server/schema'
 
 export async function updateStructure(
   structure: DataInclusionStructureServerInput,

@@ -199,13 +199,13 @@
 <script lang="ts" setup>
   import type { FormErrors } from 'vee-validate'
   import { v4 } from 'uuid'
-  import { PartnerOrganizationData, DataInclusionStructure } from './types'
+  import type { PartnerOrganizationData, DataInclusionStructure } from './types'
   import { partnerOrganizationFieldLabels } from '~/client/labels'
-  import {
+  import type {
     AddPartnerOrganizationInput,
-    EditPartnerOrganizationInput,
-    siretSchema
+    EditPartnerOrganizationInput
   } from '~/server/schema'
+  import { siretSchema } from '~/server/schema'
   import { SEARCH_NUMBER_CHARACTERS } from '~/utils/constants'
 
   const props = defineProps<{

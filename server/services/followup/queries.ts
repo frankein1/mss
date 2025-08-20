@@ -1,11 +1,13 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { filterFollowup, filterSocialSupport } from '../helper'
 import { FollowupRepo } from '~/server/database'
-import {
+import type {
   AppContextPermissions,
   FollowupPermissions,
   SecurityRuleContext,
-  SecurityRuleGrantee,
+  SecurityRuleGrantee
+} from '~/server/security'
+import {
   getAppContextPermissions,
   getFollowupPermissions
 } from '~/server/security'

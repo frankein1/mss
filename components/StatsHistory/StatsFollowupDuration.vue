@@ -31,13 +31,13 @@
 <script lang="ts" setup>
   import { FollowupDuration } from '@prisma/client'
   import { followupDurationKeys, getStatLabel } from '~/client/options'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { ChartColor } from '~/utils/color/chartColors'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number

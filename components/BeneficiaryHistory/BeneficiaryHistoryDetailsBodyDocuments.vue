@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { DocumentItems } from './types'
+  import type { DocumentItems } from './types'
 
   defineProps<{
     documents: DocumentItems

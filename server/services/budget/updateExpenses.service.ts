@@ -1,6 +1,9 @@
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
 import { BudgetExpensesRepo } from '~/server/database/repository'
-import { UpdateBudgetExpensesInput } from '~/server/schema'
+import type { UpdateBudgetExpensesInput } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 
 async function getExpensesWithLoansAndDebts(

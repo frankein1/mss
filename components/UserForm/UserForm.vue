@@ -53,7 +53,8 @@
   import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleKeys } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'
-  import { UserCreationInput, createUserSchema } from '~/server/schema'
+  import type { UserCreationInput } from '~/server/schema'
+  import { createUserSchema } from '~/server/schema'
   import { getUserCreationMessage } from '~/utils/user'
 
   const snackbar = useSnackbar()

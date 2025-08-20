@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetBeneficiaryGeneral } from '~/types/beneficiary'
+  import type { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{

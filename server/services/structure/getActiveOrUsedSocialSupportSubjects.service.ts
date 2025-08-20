@@ -1,5 +1,5 @@
 import { SocialSupportSubjectRepo } from '~/server/database'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 
 export async function getActiveOrUsedSocialSupportSubjects({
   ctx

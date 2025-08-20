@@ -25,10 +25,8 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    updateBeneficiaryExternalOrganisationsSchema,
-    UpdateBeneficiaryExternalOrganisationsInput
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
+  import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()

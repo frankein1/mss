@@ -49,9 +49,12 @@
 </template>
 
 <script setup lang="ts">
-  import { PartnerOrganizationIdName } from '~/types/partner'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
-  import { CreateWorkshopInput, UpdateWorkShopInput } from '~/server/schema'
+  import type {
+    CreateWorkshopInput,
+    UpdateWorkShopInput
+  } from '~/server/schema'
   import { workshopLabels } from '~/client/labels'
   import type { FormErrors } from 'vee-validate'
 

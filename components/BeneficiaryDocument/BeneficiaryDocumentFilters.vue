@@ -12,7 +12,7 @@
   import { withEmptyValue } from '~/utils/options'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = defineProps<{

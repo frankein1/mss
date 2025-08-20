@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
   import { canBeDisabled } from '~/utils/structure'
-  import { StructureInfo } from './types'
+  import type { StructureInfo } from './types'
 
   const props = defineProps<{
     structure: StructureInfo

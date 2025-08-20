@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { CommentItem, CommentData } from './types'
+  import type { CommentItem, CommentData } from './types'
   import { formatDateToLocalTimezone } from '~/utils/formatDateToLocalTimezone'
   import { formatUserDisplayName } from '~/utils/user'
 

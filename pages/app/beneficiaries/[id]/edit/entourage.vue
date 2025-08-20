@@ -23,10 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    updateBeneficiaryEntourageSchema,
-    UpdateBeneficiaryEntourageInput
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryEntourageInput } from '~/server/schema'
+  import { updateBeneficiaryEntourageSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()

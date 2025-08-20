@@ -46,9 +46,9 @@
 </template>
 
 <script setup lang="ts">
-  import { GetDocuments, GetDocument } from './types'
+  import type { GetDocuments, GetDocument } from './types'
   import type { BeneficiaryDocumentSort } from '~/types/table'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     documents: GetDocuments

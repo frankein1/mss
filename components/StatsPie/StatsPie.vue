@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { ChartItem } from 'chart.js'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { ChartItem } from 'chart.js'
+  import type { StatsPiePropType } from '~/types/stat'
 
   const { $buildChart } = useNuxtApp()
 

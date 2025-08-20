@@ -1,6 +1,6 @@
 import { useSession } from 'h3'
 import { v4 } from 'uuid'
-import { RdvspAuthSession } from '~/server/types/session'
+import type { RdvspAuthSession } from '~/server/types/session'
 import { getConfig, authorize } from '~/server/lib/rdvsp-oauth.client'
 
 const { auth } = useRuntimeConfig()

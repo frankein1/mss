@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { EditFollowupInput } from '~/server/schema'
+  import type { EditFollowupInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { getSocialSupportSubjectsFromArray } from '~/utils/socialSupportSubject'

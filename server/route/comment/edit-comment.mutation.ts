@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { EditCommentInput, editCommentSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { EditCommentInput } from '~/server/schema'
+import { editCommentSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { CommentRepo } from '~/server/database'
 import { getCommentPermissions } from '~/server/security'
 

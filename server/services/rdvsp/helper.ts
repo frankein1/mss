@@ -1,5 +1,5 @@
 import { UserRepo } from '~/server/database'
-import { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~/server/security'
 import { forbiddenError, unauthorizedError } from '~/server/trpc'
 
 export async function getAgentAuthInfo(user: SecurityRuleGrantee) {

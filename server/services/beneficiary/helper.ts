@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import RemoveAccents from 'remove-accents'
-import { BeneficiaryFilterServerInput } from '~/server/schema'
+import type { BeneficiaryFilterServerInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
 export function prepareBeneficiarySearchConditions(query: string): {

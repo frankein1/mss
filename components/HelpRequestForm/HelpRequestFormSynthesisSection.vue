@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-  import { JSONContent } from '@tiptap/vue-3'
+  import type { JSONContent } from '@tiptap/vue-3'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'

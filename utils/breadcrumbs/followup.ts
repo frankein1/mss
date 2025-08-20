@@ -1,8 +1,10 @@
 import { breadcrumbs as ben } from './beneficiary'
 import { breadcrumbs as file } from './file'
-import type { BeneficiaryIdentification } from '~/types/beneficiary'
+import type {
+  BeneficiaryIdentification,
+  BeneficiaryNames
+} from '~/types/beneficiary'
 import { routes } from '~/utils/routes'
-import { BeneficiaryNames } from '~/types/beneficiary'
 
 const r = routes.followup
 

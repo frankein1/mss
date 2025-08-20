@@ -14,11 +14,9 @@
 </template>
 
 <script setup lang="ts">
-  import { User } from '@prisma/client'
-  import {
-    editUserAidantConnectAuthorisationSchema,
-    UserAidantConnectAuthorisationEditionInput
-  } from '~/server/schema'
+  import type { User } from '@prisma/client'
+  import type { UserAidantConnectAuthorisationEditionInput } from '~/server/schema'
+  import { editUserAidantConnectAuthorisationSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()

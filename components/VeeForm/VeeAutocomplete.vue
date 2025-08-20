@@ -105,7 +105,7 @@
   import { useDebounceFn } from '@vueuse/core'
   import { SEARCH_DEFER_MS, UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
-  import { OptionsWithDisabled } from '~/utils/options'
+  import type { OptionsWithDisabled } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{

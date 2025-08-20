@@ -1,11 +1,12 @@
-import { Prisma, PrismaClient } from '@prisma/client'
-import { DefaultArgs } from '@prisma/client/runtime/library'
+import type { Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import type { DefaultArgs } from '@prisma/client/runtime/library'
 import { shouldLog, formatPrismaQueryLog } from '~/server/utils/logging.js'
 import picocolors from 'picocolors'
 
 declare global {
   // allow global `var` declarations
-  // eslint-disable-next-line no-var
+
   var prismaClient: PrismaClient | undefined
 }
 

@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 
   const props = defineProps<{

@@ -1,21 +1,21 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { GetHistoryInput, getHistorySchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { GetHistoryInput } from '~/server/schema'
+import { getHistorySchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type {
+  SecurityRuleGrantee,
+  SecurityRuleContext
+} from '~/server/security'
 import {
   getDocumentPermissions,
-  SecurityRuleGrantee,
-  SecurityRuleContext,
   getSocialSupportPermissions,
   getCommentPermissions,
   getAppContextPermissions
 } from '~/server/security'
 import { SocialSupportRepo, StructureRepo } from '~/server/database'
-import {
-  FamilyFileSecurityTarget,
-  FamilyFileService,
-  RdvspService
-} from '~/server/services'
+import type { FamilyFileSecurityTarget } from '~/server/services'
+import { FamilyFileService, RdvspService } from '~/server/services'
 import {
   filterSocialSupport,
   filterFollowup,

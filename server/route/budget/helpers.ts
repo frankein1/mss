@@ -1,6 +1,6 @@
 import { budgetExpensesKeys, budgetIncomeKeys } from '~/client/options'
 import { prismaDecimalToNumber } from '~/utils/prisma'
-import {
+import type {
   BudgetExpensesWithLoansAndDebts,
   BudgetIncomeWithCustoms,
   ExpensesKey,

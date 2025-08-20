@@ -1,5 +1,5 @@
 import { createMutation } from '../createRoute'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'

@@ -232,9 +232,9 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { Options } from '~/utils/options'
-  import { StatFilterInput } from '~/server/schema'
-  import { Menu } from '~/types/menu'
+  import type { Options } from '~/utils/options'
+  import type { StatFilterInput } from '~/server/schema'
+  import type { Menu } from '~/types/menu'
   import { StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'

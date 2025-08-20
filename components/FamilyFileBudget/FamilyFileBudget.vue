@@ -58,12 +58,12 @@
 
 <script lang="ts" setup>
   import dayjs from 'dayjs'
-  import { BudgetWithExpensesAndIncomes } from '~/types/budget'
+  import type { BudgetWithExpensesAndIncomes } from '~/types/budget'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { getExportUrl } from '~/utils/export/getExportUrl'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const matomo = useMatomo()

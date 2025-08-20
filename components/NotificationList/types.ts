@@ -1,4 +1,4 @@
-import { NotificationType, SocialSupportType } from '@prisma/client'
+import type { NotificationType, SocialSupportType } from '@prisma/client'
 
 export type NotificationItemType = {
   id: string

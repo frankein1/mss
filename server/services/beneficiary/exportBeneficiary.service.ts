@@ -2,15 +2,18 @@ import fs from 'fs'
 import path from 'path'
 import hbs from 'handlebars'
 import JSZip from 'jszip'
-import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
+import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
 import {
   BeneficiaryRepo,
   UserRepo,
   SocialSupportRepo,
   DocumentRepo
 } from '~/server/database'
-import {
+import type {
   Prisma,
   Beneficiary,
   BeneficiaryRelative,

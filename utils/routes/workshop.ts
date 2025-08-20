@@ -1,6 +1,6 @@
-import { WorkshopTab } from '../constants/workshop'
+import type { WorkshopTab } from '../constants/workshop'
 import { WorkshopsRoute } from './utils'
-import { WorkshopDetails } from '~/types/workshop'
+import type { WorkshopDetails } from '~/types/workshop'
 
 function createSuffixUrl(options?: WorkshopRouteOptions) {
   const hasDefinedOptions = options && Object.values(options).every(o => !!o)

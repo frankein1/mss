@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
-  import { CreateBeneficiaryInput } from '~/server/schema'
+  import type { CreateBeneficiaryInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'

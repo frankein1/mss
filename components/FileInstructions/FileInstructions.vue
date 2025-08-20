@@ -50,8 +50,9 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionFilterInput } from '~/server/schema'
-  import { FileInstructionSort, SortOrder } from '~/types/table'
+  import type { FileInstructionFilterInput } from '~/server/schema'
+  import type { FileInstructionSort } from '~/types/table'
+  import { SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
   import {
     REQUEST_LIMIT_DEFAULT,
@@ -61,7 +62,7 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
-  import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
+  import type { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { isTRPCClientError } from '~/utils/error'
 
   const route = useRoute()

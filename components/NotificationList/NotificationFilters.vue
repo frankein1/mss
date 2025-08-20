@@ -11,12 +11,10 @@
 </template>
 
 <script setup lang="ts">
-  import { FilterProp } from '~/types/filter'
+  import type { FilterProp } from '~/types/filter'
   import { FilterType } from '~/utils/constants/filters'
-  import {
-    notificationTypeFilterKeys,
-    NotificationTypeFilterValue
-  } from '~/client/options'
+  import type { NotificationTypeFilterValue } from '~/client/options'
+  import { notificationTypeFilterKeys } from '~/client/options'
 
   type NotificationFilter = {
     type?: NotificationTypeFilterValue | ''

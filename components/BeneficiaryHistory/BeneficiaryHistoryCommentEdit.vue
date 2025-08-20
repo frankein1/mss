@@ -51,8 +51,9 @@
 
 <script setup lang="ts">
   import BeneficiaryHistoryCommentDeleteConfirm from './BeneficiaryHistoryCommentDeleteConfirm.vue'
-  import { CommentData } from './types'
-  import { EditCommentInput, editCommentSchema } from '~/server/schema'
+  import type { CommentData } from './types'
+  import type { EditCommentInput } from '~/server/schema'
+  import { editCommentSchema } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const modal = useModal()

@@ -1,5 +1,5 @@
-import { GetByFamilyFileIdInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { GetByFamilyFileIdInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
 
 export default async function getByFamileFileId({

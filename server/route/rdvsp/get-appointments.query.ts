@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { RdvspService } from '~/server/services'
 import { getAppContextPermissions } from '~/server/security'

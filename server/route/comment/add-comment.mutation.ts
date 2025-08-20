@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { AddCommentInput, addCommentSchema } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { AddCommentInput } from '~/server/schema'
+import { addCommentSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { CommentService, BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (

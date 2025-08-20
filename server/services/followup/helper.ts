@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import { SocialSupportSubject, Prisma } from '@prisma/client'
-import { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
+import type { SocialSupportSubject, Prisma } from '@prisma/client'
+import type { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
 import { FollowupPeriodFilter } from '~/types/followup'
 import { SortOrder } from '~/types/table'
 import { FilterFollowupNotFilled } from '~/utils/constants/filters'

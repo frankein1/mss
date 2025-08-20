@@ -76,14 +76,14 @@
 </template>
 
 <script setup lang="ts">
-  import { inferProcedureOutput } from '@trpc/server'
-  import { AppRouter } from '~/server/trpc/routers'
+  import type { inferProcedureOutput } from '@trpc/server'
+  import type { AppRouter } from '~/server/trpc/routers'
   import { routes } from '~/utils/routes'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { commonRelationshipKeys } from '~/client/options'
-  import { RelativeRelationship } from '@prisma/client'
+  import type { RelativeRelationship } from '@prisma/client'
   import { MSS_ERROR_CODES, isTRPCClientErrorWithMSSCode } from '~/utils/error'
-  import { ArrayElement } from '~/types/utils'
+  import type { ArrayElement } from '~/types/utils'
   import { EventCategory, FamilyFileAction } from '~/types/matomo'
 
   type BeneficiarySearchResult = ArrayElement<

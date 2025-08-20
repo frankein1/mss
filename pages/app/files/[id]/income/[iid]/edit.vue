@@ -71,10 +71,8 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { useFamilyFileMinimalInfo } from '~/composables/useFamilyFileMinimalInfo'
-  import {
-    UpdateBudgetIncomeInput,
-    updateBudgetIncomeSchema
-  } from '~/server/schema'
+  import type { UpdateBudgetIncomeInput } from '~/server/schema'
+  import { updateBudgetIncomeSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incomeSourceKeys, budgetIncomeKeys } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -84,7 +82,7 @@
     incrementBudgetTotal
   } from '~/utils/budget'
   import { euros } from '~/utils/euros'
-  import { IncomeKey } from '~/types/budget'
+  import type { IncomeKey } from '~/types/budget'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import BudgetDeleteConfirmation from '~/components/FamilyFileBudget/BudgetDeleteConfirmation.vue'

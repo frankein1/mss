@@ -1,4 +1,4 @@
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 /** Detect structures in West-Indies/Guyana timezones */
 export function useStructureState() {

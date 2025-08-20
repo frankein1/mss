@@ -1,7 +1,7 @@
 import RemoveAccents from 'remove-accents'
-import { inferProcedureOutput } from '@trpc/server'
-import { AppRouter } from '~/server/trpc/routers'
-import { ArrayElement } from '~/types/utils'
+import type { inferProcedureOutput } from '@trpc/server'
+import type { AppRouter } from '~/server/trpc/routers'
+import type { ArrayElement } from '~/types/utils'
 
 type BeneficiarySearchResult = ArrayElement<
   inferProcedureOutput<AppRouter['beneficiary']['search']>

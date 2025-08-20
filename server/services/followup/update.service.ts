@@ -1,4 +1,5 @@
-import { FollowupMedium, NotificationType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { FollowupMedium, NotificationType } from '@prisma/client'
 import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import {
@@ -6,8 +7,8 @@ import {
   NotificationRepo,
   SocialSupportRepo
 } from '~/server/database'
-import { EditFollowupInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { EditFollowupInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
 

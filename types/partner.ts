@@ -1,4 +1,7 @@
-import { PartnerOrganization, PartnerOrganizationContact } from '@prisma/client'
+import type {
+  PartnerOrganization,
+  PartnerOrganizationContact
+} from '@prisma/client'
 
 export type PartnerOrganizationIdName = Pick<
   PartnerOrganization,

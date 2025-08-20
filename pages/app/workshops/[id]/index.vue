@@ -45,7 +45,7 @@
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
-  import { WorkshopWithAttendeesDetails } from '~/types/workshop'
+  import type { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import { WorkshopTab } from '~/utils/constants/workshop'
   import { isWorkshopPassed } from '~/utils/workshops/isWorkshopPassed'
 

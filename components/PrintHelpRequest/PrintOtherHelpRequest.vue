@@ -158,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestOutput } from './types'
+  import type { HelpRequestOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { baseRefusalReasonKeys, ministerKeys } from '~/client/options'

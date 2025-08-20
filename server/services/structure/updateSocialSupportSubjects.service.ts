@@ -1,7 +1,7 @@
 import { NotificationType } from '@prisma/client'
 import { NotificationRepo, StructureRepo } from '~/server/database'
-import { UpdateSocialSupportSubjectsInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { UpdateSocialSupportSubjectsInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
 
 export const updateSocialSupportSubjects = async ({
   input,

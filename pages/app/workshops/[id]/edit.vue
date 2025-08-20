@@ -28,7 +28,8 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { UpdateWorkShopInput, updateWorkshopSchema } from '~/server/schema'
+  import type { UpdateWorkShopInput } from '~/server/schema'
+  import { updateWorkshopSchema } from '~/server/schema'
   import WorkshopDeleteModal from '~/components/Workshop/WorkshopDeleteModal.vue'
   import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 

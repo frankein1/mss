@@ -148,7 +148,8 @@
   import { structureTypeKeys } from '~/client/options'
   import { structureFieldLabels } from '~/client/labels'
   import type { StructureInfo } from '~/components/Structure/types'
-  import { CreateStructureInput, createStructureSchema } from '~/server/schema'
+  import type { CreateStructureInput } from '~/server/schema'
+  import { createStructureSchema } from '~/server/schema'
 
   const props = defineProps<{
     structure?: StructureInfo

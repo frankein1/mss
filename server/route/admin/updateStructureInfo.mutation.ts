@@ -1,9 +1,7 @@
 import { createMutation } from '~/server/route'
-import { AdminContext } from '~/server/trpc'
-import {
-  editStructureAdminInfoSchema,
-  EditStructureAdminInfoInput
-} from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
+import type { EditStructureAdminInfoInput } from '~/server/schema'
+import { editStructureAdminInfoSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
 

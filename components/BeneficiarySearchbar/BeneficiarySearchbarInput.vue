@@ -68,9 +68,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { inferProcedureOutput } from '@trpc/server'
+  import type { inferProcedureOutput } from '@trpc/server'
   import { useDebounceFn } from '@vueuse/core'
-  import { AppRouter } from '~/server/trpc/routers'
+  import type { AppRouter } from '~/server/trpc/routers'
   import {
     SEARCH_DEFER_MS,
     SEARCH_NUMBER_CHARACTERS,

@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Structures } from './types'
+  import type { Structures } from './types'
   import { structureTypeKeys } from '~/client/options'
   import { routes } from '~/utils/routes'
 

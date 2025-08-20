@@ -31,11 +31,11 @@
 
 <script lang="ts" setup>
   import { beneficiaryMobilityKeys, getStatLabel } from '~/client/options'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number

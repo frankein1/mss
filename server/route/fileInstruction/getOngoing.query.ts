@@ -1,6 +1,6 @@
-import { SocialSupportStatus } from '@prisma/client'
+import type { SocialSupportStatus } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FileInstructionService } from '~/server/services'

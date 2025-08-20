@@ -30,12 +30,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number

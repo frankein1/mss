@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { WorkshopsPageItem } from './types'
+  import type { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 

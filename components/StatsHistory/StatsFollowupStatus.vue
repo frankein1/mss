@@ -22,8 +22,8 @@
 
 <script lang="ts" setup>
   import { SocialSupportStatus } from '@prisma/client'
-  import { StatFilterInput } from '~/server/schema'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatFilterInput } from '~/server/schema'
+  import type { StatsPiePropType } from '~/types/stat'
   import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'
 

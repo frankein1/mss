@@ -13,13 +13,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportSubject, FileInstructionType } from '@prisma/client'
+  import type { SocialSupportSubject } from '@prisma/client'
+  import { FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { HelpRequestPageItem } from './types'
-  import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
+  import type { HelpRequestPageItem } from './types'
+  import type { EditHelpRequestInput } from '~/server/schema'
+  import { editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 

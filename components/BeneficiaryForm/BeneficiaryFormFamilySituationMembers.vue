@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
   import { relativeRelationshipKeys } from '~/client/options'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   defineProps<{ familyIdentification: BeneficiaryFileIdentification[] }>()
 
   const route = useRoute()

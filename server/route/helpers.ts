@@ -1,5 +1,6 @@
 import { Node } from 'prosemirror-model'
-import { getSchema, JSONContent } from '@tiptap/core'
+import type { JSONContent } from '@tiptap/core'
+import { getSchema } from '@tiptap/core'
 import { tiptapExtensions } from '~/utils/richTextEditor'
 
 export const validateRichTextSchema = (richText: string): boolean => {

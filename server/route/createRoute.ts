@@ -1,10 +1,10 @@
-import { H3Event } from 'h3'
-import { ZodType, z } from 'zod'
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import type { H3Event } from 'h3'
+import type { ZodType, z } from 'zod'
+import type { UserActivityObject, UserActivityType } from '@prisma/client'
 import { isAdmin } from '../security/rules/helpers'
 import { forbiddenError } from '~/server/trpc'
 import { addUserActivity } from '~/server/query'
-import { SecurityRule, SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRule, SecurityRuleGrantee } from '~/server/security'
 import type { SecurityRuleStructure } from '~/server/security/rules/types'
 
 export type AdminRouteHandlerContext<Grantee> = {

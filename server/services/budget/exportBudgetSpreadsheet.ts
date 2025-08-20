@@ -1,10 +1,10 @@
-import { RowType, WorksheetType } from '~/types/export'
+import type { RowType, WorksheetType } from '~/types/export'
 import { formatBudgetMemberLabel } from '~/utils/budget'
 import {
   getTotalExpenses,
   getTotalIncome
 } from '~/server/services/budget/helpers'
-import { BudgetWithExpensesAndIncomes } from '~/types/budget'
+import type { BudgetWithExpensesAndIncomes } from '~/types/budget'
 import {
   getIncomeRows,
   getRowTotal,

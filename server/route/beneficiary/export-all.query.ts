@@ -1,11 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import {
-  ExportBeneficiariesInput,
-  exportBeneficiariesSchema
-} from '~/server/schema'
+import type { ExportBeneficiariesInput } from '~/server/schema'
+import { exportBeneficiariesSchema } from '~/server/schema'
 import { BeneficiaryService, UserService } from '~/server/services'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 

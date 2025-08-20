@@ -1,7 +1,7 @@
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { HelpRequestRepo, SocialSupportRepo } from '~/server/database'
-import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import type { StatFilterInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 import {
   FileInstructionType,

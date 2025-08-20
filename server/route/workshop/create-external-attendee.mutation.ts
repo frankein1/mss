@@ -4,13 +4,11 @@ import {
   WorkshopAttendeeType
 } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  CreateExternalAttendeeInput,
-  createExternalAttendeeSchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { CreateExternalAttendeeInput } from '~/server/schema'
+import { createExternalAttendeeSchema } from '~/server/schema'
 import { WorkshopAttendeeRepo, WorkshopRepo } from '~/server/database'
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

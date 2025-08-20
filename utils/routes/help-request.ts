@@ -1,7 +1,7 @@
-import { FileInstructionType } from '@prisma/client'
+import type { FileInstructionType } from '@prisma/client'
 import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
-import { BeneficiaryNames } from '~/types/beneficiary'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 import { fileInstructionTypeFilterKeys } from '~/client/options'
 
 export interface HelpRequestAddRouteOptions {

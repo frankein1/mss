@@ -1,7 +1,7 @@
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { FollowupRepo } from '~/server/database'
-import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import type { StatFilterInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export async function getFollowupActionsEntreprisesStatsQuery(
   user: SecurityRuleGrantee,

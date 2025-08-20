@@ -1,4 +1,4 @@
-import { H3Event } from 'h3'
+import type { H3Event } from 'h3'
 import { prismaClient } from '~/server/prisma'
 
 const apiTokenMiddleware = async (event: H3Event) => {

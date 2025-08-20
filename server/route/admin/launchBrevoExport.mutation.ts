@@ -1,8 +1,6 @@
-import {
-  exportBrevoContactsSchema,
-  ExportBrevoContactsInput
-} from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { ExportBrevoContactsInput } from '~/server/schema'
+import { exportBrevoContactsSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
 import { AdminService, JobResultService } from '~/server/services'
 import { createMutation } from '~/server/route'
 

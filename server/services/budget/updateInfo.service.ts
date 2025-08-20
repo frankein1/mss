@@ -1,6 +1,6 @@
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
-import { UpdateBudgetInfoInput } from '~/server/schema'
+import type { UpdateBudgetInfoInput } from '~/server/schema'
 
 export async function updateInfo({
   ctx,
@@ -9,7 +9,6 @@ export async function updateInfo({
   ctx: SecurityRuleContext
   input: UpdateBudgetInfoInput
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { remainingAfterExpenses, ...data } = input
   return await BudgetRepo.update(ctx.user, {
     where: { id: input.id },

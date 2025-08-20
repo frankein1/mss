@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SearchBeneficiaryInput,
-  searchBeneficiarySchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SearchBeneficiaryInput } from '~/server/schema'
+import { searchBeneficiarySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 

@@ -1,11 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { SecurityRuleContext } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  UpdateBeneficiaryExternalOrganisationsInput,
-  updateBeneficiaryExternalOrganisationsSchema
-} from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
+import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 

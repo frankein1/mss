@@ -1,8 +1,8 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { getPage as getPageFn } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
-import { SecurityRuleContext } from '~/server/security'
-import { GetBeneficiariesInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { GetBeneficiariesInput } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { BeneficiaryRepo } from '~/server/database'
 

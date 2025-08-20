@@ -1,8 +1,9 @@
-import { Prisma, UserStatus } from '@prisma/client'
-import { GetSimilarBeneficiaryInput } from '~/server/schema'
+import type { Prisma } from '@prisma/client'
+import { UserStatus } from '@prisma/client'
+import type { GetSimilarBeneficiaryInput } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database/repository'
 import { BeneficiaryConstraints } from '~/server/database/constraints'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 import {
   isReferent,

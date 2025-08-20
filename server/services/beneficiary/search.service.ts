@@ -1,6 +1,6 @@
 import { prepareBeneficiarySearchConditions } from './helper'
-import { SearchBeneficiaryInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { SearchBeneficiaryInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
 
 export async function search({

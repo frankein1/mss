@@ -130,7 +130,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatsListPropType } from '~/types/stat'
   import {
     STATS_COLLAPSED_LIMIT,
     STATS_NULL_LABEL

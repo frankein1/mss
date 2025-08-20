@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
   import type { SocialSupportItem } from './types'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()

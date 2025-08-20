@@ -1,6 +1,6 @@
-import { StatsCardConfig } from '~/types/stat'
+import type { StatsCardConfig } from '~/types/stat'
 import { toBlob } from 'html-to-image'
-import { StatFilterInput } from '~/server/schema'
+import type { StatFilterInput } from '~/server/schema'
 import { getExportUrl } from '~/utils/export/getExportUrl'
 import { getExportFilename } from '~/utils/export/getExportFilename'
 import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'

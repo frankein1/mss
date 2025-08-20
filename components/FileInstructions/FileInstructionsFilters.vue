@@ -29,7 +29,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
-  import { FileInstructionFilterInput } from '~/server/schema'
+  import type { FileInstructionFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import {
     helpRequestFieldLabels,

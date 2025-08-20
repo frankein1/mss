@@ -12,12 +12,10 @@
 <script lang="ts" setup>
   import { SocialSupportStatus, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    CreateHousingHelpRequestInput,
-    createHousingHelpRequestSchema
-  } from '~/server/schema'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { CreateHousingHelpRequestInput } from '~/server/schema'
+  import { createHousingHelpRequestSchema } from '~/server/schema'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 

@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
-  import { CreateStructureInput } from '~/server/schema'
+  import type { CreateStructureInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()

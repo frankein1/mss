@@ -54,12 +54,13 @@
 </template>
 
 <script setup lang="ts">
-  import { GetDocument } from './types'
+  import type { GetDocument } from './types'
   import { AlertType } from '~/utils/constants/alert'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
-  import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryDocumentSort } from '~/types/table'
+  import { SortOrder } from '~/types/table'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   const trpcClient = useTrpcClient()
 
   const { familyFileId, familyFileIdentification } = defineProps<{

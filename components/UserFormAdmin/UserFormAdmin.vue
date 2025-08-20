@@ -78,15 +78,14 @@
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { AdminUserOutput } from './types'
+  import type { AdminUserOutput } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { userRoleKeys, userStatusKeys } from '~/client/options'
-  import {
+  import type {
     AdminEditUserInput,
-    AdminCreateUserInput,
-    adminEditUserSchema,
-    adminCreateUserSchema
+    AdminCreateUserInput
   } from '~/server/schema'
+  import { adminEditUserSchema, adminCreateUserSchema } from '~/server/schema'
   import { toOptions, withEmptyValue } from '~/utils/options'
 
   const trpcClient = useTrpcClient()

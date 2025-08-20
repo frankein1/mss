@@ -75,7 +75,7 @@
   import ArchiveDeleteModal from '~/components/Archive/ArchiveDeleteModal.vue'
   import DeleteModal from '~/components/Archive/DeleteModal.vue'
   import ArchiveQuitPageModal from '~/components/Archive/ArchiveQuitPageModal.vue'
-  import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+  import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { BeneficiaryArchiveAction, EventCategory } from '~/types/matomo'
   import { formatUserDisplayName } from '~/utils/user'
 

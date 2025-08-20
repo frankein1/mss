@@ -1,10 +1,9 @@
 import { createQuery } from '~/server/route'
-import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ExportFollowupsInput } from '~/server/schema'
+import { exportFollowupsSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FollowupService, UserService } from '~/server/services'
 import { UserActivityType } from '@prisma/client'

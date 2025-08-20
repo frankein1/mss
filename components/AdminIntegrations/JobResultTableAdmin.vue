@@ -83,7 +83,7 @@
   import { JobStatus } from '@prisma/client'
   import type { JobResultAdminSort } from '~/types/table'
   import { jobResultStatusKeys } from '~/client/options'
-  import { JobResult } from '~/server/schema'
+  import type { JobResult } from '~/server/schema'
 
   const props = defineProps<{
     jobs: JobResult[]

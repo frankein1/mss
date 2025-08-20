@@ -62,8 +62,8 @@
 
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import type { FamilyFilePermissions } from '~/server/security'
 
   const { isStructureManager } = useAuthState()
   const route = useRoute()

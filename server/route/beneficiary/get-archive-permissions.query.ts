@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'

@@ -1,7 +1,7 @@
 import { prepareHelpRequestStatFilters } from '../helpers'
 import { FileInstructionRepo } from '~/server/database'
-import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import type { StatFilterInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY, STATS_NULL_LABEL } from '~/utils/constants/stats'
 
 type FileInstructionsResponse = {

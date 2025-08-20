@@ -1,4 +1,5 @@
-import { Prisma, SocialSupportSubject, UserActivityType } from '@prisma/client'
+import type { Prisma, SocialSupportSubject } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import {
   BeneficiaryRepo,
   FamilyFileRepo,
@@ -7,12 +8,10 @@ import {
 } from '~/server/database'
 import { ArchivedBeneficiaryRepo } from '~/server/database/repository/ArchivedBeneficiaryRepository'
 import { createMutation } from '~/server/route'
-import {
-  ExportBeneficiaryInput,
-  exportBeneficiarySchema
-} from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import { SecurityRuleContext } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import { exportBeneficiarySchema } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { BeneficiaryService } from '~/server/services'
 

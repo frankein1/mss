@@ -1,4 +1,4 @@
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { SocialSupportRepo } from '~/server/database/repository'
 import { SocialSupportConstraints } from '~/server/database/constraints'
 

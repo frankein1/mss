@@ -45,7 +45,8 @@
 <script setup lang="ts">
   import { Fragment, Slice } from '@tiptap/pm/model'
   import type { Node } from '@tiptap/pm/model'
-  import { EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
+  import type { JSONContent } from '@tiptap/vue-3'
+  import { EditorContent, useEditor } from '@tiptap/vue-3'
 
   const props = withDefaults(
     defineProps<{

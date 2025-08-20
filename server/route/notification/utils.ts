@@ -1,9 +1,5 @@
-import {
-  Notification,
-  SocialSupport,
-  SocialSupportType,
-  User
-} from '@prisma/client'
+import type { Notification, SocialSupport, User } from '@prisma/client'
+import { SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUserDisplayName } from '~/utils/user'
 

@@ -36,11 +36,14 @@
 <script lang="ts" setup>
   import { routes } from '~/utils/routes'
   import { budgetIncomeKeys } from '~/client/options'
-  import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
+  import type {
+    IncomeKey,
+    GetBudgetIncomeHouseholdMember
+  } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { formatBudgetMemberLabel, incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string

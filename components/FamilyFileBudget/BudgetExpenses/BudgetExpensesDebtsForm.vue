@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
-  import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import type { UpdateLoanOrDebtInput } from '~/server/schema'
 
   defineProps<{ total: number | null }>()
 

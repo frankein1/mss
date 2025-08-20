@@ -64,7 +64,7 @@
 <script lang="ts" setup>
   import { ArchiveReason } from '@prisma/client'
   import { archiveReasonKeys } from '~/client/options/archive'
-  import { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+  import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { AlertType } from '~/utils/constants/alert'
 
   const props = defineProps<{

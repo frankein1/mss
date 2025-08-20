@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
-  import { EditStructureInfoInput } from '~/server/schema'
+  import type { EditStructureInfoInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'

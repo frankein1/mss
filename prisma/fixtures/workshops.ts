@@ -1,6 +1,6 @@
+import type { Prisma } from '@prisma/client'
 import {
   AgeLimitCondition,
-  Prisma,
   WorkshopAttendeeAttendance,
   WorkshopAttendeeListType,
   WorkshopAttendeeType

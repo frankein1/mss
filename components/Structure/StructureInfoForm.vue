@@ -124,10 +124,8 @@
 <script lang="ts" setup>
   import { structureFieldLabels } from '~/client/labels'
   import type { StructureInfo } from '~/components/Structure/types'
-  import {
-    EditStructureInfoInput,
-    editStructureInfoSchema
-  } from '~/server/schema'
+  import type { EditStructureInfoInput } from '~/server/schema'
+  import { editStructureInfoSchema } from '~/server/schema'
 
   const props = defineProps<{
     structure: StructureInfo

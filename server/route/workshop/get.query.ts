@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  AllowSecurityCheck,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { WorkshopRepo } from '~/server/database'
 import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
 import { isReferent } from '~/server/security'

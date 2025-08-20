@@ -28,14 +28,14 @@
 
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import {
     fileInstructionTypePictos,
     fileInstructionTypeFilterKeys
   } from '~/client/options'
   import { ChartColor } from '~/utils/color/chartColors'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { BeneficiaryRepo } from '~/server/database'
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 
 export const getLastActivity = async ({
   ctx,

@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-  import {
+  import type {
     BeneficiaryIdentification,
     BeneficiaryReferent
   } from '~/types/beneficiary'
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
-  import { BeneficiaryStatus } from '@prisma/client'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { BeneficiaryStatus } from '@prisma/client'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 

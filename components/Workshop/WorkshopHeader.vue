@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-  import { WorkshopWithAttendeesDetails } from '~/types/workshop'
+  import type { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import { getDurationInHoursAndMinutes } from '~/utils/duration/getDuration'
   import { routes } from '~/utils/routes'
   import { capitalizeFirstLetter } from '~/utils/text/capitalizeFirstLetter'

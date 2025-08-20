@@ -107,14 +107,14 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { GetDocument } from './types'
-  import { EditDocumentInput } from '~/server/schema'
-  import { DocumentTag } from '~/types/document'
+  import type { GetDocument } from './types'
+  import type { EditDocumentInput } from '~/server/schema'
+  import type { DocumentTag } from '~/types/document'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import { documentTypeKeys, documentTagKeys } from '~/client/options'
-  import { DocumentPermissions } from '~/server/security'
+  import type { DocumentPermissions } from '~/server/security'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const modal = useModal()
   const matomo = useMatomo()

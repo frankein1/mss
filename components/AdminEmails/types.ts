@@ -1,4 +1,4 @@
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 type AdminEmailsOutput = RouterOutput['admin']['getEmails']
 

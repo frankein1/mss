@@ -1,4 +1,4 @@
-import { Structure, User } from '@prisma/client'
+import type { Structure, User } from '@prisma/client'
 
 export type SecurityRuleStructure = Pick<
   Structure,

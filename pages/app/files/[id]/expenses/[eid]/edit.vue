@@ -56,15 +56,13 @@
 
 <script setup lang="ts">
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import {
-    UpdateBudgetExpensesInput,
-    updateBudgetExpensesSchema
-  } from '~/server/schema'
+  import type { UpdateBudgetExpensesInput } from '~/server/schema'
+  import { updateBudgetExpensesSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { euros } from '~/utils/euros'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { budgetExpensesKeys } from '~/client/options'
-  import { ExpensesKey } from '~/types/budget'
+  import type { ExpensesKey } from '~/types/budget'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 

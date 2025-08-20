@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import {
-  adminGetJobResultsSchema,
-  AdminGetJobResultsInput
-} from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { AdminGetJobResultsInput } from '~/server/schema'
+import { adminGetJobResultsSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
 import { getTotalPages } from '~/utils/table'
 import { AdminService } from '~/server/services'
 

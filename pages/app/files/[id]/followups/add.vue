@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { AddFollowupInput } from '~/server/schema'
+  import type { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'

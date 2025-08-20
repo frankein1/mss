@@ -1,11 +1,10 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { PlanAppointmentInput, planAppointmentSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { PlanAppointmentInput } from '~/server/schema'
+import { planAppointmentSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { RdvspService } from '~/server/services'
 
 const securityCheck = (ctx: SecurityRuleContext, _: PlanAppointmentInput) => {

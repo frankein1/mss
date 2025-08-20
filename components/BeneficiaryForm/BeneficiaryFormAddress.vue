@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryAccommodationMode } from '@prisma/client'
+  import type { BeneficiaryAccommodationMode } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     HostedAccommodationMode,

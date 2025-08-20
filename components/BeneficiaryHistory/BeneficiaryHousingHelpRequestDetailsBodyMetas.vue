@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { FileInstructionData, HousingHelpRequestData } from './types'
+  import type { FileInstructionData, HousingHelpRequestData } from './types'
   import {
     fileInstructionRefusalReasonKeys,
     askedHousingKeys,

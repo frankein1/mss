@@ -12,11 +12,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportSubject, SocialSupportStatus } from '@prisma/client'
+  import type { SocialSupportSubject } from '@prisma/client'
+  import { SocialSupportStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { AddFollowupInput } from '~/server/schema'
+  import { addFollowupSchema } from '~/server/schema'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 

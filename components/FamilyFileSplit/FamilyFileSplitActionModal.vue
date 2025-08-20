@@ -88,11 +88,9 @@
 <script setup lang="ts">
   import type { Beneficiary } from '@prisma/client'
   import type { SplitOutput } from './types'
-  import {
-    UpdateBeneficiaryTaxHouseholdInput,
-    updateBeneficiaryTaxHouseholdSchema
-  } from '~/server/schema'
-  import { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
+  import type { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
+  import { updateBeneficiaryTaxHouseholdSchema } from '~/server/schema'
+  import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
   import { BeneficiaryAction, EventCategory } from '~/types/matomo'
   const props = defineProps<{

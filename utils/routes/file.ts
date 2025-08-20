@@ -1,10 +1,10 @@
 import { AppRoute, FilesRoute, getRouteOptions } from './utils'
-import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import { HistoryTab } from '~/utils/constants/history'
-import { BeneficiaryNames } from '~/types/beneficiary'
+import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import type { HistoryTab } from '~/utils/constants/history'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 import { formatFamilyFileName } from '~/utils/familyFile/formatFamilyFileName'
-import { TypeSuivi } from '~/client/options'
-import {
+import type { TypeSuivi } from '~/client/options'
+import type {
   FilterFileInstructionNotFilled,
   FilterFollowupNotFilled
 } from '../constants/filters'

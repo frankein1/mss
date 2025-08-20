@@ -1,15 +1,17 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import {
   filterFileInstruction,
   filterHelpRequest,
   filterSocialSupport
 } from '../helper'
 import { HelpRequestRepo } from '~/server/database'
-import {
+import type {
   AppContextPermissions,
   FileInstructionPermissions,
   SecurityRuleContext,
-  SecurityRuleGrantee,
+  SecurityRuleGrantee
+} from '~/server/security'
+import {
   getAppContextPermissions,
   getFileInstructionPermissions
 } from '~/server/security'

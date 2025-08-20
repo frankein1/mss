@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
-  import { CreateStructureInput } from '~/server/schema'
+  import type { CreateStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
   import { routes } from '~/utils/routes'

@@ -1,4 +1,4 @@
-import {
+import type {
   Comment,
   Document,
   FileInstruction,
@@ -12,7 +12,7 @@ import {
   PartnerOrganizationContact,
   FamilyFile
 } from '@prisma/client'
-import { BeneficiaryIdentification } from '~/types/beneficiary'
+import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null

@@ -1,5 +1,5 @@
 import merge from 'lodash.merge'
-import { SecurityRuleGrantee } from '../../../security'
+import type { SecurityRuleGrantee } from '../../../security'
 
 export const appendConstraints = <T extends { where?: any }>(
   user: SecurityRuleGrantee,

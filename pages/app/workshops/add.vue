@@ -25,7 +25,8 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import { CreateWorkshopInput, createWorkshopSchema } from '~/server/schema'
+  import type { CreateWorkshopInput } from '~/server/schema'
+  import { createWorkshopSchema } from '~/server/schema'
 
   const title = routes.workshop.AppWorkshopAdd.title
 

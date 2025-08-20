@@ -1,4 +1,5 @@
-import { Structure, User, UserStatus } from '@prisma/client'
+import type { Structure, User } from '@prisma/client'
+import { UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
 

@@ -185,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestOutput } from './types'
+  import type { HelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import {

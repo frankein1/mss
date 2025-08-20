@@ -8,11 +8,11 @@ import { exportAll } from './export-all.service'
 import { exportBeneficiary } from './exportBeneficiary.service'
 import { search } from './search.service'
 import { getSimilar } from './getSimilar.service'
+import type { BeneficiarySecurityTarget } from './permission.service'
 import {
   getBeneficiarySecurityTarget,
   getEditionPermissions,
   getDeleteDraftPermissions,
-  BeneficiarySecurityTarget,
   getArchivePermissions
 } from './permission.service'
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'

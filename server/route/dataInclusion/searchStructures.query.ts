@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SearchDataInclusionStructureInput,
-  searchDataInclusionStructureSchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SearchDataInclusionStructureInput } from '~/server/schema'
+import { searchDataInclusionStructureSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { DataInclusionService } from '~/server/services'
 

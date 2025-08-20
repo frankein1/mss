@@ -15,8 +15,8 @@
 <script setup lang="ts">
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
   import { routes } from '~/utils/routes'
-  import { CreateBudgetIncomeInput } from '~/server/schema'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { CreateBudgetIncomeInput } from '~/server/schema'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string

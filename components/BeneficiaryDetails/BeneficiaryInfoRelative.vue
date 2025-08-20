@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryRelative } from '~/types/beneficiary'
+  import type { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { relativeRelationshipKeys } from '~/client/options'
   import { relativeFieldLabels } from '~/client/labels'
 

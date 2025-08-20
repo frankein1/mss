@@ -1,14 +1,11 @@
-import {
-  ArcElement,
-  Chart,
-  PieController,
-  Tooltip,
+import type {
   ChartItem,
   ChartConfiguration,
   ChartConfigurationCustomTypesPerDataset,
   ChartType,
   DefaultDataPoint
 } from 'chart.js'
+import { ArcElement, Chart, PieController, Tooltip } from 'chart.js'
 
 export default defineNuxtPlugin(() => {
   Chart.register(ArcElement, PieController, Tooltip)

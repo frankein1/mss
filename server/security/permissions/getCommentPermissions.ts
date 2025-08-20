@@ -1,8 +1,5 @@
-import {
-  SecurityRuleContext,
-  SecurityTargetWithCreator,
-  isCreator
-} from '../rules'
+import type { SecurityRuleContext, SecurityTargetWithCreator } from '../rules'
+import { isCreator } from '../rules'
 
 export type CommentPermissions = {
   edit: boolean

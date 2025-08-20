@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
   import type { Menu } from '~/types/menu'
-  import { WorkshopAttendee } from '~/types/workshop'
+  import type { WorkshopAttendee } from '~/types/workshop'
   import {
     BeneficiaryTitle,
     Gender,

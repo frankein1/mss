@@ -1,4 +1,4 @@
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 type BeneficiaryList = RouterOutput['beneficiary']['getBeneficiaryList']
 

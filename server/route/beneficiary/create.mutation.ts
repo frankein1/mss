@@ -1,10 +1,8 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  CreateBeneficiaryInput,
-  createBeneficiarySchema
-} from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { CreateBeneficiaryInput } from '~/server/schema'
+import { createBeneficiarySchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 

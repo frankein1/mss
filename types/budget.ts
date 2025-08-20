@@ -8,8 +8,8 @@ import type {
   BudgetExpensesCustom,
   BudgetIncomeCustom
 } from '@prisma/client'
-import { BeneficiaryFileIdentification } from './beneficiary'
-import { getBudget } from '~/server/services/budget/getBudget.service'
+import type { BeneficiaryFileIdentification } from './beneficiary'
+import type { getBudget } from '~/server/services/budget/getBudget.service'
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,
@@ -51,4 +51,4 @@ export type BudgetIncomeWithCustoms = BudgetIncome & {
 
 export type BudgetWithExpensesAndIncomes = Awaited<ReturnType<typeof getBudget>>
 
-export { BudgetExpenses, BudgetIncome }
+export type { BudgetExpenses, BudgetIncome }

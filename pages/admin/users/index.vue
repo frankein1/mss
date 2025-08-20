@@ -28,7 +28,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { UserAdminSort } from '~/types/table'
+  import type { UserAdminSort } from '~/types/table'
   import type { UserAdminFilterInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
 

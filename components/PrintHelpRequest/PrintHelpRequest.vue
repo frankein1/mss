@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionType } from '@prisma/client'
+  import type { FileInstructionType } from '@prisma/client'
   import PrintFinancialHelpRequest from './PrintFinancialHelpRequest.vue'
   import PrintOtherHelpRequest from './PrintOtherHelpRequest.vue'
-  import { HelpRequestOutput } from './types'
+  import type { HelpRequestOutput } from './types'
 
   defineProps<{
     helpRequest: HelpRequestOutput

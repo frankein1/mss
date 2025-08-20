@@ -1,5 +1,5 @@
-import { User } from '@prisma/client'
-import { FieldLabels } from '~/types/fieldLabels'
+import type { User } from '@prisma/client'
+import type { FieldLabels } from '~/types/fieldLabels'
 
 export const userFieldLabels: FieldLabels<User> = {
   id: 'Identifiant',

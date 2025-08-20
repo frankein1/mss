@@ -144,10 +144,10 @@
 </template>
 
 <script lang="ts" setup>
+  import type { Options } from '~/utils/options'
   import {
     NEW_OPTION_PREFIX,
     NEW_OPTION_ID,
-    Options,
     getOptionValues,
     getOptionLabels
   } from '~/utils/options'

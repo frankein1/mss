@@ -1,11 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { BudgetService } from '~/server/services'
-import {
-  CreateBudgetIncomeInput,
-  createBudgetIncomeSchema
-} from '~/server/schema'
+import type { CreateBudgetIncomeInput } from '~/server/schema'
+import { createBudgetIncomeSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const securityCheck = AllowSecurityCheck

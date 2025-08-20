@@ -1,11 +1,11 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { WorkshopAttendeeConstraints } from '../constraints'
 import {
   appendConstraints,
   appendCreateConstraints
 } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~/server/security'
 
 // READ
 

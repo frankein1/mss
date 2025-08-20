@@ -1,4 +1,4 @@
-import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 import { relativeRelationshipKeys } from '~/client/options/beneficiary'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
 

@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatFamilyFileLabels } from '~/utils/familyFile'
 
   const props = defineProps<{

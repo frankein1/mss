@@ -1,5 +1,5 @@
 import { SocialSupportSubjectRepo } from '~/server/database'
-import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
+import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
 export async function update({
   input

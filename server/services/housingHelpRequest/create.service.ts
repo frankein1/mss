@@ -5,8 +5,8 @@ import {
 } from '@prisma/client'
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HousingHelpRequestRepo } from '~/server/database'
-import { CreateHousingHelpRequestInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { CreateHousingHelpRequestInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 type CreateParams = {

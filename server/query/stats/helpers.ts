@@ -1,7 +1,8 @@
-import { FileInstructionType, SocialSupportType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
-import { StatFilterInput } from '~/server/schema'
+import type { StatFilterInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~/types/stat'
 

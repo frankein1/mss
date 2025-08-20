@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
   import AtomFilters from './AtomFilters.vue'
-  import { FilterProp } from '~/types/filter'
+  import type { FilterProp } from '~/types/filter'
   import { FilterType } from '~/utils/constants/filters'
 
   const filtersDateSearchSelectReset: FilterProp[] = [

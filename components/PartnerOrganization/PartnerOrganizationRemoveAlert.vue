@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { PartnerOrganizationData } from './types'
+  import type { PartnerOrganizationData } from './types'
 
   const props = defineProps<{
     partner: PartnerOrganizationData

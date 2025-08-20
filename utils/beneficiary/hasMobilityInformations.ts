@@ -1,4 +1,4 @@
-import { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '@prisma/client'
 
 export function hasMobilityInformations(
   beneficiary: Pick<Beneficiary, 'mobility'>

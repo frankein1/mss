@@ -6,8 +6,8 @@ import {
 import { SocialSupportSubjectService } from '..'
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'
-import { CreateHelpRequestInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { CreateHelpRequestInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 
 type CreateParams = {

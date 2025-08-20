@@ -55,12 +55,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { Prisma } from '@prisma/client'
+  import type { Prisma } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    UpdateBudgetInfoInput,
-    updateBudgetInfoSchema
-  } from '~/server/schema'
+  import type { UpdateBudgetInfoInput } from '~/server/schema'
+  import { updateBudgetInfoSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'

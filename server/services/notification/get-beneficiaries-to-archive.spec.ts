@@ -2,7 +2,7 @@ import { describe, it, beforeEach, afterEach, vi } from 'vitest'
 import { prismaClient } from '~/server/prisma'
 import { getInactiveBeneficiaries } from './helper'
 import dayjs from 'dayjs'
-import { NotificationType } from '@prisma/client'
+import type { NotificationType } from '@prisma/client'
 
 // Ce test à pour but d'évaluer le nombre de bénéficiaire à archiver par structure
 // SVP ne pas inclure dans la CI

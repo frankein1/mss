@@ -1,7 +1,7 @@
 import { useSession } from 'h3'
 import { v4 } from 'uuid'
 import { getProConnectClient } from '~/server/lib'
-import { AuthSession } from '~/server/types/session'
+import type { AuthSession } from '~/server/types/session'
 
 export default defineEventHandler(async event => {
   const client = getProConnectClient()

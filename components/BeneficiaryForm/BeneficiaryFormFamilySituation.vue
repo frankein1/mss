@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   import { routes } from '~/utils/routes'
 

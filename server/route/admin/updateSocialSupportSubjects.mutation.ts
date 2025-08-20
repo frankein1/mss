@@ -1,9 +1,7 @@
 import { createMutation } from '~/server/route'
-import { AdminContext } from '~/server/trpc'
-import {
-  updateAdminStructureSubjectsSchema,
-  UpdateAdminStructureSubjectsInput
-} from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
+import type { UpdateAdminStructureSubjectsInput } from '~/server/schema'
+import { updateAdminStructureSubjectsSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { StructureService } from '~/server/services'
 import { structureContextQuery } from '~/server/trpc/createContext'

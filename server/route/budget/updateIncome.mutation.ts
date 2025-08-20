@@ -1,10 +1,8 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  updateBudgetIncomeSchema,
-  UpdateBudgetIncomeInput
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateBudgetIncomeInput } from '~/server/schema'
+import { updateBudgetIncomeSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 

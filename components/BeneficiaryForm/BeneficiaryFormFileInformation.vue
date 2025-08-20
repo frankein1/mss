@@ -58,7 +58,7 @@
   import { UserStatus, BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusKeys } from '~/client/options'
-  import { BeneficiaryReferent } from '~/types/beneficiary'
+  import type { BeneficiaryReferent } from '~/types/beneficiary'
 
   const props = withDefaults(
     defineProps<{

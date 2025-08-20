@@ -31,10 +31,10 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereCategorieKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import { StatsListPropType } from '~/types/stat'
+  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number

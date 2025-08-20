@@ -64,16 +64,17 @@
 </template>
 
 <script setup lang="ts" generic="T extends ZodSchema">
-  import { ZodSchema, z } from 'zod'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import type { ZodSchema, z } from 'zod'
+  import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
-  import { FamilyFilePermissions } from '~/server/security'
+  import type { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
-  import {
+  import type {
     BeneficiaryIdentification,
     BeneficiaryFileIdentification
   } from '~/types/beneficiary'
-  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
+  import type { AppBeneficiaryEditRoute } from '~/utils/routes'
+  import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
   type SubmitType = z.infer<T>

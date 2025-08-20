@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation as createMutationFn } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { AddFollowupInput } from '~/server/schema'
+import { addFollowupSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
 
 import { FamilyFileService, FollowupService } from '~/server/services'
 import { TRPCError } from '@trpc/server'

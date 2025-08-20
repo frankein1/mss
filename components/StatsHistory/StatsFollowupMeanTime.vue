@@ -51,11 +51,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors'
   import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number

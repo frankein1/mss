@@ -1,9 +1,10 @@
 import { HousingHelpRequestRepo } from '~/server/database'
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import {
-  FileInstructionPermissions,
-  getFileInstructionPermissions
-} from '~/server/security/permissions'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
+import type { FileInstructionPermissions } from '~/server/security/permissions'
+import { getFileInstructionPermissions } from '~/server/security/permissions'
 
 function getHousingHelpRequestSecurityTarget(
   user: SecurityRuleGrantee,

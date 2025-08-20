@@ -1,8 +1,9 @@
-import { BeneficiaryStatus, BudgetIncomeType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { BeneficiaryStatus, BudgetIncomeType } from '@prisma/client'
 import { BeneficiaryRepo, BudgetRepo } from '~/server/database'
-import { CreateFamilyFileMemberInput } from '~/server/schema'
+import type { CreateFamilyFileMemberInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
-import {
+import type {
   SecurityRuleContext,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'

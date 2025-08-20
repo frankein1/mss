@@ -1,5 +1,5 @@
 import BeneficiaryFormSimilarModal from '~/components/BeneficiaryFormSimilar/BeneficiaryFormSimilarModal.vue'
-import { SimilarBeneficiary } from '~/server/route'
+import type { SimilarBeneficiary } from '~/server/route'
 
 export function useBeneficiaryFormSimilarModal(
   similarBeneficiary: Exclude<SimilarBeneficiary, undefined>,

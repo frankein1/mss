@@ -130,7 +130,7 @@
   } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import sortBeneficiarySearchResults from '~/utils/beneficiary/sortBeneficiarySearchResults'
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import type { BeneficiarySearchResult } from '~/types/beneficiary'
   import BeneficiarySearchComboboxResult from './BeneficiarySearchComboboxResult.vue'
   import { routes } from '~/utils/routes'
 

@@ -29,14 +29,13 @@ import {
   getDepartmentStatsQuery,
   getMinistereInterpellationStatsQuery
 } from '~/server/query/stats'
-import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { StatFilterInput } from '~/server/schema'
+import { statFilterSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { getPercentage } from '~/utils/stats'
 import { getColumns } from '~/utils/export/getColumns'
 

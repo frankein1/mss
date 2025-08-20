@@ -61,7 +61,7 @@
   import type { FileInstructions } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
-  import { FileInstructionFilterInput } from '~/server/schema'
+  import type { FileInstructionFilterInput } from '~/server/schema'
 
   const props = defineProps<{
     items: FileInstructions

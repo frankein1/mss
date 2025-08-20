@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~/server/security'
 
 function findMany<T extends Prisma.DataInclusionStructureFindManyArgs>(
   user: SecurityRuleGrantee,

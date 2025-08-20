@@ -27,10 +27,8 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    updateBeneficiaryTaxHouseholdSchema,
-    UpdateBeneficiaryTaxHouseholdInput
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
+  import { updateBeneficiaryTaxHouseholdSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()

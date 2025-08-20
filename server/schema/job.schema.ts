@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { Prisma, JobStatus } from '@prisma/client'
+import type { JobStatus } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { maxStringLengthMessage } from '~/utils/zod'
 import {
   paginatedSchema,

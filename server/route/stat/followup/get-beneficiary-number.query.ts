@@ -1,10 +1,9 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { StatFilterInput } from '~/server/schema'
+import { statFilterSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { getFollowupBeneficiaryNumberQuery } from '~/server/query/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>

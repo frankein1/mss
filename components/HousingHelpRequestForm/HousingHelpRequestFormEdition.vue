@@ -14,14 +14,12 @@
 <script lang="ts" setup>
   import { AskedHousing, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    EditHousingHelpRequestInput,
-    editHousingHelpRequestSchema
-  } from '~/server/schema'
+  import type { EditHousingHelpRequestInput } from '~/server/schema'
+  import { editHousingHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
-  import { PartnerOrganizationIdName } from '~/types/partner'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 

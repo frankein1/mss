@@ -2,7 +2,7 @@ import type { H3Event } from 'h3'
 import { test as base } from 'vitest'
 import { test as t } from '~/server/trpc/createRouter'
 import { appRouter } from '~/server/trpc/routers'
-import { AppContext } from '~/server/trpc'
+import type { AppContext } from '~/server/trpc'
 import {
   fixturesUsers,
   fixtureStructures,

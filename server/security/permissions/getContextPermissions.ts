@@ -1,5 +1,5 @@
-import { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
-import { SecurityRuleStructure } from '../rules/types'
+import type { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
+import type { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
 
 export type AppContextPermissions = {

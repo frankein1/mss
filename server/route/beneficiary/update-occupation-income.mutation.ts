@@ -1,15 +1,13 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
+import type {
   AppContextPermissions,
-  SecurityRuleContext,
-  getAppContextPermissions
+  SecurityRuleContext
 } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  UpdateBeneficiaryOccupationInput,
-  updateBeneficiaryOccupationSchema
-} from '~/server/schema'
+import { getAppContextPermissions } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateBeneficiaryOccupationInput } from '~/server/schema'
+import { updateBeneficiaryOccupationSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 

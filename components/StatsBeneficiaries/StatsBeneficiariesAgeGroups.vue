@@ -29,12 +29,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AgeGroup, ageGroupKeys, getStatLabel } from '~/client/options'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { getStatColor } from '~/client/colors/stats'
-  import { StatsPiePropType } from '~/types/stat'
+  import type { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { ChartColor } from '~/utils/color/chartColors'
 

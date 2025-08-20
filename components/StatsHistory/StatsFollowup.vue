@@ -154,13 +154,13 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { StatFilterInput } from '~/server/schema'
-  import { Options } from '~/utils/options'
-  import { StatsCardConfig } from '~/types/stat'
-  import { Menu } from '~/types/menu'
+  import type { StatFilterInput } from '~/server/schema'
+  import type { Options } from '~/utils/options'
+  import type { StatsCardConfig } from '~/types/stat'
+  import type { Menu } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
-  import { HistoryCounts } from '~/types/fileInstruction'
+  import type { HistoryCounts } from '~/types/fileInstruction'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()

@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryRelative } from '~/types/beneficiary'
+  import type { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{

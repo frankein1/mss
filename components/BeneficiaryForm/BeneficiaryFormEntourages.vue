@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import { CreateOrUpdateEntourageInput } from '~/server/schema'
+  import type { CreateOrUpdateEntourageInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const { remove, fields } =

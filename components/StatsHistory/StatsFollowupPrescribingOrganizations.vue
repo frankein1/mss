@@ -43,10 +43,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
-  import { StatsListPropType, StatsPiePropType } from '~/types/stat'
+  import type { StatsListPropType, StatsPiePropType } from '~/types/stat'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'

@@ -1,10 +1,8 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  GetSimilarBeneficiaryInput,
-  getSimilarBeneficiarySchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { GetSimilarBeneficiaryInput } from '~/server/schema'
+import { getSimilarBeneficiarySchema } from '~/server/schema'
 import { BeneficiaryService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 

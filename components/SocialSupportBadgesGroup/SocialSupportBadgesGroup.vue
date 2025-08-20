@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus } from '@prisma/client'
+  import type { SocialSupportStatus } from '@prisma/client'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { appointmentStatusKeys } from '~/client/options'
 

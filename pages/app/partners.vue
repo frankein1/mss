@@ -64,8 +64,8 @@
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
-  import { PartnerOrganizationData } from '~/components/PartnerOrganization/types'
-  import {
+  import type { PartnerOrganizationData } from '~/components/PartnerOrganization/types'
+  import type {
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
   } from '~/server/schema'

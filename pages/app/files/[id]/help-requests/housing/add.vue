@@ -41,7 +41,7 @@
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { CreateHousingHelpRequestInput } from '~/server/schema'
+  import type { CreateHousingHelpRequestInput } from '~/server/schema'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'

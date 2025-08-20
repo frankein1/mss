@@ -34,7 +34,7 @@
   } from '~/types/matomo'
   import BeneficiarySearchCombobox from './BeneficiarySearchCombobox.vue'
   import { routes } from '~/utils/routes'
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import type { BeneficiarySearchResult } from '~/types/beneficiary'
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({

@@ -211,7 +211,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportSubject } from '@prisma/client'
+  import type { SocialSupportSubject } from '@prisma/client'
   import {
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels
@@ -222,8 +222,8 @@
     externalOrganisationKeys,
     askedHousingKeys
   } from '~/client/options'
-  import { CreateHousingHelpRequestInput } from '~/server/schema'
-  import { PartnerOrganizationIdName } from '~/types/partner'
+  import type { CreateHousingHelpRequestInput } from '~/server/schema'
+  import type { PartnerOrganizationIdName } from '~/types/partner'
   import { routes } from '~/utils/routes'
 
   const { application } = usePermissions()

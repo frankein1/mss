@@ -46,12 +46,12 @@
 
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
-  import { FileInstruction } from '~/server/trpc/routers'
+  import type { FileInstruction } from '~/server/trpc/routers'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { FileInstructionFilterInput } from '~/server/schema'
+  import type { FileInstructionFilterInput } from '~/server/schema'
   import { roomCountKeys } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'

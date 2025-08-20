@@ -1,10 +1,9 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
-import { IdInput, idSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
+import type { IdInput } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { FileInstructionRepo } from '~/server/database'
 
 const handler = async ({

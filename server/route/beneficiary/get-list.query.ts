@@ -1,6 +1,7 @@
 import { createQuery } from '~/server/route'
-import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { GetBeneficiariesInput } from '~/server/schema'
+import { getBeneficiariesSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 

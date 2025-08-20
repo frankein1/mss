@@ -1,8 +1,9 @@
 import { UserRepo } from '~/server/database'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
 import { createMutation } from '~/server/route'
-import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { AdminEditUserInput } from '~/server/schema'
+import { adminEditUserSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
 
 const adminHandler = async ({
   ctx: _ctx,

@@ -107,12 +107,9 @@
 <script setup lang="ts">
   import { workshopExternalAttendeeLabels } from '~/client/labels'
   import { beneficiaryGenderKeys } from '~/client/options'
-  import { SimilarBeneficiary } from '~/server/route'
-
-  import {
-    CreateExternalAttendeeInput,
-    createExternalAttendeeSchema
-  } from '~/server/schema'
+  import type { SimilarBeneficiary } from '~/server/route'
+  import type { CreateExternalAttendeeInput } from '~/server/schema'
+  import { createExternalAttendeeSchema } from '~/server/schema'
 
   const { workshopId, refresh } = defineProps<{
     workshopId: string

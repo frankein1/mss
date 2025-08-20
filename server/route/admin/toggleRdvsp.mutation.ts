@@ -1,7 +1,8 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ToggleRdvspInput, toggleRdvspSchema } from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { ToggleRdvspInput } from '~/server/schema'
+import { toggleRdvspSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
 
 const adminHandler = async ({

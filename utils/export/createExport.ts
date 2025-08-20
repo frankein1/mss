@@ -1,8 +1,9 @@
 import { readFileSync, unlinkSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
-import ExcelPkg, { Column, Workbook } from 'exceljs'
+import type { Column, Workbook } from 'exceljs'
+import ExcelPkg from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
-import { RowType, WorksheetType } from '~/types/export'
+import type { RowType, WorksheetType } from '~/types/export'
 
 const { Workbook: WorkbookConstructor } = ExcelPkg
 

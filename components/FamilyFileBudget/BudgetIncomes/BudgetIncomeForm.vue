@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
   import { budgetIncomeKeys } from '~/client/options'
-  import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import type { UpdateLoanOrDebtInput } from '~/server/schema'
   import { v4 } from 'uuid'
 
   const { fields, push, remove } =

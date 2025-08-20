@@ -1,5 +1,6 @@
-import { inferAsyncReturnType } from '@trpc/server'
-import { H3Event, parseCookies } from 'h3'
+import type { inferAsyncReturnType } from '@trpc/server'
+import type { H3Event } from 'h3'
+import { parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
 import { UserRepo } from '~/server/database'
 

@@ -1,7 +1,10 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { filterOutEmptyElements } from '../helper'
-import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
-import { UpdateBeneficiaryEntourageInput } from '~/server/schema'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
+import type { UpdateBeneficiaryEntourageInput } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { prepareRelationUpdates } from '~/utils/prisma'
 

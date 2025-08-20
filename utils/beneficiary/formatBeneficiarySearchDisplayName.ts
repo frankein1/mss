@@ -1,4 +1,4 @@
-import { BeneficiaryIdentification } from '~/types/beneficiary'
+import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
 export function formatBeneficiarySearchDisplayName(
   beneficiary: BeneficiaryIdentification

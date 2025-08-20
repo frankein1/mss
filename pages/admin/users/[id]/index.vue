@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AdminEditUserInput } from '~/server/schema'
+  import type { AdminEditUserInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { formatUserDisplayName } from '~/utils/user'
 

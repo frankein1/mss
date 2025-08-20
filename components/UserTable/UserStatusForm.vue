@@ -15,8 +15,10 @@
 </template>
 
 <script setup lang="ts">
-  import { User, UserStatus } from '@prisma/client'
-  import { editUserStatusSchema, UserStatusEditionInput } from '~/server/schema'
+  import type { User } from '@prisma/client'
+  import { UserStatus } from '@prisma/client'
+  import type { UserStatusEditionInput } from '~/server/schema'
+  import { editUserStatusSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()

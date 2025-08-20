@@ -44,16 +44,14 @@
 </template>
 
 <script setup lang="ts">
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { AlertType } from '~/utils/constants/alert'
   import { formatBeneficiaryNameAndBirthDate } from '~/utils/beneficiary'
   import { routes } from '~/utils/routes'
-  import {
-    getSimilarBeneficiarySchema,
-    GetSimilarBeneficiaryInput
-  } from '~/server/schema'
+  import type { GetSimilarBeneficiaryInput } from '~/server/schema'
+  import { getSimilarBeneficiarySchema } from '~/server/schema'
   import { formatUserDisplayName } from '~/utils/user'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     similarBeneficiary: SimilarBeneficiary

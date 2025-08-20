@@ -1,9 +1,11 @@
-import { FileInstructionType } from '@prisma/client'
+import type { FileInstructionType } from '@prisma/client'
 import { breadcrumbs as ben } from './beneficiary'
 import { breadcrumbs as file } from './file'
-import type { BeneficiaryIdentification } from '~/types/beneficiary'
+import type {
+  BeneficiaryIdentification,
+  BeneficiaryNames
+} from '~/types/beneficiary'
 import { routes } from '~/utils/routes'
-import { BeneficiaryNames } from '~/types/beneficiary'
 
 const r = routes.helpRequest
 

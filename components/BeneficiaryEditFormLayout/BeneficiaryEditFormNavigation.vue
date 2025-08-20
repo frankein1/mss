@@ -8,9 +8,10 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { FamilyFilePermissions } from '~/server/security'
-  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
+  import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import type { FamilyFilePermissions } from '~/server/security'
+  import type { AppBeneficiaryEditRoute } from '~/utils/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute

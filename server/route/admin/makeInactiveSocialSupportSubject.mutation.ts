@@ -1,6 +1,7 @@
 import { createMutation } from '~/server/route'
-import { AdminContext } from '~/server/trpc'
-import { IdInput, idSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
+import type { IdInput } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { SocialSupportSubjectService } from '~/server/services'
 
 const adminHandler = async ({

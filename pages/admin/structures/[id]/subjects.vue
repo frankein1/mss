@@ -89,10 +89,8 @@
 <script lang="ts" setup>
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    updateSocialSupportSubjectsSchema,
-    UpdateSocialSupportSubjectsInput
-  } from '~/server/schema'
+  import type { UpdateSocialSupportSubjectsInput } from '~/server/schema'
+  import { updateSocialSupportSubjectsSchema } from '~/server/schema'
 
   const title = routes.structure.AppStructureSubjects.title
 

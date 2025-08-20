@@ -1,4 +1,5 @@
-import { NotificationType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { NotificationType } from '@prisma/client'
 import { SocialSupportSubjectService } from '..'
 import { cleanUpdateInput } from './helper'
 import {
@@ -7,8 +8,8 @@ import {
   FileInstructionRepo,
   NotificationRepo
 } from '~/server/database'
-import { EditHelpRequestInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { EditHelpRequestInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
 

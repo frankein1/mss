@@ -1,8 +1,8 @@
-import { Minister, Prisma } from '@prisma/client'
+import type { Minister, Prisma } from '@prisma/client'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import { BeneficiaryRepo } from '~/server/database'
-import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import type { StatFilterInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export async function getMinistereInterpellationStatsQuery(
   user: SecurityRuleGrantee,

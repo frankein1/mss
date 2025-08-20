@@ -14,9 +14,9 @@
 
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
-  import { PartnerOrganizationData, DataInclusionStructure } from './types'
+  import type { PartnerOrganizationData, DataInclusionStructure } from './types'
+  import type { AddPartnerOrganizationInput } from '~/server/schema'
   import {
-    AddPartnerOrganizationInput,
     addCustomPartnerOrganizationSchema,
     addDataInclusionPartnerOrganizationSchema
   } from '~/server/schema'

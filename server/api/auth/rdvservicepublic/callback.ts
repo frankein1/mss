@@ -1,5 +1,5 @@
 import { useSession } from 'h3'
-import { RdvspAuthSession } from '~/server/types/session'
+import type { RdvspAuthSession } from '~/server/types/session'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'

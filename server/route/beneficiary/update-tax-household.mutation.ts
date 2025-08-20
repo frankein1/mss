@@ -1,11 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { SecurityRuleContext } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  UpdateBeneficiaryTaxHouseholdInput,
-  updateBeneficiaryTaxHouseholdSchema
-} from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
+import { updateBeneficiaryTaxHouseholdSchema } from '~/server/schema'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (

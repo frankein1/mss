@@ -1,9 +1,7 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  GetByFamilyFileIdInput,
-  getByFamilyFileIdSchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { GetByFamilyFileIdInput } from '~/server/schema'
+import { getByFamilyFileIdSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 

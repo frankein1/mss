@@ -4,13 +4,10 @@ import {
   SocialSupportRepo,
   StructureRepo
 } from '~/server/database'
-import { PlanAppointmentInput } from '~/server/schema'
+import type { PlanAppointmentInput } from '~/server/schema'
 import * as client from '~/server/lib/rdvsp-oauth.client'
-import {
-  invalidError,
-  unauthorizedError,
-  ProtectedAppContext
-} from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
+import { invalidError, unauthorizedError } from '~/server/trpc'
 import { getAgentAuthInfo, checkIntegrationSetupForStructure } from './helper'
 import { SocialSupportStatus, SocialSupportType } from '@prisma/client'
 import { connect } from '~/utils/prisma'

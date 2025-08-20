@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { EditDocumentInput } from '~/server/schema'
+import { editDocumentSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
 

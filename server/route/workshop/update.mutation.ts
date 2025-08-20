@@ -1,13 +1,14 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { updateWorkshopSchema, UpdateWorkShopInput } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateWorkShopInput } from '~/server/schema'
+import { updateWorkshopSchema } from '~/server/schema'
 import {
   WorkshopRepo,
   WorkshopNameRepo,
   PartnerOrganizationRepo
 } from '~/server/database'
-import { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
 const securityCheck = async (

@@ -1,6 +1,6 @@
 import { PartnerOrganizationRepo } from '~/server/database'
-import { AddPartnerOrganizationInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { AddPartnerOrganizationInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 
 export async function create({
   input,

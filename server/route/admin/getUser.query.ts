@@ -1,6 +1,6 @@
 import { UserRole } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { AdminContext } from '~/server/trpc'
+import type { AdminContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import { UserRepo } from '~/server/database'
 

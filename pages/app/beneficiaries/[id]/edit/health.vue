@@ -26,10 +26,8 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    updateBeneficiaryHealthSchema,
-    UpdateBeneficiaryHealthInput
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryHealthInput } from '~/server/schema'
+  import { updateBeneficiaryHealthSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()

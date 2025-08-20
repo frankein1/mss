@@ -1,8 +1,9 @@
-import { BudgetIncomeType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { BudgetIncomeType } from '@prisma/client'
 import { BeneficiaryRepo, BudgetIncomeRepo } from '~/server/database'
-import { CreateBeneficiaryInput } from '~/server/schema'
+import type { CreateBeneficiaryInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
-import { SecurityRuleContext } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 
 type CreateParams = {
   ctx: SecurityRuleContext

@@ -44,8 +44,9 @@
 
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
-  import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
   import { routes, apiRoutes } from '~/utils/routes'
+  import type { AcceptCGUInput } from '~/server/schema'
+  import { acceptCGUSchema } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

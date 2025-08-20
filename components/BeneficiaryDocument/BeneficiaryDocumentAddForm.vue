@@ -60,13 +60,11 @@
 
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    UploadBrowserDocumentInput,
-    uploadBrowserDocumentSchema
-  } from '~/server/schema'
+  import type { UploadBrowserDocumentInput } from '~/server/schema'
+  import { uploadBrowserDocumentSchema } from '~/server/schema'
   import { documentTypeKeys, documentTagKeys } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = withDefaults(

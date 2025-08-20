@@ -1,4 +1,5 @@
-import { Prisma, UserStatus, UserActivityType } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { UserStatus, UserActivityType } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import {
   AppointmentRepo,
@@ -17,8 +18,9 @@ import {
   UserRepo
 } from '~/server/database'
 import { createMutation } from '~/server/route'
-import { IdInput, idSchema } from '~/server/schema'
-import { AdminContext } from '~/server/trpc'
+import type { IdInput } from '~/server/schema'
+import { idSchema } from '~/server/schema'
+import type { AdminContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getDisabledStructureAlert } from '~/server/email'
 import { customAlphabet } from 'nanoid'

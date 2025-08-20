@@ -1,7 +1,7 @@
-import { Prisma } from '@prisma/client'
-import { SecurityRuleContext } from '~/server/security'
+import type { Prisma } from '@prisma/client'
+import type { SecurityRuleContext } from '~/server/security'
 import { DataInclusionStructureRepo } from '~/server/database/repository'
-import { SearchDataInclusionStructureInput } from '~/server/schema'
+import type { SearchDataInclusionStructureInput } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 
 function getQueryForDepartmentSearch(zipcode: string) {

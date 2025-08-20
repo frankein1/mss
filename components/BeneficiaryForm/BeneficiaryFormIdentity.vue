@@ -82,8 +82,8 @@
     beneficiaryTitleKeys,
     nationalityKeys
   } from '~/client/options'
-  import { SimilarBeneficiary } from '~/server/trpc/routers'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
+  import type { SimilarBeneficiary } from '~/server/trpc/routers'
+  import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)

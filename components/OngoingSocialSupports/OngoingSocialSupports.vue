@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus } from '@prisma/client'
+  import type { SocialSupportStatus } from '@prisma/client'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'

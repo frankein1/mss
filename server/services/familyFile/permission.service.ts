@@ -1,11 +1,11 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { FamilyFileRepo } from '~/server/database'
-import {
+import type {
   FamilyFilePermissions,
   SecurityRuleContext,
-  SecurityRuleGrantee,
-  getFamilyFilePermissions
+  SecurityRuleGrantee
 } from '~/server/security'
+import { getFamilyFilePermissions } from '~/server/security'
 
 export function getFamilyFileSecurityTarget(
   user: SecurityRuleGrantee,

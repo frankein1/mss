@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { fixtureStructures } from './'
 
 const structureId = fixtureStructures[0].id

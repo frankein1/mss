@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-  import { StructureInfo } from './types'
+  import type { StructureInfo } from './types'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{

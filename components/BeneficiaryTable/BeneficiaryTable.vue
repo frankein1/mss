@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryListItems } from './types'
+  import type { BeneficiaryListItems } from './types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { BeneficiarySort } from '~/types/table'
 

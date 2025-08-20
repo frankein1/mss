@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-use-before-define
 export const sum = <K extends keyof T, T>(items: T[], key: K): number =>
   items.reduce((result, current) => {
     const value = current[key]

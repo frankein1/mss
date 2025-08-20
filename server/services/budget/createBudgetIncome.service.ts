@@ -1,6 +1,7 @@
-import { BudgetIncomeType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { BudgetIncomeType } from '@prisma/client'
 import { BudgetIncomeRepo } from '~/server/database'
-import { CreateBudgetIncomeInput } from '~/server/schema'
+import type { CreateBudgetIncomeInput } from '~/server/schema'
 
 export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
   const { budgetId, member, beneficiaryId } = input

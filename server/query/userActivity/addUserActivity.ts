@@ -1,10 +1,11 @@
-import { Prisma, UserActivityType, UserActivityObject } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { UserActivityType, UserActivityObject } from '@prisma/client'
 import {
   createOrUpdateStructure,
   createOrUpdateUser
 } from '~/server/integrations/brevo/service'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~/server/security'
 
 export type AddUserActivityInput = {
   transaction?: Prisma.TransactionClient

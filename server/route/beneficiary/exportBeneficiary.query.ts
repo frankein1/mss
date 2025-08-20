@@ -1,11 +1,9 @@
 import { createQuery } from '~/server/route'
-import {
-  ExportBeneficiaryInput,
-  exportBeneficiarySchema
-} from '~/server/schema/beneficiary/exportbeneficiary.schema'
-import { SecurityRuleContext } from '~/server/security'
+import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import { exportBeneficiarySchema } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryService } from '~/server/services'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { UserActivityType } from '@prisma/client'
 const securityCheck = async (
   ctx: SecurityRuleContext,

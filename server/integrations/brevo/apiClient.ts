@@ -1,5 +1,5 @@
-import { Structure } from '@prisma/client'
-import { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
+import type { Structure } from '@prisma/client'
+import type { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import { URLSearchParams } from 'url'
 
 const runtimeConfig = useRuntimeConfig()

@@ -1,9 +1,9 @@
 import { FilesRoute, BeneficiariesRoute } from './utils'
-import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import { HistoryTab } from '~/utils/constants/history'
+import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import type { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
-import { BeneficiaryNames } from '~/types/beneficiary'
-import { FilterBeneficiaryNotFilled } from '../constants/filters'
+import type { BeneficiaryNames } from '~/types/beneficiary'
+import type { FilterBeneficiaryNotFilled } from '../constants/filters'
 
 type OriginPage =
   | 'AppOverview'

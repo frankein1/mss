@@ -56,11 +56,12 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
-  import { FollowupSort, SortOrder } from '~/types/table'
+  import type { FollowupSort } from '~/types/table'
+  import { SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
-  import { FilterFollowupNotFilled } from '~/utils/constants/filters'
+  import type { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { isTRPCClientError } from '~/utils/error'
 
   const route = useRoute()

@@ -72,11 +72,9 @@
   import { taxHouseHoldRelationshipKeys } from '~/client/options'
   import { relativeFieldLabels } from '~/client/labels'
 
-  import {
-    CreateBudgetIncomeInput,
-    createBudgetIncomeSchema
-  } from '~/server/schema'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { CreateBudgetIncomeInput } from '~/server/schema'
+  import { createBudgetIncomeSchema } from '~/server/schema'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = defineProps<{

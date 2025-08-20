@@ -1,6 +1,7 @@
 import { FamilyFileService } from '..'
 import { DocumentRepo } from '~/server/database'
-import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
+import { getDocumentPermissions } from '~/server/security'
 
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,

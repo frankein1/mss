@@ -1,4 +1,4 @@
-import { Column } from 'exceljs'
+import type { Column } from 'exceljs'
 
 export type RowType = { [k: string]: string | boolean }
 

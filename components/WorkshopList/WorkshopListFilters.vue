@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
   import { workshopPeriodFilterKeys } from '~/client/options'
-  import { FilterProp, FilterValues } from '~/types/filter'
+  import type { FilterProp, FilterValues } from '~/types/filter'
   import { FilterType, PeriodFilter } from '~/utils/constants/filters'
 
   const model = defineModel<{

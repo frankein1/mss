@@ -1,4 +1,4 @@
-import { TRPCClientError } from '@trpc/client'
+import type { TRPCClientError } from '@trpc/client'
 import type { inferRouterOutputs } from '@trpc/server'
 import { beneficiaryRouter } from './beneficiary/router'
 import { budgetRouter } from './budgetRouter'

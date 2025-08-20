@@ -1,14 +1,10 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  EditHousingHelpRequestInput,
-  editHousingHelpRequestSchema
-} from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { EditHousingHelpRequestInput } from '~/server/schema'
+import { editHousingHelpRequestSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { HousingHelpRequestService } from '~/server/services'
 
 const handler = ({

@@ -61,7 +61,7 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  import { WorkshopsPageItems } from './types'
+  import type { WorkshopsPageItems } from './types'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
   const trpcClient = useTrpcClient()

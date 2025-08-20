@@ -1,8 +1,10 @@
-import { NotificationType, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { NotificationType } from '@prisma/client'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
-import { AddCommentInput } from '~/server/schema'
-import { getCommentPermissions, SecurityRuleGrantee } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { AddCommentInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security'
+import { getCommentPermissions } from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
 
 function getTargetedSocialSupport(
   user: SecurityRuleGrantee,

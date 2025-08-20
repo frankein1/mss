@@ -246,7 +246,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HousingHelpRequestOutput } from './types'
+  import type { HousingHelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { formatDate } from '~/utils/formatDate'
   import {

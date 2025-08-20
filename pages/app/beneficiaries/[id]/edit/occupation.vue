@@ -23,10 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    updateBeneficiaryOccupationSchema,
-    UpdateBeneficiaryOccupationInput
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryOccupationInput } from '~/server/schema'
+  import { updateBeneficiaryOccupationSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
   definePageMeta({

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
   import FamilyFileSegmentedControl from './FamilyFileSegmentedControl.vue'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const members = [
     {

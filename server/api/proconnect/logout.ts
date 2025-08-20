@@ -4,7 +4,7 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import type { H3Event } from 'h3'
 import { unauthorized } from '~/utils/api/errors'
-import { JwtUser } from '~/server/lib/jwt'
+import type { JwtUser } from '~/server/lib/jwt'
 
 export default defineEventHandler(async event => {
   const { inactive } = getQuery(event)

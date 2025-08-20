@@ -1,4 +1,4 @@
-import { JwtPayload } from 'jsonwebtoken'
+import type { JwtPayload } from 'jsonwebtoken'
 import { routes, apiRoutes } from '~/utils/routes'
 
 export type ProConnectToken = {

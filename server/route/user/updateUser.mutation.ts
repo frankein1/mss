@@ -5,12 +5,11 @@ import {
   UserStatus
 } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import { UserEditionInput, editUserSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UserEditionInput } from '~/server/schema'
+import { editUserSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { UserRepo } from '~/server/database'
 
 const handler = async ({

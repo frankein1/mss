@@ -58,7 +58,7 @@
   import type { SocialSupportSubjects } from './types'
   import SocialSupportSubjectEdition from './SocialSupportSubjectEdition.vue'
   import SocialSupportSubjectDeletion from './SocialSupportSubjectDeletion.vue'
-  import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
+  import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
   defineProps<{
     subjects: SocialSupportSubjects

@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupPageItem } from '~/server/trpc/routers'
+  import type { FollowupPageItem } from '~/server/trpc/routers'
   import { followupStatusKeys } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatUserDisplayName } from '~/utils/user'

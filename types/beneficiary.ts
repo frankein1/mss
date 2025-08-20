@@ -4,7 +4,7 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
-import { RouterOutput } from '~/server/trpc/routers'
+import type { RouterOutput } from '~/server/trpc/routers'
 
 export type BeneficiaryReferent = {
   id: string

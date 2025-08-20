@@ -57,8 +57,8 @@
 </template>
 
 <script setup lang="ts">
-  import { WorkshopWithAttendeesDetails } from '~/types/workshop'
-  import {
+  import type { WorkshopWithAttendeesDetails } from '~/types/workshop'
+  import type {
     WorkshopAttendeeAttendance,
     WorkshopAttendeeType
   } from '@prisma/client'
@@ -66,6 +66,7 @@
     FAILED_DOWNLOAD_ERROR_MESSAGE,
     INVALID_CODE_ERROR_MESSAGE
   } from '~/utils/constants'
+  import WorkshopAttendeeItem from './WorkshopAttendeeItem.vue'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { isTRPCClientError } from '~/utils/error'

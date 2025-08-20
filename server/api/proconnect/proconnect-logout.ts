@@ -1,4 +1,4 @@
-import { AuthSession } from '~/server/types/session'
+import type { AuthSession } from '~/server/types/session'
 import { badrequest } from '~/utils/api/errors'
 
 /** Manage logout for Proconnect when the login for

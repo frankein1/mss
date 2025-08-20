@@ -72,7 +72,8 @@
 </template>
 
 <script setup lang="ts">
-  import { JobResultAdminSort, SortOrder } from '~/types/table'
+  import type { JobResultAdminSort } from '~/types/table'
+  import { SortOrder } from '~/types/table'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import type { JobResultAdminFilterInput } from '~/server/schema'
 

@@ -1,13 +1,9 @@
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  updateSocialSupportSubjectSchema,
-  UpdateSocialSupportSubjectNameInput
-} from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
+import { updateSocialSupportSubjectSchema } from '~/server/schema'
+import type { SecurityRuleContext } from '~/server/security'
+import { getAppContextPermissions } from '~/server/security'
 import { SocialSupportSubjectService } from '~/server/services'
 
 const handler = async ({

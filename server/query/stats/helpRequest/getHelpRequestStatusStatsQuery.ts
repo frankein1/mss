@@ -1,7 +1,7 @@
 import { prepareHelpRequestStatFilters } from '../helpers'
 import { SocialSupportConstraints, SocialSupportRepo } from '~/server/database'
-import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import type { StatFilterInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 export async function getHelpRequestStatusStatsQuery(

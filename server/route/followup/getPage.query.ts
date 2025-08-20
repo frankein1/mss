@@ -1,7 +1,8 @@
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { GetFollowupsInput } from '~/server/schema'
+import { getFollowupsSchema } from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FollowupService } from '~/server/services'
 

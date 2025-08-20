@@ -43,11 +43,12 @@
 </template>
 
 <script setup lang="ts">
-  import { GetDocument } from './types'
+  import type { GetDocument } from './types'
   import { documentTagKeys, documentTypeKeys } from '~/client/options'
-  import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
+  import type { EditDocumentInput } from '~/server/schema'
+  import { editDocumentSchema } from '~/server/schema'
   import { documentFieldLabels } from '~/client/labels'
-  import { DocumentPermissions } from '~/server/security'
+  import type { DocumentPermissions } from '~/server/security'
 
   const props = defineProps<{
     document: GetDocument

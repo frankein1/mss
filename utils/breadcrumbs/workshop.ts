@@ -1,6 +1,6 @@
 import { routes } from '~/utils/routes'
 import { breadcrumbs as user } from './user'
-import { WorkshopDetails } from '~/types/workshop'
+import type { WorkshopDetails } from '~/types/workshop'
 
 const r = routes.workshop
 type Routes = typeof r

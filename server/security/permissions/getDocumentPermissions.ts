@@ -1,5 +1,5 @@
-import { Document } from '@prisma/client'
-import {
+import type { Document } from '@prisma/client'
+import type {
   SecurityRuleContext,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure

@@ -1,4 +1,4 @@
-import { Options } from '~/utils/options'
+import type { Options } from '~/utils/options'
 
 export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
   Array.from(options).map(o => o.value) as [string, ...string[]]

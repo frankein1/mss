@@ -199,7 +199,7 @@
 
 <script setup lang="ts">
   import { budgetExpensesKeys } from '~/client/options'
-  import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import type { UpdateLoanOrDebtInput } from '~/server/schema'
   import { v4 } from 'uuid'
 
   defineProps<{ total: number | null }>()

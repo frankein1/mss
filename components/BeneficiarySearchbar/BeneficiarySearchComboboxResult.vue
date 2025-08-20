@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import type { BeneficiarySearchResult } from '~/types/beneficiary'
 
   defineProps<{
     search: string | undefined

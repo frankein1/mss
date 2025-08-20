@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { siretSchema } from '~/server/schema'
 import { PartnerOrganizationRepo } from '~/server/database'

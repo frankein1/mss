@@ -62,8 +62,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupPageItems } from '~/server/trpc/routers'
-  import { FollowupSort } from '~/types/table'
+  import type { FollowupPageItems } from '~/server/trpc/routers'
+  import type { FollowupSort } from '~/types/table'
   import { followupFieldLabels } from '~/client/labels'
 
   const props = defineProps<{

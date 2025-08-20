@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AdminUsersOutput } from './types'
+  import type { AdminUsersOutput } from './types'
   import { userRoleKeys } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
   import { routes } from '~/utils/routes'

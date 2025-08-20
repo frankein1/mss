@@ -1,10 +1,8 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
-import {
-  EditPartnerOrganizationInput,
-  editPartnerOrganizationSchema
-} from '~/server/schema'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { EditPartnerOrganizationInput } from '~/server/schema'
+import { editPartnerOrganizationSchema } from '~/server/schema'
 
 import { PartnerOrganizationService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
