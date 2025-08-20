@@ -41,7 +41,7 @@
       <div class="fr-grid-row">
         <div
           v-if="hasPhoneOrAddress(beneficiary.general)"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <BeneficiaryInfoLabel
             label="Numéro de téléphone"
@@ -59,7 +59,7 @@
         </div>
         <div
           v-if="hasEmailOrAddressComplement(beneficiary.general)"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <BeneficiaryInfoLabel
             label="Email"

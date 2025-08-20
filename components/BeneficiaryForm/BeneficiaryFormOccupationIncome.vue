@@ -128,7 +128,10 @@
             </p>
           </div>
 
-          <AtomPictogram path="/pictograms/money.svg"></AtomPictogram>
+          <AtomPictogram
+            class="fr-hidden fr-unhidden-sm"
+            path="/pictograms/money.svg"
+          ></AtomPictogram>
         </div>
       </AtomCallout>
     </BeneficiaryFormSection>

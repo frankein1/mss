@@ -1,11 +1,5 @@
 <template>
-  <!-- <VeeSearchInput
-        name="filter"
-        label="Rechercher"
-        @on-input="onSearch"
-      /> -->
-
-  <div class="sss-add__items">
+  <div class="sss-add__items fr-p-2w">
     <VeeCheckbox
       v-for="(item, index) in filteredSubjects"
       :key="index"
@@ -27,10 +21,6 @@
 
   const filter = ref('')
 
-  // function onSearch(pattern: string) {
-  //   filter.value = formatSearchPattern(pattern)
-  // }
-
   const filteredSubjects = computed(() => {
     const res = !filter.value.length
       ? props.subjects
@@ -45,8 +35,6 @@
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .sss-add__items {
-    padding: 1rem 0;
-
     @include dsfr-media-query.respond-from('lg') {
       columns: 2;
       column-gap: 3rem;

@@ -220,14 +220,31 @@
   .partner-search-bar {
     display: flex;
     flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
   .partner-search-bar__input {
-    flex: 0 0 calc(66.666% - 0.75rem);
+    width: 100%;
+    flex-grow: 1;
   }
 
   .partner-search-bar__action {
-    margin-left: auto;
+    width: 100%;
+    flex-grow: 1;
+  }
+
+  @include dsfr-media-query.respond-from('md') {
+    .partner-search-bar__input {
+      width: auto;
+      flex-grow: 4;
+    }
+
+    .partner-search-bar__action {
+      width: auto;
+      flex-grow: 1;
+    }
   }
 
   .partner__show-button {

@@ -3,24 +3,24 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.gir"
       :value="beneficiaryGirKeys.value(health.gir)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.doctor"
       :value="health.doctor"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.socialSecurityNumber"
       :value="health.socialSecurityNumber"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.insurance"
       :value="health.insurance"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">

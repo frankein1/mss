@@ -28,7 +28,7 @@
     <template v-if="hasChildren">
       <div
         v-if="taxHouseholds.majorChildren && taxHouseholds.majorChildren > 0"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       >
         <BeneficiaryInfoLabel
           :label="beneficiaryFieldLabels.majorChildren"
@@ -37,7 +37,7 @@
       </div>
       <div
         v-if="taxHouseholds.minorChildren && taxHouseholds.minorChildren > 0"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       >
         <BeneficiaryInfoLabel
           :label="beneficiaryFieldLabels.minorChildren"

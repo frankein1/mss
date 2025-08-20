@@ -7,7 +7,7 @@
       v-if="label"
       class="field-label"
     >
-      {{ label }} :
+      {{ label }}&nbsp;:
     </div>
     <div class="field-value">{{ displayedValue }}</div>
   </div>

@@ -91,6 +91,7 @@
   .beneficiarydetailshistoryactions_container {
     display: flex;
     align-items: center;
+    gap: 1rem;
     flex-direction: column;
 
     @include dsfr-media-query.respond-from('sm') {
@@ -101,7 +102,8 @@
 
   .benficiarydetailshistoryactions_btns-group {
     flex: 1;
-    gap: 0.5rem;
+    gap: 1rem;
+    align-items: baseline;
 
     .fr-btn {
       margin-bottom: 0;

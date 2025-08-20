@@ -150,12 +150,21 @@
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
+  form {
+    width: 100%;
+
+    @include dsfr-media-query.respond-from('sm') {
+      width: auto;
+    }
+  }
+
   .fr-pagination__list {
     justify-content: center;
   }
 
   .fr-grid-row.fr-grid-row--middle {
     justify-content: space-between;
+    align-items: flex-end;
     gap: 1rem;
 
     @include dsfr-media-query.respond-from('sm') {

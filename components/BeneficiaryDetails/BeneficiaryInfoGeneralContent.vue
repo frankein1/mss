@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="fr-grid-row">
-      <div class="fr-col-6 fr-pb-2w">
+      <div class="fr-col-12 fr-col-md-6 fr-pb-2w">
         <div class="field-value">
           {{ formatBeneficiaryName(general) }}
         </div>
@@ -23,19 +23,19 @@
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.gender"
         :value="beneficiaryGenderKeys.value(general.gender)"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
     </div>
     <div class="fr-grid-row">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.birthName"
         :value="general.birthName"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.nationality"
         :value="nationalityKeys.value(general.nationality)"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
     </div>
     <div class="fr-grid-row">
@@ -81,23 +81,23 @@
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.street"
         :value="formatAddress(general)"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.addressComplement"
         :value="general.addressComplement"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.department"
         :value="general.department"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         v-if="general.qpv != null"
         :label="beneficiaryFieldLabels.qpv"
         :value="general.qpv ? 'Oui' : 'Non'"
-        class="fr-col-6"
+        class="fr-col-12 fr-col-md-6"
       />
     </div>
   </div>

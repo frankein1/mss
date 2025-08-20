@@ -7,12 +7,12 @@
           occupationIncome.socioProfessionalCategory
         )
       "
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.occupation"
       :value="occupationIncome.occupation"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
@@ -42,38 +42,38 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.studyLevel"
       :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employer"
       :value="occupationIncome.employer"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employerSiret"
       :value="occupationIncome.employerSiret"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.unemploymentNumber"
       :value="occupationIncome.unemploymentNumber"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.cafNumber"
       :value="occupationIncome.cafNumber"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.pensionOrganisations"
       :value="pensionOrganisations"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
 
@@ -81,12 +81,12 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
       :value="ministereCategorieKeys.value(occupationIncome.ministereCategorie)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereStructure"
       :value="ministereStructureKeys.value(occupationIncome.ministereStructure)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
@@ -95,7 +95,7 @@
           occupationIncome.ministereDepartementServiceAc
         )
       "
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
 </template>

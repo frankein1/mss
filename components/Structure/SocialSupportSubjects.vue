@@ -18,7 +18,7 @@
 
         <img
           src="/pictograms/inclusion.svg"
-          class="img"
+          class="img fr-hidden fr-unhidden-sm"
           alt=""
         />
       </div>

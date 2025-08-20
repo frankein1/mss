@@ -391,13 +391,19 @@
   defineProps<{ permissions: AppContextPermissions }>()
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
   th:first-child,
   td:first-child {
     left: 0;
-    position: sticky;
+    position: initial;
     z-index: 50;
     max-width: 14rem;
+
+    @include dsfr-media-query.respond-from('md') {
+      position: sticky;
+    }
   }
 
   th:not(:first-child),

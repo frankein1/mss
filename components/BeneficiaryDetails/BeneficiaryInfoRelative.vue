@@ -8,29 +8,29 @@
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.relationship"
       :value="relativeRelationshipKeys.value(relative.relationship)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.birthDate"
       :value="formatDate(relative.birthDate)"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.city"
       :value="relative.city"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.email"
       :value="relative.email"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.phone"
       :value="relative.phone"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     />
   </div>
   <div class="fr-grid-row">

@@ -22,7 +22,7 @@
 
           <img
             src="/pictograms/inclusion.svg"
-            class="img"
+            class="fr-hidden fr-unhidden-sm img"
             alt=""
           />
         </div>
