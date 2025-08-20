@@ -221,6 +221,7 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .history-details__icon {
     display: flex;
@@ -267,11 +268,36 @@
   .beneficiary-history-details-collapse__title {
     position: relative;
     display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
+    flex-direction: column;
     padding: 1.5rem;
-    column-gap: 1.5rem;
+    gap: 1.5rem;
     border-radius: 0.5rem;
+
+    .history-details__icon {
+      display: none;
+    }
+
+    .history-details__status {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @include dsfr-media-query.respond-from('md') {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: stretch;
+
+      .history-details__icon {
+        display: flex;
+      }
+
+      .history-details__status {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
 
     &.expanded {
       border-radius: 0.5rem 0.5rem 0 0;
@@ -286,13 +312,6 @@
 
   .history-details__date {
     font-weight: 400;
-  }
-
-  .history-details__status {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
   }
 
   .status-badges {

@@ -1,6 +1,6 @@
 <template>
   <div class="beneficiarydetailshistoryactions_container">
-    <span class="fr-text--bold fr-mr-2w"> Créer :</span>
+    <span class="fr-text--bold fr-mr-2w"> Créer&nbsp;:</span>
     <ul
       class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--icon-left benficiarydetailshistoryactions_btns-group"
     >
@@ -91,10 +91,17 @@
   .beneficiarydetailshistoryactions_container {
     display: flex;
     align-items: center;
+    flex-direction: column;
+
+    @include dsfr-media-query.respond-from('sm') {
+      flex-direction: row;
+      align-items: flex-start;
+    }
   }
 
   .benficiarydetailshistoryactions_btns-group {
     flex: 1;
+    gap: 0.5rem;
 
     .fr-btn {
       margin-bottom: 0;

@@ -12,7 +12,7 @@
         :label="budgetCustomIncomeKeys.byKey.type"
       />
     </div>
-    <div class="fr-col-10 fr-col-lg-5">
+    <div class="fr-col-9 fr-col-sm-10 fr-col-lg-5">
       <VeeCurrencyInput
         v-if="type === 'expense'"
         :name="`customs[${index}].amount`"
@@ -25,7 +25,7 @@
       />
     </div>
 
-    <div class="fr-col-2 fr-col-lg-1 delete-custom">
+    <div class="fr-col-3 fr-col-sm-2 fr-col-lg-1 delete-custom">
       <DsfrButton
         secondary
         class="btn-delete-action"

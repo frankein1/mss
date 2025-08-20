@@ -5,7 +5,7 @@
   >
     <div
       v-if="icon"
-      class="pagetitle__icon fr-mr-4w"
+      class="pagetitle__icon fr-mr-4w fr-hidden fr-unhidden-sm"
       :class="`pagetitle__icon--${iconVariant}`"
     >
       <span

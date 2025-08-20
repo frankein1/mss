@@ -1,22 +1,20 @@
 <template>
   <nav
-    id="secondary-navigation"
     class="fr-sidemenu"
     role="navigation"
-    aria-labelledby="secondarymenu-title"
-    tabindex="-1"
+    aria-labelledby="sidemenu-title"
   >
-    <div class="fr-sidemenu__inner">
+    <div class="fr-sidemenu__inner fr-pr-0">
       <button
-        id="secondarymenu-title"
-        class="fr-sidemenu__btn"
-        aria-controls="fr-sidemenu-wrapper"
         aria-expanded="false"
+        aria-controls="sidemenu-collapse-1"
+        type="button"
+        class="fr-sidemenu__btn"
       >
-        Menu de navigation du formulaire
+        Menu du formulaire
       </button>
       <div
-        id="fr-sidemenu-wrapper"
+        id="sidemenu-collapse-1"
         class="fr-collapse"
       >
         <ul class="fr-sidemenu__list">
@@ -210,6 +208,7 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/variables' as *;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .fr-sidemenu {
     padding-right: 0;
@@ -217,7 +216,10 @@
 
   .fr-sidemenu__inner {
     box-shadow: none;
-    padding: 1.5rem 1rem;
+
+    @include dsfr-media-query.respond-from('md') {
+      padding: 1.5rem 1rem;
+    }
   }
 
   .fr-sidemenu__btn[aria-current],

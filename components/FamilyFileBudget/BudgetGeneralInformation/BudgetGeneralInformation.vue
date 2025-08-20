@@ -10,9 +10,9 @@
       </NuxtLink>
     </div>
 
-    <section class="fr-container">
-      <div class="fr-grid-row">
-        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
+    <div class="fr-container">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3 bgi__content__item">
           <img
             src="~/assets/icons/pig.svg"
             class="item-icon"
@@ -29,8 +29,8 @@
           </div>
         </div>
 
-        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
-          <hr class="bgi__content__separator" />
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3 bgi__content__item">
+          <hr class="bgi__content__separator bgi__content__separator--md" />
           <span
             class="fr-icon-bank-line item-icon"
             aria-hidden="true"
@@ -46,8 +46,8 @@
           </div>
         </div>
 
-        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
-          <hr class="bgi__content__separator bgi__content__separator--md" />
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3 bgi__content__item">
+          <hr class="bgi__content__separator bgi__content__separator--xl" />
           <img
             src="~/assets/icons/banquefrance.svg"
             class="item-icon"
@@ -68,8 +68,8 @@
           </div>
         </div>
 
-        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
-          <hr class="bgi__content__separator" />
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3 bgi__content__item">
+          <hr class="bgi__content__separator bgi__content__separator--md" />
           <span
             class="fr-icon-home-4-line item-icon"
             aria-hidden="true"
@@ -82,11 +82,11 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
     <hr class="separator" />
 
-    <section class="bgi__content">
+    <div class="bgi__content">
       <div class="bgi__content__item">
         <div class="item-icon item-icon--tertiary">
           <span
@@ -107,7 +107,7 @@
             : '-'
         }}
       </div>
-    </section>
+    </div>
   </section>
 </template>
 
@@ -125,6 +125,7 @@
   .bgi__header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 1.25rem;
 
     > h3 {
@@ -155,12 +156,17 @@
     width: 0.0625rem;
     height: 3.125rem;
     background-color: var(--border-default-grey);
+    display: none;
 
     &--md {
-      display: none;
-
       @include dsfr-media-query.respond-from('md') {
-        display: unset;
+        display: block;
+      }
+    }
+
+    &--xl {
+      @include dsfr-media-query.respond-from('xl') {
+        display: block;
       }
     }
   }

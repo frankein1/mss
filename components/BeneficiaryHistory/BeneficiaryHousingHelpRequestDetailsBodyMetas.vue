@@ -10,24 +10,26 @@
   </li>
   <li v-if="askedHousing">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.askedHousing }} :</span
+      >{{ housingHelpRequestFieldLabels.askedHousing }}&nbsp;:</span
     >
     {{ askedHousing }}
   </li>
   <li v-if="housingHelpRequest.prescribingOrganization?.name">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.prescribingOrganizationId }} :</span
+      >{{ helpRequestFieldLabels.prescribingOrganizationId }}&nbsp;:</span
     >
     {{ housingHelpRequest.prescribingOrganization.name }}
   </li>
   <li v-if="housingHelpRequest.prescribingOrganizationContact?.name">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.prescribingOrganizationContactId }} :</span
+      >{{
+        helpRequestFieldLabels.prescribingOrganizationContactId
+      }}&nbsp;:</span
     >
     {{ housingHelpRequest.prescribingOrganizationContact.name }}
   </li>
   <li v-if="instructorOrganization">
-    <span class="information-label">Instruction :</span>
+    <span class="information-label">Instruction&nbsp;:</span>
     {{ instructorOrganization }}
   </li>
   <li v-if="fileInstruction.instructorOrganizationContact">
@@ -35,25 +37,25 @@
       >{{
         housingHelpRequestFieldLabels.instructorOrganizationContactId
       }}
-      :</span
+      &nbsp;:</span
     >
     {{ fileInstruction.instructorOrganizationContact.name }}
   </li>
   <li v-if="housingHelpRequest.reason">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.reason }} :</span
+      >{{ housingHelpRequestFieldLabels.reason }}&nbsp;:</span
     >
     {{ housingReasonKeys.value(housingHelpRequest.reason) }}
   </li>
   <li v-if="housingHelpRequest.uniqueId">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.uniqueId }} :</span
+      >{{ housingHelpRequestFieldLabels.uniqueId }}&nbsp;:</span
     >
     {{ housingHelpRequest.uniqueId }}
   </li>
   <li v-if="housingHelpRequest.maxRent">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.maxRent }} :</span
+      >{{ housingHelpRequestFieldLabels.maxRent }}&nbsp;:</span
     >
     <span class="euro-symbol fr-ml-1v">{{
       euros(housingHelpRequest.maxRent)
@@ -61,7 +63,7 @@
   </li>
   <li v-if="housingHelpRequest.maxCharges">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.maxCharges }} :</span
+      >{{ housingHelpRequestFieldLabels.maxCharges }}&nbsp;:</span
     >
     <span class="euro-symbol fr-ml-1v">{{
       euros(housingHelpRequest.maxCharges)
@@ -69,13 +71,13 @@
   </li>
   <li v-if="housingType">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.housingType }} :</span
+      >{{ housingHelpRequestFieldLabels.housingType }}&nbsp;:</span
     >
     {{ housingType }}
   </li>
   <li v-if="roomCount">
     <span class="information-label"
-      >{{ housingHelpRequestFieldLabels.roomCount }} :</span
+      >{{ housingHelpRequestFieldLabels.roomCount }}&nbsp;:</span
     >
     {{ roomCount }}
   </li>
@@ -90,7 +92,7 @@
       >{{
         housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
       }}
-      :</span
+      &nbsp;:</span
     >
     {{ housingHelpRequest.taxHouseholdAdditionalInformation }}
   </li>
@@ -102,26 +104,26 @@
   </li>
   <li v-if="fileInstruction.dispatchDate">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.dispatchDate }} :</span
+      >{{ helpRequestFieldLabels.dispatchDate }}&nbsp;:</span
     >
     {{ formatDate(fileInstruction.dispatchDate) }}
   </li>
   <li v-if="fileInstruction.examinationDate">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.examinationDate }} :</span
+      >{{ helpRequestFieldLabels.examinationDate }}&nbsp;:</span
     >
     {{ formatDate(fileInstruction.examinationDate) }}
   </li>
   <li v-if="fileInstruction.decisionDate">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.decisionDate }} :</span
+      >{{ helpRequestFieldLabels.decisionDate }}&nbsp;:</span
     >
     {{ formatDate(fileInstruction.decisionDate) }}
   </li>
   <template v-if="status === SocialSupportStatus.Accepted"> </template>
   <li v-if="hasRefusalReason">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.refusalReason }} :</span
+      >{{ helpRequestFieldLabels.refusalReason }}&nbsp;:</span
     >
     {{ refusalReason }}
   </li>

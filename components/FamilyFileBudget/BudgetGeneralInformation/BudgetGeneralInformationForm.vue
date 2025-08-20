@@ -1,6 +1,6 @@
 <template>
   <section class="feature-section fr-container">
-    <div class="fr-grid-row fr-grid-row--gutters fr-p-5w">
+    <div class="fr-grid-row fr-grid-row--gutters fr-p-1w fr-p-md-5w">
       <div class="fr-col-12 fr-py-0">
         <h2 class="fr-h5 fr-mb-1w">Reste à vivre</h2>
 
@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <div class="fr-col-6">
+      <div class="fr-col-12 fr-col-sm-6">
         <VeeInput
           type="number"
           name="numberHouseholdMembers"
@@ -18,7 +18,7 @@
         />
       </div>
 
-      <div class="fr-col-6">
+      <div class="fr-col-12 fr-col-sm-6">
         <VeeCurrencyInput
           name="remainingAfterExpenses"
           label="Reste à vivre"
@@ -76,5 +76,9 @@
 
   .disabled {
     color: var(--text-mention-grey);
+  }
+
+  .fr-grid-row {
+    align-items: flex-end;
   }
 </style>

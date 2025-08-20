@@ -189,7 +189,7 @@
     align-items: center;
     list-style-type: none;
     margin: 0;
-    height: 40px;
+    flex-wrap: wrap;
 
     li {
       height: 40px;

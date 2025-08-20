@@ -87,7 +87,7 @@
         </template>
 
         <ul
-          class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
+          class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--left button-list"
         >
           <li v-if="canDelete">
             <button
@@ -267,6 +267,7 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/dsfr/core/index' as dsfr;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .beneficiary-history-details-body {
     --text-spacing: 0 0 1rem;
@@ -301,9 +302,18 @@
   }
 
   .information-list {
-    column-gap: 2rem;
     margin-bottom: 0.5rem;
-    column-count: 2;
+
+    @include dsfr-media-query.respond-from('md') {
+      column-gap: 2rem;
+      column-count: 2;
+    }
+  }
+
+  .button-list {
+    @include dsfr-media-query.respond-from('md') {
+      text-align: right;
+    }
   }
 </style>
 

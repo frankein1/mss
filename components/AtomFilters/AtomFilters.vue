@@ -35,7 +35,12 @@
       v-if="collapsedByDefaultFilters.length"
       class="filter-left-section"
     >
-      <p v-if="resultsLabel">{{ resultsLabel }}</p>
+      <p
+        v-if="resultsLabel"
+        class="fr-mb-0"
+      >
+        {{ resultsLabel }}
+      </p>
       <ul
         v-show="showCollapsedFiltersSummary"
         class="fr-tags-group"
@@ -53,7 +58,7 @@
         </li>
       </ul>
     </div>
-    <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg">
+    <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline">
       <li v-if="!noReset">
         <button
           v-show="hasFilters"
@@ -399,23 +404,23 @@
 
   .filter-summary {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    @include dsfr-media-query.respond-from('md') {
+      margin-top: 1rem;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      .fr-btns-group {
+        flex-wrap: nowrap;
+      }
+    }
 
     .fr-tags-group {
       margin-right: 1rem;
-    }
-
-    .fr-btns-group {
-      margin-left: auto;
-      display: flex;
-      flex-wrap: nowrap;
-      flex: 1 0 auto;
-      justify-content: flex-end;
-
-      &:not(.fr-btns-group--sm, .fr-btns-group--lg).fr-btns-group--icon-left
-        .fr-btn[class*=' fr-icon-'] {
-        margin-bottom: 0;
-      }
     }
   }
 

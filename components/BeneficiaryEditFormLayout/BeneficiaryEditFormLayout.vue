@@ -4,11 +4,11 @@
     v-if="beneficiaryIdentification"
     ref="form"
     novalidate
-    class="fr-grid-row"
+    class="fr-grid-row form-wrapper"
     @submit.prevent="onSubmit"
   >
     <BeneficiaryEditFormNavigation
-      class="beneficiary-form-content content beneficiaryformlayout__navigation fr-col-3"
+      class="form-navigation content beneficiaryformlayout__navigation fr-col-12 fr-col-md-3"
       :permissions="permissions"
       :current-route="currentRoute"
       :beneficiary-id="beneficiaryIdentification.id"
@@ -20,7 +20,7 @@
     />
     <div
       ref="beneficiaryFormLayoutMainContainer"
-      class="beneficiary-form-content content fr-col-9 fr-container"
+      class="beneficiary-form-content content fr-col-12 fr-col-md-9 fr-container"
     >
       <AtomBreadcrumb
         :links="
@@ -181,13 +181,30 @@
 
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
-  .beneficiaryformlayout__navigation {
-    border-right: 1px solid var(--border-default-grey);
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    @include dsfr-media-query.respond-from('md') {
+      flex-direction: row;
+    }
   }
 
   main form .beneficiary-form-content {
-    height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
+    @include dsfr-media-query.respond-from('md') {
+      height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
+    }
+  }
+
+  .form-navigation {
+    border: none;
+
+    @include dsfr-media-query.respond-from('md') {
+      border-right: 1px solid var(--border-default-grey);
+      height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
+    }
   }
 </style>
 <style lang="scss">

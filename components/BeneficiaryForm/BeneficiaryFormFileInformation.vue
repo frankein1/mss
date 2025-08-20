@@ -28,7 +28,11 @@
 
     <div
       v-if="full"
-      :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"
+      :class="
+        application.module.vulnerablePerson
+          ? 'fr-col-12 fr-col-md-6'
+          : 'fr-col-12'
+      "
     >
       <VeeCheckbox
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
@@ -38,7 +42,9 @@
 
     <div
       v-if="application.module.vulnerablePerson && full"
-      :class="application.module.vulnerablePerson ? 'fr-col-6' : ''"
+      :class="
+        application.module.vulnerablePerson ? 'fr-col-12 fr-col-md-6' : ''
+      "
     >
       <VeeCheckbox
         :label="beneficiaryFieldLabels.vulnerablePerson"

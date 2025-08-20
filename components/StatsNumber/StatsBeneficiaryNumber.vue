@@ -1,6 +1,6 @@
 <template>
   <div class="fr-m-2w fr-grid-row">
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-md-6">
       <span
         class="text-big fr-h2"
         :class="historyType"
@@ -20,7 +20,7 @@
 
     <div
       v-if="familyCounts"
-      class="fr-col-6"
+      class="fr-col-12 fr-col-md-6"
     >
       <span
         class="text-big fr-h2"
@@ -45,6 +45,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .fr-grid-row {
+    gap: 1rem;
+  }
+
   .text-big {
     font-size: 2.5rem;
   }

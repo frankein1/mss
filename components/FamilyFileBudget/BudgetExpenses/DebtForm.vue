@@ -1,13 +1,13 @@
 <template>
   <section class="fr-grid-row fr-grid-row--gutters">
-    <div class="fr-col-11">
+    <div class="fr-col-9 fr-col-sm-10 fr-col-lg-11">
       <VeeInput
         :name="`debts[${index}].type`"
         :label="budgetDebtsKeys.byKey.type"
       />
     </div>
 
-    <div class="fr-col-1 delete-loan">
+    <div class="fr-col-3 fr-col-sm-2 fr-col-lg-1 delete-loan">
       <DsfrButton
         secondary
         class="btn-delete-action"
@@ -19,7 +19,7 @@
       />
     </div>
 
-    <div class="fr-col-4">
+    <div class="fr-col-12 fr-col-sm-4">
       <VeeInput
         :name="`debts[${index}].dueDate`"
         :label="budgetDebtsKeys.byKey.dueDate"
@@ -27,14 +27,14 @@
       />
     </div>
 
-    <div class="fr-col-4">
+    <div class="fr-col-12 fr-col-sm-4">
       <VeeCurrencyInput
         :name="`debts[${index}].amountTotal`"
         :label="budgetDebtsKeys.byKey.amountTotal"
       />
     </div>
 
-    <div class="fr-col-4">
+    <div class="fr-col-12 fr-col-sm-4">
       <VeeCurrencyInput
         :name="`debts[${index}].amountPerMonth`"
         :label="budgetDebtsKeys.byKey.amountPerMonth"
