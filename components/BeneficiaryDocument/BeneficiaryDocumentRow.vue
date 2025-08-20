@@ -217,7 +217,8 @@
   }
 
   .name-container {
-    word-break: break-word; // Allows to split dashed or underscored document names
+    word-break: normal; // Allows to split dashed or underscored document names
+    overflow-wrap: anywhere;
     overflow: hidden;
     display: -webkit-box;
     height: 1rem;

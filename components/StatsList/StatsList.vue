@@ -204,7 +204,8 @@
 
     > :first-child {
       grid-area: label;
-      word-break: break-word;
+      word-break: normal;
+      overflow-wrap: anywhere;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;

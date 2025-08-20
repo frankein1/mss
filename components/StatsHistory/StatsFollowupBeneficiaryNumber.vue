@@ -62,6 +62,7 @@
   }
 
   h2 {
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 </style>

@@ -271,7 +271,8 @@
   .fr-sidemenu__link {
     color: #fff;
     font-weight: $font-weight-normal;
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: anywhere;
     padding: 0.75rem;
   }
 

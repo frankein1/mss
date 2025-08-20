@@ -95,6 +95,7 @@
     padding: 0.5rem 0.75rem;
     border-radius: 0 0.5rem 0.5rem;
     background-color: var(--background-contrast-grey);
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 </style>
