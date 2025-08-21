@@ -2,7 +2,7 @@
   <div>
     <AtomBreadcrumb :links="breadcrumbs" />
     <div class="page-title-container fr-mb-4w">
-      <div class="page-title-image">
+      <div class="page-title-image fr-hidden fr-unhidden-sm">
         <img
           src="/pictograms/calendar.svg"
           alt=""

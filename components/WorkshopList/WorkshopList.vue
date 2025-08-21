@@ -33,7 +33,13 @@
         )"
         :key="month[0]"
       >
-        <p class="workshop-month">{{ month[0] }}</p>
+        <p
+          role="heading"
+          aria-level="3"
+          class="workshop-month"
+        >
+          {{ month[0] }}
+        </p>
         <ul class="workshop-list">
           <li
             v-for="workshop in month[1]"

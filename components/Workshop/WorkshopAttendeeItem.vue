@@ -100,7 +100,7 @@
               label: 'Absence excusée'
             }
           ]"
-          label="Présence"
+          label="Émargement"
           no-label
           inline
           small

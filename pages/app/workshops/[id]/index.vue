@@ -26,6 +26,7 @@
         <WorkshopCreateAttendee
           class="add-participant"
           :attendees="workshop.workshopAttendees"
+          :workshop
           @refresh="refresh"
         />
       </PageContainer>

@@ -1,6 +1,12 @@
 <template>
   <div class="add-attendee-container">
-    <h3 class="text--uppercase">Ajouter des personnes partcipantes</h3>
+    <p
+      role="heading"
+      :aria-level="hasSessionName ? '3' : '2'"
+      class="heading-add-attendee text--uppercase"
+    >
+      Ajouter des personnes partcipantes
+    </p>
 
     <div class="input-wrapper">
       <ComboBox
@@ -55,11 +61,17 @@
 
 <script setup lang="ts">
   import type { BeneficiarySearchResult } from '~/types/beneficiary'
-  import type { WorkshopAttendee } from '~/types/workshop'
+  import type {
+    WorkshopAttendee,
+    WorkshopWithAttendeesDetails
+  } from '~/types/workshop'
   import WorkshopAddExternalAttendeeModal from '~/components/Workshop/WorkshopAddExternalAttendeeModal.vue'
   import { WorkshopAttendeeType } from '@prisma/client'
 
-  const { attendees } = defineProps<{ attendees: WorkshopAttendee[] }>()
+  const { attendees, workshop } = defineProps<{
+    attendees: WorkshopAttendee[]
+    workshop: WorkshopWithAttendeesDetails
+  }>()
   const emit = defineEmits<{ refresh: [] }>()
 
   const trpcClient = useTrpcClient()
@@ -81,6 +93,11 @@
       )
       .filter(Boolean)
   })
+
+  const hasSessionName = computed(() => {
+    return workshop.sessionName != null && workshop.sessionName !== ''
+  })
+
   const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
 
   const workshopId = route.params.id as string
@@ -154,9 +171,11 @@
       }
     }
 
-    h3 {
+    .heading-add-attendee {
       color: white;
       font-size: 0.75rem;
+      line-height: 1.25rem;
+      font-weight: 700;
       margin-bottom: 0.5rem;
       text-align: center;
     }

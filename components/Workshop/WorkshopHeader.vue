@@ -1,7 +1,9 @@
 <template>
   <div class="header-wrapper">
     <h1>{{ workshop.workshopName.name }}</h1>
-    <h2 v-if="workshop.sessionName">{{ workshop.sessionName }}</h2>
+    <h2 v-if="workshop.sessionName">
+      {{ workshop.sessionName }}
+    </h2>
     <p class="date-details">
       <i class="ri-calendar-event-line fr-mr-2w"></i>{{ dateDetails }}
     </p>

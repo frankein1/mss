@@ -6,7 +6,11 @@
           src="/pictograms/tickets.svg"
           alt=""
         />
-        <p class="registration-count">
+        <p
+          class="registration-count"
+          role="heading"
+          :aria-level="hasSessionName ? '4' : '3'"
+        >
           <span class="count-emphasis">{{
             workshop._count.workshopAttendees
           }}</span>
@@ -83,6 +87,10 @@
   const emit = defineEmits<{ refresh: [] }>()
 
   const { isReferent } = useAuthState()
+
+  const hasSessionName = computed(() => {
+    return workshop.sessionName != null && workshop.sessionName !== ''
+  })
 
   const onDeleteAttendee = async (id: string, type: WorkshopAttendeeType) => {
     const { mutate, error } = trpcClient.workshop.deleteAttendee.useMutation()

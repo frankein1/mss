@@ -9,7 +9,13 @@
         <p class="day-number">{{ numberDay }}</p>
       </div>
       <div class="item-description">
-        <p class="title">{{ title }}</p>
+        <p
+          role="heading"
+          aria-level="4"
+          class="title"
+        >
+          {{ title }}
+        </p>
         <div
           v-if="hour || workshop.location"
           class="item-hours"
