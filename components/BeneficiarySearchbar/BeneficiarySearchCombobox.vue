@@ -102,6 +102,7 @@
             }"
           >
             <button
+              :id="`beneficiary-search-followup-link-${rowIndex}`"
               type="button"
               class="action-btn fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line fr-btn--sm"
               :title="`${action.title} pour ${formatBeneficiarySearchDisplayName(result)}`"
