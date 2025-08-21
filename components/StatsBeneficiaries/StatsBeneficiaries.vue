@@ -20,18 +20,21 @@
         </template>
         <template #icon>
           <img
+            class="fr-mr-1w"
             src="~/assets/img/avatar.svg"
             alt=""
           />
         </template>
         <template #title>
-          <div>{{ beneficiaryCountLabel[0] }}</div>
-          <div
+          <p class="fr-mb-0 fr-h3 title-blue">
+            {{ beneficiaryCountLabel[0] }}
+          </p>
+          <p
             v-if="beneficiaryCountLabel[1] && beneficiaryCount?.count"
             class="fr-text--lg fr-mb-0"
           >
             {{ beneficiaryCountLabel[1] }}
-          </div>
+          </p>
         </template>
       </StatsHeader>
       <StatsExportAlert
@@ -60,7 +63,6 @@
               filters.beneficiaryStatus
             "
             history-type="beneficiary"
-            :total-count="beneficiaryCount.count"
             :filters="filters"
           />
         </div>

@@ -3,9 +3,9 @@
     <div class="header-title">
       <slot name="icon"></slot>
       <slot name="header"></slot>
-      <p class="fr-mb-0 fr-ml-1w fr-h3">
+      <div class="color--primary">
         <slot name="title"></slot>
-      </p>
+      </div>
     </div>
     <AtomDropdown
       v-if="menus.length > 0"
@@ -40,7 +40,7 @@
       align-items: center;
     }
 
-    .fr-h3 {
+    .color--primary {
       color: var(--primary);
     }
 

@@ -30,8 +30,8 @@
             <button
               class="fr-btn"
               type="submit"
-              :submitting="isSubmitting"
               :disabled="isSubmitting"
+              :data-submitting="isSubmitting"
             >
               Modifier
             </button>

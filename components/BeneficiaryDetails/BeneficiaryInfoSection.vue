@@ -12,12 +12,12 @@
         aria-expanded="true"
         :aria-controls="infoSectionId"
       >
-        <div
+        <span
           role="heading"
           aria-level="4"
         >
           {{ title }}
-        </div>
+        </span>
       </button>
     </div>
     <div

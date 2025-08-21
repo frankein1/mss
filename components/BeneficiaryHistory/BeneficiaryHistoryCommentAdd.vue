@@ -25,10 +25,10 @@
       >
         <li>
           <button
-            type="submit"
             class="fr-btn"
+            type="submit"
             :disabled="isSubmitting"
-            :submitting="isSubmitting"
+            :data-submitting="isSubmitting"
           >
             Ajouter
           </button>

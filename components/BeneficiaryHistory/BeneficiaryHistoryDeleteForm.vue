@@ -29,7 +29,8 @@
           class="fr-btn btn-delete-action"
           title="Supprimer"
           type="submit"
-          :submitting="isSubmitting"
+          :disabled="isSubmitting"
+          :data-submitting="isSubmitting"
         >
           Supprimer
         </button>

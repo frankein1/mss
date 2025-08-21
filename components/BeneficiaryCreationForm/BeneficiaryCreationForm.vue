@@ -136,7 +136,6 @@
           <button
             class="fr-btn fr-btn--secondary"
             type="button"
-            :submitting="isSubmitting"
             :disabled="isSubmitting"
             @click="emit('cancel')"
           >
@@ -147,8 +146,8 @@
           <button
             class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
             type="submit"
-            :submitting="isSubmitting"
             :disabled="isSubmitting"
+            :data-submitting="isSubmitting"
             @click="complete = true"
           >
             Enregistrer et compléter
@@ -158,8 +157,8 @@
           <button
             class="fr-btn"
             type="submit"
-            :submitting="isSubmitting"
             :disabled="isSubmitting"
+            :data-submitting="isSubmitting"
             @click="complete = false"
           >
             Enregistrer

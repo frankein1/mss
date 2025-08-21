@@ -100,7 +100,7 @@
             <button
               class="fr-btn fr-btn fr-mb-0"
               type="submit"
-              :submitting="isSubmitting"
+              :data-submitting="isSubmitting"
               :disabled="isSubmitting"
             >
               Confirmer

@@ -4,7 +4,6 @@
     :title-id="id"
     name="family-file-members"
     :inline="true"
-    label="Fiche :"
     legend="Fiche :"
     :options
     :model-value="modelValue"

@@ -187,7 +187,8 @@
           class="fr-btn fr-mt-3w"
           title="Valider"
           type="submit"
-          :submitting="isSubmitting"
+          :data-submitting="isSubmitting"
+          :disabled="isSubmitting"
         >
           Valider
         </button>

@@ -35,7 +35,8 @@
       class="fr-btn fr-mt-3w"
       title="Modifier"
       type="submit"
-      :submitting="isSubmitting"
+      :data-submitting="isSubmitting"
+      :disabled="isSubmitting"
     >
       Modifier
     </button>

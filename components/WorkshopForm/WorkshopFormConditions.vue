@@ -9,13 +9,32 @@
       <p class="fr-mb-1v">Fonctionnalité à venir.</p>
     </div>
     <div class="workshop-form-toggle fr-col-12">
-      <DsfrToggleSwitch
-        v-model="hasAttendeeLimit"
-        label="Limiter le nombre de personnes participantes"
-        hint="Les personnes supplémentaires seront inscrites sur liste d’attente."
-        no-text
-        :disabled="true"
-      />
+      <!-- Do not use DsfrToggleSwitch here. Bug: duplicate id on label and hint paragraph -->
+      <div class="fr-toggle">
+        <input
+          id="attendee-limit-toggle"
+          type="checkbox"
+          class="fr-toggle__input"
+          disabled
+          aria-describedby="attendee-limit-toggle-hint attendee-limit-toggle-messages"
+        />
+        <label
+          class="fr-toggle__label"
+          for="attendee-limit-toggle"
+          >Limiter le nombre de personnes participantes</label
+        >
+        <p
+          id="attendee-limit-toggle-hint"
+          class="fr-hint-text"
+        >
+          Les personnes supplémentaires seront inscrites sur liste d’attente.
+        </p>
+        <div
+          id="attendee-limit-toggle-messages"
+          class="fr-messages-group"
+          aria-live="polite"
+        ></div>
+      </div>
     </div>
     <div class="fr-col-12 fr-col-sm-6">
       <VeeInput
@@ -52,8 +71,6 @@
   const hasAttendeeLimit = ref(false)
 
   defineProps<{
-    // eslint-disable-next-line vue/no-unused-properties
-    isSubmitting: boolean
     ageConditionOptions: Options
   }>()
 

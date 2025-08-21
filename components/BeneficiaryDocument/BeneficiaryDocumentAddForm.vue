@@ -51,7 +51,8 @@
       class="fr-btn fr-mt-3w"
       title="Ajouter"
       type="submit"
-      :submitting="isSubmitting"
+      :data-submitting="isSubmitting"
+      :disabled="isSubmitting"
     >
       Ajouter
     </button>

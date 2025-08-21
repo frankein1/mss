@@ -6,7 +6,6 @@
       <button
         class="fr-btn fr-btn--secondary"
         type="button"
-        :submitting="isSubmitting"
         :disabled="isSubmitting"
         @click="emit('cancel')"
       >
@@ -28,8 +27,8 @@
       <button
         class="fr-btn"
         type="submit"
-        :submitting="isSubmitting"
         :disabled="isSubmitting"
+        :data-submitting="isSubmitting"
         @click="emit('submit')"
       >
         {{ update ? 'Confirmer' : 'Enregistrer' }}

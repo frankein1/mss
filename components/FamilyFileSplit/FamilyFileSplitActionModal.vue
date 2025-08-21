@@ -41,8 +41,8 @@
           <DsfrButton
             label="Confirmer la dissociation"
             type="submit"
-            :submitting="isSubmittingSplit"
-            :readonly="isSubmittingSplit"
+            :disabled="isSubmittingSplit"
+            :data-submitting="isSubmittingSplit"
           ></DsfrButton>
         </li>
       </DsfrButtonGroup>
@@ -76,8 +76,8 @@
           <DsfrButton
             label="Enregistrer"
             type="submit"
-            :submitting="isSubmittingSituation"
-            :readonly="isSubmittingSituation"
+            :disabled="isSubmittingSituation"
+            :data-submitting="isSubmittingSituation"
           ></DsfrButton>
         </li>
       </DsfrButtonGroup>

@@ -23,7 +23,9 @@
           <AtomicIconHelpRequest :is-big="true" />
         </template>
         <template #title>
-          {{ helpRequestCountLabel }}
+          <p class="fr-mb-0 fr-h3 title-blue">
+            {{ helpRequestCountLabel }}
+          </p>
         </template>
       </StatsHeader>
       <StatsExportAlert

@@ -32,8 +32,8 @@
         <DsfrButton
           label="Prendre rendez-vous"
           type="submit"
-          :submitting="isSubmittingAppointmentPlan"
-          :readonly="isSubmittingAppointmentPlan"
+          :disabled="isSubmittingAppointmentPlan"
+          :data-submitting="isSubmittingAppointmentPlan"
         ></DsfrButton>
       </li>
     </DsfrButtonGroup>

@@ -37,9 +37,8 @@
               </h1>
               <component
                 :is="modalState.component"
-                v-if="modalState"
+                v-if="modalState && isOpen"
                 v-bind="modalProps"
-                v-model="isOpen"
               />
             </div>
           </div>

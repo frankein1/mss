@@ -40,7 +40,7 @@
       class="fr-btn fr-btn--lg"
       type="submit"
       :disabled="isSubmitting"
-      :submitting="isSubmitting"
+      :data-submitting="isSubmitting"
     >
       Créer
     </button>

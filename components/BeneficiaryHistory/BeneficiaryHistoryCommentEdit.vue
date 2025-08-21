@@ -18,7 +18,7 @@
           type="submit"
           class="fr-btn"
           :disabled="isSubmitting"
-          :submitting="isSubmitting"
+          :data-submitting="isSubmitting"
         >
           Valider
         </button>

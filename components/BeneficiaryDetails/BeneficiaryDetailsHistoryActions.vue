@@ -38,7 +38,7 @@
           title="Rendez-vous"
           :data-fr-opened="familyFile ? 'false' : ''"
           :aria-controls="familyFile ? 'global-modal' : ''"
-          :submitting="isSubmittingAppointmentPlan"
+          :disabled="isSubmittingAppointmentPlan"
           :readonly="isSubmittingAppointmentPlan"
           @click="emit('planAppointment')"
         >

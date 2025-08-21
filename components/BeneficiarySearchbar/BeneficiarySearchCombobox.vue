@@ -22,7 +22,6 @@
         type="search"
         role="combobox"
         aria-autocomplete="list"
-        :aria-expanded="results.length > 0"
         :aria-controls="GRID_ID"
         :aria-activedescendant="activeDescendant"
         @keydown="handleKeydown"
@@ -49,14 +48,14 @@
         />
         <li
           v-for="(result, rowIndex) in results"
-          :id="'result-row-' + rowIndex"
+          :id="resultRowId + '-result-row-' + rowIndex"
           :key="rowIndex"
           class="result-row"
           role="row"
           :class="{ focused: rowIndex === activeRow }"
         >
           <div
-            :id="'result-item-' + rowIndex"
+            :id="resultItemId + '-result-item-' + rowIndex"
             class="result-cell"
             role="gridcell"
             :class="{
@@ -163,6 +162,8 @@
   const results = ref<BeneficiarySearchResult[]>([])
   const loading = ref<boolean>(false)
   const error = ref<string>('')
+  const resultRowId = useId()
+  const resultItemId = useId()
 
   const LABEL_ID = computed(() => `beneficiary-search-label-${useId()}`)
   const INPUT_ID = computed(() => `beneficiary-search-input-${useId()}`)
@@ -174,7 +175,7 @@
   const activeCol = ref(0)
   const activeDescendant = computed(() => {
     if (activeRow.value >= 0) {
-      return `result-item-${activeRow.value}x${activeCol.value}`
+      return `${resultItemId}-result-item-${activeRow.value}x${activeCol.value}`
     }
     return ''
   })
@@ -286,7 +287,9 @@
 
   watch(activeRow, newIndex => {
     if (newIndex >= 0) {
-      const el = document.getElementById(`result-row-${newIndex}`)
+      const el = document.getElementById(
+        `${resultRowId}-result-row-${newIndex}`
+      )
       el?.scrollIntoView({ block: 'nearest' })
     }
   })

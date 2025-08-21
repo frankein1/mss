@@ -16,8 +16,8 @@
       <button
         :class="confirmSecondaryClass"
         :type="confirmSecondaryType"
-        :submitting="isSubmitting"
         :disabled="isSubmitting"
+        :data-submitting="isSubmitting"
         data-fr-opened="false"
         aria-controls="global-modal"
         @click="$emit('secondaryAction')"
@@ -30,8 +30,8 @@
       <button
         class="fr-btn submit-btn"
         type="submit"
-        :submitting="isSubmitting"
         :disabled="isSubmitting"
+        :data-submitting="isSubmitting"
       >
         {{ confirmLabel }}
       </button>

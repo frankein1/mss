@@ -22,7 +22,7 @@
         <button
           class="fr-btn submit-btn force-focus-visible"
           type="submit"
-          :submitting="isSubmitting"
+          :data-submitting="isSubmitting"
           :disabled="isSubmitting"
           @click="emit('save')"
         >

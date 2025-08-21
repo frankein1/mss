@@ -26,7 +26,6 @@
           label="Rechercher un dossier bénéficiaire"
           placeholder="Rechercher un dossier bénéficiaire"
           :label-visible="false"
-          name="beneficiary-search"
           :search-fn="searchBeneficiaries"
           :select-only="true"
           :action="{
@@ -64,7 +63,6 @@
             :disabled="
               !formValues.relationship || !linked_beneficiary || isSubmitting
             "
-            :submitting="isSubmitting"
             @click.prevent="onSubmit"
           >
             Confirmer

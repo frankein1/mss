@@ -6,7 +6,6 @@
         label="Rechercher un dossier bénéficiaire"
         :label-visible="false"
         placeholder="Rechercher un dossier bénéficiaire"
-        name="beneficiary-search"
         :search-fn="searchBeneficiaries"
         :action="{
           title: `Créer une synthèse`

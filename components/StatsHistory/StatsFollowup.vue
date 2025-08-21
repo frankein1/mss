@@ -25,15 +25,18 @@
           <AtomIconFollowup :is-big="true" />
         </template>
         <template #title>
-          {{ followupCountLabel }}
-          <span
-            v-if="
-              historyCounts?.firstFollowups && historyCounts.firstFollowups > 0
-            "
-            class="fr-text--sm"
-          >
-            dont {{ firstFollowupCountLabel }}</span
-          >
+          <p class="fr-mb-0 fr-h3 title-blue">
+            {{ followupCountLabel }}
+            <span
+              v-if="
+                historyCounts?.firstFollowups &&
+                historyCounts.firstFollowups > 0
+              "
+              class="fr-text--sm"
+            >
+              dont {{ firstFollowupCountLabel }}
+            </span>
+          </p>
         </template>
       </StatsHeader>
       <StatsExportAlert

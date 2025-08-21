@@ -68,7 +68,7 @@
       class="fr-btn fr-btn--lg submit-btn fr-mt-2w"
       type="submit"
       :disabled="isSubmitting"
-      :submitting="isSubmitting"
+      :data-submitting="isSubmitting"
     >
       Enregistrer
     </button>

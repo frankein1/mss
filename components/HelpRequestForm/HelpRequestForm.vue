@@ -82,8 +82,8 @@
             <button
               class="fr-btn submit-btn"
               type="submit"
-              :submitting="isSubmitting"
               :disabled="isSubmitting"
+              :data-submitting="isSubmitting"
             >
               Enregistrer
             </button>
