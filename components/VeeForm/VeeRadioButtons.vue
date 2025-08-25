@@ -59,9 +59,9 @@
           :aria-pressed="optionValue === value"
           tabindex="-1"
         >
-          <div :for="optionId(optionValue)">
+          <label :for="optionId(optionValue)">
             {{ optionLabel }}
-          </div>
+          </label>
         </button>
         <div
           v-if="pictos && optionValue in pictos"
@@ -154,7 +154,7 @@
   button.fr-tag {
     padding: 0;
 
-    > div {
+    > label {
       padding: 0.25rem 0.75rem;
       cursor: pointer;
     }
