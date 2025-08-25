@@ -91,7 +91,7 @@
       .filter(({ type }) => type === WorkshopAttendeeType.Beneficiary)
       .map(attendee => {
         // TS is not smart enough to detect the previous filter operation
-        if (attendee !== WorkshopAttendeeType.Beneficiary) {
+        if (attendee.type !== WorkshopAttendeeType.Beneficiary) {
           throw new Error('Error in filtering')
         }
         return attendee.beneficiaryId
