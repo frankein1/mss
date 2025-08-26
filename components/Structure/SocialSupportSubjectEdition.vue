@@ -52,7 +52,7 @@
     id: string
     name: string
     isSubmitting: boolean
-    validate: (name: string) => Promise<boolean>
+    validate: (name: string, id: string) => Promise<boolean>
     update: (values: UpdateSocialSupportSubjectNameInput) => void
   }>()
 
@@ -66,7 +66,7 @@
     })
 
   const onSubmit = handleSubmit(async values => {
-    const validated = await props.validate(values.name)
+    const validated = await props.validate(values.name, props.id)
     if (!validated) {
       setErrors({
         name: "Cet objet d'accompagnement existe déjà, modification impossible"

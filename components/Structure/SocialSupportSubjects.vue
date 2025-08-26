@@ -79,12 +79,19 @@
   const isSubmittingModification = ref(false)
   const isSubmittingDeletion = ref(false)
 
-  const nameCanBeUpdated = async (name: string) => {
+  const nameCanBeUpdated = async (name: string, id?: string) => {
     const subjectWithSameNameExists =
       await trpcClient.structure.findSocialSupportSubject.query({
         name: name.trim().toLocaleLowerCase()
       })
-    return !subjectWithSameNameExists
+    if (subjectWithSameNameExists) {
+      if (id) {
+        return subjectWithSameNameExists.id === id
+      } 
+        return false
+      
+    }
+    return true
   }
 
   function editSubject(id: string, name: string) {
@@ -93,7 +100,7 @@
       id,
       name,
       isSubmitting: isSubmittingModification.value,
-      validate: (name: string) => nameCanBeUpdated(name),
+      validate: (name: string, id: string) => nameCanBeUpdated(name, id),
       update: onUpdateStructureSubject
     })
   }
