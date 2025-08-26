@@ -60,6 +60,7 @@
   import type { WorkshopsPageItem } from './types'
   import { routes } from '~/utils/routes'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
+  import { BadgeColor } from '~/types/badge'
 
   const { workshop, timeDirection } = defineProps<{
     workshop: WorkshopsPageItem
@@ -85,10 +86,6 @@
     return hour + 'h' + minute
   })
 
-  // TODO (émargement/sign-in)
-  // if workshop date is not yet passed status badge is null
-  // instead, display registration text
-
   const plural = (n: number, w: string) => (n > 1 ? `${n} ${w}s` : `${n} ${w}`)
   const registrations = computed(() =>
     plural(workshop._count.workshopAttendees, 'inscription')
@@ -98,17 +95,27 @@
     if (timeDirection === FilterWorkshopTimeDirection.Future) {
       return null
     }
+    const emptyAttendances = workshop.workshopAttendees.filter(
+      a => a.attendance === null
+    )
+    if (
+      emptyAttendances.length === workshop.workshopAttendees.length ||
+      workshop.workshopAttendees.length === 0
+    ) {
+      return {
+        color: BadgeColor.Purple,
+        label: 'À remplir'
+      }
+    }
+    if (emptyAttendances.length === 0) {
+      return {
+        color: BadgeColor.Green,
+        label: 'Rempli'
+      }
+    }
     return {
-      color: 'purple' as
-        | 'purple'
-        | 'grey'
-        | 'green'
-        | 'red'
-        | 'yellow'
-        | 'bue'
-        | 'orange'
-        | undefined,
-      label: 'À remplir'
+      color: BadgeColor.Purple,
+      label: 'Partiellement rempli'
     }
   })
 </script>

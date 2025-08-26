@@ -9,7 +9,7 @@
         'fr-badge--error': color === 'red',
         'fr-badge--green-tilleul-verveine': color === 'yellow',
         'fr-badge fr-badge--orange-terre-battue': color === 'orange',
-        'fr-badge--info': color === 'bue',
+        'fr-badge--info': color === 'blue',
         '': color === 'grey',
         'fr-badge--icon-left': icon
       },
@@ -23,16 +23,18 @@
 </template>
 
 <script setup lang="ts">
+  import { BadgeColor } from '~/types/badge'
+
   withDefaults(
     defineProps<{
       small?: boolean
-      color?: 'green' | 'purple' | 'red' | 'yellow' | 'bue' | 'orange' | 'grey'
+      color?: BadgeColor
       label?: string
       icon?: string
     }>(),
     {
       small: false,
-      color: 'grey',
+      color: BadgeColor.Grey,
       icon: undefined,
       label: undefined
     }
