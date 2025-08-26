@@ -28,8 +28,8 @@
             >
               <img
                 id="sidemenu-title"
-                src="~/assets/img/logo-mss-bleu.png"
-                class="fr-responsive-img"
+                src="~/assets/img/logo-mss-bleu.svg"
+                width="100"
                 alt="Mon Suivi Social"
               />
             </NuxtLink>
