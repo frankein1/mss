@@ -11,39 +11,44 @@
     <div class="input-wrapper">
       <ComboBox
         ref="attendee-combobox"
-        v-slot="{ option, input }"
-        v-model="selectedBeneficiary"
-        label="Rechercher parmi vos bénéficiaires enregistrés"
-        :options="results"
-        :format-display-value="formatBeneficiarySearchDisplayName"
+        label="Ajouter un bénéficiaire enregistré"
         @input="searchBeneficiaries"
         @select="onSelect"
       >
-        <div class="beneficiary">
-          <div class="beneficiary-info">
-            <span class="beneficiary-name">
-              <AtomTextEmphasis
-                :name="formatBeneficiarySearchDisplayName(option)"
-                :input="input"
-              ></AtomTextEmphasis>
-            </span>
-            <span
-              v-if="option.birthDate"
-              class="beneficiary-age"
-              :class="{ disabled: option.disabled }"
-            >
-              {{ calculateAge(option.birthDate) + ' ans' }}</span
-            >
-          </div>
-
-          <div
-            v-if="beneficiaryAttendeeIds.includes(option.id)"
-            class="beneficiary-already-invited"
+        <template #input><ComboBoxInput v-model="inputValue" /></template>
+        <template #listbox>
+          <ComboBoxItem
+            v-for="option in results"
+            :key="option.id"
+            :disabled="option.disabled"
+            :value="option.id"
           >
-            <span class="fr-icon-check-line"></span>
-            <span>Déjà ajouté</span>
-          </div>
-        </div>
+            <div class="beneficiary">
+              <div class="beneficiary-info">
+                <span class="beneficiary-name">
+                  <AtomTextEmphasis
+                    :name="formatBeneficiarySearchDisplayName(option)"
+                    :input="inputValue"
+                  ></AtomTextEmphasis>
+                </span>
+                <span
+                  v-if="option.birthDate"
+                  class="beneficiary-age"
+                  :class="{ disabled: option.disabled }"
+                >
+                  {{ calculateAge(option.birthDate) + ' ans' }}</span
+                >
+              </div>
+              <div
+                v-if="beneficiaryAttendeeIds.includes(option.id)"
+                class="beneficiary-already-invited"
+              >
+                <span class="fr-icon-check-line"></span>
+                <span>Déjà ajouté</span>
+              </div>
+            </div>
+          </ComboBoxItem></template
+        >
       </ComboBox>
       <p class="separator">ou</p>
       <button
@@ -78,22 +83,20 @@
   const snackbar = useSnackbar()
   const route = useRoute()
   const modal = useModal()
-
-  const selectedBeneficiary = ref<
-    (BeneficiarySearchResult & { disabled: boolean }) | null
-  >(null)
+  const inputValue = ref<string>('')
   const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
   const comboboxRef = useTemplateRef('attendee-combobox')
-  const beneficiaryAttendeeIds = computed(() => {
-    return attendees
-      .map(attendee =>
-        attendee.type === WorkshopAttendeeType.Beneficiary
-          ? attendee.beneficiaryId
-          : false
-      )
-      .filter(Boolean)
-  })
-
+  const beneficiaryAttendeeIds = computed(() =>
+    attendees
+      .filter(({ type }) => type === WorkshopAttendeeType.Beneficiary)
+      .map(attendee => {
+        // TS is not smart enough to detect the previous filter operation
+        if (attendee.type !== WorkshopAttendeeType.Beneficiary) {
+          throw new Error('Error in filtering')
+        }
+        return attendee.beneficiaryId
+      })
+  )
   const hasSessionName = computed(() => {
     return workshop.sessionName != null && workshop.sessionName !== ''
   })
@@ -103,6 +106,11 @@
   const workshopId = route.params.id as string
 
   async function searchBeneficiaries(query: string) {
+    // TODO: uncomment me
+    // if (query.length < 2) {
+    //   results.value = []
+    //   return
+    // }
     const beneficiaries = await trpcClient.beneficiary.search.query({
       query
     })
@@ -112,12 +120,15 @@
     }))
   }
 
-  const onSelect = async (beneficiary: BeneficiarySearchResult) => {
+  const onSelect = async (beneficiaryId: unknown) => {
+    if (typeof beneficiaryId !== 'string') {
+      return
+    }
     comboboxRef.value?.reset()
     results.value = []
 
     const created = await mutate({
-      beneficiaryId: beneficiary.id,
+      beneficiaryId: beneficiaryId,
       workshopId: workshopId
     })
 
