@@ -1,0 +1,78 @@
+<style type='text/css' media='all'>
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: rgb(58 58 58);
+    box-sizing: border-box;
+    margin-top: 0;
+  }
+  body {
+    margin: 2rem;
+  }
+  h1 {
+    color: rgb(69 80 229);
+  }
+  h1,
+  h2 {
+    font-weight: 700;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  hr {
+    margin: 2rem 0;
+  }
+  ul > li {
+    margin-bottom: 0.5rem;
+  }
+</style>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Atelier avec {{{beneficiaryName}}}</title>
+  </head>
+  <body>
+    <h1>Atelier avec {{{beneficiaryName}}}</h1>
+    <h2>{{{workshopName}}}
+      {{#if sessionName}}
+        –
+        {{{sessionName}}}
+      {{/if}}
+    </h2>
+    <ul>
+      <li><span class='bold'>Date&nbsp;: </span>{{{date}}}</li>
+      <li><span class='bold'>Créé par &nbsp;: </span>{{{createdByEmail}}}</li>
+      <li><span class='bold'>Présence&nbsp;: </span>{{{attendance}}}</li>
+
+      {{#if startTime}}
+        <li><span class='bold'>Heure de début&nbsp;: </span>{{{startTime}}}</li>
+      {{/if}}
+
+      {{#if endTime}}
+        <li><span class='bold'>Heure de fin&nbsp;: </span>{{{endTime}}}</li>
+      {{/if}}
+
+      {{#if location}}
+        <li><span class='bold'>Lieu&nbsp;: </span>{{{location}}}</li>
+      {{/if}}
+
+      {{#if partnerOrganizationName}}
+        <li><span class='bold'>Partenaire ou organisme financeur&nbsp;:
+          </span>{{{partnerOrganizationName}}}</li>
+      {{/if}}
+
+      {{#if host}}
+        <li><span class='bold'>Personne intervenante&nbsp;:
+          </span>{{{host}}}</li>
+      {{/if}}
+
+      {{#if description}}
+        <li><span class='bold'>Description / notes&nbsp;:
+          </span>{{{description}}}</li>
+      {{/if}}
+
+    </ul>
+  </body>
+</html>

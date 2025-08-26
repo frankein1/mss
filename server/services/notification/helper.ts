@@ -245,6 +245,11 @@ function select() {
         }
       }
     },
+    workshopAttendees: {
+      select: {
+        updated: true
+      }
+    },
     structure: {
       select: {
         name: true, // pour tests

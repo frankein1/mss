@@ -64,6 +64,11 @@ export const getBeneficiaryLastActivity = (
         })
         .filter(Boolean) as Date[])
     : []
+  const workshopActivities = beneficiary.workshopAttendees
+    ? (beneficiary.workshopAttendees
+        .map(attendee => attendee.updated)
+        .filter(Boolean) as Date[])
+    : []
 
   const { public: publicConfig } = useRuntimeConfig()
   if (
@@ -82,7 +87,8 @@ export const getBeneficiaryLastActivity = (
       loanActivities,
       debtsActivities,
       customExpenseActivities,
-      customIncomeActivities
+      customIncomeActivities,
+      workshopActivities
     ])
   }
 
@@ -98,7 +104,8 @@ export const getBeneficiaryLastActivity = (
     ...loanActivities,
     ...debtsActivities,
     ...customExpenseActivities,
-    ...customIncomeActivities
+    ...customIncomeActivities,
+    ...workshopActivities
   ]
     .filter(date => date != null && date.getTime() !== migrationDate.getTime())
     .filter(Boolean) as Date[]
@@ -180,6 +187,11 @@ export const getBeneficiaryWithActivityDates = async (
               }
             }
           }
+        }
+      },
+      workshopAttendees: {
+        select: {
+          updated: true
         }
       }
     }

@@ -12,13 +12,21 @@ import {
   fixturesPartnerOrganizations,
   fixturesUsers,
   FixtureUserRole,
-  fixturesBeneficiaries
+  fixturesBeneficiaries,
+  FixtureBeneficiary
 } from '.'
 import dayjs from 'dayjs'
 import { toFirstLetterUpperCase } from '../../utils/toFirstLetterUpperCase'
 
 const WORKSHOP_COUNT = 100
 const WORKSHOP_NAME_COUNT = 30
+
+// Exclude M. Inactif ans S. Tesson as they must be inactive beneficiaries
+const filteredFixtureBeneficiaries = fixturesBeneficiaries.filter(
+  b =>
+    b.id !== fixturesBeneficiaries[FixtureBeneficiary.INACTIVE].id &&
+    b.id !== fixturesBeneficiaries[FixtureBeneficiary.TESSON].id
+)
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const createdById =
@@ -115,9 +123,9 @@ export const fixturesWorkshopAttendees = fixturesWorkshops
   .map(workshop => {
     const nAttendees = faker.number.int({
       min: 0,
-      max: fixturesBeneficiaries.length - 1
+      max: filteredFixtureBeneficiaries.length - 1
     })
-    const beneficiaries = fixturesBeneficiaries.filter(
+    const beneficiaries = filteredFixtureBeneficiaries.filter(
       b => b.structureId === structureId
     )
 

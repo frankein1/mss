@@ -11,7 +11,8 @@ import {
   BeneficiaryRepo,
   UserRepo,
   SocialSupportRepo,
-  DocumentRepo
+  DocumentRepo,
+  WorkshopRepo
 } from '~/server/database'
 import type {
   Prisma,
@@ -50,7 +51,8 @@ import {
   lowIncomeHousingKeys,
   helpRequestRefusalReasonKeys,
   fileInstructionTypeFilterKeys,
-  nationalityKeys
+  nationalityKeys,
+  workshopAttendeeAttendanceKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { exportBudgetSpreadsheet } from '../budget/exportBudgetSpreadsheet'
@@ -73,14 +75,25 @@ export const exportBeneficiary = async ({
     where: { id: ctx.user.id }
   })
 
+  // social supports
   const socialSupports = await getSocialSupports(
     beneficiaryDetails.familyFileId,
     beneficiaryDetails.id,
     user
   )
 
-  const [housingCount, financialCount, otherCount, followupCount] =
-    await getCounts(beneficiaryDetails.familyFileId, user)
+  // counts
+  const [
+    housingCount,
+    financialCount,
+    otherCount,
+    followupCount,
+    workshopCount
+  ] = await getCounts(
+    beneficiaryDetails.familyFileId,
+    beneficiaryDetails.id,
+    user
+  )
 
   // budget
   const budget = await getBudget({
@@ -101,6 +114,9 @@ export const exportBeneficiary = async ({
     }
   })
 
+  // workshops
+  const workshops = await getWorkshops(beneficiaryDetails.id, user)
+
   // Abstract Page
   const abstractData = {
     name: getBeneficiaryName(beneficiaryDetails),
@@ -119,7 +135,8 @@ export const exportBeneficiary = async ({
       housingCount,
       financialCount,
       otherCount,
-      followupCount
+      followupCount,
+      workshopCount
     }
   }
   const abstractContent = await compile(
@@ -182,6 +199,23 @@ export const exportBeneficiary = async ({
       })
   )
 
+  // Workshops
+  const workshopContents = await Promise.all(
+    workshops.map(async workshop => {
+      const content = await compile(
+        'handlebars-templates/workshop-template.hbs',
+        {
+          beneficiaryName: getBeneficiaryName(beneficiaryDetails),
+          ...getWorkshopData(workshop)
+        }
+      )
+      return {
+        filename: `Atelier/atelier_${workshop.id}.html`,
+        content
+      }
+    })
+  )
+
   // create zip file
   const zip = new JSZip()
   zip.file('Résumé_archive.html', abstractContent)
@@ -194,6 +228,9 @@ export const exportBeneficiary = async ({
   })
   helpRequests.forEach(helpRequest => {
     zip.file(helpRequest.filename, helpRequest.content)
+  })
+  workshopContents.forEach(workshop => {
+    zip.file(workshop.filename, workshop.content)
   })
   zip.file('Budget/budget_mensuel.xlsx', budgetBuffer, { binary: true })
 
@@ -526,6 +563,27 @@ const getHelpRequestData = (
   }
 }
 
+const getWorkshopData = (workshop: WorkshopWithAttendee) => {
+  return {
+    id: workshop.id,
+    workshopName: workshop.workshopName.name,
+    sessionName: workshop.sessionName,
+    date: workshop.date.toLocaleDateString('fr-FR'),
+    startTime: workshop.startTime,
+    endTime: workshop.endTime,
+    location: workshop.location,
+    partnerOrganizationName: workshop.partnerOrganization?.name,
+    host: workshop.host,
+    description: workshop.description,
+    createdByEmail: workshop.createdBy.email,
+    attendance: workshop.workshopAttendees[0]?.attendance
+      ? workshopAttendeeAttendanceKeys.value(
+          workshop.workshopAttendees[0]?.attendance
+        )
+      : ''
+  }
+}
+
 type BeneficiaryRelativeData = FieldLabels<
   Omit<
     BeneficiaryRelative,
@@ -643,7 +701,11 @@ const getBeneficiaryInfoData = (
   }
 }
 
-const getCounts = async (familyFileId: string, user: User) =>
+const getCounts = async (
+  familyFileId: string,
+  beneficiaryId: string,
+  user: User
+) =>
   await Promise.all([
     SocialSupportRepo.count(user, {
       where: {
@@ -669,6 +731,15 @@ const getCounts = async (familyFileId: string, user: User) =>
       where: {
         familyFileId: familyFileId,
         socialSupportType: 'Followup'
+      }
+    }),
+    WorkshopRepo.count(user, {
+      where: {
+        workshopAttendees: {
+          some: {
+            beneficiaryId: beneficiaryId
+          }
+        }
       }
     })
   ])
@@ -787,6 +858,49 @@ const getSocialSupports = async (
   })
 }
 
+const getWorkshops = async (beneficiaryId: string, user: User) => {
+  return await WorkshopRepo.findMany(user, {
+    where: {
+      workshopAttendees: {
+        some: {
+          beneficiaryId: beneficiaryId
+        }
+      }
+    },
+    select: {
+      id: true,
+      workshopName: true,
+      sessionName: true,
+      date: true,
+      startTime: true,
+      endTime: true,
+      location: true,
+      partnerOrganization: {
+        select: {
+          name: true
+        }
+      },
+      host: true,
+      description: true,
+      createdBy: {
+        select: {
+          email: true
+        }
+      },
+      createdAt: true,
+      workshopAttendees: {
+        where: {
+          beneficiaryId: beneficiaryId
+        },
+        select: {
+          attendance: true
+        }
+      }
+    },
+    orderBy: [{ date: 'desc' }, { createdAt: 'desc' }]
+  })
+}
+
 const getPrettyUserName = (user: User | null) => {
   if (!user) {
     return null
@@ -811,3 +925,5 @@ type SocialSupportItem = SocialSupportWithFollowupAndSubject[0]
 type BeneficiaryWithEntourageAndRelative = Awaited<
   ReturnType<typeof getBeneficaryDetails>
 >
+
+type WorkshopWithAttendee = Awaited<ReturnType<typeof getWorkshops>>[0]

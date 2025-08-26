@@ -102,5 +102,10 @@ const beneficiaryWithActivity: BeneficiaryWithActivityDates = {
     {
       created: new Date('2024-11-11T03:28:59+01:00')
     }
+  ],
+  workshopAttendees: [
+    {
+      updated: new Date('2024-11-11T03:28:59+01:00')
+    }
   ]
 }
