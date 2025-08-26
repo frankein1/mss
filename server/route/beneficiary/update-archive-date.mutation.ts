@@ -30,7 +30,7 @@ const handler = async ({
   }
   ctx: ProtectedAppContext
 }) => {
-  const [user, ben] = await getUserAndBeneficiary(ctx, input.id)
+  const [_user, ben] = await getUserAndBeneficiary(ctx, input.id)
   const archiveDueDate = dayjs().add(1, 'year').toDate()
 
   const updateBeneficiary = BeneficiaryRepo.prisma.update({
@@ -44,7 +44,7 @@ const handler = async ({
     }
   })
 
-  const markNotificationsAsRead = NotificationRepo.prisma.updateMany({
+  const deletedNotifications = NotificationRepo.prisma.deleteMany({
     where: {
       OR: [
         { type: NotificationType.ArchiveDueToday },
@@ -52,17 +52,12 @@ const handler = async ({
         { type: NotificationType.ArchiveDueOneMonth }
       ],
       beneficiaryId: input.id
-    },
-    data: {
-      read: true,
-      archiveDate: archiveDueDate,
-      detail: `Date d'archivage modifiée par ${user.firstName} ${user.lastName}`
     }
   })
 
   const [updatedBeneficiary, _] = await prismaClient.$transaction([
     updateBeneficiary,
-    markNotificationsAsRead
+    deletedNotifications
   ])
 
   return updatedBeneficiary
