@@ -29,7 +29,7 @@ export const addCustomPartnerOrganizationSchema = z.object({
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
-  workingHours: limitedStringConstraint(null, 100).nullish(),
+  workingHours: limitedStringConstraint(null, 400).nullish(),
   contacts: contactPartnerOrganizationSchema
 })
 
