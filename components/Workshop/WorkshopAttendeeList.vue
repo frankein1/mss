@@ -74,9 +74,11 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { isTRPCClientError } from '~/utils/error'
+  import { WorkshopAction, EventCategory } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+  const matomo = useMatomo()
 
   const isDownloading = ref(false)
 
@@ -102,6 +104,7 @@
       return
     }
     emit('refresh')
+    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.RemoveAttendee)
     snackbar.success('La suppression du participant a réussi.')
   }
 
@@ -138,6 +141,10 @@
       downloadLink.download = getExportFilename('émargement')
       downloadLink.click()
       downloadLink.remove()
+      matomo.trackEvent(
+        EventCategory.Workshop,
+        WorkshopAction.DownloadPresenceList
+      )
 
       useModal().close()
     } catch (err: unknown) {

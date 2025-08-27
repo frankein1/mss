@@ -32,12 +32,14 @@
   import { updateWorkshopSchema } from '~/server/schema'
   import WorkshopDeleteModal from '~/components/Workshop/WorkshopDeleteModal.vue'
   import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
+  import { WorkshopAction, EventCategory } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
   const workshopId = route.params.id as string
   const modal = useModal()
+  const matomo = useMatomo()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
@@ -99,6 +101,14 @@
       return
     }
     snackbar.success("L'atelier a été modifié avec succès.")
+    if (input.name !== workshop.value?.workshopName.name) {
+      matomo.trackEvent(
+        EventCategory.Workshop,
+        input.mode === 'all'
+          ? WorkshopAction.ChangeAllNames
+          : WorkshopAction.ChangeOneName
+      )
+    }
     const workshopRoute = routes.workshop.AppWorkshop.path(workshopUpdated.id)
     navigateTo(workshopRoute)
   }
@@ -118,6 +128,7 @@
       return
     }
     modal.close()
+    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.DeleteWorkshop)
     snackbar.success("L'atelier a été supprimé avec succès.")
     navigateTo(routes.workshop.AppWorkshops.path())
   }

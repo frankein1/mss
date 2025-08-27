@@ -17,7 +17,8 @@ export enum EventCategory {
   BeneficiaryArchive = 'Archive Bénéficiaire',
   FamilyFile = 'Dossier Foyer',
   FollowupForm = 'Formulaire Entretien',
-  CreateFollowup = 'Créer une synthèse'
+  CreateFollowup = 'Créer une synthèse',
+  Workshop = 'Atelier'
 }
 
 export enum FamilyFileAction {
@@ -146,6 +147,14 @@ export enum ExportEventAction {
   DownloadExcel = "Export d'un document Excel"
 }
 
+export enum WorkshopAction {
+  ChangeOneName = "Modifier un seul nom d'atelier",
+  ChangeAllNames = "Modifier tous les noms d'atelier",
+  RemoveAttendee = 'Supprimer un participant',
+  DownloadPresenceList = 'Télécharger la liste de présence',
+  DeleteWorkshop = 'Supprimer un atelier'
+}
+
 export type EventAction =
   | BeneficiaryFilterEventAction
   | BeneficiaryHistoryFilterEventAction
@@ -164,6 +173,7 @@ export type EventAction =
   | FamilyFileAction
   | FollowupFormAction
   | FollowupAction
+  | WorkshopAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void
