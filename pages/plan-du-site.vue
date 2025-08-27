@@ -76,6 +76,10 @@
         to: routes.file.AppHistory.path(),
         label: routes.file.AppHistory.title
       })
+      items.push({
+        to: routes.workshop.AppWorkshops.path(),
+        label: 'Ateliers'
+      })
       if (application.value.module.stats) {
         items.push({
           to: routes.stats.AppStats.path(),

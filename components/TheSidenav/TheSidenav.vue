@@ -178,6 +178,7 @@
     }
   }
 
+  // TODO: Add pages to sitemap (pages/plan-du-site.vue)
   const menuItems = computed(() => {
     const items = []
     if (authState.isAdmin()) {
@@ -221,6 +222,11 @@
         to: routes.file.AppHistory.path(),
         label: 'Accompagnements',
         icon: 'fr-icon-folder-2-line'
+      })
+      items.push({
+        to: routes.workshop.AppWorkshops.path(),
+        label: 'Ateliers',
+        icon: 'fr-icon-calendar-event-line'
       })
       if (application.value.module.stats) {
         items.push({
