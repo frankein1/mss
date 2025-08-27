@@ -1,35 +1,39 @@
 <template>
-  <div class="fr-m-2w fr-grid-row">
+  <div class="fr-m-2w fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-12 fr-col-md-6">
-      <span
-        class="text-big fr-h2"
-        :class="historyType"
-        >{{ beneficiaryCounts }}&nbsp;</span
-      >
-      <span class="fr-h5">
-        <template v-if="historyType === 'beneficiary'">
-          {{
-            `${plural('dossier', beneficiaryCounts)} ${plural('bénéficiaire', beneficiaryCounts)}`
-          }}
-        </template>
-        <template v-else>{{
-          `${plural('bénéficiaire', beneficiaryCounts)} ${plural('concerné', beneficiaryCounts)}`
-        }}</template></span
-      >
+      <p class="fr-mb-0">
+        <span
+          class="text-big fr-h2"
+          :class="historyType"
+          >{{ beneficiaryCounts }}&nbsp;</span
+        >
+        <span class="fr-h5">
+          <template v-if="historyType === 'beneficiary'">
+            {{
+              `${plural('dossier', beneficiaryCounts)} ${plural('bénéficiaire', beneficiaryCounts)}`
+            }}
+          </template>
+          <template v-else>{{
+            `${plural('bénéficiaire', beneficiaryCounts)} ${plural('concerné', beneficiaryCounts)}`
+          }}</template></span
+        >
+      </p>
     </div>
 
     <div
       v-if="familyCounts"
       class="fr-col-12 fr-col-md-6"
     >
-      <span
-        class="text-big fr-h2"
-        :class="historyType"
-        >{{ familyCounts }}&nbsp;</span
-      >
-      <span class="fr-h5">{{
-        `${plural('dossier', familyCounts)} ${plural('foyer', familyCounts)}`
-      }}</span>
+      <p class="fr-mb-0">
+        <span
+          class="text-big fr-h2"
+          :class="historyType"
+          >{{ familyCounts }}&nbsp;</span
+        >
+        <span class="fr-h5">{{
+          `${plural('dossier', familyCounts)} ${plural('foyer', familyCounts)}`
+        }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -45,10 +49,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .fr-grid-row {
-    gap: 1rem;
-  }
-
   .text-big {
     font-size: 2.5rem;
   }

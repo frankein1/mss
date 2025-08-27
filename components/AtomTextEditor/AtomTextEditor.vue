@@ -25,7 +25,7 @@
       ></span>
     </label>
     <client-only>
-      <div class="tiptap-editor-menubar fr-input">
+      <div class="tiptap-editor-menubar">
         <AtomTextEditorMenubar :editor="editor" />
       </div>
       <EditorContent
@@ -185,6 +185,7 @@
   .tiptap-editor-menubar {
     box-shadow: inset 0 -1px 0 0 #cecece;
     padding: 0;
+    background-color: var(--background-contrast-grey);
   }
 
   .tiptap-editor-content {
