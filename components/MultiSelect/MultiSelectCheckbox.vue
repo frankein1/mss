@@ -2,6 +2,7 @@
   <input
     :id="id"
     type="checkbox"
+    class="input-checkbox"
     :name="option.value"
     :label="option.label"
     :checked

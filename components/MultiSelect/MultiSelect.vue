@@ -95,7 +95,7 @@
                   class="option-item"
                 >
                   <MultiSelectCheckbox
-                    :id="'input-checkbox-' + option.value"
+                    :id="option.value"
                     :option="option"
                     :checked="isOptionChecked(multiselectValue, option)"
                     :disabled="
@@ -286,9 +286,7 @@
   // Keyboard interactions on the expanded listbox
   const handleSearchInputKeyDown = () => {
     document
-      .querySelector<HTMLElement>(
-        `#input-checkbox-${displayedOptions.value[0]?.value}`
-      )
+      .querySelector<HTMLElement>(`#${displayedOptions.value[0]?.value}`)
       ?.focus()
   }
 
@@ -316,7 +314,7 @@
   }
 
   const getAllCheckbox = (): NodeListOf<HTMLElement> =>
-    document.querySelectorAll(`[id^="input-checkbox-"]`)
+    document.querySelectorAll(`.input-checkbox`)
 
   /** Trigger the selection of an option through the parent component */
   const triggerSelectValue = (value: string) => {
