@@ -361,7 +361,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2024-10-26'),
     fileInstruction: {
@@ -410,7 +409,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2024-10-18'),
     fileInstruction: {
@@ -436,7 +434,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2024-11-03'),
     fileInstruction: {
@@ -465,7 +462,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2024-12-09'),
     fileInstruction: {
@@ -497,7 +493,6 @@ const fixturesHousingHelpRequestSocialSupports = [
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
-    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequestHousing',
     date: new Date('2024-10-19'),
     fileInstruction: {
