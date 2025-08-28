@@ -28,6 +28,23 @@
           Instruction de dossier
         </button>
       </li>
+      <li>
+        <button
+          class="fr-btn fr-btn fr-btn--secondary"
+          type="button"
+          title="Inscrire à un atelier"
+          aria-describedby="workshop-tooltip"
+          disabled
+        >
+          Inscrire à un atelier
+        </button>
+        <span
+          id="workshop-tooltip"
+          class="fr-tooltip fr-placement"
+          role="tooltip"
+          >Fonctionnalité à venir
+        </span>
+      </li>
       <li
         v-if="application.module.rdv"
         id="action-rdv"
@@ -96,14 +113,18 @@
 
     @include dsfr-media-query.respond-from('sm') {
       flex-direction: row;
-      align-items: flex-start;
+      align-items: baseline;
     }
   }
 
   .benficiarydetailshistoryactions_btns-group {
     flex: 1;
-    gap: 1rem;
-    align-items: baseline;
+    row-gap: 0.5rem;
+    align-items: center;
+
+    @include dsfr-media-query.respond-from('sm') {
+      align-items: baseline;
+    }
 
     .fr-btn {
       margin-bottom: 0;
@@ -137,7 +158,7 @@
       height: fit-content;
     }
 
-    @include dsfr-media-query.respond-from('lg') {
+    @include dsfr-media-query.respond-from('sm') {
       margin-left: auto;
       margin-top: 0;
     }
