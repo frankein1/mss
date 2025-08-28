@@ -24,6 +24,7 @@
         aria-autocomplete="list"
         :aria-controls="GRID_ID"
         :aria-activedescendant="activeDescendant"
+        :aria-expanded="results.length > 0"
         @keydown="handleKeydown"
         @focus="onFocus"
         @blur="onBlur"
