@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.48.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.48.0...v1.48.1) (2025-09-03)
+
+
+### Bug Fixes
+
+* **layout:** aligner les boutons des tuiles historique à droite ([442e6bf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/442e6bf3fa78cd1ff6660cc5dbe31291977a6cb0))
+
 ## [1.48.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.47.0...v1.48.0) (2025-09-01)
 
 
