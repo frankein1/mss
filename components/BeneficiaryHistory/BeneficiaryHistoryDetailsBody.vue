@@ -87,7 +87,7 @@
         </template>
 
         <ul
-          class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--left button-list"
+          class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--icon-left fr-btns-group--left"
         >
           <li v-if="canDelete">
             <button
@@ -310,9 +310,10 @@
     }
   }
 
-  .button-list {
+  .fr-btns-group--left {
     @include dsfr-media-query.respond-from('md') {
       text-align: right;
+      justify-content: flex-end;
     }
   }
 </style>
