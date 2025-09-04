@@ -75,16 +75,16 @@
   }
 
   async function openDisconnectAlert() {
-    if (!modal.isReady.value) {
+    if (!modal.isReady) {
       throw new Error('disconnect-handler: modal not ready')
     }
 
     // If another modal is already opened, close it to reopen Disconnect alert
-    if (modal.isOpen.value && !modal.title.value.match(/déconnexion dans/i)) {
+    if (modal.isOpen && !modal.title.value.match(/déconnexion dans/i)) {
       modal.close()
 
-      // Wait for the modal state component to be reset (cf. useModal.ts#close)
-      // when refactoring the modal, we could handle internally the unmount of internal component
+      // FIXME: wait for the modal state component to be reset (cf. useModal.ts#close)
+      // when refactoring the modal, we should handle internally the unmount of internal component
       // and not destroy it with a `v-if="isOpen"` like currently done in AtomModal
       await promiseTimeout(1000)
     }
@@ -94,12 +94,12 @@
       title: `Déconnexion dans ${alertThreshold} minutes`,
       disconnect: () =>
         navigateTo(apiRoutes.proConnect.ApiLogout.path(), { external: true }),
-      keepConnect: () => {
+      keepConnect: async () => {
         if (countdown.value < 0) {
           cleanup()
           logout()
         } else {
-          refreshToken()
+          await refreshToken()
         }
       }
     })
