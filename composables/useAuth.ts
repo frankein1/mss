@@ -1,22 +1,10 @@
 import { useAuthState } from './useAuthState'
 import type { AppContextPermissions } from '~/server/security'
 import type { JwtUser } from '~/server/lib/jwt'
-import { minutesToMillis } from '~/utils/time'
-import { COUNTDOWN_SESSION_LABEL } from '~/utils/constants'
 
 interface UserSession {
   user: JwtUser
   permissions: AppContextPermissions
-}
-
-function resetSessionTimer() {
-  const {
-    public: {
-      auth: { tokenValidationInMinutes }
-    }
-  } = useRuntimeConfig()
-  const initial = minutesToMillis(tokenValidationInMinutes)
-  localStorage.setItem(COUNTDOWN_SESSION_LABEL, initial.toString())
 }
 
 export function useAuth() {
@@ -50,11 +38,9 @@ export function useAuth() {
     }
   }
 
-  /** Fetch a new auth token after having verified the current one and reset the local timer for session renewal */
-  async function refreshToken() {
-    const session = await $fetch<JwtUser>('/api/auth/refresh-token')
-    resetSessionTimer()
-    return session
+  /** Fetch a new auth token after having verified the current one */
+  function refreshToken() {
+    return $fetch<JwtUser>('/api/auth/refresh-token')
   }
 
   async function getSession() {

@@ -6,6 +6,8 @@ import { apiRoutes } from '~/utils/routes'
 /** Regenerate a new session token using the information
  * from the former token. This does not fetch
  * the latest user information from the database
+ *
+ * If the refresh fails, the user is logged out of Proconnect
  */
 export default defineEventHandler(event => {
   const user = event.context.auth?.user

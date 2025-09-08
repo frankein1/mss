@@ -1,16 +1,10 @@
 import { getHeader } from 'h3'
 import { useAuth } from '~/composables/useAuth'
 import { minutesToMillis } from '~/utils/time'
-import { useEventListener, useLocalStorage } from '@vueuse/core'
-import type { WatchHandle } from 'vue'
-import {
-  COUNTDOWN_INACTIVITY_LABEL,
-  COUNTDOWN_SESSION_LABEL,
-  DEFAULT_INTERVAL_TIME_FOR_STORAGE_REFRESH
-} from '~/utils/constants'
+import { useEventListener } from '@vueuse/core'
 
 export default defineNuxtPlugin(async nuxtApp => {
-  const { verifySession } = useAuth()
+  const { getSession } = useAuth()
 
   let nitroPrerender = false
   if (nuxtApp.ssrContext) {
@@ -22,11 +16,13 @@ export default defineNuxtPlugin(async nuxtApp => {
 
   // Only fetch session if it was not yet initialized server-side
   if (!user.value && !nitroPrerender) {
-    await verifySession()
+    // For the time being the session is renewed on app load to avoid problems with
+    // expired tokens
+    await getSession()
   }
 
   let cleanupVisibilityHandler: (() => void) | undefined
-  let cleanupSessionRefreshHandler: (() => void) | undefined
+  let cleanupSessionRefreshHandler: NodeJS.Timeout | undefined
 
   nuxtApp.hook('app:mounted', () => {
     // Listen for when the page is visible, if the user switches tabs
@@ -46,7 +42,7 @@ export default defineNuxtPlugin(async nuxtApp => {
     }
 
     if (cleanupSessionRefreshHandler) {
-      cleanupSessionRefreshHandler()
+      clearInterval(cleanupSessionRefreshHandler)
     }
 
     user.value = null
@@ -67,12 +63,16 @@ function handleSessionRefreshOnTabVisibilityChange() {
   }
 
   const { refreshToken } = useAuth()
-  return useEventListener(document, 'visibilitychange', refreshToken)
+  const { isAuthenticated } = useAuthState()
+
+  return useEventListener(document, 'visibilitychange', () => {
+    if (isAuthenticated()) {
+      return refreshToken
+    }
+  })
 }
 
-function handleSessionRefreshOnInterval(
-  intervalTimeInMs = DEFAULT_INTERVAL_TIME_FOR_STORAGE_REFRESH
-) {
+function handleSessionRefreshOnInterval() {
   if (!import.meta.client) {
     console.warn(
       'auth-management: not on client. handleSessionRefreshOnInterval can only be executed onMounted'
@@ -82,81 +82,36 @@ function handleSessionRefreshOnInterval(
 
   const {
     public: {
-      disconnect: { threshold },
       auth: { tokenValidationInMinutes }
     }
   } = useRuntimeConfig()
 
-  const { refreshToken } = useAuth()
-  const { user } = useAuthState()
+  const { refreshToken, logout } = useAuth()
+  const { isAuthenticated } = useAuthState()
 
-  const initial = minutesToMillis(tokenValidationInMinutes)
-  const activityThreshold = minutesToMillis(threshold)
+  const intervalTime = minutesToMillis(tokenValidationInMinutes / 2)
 
-  // The session counter is stored in local storage in order to manage several tabs
-  const countdown = useLocalStorage(COUNTDOWN_SESSION_LABEL, initial)
-
-  let timer: NodeJS.Timeout
-  let unwatch: WatchHandle
-
-  function setTimer() {
-    // Initialize countdown
-    resetSessionTimer()
-
-    // Every intervalTimeInMs the counter is decremented
-    timer = setInterval(() => {
-      countdown.value = countdown.value - intervalTimeInMs
-    }, intervalTimeInMs)
-
-    unwatch = watch(countdown, async () => {
-      if (user.value) {
-        // Refresh token when session will expire in less than 10 minutes
-        const sessionExpiresIn10min = countdown.value < minutesToMillis(10)
-
-        if (!sessionExpiresIn10min) {
-          return
-        }
-
-        // And if user has been active in the last 10 minutes
-        const inactivityCountdown = parseInt(
-          localStorage.getItem(COUNTDOWN_INACTIVITY_LABEL) || '0'
-        )
-        const userHasActivity =
-          activityThreshold - inactivityCountdown < minutesToMillis(10)
-
-        if (!userHasActivity) {
-          console.log('auth-management: user is not active')
-          return
-        }
-        console.log(
-          'auth-management: refresh token in handleSessionRefreshOnInterval'
-        )
+  const timer = setInterval(async () => {
+    if (isAuthenticated()) {
+      try {
         await refreshToken()
-      } else {
-        console.log('auth-management: handleSessionRefreshOnInterval no user')
-        cleanup()
+      } catch (e) {
+        console.error('auth-management: failure to refresh session', e)
+        logout()
+        if (timer) {
+          clearInterval(timer)
+        }
+        throw e
       }
-    })
-  }
-
-  function cleanup() {
-    console.debug('auth-management: cleanup')
-    if (unwatch) {
-      unwatch()
+    } else {
+      console.log(
+        'auth-management: handleSessionRefreshOnInterval not authenticated'
+      )
+      if (timer) {
+        clearInterval(timer)
+      }
     }
-    if (timer) {
-      clearInterval(timer)
-    }
-    countdown.value = undefined
-    localStorage.removeItem(COUNTDOWN_SESSION_LABEL)
-  }
+  }, intervalTime)
 
-  function resetSessionTimer() {
-    countdown.value = initial
-  }
-
-  // Initialize
-  setTimer()
-
-  return cleanup
+  return timer
 }
