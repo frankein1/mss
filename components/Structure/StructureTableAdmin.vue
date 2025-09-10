@@ -22,32 +22,32 @@
           </tr>
         </thead>
         <tbody>
-          <NuxtLink
+          <tr
             v-for="structure in structures"
             :key="structure.id"
-            v-slot="{ navigate }"
-            custom
-            :to="routes.admin.AdminStructure.path(structure.id)"
+            class="clickable-row"
           >
-            <tr
-              class="clickable-row"
-              @click="navigate"
-            >
-              <td>{{ structure.name }}</td>
-              <td>{{ structureTypeKeys.value(structure.type) }}</td>
-              <td>{{ structure.zipcode }}</td>
-              <td>{{ structure.city }}</td>
-              <td>{{ formatDate(structure.created) }}</td>
-              <td>
-                <span :class="structure.canBeDisabled ? 'fr-badge--error' : ''">
-                  {{ formatDate(structure.lastAccess) || 'Aucune' }}
-                </span>
-                <span v-if="structure.canBeDisabled">
-                  ({{ structure.deactivationAlertEmail }})
-                </span>
-              </td>
-            </tr>
-          </NuxtLink>
+            <td>
+              <NuxtLink
+                :to="routes.admin.AdminStructure.path(structure.id)"
+                class="table-row-link"
+              >
+                {{ structure.name }}
+              </NuxtLink>
+            </td>
+            <td>{{ structureTypeKeys.value(structure.type) }}</td>
+            <td>{{ structure.zipcode }}</td>
+            <td>{{ structure.city }}</td>
+            <td>{{ formatDate(structure.created) }}</td>
+            <td>
+              <span :class="structure.canBeDisabled ? 'fr-badge--error' : ''">
+                {{ formatDate(structure.lastAccess) || 'Aucune' }}
+              </span>
+              <span v-if="structure.canBeDisabled">
+                ({{ structure.deactivationAlertEmail }})
+              </span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
