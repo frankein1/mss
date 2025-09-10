@@ -33,6 +33,7 @@
   import WorkshopDeleteModal from '~/components/Workshop/WorkshopDeleteModal.vue'
   import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
   import { WorkshopAction, EventCategory } from '~/types/matomo'
+  import { MSS_ERROR_CODES } from '~/utils/error'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -78,7 +79,10 @@
       partnerOrganizationId: workshop.value?.partnerOrganizationId,
       host: workshop.value?.host,
       sessionName: workshop.value?.sessionName,
-      description: workshop.value?.description
+      description: workshop.value?.description,
+      ageLimit: workshop.value?.ageLimit,
+      ageLimitCondition: workshop.value?.ageLimitCondition,
+      attendeeLimit: workshop.value?.attendeeLimit
     }
   })
 
@@ -94,10 +98,19 @@
   const onUpdateWorkshop = async (input: UpdateWorkShopInput) => {
     const workshopUpdated = await mutate(input)
     if (error.value || workshopUpdated === null) {
-      snackbar.error(
-        "La modification de l'atelier a échoué.",
-        snackbar.focus('form', 'select')
-      )
+      if (
+        error?.value?.data?.MSS_CODE ===
+        MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
+      ) {
+        snackbar.error(
+          `L‘atelier a déjà ${workshop.value?._count.mainAttendees} participants. Supprimez-en si vous souhaitez réduire le nombre de participants maximum.`,
+          () => snackbar.focus('form', 'select')
+        )
+      } else {
+        snackbar.error("La modification de l'atelier a échoué.", () =>
+          snackbar.focus('form', 'select')
+        )
+      }
       return
     }
     snackbar.success("L'atelier a été modifié avec succès.")

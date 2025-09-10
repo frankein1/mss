@@ -9,6 +9,7 @@ import { updateWorkshop } from './update.mutation'
 import { updateAttendeeAttendance } from './update-attendee-attendance.mutation'
 import { deleteAttendee } from './delete-attendee.mutation'
 import { getExportedAttendance } from './getExportedAttendance.query'
+import { updateAttendeeListType } from './update-attendee-list-type.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
@@ -21,5 +22,6 @@ export const workshopRoutes = {
   createExternalAttendee,
   deleteAttendee,
   updateAttendeeAttendance,
-  getExportedAttendance
+  getExportedAttendance,
+  updateAttendeeListType
 }

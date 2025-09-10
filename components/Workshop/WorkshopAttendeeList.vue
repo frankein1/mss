@@ -12,9 +12,17 @@
           :aria-level="hasSessionName ? '4' : '3'"
         >
           <span class="count-emphasis">{{
-            workshop._count.workshopAttendees
+            workshop._count.mainAttendees
           }}</span>
-          inscription<span v-if="workshop._count.workshopAttendees > 1">s</span>
+          <span v-if="workshop.attendeeLimit"
+            >/{{ workshop.attendeeLimit }}</span
+          >
+          inscription<span v-if="workshop._count.mainAttendees > 1">s</span>
+          <span
+            v-if="workshop.attendeeLimit"
+            class="waiting-count"
+            >{{ workshop._count.waitingAttendees }} sur liste d'attente</span
+          >
         </p>
         <div
           v-if="workshop.workshopAttendees.length > 0"
@@ -40,11 +48,11 @@
     </div>
     <div class="fr-col-12">
       <ul
-        v-if="workshop.workshopAttendees.length"
+        v-if="attendeeLists.Main?.length"
         class="attendee-list"
       >
         <li
-          v-for="(attendee, idx) in workshop.workshopAttendees"
+          v-for="(attendee, idx) in attendeeLists.Main"
           :key="idx"
           class="fr-mb-1w"
         >
@@ -57,14 +65,52 @@
       </ul>
       <WorkshopAttendeeEmpty v-else />
     </div>
+    <div
+      v-if="isWorkshopFull && workshop.attendeeLimit !== null"
+      class="fr-col-12"
+    >
+      <p
+        class="waiting-list"
+        role="heading"
+        :aria-level="hasSessionName ? '4' : '3'"
+      >
+        <span class="count-emphasis">{{
+          workshop._count.waitingAttendees
+        }}</span>
+        personne<span v-if="workshop._count.waitingAttendees > 1">s</span>
+        sur liste d‘attente
+      </p>
+      <hr />
+      <ul
+        v-if="attendeeLists.Waiting?.length"
+        class="attendee-list"
+      >
+        <li
+          v-for="(attendee, idx) in attendeeLists.Waiting"
+          :key="idx"
+          class="fr-mb-1w"
+        >
+          <WorkshopAttendeeItem
+            :attendee
+            :is-workshop-full
+            @delete-attendee="onDeleteAttendee"
+            @change-attendance="onChangeAttendance"
+            @transfer-attendee="onTransferAttendee"
+          />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { WorkshopWithAttendeesDetails } from '~/types/workshop'
   import type {
-    WorkshopAttendeeAttendance,
-    WorkshopAttendeeType
+    WorkshopAttendee,
+    WorkshopWithAttendeesDetails
+  } from '~/types/workshop'
+  import {
+    WorkshopAttendeeListType,
+    type WorkshopAttendeeAttendance
   } from '@prisma/client'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
@@ -73,12 +119,14 @@
   import WorkshopAttendeeItem from './WorkshopAttendeeItem.vue'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { isTRPCClientError } from '~/utils/error'
+  import { isTRPCClientError, MSS_ERROR_CODES } from '~/utils/error'
   import { WorkshopAction, EventCategory } from '~/types/matomo'
+  import WorkshopCapacityModal from './WorkshopCapacityModal.vue'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const matomo = useMatomo()
+  const modal = useModal()
 
   const isDownloading = ref(false)
 
@@ -88,14 +136,30 @@
 
   const emit = defineEmits<{ refresh: [] }>()
 
+  const isWorkshopFull = computed(
+    () => workshop.attendeeLimit === workshop._count.mainAttendees
+  )
+
   const { isReferent } = useAuthState()
 
   const hasSessionName = computed(() => {
     return workshop.sessionName != null && workshop.sessionName !== ''
   })
 
-  const onDeleteAttendee = async (id: string, type: WorkshopAttendeeType) => {
-    const { mutate, error } = trpcClient.workshop.deleteAttendee.useMutation()
+  const attendeeLists = computed(() =>
+    Object.groupBy(workshop.workshopAttendees, ({ listType }) => listType)
+  )
+
+  const transferAttendeeMutation =
+    trpcClient.workshop.updateAttendeeListType.useMutation()
+  const updateAttendeeAttendanceMutation =
+    trpcClient.workshop.updateAttendeeAttendance.useMutation()
+  const deleteAttendeeMutation =
+    trpcClient.workshop.deleteAttendee.useMutation()
+
+  const onDeleteAttendee = async (attendee: WorkshopAttendee) => {
+    const { id, listType, type } = attendee
+    const { mutate, error } = deleteAttendeeMutation
 
     const deletedAttendee = await mutate({ id, type })
 
@@ -106,14 +170,47 @@
     emit('refresh')
     matomo.trackEvent(EventCategory.Workshop, WorkshopAction.RemoveAttendee)
     snackbar.success('La suppression du participant a réussi.')
+    if (
+      attendee.listType === WorkshopAttendeeListType.Main &&
+      isWorkshopFull.value
+    ) {
+      modal.open(WorkshopCapacityModal, {
+        triggerOpen: true,
+        isFull: false
+      })
+    }
+  }
+
+  function getTransferErrorMessage(
+    error: NonNullable<typeof transferAttendeeMutation.error.value>
+  ) {
+    if (error?.data?.MSS_CODE === MSS_ERROR_CODES.WORKSHOP_ALREADY_FULL) {
+      return 'L‘atelier est complet. Augmentez la limite de participants pour pouvoir en ajouter de nouveaux.'
+    }
+    return 'Le transfert du participant a échoué.'
+  }
+
+  const onTransferAttendee = async (id: string) => {
+    const { mutate, error } = transferAttendeeMutation
+    await mutate({
+      id,
+      listType: WorkshopAttendeeListType.Main
+    })
+
+    if (error.value) {
+      snackbar.error(getTransferErrorMessage(error.value))
+      return
+    }
+    emit('refresh')
+    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.TransferAttendee)
+    snackbar.success('Le transfert du participant a réussi.')
   }
 
   const onChangeAttendance = async (
     id: string,
     attendance: WorkshopAttendeeAttendance
   ) => {
-    const { mutate, error } =
-      trpcClient.workshop.updateAttendeeAttendance.useMutation()
+    const { mutate, error } = updateAttendeeAttendanceMutation
 
     const result = await mutate({ id, attendance })
 
@@ -166,6 +263,16 @@
 <style scoped lang="scss">
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
+  .waiting-list {
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    .count-emphasis {
+      font-size: 2.25rem;
+      color: var(--primary);
+    }
+  }
+
   .registration {
     display: flex;
     justify-content: flex-start;
@@ -180,6 +287,12 @@
       .count-emphasis {
         font-size: 2.25rem;
         color: var(--primary);
+      }
+
+      .waiting-count {
+        font-size: 1.25rem;
+        color: var(--primary);
+        margin-left: 1rem;
       }
     }
 

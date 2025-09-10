@@ -83,7 +83,10 @@
         {{ attendee.comment }}
       </p>
     </div>
-    <div class="presence">
+    <div
+      v-if="attendee.listType === WorkshopAttendeeListType.Main"
+      class="presence"
+    >
       <form
         ref="attendeeForm"
         novalidate
@@ -118,18 +121,21 @@
     BeneficiaryTitle,
     Gender,
     WorkshopAttendeeAttendance,
+    WorkshopAttendeeListType,
     WorkshopAttendeeType
   } from '@prisma/client'
   import { beneficiaryTitleKeys } from '~/client/options'
 
   const attendeeForm = ref<HTMLFormElement | null>(null)
 
-  const { attendee } = defineProps<{
+  const { attendee, isWorkshopFull = false } = defineProps<{
     attendee: WorkshopAttendee
+    isWorkshopFull?: boolean
   }>()
 
   const emit = defineEmits<{
-    deleteAttendee: [id: string, type: WorkshopAttendeeType]
+    deleteAttendee: [attendee: WorkshopAttendee]
+    transferAttendee: [id: string]
     changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
   }>()
 
@@ -168,11 +174,21 @@
   // Option button dropdown
   const menus: Menu[] = [
     {
-      label: "Retirer de l'atelier",
-      callback: () => emit('deleteAttendee', attendee.id, attendee.type),
+      label: 'Retirer de l‘atelier',
+      callback: () => emit('deleteAttendee', attendee),
       icon: 'ri-user-unfollow-line'
     }
   ]
+
+  if (attendee.listType === WorkshopAttendeeListType.Waiting) {
+    menus.push({
+      label: 'Transférer comme participant',
+      callback: () => emit('transferAttendee', attendee.id),
+      icon: 'ri-user-shared-line',
+      disabled: isWorkshopFull,
+      title: isWorkshopFull ? 'Atelier complet' : undefined
+    })
+  }
 
   useForm({
     initialValues: {
@@ -288,6 +304,21 @@
   // Dropmenu
   :deep(.ri-user-unfollow-line) {
     min-width: max-content;
+  }
+
+  :deep(.ri-user-shared-line::before) {
+    --icon-size: 1rem;
+
+    content: '';
+    background-color: currentcolor;
+    display: inline-block;
+    height: var(--icon-size);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+    width: var(--icon-size);
+    margin-right: 0.5em;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M14 14.252V16.3414C13.3744 16.1203 12.7013 16 12 16C8.68629 16 6 18.6863 6 22H4C4 17.5817 7.58172 14 12 14C12.6906 14 13.3608 14.0875 14 14.252ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM12 11C14.21 11 16 9.21 16 7C16 4.79 14.21 3 12 3C9.79 3 8 4.79 8 7C8 9.21 9.79 11 12 11ZM18.5858 17L16.7574 15.1716L18.1716 13.7574L22.4142 18L18.1716 22.2426L16.7574 20.8284L18.5858 19H15V17H18.5858Z'%3E%3C/path%3E%3C/svg%3E");
   }
 
   :deep(.ri-user-unfollow-line::before) {

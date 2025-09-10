@@ -20,6 +20,18 @@
       >
         <i class="ri-map-pin-2-line"></i>{{ workshop.location }}
       </p>
+      <p
+        v-if="workshop.ageLimitCondition"
+        class="location"
+      >
+        <i class="fr-icon-group-line"></i
+        >{{
+          ageConditionKeys.byKey[workshop.ageLimitCondition] +
+          ' ' +
+          workshop.ageLimit +
+          ' ans'
+        }}
+      </p>
     </div>
     <p
       v-if="workshop.host || workshop.partnerOrganization"
@@ -72,6 +84,7 @@
   import { getDurationInHoursAndMinutes } from '~/utils/duration/getDuration'
   import { routes } from '~/utils/routes'
   import { capitalizeFirstLetter } from '~/utils/text/capitalizeFirstLetter'
+  import { ageConditionKeys } from '~/client/options/ageCondition'
 
   const props = defineProps<{
     workshop: WorkshopWithAttendeesDetails
@@ -104,6 +117,11 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
+  .fr-icon-group-line {
+    color: #fa794a;
+    margin-right: 0.25rem;
+  }
 
   .header-wrapper,
   .action-wrapper,

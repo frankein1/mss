@@ -4,4 +4,6 @@ export type Menu = {
   href?: string
   icon?: string
   callback?: () => void
+  disabled?: boolean
+  title?: string
 }

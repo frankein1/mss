@@ -67,6 +67,7 @@
   } from '~/types/workshop'
   import WorkshopAddExternalAttendeeModal from '~/components/Workshop/WorkshopAddExternalAttendeeModal.vue'
   import { WorkshopAttendeeType } from '@prisma/client'
+  import WorkshopCapacityModal from './WorkshopCapacityModal.vue'
 
   const { attendees, workshop } = defineProps<{
     attendees: WorkshopAttendee[]
@@ -78,6 +79,9 @@
   const snackbar = useSnackbar()
   const route = useRoute()
   const modal = useModal()
+  const isWorkshopFull = computed(
+    () => workshop.attendeeLimit === workshop._count.mainAttendees
+  )
 
   const selectedBeneficiary = ref<
     (BeneficiarySearchResult & { disabled: boolean }) | null
@@ -133,6 +137,12 @@
       'Personne ajoutée avec succès',
       snackbar.focus('.combobox-wrapper')
     )
+    if (isWorkshopFull.value) {
+      modal.open(WorkshopCapacityModal, {
+        triggerOpen: true,
+        isFull: true
+      })
+    }
   }
 
   function onAddExternalAttendee() {

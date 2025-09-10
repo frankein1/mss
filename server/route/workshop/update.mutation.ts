@@ -10,6 +10,9 @@ import {
 } from '~/server/database'
 import type { SecurityRuleContext } from '~/server/security'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
+import { getOne } from './get.query'
+import { TRPCError } from '@trpc/server'
+import { MSS_ERROR_CODES } from '~/utils/error'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -36,6 +39,20 @@ const handler = async ({
   input: UpdateWorkShopInput
   ctx: ProtectedAppContext
 }) => {
+  const workshop = await getOne(ctx.user, id)
+  if (
+    input.attendeeLimit !== null &&
+    input.attendeeLimit !== undefined &&
+    input.attendeeLimit < workshop._count.mainAttendees
+  ) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: `Workshop ${id} already has ${workshop._count.mainAttendees}. Can not reduce the attendeeLimit to: ${input.attendeeLimit}`,
+      cause: {
+        MSS_CODE: MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
+      }
+    })
+  }
   if (mode && name) {
     await updateWorkshopName(ctx, { mode, name, id })
   }

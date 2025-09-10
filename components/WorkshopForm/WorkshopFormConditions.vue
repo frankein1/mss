@@ -6,16 +6,15 @@
       <h2 class="fr-text--sm fr-text--bold text--uppercase fr-mb-1w">
         Conditions de participation
       </h2>
-      <p class="fr-mb-1v">Fonctionnalité à venir.</p>
     </div>
     <div class="workshop-form-toggle fr-col-12">
       <!-- Do not use DsfrToggleSwitch here. Bug: duplicate id on label and hint paragraph -->
       <div class="fr-toggle">
         <input
           id="attendee-limit-toggle"
+          v-model="hasAttendeeLimit"
           type="checkbox"
           class="fr-toggle__input"
-          disabled
           aria-describedby="attendee-limit-toggle-hint attendee-limit-toggle-messages"
         />
         <label
@@ -42,7 +41,7 @@
         hint="Saisisez un nombre entier"
         :label="workshopLabels.attendeeLimit"
         name="attendeeLimit"
-        :disabled="true"
+        :disabled="!hasAttendeeLimit"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-8 flex-end">
@@ -50,16 +49,15 @@
         :label="workshopLabels.ageLimitCondition"
         name="ageLimitCondition"
         :options="withEmptyValue(ageConditionOptions)"
-        :disabled="true"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-4 flex-end">
       <VeeInput
         type="number"
-        hint="Saisisez un nombre entier"
+        hint="Saisissez un nombre entier"
         :label="workshopLabels.ageLimit"
         name="ageLimit"
-        :disabled="true"
+        :disabled="!ageLimitCondition"
       />
     </div>
   </section>
@@ -67,8 +65,6 @@
 
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
-
-  const hasAttendeeLimit = ref(false)
 
   defineProps<{
     ageConditionOptions: Options
@@ -78,13 +74,15 @@
   const { value: attendeeLimit } = useField('attendeeLimit')
   const { value: ageLimit } = useField('ageLimit')
 
+  const hasAttendeeLimit = ref(Boolean(attendeeLimit.value))
+
   watch(hasAttendeeLimit, () => {
     if (!hasAttendeeLimit.value) {
       attendeeLimit.value = null
     }
   })
   watch(ageLimitCondition, () => {
-    if (ageLimitCondition.value == '') {
+    if (ageLimitCondition.value === '') {
       ageLimit.value = null
     }
   })

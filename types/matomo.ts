@@ -151,6 +151,7 @@ export enum WorkshopAction {
   ChangeOneName = "Modifier un seul nom d'atelier",
   ChangeAllNames = "Modifier tous les noms d'atelier",
   RemoveAttendee = 'Supprimer un participant',
+  TransferAttendee = 'Transférer un participant',
   DownloadPresenceList = 'Télécharger la liste de présence',
   DeleteWorkshop = 'Supprimer un atelier'
 }

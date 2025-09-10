@@ -26,6 +26,9 @@ export const workshopRouter = router({
   createExternalAttendee: protectedProcedure
     .input(routes.createExternalAttendee.inputValidation)
     .mutation(routes.createExternalAttendee.execute),
+  updateAttendeeListType: protectedProcedure
+    .input(routes.updateAttendeeListType.inputValidation)
+    .mutation(routes.updateAttendeeListType.execute),
   deleteAttendee: protectedProcedure
     .input(routes.deleteAttendee.inputValidation)
     .mutation(routes.deleteAttendee.execute),

@@ -13,6 +13,7 @@ import {
   WorkshopRepo
 } from '~/server/database'
 import type { SecurityRuleContext } from '~/server/security'
+import { getOne } from './get.query'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -44,18 +45,11 @@ const handler = async ({
   input: CreateAttendeeInput
   ctx: ProtectedAppContext
 }) => {
-  const workshop = await WorkshopRepo.findUniqueOrThrow(ctx.user, {
-    select: {
-      structureId: true,
-      attendeeLimit: true,
-      _count: { select: { workshopAttendees: true } }
-    },
-    where: { id: input.workshopId }
-  })
+  const workshop = await getOne(ctx.user, input.workshopId)
 
   const listType =
-    workshop.attendeeLimit &&
-    workshop._count.workshopAttendees >= workshop.attendeeLimit
+    workshop.attendeeLimit !== null &&
+    workshop._count.mainAttendees >= workshop.attendeeLimit
       ? WorkshopAttendeeListType.Waiting
       : WorkshopAttendeeListType.Main
 

@@ -35,16 +35,20 @@
       >
         <NuxtLink
           v-if="menu.to || menu.href"
+          :disabled="menu.disabled"
           :to="menu.to || menu.href"
           :class="menuClass(menu.icon)"
           :external="menu.href != null"
+          :title="menu.title"
           @focus="expanded = true"
         >
           {{ menu.label }}
         </NuxtLink>
         <button
           v-else
+          :disabled="menu.disabled"
           :class="menuClass(menu.icon)"
+          :title="menu.title"
           @click.prevent="menu.callback"
           @focus="expanded = true"
         >
@@ -132,6 +136,7 @@
     border-radius: 0;
     width: 100%;
     text-align: left;
+    text-wrap: nowrap;
   }
 
   .dropdown-btn {

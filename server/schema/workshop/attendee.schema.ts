@@ -2,6 +2,7 @@ import { nativeEnum, z } from 'zod'
 import {
   Gender,
   WorkshopAttendeeAttendance,
+  WorkshopAttendeeListType,
   WorkshopAttendeeType
 } from '@prisma/client'
 import {
@@ -27,6 +28,15 @@ export const updateAttendeeAttendanceSchema = z.object({
 
 export type UpdateAttendeeAttendanceInput = z.infer<
   typeof updateAttendeeAttendanceSchema
+>
+
+export const updateAttendeeListTypeSchema = z.object({
+  id: z.string().uuid(),
+  listType: z.nativeEnum(WorkshopAttendeeListType)
+})
+
+export type UpdateAttendeeListTypeInput = z.infer<
+  typeof updateAttendeeListTypeSchema
 >
 
 export const createExternalAttendeeSchema = z.object({

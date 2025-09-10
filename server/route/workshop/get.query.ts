@@ -2,10 +2,11 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { WorkshopRepo } from '~/server/database'
+import { WorkshopAttendeeRepo, WorkshopRepo } from '~/server/database'
 import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
 import { isReferent } from '~/server/security'
 import { formatWorkshopAttendees } from '~/server/services/workshop/helper'
+import { WorkshopAttendeeListType } from '@prisma/client'
 
 export const handler = async ({
   ctx: { user },
@@ -20,31 +21,46 @@ export const handler = async ({
   return await getOne(user, input.id)
 }
 
+async function getAttendeeCount(user: SecurityRuleGrantee, workshopId: string) {
+  const [mainAttendeeCount, waitingAttendeeCount] = await Promise.all([
+    WorkshopAttendeeRepo.count(user, {
+      where: { listType: WorkshopAttendeeListType.Main, workshopId }
+    }),
+    WorkshopAttendeeRepo.count(user, {
+      where: { listType: WorkshopAttendeeListType.Waiting, workshopId }
+    })
+  ])
+
+  return {
+    mainAttendees: mainAttendeeCount,
+    waitingAttendees: waitingAttendeeCount
+  }
+}
+
 export const getOne = async (user: SecurityRuleGrantee, id: string) => {
-  return await WorkshopRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include: {
-      workshopName: true
-    }
-  })
+  const [workshop, _count] = await Promise.all([
+    WorkshopRepo.findUniqueOrThrow(user, {
+      where: { id },
+      include: {
+        workshopName: true
+      }
+    }),
+    getAttendeeCount(user, id)
+  ])
+
+  return { ...workshop, _count }
 }
 export const getOneWithAttendees = async (
   user: SecurityRuleGrantee,
   id: string
 ) => {
-  const { workshopAttendees, ...rest } = await WorkshopRepo.findUniqueOrThrow(
-    user,
-    {
+  const [{ workshopAttendees, ...rest }, _count] = await Promise.all([
+    WorkshopRepo.findUniqueOrThrow(user, {
       where: { id },
       include: {
         workshopName: true,
         partnerOrganization: {
           select: { id: true, name: true }
-        },
-        _count: {
-          select: {
-            workshopAttendees: true
-          }
         },
         workshopAttendees: {
           include: {
@@ -91,11 +107,13 @@ export const getOneWithAttendees = async (
           })
         }
       }
-    }
-  )
+    }),
+    getAttendeeCount(user, id)
+  ])
 
   return {
     ...rest,
+    _count,
     workshopAttendees: formatWorkshopAttendees(workshopAttendees)
   }
 }
