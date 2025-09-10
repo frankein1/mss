@@ -6,6 +6,7 @@ export default defineEventHandler({
   onRequest: [apiTokenMiddleware],
   handler: async () => {
     const structures = await StructureRepo.prisma.findMany({
+      relationLoadStrategy: 'query',
       where: {
         disabled: false
       },
