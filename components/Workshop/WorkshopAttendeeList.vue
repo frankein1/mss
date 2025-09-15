@@ -66,7 +66,7 @@
       <WorkshopAttendeeEmpty v-else />
     </div>
     <div
-      v-if="isWorkshopFull && workshop.attendeeLimit !== null"
+      v-if="shouldShowWaitingList"
       class="fr-col-12"
     >
       <p
@@ -145,6 +145,12 @@
   const hasSessionName = computed(() => {
     return workshop.sessionName != null && workshop.sessionName !== ''
   })
+
+  const shouldShowWaitingList = computed(
+    () =>
+      workshop.attendeeLimit !== null &&
+      (isWorkshopFull.value || workshop._count.waitingAttendees > 0)
+  )
 
   const attendeeLists = computed(() =>
     Object.groupBy(workshop.workshopAttendees, ({ listType }) => listType)
