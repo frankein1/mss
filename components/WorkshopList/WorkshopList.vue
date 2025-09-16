@@ -1,71 +1,67 @@
 <template>
-  <!-- Alert + Loader -->
-  <AtomAlert
-    v-if="error"
-    :alert-type="AlertType.Error"
+  <AtomLazyComponent
+    :pending="status === 'pending'"
+    :error="Boolean(error)"
     message="La liste des ateliers n'a pas pu être chargée."
-  />
-  <WorkshopListFilters v-model="listFilters" />
-  <AtomLoader
-    v-if="status === 'pending'"
-    class="fr-mx-auto"
-  />
-  <WorkshopListEmpty
-    v-if="workshopList.length === 0"
-    :is-filtered
-    :time-direction
-  />
-  <template v-else>
-    <p>
-      {{ data?.count }}
-      {{
-        timeDirection === FilterWorkshopTimeDirection.Future
-          ? 'ateliers à venir'
-          : 'ateliers passés'
-      }}
-    </p>
+  >
+    <WorkshopListFilters v-model="listFilters" />
 
-    <ul class="workshop-list">
-      <li
-        v-for="month in groupAndSortWorkshops(
-          workshopList,
-          timeDirection !== FilterWorkshopTimeDirection.Past
-        )"
-        :key="month[0]"
-      >
-        <p
-          role="heading"
-          aria-level="3"
-          class="workshop-month"
-        >
-          {{ month[0] }}
-        </p>
-        <ul class="workshop-list">
-          <li
-            v-for="workshop in month[1]"
-            :key="workshop.id"
-          >
-            <WorkshopListItem
-              :workshop="workshop"
-              :time-direction
-            />
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-    <AtomPagination
-      class="fr-mt-4w fr-px-5v"
-      :page="page"
-      :per-page="perPage"
-      :total-pages="totalPages"
-      @change-page="updatePagination($event)"
+    <WorkshopListEmpty
+      v-if="workshopList.length === 0"
+      :is-filtered
+      :time-direction
     />
-  </template>
+    <template v-else>
+      <p>
+        {{ data?.count }}
+        {{
+          timeDirection === FilterWorkshopTimeDirection.Future
+            ? 'ateliers à venir'
+            : 'ateliers passés'
+        }}
+      </p>
+
+      <ul class="workshop-list">
+        <li
+          v-for="month in groupAndSortWorkshops(
+            workshopList,
+            timeDirection !== FilterWorkshopTimeDirection.Past
+          )"
+          :key="month[0]"
+        >
+          <p
+            role="heading"
+            aria-level="3"
+            class="workshop-month"
+          >
+            {{ month[0] }}
+          </p>
+          <ul class="workshop-list">
+            <li
+              v-for="workshop in month[1]"
+              :key="workshop.id"
+            >
+              <WorkshopListItem
+                :workshop="workshop"
+                :time-direction
+              />
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <AtomPagination
+        class="fr-mt-4w fr-px-5v"
+        :page="page"
+        :per-page="perPage"
+        :total-pages="totalPages"
+        @change-page="updatePagination($event)"
+      />
+    </template>
+  </AtomLazyComponent>
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~/utils/constants/alert'
   import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import type { WorkshopsPageItems } from './types'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'

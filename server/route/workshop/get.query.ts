@@ -104,7 +104,8 @@ export const getOneWithAttendees = async (
                 }
               ]
             }
-          })
+          }),
+          orderBy: { created: 'asc' }
         }
       }
     }),

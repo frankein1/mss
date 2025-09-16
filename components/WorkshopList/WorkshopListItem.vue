@@ -61,6 +61,7 @@
   import { routes } from '~/utils/routes'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
   import { BadgeColor } from '~/types/badge'
+  import { WorkshopAttendeeListType } from '@prisma/client'
 
   const { workshop, timeDirection } = defineProps<{
     workshop: WorkshopsPageItem
@@ -87,9 +88,20 @@
   })
 
   const plural = (n: number, w: string) => (n > 1 ? `${n} ${w}s` : `${n} ${w}`)
-  const registrations = computed(() =>
-    plural(workshop._count.workshopAttendees, 'inscription')
-  )
+  const registrations = computed(() => {
+    if (!workshop.attendeeLimit) {
+      return plural(workshop._count.workshopAttendees, 'inscription')
+    }
+    const mainAttendeesCount = workshop.workshopAttendees.filter(
+      a => a.listType === WorkshopAttendeeListType.Main
+    ).length
+    return (
+      (mainAttendeesCount >= workshop.attendeeLimit ? 'Complet : ' : '') +
+      mainAttendeesCount +
+      ' / ' +
+      plural(workshop.attendeeLimit, 'inscription')
+    )
+  })
 
   const statusBadge = computed(() => {
     if (timeDirection === FilterWorkshopTimeDirection.Future) {

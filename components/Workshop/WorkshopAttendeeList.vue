@@ -224,6 +224,7 @@
       snackbar.error('La modification du participant a échoué.')
       return
     }
+    emit('refresh')
     snackbar.success('La modification du participant a réussi.')
   }
 

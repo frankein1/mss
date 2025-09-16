@@ -46,7 +46,8 @@ const getWorkshops = async (
       workshopName: true,
       workshopAttendees: {
         select: {
-          attendance: true
+          attendance: true,
+          listType: true
         }
       },
       _count: {

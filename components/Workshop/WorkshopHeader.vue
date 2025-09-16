@@ -33,6 +33,7 @@
         }}
       </p>
     </div>
+
     <p
       v-if="workshop.host || workshop.partnerOrganization"
       class="host fr-text--sm"
@@ -76,6 +77,26 @@
         >Fonctionnalité à venir</span
       >
     </div>
+    <div
+      v-if="isFullyFilledStatus"
+      class="attendance-info fr-mt-4w"
+    >
+      <p>
+        <span class="emphasis">{{ mainAttendeesCount }}</span>
+        participant{{ mainAttendeesCount > 1 ? 's' : '' }}
+      </p>
+      <p>
+        <span class="emphasis">{{ noShowCount }}</span> absence{{
+          noShowCount > 1 ? 's' : ''
+        }}
+      </p>
+      <p>
+        <span class="emphasis">{{ excuseCount }}</span> absence{{
+          excuseCount > 1 ? 's' : ''
+        }}
+        excusée{{ excuseCount > 1 ? 's' : '' }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -85,6 +106,10 @@
   import { routes } from '~/utils/routes'
   import { capitalizeFirstLetter } from '~/utils/text/capitalizeFirstLetter'
   import { ageConditionKeys } from '~/client/options/ageCondition'
+  import {
+    WorkshopAttendeeAttendance,
+    WorkshopAttendeeListType
+  } from '@prisma/client'
 
   const props = defineProps<{
     workshop: WorkshopWithAttendeesDetails
@@ -112,6 +137,25 @@
     const start =
       props.workshop.date.toDateString() + ' ' + props.workshop.startTime
     return getDurationInHoursAndMinutes(new Date(start), new Date(end))
+  })
+
+  const isFullyFilledStatus = computed(() => {
+    const emptyAttendances = props.workshop.workshopAttendees
+      .filter(a => a.listType === WorkshopAttendeeListType.Main)
+      .filter(a => a.attendance === null)
+    return emptyAttendances.length === 0
+  })
+
+  const mainAttendeesCount = computed(() => props.workshop._count.mainAttendees)
+  const noShowCount = computed(() => {
+    return props.workshop.workshopAttendees
+      .filter(a => a.listType === WorkshopAttendeeListType.Main)
+      .filter(a => a.attendance === WorkshopAttendeeAttendance.NoShow).length
+  })
+  const excuseCount = computed(() => {
+    return props.workshop.workshopAttendees
+      .filter(a => a.listType === WorkshopAttendeeListType.Main)
+      .filter(a => a.attendance === WorkshopAttendeeAttendance.Excused).length
   })
 </script>
 
@@ -178,6 +222,36 @@
 
   .header-wrapper {
     flex-direction: column;
+  }
+
+  .attendance-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    @include dsfr-media-query.respond-from('sm') {
+      flex-direction: row;
+      gap: 1rem;
+
+      p:not(:first-child) {
+        &::before {
+          content: '|';
+          margin-right: 1rem;
+          font-weight: 400;
+        }
+      }
+    }
+
+    p {
+      font-weight: 700;
+      margin-bottom: 0;
+
+      & span.emphasis {
+        color: var(--primary);
+        font-size: 1.25em;
+      }
+    }
   }
 
   .ri-file-copy-line {
