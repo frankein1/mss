@@ -51,6 +51,14 @@ function update<T extends Prisma.WorkshopAttendeeUpdateArgs>(
   return prismaClient.workshopAttendee.update(params)
 }
 
+function updateMany<T extends Prisma.WorkshopAttendeeUpdateManyArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.WorkshopAttendeeUpdateManyArgs>
+) {
+  appendConstraints(user, params, WorkshopAttendeeConstraints.update)
+  return prismaClient.workshopAttendee.updateMany(params)
+}
+
 function create<T extends Prisma.WorkshopAttendeeCreateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.WorkshopAttendeeCreateArgs>
@@ -65,5 +73,6 @@ export const WorkshopAttendeeRepo = {
   findUniqueOrThrow,
   delete: deleteWorkshopAttendee,
   update,
+  updateMany,
   create
 }

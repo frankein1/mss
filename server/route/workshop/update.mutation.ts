@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType, WorkshopAttendeeListType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateWorkShopInput } from '~/server/schema'
@@ -6,7 +6,8 @@ import { updateWorkshopSchema } from '~/server/schema'
 import {
   WorkshopRepo,
   WorkshopNameRepo,
-  PartnerOrganizationRepo
+  PartnerOrganizationRepo,
+  WorkshopAttendeeRepo
 } from '~/server/database'
 import type { SecurityRuleContext } from '~/server/security'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
@@ -51,6 +52,14 @@ const handler = async ({
       cause: {
         MSS_CODE: MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
       }
+    })
+  }
+  if (input.attendeeLimit === null && workshop.attendeeLimit !== null) {
+    await WorkshopAttendeeRepo.updateMany(ctx.user, {
+      data: {
+        listType: WorkshopAttendeeListType.Main
+      },
+      where: { workshopId: id }
     })
   }
   if (mode && name) {
