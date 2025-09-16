@@ -14,6 +14,7 @@
   />
   <label
     class="fr-label"
+    :class="{ 'label-disabled': disabled }"
     :for="option.value"
     >{{ option.label }}</label
   >
@@ -44,6 +45,10 @@
   label {
     margin-left: 0;
     color: var(--text-label-grey) !important;
+  }
+
+  label.label-disabled {
+    color: var(--text-disabled-grey) !important;
   }
 
   label::before {

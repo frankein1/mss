@@ -314,7 +314,7 @@
   }
 
   const getAllCheckbox = (): NodeListOf<HTMLElement> =>
-    document.querySelectorAll(`.input-checkbox`)
+    document.querySelectorAll(`input.input-checkbox:not([disabled])`)
 
   /** Trigger the selection of an option through the parent component */
   const triggerSelectValue = (value: string) => {

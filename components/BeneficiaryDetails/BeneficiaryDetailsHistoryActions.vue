@@ -31,19 +31,13 @@
       <li>
         <button
           class="fr-btn fr-btn fr-btn--secondary"
-          type="button"
           title="Inscrire à un atelier"
-          aria-describedby="workshop-tooltip"
-          disabled
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          @click="onWorkshopRegistration"
         >
           Inscrire à un atelier
         </button>
-        <span
-          id="workshop-tooltip"
-          class="fr-tooltip fr-placement"
-          role="tooltip"
-          >Fonctionnalité à venir
-        </span>
       </li>
       <li
         v-if="application.module.rdv"
@@ -80,6 +74,7 @@
   import { routes } from '~/utils/routes'
   import type { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
+  import WorkshopAddBeneficiaryModal from '~/components/Workshop/WorkshopAddBeneficiaryModal.vue'
 
   const props = defineProps<{
     familyFileId: string
@@ -90,14 +85,22 @@
   }>()
 
   const emit = defineEmits<{ planAppointment: [] }>()
-
+  const modal = useModal()
   const { application } = usePermissions()
 
   function onAddHelpRequest() {
-    useModal().open(HelpRequestModal, {
+    modal.open(HelpRequestModal, {
       title: 'Nouvelle instruction de dossier',
       familyFileId: props.familyFileId,
       beneficiaryId: props.beneficiaryId
+    })
+  }
+
+  const onWorkshopRegistration = () => {
+    modal.open(WorkshopAddBeneficiaryModal, {
+      title: 'Inscrire à un ou plusieurs atelier(s)',
+      beneficiaryId: props.beneficiaryId,
+      familyFileId: props.familyFileId
     })
   }
 </script>

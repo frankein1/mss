@@ -37,5 +37,11 @@ export const workshopRouter = router({
     .mutation(routes.updateAttendeeAttendance.execute),
   getExportedAttendance: protectedProcedure
     .input(routes.getExportedAttendance.inputValidation)
-    .query(routes.getExportedAttendance.execute)
+    .query(routes.getExportedAttendance.execute),
+  getAllFuture: protectedProcedure
+    .input(routes.getAllFutureQuery.inputValidation)
+    .query(routes.getAllFutureQuery.execute),
+  registerBeneficiaries: protectedProcedure
+    .input(routes.registerBeneficiaries.inputValidation)
+    .mutation(routes.registerBeneficiaries.execute)
 })

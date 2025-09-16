@@ -10,6 +10,8 @@ import { updateAttendeeAttendance } from './update-attendee-attendance.mutation'
 import { deleteAttendee } from './delete-attendee.mutation'
 import { getExportedAttendance } from './getExportedAttendance.query'
 import { updateAttendeeListType } from './update-attendee-list-type.mutation'
+import { getAllFutureQuery } from './getAllFuture.query'
+import { registerBeneficiaries } from './registerBeneficiaries.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
@@ -23,5 +25,7 @@ export const workshopRoutes = {
   deleteAttendee,
   updateAttendeeAttendance,
   getExportedAttendance,
-  updateAttendeeListType
+  updateAttendeeListType,
+  getAllFutureQuery,
+  registerBeneficiaries
 }

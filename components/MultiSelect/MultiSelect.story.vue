@@ -6,6 +6,7 @@
       label="Rechercher un département"
       is-searchable
       :options="allValues"
+      :disabled-options="['07', '02', '15', '03', '04']"
     />
 
     <h4>Multiselect dans des tabs</h4>
