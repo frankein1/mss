@@ -107,12 +107,13 @@
     if (timeDirection === FilterWorkshopTimeDirection.Future) {
       return null
     }
-    const emptyAttendances = workshop.workshopAttendees.filter(
-      a => a.attendance === null
+    const mainAttendees = workshop.workshopAttendees.filter(
+      attendee => attendee.listType === WorkshopAttendeeListType.Main
     )
+    const emptyAttendances = mainAttendees.filter(a => a.attendance === null)
     if (
-      emptyAttendances.length === workshop.workshopAttendees.length ||
-      workshop.workshopAttendees.length === 0
+      emptyAttendances.length === mainAttendees.length ||
+      mainAttendees.length === 0
     ) {
       return {
         color: BadgeColor.Purple,
