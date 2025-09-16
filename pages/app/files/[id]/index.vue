@@ -1,10 +1,10 @@
 <template>
   <AtomAlert
-    v-if="error"
+    v-if="!familyFile"
     :alert-type="AlertType.Error"
     message="Le dossier n'a pas pu être chargé."
   />
-  <PageContainer v-else-if="familyFileIdentification">
+  <PageContainer v-else>
     <AtomBreadcrumb
       :links="breadcrumbs.file.AppFile(familyFileId, familyFileIdentification)"
     />
@@ -25,37 +25,38 @@
         @plan-appointment="handleAppointmentPlan"
       />
       <hr />
-      <AtomAlert
-        v-if="selectedError"
-        :alert-type="AlertType.Error"
-        message="Le bénéficiaire n'a pas pu être chargé."
-      />
 
       <AtomTabs
-        v-else-if="beneficiaryId"
         tab-list-name="Détails du dossier foyer"
         :tab-titles="tabTitles"
         :heading-level="2"
       >
         <template #[tabTitles.at(0)?.panelId]>
-          <FamilyFileSegmentedControl
-            v-if="familyFileIdentification.length > 1"
-            :members="familyFileIdentification"
-            :model-value="beneficiaryId"
-            @update:model-value="openBeneficiary"
+          <AtomAlert
+            v-if="selectedError || !beneficiaryId"
+            :alert-type="AlertType.Error"
+            message="Les informations du bénéficiaire n'ont pas pu être chargées."
           />
-          <BeneficiaryInfo :beneficiary-id="beneficiaryId">
-            <template #actions>
-              <BeneficiaryDetailsActions
-                :beneficiary-id="beneficiaryId"
-                :permissions="familyFile?.permissions"
-                :family-file="familyFileIdentification.length > 1"
-                @delete="openDeleteModal"
-                @split="openSplitModal"
-                @archive="handleClickArchiveBeneficiary"
-              />
-            </template>
-          </BeneficiaryInfo>
+          <template v-else>
+            <FamilyFileSegmentedControl
+              v-if="familyFileIdentification.length > 1"
+              :members="familyFileIdentification"
+              :model-value="beneficiaryId"
+              @update:model-value="openBeneficiary"
+            />
+            <BeneficiaryInfo :beneficiary-id>
+              <template #actions>
+                <BeneficiaryDetailsActions
+                  :beneficiary-id
+                  :permissions="familyFile?.permissions"
+                  :family-file="familyFileIdentification.length > 1"
+                  @delete="openDeleteModal"
+                  @split="openSplitModal"
+                  @archive="handleClickArchiveBeneficiary"
+                />
+              </template>
+            </BeneficiaryInfo>
+          </template>
         </template>
 
         <template #[tabTitles.at(1)?.panelId]>
@@ -66,8 +67,13 @@
         </template>
 
         <template #[tabTitles.at(2)?.panelId]>
+          <AtomAlert
+            v-if="!familyFile?.permissions || !beneficiaryId"
+            :alert-type="AlertType.Error"
+            message="L'historique du bénéficiaire n'a pas pu être chargé."
+          />
           <BeneficiaryHistory
-            v-if="familyFile?.permissions"
+            v-else
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
             :family-file-permissions="familyFile.permissions"
@@ -122,7 +128,7 @@
     () => route.query.beneficiaryId as string | null
   )
 
-  const { data: familyFile, error } =
+  const { data: familyFile } =
     await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
       { id: familyFileId.value },
       { queryKey: 'file.getFamilyFileMinimalInfo' }
