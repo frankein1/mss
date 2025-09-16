@@ -78,7 +78,7 @@ function invalidsetup() {
 }
 
 describe('Workshop - Update - Update workshop data', () => {
-  test('Workshop - Update - An Agent cannot update a workshop with a partner organisation from another structure', async ({
+  test('An Agent cannot update a workshop with a partner organisation from another structure', async ({
     trpc
   }) => {
     const otherPartnerOrg = await prismaClient.partnerOrganization.create({
@@ -104,7 +104,7 @@ describe('Workshop - Update - Update workshop data', () => {
     ).rejects.toThrowError(/not allowed to access route/i)
   })
 
-  test('Workshop - Update - An Agent cannot update a workshop from another structure', async ({
+  test('An Agent cannot update a workshop from another structure', async ({
     trpc
   }) => {
     const workshopFromOtherStructure = await createWorkshopsWithName(
@@ -129,7 +129,7 @@ describe('Workshop - Update - Update workshop data', () => {
     ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
   })
 
-  test('Workshop - Update - An Reception Agent can update a workshop and only the id of the created entity is returned', async ({
+  test('A Reception Agent can update a workshop and only the id of the created entity is returned', async ({
     trpc
   }) => {
     if (!workshopIds[0] || !workshopNames[0]) {
@@ -153,9 +153,7 @@ describe('Workshop - Update - Update workshop data', () => {
     expect(workshop.location).toBe('New location')
   })
 
-  test('Workshop - Update - An Administrator cannot update a workshop', async ({
-    trpc
-  }) => {
+  test('An Administrator cannot update a workshop', async ({ trpc }) => {
     await expect(
       () =>
         workshopIds[0] &&
@@ -171,7 +169,7 @@ describe('Workshop - Update - Update workshop data', () => {
 })
 
 describe('Workshop - Update - Update workshop name', () => {
-  test('Workshop - Update Name For Current workshop - If the name is the same, the workshop name is not updated', async ({
+  test('For Current workshop - If the name is the same, the workshop name is not updated', async ({
     trpc
   }) => {
     if (!workshopIds[0] || !workshopNames[0]) {
@@ -196,7 +194,7 @@ describe('Workshop - Update - Update workshop name', () => {
     expect(workshop.workshopName.name).toBe(workshopNameInDb)
   })
 
-  test('Workshop - Update Name For Current workshop - When name is new, a new workshop name is created and only the targeted workshop is updated', async ({
+  test('For Current workshop - When name is new, a new workshop name is created and only the targeted workshop is updated', async ({
     trpc
   }) => {
     if (!workshopIds[0]) {
@@ -220,9 +218,14 @@ describe('Workshop - Update - Update workshop name', () => {
     workshopNamesIds.push(workshop.workshopName.id)
     expect(workshop.workshopName.id).not.toBe(workshopNamesIds[0])
     expect(workshop.workshopName.name).toBe('new name')
+    const oldWorkshopName = await prismaClient.workshopName.findUnique({
+      select: { id: true },
+      where: { id: workshopNamesIds[0] }
+    })
+    expect(oldWorkshopName).not.toBe(null)
   })
 
-  test('Workshop - Update Name For Current workshop - When the target value is another workshop, only the targeted workshop is updated and the workshop is connected to the other workshop name', async ({
+  test('For Current workshop - When the target value is another workshop, only the targeted workshop is updated and the workshop is connected to the other workshop name', async ({
     trpc
   }) => {
     if (!workshopIds[0] || !workshopNames[1]) {
@@ -244,9 +247,57 @@ describe('Workshop - Update - Update workshop name', () => {
     })
     expect(workshop.workshopName.id).toBe(workshopNamesIds[1])
     expect(workshop.workshopName.name).toBe(workshopNames[1])
+    const oldWorkshopName = await prismaClient.workshopName.findUnique({
+      select: { id: true },
+      where: { id: workshopNamesIds[0] }
+    })
+    expect(oldWorkshopName).not.toBe(null)
   })
 
-  test('Workshop - Update Name - All workshops with the same name are updated and the target value is new', async ({
+  test('For Current workshop - When only one workshop has the previous name, the old workshop name is deleted', async ({
+    trpc
+  }) => {
+    const createdById = fixturesUsers[FixtureUserRole.StructureManager].id
+    const workshopNameWith1Workshop = await createWorkshopsWithName(
+      structureId,
+      createdById,
+      faker.word.adverb(),
+      1
+    )
+    workshopIds.push(...workshopNameWith1Workshop.workshops.map(w => w.id))
+    workshopNames.push(workshopNameWith1Workshop.name)
+    workshopNamesIds.push(workshopNameWith1Workshop.id)
+
+    const id = workshopNameWith1Workshop.workshops[0]?.id
+    const mode = UpdateWorkshopNameMode.current
+
+    if (!id) {
+      throw invalidsetup()
+    }
+
+    await trpc.receptionAgent.workshop.updateWorkshop({
+      id,
+      date,
+      mode,
+      name: 'new name  '
+    })
+
+    const workshop = await prismaClient.workshop.findUniqueOrThrow({
+      where: { id },
+      select: { workshopName: { select: { id: true, name: true } } }
+    })
+    workshopNames.push(workshop.workshopName.name)
+    workshopNamesIds.push(workshop.workshopName.id)
+    expect(workshop.workshopName.id).not.toBe(workshopNameWith1Workshop.id)
+    expect(workshop.workshopName.name).toBe('new name')
+    const oldWorkshopName = await prismaClient.workshopName.findUnique({
+      select: { id: true },
+      where: { id: workshopNameWith1Workshop.id }
+    })
+    expect(oldWorkshopName).toBe(null)
+  })
+
+  test('For all workshops - All workshops with the same name are updated and the target value is new', async ({
     trpc
   }) => {
     if (!workshopIds[0]) {
@@ -272,7 +323,7 @@ describe('Workshop - Update - Update workshop name', () => {
     )
   })
 
-  test('Workshop - Update Name - All workshops with the same name are updated, the target value is another workshop, the previous workshop name is deleted', async ({
+  test('For all workshops - All workshops with the same name are updated, the target value is another workshop, the previous workshop name is deleted', async ({
     trpc
   }) => {
     if (!workshopIds[0] || !workshopNames[0] || !workshopNames[1]) {
@@ -305,7 +356,7 @@ describe('Workshop - Update - Update workshop name', () => {
     expect(workshopName).toBe(null)
   })
 
-  test('Workshop - Update Name - All workshops with the same name are updated and the target value has the same content with a different case', async ({
+  test('For all workshops - All workshops with the same name are updated and the target value has the same content with a different case', async ({
     trpc
   }) => {
     if (!workshopIds[0] || !workshopNames[0]) {

@@ -14,6 +14,7 @@ import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 import { getOne } from './get.query'
 import { TRPCError } from '@trpc/server'
 import { MSS_ERROR_CODES } from '~/utils/error'
+import { prismaClient } from '~/server/prisma/prismaClient'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -100,8 +101,32 @@ async function updateWorkshopName(
   }
 
   if (input.mode === UpdateWorkshopNameMode.current) {
-    const value = await updateNameForCurrentWorkshop(ctx, input.id, input.name)
-    return { case: 'update-current', value }
+    const nWorkshopsWithSameName = await WorkshopRepo.count(ctx.user, {
+      where: {
+        workshopNameId: currentWorkshopName.id,
+        structureId: ctx.structure.id
+      }
+    })
+
+    // if more than 1 workshop with this name exist, the workshop name is kept
+    if (nWorkshopsWithSameName > 1) {
+      const value = await updateNameForCurrentWorkshop(
+        ctx,
+        input.id,
+        input.name
+      )
+      return { case: 'update-current', value }
+    }
+
+    // else the orphan workshop name is deleted
+    const [_, value] = await prismaClient.$transaction([
+      updateNameForCurrentWorkshop(ctx, input.id, input.name),
+      WorkshopNameRepo.delete(ctx.user, {
+        where: { id: currentWorkshopName.id, structureId: ctx.structure.id }
+      })
+    ])
+
+    return { case: 'update-current-and-delete-previous-name', value }
   }
 
   const targetWorkshopName = await WorkshopNameRepo.findUnique(ctx.user, {
@@ -135,12 +160,12 @@ async function updateWorkshopName(
  * If the worskhop name does not exist it is created, otherwise the
  * workshop is connected to the target existing workshop name
  */
-async function updateNameForCurrentWorkshop(
+function updateNameForCurrentWorkshop(
   ctx: ProtectedAppContext,
   id: string,
   name: string
 ) {
-  return await WorkshopRepo.update(ctx.user, {
+  return WorkshopRepo.update(ctx.user, {
     select: { id: true },
     where: {
       id,
