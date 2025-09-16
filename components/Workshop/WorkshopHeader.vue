@@ -68,12 +68,12 @@
       </NuxtLink>
     </div>
     <div
-      v-if="isFullyFilledStatus"
+      v-if="displayAttendances"
       class="attendance-info fr-mt-4w"
     >
       <p>
         <span class="emphasis">{{ mainAttendeesCount }}</span>
-        participant{{ mainAttendeesCount > 1 ? 's' : '' }}
+        présence{{ mainAttendeesCount > 1 ? 's' : '' }}
       </p>
       <p>
         <span class="emphasis">{{ noShowCount }}</span> absence{{
@@ -129,23 +129,30 @@
     return getDurationInHoursAndMinutes(new Date(start), new Date(end))
   })
 
-  const isFullyFilledStatus = computed(() => {
-    const emptyAttendances = props.workshop.workshopAttendees
-      .filter(a => a.listType === WorkshopAttendeeListType.Main)
-      .filter(a => a.attendance === null)
-    return emptyAttendances.length === 0
+  const mainAttendees = computed(() => {
+    return props.workshop.workshopAttendees.filter(
+      a => a.listType === WorkshopAttendeeListType.Main
+    )
   })
 
-  const mainAttendeesCount = computed(() => props.workshop._count.mainAttendees)
+  const displayAttendances = computed(() => {
+    return mainAttendees.value.filter(a => a.attendance !== null).length > 0
+  })
+
+  const mainAttendeesCount = computed(() => {
+    return mainAttendees.value.filter(
+      a => a.attendance === WorkshopAttendeeAttendance.Seen
+    ).length
+  })
   const noShowCount = computed(() => {
-    return props.workshop.workshopAttendees
-      .filter(a => a.listType === WorkshopAttendeeListType.Main)
-      .filter(a => a.attendance === WorkshopAttendeeAttendance.NoShow).length
+    return mainAttendees.value.filter(
+      a => a.attendance === WorkshopAttendeeAttendance.NoShow
+    ).length
   })
   const excuseCount = computed(() => {
-    return props.workshop.workshopAttendees
-      .filter(a => a.listType === WorkshopAttendeeListType.Main)
-      .filter(a => a.attendance === WorkshopAttendeeAttendance.Excused).length
+    return mainAttendees.value.filter(
+      a => a.attendance === WorkshopAttendeeAttendance.Excused
+    ).length
   })
 </script>
 
