@@ -12,24 +12,21 @@
   >
     <div class="fr-container">
       <WorkshopFormNameUpdate
-        v-if="update"
+        v-if="mode === 'update'"
         :is-submitting
       />
       <WorkshopFormName
         v-else
-        :is-submitting="isSubmitting"
+        :is-submitting
       />
-      <WorkshopFormInformation
-        :is-submitting="isSubmitting"
-        :partner-organizations="partnerOrganizations"
-      />
+      <WorkshopFormInformation :is-submitting="isSubmitting" />
       <WorkshopFormDescription :is-submitting="isSubmitting" />
       <WorkshopFormConditions
         :is-submitting="isSubmitting"
         :age-condition-options="ageConditionKeys.options"
       />
 
-      <AtomCallout v-if="!update">
+      <AtomCallout v-if="mode === 'create'">
         <p>
           Vous pourrez inscrire des participants et participantes sur la page
           suivante.
@@ -40,7 +37,7 @@
     <AtomActionsBar class="sticky">
       <WorkshopFormActions
         :is-submitting="isSubmitting"
-        :update
+        :mode
         @cancel="emit('cancel')"
         @delete="emit('delete')"
       />
@@ -49,7 +46,6 @@
 </template>
 
 <script setup lang="ts">
-  import type { PartnerOrganizationIdName } from '~/types/partner'
   import { ageConditionKeys } from '~/client/options'
   import type {
     CreateWorkshopInput,
@@ -58,13 +54,11 @@
   import { workshopLabels } from '~/client/labels'
   import type { FormErrors } from 'vee-validate'
 
-  const { isSubmitting, update, partnerOrganizations, caughtErrors } =
-    defineProps<{
-      isSubmitting: boolean
-      update?: boolean
-      partnerOrganizations: Array<PartnerOrganizationIdName>
-      caughtErrors: FormErrors<CreateWorkshopInput | UpdateWorkShopInput>
-    }>()
+  const { isSubmitting, mode, caughtErrors } = defineProps<{
+    isSubmitting: boolean
+    mode: 'update' | 'create' | 'duplicate'
+    caughtErrors: FormErrors<CreateWorkshopInput | UpdateWorkShopInput>
+  }>()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -72,8 +66,7 @@
     delete: []
   }>()
 
-  const form = ref<HTMLFormElement | null>(null)
-
+  const form = useTemplateRef('form')
   const { errors } = useDisplayFormErrors(
     form,
     toRef(() => caughtErrors),

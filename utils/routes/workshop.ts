@@ -42,8 +42,16 @@ export const routes = {
     title: (workshop: WorkshopDetails | null) =>
       workshop
         ? "Modifier l'atelier " + workshop.workshopName.name
-        : "Modifier l'atelier",
+        : 'Modifier un atelier',
     path: (id?: string) => `${WorkshopsRoute}/${id}/edit`
+  },
+  AppWorkshopDuplicate: {
+    name: 'AppWorkshopDuplicate',
+    title: (workshop: WorkshopDetails | null) =>
+      workshop
+        ? "Dupliquer l'atelier " + workshop.workshopName.name
+        : 'Dupliquer un atelier',
+    path: (id?: string) => `${WorkshopsRoute}/${id}/duplicate`
   },
   AppWorkshops: {
     name: 'AppWorkshops',

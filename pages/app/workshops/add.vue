@@ -6,19 +6,13 @@
         :breadcrumbs="breadcrumbs.workshop.AppWorkshopAdd()"
       />
     </div>
-    <AtomLazyComponent
-      :error="Boolean(errorPartner)"
-      message="La page n'a pas pu être chargée."
-    >
-      <WorkshopForm
-        v-if="partnerOrganizations"
-        :is-submitting="status === 'pending'"
-        :partner-organizations="partnerOrganizations"
-        :caught-errors
-        @submit="onSubmit"
-        @cancel="onCancel"
-      />
-    </AtomLazyComponent>
+    <WorkshopForm
+      mode="create"
+      :is-submitting="status === 'pending'"
+      :caught-errors
+      @submit="onSubmit"
+      @cancel="onCancel"
+    />
   </div>
 </template>
 
@@ -34,10 +28,7 @@
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-
-  // Get partners organisations
-  const { data: partnerOrganizations, error: errorPartner } =
-    await trpcClient.partner.getAll.useQuery()
+  const router = useRouter()
 
   // Form
   const { handleSubmit } = useForm<CreateWorkshopInput>({
@@ -51,8 +42,8 @@
     }
   )
 
-  const router = trpcClient.workshop
-  const { mutate, error, status } = router.createWorkshop.useMutation()
+  const { mutate, error, status } =
+    trpcClient.workshop.createWorkshop.useMutation()
 
   const onCreateWorkshop = async (input: CreateWorkshopInput) => {
     const workshopCreated = await mutate(input)
@@ -69,7 +60,7 @@
   }
 
   const onCancel = () => {
-    useRouter().back()
+    router.back()
   }
 </script>
 

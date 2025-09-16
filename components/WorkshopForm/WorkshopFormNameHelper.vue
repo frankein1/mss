@@ -1,5 +1,5 @@
 <template>
-  <DsfrAccordionsGroup class="fr-mt-2w">
+  <DsfrAccordionsGroup class="fr-mt-2w fr-grid-row--gutters">
     <DsfrAccordion
       id="workshop-form-accordion-1"
       title="L'atelier a plusieurs séances : comment faire ?"

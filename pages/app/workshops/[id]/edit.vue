@@ -12,11 +12,10 @@
       :message="fetchError"
     >
       <WorkshopForm
-        v-if="partnerOrganizations && workshop"
+        v-if="workshop"
         :is-submitting="status === 'pending'"
-        :partner-organizations="partnerOrganizations"
         :caught-errors
-        update
+        mode="update"
         @submit="onSubmit"
         @cancel="onCancel"
         @delete="onDelete"
@@ -48,16 +47,9 @@
       id: workshopId
     })
 
-  // Get partners organisations
-  const { data: partnerOrganizations, error: errorPartner } =
-    await trpcClient.partner.getAll.useQuery()
-
   const fetchError = computed(() => {
     if (errorInitialWorkshop.value) {
       return "L'atelier n'a pas pu être chargé."
-    }
-    if (errorPartner.value) {
-      return "La liste des partenaires n'a pas pu être chargée."
     }
     return ''
   })

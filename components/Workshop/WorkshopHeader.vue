@@ -60,22 +60,12 @@
       >
         Modifier
       </NuxtLink>
-
-      <button
-        aria-describedby="duplicate-tooltip"
-        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0 edit-btn"
-        type="button"
-        :disabled="true"
+      <NuxtLink
+        :to="routes.workshop.AppWorkshopDuplicate.path(workshop.id)"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left ri-file-copy-line fr-mb-0 edit-btn"
       >
-        <i class="ri-file-copy-line"></i>
         Dupliquer
-      </button>
-      <span
-        id="duplicate-tooltip"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        >Fonctionnalité à venir</span
-      >
+      </NuxtLink>
     </div>
     <div
       v-if="isFullyFilledStatus"
@@ -254,13 +244,6 @@
     }
   }
 
-  .ri-file-copy-line {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23929292'%3E%3Cpath d='M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z'%3E%3C/path%3E%3C/svg%3E");
-  }
-
   @mixin icon {
     font-size: inherit;
     display: inline-block;
@@ -268,6 +251,22 @@
     height: 24px;
     margin-bottom: -0.25em;
     margin-right: 0.25em;
+  }
+
+  .ri-file-copy-line::before {
+    --icon-size: 1rem;
+
+    content: '';
+    background-color: currentcolor;
+    display: inline-block;
+    height: var(--icon-size);
+    /* stylelint-disable property-no-vendor-prefix */
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+    width: var(--icon-size);
+    margin-right: 0.5em;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23929292'%3E%3Cpath d='M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z'%3E%3C/path%3E%3C/svg%3E");
   }
 
   .ri-calendar-event-line {

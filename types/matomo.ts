@@ -153,7 +153,8 @@ export enum WorkshopAction {
   RemoveAttendee = 'Supprimer un participant',
   TransferAttendee = 'Transférer un participant',
   DownloadPresenceList = 'Télécharger la liste de présence',
-  DeleteWorkshop = 'Supprimer un atelier'
+  DeleteWorkshop = 'Supprimer un atelier',
+  DuplicateWorkshopAndChangeDateTime = 'Dupliquer un atelier en changeant l‘heure'
 }
 
 export type EventAction =

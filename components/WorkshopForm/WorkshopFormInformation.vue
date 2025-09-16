@@ -72,12 +72,18 @@
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
   import { routes } from '~/utils/routes'
-  import type { PartnerOrganizationIdName } from '~/types/partner'
   import { timeGroup } from '~/client/options'
+
+  const trpcClient = useTrpcClient()
 
   const startTimeKeys = ref(
     timeGroup.map(time => ({ label: time, value: time }))
   )
+
+  // Get partners organisations
+  const { data: partnerOrganizations, error: errorPartner } =
+    await trpcClient.partner.getAll.useQuery()
+
   const calculateTimeValue = (startValue: string) => {
     const index = timeGroup.findIndex(time => time === startValue)
     return timeGroup
@@ -94,18 +100,17 @@
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      partnerOrganizations: Array<PartnerOrganizationIdName>
     }>(),
     {}
   )
 
   const partnerOrganizationOptions = computed(() => {
-    const partnerOrganizationsWithStringId = props.partnerOrganizations.map(
-      ({ id, ...rest }) => ({
-        id: String(id),
-        ...rest
-      })
-    )
+    const partnerOrganizationsWithStringId = (
+      partnerOrganizations.value ?? []
+    ).map(({ id, ...rest }) => ({
+      id: String(id),
+      ...rest
+    }))
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 </script>

@@ -12,7 +12,7 @@
         Annuler
       </button>
     </li>
-    <li v-if="update">
+    <li v-if="mode === 'update'">
       <button
         class="fr-btn fr-btn--secondary btn-delete-action"
         type="button"
@@ -31,7 +31,7 @@
         :data-submitting="isSubmitting"
         @click="emit('submit')"
       >
-        {{ update ? 'Confirmer' : 'Enregistrer' }}
+        {{ mode === 'create' ? 'Enregistrer' : 'Confirmer' }}
       </button>
     </li>
   </ul>
@@ -40,7 +40,7 @@
 <script setup lang="ts">
   defineProps<{
     isSubmitting: boolean
-    update: boolean
+    mode: 'create' | 'update' | 'duplicate'
   }>()
 
   const emit = defineEmits<{

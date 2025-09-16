@@ -27,6 +27,11 @@ export const breadcrumbs = {
     ...getBread('AppWorkshops'),
     ...getAppWorkshopBread(workshop)
   ],
+  AppWorkshopDuplicate: (workshop: WorkshopDetails) => [
+    ...user.AppOverview(),
+    ...getBread('AppWorkshops'),
+    ...[{ text: 'Dupliquer un atelier', to: r.AppWorkshop.path(workshop.id) }]
+  ],
   AppWorkshop: (workshop: WorkshopDetails) => [
     ...user.AppOverview(),
     ...getBread('AppWorkshops'),
