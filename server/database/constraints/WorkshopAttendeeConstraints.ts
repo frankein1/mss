@@ -35,6 +35,20 @@ const get = (user: SecurityRuleGrantee) => {
   return where
 }
 
+const count = (user: SecurityRuleGrantee) => {
+  const where: Prisma.WorkshopAttendeeCountArgs['where'] = {}
+  if (isAdmin(user)) {
+    return where
+  }
+  // All roles can count attendees
+  Object.assign(where, {
+    workshop: {
+      structureId: user.structureId
+    }
+  })
+  return where
+}
+
 const create = (user: SecurityRuleGrantee) => {
   const data: Partial<Prisma.WorkshopAttendeeCreateInput> = {}
   if (isAdmin(user)) {
@@ -47,6 +61,7 @@ const create = (user: SecurityRuleGrantee) => {
 
 export const WorkshopAttendeeConstraints = {
   get,
+  count,
   create,
   update: get,
   delete: get

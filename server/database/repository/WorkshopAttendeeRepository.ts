@@ -21,7 +21,7 @@ function count(
   user: SecurityRuleGrantee,
   params: Prisma.WorkshopAttendeeCountArgs
 ) {
-  appendConstraints(user, params, WorkshopAttendeeConstraints.get)
+  appendConstraints(user, params, WorkshopAttendeeConstraints.count)
   return prismaClient.workshopAttendee.count(params)
 }
 
