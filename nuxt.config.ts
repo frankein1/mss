@@ -80,6 +80,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/utility/icons/icons-finance/icons-finance.min.css',
     '@gouvfr/dsfr/dist/utility/icons/icons-weather/icons-weather.min.css',
     '@gouvfr/dsfr/dist/utility/icons/icons-others/icons-others.min.css',
+    '@gouvfr/dsfr/dist/utility/icons/icons-arrows/icons-arrows.min.css',
 
     // GLOBAL STYLES
     '@/assets/style/main.scss',
