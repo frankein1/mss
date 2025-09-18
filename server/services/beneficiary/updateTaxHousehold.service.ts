@@ -8,6 +8,10 @@ export async function updateTaxHousehold(
   const { id: beneficiaryId, ...taxHouseholdDatas } = cleanInput(input)
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: {
+      id: true,
+      familyFileId: true
+    },
     where: { id: beneficiaryId },
     data: {
       ...taxHouseholdDatas

@@ -86,7 +86,6 @@
 </template>
 
 <script setup lang="ts">
-  import type { Beneficiary } from '@prisma/client'
   import type { SplitOutput } from './types'
   import type { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
   import { updateBeneficiaryTaxHouseholdSchema } from '~/server/schema'
@@ -100,7 +99,7 @@
     mutationSplit: () => Promise<SplitOutput>
     mutationFamilySituation: (
       values: UpdateBeneficiaryTaxHouseholdInput
-    ) => Promise<Beneficiary>
+    ) => Promise<{ id: string; familyFileId: string }>
     reloadData: () => Promise<void>
   }>()
 

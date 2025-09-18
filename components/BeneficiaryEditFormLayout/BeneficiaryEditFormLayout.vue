@@ -155,11 +155,28 @@
     isFormDirty
   })
 
+  /** The initial values and current values of the form are compared
+   * in order to only send a API call if the data has to be updated
+   */
+  function formContentHasChanged(v: SubmitType) {
+    return JSON.stringify(meta.value.initialValues) !== JSON.stringify(v)
+  }
+
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('save', values, saveTarget.value)
+      const fileRoute = routes.file.AppFile.path(props.familyFileId || '', {
+        beneficiaryId: props.beneficiaryIdentification?.id || ''
+      })
+      const postSubmitUrl = saveTarget.value || fileRoute
+
       isNavigatingWithFormActions.value = true
+
+      if (formContentHasChanged(values)) {
+        emit('save', values, postSubmitUrl)
+      } else {
+        navigateTo(postSubmitUrl)
+      }
     }
   )
 

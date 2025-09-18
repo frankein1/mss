@@ -32,6 +32,7 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
     where: { id: input.id },
     data: input
   })

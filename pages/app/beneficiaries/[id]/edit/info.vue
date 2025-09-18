@@ -6,7 +6,7 @@
     :schema="updateBeneficiaryGeneralInformationSchema"
     :binded-values="bindedValues"
     :permissions="permissions"
-    :is-submitting="isSubmitting"
+    :is-submitting="status === 'pending'"
     :title-icon="getFormIcon(familyIdentification.length)"
     :current-route="routes.beneficiary.AppBeneficiaryEditInfo.name"
     @save="onSaveBeneficiary"
@@ -37,7 +37,6 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const isSubmitting = ref(false)
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const route = useRoute()
@@ -105,7 +104,7 @@
 
   const fetchError = computed(() => {
     if (beneficiaryError.value) {
-      return "Les informations du bénéficiaires n'ont pas pu être chargées."
+      return "Les informations du bénéficiaire n'ont pas pu être chargées."
     }
     if (agentsError.value) {
       return "La liste des agents référents n'a pas pu être chargée."
@@ -130,7 +129,11 @@
     saveBeneficiary(beneficiary, target)
   }
 
-  function saveBeneficiary(
+  const router = trpcClient.beneficiary
+  const { mutate, error, status } =
+    router.updateGeneralInformation.useMutation()
+
+  async function saveBeneficiary(
     ben: UpdateBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
@@ -138,29 +141,17 @@
       return
     }
 
-    const router = trpcClient.beneficiary
-    const updateBeneficiary = router.updateGeneralInformation.useMutation()
-    const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
+    const updated = await mutate(ben)
 
-    useTrpcMutation({
-      mutation: () => updateBeneficiary.mutate(ben),
-      isSubmitting,
-      onSuccess: () => {
-        if (updateBeneficiary.error.value) {
-          snackbar.error(errMessage, snackbar.focus('form', 'select'))
-          return
-        }
+    if (error.value || !updated) {
+      snackbar.error(
+        'La mise à jour de la fiche bénéficiaire a échoué.',
+        snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)
+      )
+      return
+    }
 
-        const fileRoute = routes.file.AppFile.path(
-          beneficiary.value?.familyFileId || '',
-          { beneficiaryId: beneficiary.value?.id }
-        )
-        navigateTo(target || fileRoute)
-      },
-      onFailure: () => {
-        snackbar.error(errMessage, snackbar.focus('form', 'select'))
-      }
-    })
+    navigateTo(target)
   }
 
   definePageMeta({

@@ -5,7 +5,7 @@
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :schema="updateBeneficiaryEntourageSchema"
-    :is-submitting="isSubmitting"
+    :is-submitting="status === 'pending'"
     :permissions="permissions"
     :current-route="routes.beneficiary.AppBeneficiaryEditEntourage.name"
     :small-title="true"
@@ -14,8 +14,8 @@
   >
     <AtomLazyComponent
       :pending
-      :error="Boolean(error)"
-      message="Les informations du bénéficiaires n'ont pas pu être chargées."
+      :error="Boolean(errorFetch)"
+      message="Les informations du bénéficiaire n'ont pas pu être chargées."
     >
       <BeneficiaryFormEntourages v-if="bindedValues" />
     </AtomLazyComponent>
@@ -30,8 +30,6 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const isSubmitting = ref(false)
-
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
@@ -41,7 +39,7 @@
     beneficiaryIdentification,
     familyIdentification,
     pending,
-    error
+    error: errorFetch
   } = await useBeneficiaryDetails(beneficiaryId)
 
   const bindedValues = computed(() => {
@@ -58,7 +56,10 @@
     }
   })
 
-  function onSaveBeneficiary(
+  const router = trpcClient.beneficiary
+  const { mutate, error, status } = router.updateEntourage.useMutation()
+
+  async function onSaveBeneficiary(
     ben: UpdateBeneficiaryEntourageInput,
     target: string | undefined
   ) {
@@ -66,33 +67,17 @@
       return
     }
 
-    const router = trpcClient.beneficiary
-    const updateBeneficiary = router.updateEntourage.useMutation()
-    const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
-    const focusfn = snackbar.focus(
-      '.actions-bar',
-      "button[type='submit']" as FocusHTMLTag
-    )
+    const updated = await mutate(ben)
 
-    useTrpcMutation({
-      mutation: () => updateBeneficiary.mutate(ben),
-      isSubmitting,
-      onSuccess: () => {
-        if (updateBeneficiary.error.value) {
-          snackbar.error(errMessage, focusfn)
-          return
-        }
+    if (error.value || !updated) {
+      snackbar.error(
+        'La mise à jour de la fiche bénéficiaire a échoué.',
+        snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)
+      )
+      return
+    }
 
-        const fileRoute = routes.file.AppFile.path(
-          beneficiary.value?.familyFileId || '',
-          { beneficiaryId: beneficiary.value?.id }
-        )
-        navigateTo(target || fileRoute)
-      },
-      onFailure: () => {
-        snackbar.error(errMessage, focusfn)
-      }
-    })
+    navigateTo(target)
   }
 
   definePageMeta({

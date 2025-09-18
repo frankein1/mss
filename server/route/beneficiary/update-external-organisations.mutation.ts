@@ -27,6 +27,7 @@ const handler = async ({
   const { id, ...externalOrganisations } = input
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
     where: { id },
     data: externalOrganisations
   })

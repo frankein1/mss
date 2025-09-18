@@ -66,6 +66,7 @@ export async function updateEntourage({
   }
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
     where: { id },
     data
   })

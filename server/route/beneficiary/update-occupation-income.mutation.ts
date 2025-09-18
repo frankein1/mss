@@ -32,6 +32,7 @@ const handler = async ({
   const appPermissions = getAppContextPermissions(ctx)
   const data = filterInput({ input, appPermissions })
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
     where: { id: input.id },
     data
   })

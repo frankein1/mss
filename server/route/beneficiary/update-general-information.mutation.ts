@@ -54,6 +54,7 @@ const handler = async ({
   )
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
     where: { id },
     data: {
       ...cleaned,
