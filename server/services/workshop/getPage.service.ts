@@ -147,7 +147,7 @@ const getDateFilter = (filter: GetWorkshopListInput['filter']) => {
         {
           // Handle startTime when the date is today
           date: { equals: todayDate },
-          OR: [{ startTime: { lt: nowString } }, { startTime: null }]
+          startTime: { lt: nowString }
         }
       ]
     }
