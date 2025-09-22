@@ -124,7 +124,7 @@
         {{
           waitingListAlert.beneficiaries.length > 1
             ? 'Un ou plusieurs bénéficiaires ont été ajoutés sur liste d’attente. Regardez dans l’historique pour plus de précisions.'
-            : 'Le bénéficiaire a été ajoutée sur liste d’attente. '
+            : 'Le bénéficiaire a été ajouté sur liste d’attente. '
         }}
       </template>
     </AtomAlert>
@@ -274,7 +274,9 @@
         ).length === 0
       ) {
         modal.close()
-        snackbar.success('Bénéficiaire inscrit aux atelier avec success')
+        snackbar.success(
+          'Bénéficiaire inscrit à un ou plusieurs ateliers avec succès'
+        )
       } else {
         waitingListAlert.value = {
           beneficiaries: values.beneficiaryIds,

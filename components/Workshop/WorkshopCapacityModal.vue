@@ -19,7 +19,7 @@
 
   const message = computed(() => {
     if (isFull) {
-      return 'L’atelier est complet, une ou plusieurs personnes ont été ajouté(s) sur liste d’attente'
+      return 'L’atelier est complet, une ou plusieurs personnes ont été ajoutée(s) sur liste d’attente'
     }
     return 'Une place est disponible. Pensez à transférer quelqu‘un de la liste d‘attente.'
   })
