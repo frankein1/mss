@@ -2,9 +2,12 @@
   <!-- Step 1: Form -->
   <AtomLazyComponent
     v-if="!waitingListAlert"
-    :error="Boolean(fileError)"
-    :pending="filePending"
-    message="Le dossier n'a pas pu être chargé"
+    :error="Boolean(fileError) || Boolean(workshopsError)"
+    :message="
+      fileError
+        ? 'Le dossier n\'a pas pu être chargé'
+        : 'Les ateliers n\'ont pas pu être chargés'
+    "
   >
     <RequiredFields />
     <div class="workshop-add-beneficiary-modal-content">
@@ -152,6 +155,7 @@
     type RegisterBeneficiariesInput
   } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
+  import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -170,11 +174,16 @@
   const matomo = useMatomo()
 
   // Get familyfile informations
-  const {
-    familyFileIdentification,
-    pending: filePending,
-    error: fileError
-  } = await useFamilyFileMinimalInfo(props.familyFileId)
+  const { familyFileIdentification, error: fileError } =
+    await useFamilyFileMinimalInfo(props.familyFileId)
+
+  // get workshop list
+  const { data: futureWorkshops, error: workshopsError } =
+    await trpcClient.workshop.getPage.useQuery({
+      filter: { timeDirection: FilterWorkshopTimeDirection.Future },
+      perPage: -1,
+      page: 1
+    })
 
   const beneficiaryOptions = computed(() =>
     (familyFileIdentification.value || []).map(beneficiary => ({
@@ -182,22 +191,17 @@
       id: beneficiary.id
     }))
   )
-  // get workshop list
-  const { data: futureWorkshops } =
-    await trpcClient.workshop.getAllFuture.useQuery()
 
   const workshopOptions = computed(() => {
-    if (futureWorkshops.value == null || futureWorkshops.value.length === 0) {
+    if (
+      futureWorkshops.value == null ||
+      futureWorkshops.value.items.length === 0
+    ) {
       return []
     }
-    return futureWorkshops.value.map(workshop => {
-      const mainAttendeeLength = workshop.workshopAttendees.filter(
-        attendee => attendee.listType === WorkshopAttendeeListType.Main
-      ).length
-      const isWorkshopFull =
-        workshop.attendeeLimit && mainAttendeeLength >= workshop.attendeeLimit
+    return futureWorkshops.value.items.map(workshop => {
       return {
-        label: `${workshop.workshopName.name} ${workshop.sessionName ? ' – ' + workshop.sessionName : ''} (${formatDate(workshop.date)}) ${isWorkshopFull ? ' (complet)' : ''}`,
+        label: `${workshop.workshopName.name} ${workshop.sessionName ? ' – ' + workshop.sessionName : ''} (${formatDate(workshop.date)}) ${workshop.isFull ? ' (complet)' : ''}`,
         value: workshop.id
       }
     })
@@ -205,7 +209,7 @@
 
   const workshopDisabledOptions: Ref<string[]> = computed(() => {
     if (values.beneficiaryIds && futureWorkshops.value) {
-      return futureWorkshops.value
+      return futureWorkshops.value.items
         .filter(workshop =>
           workshop.workshopAttendees.some(attendee =>
             values.beneficiaryIds.includes(attendee.beneficiaryId as string)

@@ -92,9 +92,7 @@
     if (!workshop.attendeeLimit) {
       return plural(workshop._count.workshopAttendees, 'inscription')
     }
-    const mainAttendeesCount = workshop.workshopAttendees.filter(
-      a => a.listType === WorkshopAttendeeListType.Main
-    ).length
+    const mainAttendeesCount = workshop._count.mainAttendees
     return (
       (mainAttendeesCount >= workshop.attendeeLimit ? 'Complet : ' : '') +
       mainAttendeesCount +

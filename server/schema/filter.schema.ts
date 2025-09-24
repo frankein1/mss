@@ -24,8 +24,10 @@ import { StatPeriodFilter } from '~/types/stat'
 import { FollowupPeriodFilter } from '~/types/followup'
 import {
   FilterBeneficiaryNotFilled,
-  FilterFollowupNotFilled
+  FilterFollowupNotFilled,
+  FilterWorkshopTimeDirection
 } from '~/utils/constants/filters'
+import { WorkshopPeriodFilter } from '~/types/workshop'
 
 const statFilterSchema = z.object({
   helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
@@ -158,6 +160,16 @@ const jobResultAdminFilterSchema = z.object({
 
 type JobResultAdminFilterInput = z.infer<typeof jobResultAdminFilterSchema>
 
+const workshopFilterSchema = z.object({
+  timeDirection: z.nativeEnum(FilterWorkshopTimeDirection).optional(),
+  workshopNameIds: z.array(z.string().uuid()).optional(),
+  period: withEmptyValueOptionalNativeEnum(WorkshopPeriodFilter),
+  fromDate: z.coerce.date().optional(),
+  toDate: z.coerce.date().optional()
+})
+
+type WorkshopFilterInput = z.infer<typeof workshopFilterSchema>
+
 export {
   statFilterSchema,
   beneficiaryFilterSchema,
@@ -166,7 +178,8 @@ export {
   userAdminFilterSchema,
   beneficiaryDocumentFilterSchema,
   emailAdminFilterSchema,
-  jobResultAdminFilterSchema
+  jobResultAdminFilterSchema,
+  workshopFilterSchema
 }
 
 export type {
@@ -178,5 +191,6 @@ export type {
   UserAdminFilterInput,
   BeneficiaryDocumentFilterInput,
   EmailAdminFilterInput,
-  JobResultAdminFilterInput
+  JobResultAdminFilterInput,
+  WorkshopFilterInput
 }
