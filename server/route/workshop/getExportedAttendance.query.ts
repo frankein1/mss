@@ -40,7 +40,7 @@ export const getExportedAttendance = createQuery({
   securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {
-    key: 'export.attendance',
+    key: 'workshop.exportattendance',
     target: 'Workshop',
     targetId: ({ ctx }) => ctx.structure.id,
     action: UserActivityType.EXPORT

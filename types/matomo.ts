@@ -156,7 +156,8 @@ export enum WorkshopAction {
   DeleteWorkshop = 'Supprimer un atelier',
   DuplicateWorkshopAndChangeDateTime = 'Dupliquer un atelier en changeant l‘heure',
   RegisterToOneWorkshop = 'Inscription à un atelier',
-  RegisterToManyWorkshops = 'Inscription à plusieurs ateliers'
+  RegisterToManyWorkshops = 'Inscription à plusieurs ateliers',
+  ExportWorkshops = 'Export de la liste des ateliers'
 }
 
 export type EventAction =

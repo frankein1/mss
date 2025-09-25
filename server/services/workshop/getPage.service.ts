@@ -1,10 +1,10 @@
-import { WorkshopAttendeeListType, type Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { WorkshopRepo } from '~/server/database'
 import type { GetWorkshopListInput } from '~/server/schema/workshop/getWorkshopList.schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { prepareWorkshopFilters } from './helper'
+import { addCountToWorkshop, prepareWorkshopFilters } from './helper'
 
 export const getPage = async ({
   ctx,
@@ -13,10 +13,7 @@ export const getPage = async ({
   ctx: SecurityRuleContext
   input: GetWorkshopListInput
 }) => {
-  const where: Prisma.WorkshopWhereInput = prepareWorkshopFilters(
-    input.filter,
-    ctx.structure.id
-  )
+  const where = prepareWorkshopFilters(input.filter, ctx.structure.id)
 
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
@@ -31,7 +28,7 @@ export const getPage = async ({
   ])
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
-  return { items: formatWorkshops(items), count, totalPages }
+  return { items: items.map(addCountToWorkshop), count, totalPages }
 }
 
 const getWorkshops = async (
@@ -73,28 +70,6 @@ const getWorkshops = async (
         filter.timeDirection === FilterWorkshopTimeDirection.Past
           ? 'desc'
           : 'asc'
-    }
-  })
-}
-
-function formatWorkshops(workshops: Awaited<ReturnType<typeof getWorkshops>>) {
-  return workshops.map(w => {
-    const mainAttendees = w.workshopAttendees.filter(
-      a => a.listType === WorkshopAttendeeListType.Main
-    ).length
-    const waitingAttendeees = Math.max(
-      0,
-      w._count.workshopAttendees - mainAttendees
-    )
-
-    return {
-      ...w,
-      isFull: w.attendeeLimit !== null && mainAttendees >= w.attendeeLimit,
-      _count: {
-        ...w._count,
-        mainAttendees,
-        waitingAttendeees
-      }
     }
   })
 }

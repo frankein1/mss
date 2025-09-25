@@ -34,6 +34,36 @@ export function getListType(nAttendeees: number, attendeeLimit: number | null) {
     : WorkshopAttendeeListType.Main
 }
 
+export function addCountToWorkshop<
+  T extends {
+    attendeeLimit: number | null
+    workshopAttendees: {
+      listType: WorkshopAttendee['listType']
+    }[]
+    _count: {
+      workshopAttendees: number
+    }
+  }
+>(w: T) {
+  const mainAttendees = w.workshopAttendees.filter(
+    a => a.listType === WorkshopAttendeeListType.Main
+  ).length
+  const waitingAttendeees = Math.max(
+    0,
+    w._count.workshopAttendees - mainAttendees
+  )
+
+  return {
+    ...w,
+    isFull: w.attendeeLimit !== null && mainAttendees >= w.attendeeLimit,
+    _count: {
+      ...w._count,
+      mainAttendees,
+      waitingAttendeees
+    }
+  }
+}
+
 interface AttendeeBeneficiary
   extends Omit<WorkshopAttendee, 'workshopExternalAttendeeId'> {
   type: typeof WorkshopAttendeeType.Beneficiary

@@ -12,14 +12,22 @@
       :time-direction
     />
     <template v-else>
-      <p>
-        {{ data?.count }}
-        {{
-          timeDirection === FilterWorkshopTimeDirection.Future
-            ? 'ateliers à venir'
-            : 'ateliers passés'
-        }}
-      </p>
+      <div class="workshop-export">
+        <p class="fr-mb-0">
+          {{ data?.count }}
+          {{
+            timeDirection === FilterWorkshopTimeDirection.Future
+              ? 'ateliers à venir'
+              : 'ateliers passés'
+          }}
+        </p>
+        <ExportDataButton
+          v-if="timeDirection === FilterWorkshopTimeDirection.Past"
+          title="Exporter liste des ateliers (.xlsx)"
+          :is-downloading="false"
+          @export="exportWorkshopList"
+        />
+      </div>
 
       <ul class="workshop-list">
         <li
@@ -62,14 +70,24 @@
 </template>
 
 <script setup lang="ts">
-  import { WORKSHOPS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    INVALID_CODE_ERROR_MESSAGE,
+    WORKSHOPS_REQUEST_LIMIT_DEFAULT
+  } from '~/utils/constants'
   import type { WorkshopsPageItems } from './types'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { isTRPCClientError } from '~/utils/error'
+  import { EventCategory, WorkshopAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
+  const matomo = useMatomo()
   const page = ref(1)
   const perPage = ref(WORKSHOPS_REQUEST_LIMIT_DEFAULT)
   const listFilters = ref({})
+  const isDownloading = ref(false)
   const filters = computed(() => ({ timeDirection, ...listFilters.value }))
   const isFiltered = computed(() => Object.keys(listFilters.value).length > 0)
 
@@ -153,9 +171,46 @@
 
     return result
   }
+
+  // Export workshop list
+  const exportWorkshopList = async (code: string) => {
+    isDownloading.value = true
+
+    try {
+      const exportedFile = await trpcClient.workshop.exportWorkshops.query({
+        code,
+        filter: filters.value
+      })
+      if (!exportedFile.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFile.data)
+      downloadLink.download = getExportFilename('ateliers')
+      downloadLink.click()
+      downloadLink.remove()
+      matomo.trackEvent(EventCategory.Workshop, WorkshopAction.ExportWorkshops)
+
+      useModal().close()
+    } catch (err: unknown) {
+      if (isTRPCClientError(err)) {
+        const msg =
+          err.data?.code === 'FORBIDDEN'
+            ? INVALID_CODE_ERROR_MESSAGE
+            : FAILED_DOWNLOAD_ERROR_MESSAGE
+        useSnackbar().error(msg)
+      } else {
+        useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+      }
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>
 
 <style scoped lang="scss">
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
   .feature-section {
     margin-bottom: 1.5rem;
   }
@@ -171,5 +226,18 @@
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
+  }
+
+  .workshop-export {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+
+    @include dsfr-media-query.respond-from('sm') {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+    }
   }
 </style>
