@@ -14,12 +14,19 @@ import {
   stringOrEmpty
 } from '../helpers.schema'
 
-export const createAttendeeSchema = z.object({
-  workshopId: z.string().uuid(),
-  beneficiaryId: z.string().uuid()
+export const createBeneficiaryAttendeeSchema = z.object({
+  workshopIds: z.array(z.string().uuid().nonempty(), {
+    required_error: 'Veuillez sélectionner au moins un atelier.'
+  }),
+  beneficiaryId: z
+    .string()
+    .uuid()
+    .nonempty({ message: 'Veuillez sélectionner un bénéficiaire.' })
 })
 
-export type CreateAttendeeInput = z.infer<typeof createAttendeeSchema>
+export type CreateBeneficiaryAttendeeInput = z.infer<
+  typeof createBeneficiaryAttendeeSchema
+>
 
 export const updateAttendeeAttendanceSchema = z.object({
   id: z.string().uuid(),

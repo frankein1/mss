@@ -20,6 +20,7 @@ import { toFirstLetterUpperCase } from '../../utils/toFirstLetterUpperCase'
 
 const WORKSHOP_COUNT = 100
 const WORKSHOP_NAME_COUNT = 30
+const MAKE_LONG = false
 
 // Exclude M. Inactif ans S. Tesson as they must be inactive beneficiaries
 const filteredFixtureBeneficiaries = fixturesBeneficiaries.filter(
@@ -39,8 +40,13 @@ const createdById =
 faker.seed(4321)
 
 /** 30% of the time make a long string to test UI rendering of strings */
+
 const makeLong = (el: string) =>
-  Math.random() > 0.7 ? `${el} & ${el} & ${el} & ${el} & ${el}` : el
+  MAKE_LONG
+    ? Math.random() > 0.7
+      ? `${el} & ${el} & ${el} & ${el} & ${el}`
+      : el
+    : el
 
 export const fixturesWorkshopNames = new Array(WORKSHOP_NAME_COUNT)
   .fill(null)

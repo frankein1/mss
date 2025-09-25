@@ -102,7 +102,8 @@
     return workshop.sessionName != null && workshop.sessionName !== ''
   })
 
-  const { mutate, error } = trpcClient.workshop.createAttendee.useMutation()
+  const { mutate, error } =
+    trpcClient.workshop.createBeneficiaryAttendee.useMutation()
 
   const workshopId = route.params.id as string
 
@@ -122,7 +123,7 @@
 
     const created = await mutate({
       beneficiaryId: beneficiary.id,
-      workshopId: workshopId
+      workshopIds: [workshopId]
     })
 
     if (error.value || !created) {

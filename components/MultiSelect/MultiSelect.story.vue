@@ -9,6 +9,28 @@
       :disabled-options="['07', '02', '15', '03', '04']"
     />
 
+    <h4>Multiselect avec bouton suite label</h4>
+    <MultiSelect
+      name="county"
+      label="Rechercher un département"
+      is-searchable
+      :options="allValues"
+      :disabled-options="['07', '02', '15', '03', '04']"
+    >
+      <template #checkbox-after-label="{ option }">
+        <DsfrButton
+          :label="parseInt(option.value) % 2 === 0 ? 'Action' : 'Réaction'"
+          type="button"
+          size="sm"
+          :icon="
+            parseInt(option.value) % 2 === 0
+              ? 'fr-icon-add-line'
+              : 'fr-icon-check-line'
+          "
+        />
+      </template>
+    </MultiSelect>
+
     <h4>Multiselect dans des tabs</h4>
     <AtomTabs
       tab-list-name="Onglets"
@@ -168,12 +190,10 @@
     { value: '976', label: 'Mayotte' }
   ]
 
-  type InitialValue = { [key: string]: boolean }
-
-  const { handleSubmit } = useForm<{ county: InitialValue[] }>({
+  const { handleSubmit } = useForm<{ county: string[] }>({
     validationSchema: null,
     initialValues: {
-      county: [{ '26': true }, { '93': true }]
+      county: ['26', '93']
     }
   })
 

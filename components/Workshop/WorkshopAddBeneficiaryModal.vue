@@ -17,75 +17,44 @@
         @submit.prevent="onSubmit"
       >
         <FormErrors
-          v-if="errors.length > 0"
+          v-if="errors.length > 1"
           :errors="errors"
         />
 
         <template
           v-if="familyFileIdentification && familyFileIdentification.length > 1"
         >
-          <fieldset
-            id="workshop-form-fieldset"
-            class="fr-fieldset"
-            :class="{ 'fr-fieldset--error': familyError }"
-            aria-labelledby="workshop-form-fieldset-legend workshop-form-fieldset-messages"
-          >
-            <legend
-              id="workshop-form-fieldset-legend"
-              class="fr-fieldset__legend--regular fr-fieldset__legend"
-            >
-              Bénéficiaire(s) concerné(s) par l’inscription&nbsp;:
-              <span class="color-red">*</span>
-            </legend>
-            <div
-              v-for="beneficiary in beneficiaryOptions"
-              :key="beneficiary.id"
-              class="fr-fieldset__element"
-            >
-              <div class="fr-checkbox-group">
-                <input
-                  :id="'checkbox-id-' + beneficiary.id"
-                  name="beneficiaryIds"
-                  :value="beneficiary.id"
-                  type="checkbox"
-                  aria-describedby="checkbox-beneficiary-message"
-                  @change="event => onBeneficiaryCheckboxChange(event)"
-                />
-                <label
-                  class="fr-label"
-                  :for="'checkbox-id-' + beneficiary.id"
-                >
-                  {{ beneficiary.label }}
-                </label>
-                <div
-                  id="checkbox-beneficiary-message"
-                  class="fr-messages-group"
-                  aria-live="polite"
-                ></div>
-              </div>
-            </div>
-
-            <div
-              v-if="familyError"
-              id="workshop-form-fieldset-messages"
-              class="fr-messages-group"
-              aria-live="polite"
-            >
-              <p
-                id="workshop-form-message-error"
-                class="fr-message fr-message--error"
-              >
-                Veuillez sélectionner au moins un bénéficiaire.
-              </p>
-            </div>
-          </fieldset>
+          <VeeRadioButtons
+            name="beneficiaryId"
+            label="Bénéficiaire concerné(e) par l’inscription&nbsp;:"
+            :options="beneficiaryOptions"
+            :inline="false"
+            required
+          />
         </template>
         <MultiSelect
           name="workshopIds"
           label="Sélectionnez les ateliers&nbsp;:"
           :options="workshopOptions"
           :disabled-options="workshopDisabledOptions"
-        />
+        >
+          <template #checkbox-after-label="{ option }">
+            <template v-if="workshopDisabledOptions.includes(option.value)">
+              <span
+                :aria-describedby="`tooltip-` + option.value"
+                class="fr-icon--sm fr-icon-information-line"
+                aria-hidden="true"
+              >
+              </span>
+              <span
+                :id="`tooltip-` + option.value"
+                class="fr-tooltip fr-placement"
+                role="tooltip"
+                >Déjà ajouté à l'atelier
+              </span>
+            </template>
+          </template>
+        </MultiSelect>
         <ul
           class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right fr-mt-2w"
         >
@@ -124,11 +93,8 @@
       :closeable="false"
     >
       <template #detailedMessage>
-        {{
-          waitingListAlert.beneficiaries.length > 1
-            ? 'Un ou plusieurs bénéficiaires ont été ajoutés sur liste d’attente. Regardez dans l’historique pour plus de précisions.'
-            : 'Le bénéficiaire a été ajouté sur liste d’attente. '
-        }}
+        Le bénéficiaire a été ajouté sur liste d’attente. Regardez dans la page
+        d'inscription de l'atelier pour plus de précisions.
       </template>
     </AtomAlert>
     <ul
@@ -151,13 +117,13 @@
   import { WorkshopAttendeeListType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import {
-    registerBeneficiariesSchema,
-    type RegisterBeneficiariesInput
+    createBeneficiaryAttendeeSchema,
+    type CreateBeneficiaryAttendeeInput
   } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
-  const props = defineProps<{
+  const { beneficiaryId, familyFileId } = defineProps<{
     beneficiaryId: string
     familyFileId: string
   }>()
@@ -166,16 +132,15 @@
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
   const form = ref<HTMLFormElement | null>(null)
-  const familyError = ref<boolean>(false)
   const waitingListAlert = ref<{
-    beneficiaries: string[]
+    beneficiaryId: string
     workshops: string[]
   } | null>(null)
   const matomo = useMatomo()
 
   // Get familyfile informations
   const { familyFileIdentification, error: fileError } =
-    await useFamilyFileMinimalInfo(props.familyFileId)
+    await useFamilyFileMinimalInfo(familyFileId)
 
   // get workshop list
   const { data: futureWorkshops, error: workshopsError } =
@@ -188,7 +153,7 @@
   const beneficiaryOptions = computed(() =>
     (familyFileIdentification.value || []).map(beneficiary => ({
       label: formatBeneficiaryDisplayName(beneficiary),
-      id: beneficiary.id
+      value: beneficiary.id
     }))
   )
 
@@ -207,59 +172,29 @@
     })
   })
 
+  const { handleSubmit, values } = useForm<CreateBeneficiaryAttendeeInput>({
+    validationSchema: toTypedSchema(createBeneficiaryAttendeeSchema),
+    initialValues: {
+      beneficiaryId
+    }
+  })
+
   const workshopDisabledOptions: Ref<string[]> = computed(() => {
-    if (values.beneficiaryIds && futureWorkshops.value) {
+    if (values.beneficiaryId && futureWorkshops.value) {
       return futureWorkshops.value.items
-        .filter(workshop =>
-          workshop.workshopAttendees.some(attendee =>
-            values.beneficiaryIds.includes(attendee.beneficiaryId as string)
-          )
+        .filter(
+          ({ workshopAttendees }) =>
+            workshopAttendees.findIndex(
+              attendee => values.beneficiaryId === attendee.beneficiaryId
+            ) >= 0
         )
         .map(workshop => workshop.id)
     }
     return []
   })
 
-  // Form management
-  const initialValues = computed(() => {
-    if (
-      familyFileIdentification.value &&
-      familyFileIdentification.value.length === 1
-    ) {
-      return {
-        beneficiaryIds: [props.beneficiaryId]
-      }
-    }
-    return {}
-  })
-
-  const onBeneficiaryCheckboxChange = (event: Event) => {
-    setFieldValue('workshopIds', []) // reset workshops selections
-
-    const input = event.target as HTMLInputElement
-    const initialBeneficiaryIds = values.beneficiaryIds || []
-
-    if (input.checked === true) {
-      setFieldValue('beneficiaryIds', [...initialBeneficiaryIds, input.value])
-      return
-    }
-    const newBeneficiaryIds = initialBeneficiaryIds.filter(
-      id => id !== input.value
-    )
-    if (newBeneficiaryIds.length === 0) {
-      setFieldValue('beneficiaryIds', [])
-      return
-    }
-    setFieldValue('beneficiaryIds', newBeneficiaryIds)
-  }
-
-  const { handleSubmit, setFieldValue, values } =
-    useForm<RegisterBeneficiariesInput>({
-      validationSchema: toTypedSchema(registerBeneficiariesSchema),
-      initialValues: initialValues.value
-    })
-  const router = trpcClient.workshop
-  const { mutate, error, status } = router.registerBeneficiaries.useMutation()
+  const { mutate, error, status } =
+    trpcClient.workshop.createBeneficiaryAttendee.useMutation()
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
@@ -283,7 +218,7 @@
         )
       } else {
         waitingListAlert.value = {
-          beneficiaries: values.beneficiaryIds,
+          beneficiaryId: values.beneficiaryId,
           workshops: values.workshopIds
         }
       }
@@ -298,16 +233,8 @@
 
   // Error management
   const { errors } = useDisplayFormErrors(form, caughtErrors, {
-    beneficiaryIds: 'Bénéficiaire(s)',
+    beneficiaryId: 'Bénéficiaire',
     workshopIds: 'Atelier(s)'
-  })
-
-  watch(caughtErrors, () => {
-    if (caughtErrors.value.beneficiaryIds != null) {
-      familyError.value = true
-      return
-    }
-    familyError.value = false
   })
 </script>
 

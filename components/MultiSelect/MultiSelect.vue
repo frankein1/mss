@@ -104,7 +104,22 @@
                     @change-value="handleOptionToggle(option)"
                     @handle-key-down="handleFocusNextCheckbox"
                     @handle-key-up="handleFocusPreviousCheckbox"
-                  />
+                  >
+                    <template #checkbox-label>
+                      <slot
+                        name="checkbox-label"
+                        :option
+                      >
+                        {{ option.label }}
+                      </slot>
+                    </template>
+                    <template #checkbox-after-label>
+                      <slot
+                        name="checkbox-after-label"
+                        :option
+                      ></slot>
+                    </template>
+                  </MultiSelectCheckbox>
                 </div>
               </fieldset>
             </div>

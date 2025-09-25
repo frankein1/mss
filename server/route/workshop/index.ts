@@ -1,4 +1,4 @@
-import { createAttendee } from './create-attendee.mutation'
+import { createBeneficiaryAttendee } from './create-beneficiary-attendee.mutation'
 import { createExternalAttendee } from './create-external-attendee.mutation'
 import { createWorkshop } from './create.mutation'
 import { getPageQuery } from './getPage.query'
@@ -10,7 +10,6 @@ import { updateAttendeeAttendance } from './update-attendee-attendance.mutation'
 import { deleteAttendee } from './delete-attendee.mutation'
 import { getExportedAttendance } from './getExportedAttendance.query'
 import { updateAttendeeListType } from './update-attendee-list-type.mutation'
-import { registerBeneficiaries } from './registerBeneficiaries.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
@@ -19,11 +18,10 @@ export const workshopRoutes = {
   getQuery,
   deleteWorkshop,
   updateWorkshop,
-  createAttendee,
+  createBeneficiaryAttendee,
   createExternalAttendee,
   deleteAttendee,
   updateAttendeeAttendance,
   getExportedAttendance,
-  updateAttendeeListType,
-  registerBeneficiaries
+  updateAttendeeListType
 }

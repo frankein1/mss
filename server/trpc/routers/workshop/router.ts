@@ -20,9 +20,9 @@ export const workshopRouter = router({
   updateWorkshop: protectedProcedure
     .input(routes.updateWorkshop.inputValidation)
     .mutation(routes.updateWorkshop.execute),
-  createAttendee: protectedProcedure
-    .input(routes.createAttendee.inputValidation)
-    .mutation(routes.createAttendee.execute),
+  createBeneficiaryAttendee: protectedProcedure
+    .input(routes.createBeneficiaryAttendee.inputValidation)
+    .mutation(routes.createBeneficiaryAttendee.execute),
   createExternalAttendee: protectedProcedure
     .input(routes.createExternalAttendee.inputValidation)
     .mutation(routes.createExternalAttendee.execute),
@@ -37,8 +37,5 @@ export const workshopRouter = router({
     .mutation(routes.updateAttendeeAttendance.execute),
   getExportedAttendance: protectedProcedure
     .input(routes.getExportedAttendance.inputValidation)
-    .query(routes.getExportedAttendance.execute),
-  registerBeneficiaries: protectedProcedure
-    .input(routes.registerBeneficiaries.inputValidation)
-    .mutation(routes.registerBeneficiaries.execute)
+    .query(routes.getExportedAttendance.execute)
 })

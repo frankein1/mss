@@ -4,7 +4,12 @@ import type {
   WorkshopAttendee,
   WorkshopExternalAttendee
 } from '@prisma/client'
-import { BeneficiaryTitle, Gender, WorkshopAttendeeType } from '@prisma/client'
+import {
+  BeneficiaryTitle,
+  Gender,
+  WorkshopAttendeeListType,
+  WorkshopAttendeeType
+} from '@prisma/client'
 import dayjs from 'dayjs'
 import type { WorkshopFilterInput } from '~/server/schema'
 import { WorkshopPeriodFilter } from '~/types/workshop'
@@ -21,6 +26,12 @@ const getGenderFromTitle = (title: BeneficiaryTitle | null | undefined) => {
     return Gender.Male
   }
   return Gender.Other
+}
+
+export function getListType(nAttendeees: number, attendeeLimit: number | null) {
+  return attendeeLimit !== null && nAttendeees >= attendeeLimit
+    ? WorkshopAttendeeListType.Waiting
+    : WorkshopAttendeeListType.Main
 }
 
 interface AttendeeBeneficiary

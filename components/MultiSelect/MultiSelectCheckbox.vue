@@ -16,8 +16,10 @@
     class="fr-label"
     :class="{ 'label-disabled': disabled }"
     :for="option.value"
-    >{{ option.label }}</label
   >
+    <slot name="checkbox-label">{{ option.label }}</slot>
+  </label>
+  <slot name="checkbox-after-label"></slot>
 </template>
 
 <script setup lang="ts">
