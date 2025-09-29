@@ -7,6 +7,10 @@
   "dockerfile": {
     "enabled": false
   },
+  "lockFileMaintenance": {
+    "enabled": false,
+    "recreateWhen": "never"
+  },
   "ignoreDeps": ["pnpm", "h3", "html-to-image", "@nuxt/test-utils"],
   "packageRules": [
     {
