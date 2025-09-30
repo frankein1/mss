@@ -1,7 +1,10 @@
 import type {
   BeneficiaryMobility,
   BeneficiaryStatus,
-  Gender
+  FollowupMedium,
+  Gender,
+  Prisma,
+  SocialSupportStatus
 } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
@@ -9,7 +12,11 @@ import type { ArrayElement } from '~/types/utils'
 
 const prismaClient = new PrismaClient()
 const STRUCTURE_COUNT = 200
+// if USERS_PER_STRUCTURE is null use Jeanne Responsable
+const USERS_PER_STRUCTURE: number | null = null
 const FAMILY_FILE_PER_STRUCTURE_COUNT = 1000
+// if SOCIAL_SUPPORTS_PER_STRUCTURE is null do not create social supports
+const SOCIAL_SUPPORTS_PER_STRUCTURE: number | null = null
 
 type SocialSupportSubjectsCreateInput = Omit<
   ArrayElement<
@@ -44,59 +51,52 @@ const socialSupportSubjects: SocialSupportSubjectsCreateInput[] = [
   }
 ]
 
+function equiRandomEnum<T>(enums: T[]) {
+  const index = faker.number.int({ min: 0, max: enums.length - 1 })
+  return enums[index] as T
+}
+
 function randomStatus(): BeneficiaryStatus {
-  const int = faker.number.int({ min: 0, max: 10 })
-  if (int === 0) {
-    return 'Archived'
-  }
-  if (int === 1) {
-    return 'Deceased'
-  }
-  if (int === 2 || int === 3) {
-    return 'Inactive'
-  }
-  return 'Active'
+  return equiRandomEnum([
+    'Archived',
+    'Deceased',
+    'Inactive',
+    'Inactive',
+    'Active'
+  ])
 }
 function randomGender(): Gender {
-  const int = faker.number.int({ min: 0, max: 2 })
-  if (int === 0) {
-    return 'Male'
-  }
-  if (int === 1) {
-    return 'Female'
-  }
-  return 'Other'
+  return equiRandomEnum(['Male', 'Female', 'Other'])
 }
 function randomMobility(): BeneficiaryMobility {
-  const int = faker.number.int({ min: 0, max: 9 })
-  if (int === 0) {
-    return 'PermitWithVehicle'
-  }
-  if (int === 1) {
-    return 'PermitWithoutVehicle'
-  }
-  if (int === 2) {
-    return 'Code'
-  }
-  if (int === 3) {
-    return 'PermitPending'
-  }
-  if (int === 4) {
-    return 'OtherPermit'
-  }
-  if (int === 5) {
-    return 'PublicTransport'
-  }
-  if (int === 6) {
-    return 'BikeOrEquivalent'
-  }
-  if (int === 7) {
-    return 'InvalidPermit'
-  }
-  if (int === 8) {
-    return 'VehicleWithoutPermit'
-  }
-  return 'None'
+  return equiRandomEnum([
+    'PermitWithVehicle',
+    'PermitWithoutVehicle',
+    'Code',
+    'PermitPending',
+    'OtherPermit',
+    'PublicTransport',
+    'BikeOrEquivalent',
+    'InvalidPermit',
+    'VehicleWithoutPermit',
+    'None'
+  ])
+}
+function randomMedium(): FollowupMedium {
+  return equiRandomEnum([
+    'PlannedInPerson',
+    'UnplannedInPerson',
+    'PhoneCall',
+    'BeneficiaryHouseAppointment',
+    'ExternalAppointment',
+    'PostalMail',
+    'Email',
+    'Videoconference',
+    'ThirdParty'
+  ])
+}
+function randomFollowupStatus(): SocialSupportStatus {
+  return equiRandomEnum(['Todo', 'InProgress', 'Done'])
 }
 
 async function main() {
@@ -115,11 +115,39 @@ async function main() {
       }
     })
 
-    if (i === 0) {
-      console.log('Linking Jeanne Responsable to a structure...')
-      await prismaClient.user.update({
-        data: { structureId: structure.id },
-        where: { id: ID_JEANNE_RESPONSABLE }
+    let users: { id: string }[] = []
+
+    if (USERS_PER_STRUCTURE === null) {
+      if (i === 0) {
+        console.log('Linking Jeanne Responsable to a structure...')
+        await prismaClient.user.update({
+          data: { structureId: structure.id },
+          where: { id: ID_JEANNE_RESPONSABLE }
+        })
+      }
+    } else {
+      const data = new Array(USERS_PER_STRUCTURE).fill(null).map(() => {
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
+        const email = `${faker.string.ulid()}${faker.internet.email({
+          firstName,
+          lastName,
+          allowSpecialCharacters: true
+        })}`
+        return {
+          structureId: structure.id,
+          firstName,
+          lastName,
+          email,
+          role: 'Referent' as const,
+          status: 'Active' as const,
+          lastAccess: faker.date.between({ from: '2022-01-01', to: new Date() })
+        } satisfies Prisma.UserCreateManyInput
+      })
+
+      users = await prismaClient.user.createManyAndReturn({
+        select: { id: true },
+        data
       })
     }
 
@@ -129,13 +157,14 @@ async function main() {
       }))
     })
 
-    await Promise.all([
+    const [_, beneficiaries, __] = await Promise.all([
       prismaClient.budget.createMany({
         data: families.map(({ id }) => ({
           familyFileId: id
         }))
       }),
-      prismaClient.beneficiary.createMany({
+      prismaClient.beneficiary.createManyAndReturn({
+        select: { id: true, familyFileId: true },
         data: families.map(({ id }) => ({
           firstName: faker.person.firstName(),
           birthName: faker.person.lastName(),
@@ -156,12 +185,52 @@ async function main() {
         }))
       }),
       prismaClient.user.update({
-        where: { id: ID_JEANNE_RESPONSABLE },
+        where: { id: users[0]?.id || ID_JEANNE_RESPONSABLE },
         data: {
           referentFor: { connect: families }
         }
       })
     ])
+
+    if (SOCIAL_SUPPORTS_PER_STRUCTURE !== null && beneficiaries[0]) {
+      const beneficiaryId = beneficiaries[0].id
+      const familyFileId = beneficiaries[0].familyFileId
+      const data = new Array(SOCIAL_SUPPORTS_PER_STRUCTURE)
+        .fill(null)
+        .map(() => ({
+          createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+          lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+          beneficiaryId,
+          familyFileId,
+          socialSupportType: 'Followup' as const,
+          structureId: structure.id,
+          status: randomFollowupStatus(),
+          date: faker.date.between({ from: '2022-01-01', to: new Date() })
+        }))
+
+      const supports = await prismaClient.socialSupport.createManyAndReturn({
+        select: { id: true },
+        data
+      })
+
+      await Promise.all([
+        prismaClient.followup.createMany({
+          data: supports.map(({ id }) => ({
+            socialSupportId: id,
+            medium: randomMedium()
+          }))
+        }),
+        prismaClient.socialSupportSubject.update({
+          where: {
+            name_ownedByStructureId: {
+              name: socialSupportSubjects[0]?.name as string,
+              ownedByStructureId: structure.id
+            }
+          },
+          data: { socialSupports: { connect: supports } }
+        })
+      ])
+    }
   }
 }
 
