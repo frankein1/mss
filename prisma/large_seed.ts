@@ -107,6 +107,7 @@ async function main() {
         type: 'Ccas',
         name: faker.company.name(),
         zipcode: faker.location.zipCode(),
+        siret: '12345678901234',
         city: faker.location.city(),
         address: faker.location.streetAddress(),
         phone: faker.phone.number(),
