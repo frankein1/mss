@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.49.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.48.0...v1.49.0) (2025-09-30)
+
+
+### Features
+
+* **api:** ajout info activité utilisateur API Métriques ([d99123d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d99123dfe06a2a3b174db3328aa4df49954a89f4)), closes [#921](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/921)
+* **api:** fusion des résultats pour les structures ayant le même siret ([7ad7f63](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7ad7f63769d6a8fab242567222fee56f7f8f06ee)), closes [#921](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/921)
+* **atelier:** dupliquer un atelier ([0af3099](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0af30992429e0c61db77448f4c743f3ee1a487a1))
+* **atelier:** gestion de la liste d'attente ([63b6c94](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/63b6c9435b45dc6604c0f90694da5dab1963d9e5))
+* **ateliers:** ajout de bénéficiaires à un ou plusieurs atelier depuis page bénéficiaire ([b29a9cb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b29a9cb0c80f53597659bbf06d1a3fbeb3d4cb0e)), closes [#897](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/897)
+* **ateliers:** export des ateliers passés ([7588406](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/75884062b6e53ad099ea07b14b1e82e27a467327))
+
+
+### Bug Fixes
+
+* **admin:** ouverture des pages structures dans nv onglet ([88f3d33](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/88f3d331f03098a88381724714f4a6d71baffd3a))
+* **api:** correction timeout api indicateurs ([544ac3b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/544ac3bd1dc11b0a3c67d69bccd0045a49432613)), closes [#903](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/903)
+* **atelier:** Info participations de la page atelier ([7c743f9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c743f96016d8d18717ff10c2e2b247afb5bedd8)), closes [#913](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/913)
+* **beneficiaire:** redirections cassées des tabs du foyer ([76ba9dc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/76ba9dc069fa24a710e87f3b35123a2b3083afa5)), closes [/github.com/nuxt/nuxt/issues/22663#issuecomment-1680734388](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//github.com/nuxt/nuxt/issues/22663/issues/issuecomment-1680734388) [#908](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/908)
+* **layout:** aligner les boutons des tuiles historique à droite ([61f4346](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/61f43469f5eb2a05c9c20f159069181684a1eaee))
+* **sso:** réapplique corrections et revient au rafrachissement de sesion antérieur ([36833d0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/36833d0a307f9216d97abd8cd28356513ecddad1))
+* **ui:** correction de priorité css sur icone option de participant ([a5f474e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a5f474e9e6e04349c9445cbb4b55393864db4d4b))
+* **workshop:** ajout bénéficiaire unique à un atelier depuis la fiche bénéficiaire ([5ed9f91](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5ed9f917c6e22f2c061b67e98ff1d0b7d0e99fea)), closes [#917](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/917)
+* **workshop:** désactivation export ateliers passés ([b5cd542](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b5cd542497b0e29b3e4c6659824f2948b9a2cc81))
+* **workshop:** diverses amélioration de l'ui ([ad54042](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ad540420edb3b5c4ef88bd9b5831c60fbbc8d96d))
+* **workshop:** fix attendance status badge ([ac8a8c1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ac8a8c1af8a81be45e84d892569c16cbc58dcdc1))
+* **workshop:** fix attendee count db constraints ([a4f1c51](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a4f1c5183dc79187688ef9132afeec3860deaef9))
+* **workshop:** fix attendee limit deletion ([f96461c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f96461c9dd95b172aaed444cfdfaa9a81239971e))
+* **workshop:** fix list date filtering ([6a53aae](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6a53aae7aaf248df5ab576e839e0b9ab1ba6d325))
+* **workshop:** fix success messages' typos ([26a5a0f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/26a5a0f09c4f598d847ce1f648f5a41cfe347b86))
+* **workshop:** fix waiting list display ([69fc7ff](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/69fc7fffdb1f3e8acf72ea1088a37bab37a48fe9))
+* **workshop:** supression du nom d'atelier à la modification si nom d'atelier devient orphelin ([69c2796](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/69c279640c1341927cf85fedf980fa79d6783e8c)), closes [#910](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/910)
+
 ## [1.48.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.47.0...v1.48.0) (2025-09-01)
 
 
