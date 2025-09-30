@@ -1,12 +1,12 @@
 <template>
   <div class="fr-col-12">
-    <h4>Multiselect</h4>
+    <h4>Multiselect défaut</h4>
     <MultiSelect
       name="county"
       label="Rechercher un département"
       is-searchable
       :options="allValues"
-      :disabled-options="['07', '02', '15', '03', '04']"
+      :disabled-options="['d07', 'd02', 'd15', 'd03', 'd04']"
     />
 
     <h4>Multiselect avec bouton suite label</h4>
@@ -15,7 +15,7 @@
       label="Rechercher un département"
       is-searchable
       :options="allValues"
-      :disabled-options="['07', '02', '15', '03', '04']"
+      :disabled-options="['d07', 'd02', 'd15', 'd03', 'd04']"
     >
       <template #checkbox-after-label="{ option }">
         <DsfrButton
@@ -30,6 +30,20 @@
         />
       </template>
     </MultiSelect>
+
+    <h4>Multiselect dans modale</h4>
+    <AtomModal />
+    <DsfrButton
+      label="Ouverture modale"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      @click="
+        modal.open(ModalStory, {
+          title: 'Modale contenant multiselect',
+          options: allValues.splice(0, 10)
+        })
+      "
+    />
 
     <h4>Multiselect dans des tabs</h4>
     <AtomTabs
@@ -70,8 +84,10 @@
 <script setup lang="ts">
   import type { Options } from '~/utils/options'
   import { useForm } from 'vee-validate'
+  import ModalStory from '~/components/MultiSelect/modal.story.vue'
 
   const form = ref<HTMLFormElement | null>(null)
+  const modal = useModal()
 
   const tabTitles = [
     {
@@ -89,111 +105,111 @@
   ]
 
   const allValues: Options = [
-    { value: '01', label: 'Ain' },
-    { value: '02', label: 'Aisne' },
-    { value: '03', label: 'Allier' },
-    { value: '04', label: 'Alpes-de-Haute-Provence' },
-    { value: '05', label: 'Hautes-Alpes' },
-    { value: '06', label: 'Alpes-Maritimes' },
-    { value: '07', label: 'Ardèche' },
-    { value: '08', label: 'Ardennes' },
-    { value: '09', label: 'Ariège' },
-    { value: '10', label: 'Aube' },
-    { value: '11', label: 'Aude' },
-    { value: '12', label: 'Aveyron' },
-    { value: '13', label: 'Bouches-du-Rhône' },
-    { value: '14', label: 'Calvados' },
-    { value: '15', label: 'Cantal' },
-    { value: '16', label: 'Charente' },
-    { value: '17', label: 'Charente-Maritime' },
-    { value: '18', label: 'Cher' },
-    { value: '19', label: 'Corrèze' },
-    { value: '21', label: "Côte-d'Or" },
-    { value: '22', label: "Côtes-d'Armor" },
-    { value: '23', label: 'Creuse' },
-    { value: '24', label: 'Dordogne' },
-    { value: '25', label: 'Doubs' },
-    { value: '26', label: 'Drôme' },
-    { value: '27', label: 'Eure' },
-    { value: '28', label: 'Eure-et-Loir' },
-    { value: '29', label: 'Finistère' },
-    { value: '30', label: 'Gard' },
-    { value: '31', label: 'Haute-Garonne' },
-    { value: '32', label: 'Gers' },
-    { value: '33', label: 'Gironde' },
-    { value: '34', label: 'Hérault' },
-    { value: '35', label: 'Ille-et-Vilaine' },
-    { value: '36', label: 'Indre' },
-    { value: '37', label: 'Indre-et-Loire' },
-    { value: '38', label: 'Isère' },
-    { value: '39', label: 'Jura' },
-    { value: '40', label: 'Landes' },
-    { value: '41', label: 'Loir-et-Cher' },
-    { value: '42', label: 'Loire' },
-    { value: '43', label: 'Haute-Loire' },
-    { value: '44', label: 'Loire-Atlantique' },
-    { value: '45', label: 'Loiret' },
-    { value: '46', label: 'Lot' },
-    { value: '47', label: 'Lot-et-Garonne' },
-    { value: '48', label: 'Lozère' },
-    { value: '49', label: 'Maine-et-Loire' },
-    { value: '50', label: 'Manche' },
-    { value: '51', label: 'Marne' },
-    { value: '52', label: 'Haute-Marne' },
-    { value: '53', label: 'Mayenne' },
-    { value: '54', label: 'Meurthe-et-Moselle' },
-    { value: '55', label: 'Meuse' },
-    { value: '56', label: 'Morbihan' },
-    { value: '57', label: 'Moselle' },
-    { value: '58', label: 'Nièvre' },
-    { value: '59', label: 'Nord' },
-    { value: '60', label: 'Oise' },
-    { value: '61', label: 'Orne' },
-    { value: '62', label: 'Pas-de-Calais' },
-    { value: '63', label: 'Puy-de-Dôme' },
-    { value: '64', label: 'Pyrénées-Atlantiques' },
-    { value: '65', label: 'Hautes-Pyrénées' },
-    { value: '66', label: 'Pyrénées-Orientales' },
-    { value: '67', label: 'Bas-Rhin' },
-    { value: '68', label: 'Haut-Rhin' },
-    { value: '69', label: 'Rhône' },
-    { value: '70', label: 'Haute-Saône' },
-    { value: '71', label: 'Saône-et-Loire' },
-    { value: '72', label: 'Sarthe' },
-    { value: '73', label: 'Savoie' },
-    { value: '74', label: 'Haute-Savoie' },
-    { value: '75', label: 'Paris' },
-    { value: '76', label: 'Seine-Maritime' },
-    { value: '77', label: 'Seine-et-Marne' },
-    { value: '78', label: 'Yvelines' },
-    { value: '79', label: 'Deux-Sèvres' },
-    { value: '80', label: 'Somme' },
-    { value: '81', label: 'Tarn' },
-    { value: '82', label: 'Tarn-et-Garonne' },
-    { value: '83', label: 'Var' },
-    { value: '84', label: 'Vaucluse' },
-    { value: '85', label: 'Vendée' },
-    { value: '86', label: 'Vienne' },
-    { value: '87', label: 'Haute-Vienne' },
-    { value: '88', label: 'Vosges' },
-    { value: '89', label: 'Yonne' },
-    { value: '90', label: 'Territoire de Belfort' },
-    { value: '91', label: 'Essonne' },
-    { value: '92', label: 'Hauts-de-Seine' },
-    { value: '93', label: 'Seine-Saint-Denis' },
-    { value: '94', label: 'Val-de-Marne' },
-    { value: '95', label: "Val-d'Oise" },
-    { value: '971', label: 'Guadeloupe' },
-    { value: '972', label: 'Martinique' },
-    { value: '973', label: 'Guyane' },
-    { value: '974', label: 'La Réunion' },
-    { value: '976', label: 'Mayotte' }
+    { value: 'd01', label: 'Ain' },
+    { value: 'd02', label: 'Aisne' },
+    { value: 'd03', label: 'Allier' },
+    { value: 'd04', label: 'Alpes-de-Haute-Provence' },
+    { value: 'd05', label: 'Hautes-Alpes' },
+    { value: 'd06', label: 'Alpes-Maritimes' },
+    { value: 'd07', label: 'Ardèche' },
+    { value: 'd08', label: 'Ardennes' },
+    { value: 'd09', label: 'Ariège' },
+    { value: 'd10', label: 'Aube' },
+    { value: 'd11', label: 'Aude' },
+    { value: 'd12', label: 'Aveyron' },
+    { value: 'd13', label: 'Bouches-du-Rhône' },
+    { value: 'd14', label: 'Calvados' },
+    { value: 'd15', label: 'Cantal' },
+    { value: 'd16', label: 'Charente' },
+    { value: 'd17', label: 'Charente-Maritime' },
+    { value: 'd18', label: 'Cher' },
+    { value: 'd19', label: 'Corrèze' },
+    { value: 'd21', label: "Côte-d'Or" },
+    { value: 'd22', label: "Côtes-d'Armor" },
+    { value: 'd23', label: 'Creuse' },
+    { value: 'd24', label: 'Dordogne' },
+    { value: 'd25', label: 'Doubs' },
+    { value: 'd26', label: 'Drôme' },
+    { value: 'd27', label: 'Eure' },
+    { value: 'd28', label: 'Eure-et-Loir' },
+    { value: 'd29', label: 'Finistère' },
+    { value: 'd30', label: 'Gard' },
+    { value: 'd31', label: 'Haute-Garonne' },
+    { value: 'd32', label: 'Gers' },
+    { value: 'd33', label: 'Gironde' },
+    { value: 'd34', label: 'Hérault' },
+    { value: 'd35', label: 'Ille-et-Vilaine' },
+    { value: 'd36', label: 'Indre' },
+    { value: 'd37', label: 'Indre-et-Loire' },
+    { value: 'd38', label: 'Isère' },
+    { value: 'd39', label: 'Jura' },
+    { value: 'd40', label: 'Landes' },
+    { value: 'd41', label: 'Loir-et-Cher' },
+    { value: 'd42', label: 'Loire' },
+    { value: 'd43', label: 'Haute-Loire' },
+    { value: 'd44', label: 'Loire-Atlantique' },
+    { value: 'd45', label: 'Loiret' },
+    { value: 'd46', label: 'Lot' },
+    { value: 'd47', label: 'Lot-et-Garonne' },
+    { value: 'd48', label: 'Lozère' },
+    { value: 'd49', label: 'Maine-et-Loire' },
+    { value: 'd50', label: 'Manche' },
+    { value: 'd51', label: 'Marne' },
+    { value: 'd52', label: 'Haute-Marne' },
+    { value: 'd53', label: 'Mayenne' },
+    { value: 'd54', label: 'Meurthe-et-Moselle' },
+    { value: 'd55', label: 'Meuse' },
+    { value: 'd56', label: 'Morbihan' },
+    { value: 'd57', label: 'Moselle' },
+    { value: 'd58', label: 'Nièvre' },
+    { value: 'd59', label: 'Nord' },
+    { value: 'd60', label: 'Oise' },
+    { value: 'd61', label: 'Orne' },
+    { value: 'd62', label: 'Pas-de-Calais' },
+    { value: 'd63', label: 'Puy-de-Dôme' },
+    { value: 'd64', label: 'Pyrénées-Atlantiques' },
+    { value: 'd65', label: 'Hautes-Pyrénées' },
+    { value: 'd66', label: 'Pyrénées-Orientales' },
+    { value: 'd67', label: 'Bas-Rhin' },
+    { value: 'd68', label: 'Haut-Rhin' },
+    { value: 'd69', label: 'Rhône' },
+    { value: 'd70', label: 'Haute-Saône' },
+    { value: 'd71', label: 'Saône-et-Loire' },
+    { value: 'd72', label: 'Sarthe' },
+    { value: 'd73', label: 'Savoie' },
+    { value: 'd74', label: 'Haute-Savoie' },
+    { value: 'd75', label: 'Paris' },
+    { value: 'd76', label: 'Seine-Maritime' },
+    { value: 'd77', label: 'Seine-et-Marne' },
+    { value: 'd78', label: 'Yvelines' },
+    { value: 'd79', label: 'Deux-Sèvres' },
+    { value: 'd80', label: 'Somme' },
+    { value: 'd81', label: 'Tarn' },
+    { value: 'd82', label: 'Tarn-et-Garonne' },
+    { value: 'd83', label: 'Var' },
+    { value: 'd84', label: 'Vaucluse' },
+    { value: 'd85', label: 'Vendée' },
+    { value: 'd86', label: 'Vienne' },
+    { value: 'd87', label: 'Haute-Vienne' },
+    { value: 'd88', label: 'Vosges' },
+    { value: 'd89', label: 'Yonne' },
+    { value: 'd90', label: 'Territoire de Belfort' },
+    { value: 'd91', label: 'Essonne' },
+    { value: 'd92', label: 'Hauts-de-Seine' },
+    { value: 'd93', label: 'Seine-Saint-Denis' },
+    { value: 'd94', label: 'Val-de-Marne' },
+    { value: 'd95', label: "Val-d'Oise" },
+    { value: 'd971', label: 'Guadeloupe' },
+    { value: 'd972', label: 'Martinique' },
+    { value: 'd973', label: 'Guyane' },
+    { value: 'd974', label: 'La Réunion' },
+    { value: 'd976', label: 'Mayotte' }
   ]
 
   const { handleSubmit } = useForm<{ county: string[] }>({
     validationSchema: null,
     initialValues: {
-      county: ['26', '93']
+      county: ['d26', 'd93']
     }
   })
 

@@ -21,12 +21,6 @@
               : 'ateliers passés'
           }}
         </p>
-        <ExportDataButton
-          v-if="timeDirection === FilterWorkshopTimeDirection.Past"
-          title="Exporter liste des ateliers (.xlsx)"
-          :is-downloading="false"
-          @export="exportWorkshopList"
-        />
       </div>
 
       <ul class="workshop-list">

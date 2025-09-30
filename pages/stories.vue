@@ -9,19 +9,19 @@
         <VeeComboboxStory />
       </div>
 
-      <h2 class="fr-col-12">Multiselect + tags</h2>
+      <h2 class="fr-col-12">Multiselect (legacy)</h2>
       <div class="fr-col-12">
         <VeeMultiselectStory />
       </div>
 
-      <h2 class="fr-col-12">Multiselect 2</h2>
+      <h2 class="fr-col-12">Multiselect</h2>
       <div class="fr-col-12">
         <MultiSelectStory />
       </div>
 
       <h2 class="fr-col-12">Wysiwyg editor</h2>
       <div class="fr-col-12">
-        <AtomTextEditor />
+        <AtomTextEditor name="editor" />
       </div>
 
       <h2 class="fr-col-12">Tables</h2>
