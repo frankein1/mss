@@ -39,7 +39,8 @@ const handler = async ({
       where: {
         ...workshopFilters,
         date: {
-          lte: new Date(Math.min(now, dateFilters?.lte?.getTime() ?? Infinity))
+          lte: new Date(Math.min(now, dateFilters?.lte?.getTime() ?? Infinity)),
+          gte: dateFilters?.gte
         },
         structureId: structure.id
       }

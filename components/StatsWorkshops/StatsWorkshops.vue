@@ -58,6 +58,7 @@
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="workshopCardConfig.attendance.id"
         :card-name="workshopCardConfig.attendance.name"
+        :card-subtitle="workshopCardConfig.attendance.subtitle"
       >
         <StatsWorkshopAttendance :filters="filters" />
       </StatsCard>
@@ -90,6 +91,7 @@
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="workshopCardConfig.cities.id"
         :card-name="workshopCardConfig.cities.name"
+        :card-subtitle="workshopCardConfig.cities.subtitle"
       >
         <StatsWorkshopAttendeeCities :filters="filters" />
       </StatsCard>
@@ -165,7 +167,7 @@
   const workshopCardConfig = {
     workshopName: {
       id: 'stats-workshop-name',
-      name: 'Ateliers'
+      name: 'Nombre d‘ateliers'
     },
     partners: {
       id: 'stats-workshop-partners',
@@ -173,7 +175,8 @@
     },
     attendance: {
       id: 'stats-attendance',
-      name: 'Participation'
+      name: 'Présences',
+      subtitle: 'Seuls les ateliers passés sont pris en compte.'
     },
     gender: {
       id: 'stats-attendees-gender',
@@ -185,7 +188,8 @@
     },
     cities: {
       id: 'stats-attendees-cities',
-      name: 'Villes'
+      name: 'Villes',
+      subtitle: 'Ville renseignée dans l’adresse du bénéficiaire.'
     }
   }
 

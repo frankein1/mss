@@ -27,6 +27,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { StatsListPropType } from '~/types/stat'
   import { routes } from '~/utils/routes'
+  import { STATS_NULL_KEY, STATS_NULL_LABEL } from '~/utils/constants/stats'
 
   const props = defineProps<{
     filters: StatFilterInput
@@ -45,9 +46,9 @@
         throw new Error('no data')
       }
       workshopPartnerStats.value = data.map(({ id, name, _count }) => ({
-        key: id,
-        label: name,
-        count: _count.workshops
+        key: id ?? STATS_NULL_KEY,
+        label: name ?? STATS_NULL_LABEL,
+        count: _count
       }))
     } catch (err: unknown) {
       console.error(err)

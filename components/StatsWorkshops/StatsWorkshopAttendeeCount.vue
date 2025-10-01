@@ -9,12 +9,12 @@
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de participants aux ateliers n'ont pas pu être chargées."
     />
-    <template v-else>
+    <p v-else>
       <span class="title-blue fr-h1">{{ mainAttendeeCount }}&nbsp;</span>
-      <span class="fr-h5">inscriptions&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;</span>
+      <span class="fr-h5">inscriptions&nbsp;+&nbsp;</span>
       <span class="title-blue fr-h4">{{ waitingAttendeeCount }}&nbsp;</span>
       <strong>sur liste d‘attente</strong>
-    </template>
+    </p>
   </div>
 </template>
 

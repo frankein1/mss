@@ -4,7 +4,7 @@ import type { WorkshopStatFilterInput } from '~/server/schema'
 import { workshopStatFilterSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { PartnerOrganizationRepo } from '~/server/database'
+import { PartnerOrganizationRepo, WorkshopRepo } from '~/server/database'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
@@ -20,20 +20,35 @@ const handler = async ({
   const { partnerOrganizationId, ...workshopFilters } =
     prepareWorkshopStatFilters(input)
 
-  return PartnerOrganizationRepo.findMany(user, {
-    select: {
-      id: true,
-      name: true,
-      _count: { select: { workshops: { where: workshopFilters } } }
-    },
-    where: {
-      id: { in: input.partnerOrganizationIds },
-      structureId: structure.id,
-      // Select partner orgs which have at least one workshop
-      workshops: { some: {} }
-    },
-    orderBy: { workshops: { _count: 'desc' } }
-  })
+  const [workshops, partners] = await Promise.all([
+    WorkshopRepo.prisma.groupBy({
+      by: ['partnerOrganizationId'],
+      orderBy: { _count: { partnerOrganizationId: 'desc' } },
+      _count: true,
+      where: {
+        structureId: structure.id,
+        ...workshopFilters
+      }
+    }),
+    PartnerOrganizationRepo.findMany(user, {
+      select: { id: true, name: true },
+      where: {
+        structureId: structure.id
+      }
+    })
+  ])
+
+  const partnersById = Object.groupBy(partners, partner => partner.id)
+
+  return workshops.map(({ partnerOrganizationId, _count }) => ({
+    _count,
+    id: partnerOrganizationId,
+    name:
+      partnerOrganizationId &&
+      partnersById?.[partnerOrganizationId]?.[0] !== undefined
+        ? partnersById[partnerOrganizationId][0].name
+        : null
+  }))
 }
 
 export const getWorkshopPartnerStatsQuery = createQuery({
