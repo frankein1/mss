@@ -1,0 +1,241 @@
+<template>
+  <div>
+    <!-- Filters -->
+
+    <StatsWorkshopFilters v-model:filters="filters" />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h3 class="fr-sr-only">Résultats</h3>
+      <StatsHeader
+        class="fr-mt-3w"
+        :menus="menus"
+      >
+        <template #header>
+          <h4 class="fr-sr-only">Nombre d‘ateliers</h4>
+        </template>
+        <template #icon>
+          <img
+            class="fr-mr-1w"
+            src="~/assets/img/avatar.svg"
+            alt=""
+          />
+        </template>
+        <template #title>
+          <p class="fr-mb-0 fr-h3 title-blue">
+            {{ totalWorkshopCountLabel }}
+            <span class="fr-text--sm">{{ detailedWorkshopCountLabel }}</span>
+          </p>
+        </template>
+      </StatsHeader>
+      <StatsExportAlert
+        v-if="!alertClose"
+        @close-alert="alertClose = true"
+      />
+      <!-- Alert + Loader -->
+      <AtomAlert
+        v-if="error"
+        :alert-type="AlertType.Error"
+        message="Le nombre total de bénéficiaires n'a pas pu être chargé."
+      />
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
+      />
+
+      <div class="fr-col-12">
+        <StatsWorkshopAttendeeCount :filters="filters" />
+      </div>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.workshopName.id"
+        :card-name="workshopCardConfig.workshopName.name"
+      >
+        <StatsWorkshopName :filters="filters" />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.attendance.id"
+        :card-name="workshopCardConfig.attendance.name"
+      >
+        <StatsWorkshopAttendance :filters="filters" />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.gender.id"
+        :card-name="workshopCardConfig.gender.name"
+      >
+        <StatsWorkshopAttendeeGender :filters="filters" />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.ages.id"
+        :card-name="workshopCardConfig.ages.name"
+      >
+        <StatsWorkshopAttendeeAgeGroups :filters="filters" />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.partners.id"
+        :card-name="workshopCardConfig.partners.name"
+      >
+        <StatsWorkshopPartners :filters="filters" />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="workshopCardConfig.cities.id"
+        :card-name="workshopCardConfig.cities.name"
+      >
+        <StatsWorkshopAttendeeCities :filters="filters" />
+      </StatsCard>
+    </section>
+  </div>
+</template>
+
+<script lang="ts" setup>
+  import { AlertType } from '~/utils/constants/alert'
+  import type { WorkshopStatFilterInput } from '~/server/schema'
+  import type { Menu } from '~/types/menu'
+  import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
+  import { EventCategory, ExportEventAction } from '~/types/matomo'
+
+  const alertClose = ref<boolean>(true)
+
+  const trpcClient = useTrpcClient()
+  const matomo = useMatomo()
+
+  const isDownloading = ref(false)
+  const filters = ref<WorkshopStatFilterInput>({})
+
+  const error = ref<boolean>(false)
+  const pending = ref<boolean>(false)
+  const workshopCount = ref<{
+    total: number
+    future: number
+    past: number
+  } | null>(null)
+
+  watchEffect(async () => {
+    pending.value = true
+    // Do not use useMutation() or useTrpcMutation()
+    // it cause issues with response #id matching
+    const data = await trpcClient.stat.getWorkshopCountStats.mutate(
+      filters.value
+    )
+    if (data == null) {
+      error.value = true
+      return
+    }
+    workshopCount.value = data
+    pending.value = false
+  })
+
+  const plural = (word: string, q: number, end = 's') =>
+    q > 1 ? `${word}${end}` : `${word}`
+
+  const totalWorkshopCountLabel = computed(() => {
+    const count = workshopCount.value?.total ?? 0
+    return `${count} ${plural('atelier', count)}`
+  })
+
+  const detailedWorkshopCountLabel = computed(() => {
+    const futureCount = workshopCount.value?.future ?? 0
+    const pastCount = workshopCount.value?.past ?? 0
+
+    return `(${pastCount} ${plural('passé', pastCount)} et ${futureCount} à venir)`
+  })
+
+  const excelIsDownloading = (downloading: boolean) => {
+    isDownloading.value = downloading
+  }
+  const handleExportExcel = () => {
+    exportStats(
+      filters.value,
+      'stats_beneficiaires',
+      trpcClient,
+      excelIsDownloading
+    )
+  }
+
+  const workshopCardConfig = {
+    workshopName: {
+      id: 'stats-workshop-name',
+      name: 'Ateliers'
+    },
+    partners: {
+      id: 'stats-workshop-partners',
+      name: 'Partenaires'
+    },
+    attendance: {
+      id: 'stats-attendance',
+      name: 'Participation'
+    },
+    gender: {
+      id: 'stats-attendees-gender',
+      name: 'Genres'
+    },
+    ages: {
+      id: 'stats-attendees-age',
+      name: 'Tranches d‘âge'
+    },
+    cities: {
+      id: 'stats-attendees-cities',
+      name: 'Villes'
+    }
+  }
+
+  const menus: ComputedRef<Menu[]> = computed(() => {
+    const menus: Menu[] = []
+
+    // if (beneficiaryCount.value?.count != 0) {
+    //   menus.push({
+    //     label: 'En images (.zip)',
+    //     callback: async () => {
+    //       matomo.trackEvent(
+    //         EventCategory.ExportStats,
+    //         ExportEventAction.DownloadImages
+    //       )
+    //       alertClose.value = false
+    //       const date = new Date()
+    //       setTimeout(() => {
+    //         zipAndDownloadImages(
+    //           'Statistiques - Bénéficiaires - ' + date.toLocaleDateString(),
+    //           {
+    //             ...beneficiariesCardConfig
+    //           },
+    //           buttonFilter,
+    //           closeAlert
+    //         )
+    //       }, 200)
+    //     }
+    //   })
+    // }
+
+    // if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
+    //   menus.push({
+    //     label: 'En tableur (.xlsx)',
+    //     callback: () => {
+    //       matomo.trackEvent(
+    //         EventCategory.ExportStats,
+    //         ExportEventAction.DownloadExcel
+    //       )
+    //       handleExportExcel()
+    //     }
+    //   })
+    // }
+    return menus
+  })
+
+  const buttonFilter = (node: HTMLElement | Node) => {
+    return (node as HTMLElement).tagName !== 'BUTTON'
+  }
+
+  const closeAlert = () => {
+    alertClose.value = true
+  }
+</script>

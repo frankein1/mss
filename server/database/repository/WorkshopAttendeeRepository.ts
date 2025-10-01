@@ -74,5 +74,8 @@ export const WorkshopAttendeeRepo = {
   delete: deleteWorkshopAttendee,
   update,
   updateMany,
-  create
+  create,
+  prisma: {
+    groupBy: prismaClient.workshopAttendee.groupBy
+  }
 }

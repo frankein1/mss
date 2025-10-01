@@ -1,8 +1,12 @@
 import type { Prisma } from '@prisma/client'
-import { FileInstructionType, SocialSupportType } from '@prisma/client'
+import {
+  FileInstructionType,
+  SocialSupportType,
+  WorkshopAttendeeType
+} from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
-import type { StatFilterInput } from '~/server/schema'
+import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~/types/stat'
 
@@ -43,6 +47,27 @@ export function preparePrescribingOrganizationStats(
   )
   prescribingOrganizationStatsValues.sort((a, b) => b._count - a._count)
   return prescribingOrganizationStatsValues
+}
+
+export function prepareWorkshopStatFilters(filters: WorkshopStatFilterInput) {
+  const workshopFilters: Prisma.WorkshopWhereInput = {}
+
+  if (filters.workshopNameIds) {
+    workshopFilters.workshopNameId = { in: filters.workshopNameIds }
+  }
+  if (filters.partnerOrganizationIds) {
+    workshopFilters.partnerOrganizationId = {
+      in: filters.partnerOrganizationIds
+    }
+  }
+  if (
+    (filters.period && filters.period !== StatPeriodFilter.Custom) ||
+    (filters.period === StatPeriodFilter.Custom &&
+      (filters.fromDate || filters.toDate))
+  ) {
+    workshopFilters.date = prepareDateFilters(filters)
+  }
+  return workshopFilters
 }
 
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
@@ -241,7 +266,9 @@ export function prepareBeneficiaryStatFilters(
   return formattedFilters
 }
 
-function prepareDateFilters(filters: StatFilterInput) {
+export function prepareDateFilters(
+  filters: Pick<StatFilterInput, 'period' | 'fromDate' | 'toDate'>
+) {
   switch (filters.period) {
     case StatPeriodFilter.ThisYear:
       return {

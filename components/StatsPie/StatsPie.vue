@@ -23,11 +23,13 @@
   const props = defineProps<{
     pieLabel: string
     stats: StatsPiePropType
-    totalCount: number
     notFilledRoute?: string
   }>()
 
   const chart = ref<ChartItem>('')
+  const totalCount = computed(() =>
+    props.stats.reduce((acc, item) => acc + item.count, 0)
+  )
 
   onMounted(() => {
     plotChart()

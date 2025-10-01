@@ -3,7 +3,8 @@ import dayjs from 'dayjs'
 import { AgeGroup } from '~/client/options'
 
 export function ageGroupToDateRange(ageGroup: AgeGroup): {
-  [key: string]: Dayjs
+  lower?: Dayjs
+  upper?: Dayjs
 } {
   const today = dayjs().hour(0).minute(0).second(0).millisecond(0)
   switch (ageGroup) {

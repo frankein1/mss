@@ -13,5 +13,6 @@ function deleteWorkshopExternalAttendee(
 }
 
 export const WorkshopExternalAttendeeRepo = {
-  delete: deleteWorkshopExternalAttendee
+  delete: deleteWorkshopExternalAttendee,
+  prisma: { groupBy: prismaClient.workshopExternalAttendee.groupBy }
 }

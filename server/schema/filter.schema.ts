@@ -57,6 +57,27 @@ const statFilterSchema = z.object({
   ageGroup: z.nativeEnum(AgeGroup).nullish()
 })
 
+const workshopStatFilterSchema = z.object({
+  period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
+  fromDate: z.coerce.date().nullish(),
+  toDate: z.coerce
+    .date()
+    .nullish()
+    .transform(v => {
+      if (v === undefined || v === null) {
+        return v
+      }
+      return dayjs(v).hour(23).minute(59).second(59).toDate()
+    }),
+  workshopNameIds: z.array(z.string().uuid()).optional(),
+  partnerOrganizationIds: z.array(z.string().uuid()).optional(),
+  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  createdById: z.array(z.string().uuid()).nullish(),
+  ageGroup: z.nativeEnum(AgeGroup).nullish()
+})
+
+type WorkshopStatFilterInput = z.infer<typeof workshopStatFilterSchema>
+
 type StatFilterInput = Omit<
   z.infer<typeof statFilterSchema>,
   'helpRequestSubject'
@@ -179,7 +200,8 @@ export {
   beneficiaryDocumentFilterSchema,
   emailAdminFilterSchema,
   jobResultAdminFilterSchema,
-  workshopFilterSchema
+  workshopFilterSchema,
+  workshopStatFilterSchema
 }
 
 export type {
@@ -192,5 +214,6 @@ export type {
   BeneficiaryDocumentFilterInput,
   EmailAdminFilterInput,
   JobResultAdminFilterInput,
-  WorkshopFilterInput
+  WorkshopFilterInput,
+  WorkshopStatFilterInput
 }

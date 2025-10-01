@@ -123,5 +123,29 @@ export const statRouter = router({
     .mutation(routes.getHelpRequestBeneficiaryNumberQ.execute),
   getFollowupBeneficiaryNumber: protectedProcedure
     .input(routes.getFollowupBeneficiaryNumberQ.inputValidation)
-    .mutation(routes.getFollowupBeneficiaryNumberQ.execute)
+    .mutation(routes.getFollowupBeneficiaryNumberQ.execute),
+  getWorkshopNameStats: protectedProcedure
+    .input(routes.getWorkshopNameStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopNameStatsQuery.execute),
+  getWorkshopPartnerStats: protectedProcedure
+    .input(routes.getWorkshopPartnerStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopPartnerStatsQuery.execute),
+  getWorkshopAttendeeGenderStats: protectedProcedure
+    .input(routes.getWorkshopAttendeeGenderStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopAttendeeGenderStatsQuery.execute),
+  getWorkshopAttendanceStats: protectedProcedure
+    .input(routes.getWorkshopAttendanceStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopAttendanceStatsQuery.execute),
+  getWorkshopCountStats: protectedProcedure
+    .input(routes.getWorkshopCountStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopCountStatsQuery.execute),
+  getWorkshopAttendeeCountStats: protectedProcedure
+    .input(routes.getWorkshopAttendeeCountStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopAttendeeCountStatsQuery.execute),
+  getWorkshopAttendeeAgeStats: protectedProcedure
+    .input(routes.getWorkshopAttendeeAgeStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopAttendeeAgeStatsQuery.execute),
+  getWorkshopAttendeeCityStats: protectedProcedure
+    .input(routes.getWorkshopAttendeeCityStatsQuery.inputValidation)
+    .mutation(routes.getWorkshopAttendeeCityStatsQuery.execute)
 })

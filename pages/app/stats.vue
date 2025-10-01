@@ -61,6 +61,23 @@
               :agent-options="agentsOptions"
             />
           </template>
+          <template #[tabTitles.at(3)?.panelId]>
+            <AtomAlert
+              v-if="fetchError"
+              :alert-type="AlertType.Error"
+              :message="fetchError"
+            />
+            <StatsWorkshops
+              v-if="
+                socialSupportSubjectOptions &&
+                beneficiariesCitiesOptions &&
+                agentsOptions
+              "
+              :social-support-subject-options="socialSupportSubjectOptions"
+              :beneficiaries-cities-options="beneficiariesCitiesOptions"
+              :agent-options="agentsOptions"
+            />
+          </template>
         </AtomTabs>
       </div>
     </div>
@@ -96,6 +113,12 @@
       panelId: panelId('Instructions'),
       title: 'Instructions de dossiers',
       icon: 'fr-icon-questionnaire-line'
+    },
+    {
+      tabId: 'Ateliers',
+      panelId: panelId('Ateliers'),
+      title: 'Ateliers',
+      icon: 'fr-icon-calendar-line'
     }
   ]
 

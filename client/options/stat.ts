@@ -5,7 +5,10 @@ import { buildKeys } from '~/utils/keys/keyBuilder'
 export const getStatLabel = <T extends string>(
   labels: Record<T, string>,
   key: T | null
-) => (key && key !== STATS_NULL_KEY ? labels[key] : STATS_NULL_LABEL)
+): string =>
+  key && key !== STATS_NULL_KEY && key in labels
+    ? labels[key]
+    : STATS_NULL_LABEL
 
 export const periodKeys = buildKeys({
   [StatPeriodFilter.ThisYear]: 'Cette année',

@@ -137,41 +137,42 @@
   } from '~/utils/constants/stats'
   import { getPercentage } from '~/utils/stats'
 
-  const props = withDefaults(
-    defineProps<{
-      stats: StatsListPropType
-      statsBar?: boolean
-      statsPercentage?: boolean
-      statsColorDot?: boolean
-      withSubCount?: boolean
-      subCountLabel?: string
-      totalCount?: number
-      unit?: string
-      toFixed?: number
-      withSum?: boolean
-      notFilledRoute?: string
-      displayTotal?: boolean
-    }>(),
-    {
-      statsBar: false,
-      statsPercentage: true,
-      statsColorDot: false,
-      subCountLabel: undefined,
-      totalCount: 0,
-      unit: '',
-      toFixed: undefined,
-      withSum: true,
-      notFilledRoute: undefined,
-      displayTotal: true
-    }
-  )
+  const {
+    stats,
+    statsBar = false,
+    statsPercentage = true,
+    statsColorDot = false,
+    subCountLabel = undefined,
+    totalCount: totalCountFromProps,
+    unit = '',
+    toFixed = undefined,
+    withSum = true,
+    notFilledRoute = undefined,
+    displayTotal = true
+  } = defineProps<{
+    stats: StatsListPropType
+    statsBar?: boolean
+    statsPercentage?: boolean
+    statsColorDot?: boolean
+    withSubCount?: boolean
+    subCountLabel?: string
+    totalCount?: number
+    unit?: string
+    toFixed?: number
+    withSum?: boolean
+    notFilledRoute?: string
+    displayTotal?: boolean
+  }>()
+
   const STATS_ID = 'stats-' + useId()
   const expandStats = ref<boolean>(false)
+  const totalCount = computed(
+    () =>
+      totalCountFromProps || stats.reduce((acc, item) => acc + item.count, 0)
+  )
 
   const displayedStats = computed(() =>
-    expandStats.value
-      ? props.stats
-      : props.stats.slice(0, STATS_COLLAPSED_LIMIT)
+    expandStats.value ? stats : stats.slice(0, STATS_COLLAPSED_LIMIT)
   )
 
   const expandBtnLabel = computed(() =>
@@ -179,9 +180,7 @@
   )
 
   const sum = computed(() =>
-    props.withSum
-      ? props.stats.reduce((acc, curr) => acc + curr.count, 0)
-      : undefined
+    withSum ? stats.reduce((acc, curr) => acc + curr.count, 0) : undefined
   )
 </script>
 
