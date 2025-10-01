@@ -46,6 +46,7 @@
                 aria-hidden="true"
               >
               </span>
+              <span class="fr-sr-only">Déjà ajouté à l'atelier</span>
               <span
                 :id="`tooltip-` + option.value"
                 class="fr-tooltip fr-placement"
