@@ -94,7 +94,11 @@ export default defineEventHandler({
         id: s.id,
         nom: s.name,
         siret: s.siret?.replaceAll(' ', ''),
-        codePostal: s.zipcode.trim(),
+        // The current format for Metabase map does not deal properly with Corse zipcodes so they are modified in the DB
+        // Replace modified zipcode from Corse that include 2B by 20
+        codePostal: s.zipcode.trim().startsWith('2B')
+          ? `20${s.zipcode.trim().substring(2)}`
+          : s.zipcode.trim(),
         ville: s.city.trim(),
         utilisateurs: s._count.users,
         accompagnements: s._count.socialSupports,
