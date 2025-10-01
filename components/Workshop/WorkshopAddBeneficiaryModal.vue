@@ -33,6 +33,7 @@
           />
         </template>
         <MultiSelect
+          ref="ms"
           name="workshopIds"
           label="Sélectionnez les ateliers&nbsp;:"
           :options="workshopOptions"
@@ -122,6 +123,7 @@
   } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
+  import type { MultiSelect } from '#components'
 
   const { beneficiaryId, familyFileId } = defineProps<{
     beneficiaryId: string
@@ -236,6 +238,19 @@
     beneficiaryId: 'Bénéficiaire',
     workshopIds: 'Atelier(s)'
   })
+
+  const ms = ref<typeof MultiSelect | null>(null)
+  /** When the dropdown is shown, scroll down the modal to display it fully */
+  watch(
+    () => ms.value?.dropdown,
+    el => {
+      el?.scrollIntoView({
+        block: 'start',
+        inline: 'nearest',
+        behavior: 'smooth'
+      })
+    }
+  )
 </script>
 
 <style lang="scss" scoped>

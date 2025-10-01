@@ -1,6 +1,7 @@
 <template>
-  <div style="height: 450px">
+  <div style="height: 200px">
     <MultiSelect
+      ref="ms"
       name="county"
       label="Rechercher un département"
       is-searchable
@@ -33,5 +34,20 @@
 </template>
 
 <script setup lang="ts">
+  import type { MultiSelect } from '#components'
+
   defineProps<{ options: { value: string; label: string }[] }>()
+
+  const ms = ref<typeof MultiSelect | null>(null)
+  /** When the dropdown is shown, scroll down the modal to display it fully */
+  watch(
+    () => ms.value?.dropdown,
+    el => {
+      el?.scrollIntoView({
+        block: 'start',
+        inline: 'nearest',
+        behavior: 'smooth'
+      })
+    }
+  )
 </script>

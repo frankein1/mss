@@ -70,6 +70,7 @@
           <!-- List des items -->
           <div
             ref="scrollContainer"
+            tabindex="-1"
             class="scroll-container show-scrollbar custom-scrollbar-gray"
           >
             <div class="content">
@@ -185,7 +186,7 @@
   const optionQuery = ref<any>(null)
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
-  const target = ref(null)
+  const target = ref<HTMLDivElement | null>(null)
   const name = toRef(() => props.name)
   const labelSearchId = useId()
 
@@ -339,7 +340,7 @@
     }
   }
 
-  defineExpose({ triggerSelectValue })
+  defineExpose({ triggerSelectValue, dropdown: target })
 
   onClickOutside(target, _event => {
     isOpen.value = false
