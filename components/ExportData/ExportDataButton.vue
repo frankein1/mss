@@ -21,11 +21,20 @@
 
   const emit = defineEmits<{ export: [code: string] }>()
 
-  defineProps<{ isDownloading: boolean; title?: string }>()
+  const {
+    isDownloading,
+    title = undefined,
+    hasFilters = true
+  } = defineProps<{
+    isDownloading: boolean
+    title?: string
+    hasFilters?: boolean
+  }>()
 
   function exportConfirm() {
     modal.open(ExportDataConfirm, {
       title: 'Attention aux données des bénéficiaires',
+      hasFilters: hasFilters,
       export: (code: string) => emit('export', code)
     })
   }

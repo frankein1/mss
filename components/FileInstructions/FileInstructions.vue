@@ -24,6 +24,7 @@
         <ExportDataButton
           v-if="application.export.history"
           :is-downloading="isDownloading"
+          :has-filters="true"
           @export="exportFileInstructions"
         />
       </div>

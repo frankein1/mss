@@ -31,6 +31,7 @@
           <ExportDataButton
             title="Exporter liste émargement (.xlsx)"
             :is-downloading="isDownloading"
+            :has-filters="false"
             @export="getExportedAttendance"
           />
         </div>

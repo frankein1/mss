@@ -13,7 +13,9 @@
       </strong>
     </p>
 
-    <p>Toutes les pages seront exportées avec les filtres actuels.</p>
+    <p v-if="hasFilters">
+      Toutes les pages seront exportées avec les filtres actuels.
+    </p>
 
     <form
       ref="form"
@@ -43,7 +45,10 @@
   import { z } from 'zod'
   import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 
-  const props = defineProps<{ export: (code: string) => void }>()
+  const props = defineProps<{
+    hasFilters?: boolean
+    export: (code: string) => void
+  }>()
 
   const trpcClient = useTrpcClient()
 

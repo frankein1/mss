@@ -35,6 +35,7 @@
               </p>
               <ExportDataButton
                 :is-downloading="isDownloading"
+                :has-filters="true"
                 @export="exportBeneficiaries"
               />
             </div>
