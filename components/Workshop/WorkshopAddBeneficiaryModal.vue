@@ -294,6 +294,6 @@
   }
 
   :deep(.multiselect .multiselect-content) {
-    position: relative;
+    position: relative !important;
   }
 </style>
