@@ -1,6 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import {
   AgeLimitCondition,
+  Gender,
   WorkshopAttendeeAttendance,
   WorkshopAttendeeListType,
   WorkshopAttendeeType
@@ -17,6 +18,7 @@ import {
 } from '.'
 import dayjs from 'dayjs'
 import { toFirstLetterUpperCase } from '../../utils/toFirstLetterUpperCase'
+import { equiRandomEnum } from './utils'
 
 const WORKSHOP_COUNT = 100
 const WORKSHOP_NAME_COUNT = 30
@@ -103,7 +105,8 @@ export const fixturesWorkshops = new Array(WORKSHOP_COUNT)
       host: faker.person.fullName(),
       sessionName: makeLong(faker.lorem.words(6)),
       description: makeLong(faker.lorem.paragraphs()),
-      attendeeLimit: faker.number.int({ min: 5, max: 40 }),
+      attendeeLimit:
+        Math.random() > 0.5 ? faker.number.int({ min: 5, max: 20 }) : undefined,
       ageLimit: faker.number.int({ min: 15, max: 70 }),
       ageLimitCondition: AgeLimitCondition.GreaterThan
     }
@@ -113,36 +116,71 @@ function randomAttendance(workshopDate: Date) {
   if (dayjs(workshopDate).isAfter(dayjs(new Date()))) {
     return undefined
   }
-  switch (faker.number.int({ min: 0, max: 3 })) {
-    case 0:
-      return WorkshopAttendeeAttendance.Excused
-    case 1:
-      return WorkshopAttendeeAttendance.NoShow
-    case 2:
-      return WorkshopAttendeeAttendance.Seen
-    default:
-      return undefined
+  return equiRandomEnum([
+    WorkshopAttendeeAttendance.Excused,
+    WorkshopAttendeeAttendance.NoShow,
+    WorkshopAttendeeAttendance.Seen,
+    undefined
+  ])
+}
+
+function getListType(index: number, attendeeLimit: number | undefined) {
+  if (attendeeLimit) {
+    return index < attendeeLimit
+      ? WorkshopAttendeeListType.Main
+      : WorkshopAttendeeListType.Waiting
   }
+  return WorkshopAttendeeListType.Main
 }
 
 export const fixturesWorkshopAttendees = fixturesWorkshops
   .map(workshop => {
-    const nAttendees = faker.number.int({
-      min: 0,
-      max: filteredFixtureBeneficiaries.length - 1
-    })
+    const nAttendees = faker.number.int({ min: 0, max: 25 })
     const beneficiaries = filteredFixtureBeneficiaries.filter(
       b => b.structureId === structureId
     )
 
-    return new Array(nAttendees).fill(null).map(() => ({
-      id: faker.string.uuid(),
-      workshopId: workshop.id,
-      type: WorkshopAttendeeType.Beneficiary,
-      listType: WorkshopAttendeeListType.Main,
-      comment: makeLong(faker.lorem.words(6)),
-      attendance: randomAttendance(workshop.date),
-      beneficiaryId: beneficiaries.pop()?.id
-    }))
+    return new Array(nAttendees).fill(null).map((_, index) => {
+      const listType = getListType(index, workshop.attendeeLimit)
+      const benid = beneficiaries.pop()?.id
+      const type = benid
+        ? equiRandomEnum([
+            WorkshopAttendeeType.Beneficiary,
+            WorkshopAttendeeType.External
+          ])
+        : WorkshopAttendeeType.External
+      const beneficiaryId =
+        type === WorkshopAttendeeType.Beneficiary ? benid : undefined
+      const workshopExternalAttendeeId =
+        type === WorkshopAttendeeType.External ? faker.string.uuid() : undefined
+      return {
+        id: faker.string.uuid(),
+        workshopId: workshop.id,
+        type,
+        listType,
+        comment: makeLong(faker.lorem.words(6)),
+        attendance: randomAttendance(workshop.date),
+        beneficiaryId,
+        workshopExternalAttendeeId
+      }
+    })
   })
   .flat() satisfies Prisma.WorkshopAttendeeCreateManyInput[]
+
+export const fixturesWorkshopExternalAttendees = fixturesWorkshopAttendees
+  .filter(a => a.type === WorkshopAttendeeType.External)
+  .map(attendee => ({
+    id: attendee.workshopExternalAttendeeId,
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    email: faker.internet.email(),
+    phone: faker.phone.number(),
+    gender: equiRandomEnum([
+      Gender.Male,
+      Gender.Female,
+      Gender.Other,
+      undefined
+    ]),
+    birthDate: faker.date.birthdate(),
+    city: faker.location.city()
+  })) satisfies Prisma.WorkshopExternalAttendeeCreateManyInput[]

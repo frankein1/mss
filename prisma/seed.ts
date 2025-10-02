@@ -16,6 +16,7 @@ import {
   fixturesBudgetExpenses,
   fixturesWorkshopNames,
   fixturesWorkshops,
+  fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './fixtures'
 
@@ -176,6 +177,15 @@ function loadWorkshops() {
   })
 }
 
+function loadWorkshopExternalAttendees() {
+  console.log('🥷 Workshops external attendees...')
+
+  return prismaClient.workshopExternalAttendee.createMany({
+    data: fixturesWorkshopExternalAttendees,
+    skipDuplicates: true
+  })
+}
+
 function loadWorkshopAttendees() {
   console.log('🕺 Workshops attendees...')
 
@@ -202,6 +212,7 @@ function loadFixtures() {
     ...loadFixturesBudgetExpenses(),
     loadWorkshopNames(),
     loadWorkshops(),
+    loadWorkshopExternalAttendees(),
     loadWorkshopAttendees()
   ]
 }

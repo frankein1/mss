@@ -9,6 +9,7 @@ import type {
 import { PrismaClient } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import type { ArrayElement } from '~/types/utils'
+import { equiRandomEnum } from './fixtures/utils'
 
 const prismaClient = new PrismaClient()
 const STRUCTURE_COUNT = 200
@@ -50,11 +51,6 @@ const socialSupportSubjects: SocialSupportSubjectsCreateInput[] = [
     used: true
   }
 ]
-
-function equiRandomEnum<T>(enums: T[]) {
-  const index = faker.number.int({ min: 0, max: enums.length - 1 })
-  return enums[index] as T
-}
 
 function randomStatus(): BeneficiaryStatus {
   return equiRandomEnum([

@@ -16,5 +16,6 @@ export { fixturesBudgetExpenses } from './budgetExpenses'
 export {
   fixturesWorkshopNames,
   fixturesWorkshops,
+  fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './workshops'
