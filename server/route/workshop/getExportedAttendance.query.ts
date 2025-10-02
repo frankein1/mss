@@ -23,14 +23,40 @@ const handler = async ({
     input: { code: input.code }
   })
 
-  const attendees = await getAttendees(ctx, input)
+  const workshop = await getWorkshopInfo(ctx, input)
+  const attendees = workshop.workshopAttendees
   const { rows, columns } = createFile(attendees)
+  const header = getWorksheetHeader(workshop)
 
   // Forced to return base64 encoded version of the file in tRPC
   // Cf. https://github.com/trpc/trpc/discussions/658
   // & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
   const stream = await createExport(ctx.user.id, [
-    { name: 'Émargement', columns, rows }
+    {
+      name: 'Émargement',
+      columns,
+      rows,
+      options: {
+        headerFooter: {
+          firstHeader: header,
+          oddHeader: header,
+          evenHeader: header
+        },
+        properties: {
+          showGridLines: false
+        },
+        pageSetup: {
+          orientation: 'landscape'
+        },
+        views: [
+          {
+            state: 'normal',
+            style: 'pageLayout'
+          }
+        ],
+        state: 'visible'
+      }
+    }
   ])
   return { data: stream.toString('base64') }
 }
@@ -46,6 +72,21 @@ export const getExportedAttendance = createQuery({
     action: UserActivityType.EXPORT
   }
 })
+
+const getWorksheetHeader = (workshop: WorkshopInfo) => {
+  let header = workshop.workshopName.name
+  if (workshop.sessionName) {
+    header += ` - ${workshop.sessionName}`
+  }
+  if (workshop.date) {
+    header += ` - ${workshop.date.toLocaleDateString('fr-FR')}`
+  }
+  if (workshop.host) {
+    header += ` - ${workshop.host}`
+  }
+
+  return header
+}
 
 const createFile = (attendees: Attendees) => {
   const rows: RowType[] = attendees
@@ -65,7 +106,8 @@ const createFile = (attendees: Attendees) => {
       if (attendee.workshopExternalAttendee) {
         return {
           firstName: attendee.workshopExternalAttendee.firstName || '',
-          lastName: attendee.workshopExternalAttendee.lastName || '',
+          lastName:
+            attendee.workshopExternalAttendee.lastName?.toUpperCase() || '',
           age: attendee.workshopExternalAttendee.birthDate
             ? calculateAge(
                 attendee.workshopExternalAttendee.birthDate
@@ -109,7 +151,7 @@ const createFile = (attendees: Attendees) => {
   return { rows, columns }
 }
 
-const getAttendees = async (
+const getWorkshopInfo = async (
   ctx: ProtectedAppContext,
   input: ExportAttendanceInput
 ) => {
@@ -117,6 +159,14 @@ const getAttendees = async (
     where: { id: input.workshopId },
     select: {
       id: true,
+      workshopName: {
+        select: {
+          name: true
+        }
+      },
+      sessionName: true,
+      date: true,
+      host: true,
       workshopAttendees: {
         select: {
           id: true,
@@ -147,7 +197,8 @@ const getAttendees = async (
       }
     }
   })
-  return workshop.workshopAttendees
+  return workshop
 }
 
-type Attendees = Awaited<ReturnType<typeof getAttendees>>
+type WorkshopInfo = Awaited<ReturnType<typeof getWorkshopInfo>>
+type Attendees = WorkshopInfo['workshopAttendees']

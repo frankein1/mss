@@ -37,7 +37,10 @@ function getFullColumns(
 }
 
 function createWorksheet(workbook: Workbook, worksheetData: WorksheetType) {
-  const worksheet = workbook.addWorksheet(worksheetData.name)
+  const worksheet = workbook.addWorksheet(
+    worksheetData.name,
+    worksheetData.options
+  )
 
   worksheet.columns = getFullColumns(worksheetData.columns, worksheetData.rows)
 
