@@ -87,9 +87,8 @@
     if (subjectWithSameNameExists) {
       if (id) {
         return subjectWithSameNameExists.id === id
-      } 
-        return false
-      
+      }
+      return false
     }
     return true
   }

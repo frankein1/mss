@@ -352,3 +352,8 @@ select:focus:not(:focus-visible) {
 textarea {
   resize: vertical;
 }
+
+/* Fix modal max height */
+.fr-modal__body {
+  max-height: 80vh !important;
+}
