@@ -20,18 +20,21 @@ const handler = async ({
   const { workshopNameId, ...workshopFilters } =
     prepareWorkshopStatFilters(input)
 
-  return WorkshopNameRepo.findMany(user, {
-    select: {
-      id: true,
-      name: true,
-      _count: { select: { workshops: { where: workshopFilters } } }
-    },
-    where: {
-      structureId: structure.id,
-      id: { in: input.workshopNameIds }
-    },
-    orderBy: { workshops: { _count: 'desc' } }
-  })
+  return (
+    await WorkshopNameRepo.findMany(user, {
+      select: {
+        id: true,
+        name: true,
+        _count: { select: { workshops: { where: workshopFilters } } }
+      },
+      where: {
+        structureId: structure.id,
+        id: { in: input.workshopNameIds }
+      }
+    })
+  )
+    .filter(wn => wn._count.workshops > 0)
+    .sort((a, b) => b._count.workshops - a._count.workshops)
 }
 
 export const getWorkshopNameStatsQuery = createQuery({
