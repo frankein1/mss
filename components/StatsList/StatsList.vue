@@ -25,7 +25,7 @@
             alt=""
           />
           <NuxtLink
-            v-if="label === STATS_NULL_LABEL"
+            v-if="label === STATS_NULL_LABEL && notFilledRoute"
             :to="notFilledRoute"
             >{{ label }}</NuxtLink
           >

@@ -11,12 +11,12 @@
         :menus="menus"
       >
         <template #header>
-          <h4 class="fr-sr-only">Nombre d‘ateliers</h4>
+          <h4 class="fr-sr-only">Nombre d’ateliers</h4>
         </template>
         <template #icon>
           <img
             class="fr-mr-1w"
-            src="~/assets/img/avatar.svg"
+            src="/pictograms/calendar-blue.svg"
             alt=""
           />
         </template>
@@ -184,7 +184,7 @@
     },
     ages: {
       id: 'stats-attendees-age',
-      name: 'Tranches d‘âge'
+      name: 'Tranches d’âge'
     },
     cities: {
       id: 'stats-attendees-cities',

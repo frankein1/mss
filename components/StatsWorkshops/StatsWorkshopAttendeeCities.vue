@@ -27,9 +27,9 @@
 <script lang="ts" setup>
   import type { WorkshopStatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'
   import type { StatsListPropType } from '~/types/stat'
+  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 
   const props = defineProps<{
     filters: WorkshopStatFilterInput
