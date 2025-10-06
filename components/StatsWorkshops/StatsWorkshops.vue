@@ -37,64 +37,62 @@
         :alert-type="AlertType.Error"
         message="Le nombre total de bénéficiaires n'a pas pu être chargé."
       />
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
 
-      <div class="fr-col-12">
-        <StatsWorkshopAttendeeCount :filters="filters" />
-      </div>
+      <template v-if="workshopCount && workshopCount.total > 0">
+        <div class="fr-col-12">
+          <StatsWorkshopAttendeeCount :filters="filters" />
+        </div>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.workshopName.id"
-        :card-name="workshopCardConfig.workshopName.name"
-      >
-        <StatsWorkshopName :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.workshopName.id"
+          :card-name="workshopCardConfig.workshopName.name"
+        >
+          <StatsWorkshopName :filters="filters" />
+        </StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.attendance.id"
-        :card-name="workshopCardConfig.attendance.name"
-        :card-subtitle="workshopCardConfig.attendance.subtitle"
-      >
-        <StatsWorkshopAttendance :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.attendance.id"
+          :card-name="workshopCardConfig.attendance.name"
+          :card-subtitle="workshopCardConfig.attendance.subtitle"
+        >
+          <StatsWorkshopAttendance :filters="filters" />
+        </StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.gender.id"
-        :card-name="workshopCardConfig.gender.name"
-      >
-        <StatsWorkshopAttendeeGender :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.gender.id"
+          :card-name="workshopCardConfig.gender.name"
+        >
+          <StatsWorkshopAttendeeGender :filters="filters" />
+        </StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.ages.id"
-        :card-name="workshopCardConfig.ages.name"
-      >
-        <StatsWorkshopAttendeeAgeGroups :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.ages.id"
+          :card-name="workshopCardConfig.ages.name"
+        >
+          <StatsWorkshopAttendeeAgeGroups :filters="filters" />
+        </StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.partners.id"
-        :card-name="workshopCardConfig.partners.name"
-      >
-        <StatsWorkshopPartners :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.partners.id"
+          :card-name="workshopCardConfig.partners.name"
+        >
+          <StatsWorkshopPartners :filters="filters" />
+        </StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="workshopCardConfig.cities.id"
-        :card-name="workshopCardConfig.cities.name"
-        :card-subtitle="workshopCardConfig.cities.subtitle"
-      >
-        <StatsWorkshopAttendeeCities :filters="filters" />
-      </StatsCard>
+        <StatsCard
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+          :card-id="workshopCardConfig.cities.id"
+          :card-name="workshopCardConfig.cities.name"
+          :card-subtitle="workshopCardConfig.cities.subtitle"
+        >
+          <StatsWorkshopAttendeeCities :filters="filters" />
+        </StatsCard>
+      </template>
     </section>
   </div>
 </template>
