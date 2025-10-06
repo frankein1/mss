@@ -27,7 +27,8 @@ const handler = async ({
       _count: true,
       where: {
         structureId: structure.id,
-        ...workshopFilters
+        ...workshopFilters,
+        ...(!!partnerOrganizationId && { partnerOrganizationId })
       }
     }),
     PartnerOrganizationRepo.findMany(user, {

@@ -94,7 +94,7 @@
     if (partnerOrganizations.value) {
       statsFilters.push({
         name: 'partnerOrganizationIds',
-        label: 'Organisme prescripteur',
+        label: 'Partenaire',
         type: FilterType.SelectMultiple,
         options: partnerOrganizations.value.map(({ id, name }) => ({
           label: name,
