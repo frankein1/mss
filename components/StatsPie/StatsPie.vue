@@ -6,54 +6,70 @@
       </canvas>
     </div>
     <StatsList
-      :total-count="totalCount"
-      :stats="stats"
+      :total-count
+      :stats
       stats-color-dot
-      :not-filled-route="notFilledRoute"
+      :not-filled-route
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import type { ChartItem } from 'chart.js'
+  import type { Chart, ChartItem } from 'chart.js'
   import type { StatsPiePropType } from '~/types/stat'
 
   const { $buildChart } = useNuxtApp()
 
-  const props = defineProps<{
+  const {
+    pieLabel,
+    stats,
+    notFilledRoute = undefined
+  } = defineProps<{
     pieLabel: string
     stats: StatsPiePropType
     notFilledRoute?: string
   }>()
 
   const chart = ref<ChartItem>('')
+  let instance: Chart | null = null
+
+  const chartData = computed(() => ({
+    labels: stats.map(({ label }) => label),
+    datasets: [
+      {
+        label: pieLabel,
+        data: stats.map(({ count }) => count),
+        backgroundColor: stats.map(({ color }) => color),
+        hoverOffset: 4
+      }
+    ]
+  }))
+
   const totalCount = computed(() =>
-    props.stats.reduce((acc, item) => acc + item.count, 0)
+    stats.reduce((acc, item) => acc + item.count, 0)
   )
 
-  onMounted(() => {
-    plotChart()
-  })
-
   function plotChart() {
-    $buildChart(chart.value, {
+    return $buildChart(chart.value, {
       type: 'pie',
       options: {
         responsive: true
       },
-      data: {
-        labels: props.stats.map(({ label }) => label),
-        datasets: [
-          {
-            label: props.pieLabel,
-            data: props.stats.map(({ count }) => count),
-            backgroundColor: props.stats.map(({ color }) => color),
-            hoverOffset: 4
-          }
-        ]
-      }
+      data: chartData.value
     })
   }
+
+  onMounted(() => {
+    instance = plotChart()
+  })
+
+  /* Update chart data when stats change */
+  watch(chartData, () => {
+    if (instance) {
+      instance.data = chartData.value
+      instance.update()
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
