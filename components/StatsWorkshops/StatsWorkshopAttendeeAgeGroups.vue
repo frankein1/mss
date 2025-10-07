@@ -8,11 +8,12 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des tranches d'âge n'ont pas pu être chargées."
   />
-  <StatsPie
-    v-if="ageStats"
-    pie-label="Répartition des tranches d'âge"
-    :stats="ageStats"
-  />
+  <template v-else-if="ageStats && ageStats.length">
+    <StatsPie
+      pie-label="Nb. participants"
+      :stats="ageStats"
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.workshop.AppWorkshopAdd.path()"

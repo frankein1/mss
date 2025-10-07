@@ -8,11 +8,14 @@
     :alert-type="AlertType.Error"
     message="Le décompte des ateliers n‘a pas pu être chargé."
   />
-  <StatsPie
-    v-if="workshopAttendanceStats"
-    :stats="workshopAttendanceStats"
-    pie-label="Répartion des présences des participants"
-  />
+  <template
+    v-else-if="workshopAttendanceStats && workshopAttendanceStats.length"
+  >
+    <StatsPie
+      :stats="workshopAttendanceStats"
+      pie-label="Nb. participants"
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.workshop.AppWorkshopAdd.path()"

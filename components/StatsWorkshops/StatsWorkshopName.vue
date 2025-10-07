@@ -8,11 +8,12 @@
     :alert-type="AlertType.Error"
     message="Le décompte des ateliers n‘a pas pu être chargé."
   />
-  <StatsList
-    v-if="workshopNameStats"
-    :stats-percentage="false"
-    :stats="workshopNameStats"
-  />
+  <template v-else-if="workshopNameStats && workshopNameStats.length">
+    <StatsList
+      :stats-percentage="false"
+      :stats="workshopNameStats"
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.workshop.AppWorkshopAdd.path()"

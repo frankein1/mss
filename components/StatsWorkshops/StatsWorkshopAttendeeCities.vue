@@ -8,12 +8,12 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des villes n'ont pas pu être chargées."
   />
-
-  <StatsList
-    v-if="citiesStats"
-    :stats="citiesStats"
-    stats-bar
-  />
+  <template v-else-if="citiesStats && citiesStats.length">
+    <StatsList
+      :stats="citiesStats"
+      stats-bar
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.workshop.AppWorkshopAdd.path()"

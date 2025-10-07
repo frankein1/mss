@@ -31,15 +31,10 @@
         v-if="!alertClose"
         @close-alert="alertClose = true"
       />
-      <!-- Alert + Loader -->
       <AtomAlert
         v-if="error"
         :alert-type="AlertType.Error"
         message="Le nombre total de bénéficiaires n'a pas pu être chargé."
-      />
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
       />
 
       <div class="fr-col-12">
