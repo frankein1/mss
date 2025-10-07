@@ -165,7 +165,7 @@
     trpcClient.workshop.deleteAttendee.useMutation()
 
   const onDeleteAttendee = async (attendee: WorkshopAttendee) => {
-    const { id, listType, type } = attendee
+    const { id, type } = attendee
     const { mutate, error } = deleteAttendeeMutation
 
     const deletedAttendee = await mutate({ id, type })

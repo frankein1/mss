@@ -81,7 +81,7 @@
   )
 
   // Get partners organisations
-  const { data: partnerOrganizations, error: errorPartner } =
+  const { data: partnerOrganizations } =
     await trpcClient.partner.getAll.useQuery()
 
   const calculateTimeValue = (startValue: string) => {
@@ -97,12 +97,9 @@
     endTimeKeys.value = calculateTimeValue(startValue)
   }
 
-  const props = withDefaults(
-    defineProps<{
-      isSubmitting: boolean
-    }>(),
-    {}
-  )
+  defineProps<{
+    isSubmitting: boolean
+  }>()
 
   const partnerOrganizationOptions = computed(() => {
     const partnerOrganizationsWithStringId = (

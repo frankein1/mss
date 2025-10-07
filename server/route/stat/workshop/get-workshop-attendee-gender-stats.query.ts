@@ -12,7 +12,6 @@ import { STATS_NULL_KEY } from '~/utils/constants/stats'
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats
 
-// TODO(Achille): inclure les filtres d'atelier
 const handler = async ({
   input,
   ctx: { structure, user }

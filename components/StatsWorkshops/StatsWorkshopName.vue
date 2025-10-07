@@ -48,7 +48,7 @@
       workshopNameStats.value = data.map(({ id, name, _count }) => ({
         key: id,
         label: name,
-        count: _count.workshops
+        count: _count
       }))
     } catch (err: unknown) {
       console.error(err)

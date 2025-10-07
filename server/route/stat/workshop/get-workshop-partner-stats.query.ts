@@ -17,9 +17,11 @@ const handler = async ({
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const { partnerOrganizationId, ...workshopFilters } =
-    prepareWorkshopStatFilters(input)
+  const workshopFilters = prepareWorkshopStatFilters(input)
 
+  // It's not possible to do a groupBy (on workshops) and retrieve additional fields
+  // from a relation (from partners) in a single request,
+  // so we have to do 2 parallel requests and merge them in application code
   const [workshops, partners] = await Promise.all([
     WorkshopRepo.prisma.groupBy({
       by: ['partnerOrganizationId'],
@@ -27,8 +29,7 @@ const handler = async ({
       _count: true,
       where: {
         structureId: structure.id,
-        ...workshopFilters,
-        ...(!!partnerOrganizationId && { partnerOrganizationId })
+        ...workshopFilters
       }
     }),
     PartnerOrganizationRepo.findMany(user, {
@@ -44,9 +45,12 @@ const handler = async ({
   return workshops.map(({ partnerOrganizationId, _count }) => ({
     _count,
     id: partnerOrganizationId,
+    // partnerOrganizationId might be null, so be careful not to access
+    // partnersById[partnerOrganizationId] directly, as will fail even with
+    // optional chaining.
     name:
       partnerOrganizationId &&
-      partnersById?.[partnerOrganizationId]?.[0] !== undefined
+      partnersById[partnerOrganizationId]?.[0] !== undefined
         ? partnersById[partnerOrganizationId][0].name
         : null
   }))

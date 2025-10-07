@@ -7,11 +7,7 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { CreateBeneficiaryAttendeeInput } from '~/server/schema'
 import { createBeneficiaryAttendeeSchema } from '~/server/schema'
-import {
-  BeneficiaryRepo,
-  WorkshopAttendeeRepo,
-  WorkshopRepo
-} from '~/server/database'
+import { BeneficiaryRepo, WorkshopRepo } from '~/server/database'
 import type { SecurityRuleContext } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 import { getListType } from '~/server/services/workshop/helper'

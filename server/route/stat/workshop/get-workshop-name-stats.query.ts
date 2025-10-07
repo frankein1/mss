@@ -4,8 +4,9 @@ import type { WorkshopStatFilterInput } from '~/server/schema'
 import { workshopStatFilterSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { WorkshopNameRepo } from '~/server/database'
+import { WorkshopNameRepo, WorkshopRepo } from '~/server/database'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
+import { STATS_NULL_KEY } from '~/utils/constants/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats
@@ -17,24 +18,39 @@ const handler = async ({
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const { workshopNameId, ...workshopFilters } =
-    prepareWorkshopStatFilters(input)
+  const workshopFilters = prepareWorkshopStatFilters(input)
 
-  return (
-    await WorkshopNameRepo.findMany(user, {
+  // It's not possible to do a groupBy (on workshops) and retrieve additional fields
+  // from a relation (from workshopNames) in a single request,
+  // so we have to do 2 parallel requests and merge them in application code
+  const [workshops, workshopNames] = await Promise.all([
+    WorkshopRepo.prisma.groupBy({
+      by: ['workshopNameId'],
+      _count: true,
+      orderBy: { _count: { workshopNameId: 'desc' } },
+      where: { structureId: structure.id, ...workshopFilters }
+    }),
+    WorkshopNameRepo.findMany(user, {
       select: {
         id: true,
-        name: true,
-        _count: { select: { workshops: { where: workshopFilters } } }
+        name: true
       },
       where: {
-        structureId: structure.id,
-        id: { in: input.workshopNameIds }
+        structureId: structure.id
       }
     })
+  ])
+
+  const workshopNamesById = Object.groupBy(
+    workshopNames,
+    workshopName => workshopName.id
   )
-    .filter(wn => wn._count.workshops > 0)
-    .sort((a, b) => b._count.workshops - a._count.workshops)
+
+  return workshops.map(({ workshopNameId, _count }) => ({
+    id: workshopNameId,
+    _count,
+    name: workshopNamesById[workshopNameId]?.[0]?.name ?? STATS_NULL_KEY
+  }))
 }
 
 export const getWorkshopNameStatsQuery = createQuery({

@@ -4,11 +4,7 @@ import type { WorkshopStatFilterInput } from '~/server/schema'
 import { workshopStatFilterSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import {
-  BeneficiaryRepo,
-  WorkshopAttendeeRepo,
-  WorkshopExternalAttendeeRepo
-} from '~/server/database'
+import { WorkshopAttendeeRepo } from '~/server/database'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
 import { WorkshopAttendeeListType } from '@prisma/client'
 
