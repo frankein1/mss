@@ -5,6 +5,14 @@ export default defineNuxtRouteMiddleware(to => {
 
   const isAdminRoute = to.fullPath.startsWith(routes.admin.Admin.path())
 
+  if (import.meta.client) {
+    const { $sentry } = useNuxtApp()
+    const user = authState.user.value?.id
+      ? { id: authState.user.value.id }
+      : null
+    $sentry?.setUser(user)
+  }
+
   if (!authState.isAuthenticated()) {
     return navigateTo({
       path: routes.auth.AuthLogin.path(),

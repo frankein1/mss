@@ -222,7 +222,7 @@ export default defineNuxtConfig({
       },
       sentry: {
         dsn: process.env.SENTRY_DSN,
-        debug: !!process.env.SENTRY_DEBUG,
+        debug: (process.env.SENTRY_DEBUG || 'false') === 'true',
         tracesSampleRate: parseFloat(
           process.env.SENTRY_TRACE_SAMPLE_RATE || '0.1'
         )
