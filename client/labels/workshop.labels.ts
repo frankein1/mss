@@ -36,4 +36,6 @@ export const workshopExternalAttendeeLabels = {
   phone: 'Téléphone',
   birthDate: 'Date de naissance',
   city: 'Ville'
-} satisfies FieldLabels<Omit<WorkshopExternalAttendee, 'created' | 'updated'>>
+} satisfies FieldLabels<
+  Omit<WorkshopExternalAttendee, 'created' | 'updated' | 'isAnonymized'>
+>

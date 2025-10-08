@@ -2230,6 +2230,8 @@ model WorkshopExternalAttendee {
   birthDate DateTime? @map("birth_date") @db.Date
   city      String?
 
+  isAnonymized Boolean @default(false) @map("is_anonymized")
+
   workshopAttendee WorkshopAttendee?
 
   @@map("workshop_external_attendee")

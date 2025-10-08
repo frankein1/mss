@@ -19,7 +19,8 @@
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
     "prisma": "prisma",
     "release": "commit-and-tag-version",
-    "prepare": "husky"
+    "prepare": "husky",
+    "scheduler:workshop-anonymization": "tsx server/scheduler/workshop/anonymize-external-attendees.ts"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
