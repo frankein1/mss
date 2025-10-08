@@ -86,7 +86,8 @@ export const getOneWithAttendees = async (
                 birthDate: true,
                 email: true,
                 city: true,
-                phone: true
+                phone: true,
+                isAnonymized: true
               }
             }
           },

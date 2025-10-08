@@ -3,19 +3,34 @@
     <div class="name-options">
       <p class="fr-text--bold">
         {{ attendeeName }}
-        <span
-          v-if="attendee.type === WorkshopAttendeeType.Beneficiary"
-          :aria-describedby="BENEFICIARY_TOOLTIP_ID"
-          class="fr-icon--sm fr-icon-user-line fr-ml-1v"
-          aria-hidden="true"
-        >
-        </span>
-        <span
-          :id="BENEFICIARY_TOOLTIP_ID"
-          class="fr-tooltip fr-placement"
-          role="tooltip"
-          >Bénéficiaire enregistré sur Mon Suivi Social
-        </span>
+        <template v-if="attendee.type === WorkshopAttendeeType.Beneficiary">
+          <span
+            :aria-describedby="BENEFICIARY_TOOLTIP_ID"
+            class="fr-icon--sm fr-icon-user-line fr-ml-1v"
+            aria-hidden="true"
+          >
+          </span>
+          <span
+            :id="BENEFICIARY_TOOLTIP_ID"
+            class="fr-tooltip fr-placement"
+            role="tooltip"
+            >Bénéficiaire enregistré sur Mon Suivi Social
+          </span>
+        </template>
+        <template v-else-if="attendee.isAnonymized">
+          <span
+            :aria-describedby="ANON_EXTERNAL_TOOLTIP_ID"
+            class="fr-icon--sm fr-icon-eye-off-line fr-ml-1v"
+            aria-hidden="true"
+          >
+          </span>
+          <span
+            :id="ANON_EXTERNAL_TOOLTIP_ID"
+            class="fr-tooltip fr-placement"
+            role="tooltip"
+            >Non bénéficiaire - donnée anonymisée après 3 mois
+          </span>
+        </template>
       </p>
       <AtomDropdown
         label="Options"
@@ -141,6 +156,7 @@
 
   const BENEFICIARY_TOOLTIP_ID = 'beneficiary-tooltip-' + useId()
   const ATTENDEE_PRESENCE_ID = 'beneficiary-presence-' + useId()
+  const ANON_EXTERNAL_TOOLTIP_ID = `anon-external-tooltip-${useId()}`
 
   const attendeeName = computed(() => {
     let title = ''

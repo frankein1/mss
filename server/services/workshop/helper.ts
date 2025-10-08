@@ -116,6 +116,7 @@ export function formatWorkshopAttendees(
       | 'phone'
       | 'email'
       | 'city'
+      | 'isAnonymized'
     > | null
   })[]
 ) {
