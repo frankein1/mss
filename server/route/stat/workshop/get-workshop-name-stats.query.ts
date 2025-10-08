@@ -13,11 +13,18 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { structure, user }
+  ctx
 }: {
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
+  return getWorkshopNameStats(input, ctx)
+}
+
+export const getWorkshopNameStats = async (
+  input: WorkshopStatFilterInput,
+  ctx: ProtectedAppContext
+) => {
   const workshopFilters = prepareWorkshopStatFilters(input)
 
   // It's not possible to do a groupBy (on workshops) and retrieve additional fields
@@ -28,15 +35,15 @@ const handler = async ({
       by: ['workshopNameId'],
       _count: true,
       orderBy: { _count: { workshopNameId: 'desc' } },
-      where: { structureId: structure.id, ...workshopFilters }
+      where: { structureId: ctx.structure.id, ...workshopFilters }
     }),
-    WorkshopNameRepo.findMany(user, {
+    WorkshopNameRepo.findMany(ctx.user, {
       select: {
         id: true,
         name: true
       },
       where: {
-        structureId: structure.id
+        structureId: ctx.structure.id
       }
     })
   ])

@@ -12,17 +12,24 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { structure }
+  ctx
 }: {
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
+  return getWorkshopAttendeeCount(input, ctx)
+}
+
+export const getWorkshopAttendeeCount = async (
+  input: WorkshopStatFilterInput,
+  ctx: ProtectedAppContext
+) => {
   const workshopFilters = prepareWorkshopStatFilters(input)
   return WorkshopAttendeeRepo.prisma.groupBy({
     by: ['listType'],
     _count: true,
     where: {
-      workshop: { structureId: structure.id, ...workshopFilters }
+      workshop: { structureId: ctx.structure.id, ...workshopFilters }
     }
   })
 }

@@ -16,14 +16,21 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { structure, user }
+  ctx
 }: {
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
+  return getWorkshopAttendeeAge(input, ctx)
+}
+
+export const getWorkshopAttendeeAge = async (
+  input: WorkshopStatFilterInput,
+  ctx: ProtectedAppContext
+) => {
   const workshopFilters = prepareWorkshopStatFilters(input)
 
-  const attendees = await WorkshopAttendeeRepo.findMany(user, {
+  const attendees = await WorkshopAttendeeRepo.findMany(ctx.user, {
     select: {
       beneficiary: {
         select: {
@@ -38,7 +45,7 @@ const handler = async ({
     },
     where: {
       listType: WorkshopAttendeeListType.Main,
-      workshop: { structureId: structure.id, ...workshopFilters }
+      workshop: { structureId: ctx.structure.id, ...workshopFilters }
     }
   })
   return Object.values(

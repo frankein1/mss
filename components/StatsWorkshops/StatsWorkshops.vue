@@ -105,6 +105,7 @@
 
   const trpcClient = useTrpcClient()
   const matomo = useMatomo()
+  const { application } = usePermissions()
 
   const isDownloading = ref(false)
   const filters = ref<WorkshopStatFilterInput>({})
@@ -151,18 +152,13 @@
     isDownloading.value = downloading
   }
   const handleExportExcel = () => {
-    exportStats(
-      filters.value,
-      'stats_beneficiaires',
-      trpcClient,
-      excelIsDownloading
-    )
+    exportStats(filters.value, 'stats_ateliers', trpcClient, excelIsDownloading)
   }
 
   const workshopCardConfig = {
     workshopName: {
       id: 'stats-workshop-name',
-      name: 'Nombre d‘ateliers'
+      name: 'Nombre d’ateliers'
     },
     partners: {
       id: 'stats-workshop-partners',
@@ -191,42 +187,42 @@
   const menus: ComputedRef<Menu[]> = computed(() => {
     const menus: Menu[] = []
 
-    // if (beneficiaryCount.value?.count != 0) {
-    //   menus.push({
-    //     label: 'En images (.zip)',
-    //     callback: async () => {
-    //       matomo.trackEvent(
-    //         EventCategory.ExportStats,
-    //         ExportEventAction.DownloadImages
-    //       )
-    //       alertClose.value = false
-    //       const date = new Date()
-    //       setTimeout(() => {
-    //         zipAndDownloadImages(
-    //           'Statistiques - Bénéficiaires - ' + date.toLocaleDateString(),
-    //           {
-    //             ...beneficiariesCardConfig
-    //           },
-    //           buttonFilter,
-    //           closeAlert
-    //         )
-    //       }, 200)
-    //     }
-    //   })
-    // }
+    if (workshopCount.value?.total != 0) {
+      menus.push({
+        label: 'En images (.zip)',
+        callback: async () => {
+          matomo.trackEvent(
+            EventCategory.ExportStats,
+            ExportEventAction.DownloadWorkshopStatsImages
+          )
+          alertClose.value = false
+          const date = new Date()
+          setTimeout(() => {
+            zipAndDownloadImages(
+              'Statistiques - Ateliers - ' + date.toLocaleDateString(),
+              {
+                ...workshopCardConfig
+              },
+              buttonFilter,
+              closeAlert
+            )
+          }, 200)
+        }
+      })
+    }
 
-    // if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
-    //   menus.push({
-    //     label: 'En tableur (.xlsx)',
-    //     callback: () => {
-    //       matomo.trackEvent(
-    //         EventCategory.ExportStats,
-    //         ExportEventAction.DownloadExcel
-    //       )
-    //       handleExportExcel()
-    //     }
-    //   })
-    // }
+    if (workshopCount.value?.total != 0 && application.value.export.stats) {
+      menus.push({
+        label: 'En tableur (.xlsx)',
+        callback: () => {
+          matomo.trackEvent(
+            EventCategory.ExportStats,
+            ExportEventAction.DownloadWorkshopStatsExcel
+          )
+          handleExportExcel()
+        }
+      })
+    }
     return menus
   })
 

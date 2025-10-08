@@ -112,6 +112,7 @@ type ExportType =
   | 'stats_entretiens'
   | 'stats_instructions_dossier'
   | 'stats_beneficiaires'
+  | 'stats_ateliers'
 
 // export as Excel file
 export const exportStats = async (
@@ -132,6 +133,9 @@ export const exportStats = async (
         break
       case 'stats_beneficiaires':
         exportedFile = await client.stat.exportBeneficiaryStats.mutate(filters)
+        break
+      case 'stats_ateliers':
+        exportedFile = await client.stat.exportWorkshopStats.mutate(filters)
         break
     }
     if (!exportedFile?.data) {

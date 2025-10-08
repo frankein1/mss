@@ -395,7 +395,7 @@
         callback: async () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
-            ExportEventAction.DownloadImages
+            ExportEventAction.DownloadBeneficiaryStatsImages
           )
           alertClose.value = false
           const date = new Date()
@@ -421,7 +421,7 @@
         callback: () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
-            ExportEventAction.DownloadExcel
+            ExportEventAction.DownloadBeneficiaryStatsExcel
           )
           handleExportExcel()
         }

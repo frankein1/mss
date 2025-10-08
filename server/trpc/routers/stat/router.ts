@@ -147,5 +147,8 @@ export const statRouter = router({
     .mutation(routes.getWorkshopAttendeeAgeStatsQuery.execute),
   getWorkshopAttendeeCityStats: protectedProcedure
     .input(routes.getWorkshopAttendeeCityStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendeeCityStatsQuery.execute)
+    .mutation(routes.getWorkshopAttendeeCityStatsQuery.execute),
+  exportWorkshopStats: protectedProcedure
+    .input(routes.exportWorkshopStatsQuery.inputValidation)
+    .mutation(routes.exportWorkshopStatsQuery.execute)
 })

@@ -143,8 +143,15 @@ export enum OverviewToHistoryEventAction {
 }
 
 export enum ExportEventAction {
-  DownloadImages = 'Export en images',
-  DownloadExcel = "Export d'un document Excel"
+  DownloadExcel = 'Télécharger en document Excel',
+  DownloadBeneficiaryStatsImages = 'Export des stats Bénéficiaires en images',
+  DownloadBeneficiaryStatsExcel = 'Export des stats Bénéficiaires en document Excel',
+  DownloadFolloupStatsImages = 'Export des stats Entretiens en images',
+  DownloadFolloupStatsExcel = 'Export des stats Entretiens en document Excel',
+  DownloadHelpRequestStatsImages = 'Export des stats Instructions de dossier en images',
+  DownloadHelpRequestStatsExcel = 'Export des stats Instructions de dossier en document Excel',
+  DownloadWorkshopStatsImages = 'Export des stats Ateliersen images',
+  DownloadWorkshopStatsExcel = 'Export des stats Ateliers en document Excel'
 }
 
 export enum WorkshopAction {

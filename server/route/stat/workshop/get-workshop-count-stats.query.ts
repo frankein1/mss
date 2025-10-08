@@ -15,11 +15,18 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx
 }: {
   input: WorkshopStatFilterInput
   ctx: ProtectedAppContext
 }) => {
+  return getWorkshopCountStats(input, ctx)
+}
+
+export const getWorkshopCountStats = async (
+  input: WorkshopStatFilterInput,
+  { user, structure }: ProtectedAppContext
+) => {
   const { date, ...workshopFilters } = prepareWorkshopStatFilters(input)
   const dateFilters = prepareDateFilters(input)
   const now = new Date().getTime()
