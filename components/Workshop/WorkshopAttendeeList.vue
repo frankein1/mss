@@ -125,6 +125,7 @@
   import { isTRPCClientError, MSS_ERROR_CODES } from '~/utils/error'
   import { WorkshopAction, EventCategory } from '~/types/matomo'
   import WorkshopCapacityModal from './WorkshopCapacityModal.vue'
+  import groupBy from '~/utils/groupBy'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -156,7 +157,7 @@
   )
 
   const attendeeLists = computed(() =>
-    Object.groupBy(workshop.workshopAttendees, ({ listType }) => listType)
+    groupBy(workshop.workshopAttendees, ({ listType }) => listType)
   )
 
   const transferAttendeeMutation =

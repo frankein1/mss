@@ -6,6 +6,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { PartnerOrganizationRepo, WorkshopRepo } from '~/server/database'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
+import groupBy from '~/utils/groupBy'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats
@@ -47,7 +48,7 @@ export const getWorkshopPartners = async (
     })
   ])
 
-  const partnersById = Object.groupBy(partners, partner => partner.id)
+  const partnersById = groupBy(partners, partner => partner.id)
 
   return workshops.map(({ partnerOrganizationId, _count }) => ({
     _count,
