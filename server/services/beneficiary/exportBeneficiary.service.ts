@@ -576,6 +576,9 @@ const getWorkshopData = (workshop: WorkshopWithAttendee) => {
     host: workshop.host,
     description: workshop.description,
     createdByEmail: workshop.createdBy.email,
+    comment: workshop.workshopAttendees[0]?.comment
+      ? workshop.workshopAttendees[0].comment
+      : undefined,
     attendance: workshop.workshopAttendees[0]?.attendance
       ? workshopAttendeeAttendanceKeys.value(
           workshop.workshopAttendees[0]?.attendance
@@ -893,7 +896,8 @@ const getWorkshops = async (beneficiaryId: string, user: User) => {
           beneficiaryId: beneficiaryId
         },
         select: {
-          attendance: true
+          attendance: true,
+          comment: true
         }
       }
     },

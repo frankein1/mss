@@ -40,5 +40,8 @@ export const workshopRouter = router({
     .query(routes.getExportedAttendance.execute),
   exportWorkshops: protectedProcedure
     .input(routes.exportWorkshops.inputValidation)
-    .query(routes.exportWorkshops.execute)
+    .query(routes.exportWorkshops.execute),
+  updateAttendee: protectedProcedure
+    .input(routes.updateAttendee.inputValidation)
+    .mutation(routes.updateAttendee.execute)
 })

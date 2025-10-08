@@ -140,8 +140,10 @@
     WorkshopAttendeeType
   } from '@prisma/client'
   import { beneficiaryTitleKeys } from '~/client/options'
+  import WorkshopUpdateAttendeeModal from './WorkshopUpdateAttendeeModal.vue'
 
   const attendeeForm = ref<HTMLFormElement | null>(null)
+  const modal = useModal()
 
   const { attendee, isWorkshopFull = false } = defineProps<{
     attendee: WorkshopAttendee
@@ -150,6 +152,7 @@
 
   const emit = defineEmits<{
     deleteAttendee: [attendee: WorkshopAttendee]
+    refresh: []
     transferAttendee: [id: string]
     changeAttendance: [id: string, attendance: WorkshopAttendeeAttendance]
   }>()
@@ -190,7 +193,12 @@
   // Option button dropdown
   const menus: Menu[] = [
     {
-      label: 'Retirer de l‘atelier',
+      label: 'Modifier les informations',
+      callback: () => onUpdateAttendee(attendee),
+      icon: 'fr-icon-edit-line'
+    },
+    {
+      label: 'Retirer de l’atelier',
       callback: () => emit('deleteAttendee', attendee),
       icon: 'ri-user-unfollow-line'
     }
@@ -218,6 +226,15 @@
       attendee.id,
       attendance as WorkshopAttendeeAttendance
     )
+  }
+  const onUpdateAttendee = (attendee: WorkshopAttendee) => {
+    modal.open(WorkshopUpdateAttendeeModal, {
+      title: 'Modifier les informations',
+      size: 'lg',
+      triggerOpen: true,
+      attendee: attendee,
+      refresh: () => emit('refresh')
+    })
   }
 </script>
 

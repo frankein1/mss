@@ -1,7 +1,10 @@
 <template>
   <div
     class="autocomplete fr-input-group"
-    :class="{ 'fr-input-group--error': error }"
+    :class="{
+      'fr-input-group--error': error,
+      'fr-input-group--disabled': disabled
+    }"
   >
     <label
       class="fr-label"
@@ -28,6 +31,7 @@
       :class="{ 'fr-input--error': error }"
       :name
       :type
+      :disabled
       autocomplete="off"
       aria-autocomplete="list"
       aria-haspopup="listbox"
@@ -114,12 +118,14 @@
       type?: string
       searchFn: (search: string) => Promise<OptionsWithDisabled>
       required?: boolean
+      disabled?: boolean
       value?: string
       hint?: string
     }>(),
     {
       type: 'search',
       required: false,
+      disabled: false,
       value: undefined,
       hint: ''
     }

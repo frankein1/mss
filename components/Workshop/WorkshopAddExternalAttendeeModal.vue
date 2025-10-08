@@ -96,7 +96,8 @@
         <DsfrButton
           label="Valider"
           type="submit"
-          :submitting="status === 'pending'"
+          :data-submitting="status === 'pending'"
+          :disabled="status === 'pending'"
           :readonly="status === 'pending'"
         ></DsfrButton>
       </li>

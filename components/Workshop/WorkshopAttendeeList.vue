@@ -61,6 +61,7 @@
             :attendee
             @delete-attendee="onDeleteAttendee"
             @change-attendance="onChangeAttendance"
+            @refresh="emit('refresh')"
           />
         </li>
       </ul>
@@ -79,7 +80,7 @@
           workshop._count.waitingAttendees
         }}</span>
         personne<span v-if="workshop._count.waitingAttendees > 1">s</span>
-        sur liste d‘attente
+        sur liste d’attente
       </p>
       <hr />
       <ul
@@ -97,6 +98,7 @@
             @delete-attendee="onDeleteAttendee"
             @change-attendance="onChangeAttendance"
             @transfer-attendee="onTransferAttendee"
+            @refresh="emit('refresh')"
           />
         </li>
       </ul>
@@ -165,7 +167,7 @@
     trpcClient.workshop.deleteAttendee.useMutation()
 
   const onDeleteAttendee = async (attendee: WorkshopAttendee) => {
-    const { id, type } = attendee
+    const { id, listType, type } = attendee
     const { mutate, error } = deleteAttendeeMutation
 
     const deletedAttendee = await mutate({ id, type })
@@ -177,10 +179,7 @@
     emit('refresh')
     matomo.trackEvent(EventCategory.Workshop, WorkshopAction.RemoveAttendee)
     snackbar.success('La suppression du participant a réussi.')
-    if (
-      attendee.listType === WorkshopAttendeeListType.Main &&
-      isWorkshopFull.value
-    ) {
+    if (listType === WorkshopAttendeeListType.Main && isWorkshopFull.value) {
       modal.open(WorkshopCapacityModal, {
         triggerOpen: true,
         isFull: false
@@ -192,7 +191,7 @@
     error: NonNullable<typeof transferAttendeeMutation.error.value>
   ) {
     if (error?.data?.MSS_CODE === MSS_ERROR_CODES.WORKSHOP_ALREADY_FULL) {
-      return 'L‘atelier est complet. Augmentez la limite de participants pour pouvoir en ajouter de nouveaux.'
+      return 'L’atelier est complet. Augmentez la limite de participants pour pouvoir en ajouter de nouveaux.'
     }
     return 'Le transfert du participant a échoué.'
   }

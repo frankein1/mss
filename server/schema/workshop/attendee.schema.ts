@@ -63,6 +63,21 @@ export type CreateExternalAttendeeInput = z.infer<
   typeof createExternalAttendeeSchema
 >
 
+export const updateAttendeeSchema = z.object({
+  attendeeId: z.string().uuid(),
+  type: requiredNativeEnum(WorkshopAttendeeType),
+  gender: nativeEnum(Gender).nullable(),
+  lastName: limitedStringConstraint().nullable(),
+  firstName: limitedStringConstraint().nullable(),
+  birthDate: dateOrEmpty,
+  phone: stringOrEmpty(phoneConstraint),
+  email: emailOrEmpty(),
+  zipcode: stringOrEmpty(limitedStringConstraint(4, 6)),
+  city: limitedStringConstraint(null, 50).nullable(),
+  comment: limitedStringConstraint(null, 500).nullable()
+})
+export type UpdateAttendeeInput = z.infer<typeof updateAttendeeSchema>
+
 export const deleteAttendeeSchema = z.object({
   id: z.string().uuid(),
   type: requiredNativeEnum(WorkshopAttendeeType)

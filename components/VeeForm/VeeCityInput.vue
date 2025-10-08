@@ -5,6 +5,7 @@
     :search-fn="searchCitiesFn"
     :value="selectedValue"
     :required="required"
+    :disabled="disabled"
     @result-selected="onSelectCity"
   />
 </template>
@@ -23,8 +24,9 @@
       name: string
       zipCode?: string | null
       required?: boolean
+      disabled?: boolean
     }>(),
-    { zipCode: '', required: false }
+    { zipCode: '', required: false, disabled: false }
   )
 
   const emit = defineEmits<{
