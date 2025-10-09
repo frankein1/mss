@@ -56,7 +56,7 @@ export const getWorkshopGender = async (
       acc[key] = { gender, _count: (acc[key]?._count ?? 0) + 1 }
       return acc
     }, {})
-  )
+  ).sort((a, b) => b._count - a._count)
 }
 
 export const getWorkshopAttendeeGenderStatsQuery = createQuery({

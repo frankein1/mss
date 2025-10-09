@@ -30,7 +30,8 @@ export const getWorkshopAttendeeCount = async (
     _count: true,
     where: {
       workshop: { structureId: ctx.structure.id, ...workshopFilters }
-    }
+    },
+    orderBy: { _count: { listType: 'desc' } }
   })
 }
 

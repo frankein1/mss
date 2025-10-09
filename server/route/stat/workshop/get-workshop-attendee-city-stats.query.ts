@@ -55,7 +55,7 @@ export const getWorkshopCities = async (
       },
       {}
     )
-  )
+  ).sort((a, b) => b._count - a._count)
 }
 
 export const getWorkshopAttendeeCityStatsQuery = createQuery({

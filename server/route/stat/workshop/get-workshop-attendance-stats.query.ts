@@ -36,18 +36,21 @@ export const getWorkshopAttendance = async (
   dateFilters.lte = new Date(
     dateFilters?.lte ? Math.min(dateFilters.lte.getTime(), now) : now
   )
-  return WorkshopAttendeeRepo.prisma.groupBy({
-    by: ['attendance'],
-    _count: true,
-    where: {
-      listType: WorkshopAttendeeListType.Main,
-      workshop: {
-        structureId: ctx.structure.id,
-        date: dateFilters,
-        ...workshopFilters
-      }
-    }
-  })
+  return (
+    await WorkshopAttendeeRepo.prisma.groupBy({
+      by: ['attendance'],
+      _count: true,
+      where: {
+        listType: WorkshopAttendeeListType.Main,
+        workshop: {
+          structureId: ctx.structure.id,
+          date: dateFilters,
+          ...workshopFilters
+        }
+      },
+      orderBy: { _count: { attendance: 'desc' } }
+    })
+  ).sort((a, b) => b._count - a._count)
 }
 
 export const getWorkshopAttendanceStatsQuery = createQuery({

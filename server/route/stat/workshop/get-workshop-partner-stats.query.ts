@@ -50,18 +50,20 @@ export const getWorkshopPartners = async (
 
   const partnersById = groupBy(partners, partner => partner.id)
 
-  return workshops.map(({ partnerOrganizationId, _count }) => ({
-    _count,
-    id: partnerOrganizationId,
-    // partnerOrganizationId might be null, so be careful not to access
-    // partnersById[partnerOrganizationId] directly, as will fail even with
-    // optional chaining.
-    name:
-      partnerOrganizationId &&
-      partnersById[partnerOrganizationId]?.[0] !== undefined
-        ? partnersById[partnerOrganizationId][0].name
-        : null
-  }))
+  return workshops
+    .map(({ partnerOrganizationId, _count }) => ({
+      _count,
+      id: partnerOrganizationId,
+      // partnerOrganizationId might be null, so be careful not to access
+      // partnersById[partnerOrganizationId] directly, as will fail even with
+      // optional chaining.
+      name:
+        partnerOrganizationId &&
+        partnersById[partnerOrganizationId]?.[0] !== undefined
+          ? partnersById[partnerOrganizationId][0].name
+          : null
+    }))
+    .sort((a, b) => b._count - a._count)
 }
 
 export const getWorkshopPartnerStatsQuery = createQuery({
