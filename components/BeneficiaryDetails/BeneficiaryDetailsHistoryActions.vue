@@ -55,6 +55,16 @@
         >
           Rendez-vous
         </button>
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0"
+          type="button"
+          title="Simulation"
+          :disabled="isSubmittingAppointmentPlan"
+          :readonly="isSubmittingAppointmentPlan"
+          @click="emit('startSimulation')"
+        >
+          Simulation
+        </button>
       </li>
       <li class="mesdroitssociaux-btn-container">
         <NuxtLink
@@ -76,6 +86,7 @@
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
   import WorkshopAddBeneficiaryModal from '~/components/Workshop/WorkshopAddBeneficiaryModal.vue'
 
+
   const props = defineProps<{
     familyFileId: string
     beneficiaryId: string
@@ -84,9 +95,15 @@
     familyFile: boolean
   }>()
 
-  const emit = defineEmits<{ planAppointment: [] }>()
+  const emit = defineEmits<{ planAppointment: [], startSimulation: [] }>()
   const modal = useModal()
   const { application } = usePermissions()
+
+  const trpcClient = useTrpcClient()
+
+  //const stuff = await (await fetch("/api/health-check")).text()
+  //const stuff = await trpcClient.mesAides.getBenefits.query()
+  //console.log(stuff)
 
   function onAddHelpRequest() {
     modal.open(HelpRequestModal, {

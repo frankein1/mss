@@ -26,6 +26,20 @@ import { rdvspRouter } from './rdvspRouter'
 import { router } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
 
+
+import { protectedProcedure, router } from '~/server/trpc'
+
+import { mesAidesRoutes } from '~/server/route'
+
+export const mesAidesRouter = router({
+  startSimulation: protectedProcedure
+    .input(mesAidesRoutes.startSimulation.inputValidation)
+    .mutation(mesAidesRoutes.startSimulation.execute),
+  getBenefits: protectedProcedure
+    .input(mesAidesRoutes.getBenefits.inputValidation)
+    .query(mesAidesRoutes.getBenefits.execute),
+})
+
 export const appRouter = router({
   admin: adminRouter,
   beneficiary: beneficiaryRouter,
@@ -43,6 +57,7 @@ export const appRouter = router({
   fileInstruction: fileInstructionRouter,
   documents: documentRouter,
   comment: commentRouter,
+  mesAides: mesAidesRouter,
   permissions: permissionsRouter,
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,

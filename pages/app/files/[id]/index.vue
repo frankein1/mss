@@ -23,6 +23,7 @@
         :is-submitting-appointment-plan
         class="fr-pb-3w"
         @plan-appointment="handleAppointmentPlan"
+        @start-simulation="handleStartSimulation"
       />
       <hr />
 
@@ -336,6 +337,24 @@
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
       reloadData
     })
+  }
+
+  function handleStartSimulation() {
+    return startSimulation(familyFileId)
+  }
+
+  async function startSimulation(familyFileId: string) {
+    //return trpcClient.mesAides.getBenefits.useQuery()
+    await useTrpcMutation({
+      mutation: () =>
+        trpcClient.mesAides.startSimulation.mutate({ familyFileId: familyFileId.value }),
+      onSuccess: ({url}) => {
+        //alert(url)
+        window.location.href = url
+      },
+      onFailure: (e: unknown) =>
+        console.log(e, familyFileId)
+    })//*/
   }
 
   /** Take an appointment with RDV Service Public for a beneficiary */
