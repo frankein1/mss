@@ -74,7 +74,8 @@
       description: workshop.value?.description,
       ageLimit: workshop.value?.ageLimit,
       ageLimitCondition: workshop.value?.ageLimitCondition,
-      attendeeLimit: workshop.value?.attendeeLimit
+      attendeeLimit: workshop.value?.attendeeLimit,
+      chargeable: workshop.value?.chargeable
     }
   })
 

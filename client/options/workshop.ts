@@ -13,3 +13,8 @@ export const workshopAttendeeAttendanceKeys = buildKeys({
   [WorkshopAttendeeAttendance.NoShow]: 'Absence',
   [WorkshopAttendeeAttendance.Seen]: 'Présence'
 })
+
+export const paymentReceivedKeys = buildKeys({
+  true: 'Payé',
+  false: 'Non payé'
+})

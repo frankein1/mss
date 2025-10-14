@@ -50,6 +50,11 @@
         <li><span class='bold'>Commentaire&nbsp;: </span>{{{comment}}}</li>
       {{/if}}
 
+      {{#if paymentAmount}}
+        <li><span class='bold'>Payé&nbsp;:
+          </span>{{{paymentAmount}}}&nbsp;€</li>
+      {{/if}}
+
       {{#if startTime}}
         <li><span class='bold'>Heure de début&nbsp;: </span>{{{startTime}}}</li>
       {{/if}}

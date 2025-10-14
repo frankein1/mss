@@ -149,6 +149,7 @@
   function onAddExternalAttendee() {
     modal.open(WorkshopAddExternalAttendeeModal, {
       title: 'Ajouter une nouvelle personne',
+      isWorkshopChargeable: workshop.chargeable,
       size: 'lg',
       workshopId,
       refresh: () => emit('refresh')

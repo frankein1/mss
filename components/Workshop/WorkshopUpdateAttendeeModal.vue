@@ -65,6 +65,22 @@
         name="comment"
         label="Commentaire"
       />
+
+      <template v-if="isWorkshopChargeable">
+        <div class="fr-col-12">
+          <VeeRadioButtons
+            name="paymentReceived"
+            :label="workshopAttendeeLabels.paymentReceived"
+            :options="paymentReceivedKeys.options"
+          />
+        </div>
+        <VeeCurrencyInput
+          v-if="values.paymentReceived === 'true'"
+          class="fr-col-12 fr-col-md-8 fr-col-lg-6"
+          name="paymentAmount"
+          :label="workshopAttendeeLabels.paymentAmount"
+        />
+      </template>
     </div>
 
     <DsfrButtonGroup
@@ -96,8 +112,11 @@
 </template>
 
 <script setup lang="ts">
-  import { workshopExternalAttendeeLabels } from '~/client/labels'
-  import { beneficiaryGenderKeys } from '~/client/options'
+  import {
+    workshopExternalAttendeeLabels,
+    workshopAttendeeLabels
+  } from '~/client/labels'
+  import { beneficiaryGenderKeys, paymentReceivedKeys } from '~/client/options'
   import type { UpdateAttendeeInput } from '~/server/schema'
   import { updateAttendeeSchema } from '~/server/schema'
   import type { WorkshopAttendee } from '~/types/workshop'
@@ -105,19 +124,28 @@
   const modal = useModal()
   const snackbar = useSnackbar()
 
-  const { attendee, refresh } = defineProps<{
+  const { attendee, refresh, isWorkshopChargeable } = defineProps<{
+    isWorkshopChargeable: boolean | null
     attendee: WorkshopAttendee
     refresh: () => void
   }>()
 
   /** Manage form and errors */
-  const { handleSubmit, values } = useForm<UpdateAttendeeInput>({
+  const { handleSubmit, values, setFieldValue } = useForm<UpdateAttendeeInput>({
     validationSchema: toTypedSchema(updateAttendeeSchema),
     initialValues: {
+      ...attendee,
       attendeeId: attendee.id,
-      ...attendee
+      paymentAmount: Number(attendee.paymentAmount)
     }
   })
+  // initialValues doesn't work for paymentReceived
+  setFieldValue(
+    'paymentReceived',
+    typeof attendee.paymentReceived === 'boolean'
+      ? (attendee.paymentReceived.toString() as 'true' | 'false')
+      : undefined
+  )
 
   const form = ref<HTMLFormElement | null>(null)
 
@@ -158,6 +186,10 @@
   }
 
   :deep(.fr-fieldset) {
+    margin-bottom: 0;
+  }
+
+  :deep(.fr-fieldset__element) {
     margin-bottom: 0;
   }
 </style>

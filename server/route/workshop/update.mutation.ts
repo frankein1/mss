@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { UserActivityType, WorkshopAttendeeListType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
@@ -67,16 +68,40 @@ const handler = async ({
     await updateWorkshopName(ctx, { mode, name, id })
   }
 
-  return await WorkshopRepo.update(ctx.user, {
-    select: { id: true },
-    where: { id },
-    data: {
-      ...input,
-      partnerOrganization: partnerOrganizationId
-        ? { connect: { id: partnerOrganizationId } }
-        : { disconnect: true }
-    }
-  })
+  const updateWorkshopTransaction = () =>
+    WorkshopRepo.update(ctx.user, {
+      select: { id: true },
+      where: { id },
+      data: {
+        ...input,
+        partnerOrganization: partnerOrganizationId
+          ? { connect: { id: partnerOrganizationId } }
+          : { disconnect: true }
+      }
+    })
+
+  const transactions: (() => Prisma.PrismaPromise<any>)[] = [
+    updateWorkshopTransaction
+  ]
+
+  // In case of a change from chargeable to not chargeable
+  if (workshop.chargeable === true && input.chargeable === false) {
+    transactions.push(() =>
+      WorkshopAttendeeRepo.updateMany(ctx.user, {
+        where: { workshopId: id },
+        data: {
+          paymentReceived: null,
+          paymentAmount: null
+        }
+      })
+    )
+  }
+
+  const [wks, _attendeeCount] = await prismaClient.$transaction(
+    transactions.map(t => t())
+  )
+
+  return wks
 }
 
 async function updateWorkshopName(
@@ -239,7 +264,7 @@ export const updateWorkshop = createMutation({
   auditLog: {
     key: 'workshop.updateWorkshop',
     target: 'Workshop',
-    targetId: ({ routeResult }) => routeResult.id,
+    targetId: ({ input }) => input.id,
     action: UserActivityType.UPDATE
   }
 })

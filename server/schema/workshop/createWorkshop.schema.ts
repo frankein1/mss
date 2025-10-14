@@ -35,7 +35,8 @@ export const createWorkshopSchemaBase = z.object({
     .number()
     .int(validIntNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish()
+    .nullish(),
+  chargeable: z.boolean().default(false)
 })
 
 export const createWorkshopSchema = createWorkshopSchemaBase

@@ -59,6 +59,7 @@
         >
           <WorkshopAttendeeItem
             :attendee
+            :is-workshop-chargeable="workshop.chargeable"
             @delete-attendee="onDeleteAttendee"
             @change-attendance="onChangeAttendance"
             @refresh="emit('refresh')"
@@ -95,6 +96,7 @@
           <WorkshopAttendeeItem
             :attendee
             :is-workshop-full
+            :is-workshop-chargeable="workshop.chargeable"
             @delete-attendee="onDeleteAttendee"
             @change-attendance="onChangeAttendance"
             @transfer-attendee="onTransferAttendee"

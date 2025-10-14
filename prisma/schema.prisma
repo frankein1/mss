@@ -2151,6 +2151,7 @@ model Workshop {
   attendeeLimit         Int?                 @map("attendee_limit")
   ageLimitCondition     AgeLimitCondition?   @map("ageLimitCondition")
   ageLimit              Int?                 @map("ageLimit")
+  chargeable            Boolean              @default(false)
   createdBy             User                 @relation(fields: [createdById], references: [id])
   createdById           String               @map("created_by_id") @db.Uuid
   createdAt             DateTime             @default(now()) @map("created_at")
@@ -2188,10 +2189,12 @@ model WorkshopAttendee {
   workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
   workshopId String   @map("workshop_id") @db.Uuid
 
-  attendance WorkshopAttendeeAttendance?
-  type       WorkshopAttendeeType
-  listType   WorkshopAttendeeListType    @map("list_type")
-  comment    String?
+  attendance      WorkshopAttendeeAttendance?
+  type            WorkshopAttendeeType
+  listType        WorkshopAttendeeListType    @map("list_type")
+  comment         String?
+  paymentReceived Boolean?                    @map("payment_received")
+  paymentAmount   Decimal?                    @map("payment_amount")
 
   beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   /// beneficiaryId will be defined if type is 'beneficiary', and null otherwise. Enforced by 'check_attendee_type_and_ids'

@@ -91,6 +91,13 @@ const getWorksheetHeader = (workshop: WorkshopInfo) => {
 const createFile = (attendees: Attendees) => {
   const rows: RowType[] = attendees
     .map(attendee => {
+      const sharedInfo = {
+        paymentAmount:
+          attendee.paymentReceived && attendee.paymentAmount
+            ? attendee.paymentAmount.toString()
+            : '',
+        signature: ' '
+      }
       if (attendee.beneficiary) {
         return {
           firstName: attendee.beneficiary.firstName || '(non renseigné)',
@@ -100,7 +107,7 @@ const createFile = (attendees: Attendees) => {
             : '',
           phone: attendee.beneficiary.phone1 || '',
           email: attendee.beneficiary.email || '',
-          signature: ' '
+          ...sharedInfo
         }
       }
       if (attendee.workshopExternalAttendee) {
@@ -115,7 +122,7 @@ const createFile = (attendees: Attendees) => {
             : '',
           phone: attendee.workshopExternalAttendee.phone || '',
           email: attendee.workshopExternalAttendee.email || '',
-          signature: ' '
+          ...sharedInfo
         }
       }
     })
@@ -141,6 +148,10 @@ const createFile = (attendees: Attendees) => {
     {
       key: 'email',
       header: 'Email'
+    },
+    {
+      key: 'paymentAmount',
+      header: 'Montant payé'
     },
     {
       key: 'signature',
@@ -170,6 +181,8 @@ const getWorkshopInfo = async (
       workshopAttendees: {
         select: {
           id: true,
+          paymentReceived: true,
+          paymentAmount: true,
           beneficiary: {
             select: {
               firstName: true,

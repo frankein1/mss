@@ -99,6 +99,32 @@
       </p>
     </div>
     <div
+      v-if="isWorkshopChargeable"
+      class="payment"
+    >
+      <p class="fr-text--sm">
+        <i
+          class="fr-icon--sm fr-icon-money-euro-box-line"
+          aria-hidden="true"
+        ></i>
+        {{ attendee.paymentReceived ? 'Payé' : 'Non payé' }}
+        {{
+          attendee.paymentAmount != null
+            ? '&nbsp;:&nbsp;' + attendee.paymentAmount + '&nbsp;€'
+            : ''
+        }}
+        <i
+          class="fr-icon--sm"
+          :class="{
+            'fr-message--valid fr-icon-check-line': attendee.paymentReceived,
+            'fr-message--error fr-icon-close-line':
+              !attendee.paymentReceived || attendee.paymentReceived === null
+          }"
+          aria-hidden="true"
+        ></i>
+      </p>
+    </div>
+    <div
       v-if="attendee.listType === WorkshopAttendeeListType.Main"
       class="presence"
     >
@@ -145,9 +171,14 @@
   const attendeeForm = ref<HTMLFormElement | null>(null)
   const modal = useModal()
 
-  const { attendee, isWorkshopFull = false } = defineProps<{
+  const {
+    attendee,
+    isWorkshopFull = false,
+    isWorkshopChargeable
+  } = defineProps<{
     attendee: WorkshopAttendee
     isWorkshopFull?: boolean
+    isWorkshopChargeable: boolean | null
   }>()
 
   const emit = defineEmits<{
@@ -231,6 +262,7 @@
     modal.open(WorkshopUpdateAttendeeModal, {
       title: 'Modifier les informations',
       size: 'lg',
+      isWorkshopChargeable,
       triggerOpen: true,
       attendee: attendee,
       refresh: () => emit('refresh')
@@ -248,7 +280,7 @@
   .item {
     display: grid;
     grid-template-columns: repeat(2, auto);
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(6, auto);
     grid-gap: 0.25rem 1.5rem;
     border: 1px solid var(--border-default-grey);
     border-left: 3px solid var(--color-workshop);
@@ -301,8 +333,16 @@
     }
   }
 
-  .presence {
+  .payment {
     grid-area: 5 / 1 / 6 / 3;
+
+    @include dsfr-media-query.respond-from('md') {
+      grid-area: 6 / 1 / 7 / 2;
+    }
+  }
+
+  .presence {
+    grid-area: 6 / 1 / 7 / 3;
 
     @include dsfr-media-query.respond-from('md') {
       grid-area: 3 / 2 / 6 / 3;

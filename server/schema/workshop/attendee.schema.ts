@@ -6,6 +6,7 @@ import {
   WorkshopAttendeeType
 } from '@prisma/client'
 import {
+  amountNumber,
   dateOrEmpty,
   emailOrEmpty,
   limitedStringConstraint,
@@ -46,6 +47,19 @@ export type UpdateAttendeeListTypeInput = z.infer<
   typeof updateAttendeeListTypeSchema
 >
 
+const paymentReceivedSchema = z
+  .union([z.enum(['true', 'false', '']), z.boolean()])
+  .nullish()
+  .transform(v => {
+    if (v === 'false' || v === false) {
+      return false
+    }
+    if (v === 'true' || v === true) {
+      return true
+    }
+    return null
+  })
+
 export const createExternalAttendeeSchema = z.object({
   workshopId: z.string().uuid(),
   gender: nativeEnum(Gender).optional(),
@@ -54,12 +68,16 @@ export const createExternalAttendeeSchema = z.object({
   birthDate: dateOrEmpty,
   phone: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  zipcode: stringOrEmpty(limitedStringConstraint(4, 6)),
   city: limitedStringConstraint(null, 50).optional(),
-  comment: limitedStringConstraint(null, 500).optional()
+  comment: limitedStringConstraint(null, 500).optional(),
+  paymentReceived: paymentReceivedSchema,
+  paymentAmount: amountNumber.nullish()
 })
 
-export type CreateExternalAttendeeInput = z.infer<
+export type CreateExternalAttendeeInput = z.input<
+  typeof createExternalAttendeeSchema
+>
+export type CreateExternalAttendeeServerInput = z.infer<
   typeof createExternalAttendeeSchema
 >
 
@@ -72,11 +90,13 @@ export const updateAttendeeSchema = z.object({
   birthDate: dateOrEmpty,
   phone: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  zipcode: stringOrEmpty(limitedStringConstraint(4, 6)),
   city: limitedStringConstraint(null, 50).nullable(),
-  comment: limitedStringConstraint(null, 500).nullable()
+  comment: limitedStringConstraint(null, 500).nullable(),
+  paymentReceived: paymentReceivedSchema,
+  paymentAmount: amountNumber.nullish()
 })
-export type UpdateAttendeeInput = z.infer<typeof updateAttendeeSchema>
+export type UpdateAttendeeInput = z.input<typeof updateAttendeeSchema>
+export type UpdateAttendeeServerInput = z.infer<typeof updateAttendeeSchema>
 
 export const deleteAttendeeSchema = z.object({
   id: z.string().uuid(),

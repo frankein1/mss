@@ -60,11 +60,26 @@
         :disabled="!ageLimitCondition"
       />
     </div>
+    <div class="workshop-form-toggle fr-col-12 fr-mt-2v">
+      <VeeToggle
+        :label="workshopLabels.chargeable"
+        name="chargeable"
+        :checked-label="false"
+        hint="Vous pourrez indiquer pour chaque personne son règlement."
+      />
+      <AtomAlert
+        v-if="chargeable.meta.initialValue && chargeable.value.value === false"
+        class="fr-mt-4v"
+        :alert-type="AlertType.Warning"
+        message="Les montants précédemment renseignés seront définitivement supprimés."
+      />
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
   import { workshopLabels } from '~/client/labels'
+  import { AlertType } from '~/utils/constants/alert'
 
   defineProps<{
     ageConditionOptions: Options
@@ -73,6 +88,7 @@
   const { value: ageLimitCondition } = useField('ageLimitCondition')
   const { value: attendeeLimit } = useField('attendeeLimit')
   const { value: ageLimit } = useField('ageLimit')
+  const chargeable = useField<boolean>('chargeable')
 
   const hasAttendeeLimit = ref(Boolean(attendeeLimit.value))
 

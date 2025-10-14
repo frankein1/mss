@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateAttendeeInput } from '~/server/schema'
+import type { UpdateAttendeeServerInput } from '~/server/schema'
 import { updateAttendeeSchema } from '~/server/schema'
 import { WorkshopAttendeeRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -12,7 +12,7 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: UpdateAttendeeInput
+  input: UpdateAttendeeServerInput
   ctx: ProtectedAppContext
 }) => {
   let data = {}
@@ -20,13 +20,17 @@ const handler = async ({
     where: { id: input.attendeeId },
     select: { type: true }
   })
+  const sharedData = {
+    comment: input.comment,
+    paymentReceived: input.paymentReceived,
+    // if paymentReceived is false, paymentAmount should always be null
+    paymentAmount: !input.paymentReceived ? null : input.paymentAmount
+  }
   if (attendee.type === 'Beneficiary') {
-    data = {
-      comment: input.comment
-    }
+    data = sharedData
   } else if (attendee.type === 'External') {
     data = {
-      comment: input.comment,
+      ...sharedData,
       workshopExternalAttendee: {
         update: {
           firstName: input.firstName,

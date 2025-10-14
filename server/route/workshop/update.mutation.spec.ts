@@ -28,7 +28,8 @@ const createWorkshopsWithName = async (
   const data = new Array(n).fill(null).map(() => ({
     date,
     createdById,
-    structureId
+    structureId,
+    chargeable: true
   }))
 
   return await prismaClient.workshopName.create({
@@ -393,9 +394,59 @@ describe('Workshop - Update - Update workshop name', () => {
   })
 })
 
+describe('Workshop - Update - Update chargeable to false', async () => {
+  test('Delete attendee payment info on workshop previously chearcheable', async ({
+    trpc
+  }) => {
+    if (!workshopIds[0]) {
+      throw invalidsetup()
+    }
+    // add attendee
+    const attendee = await trpc.socialWorker.workshop.createExternalAttendee({
+      workshopId: workshopIds[0],
+      firstName: 'John',
+      lastName: 'Doe',
+      paymentReceived: 'true',
+      paymentAmount: 8
+    })
+
+    if (!attendee) {
+      throw invalidsetup()
+    }
+
+    // update workshop (remove chargeable)
+    await trpc.socialWorker.workshop.updateWorkshop({
+      id: workshopIds[0],
+      chargeable: false,
+      date: new Date(),
+      name: 'Atelier gratuit',
+      mode: UpdateWorkshopNameMode.all
+    })
+
+    // attendee should not have payment info
+    const attendeeWithPaymentInfo =
+      await prismaClient.workshopAttendee.findFirstOrThrow({
+        select: {
+          id: true,
+          paymentReceived: true,
+          paymentAmount: true
+        },
+        where: {
+          id: attendee.id
+        }
+      })
+
+    expect(attendeeWithPaymentInfo.paymentReceived).toBe(null)
+    expect(attendeeWithPaymentInfo.paymentAmount).toBe(null)
+  })
+})
+
 async function resetDatabase(wids: string[], wnids: string[], poid: string) {
   if (wids) {
     await prismaClient.workshop.deleteMany({ where: { id: { in: wids } } })
+    await prismaClient.workshopAttendee.deleteMany({
+      where: { workshop: { id: { in: wids } } }
+    })
   }
   if (wnids) {
     await prismaClient.workshopName.deleteMany({

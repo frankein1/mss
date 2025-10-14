@@ -10,5 +10,6 @@ export { housingHelpRequestFieldLabels } from './housingHelpRequest.labels'
 export { partnerOrganizationFieldLabels } from './partnerOrganization.labels'
 export {
   workshopLabels,
-  workshopExternalAttendeeLabels
+  workshopExternalAttendeeLabels,
+  workshopAttendeeLabels
 } from './workshop.labels'

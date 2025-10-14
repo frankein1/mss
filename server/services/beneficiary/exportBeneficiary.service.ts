@@ -583,7 +583,10 @@ const getWorkshopData = (workshop: WorkshopWithAttendee) => {
       ? workshopAttendeeAttendanceKeys.value(
           workshop.workshopAttendees[0]?.attendance
         )
-      : ''
+      : '',
+    paymentAmount: workshop.workshopAttendees[0]?.paymentReceived
+      ? workshop.workshopAttendees[0].paymentAmount
+      : undefined
   }
 }
 
@@ -897,7 +900,9 @@ const getWorkshops = async (beneficiaryId: string, user: User) => {
         },
         select: {
           attendance: true,
-          comment: true
+          comment: true,
+          paymentAmount: true,
+          paymentReceived: true
         }
       }
     },

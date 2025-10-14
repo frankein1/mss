@@ -61,7 +61,7 @@
         v-model:similar-beneficiary="similarBeneficiary"
         :usual-name="values.lastName"
         :first-name="values.firstName"
-        :birth-date="values.birthDate"
+        :birth-date="values.birthDate || null"
       />
 
       <VeeCityInput
@@ -75,6 +75,23 @@
         name="comment"
         label="Commentaire"
       />
+
+      <template v-if="isWorkshopChargeable">
+        <div class="fr-col-12">
+          <VeeRadioButtons
+            name="paymentReceived"
+            :label="workshopAttendeeLabels.paymentReceived"
+            :options="paymentReceivedKeys.options"
+          />
+        </div>
+
+        <VeeCurrencyInput
+          v-if="values.paymentReceived === 'true'"
+          class="fr-col-12 fr-col-md-8 fr-col-lg-6"
+          name="paymentAmount"
+          :label="workshopAttendeeLabels.paymentAmount"
+        />
+      </template>
     </div>
 
     <DsfrButtonGroup
@@ -106,14 +123,18 @@
 </template>
 
 <script setup lang="ts">
-  import { workshopExternalAttendeeLabels } from '~/client/labels'
-  import { beneficiaryGenderKeys } from '~/client/options'
+  import {
+    workshopExternalAttendeeLabels,
+    workshopAttendeeLabels
+  } from '~/client/labels'
+  import { beneficiaryGenderKeys, paymentReceivedKeys } from '~/client/options'
   import type { SimilarBeneficiary } from '~/server/route'
   import type { CreateExternalAttendeeInput } from '~/server/schema'
   import { createExternalAttendeeSchema } from '~/server/schema'
 
   const { workshopId, refresh } = defineProps<{
     workshopId: string
+    isWorkshopChargeable: boolean | null
     refresh: () => void
   }>()
 
