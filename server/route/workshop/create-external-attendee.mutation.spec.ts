@@ -63,7 +63,7 @@ test('Workshop - Create External Attendee - An agent can create an external atte
     lastName: 'DUPONT',
     gender: 'Female',
     comment: 'Can only come in the morning',
-    birthDate: '1975/03/23'
+    birthDate: new Date('1975/03/23')
   })
 
   workshopAttendeeId = created.id

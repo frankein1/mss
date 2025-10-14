@@ -6,7 +6,8 @@ import {
   validEmailMessage,
   requiredErrorMessage,
   errorMessages,
-  validYear
+  validYear,
+  validDate
 } from '~/utils/zod'
 
 export const paginatedSchema = z.object({
@@ -126,20 +127,12 @@ export const amountNumber = z.preprocess(
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
-export const dateOrEmpty = z.preprocess(
-  val => (val === '' || val === undefined ? null : val),
-  z
-    .date({ coerce: true })
-    .nullish()
-    .refine(
-      date => {
-        return !date || date.getFullYear() <= 9999
-      },
-      {
-        message: validYear
-      }
-    )
-)
+export const dateOrEmpty = z
+  .union(
+    [z.date({ coerce: true }).nullish(), z.literal('').transform(() => null)],
+    { errorMap: () => ({ message: validDate }) }
+  )
+  .refine(d => !d || d.getFullYear() <= 9999, { message: validYear })
 
 export const openText = (maxLength: number) =>
   stringConstraint

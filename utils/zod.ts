@@ -26,3 +26,4 @@ export const validNumber =
 export const validIntNumber = 'Veuillez entrer un nombre entier.'
 
 export const validYear = 'Veuillez renseigner une année valide.'
+export const validDate = 'Veuillez renseigner un format de date valide.'

@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest'
-import { phoneConstraint } from './helpers.schema'
+import { dateOrEmpty, phoneConstraint } from './helpers.schema'
+import { validDate } from '~/utils/zod'
 
 describe('phone number schema', () => {
   test('fails phone number with 3 digits', () => {
@@ -72,5 +73,61 @@ describe('phone number schema', () => {
 
   test('validates international phone number from japan', () => {
     expect(phoneConstraint.safeParse('+813 12 34 56 78').success).toBe(true)
+  })
+})
+
+describe('date or empty schema', () => {
+  test('validates empty date', () => {
+    const d = dateOrEmpty.safeParse('')
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(null)
+  })
+
+  test('validates undefined date', () => {
+    const d = dateOrEmpty.safeParse(undefined)
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(undefined)
+  })
+
+  test('validates null date', () => {
+    const d = dateOrEmpty.safeParse(null)
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(null)
+  })
+
+  test('does not validate when not a date format', () => {
+    const d = dateOrEmpty.safeParse('abcd')
+    expect(d.success).toBe(false)
+    expect(d.error?.errors[0]?.message).toBe(validDate)
+  })
+
+  test('validates with format with `YYYY-MM-DD`', () => {
+    const d = dateOrEmpty.safeParse('2020-01-20')
+    expect(d.success).toBe(true)
+    expect(d.data).toStrictEqual(new Date('2020-01-20'))
+  })
+
+  test('does not validate when year is not valid (allows to avoid postgres errors in date)', () => {
+    const d = dateOrEmpty.safeParse('10000-01-01')
+    expect(d.success).toBe(false)
+    expect(d.error?.errors[0]?.message).toBe(validYear)
+  })
+
+  test('validates with format with `YYYY/MM/DD`', () => {
+    const d = dateOrEmpty.safeParse('2020/01/20')
+    expect(d.success).toBe(true)
+    expect(d.data).toStrictEqual(new Date('2020-01-20'))
+  })
+
+  test('does not validate with format with `DD/MM/YYYY`', () => {
+    const d = dateOrEmpty.safeParse('20-01-2020')
+    expect(d.success).toBe(false)
+    expect(d.error?.errors[0]?.message).toBe(validDate)
+  })
+
+  test('validates with format `MMM DD YYYY`', () => {
+    const d = dateOrEmpty.safeParse('Jan 20 2020')
+    expect(d.success).toBe(true)
+    expect(d.data).toStrictEqual(new Date('2020-01-20'))
   })
 })
