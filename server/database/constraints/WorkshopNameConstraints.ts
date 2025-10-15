@@ -4,15 +4,22 @@ import { isAdmin } from '~/server/security/rules/helpers'
 
 // For now, all users of a structure can see, edit, delete, create any
 // workshop name in the same structure.
-// TODO: make sure that's what we want
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.WorkshopNameWhereInput = {}
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
-    structureId: user.structureId
-  })
+
+  if (!user.structureId) {
+    throw new Error('workshop-name-constraints: missing structure id')
+  }
+
+  Object.assign<Prisma.WorkshopNameWhereInput, Prisma.WorkshopNameWhereInput>(
+    where,
+    {
+      structureId: user.structureId
+    }
+  )
   return where
 }
 

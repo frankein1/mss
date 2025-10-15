@@ -4,11 +4,14 @@ import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {
-  const where = {}
+  const where: Prisma.BeneficiaryRelativeWhereInput = {}
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
+  Object.assign<
+    Prisma.BeneficiaryRelativeWhereInput,
+    Prisma.BeneficiaryRelativeWhereInput
+  >(where, {
     beneficiary: BeneficiaryConstraints.get(user)
   })
 
@@ -20,6 +23,7 @@ const update = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+  // The user.structureId check is performed in BeneficiaryConstraints
   Object.assign<
     Prisma.BeneficiaryRelativeWhereInput,
     Prisma.BeneficiaryRelativeWhereInput

@@ -7,12 +7,23 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
-    structureId: user.structureId
-  })
+
+  if (!user.structureId) {
+    throw new Error('family-file-constraints: missing structure id')
+  }
+
+  Object.assign<Prisma.FamilyFileWhereInput, Prisma.FamilyFileWhereInput>(
+    where,
+    {
+      structureId: user.structureId
+    }
+  )
 
   if (isReferent(user)) {
-    Object.assign(where, { referents: { some: { id: user.id } } })
+    Object.assign<Prisma.FamilyFileWhereInput, Prisma.FamilyFileWhereInput>(
+      where,
+      { referents: { some: { id: user.id } } }
+    )
   }
   return where
 }

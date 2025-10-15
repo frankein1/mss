@@ -8,6 +8,7 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+  // The user.structureId check is performed in WorkshopConstraints
   Object.assign<
     Prisma.WorkshopExternalAttendeeWhereInput,
     Prisma.WorkshopExternalAttendeeWhereInput

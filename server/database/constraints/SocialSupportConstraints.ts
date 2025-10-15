@@ -7,9 +7,14 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+
+  if (!user.structureId) {
+    throw new Error('social-support-constraints: missing structure id')
+  }
+
   Object.assign<Prisma.SocialSupportWhereInput, Prisma.SocialSupportWhereInput>(
     where,
-    { structureId: user.structureId || undefined }
+    { structureId: user.structureId }
   )
 
   if (isReferent(user)) {

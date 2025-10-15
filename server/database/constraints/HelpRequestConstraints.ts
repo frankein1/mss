@@ -8,9 +8,13 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
-    fileInstruction: FileInstructionConstraints.get(user)
-  })
+  // The user.structureId check is performed in FileInstructionConstraints
+  Object.assign<Prisma.HelpRequestWhereInput, Prisma.HelpRequestWhereInput>(
+    where,
+    {
+      fileInstruction: FileInstructionConstraints.get(user)
+    }
+  )
 
   return where
 }

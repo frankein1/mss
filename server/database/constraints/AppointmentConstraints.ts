@@ -8,9 +8,12 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
-    socialSupport: SocialSupportConstraints.get(user)
-  })
+  Object.assign<Prisma.AppointmentWhereInput, Prisma.AppointmentWhereInput>(
+    where,
+    {
+      socialSupport: SocialSupportConstraints.get(user)
+    }
+  )
 
   return where
 }

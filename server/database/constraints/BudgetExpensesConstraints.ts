@@ -7,13 +7,18 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+
+  if (!user.structureId) {
+    throw new Error('budget-expenses-constraints: missing structure id')
+  }
+
   Object.assign<
     Prisma.BudgetExpensesWhereInput,
     Prisma.BudgetExpensesWhereInput
   >(where, {
     budget: {
       familyFile: {
-        structureId: user.structureId || undefined
+        structureId: user.structureId
       }
     }
   })

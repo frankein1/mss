@@ -7,15 +7,27 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
-  Object.assign(where, {
-    structureId: user.structureId,
-    draft: false
-  })
+
+  // A non admin user should always have structure id filled
+  if (!user.structureId) {
+    throw new Error('beneficiary-constraints: missing structure id')
+  }
+
+  Object.assign<Prisma.BeneficiaryWhereInput, Prisma.BeneficiaryWhereInput>(
+    where,
+    {
+      structureId: user.structureId,
+      draft: false
+    }
+  )
 
   if (isReferent(user)) {
-    Object.assign(where, {
-      familyFile: { referents: { some: { id: user.id } } }
-    })
+    Object.assign<Prisma.BeneficiaryWhereInput, Prisma.BeneficiaryWhereInput>(
+      where,
+      {
+        familyFile: { referents: { some: { id: user.id } } }
+      }
+    )
   }
 
   return where

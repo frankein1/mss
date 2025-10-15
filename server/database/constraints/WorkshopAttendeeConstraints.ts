@@ -8,6 +8,7 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+  // The user.structureId check is performed in WorkshopConstraints
   Object.assign<
     Prisma.WorkshopAttendeeWhereInput,
     Prisma.WorkshopAttendeeWhereInput
@@ -40,8 +41,16 @@ const count = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
+
+  if (!user.structureId) {
+    throw new Error('workshop-attendee-constraints: missing structure id')
+  }
+
   // All roles can count attendees
-  Object.assign(where, {
+  Object.assign<
+    Prisma.WorkshopAttendeeWhereInput,
+    Prisma.WorkshopAttendeeWhereInput
+  >(where, {
     workshop: {
       structureId: user.structureId
     }
