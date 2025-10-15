@@ -1074,6 +1074,8 @@ enum Minister {
   StephanieRist
   // Charlotte Parmentier-Lecocq - 3 Gvt Lecornu (Ministre déléguée, chargée de l’Autonomie et des Personnes handicapées)
   CharlotteParmentierLecornu2
+  // Sarah El Hairy (3) Gvt Lecornu (2) - Haut-Commissaire à l'Enfance
+  SarahElHairyLecornu2
 }
 
 enum BeneficiaryAccommodationZone {
