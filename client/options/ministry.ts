@@ -7,6 +7,14 @@ import {
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const ministerKeys = buildKeys({
+  [Minister.JeanPierreFarandou]:
+    'Jean-Pierre Farandou – Gvt Lecornu (2) (Ministre du Travail et des Solidarités)',
+  [Minister.StephanieRist]:
+    'Stéphanie Rist – Gvt Lecornu (2) (Ministre de la Santé, des Familles, de l’Autonomie et des Personnes handicapées)',
+  [Minister.CharlotteParmentierLecornu2]:
+    'Charlotte Parmentier-Lecocq (3) – Gvt Lecornu (2) (Ministre déléguée, chargée de l’Autonomie et des Personnes handicapées)',
+  [Minister.SarahElHairyLecornu2]:
+    'Sarah El Hairy (3) – Gvt Lecornu (2) (Haut-Commissaire à l’Enfance)',
   [Minister.SarahElHairyBayrou1]:
     'Sarah El Haïry (2) - Gvt Bayrou (Haut-commissaire à l’enfance)',
   [Minister.CharlotteParmentierLecocqBayrou1]:
