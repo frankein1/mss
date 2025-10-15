@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.50.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.50.0...v1.50.1) (2025-10-15)
+
+
+### Bug Fixes
+
+* **ministre:** fix typo ([e0b6152](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e0b615263b038ad03a320f42d1a206166054a0af)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+* **ministres:** liste des ministres ([03c7958](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/03c7958ad1b2e5f79f206edf5df6e81f227a438d))
+
 ## [1.50.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.49.0...v1.50.0) (2025-10-09)
 
 
