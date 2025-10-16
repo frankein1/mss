@@ -55,6 +55,8 @@
         >
           Rendez-vous
         </button>
+      </li>
+      <li>
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0"
           type="button"
