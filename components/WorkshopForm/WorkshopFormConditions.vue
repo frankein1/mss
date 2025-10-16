@@ -7,7 +7,22 @@
         Conditions de participation
       </h2>
     </div>
-    <div class="workshop-form-toggle fr-col-12">
+    <div class="workshop-form-toggle fr-col-12 fr-mt-2v">
+      <VeeToggle
+        :label="workshopLabels.chargeable"
+        name="chargeable"
+        :checked-label="false"
+        hint="Vous pourrez indiquer pour chaque personne son règlement."
+      />
+      <AtomAlert
+        v-if="chargeable.meta.initialValue && chargeable.value.value === false"
+        class="fr-mt-4v"
+        :alert-type="AlertType.Warning"
+        message="Les montants précédemment renseignés seront définitivement supprimés."
+      />
+    </div>
+
+    <div class="workshop-form-toggle fr-col-12 fr-mt-2v">
       <!-- Do not use DsfrToggleSwitch here. Bug: duplicate id on label and hint paragraph -->
       <div class="fr-toggle">
         <input
@@ -58,20 +73,6 @@
         :label="workshopLabels.ageLimit"
         name="ageLimit"
         :disabled="!ageLimitCondition"
-      />
-    </div>
-    <div class="workshop-form-toggle fr-col-12 fr-mt-2v">
-      <VeeToggle
-        :label="workshopLabels.chargeable"
-        name="chargeable"
-        :checked-label="false"
-        hint="Vous pourrez indiquer pour chaque personne son règlement."
-      />
-      <AtomAlert
-        v-if="chargeable.meta.initialValue && chargeable.value.value === false"
-        class="fr-mt-4v"
-        :alert-type="AlertType.Warning"
-        message="Les montants précédemment renseignés seront définitivement supprimés."
       />
     </div>
   </section>
