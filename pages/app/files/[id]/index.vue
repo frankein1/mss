@@ -23,7 +23,7 @@
         :is-submitting-appointment-plan
         class="fr-pb-3w"
         @plan-appointment="handleAppointmentPlan"
-        @start-simulation="handleStartSimulation"
+        @prefill-simulation="handlePrefillSimulation"
       />
       <hr />
 
@@ -339,14 +339,14 @@
     })
   }
 
-  function handleStartSimulation() {
-    return startSimulation(familyFileId)
+  function handlePrefillSimulation() {
+    return prefillSimulation(familyFileId)
   }
 
-  async function startSimulation(familyFileId: string) {
+  async function prefillSimulation(familyFileId: string) {
     await useTrpcMutation({
       mutation: () =>
-        trpcClient.mesAides.startSimulation.mutate({ familyFileId: familyFileId.value }),
+        trpcClient.mesAides.prefillSimulation.mutate({ familyFileId: familyFileId.value }),
       onSuccess: ({url}) => {
         window.location.href = url
       },

@@ -61,7 +61,7 @@
           title="Simulation"
           :disabled="isSubmittingAppointmentPlan"
           :readonly="isSubmittingAppointmentPlan"
-          @click="emit('startSimulation')"
+          @click="emit('prefillSimulation')"
         >
           Simulation préremplie
         </button>
