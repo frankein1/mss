@@ -4,6 +4,14 @@ import {
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { PrefillSimulationInput } from '~/server/schema'
 
+interface Answer {
+  entityName: string
+  fieldName?: string
+  id?: string
+  path?: string
+  value: any
+}
+
 async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationInput):Promise<
   { url: string }
 > {
@@ -29,7 +37,7 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationI
     public: { mesAides: { host } }
   } = useRuntimeConfig()
 
-  const answers = [
+  const answers: Answer[] = [
     {
       "id": "demandeur",
       "entityName": "individu",
