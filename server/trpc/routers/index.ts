@@ -22,19 +22,10 @@ import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
+import { mesAidesRouter } from './mesAidesRouter'
 import { rdvspRouter } from './rdvspRouter'
-import { router, protectedProcedure } from '~/server/trpc'
+import { router } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
-
-
-
-import { mesAidesRoutes } from '~/server/route'
-
-export const mesAidesRouter = router({
-  startSimulation: protectedProcedure
-    .input(mesAidesRoutes.startSimulation.inputValidation)
-    .mutation(mesAidesRoutes.startSimulation.execute),
-})
 
 export const appRouter = router({
   admin: adminRouter,
