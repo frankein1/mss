@@ -59,8 +59,6 @@
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0"
           type="button"
           title="Simulation"
-          :disabled="isSubmittingAppointmentPlan"
-          :readonly="isSubmittingAppointmentPlan"
           @click="emit('prefillSimulation')"
         >
           Simulation préremplie
