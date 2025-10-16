@@ -340,7 +340,7 @@
   }
 
   function handlePrefillSimulation() {
-    return prefillSimulation(familyFileId)
+    return prefillSimulation(familyFileId.value)
   }
 
   async function prefillSimulation(familyFileId: string) {

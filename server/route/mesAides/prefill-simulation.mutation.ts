@@ -1,5 +1,7 @@
 import { createQuery, createMutation } from '~/server/route'
-import { prefillSimulationSchema, PrefillSimulationInput } from '~/server/schema/mesAides.schema'
+import { prefillSimulationSchema } from '~/server/schema/mesAides.schema'
+import type { PrefillSimulationInput } from '~/server/schema/mesAides.schema'
+import type { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { MesAidesService } from '~/server/services'
 

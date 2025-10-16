@@ -2,7 +2,7 @@ import {
   FamilyFileRepo,
 } from '~/server/database'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { PrefillSimulationInput } from '~/server/schema'
+import type { PrefillSimulationInput } from '~/server/schema'
 
 async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationInput):Promise<
   { url: string }
@@ -38,31 +38,34 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationI
     }
   ]
 
-  const dob = familyFile.beneficiaries[0].birthDate
-  if (dob) {
-    answers.push({
-      "id": "demandeur",
-      "entityName": "individu",
-      "fieldName": "date_naissance",
-      "value": dob,
-    })
-  }
-
-  if (familyFile.beneficiaries.length > 1) {
-    const conjoint = familyFile.beneficiaries.find(b => b.relationship === "Conjoint")
-    if (conjoint) {
+  const b0 = familyFile.beneficiaries[0]
+  if (b0) {
+    const dob = b0.birthDate
+    if (dob) {
       answers.push({
-        "entityName": "famille",
-        "fieldName": "en_couple",
-        "value": true,
+        "id": "demandeur",
+        "entityName": "individu",
+        "fieldName": "date_naissance",
+        "value": dob,
       })
-      if (conjoint.birthDate) {
+    }
+
+    if (familyFile.beneficiaries.length > 1) {
+      const conjoint = familyFile.beneficiaries.find(b => b.relationship === "Conjoint")
+      if (conjoint) {
         answers.push({
-          "id": "conjoint",
-          "entityName": "individu",
-          "fieldName": "date_naissance",
-          "value": conjoint.birthDate,
+          "entityName": "famille",
+          "fieldName": "en_couple",
+          "value": true,
         })
+        if (conjoint.birthDate) {
+          answers.push({
+            "id": "conjoint",
+            "entityName": "individu",
+            "fieldName": "date_naissance",
+            "value": conjoint.birthDate,
+          })
+        }
       }
     }
   }
