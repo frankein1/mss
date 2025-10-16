@@ -346,7 +346,7 @@
   async function prefillSimulation(familyFileId: string) {
     await useTrpcMutation({
       mutation: () =>
-        trpcClient.mesAides.prefillSimulation.mutate({ familyFileId: familyFileId.value }),
+        trpcClient.mesAides.prefillSimulation.mutate({ familyFileId: familyFileId }),
       onSuccess: ({url}) => {
         window.location.href = url
       },
