@@ -23,11 +23,10 @@ import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
 import { rdvspRouter } from './rdvspRouter'
-import { router } from '~/server/trpc'
+import { router, protectedProcedure } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
 
 
-import { protectedProcedure, router } from '~/server/trpc'
 
 import { mesAidesRoutes } from '~/server/route'
 
@@ -35,9 +34,6 @@ export const mesAidesRouter = router({
   startSimulation: protectedProcedure
     .input(mesAidesRoutes.startSimulation.inputValidation)
     .mutation(mesAidesRoutes.startSimulation.execute),
-  getBenefits: protectedProcedure
-    .input(mesAidesRoutes.getBenefits.inputValidation)
-    .query(mesAidesRoutes.getBenefits.execute),
 })
 
 export const appRouter = router({

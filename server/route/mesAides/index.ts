@@ -18,31 +18,9 @@ export type StartSimulationInput = z.infer<typeof startSimulationSchema>
 
 const securityCheck = AllowSecurityCheck
 
-async function fetchBenefits():Promise<
-  { slug: string }
-> {
-/*  const response = await fetch("http://localhost:8080/api/benefits")
-  const payload = await response.json()
-
-  return { slug: payload[0].slug }*/
-
-  return { slug: "cook"}
-}
-
-const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
-  fetchBenefits()
-
-const getBenefits = createQuery({
-  inputValidation: emptySchema,
-  handler,
-  securityCheck
-})
-
-
 async function prefillSimulation(ctx: ProtectedAppContext, v: StartSimulationInput):Promise<
   { url: string }
 > {
-
 
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
     where: { id: v.familyFileId },
@@ -71,10 +49,6 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: StartSimulationInp
     }
   })
 
-  // console.log(JSON.stringify(familyFile, null, 2))
-
-  const dob = familyFile.beneficiaries[0].birthDate
-
   const domain = "http://localhost:8080"
   const answers = [
     {
@@ -82,23 +56,36 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: StartSimulationInp
       "entityName": "individu",
       "fieldName": "pivot-data",
       "value": "local-mss-id"
-    },
-    {
+    }
+  ]
+
+  const dob = familyFile.beneficiaries[0].birthDate
+  if (dob) {
+    answers.push({
       "id": "demandeur",
       "entityName": "individu",
       "fieldName": "date_naissance",
       "value": dob,
-    },
-  ]
+    })
+  }
 
   if (familyFile.beneficiaries.length > 1) {
-    answers.push(
-    {
-      "id": "conjoint",
-      "entityName": "individu",
-      "fieldName": "date_naissance",
-      "value": familyFile.beneficiaries[1].birthDate,
-    })
+    const conjoint = familyFile.beneficiaries.find(b => b.relationship === "Conjoint")
+    if (conjoint) {
+      answers.push({
+        "entityName": "famille",
+        "fieldName": "en_couple",
+        "value": true,
+      })
+      if (conjoint.birthDate) {
+        answers.push({
+          "id": "conjoint",
+          "entityName": "individu",
+          "fieldName": "date_naissance",
+          "value": conjoint.birthDate,
+        })
+      }
+    }
   }
   const body = {
     dateDeValeur: new Date(),
@@ -125,7 +112,7 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: StartSimulationInp
   return { url: redirect_to }
 }
 
-const handler2 = ({
+const handler = ({
   input,
   ctx
 }: {
@@ -136,11 +123,10 @@ const handler2 = ({
 
 const startSimulation = createMutation({
   inputValidation: startSimulationSchema,
-  handler: handler2,
+  handler: handler,
   securityCheck,
 })
 
 export const mesAidesRoutes = {
-  getBenefits,
   startSimulation
 }

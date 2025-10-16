@@ -8,6 +8,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
+    "dev:db:stop": "docker compose -f docker-compose.dev.yml down",
     "lint:typecheck": "nuxt typecheck",
     "lint:js": "eslint .",
     "lint:style": "stylelint \"**/*.{css,scss,sass,html,vue}\"",

@@ -63,18 +63,8 @@
           :readonly="isSubmittingAppointmentPlan"
           @click="emit('startSimulation')"
         >
-          Simulation
+          Simulation préremplie
         </button>
-      </li>
-      <li class="mesdroitssociaux-btn-container">
-        <NuxtLink
-          to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
-          class="fr-link"
-          title="Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr - nouvelle fenêtre"
-          target="_blank"
-          rel="noopener external"
-          >Simulation de droits sociaux</NuxtLink
-        >
       </li>
     </ul>
   </div>
@@ -85,7 +75,6 @@
   import type { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
   import WorkshopAddBeneficiaryModal from '~/components/Workshop/WorkshopAddBeneficiaryModal.vue'
-
 
   const props = defineProps<{
     familyFileId: string
@@ -98,12 +87,6 @@
   const emit = defineEmits<{ planAppointment: [], startSimulation: [] }>()
   const modal = useModal()
   const { application } = usePermissions()
-
-  const trpcClient = useTrpcClient()
-
-  //const stuff = await (await fetch("/api/health-check")).text()
-  //const stuff = await trpcClient.mesAides.getBenefits.query()
-  //console.log(stuff)
 
   function onAddHelpRequest() {
     modal.open(HelpRequestModal, {
