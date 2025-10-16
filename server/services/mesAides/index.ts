@@ -22,20 +22,13 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationI
         },
         orderBy: { created: 'asc' }
       },
-      referents: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-          role: true,
-          status: true
-        }
-      }
     }
   })
 
-  const domain = "http://localhost:8080"
+  const {
+    public: { mesAides: { host } }
+  } = useRuntimeConfig()
+
   const answers = [
     {
       "id": "demandeur",
@@ -81,7 +74,7 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationI
     }
   }
 
-  const post_url = `${domain}/api/simulation`
+  const post_url = `${host}/api/simulation`
   const response = await fetch(post_url, {
     method: "POST",
     body: JSON.stringify(body),
@@ -93,7 +86,7 @@ async function prefillSimulation(ctx: ProtectedAppContext, v: PrefillSimulationI
 
   const location = "/recapitulatif"
   const to = location ? `&to=${location}` : ''
-  const redirect_to = `${domain}/api/simulation/${simulation._id}/redirect?token=${simulation.token}${to}`
+  const redirect_to = `${host}/api/simulation/${simulation._id}/redirect?token=${simulation.token}${to}`
 
   return { url: redirect_to }
 }

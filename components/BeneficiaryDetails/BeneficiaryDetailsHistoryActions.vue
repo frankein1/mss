@@ -84,7 +84,7 @@
     familyFile: boolean
   }>()
 
-  const emit = defineEmits<{ planAppointment: [], startSimulation: [] }>()
+  const emit = defineEmits<{ planAppointment: [], prefillSimulation: [] }>()
   const modal = useModal()
   const { application } = usePermissions()
 
