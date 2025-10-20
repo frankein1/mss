@@ -20,7 +20,7 @@
         <template v-else-if="attendee.isAnonymized">
           <span
             :aria-describedby="ANON_EXTERNAL_TOOLTIP_ID"
-            class="fr-icon--sm fr-icon-eye-off-line fr-ml-1v"
+            class="fr-icon--sm fr-icon-information-line fr-ml-1v"
             aria-hidden="true"
           >
           </span>
@@ -28,7 +28,8 @@
             :id="ANON_EXTERNAL_TOOLTIP_ID"
             class="fr-tooltip fr-placement"
             role="tooltip"
-            >Non bénéficiaire - donnée anonymisée après 3 mois
+            >En tant que non bénéficiaire, les données sont anonymisées 3 mois
+            après l'atelier
           </span>
         </template>
       </p>
@@ -198,6 +199,13 @@
       title = beneficiaryTitleKeys.value(BeneficiaryTitle.Miss) || ''
     } else if (attendee.gender === Gender.Male) {
       title = beneficiaryTitleKeys.value(BeneficiaryTitle.Mister) || ''
+    }
+
+    if (
+      attendee.type === WorkshopAttendeeType.External &&
+      attendee.isAnonymized
+    ) {
+      return `${title + ' '}(données anonymisées)`
     }
 
     return `${title + ' '}${(attendee.firstName || '(non renseigné)') + ' '}${attendee.lastName || '(non renseigné)'}`
