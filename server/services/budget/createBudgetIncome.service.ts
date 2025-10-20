@@ -2,6 +2,7 @@ import type { Prisma } from '@prisma/client'
 import { BudgetIncomeType } from '@prisma/client'
 import { BudgetIncomeRepo } from '~/server/database'
 import type { CreateBudgetIncomeInput } from '~/server/schema'
+import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
 export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
   const { budgetId, member, beneficiaryId } = input
@@ -10,7 +11,7 @@ export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
     type: BudgetIncomeType.HouseholdMember,
     budgetId
   }
-  if (beneficiaryId && beneficiaryId !== 'other') {
+  if (beneficiaryId && beneficiaryId !== BUDGET_INCOME_FOR_MEMBER_VALUE) {
     data.beneficiaryId = beneficiaryId
   } else if (member) {
     data.firstName = member.firstName

@@ -22,7 +22,7 @@
 
         <template
           v-if="
-            selectedBeneficiary === 'other' ||
+            selectedBeneficiary === BUDGET_INCOME_FOR_MEMBER_VALUE ||
             props.familyFileIdentification.length === 0
           "
         >
@@ -76,6 +76,7 @@
   import { createBudgetIncomeSchema } from '~/server/schema'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
   const props = defineProps<{
     budgetId: string
@@ -85,7 +86,7 @@
   }>()
 
   // Refs
-  const selectedBeneficiary = ref<string | undefined | 'other'>(undefined)
+  const selectedBeneficiary = ref<string | undefined>(undefined)
 
   const modal = useModal()
 
@@ -96,7 +97,7 @@
     }))
     options.push({
       label: 'Autre',
-      value: 'other'
+      value: BUDGET_INCOME_FOR_MEMBER_VALUE
     })
     return options
   })

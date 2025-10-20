@@ -5,8 +5,7 @@ import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-
-import { PartnerOrganizationService } from '~/server/services'
+import { PartnerOrganizationRepo } from '~/server/database'
 
 const handler = ({
   input,
@@ -14,9 +13,17 @@ const handler = ({
 }: {
   input: IdInput
   ctx: ProtectedAppContext
-}) => {
-  return PartnerOrganizationService.remove({ input, ctx })
-}
+}) =>
+  PartnerOrganizationRepo.update(ctx.user, {
+    select: { id: true },
+    where: {
+      id: input.id,
+      structureId: ctx.structure.id
+    },
+    data: {
+      inactive: true
+    }
+  })
 
 const securityCheck = (ctx: SecurityRuleContext, _input: IdInput) => {
   const appPermissions = getAppContextPermissions(ctx)

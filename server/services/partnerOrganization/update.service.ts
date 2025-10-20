@@ -60,9 +60,10 @@ export async function update({
       }
     }))
 
-  const res = await PartnerOrganizationRepo.prisma.update({
+  const res = await PartnerOrganizationRepo.update(ctx.user, {
     where: {
-      id: input.id
+      id: input.id,
+      structureId: ctx.structure.id
     },
     data: {
       ...partner,

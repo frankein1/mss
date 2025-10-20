@@ -23,5 +23,6 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const PartnerOrganizationConstraints = {
-  get
+  get,
+  update: get
 }

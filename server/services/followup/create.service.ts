@@ -116,7 +116,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     }
   })
 
-  await SocialSupportSubjectService.markUsed(subjects)
+  await SocialSupportSubjectService.markUsed({ structure, user }, subjects)
 
   return fu
 }

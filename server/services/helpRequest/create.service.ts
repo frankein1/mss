@@ -128,7 +128,7 @@ export async function create({ input, ctx }: CreateParams) {
     }
   })
 
-  await SocialSupportSubjectService.markUsed([input.subjectId])
+  await SocialSupportSubjectService.markUsed(ctx, [input.subjectId])
 
   return { id, socialSupportId: fileInstruction.socialSupportId }
 }

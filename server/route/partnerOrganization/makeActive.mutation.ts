@@ -3,9 +3,8 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
-
-import { PartnerOrganizationService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { PartnerOrganizationRepo } from '~/server/database'
 
 const handler = ({
   input,
@@ -13,9 +12,18 @@ const handler = ({
 }: {
   input: IdInput
   ctx: ProtectedAppContext
-}) => {
-  return PartnerOrganizationService.makeActive({ input, ctx })
-}
+}) =>
+  PartnerOrganizationRepo.update(ctx.user, {
+    where: {
+      id: input.id,
+      structureId: ctx.structure.id
+    },
+    data: { inactive: false },
+    select: {
+      id: true,
+      name: true
+    }
+  })
 
 export const makeActive = createMutation({
   handler,

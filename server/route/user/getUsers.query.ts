@@ -10,6 +10,15 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   return await UserRepo.findMany(user, {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      status: true,
+      role: true,
+      aidantConnectAuthorisation: true
+    },
     orderBy: { role: 'asc' }
   })
 }

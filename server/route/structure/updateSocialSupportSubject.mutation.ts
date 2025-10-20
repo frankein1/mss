@@ -4,17 +4,24 @@ import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 import { updateSocialSupportSubjectSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { SocialSupportSubjectService } from '~/server/services'
+import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { SocialSupportSubjectRepo } from '~/server/database'
 
 const handler = async ({
-  input,
-  ctx: _ctx
+  input: { id, name },
+  ctx
 }: {
   input: UpdateSocialSupportSubjectNameInput
   ctx: ProtectedAppContext
-}) => {
-  return await SocialSupportSubjectService.update({ input })
-}
+}) =>
+  SocialSupportSubjectRepo.update(ctx.user, {
+    select: { id: true },
+    where: {
+      id,
+      ownedByStructureId: ctx.structure.id
+    },
+    data: { name }
+  })
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).edit.structure
@@ -22,5 +29,13 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 export const updateStructureSubject = createMutation({
   handler,
   inputValidation: updateSocialSupportSubjectSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'structure.update-subject',
+    target: UserActivityObject.Structure,
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

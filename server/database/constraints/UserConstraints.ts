@@ -20,5 +20,6 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const UserConstraints = {
-  get
+  get,
+  update: get
 }

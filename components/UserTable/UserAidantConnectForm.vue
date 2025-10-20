@@ -14,16 +14,16 @@
 </template>
 
 <script setup lang="ts">
-  import type { User } from '@prisma/client'
   import type { UserAidantConnectAuthorisationEditionInput } from '~/server/schema'
   import { editUserAidantConnectAuthorisationSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
+  import type { UsersOutput } from './types'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    user: User
+    user: UsersOutput[0]
   }>()
 
   const { handleSubmit } = useForm<UserAidantConnectAuthorisationEditionInput>({

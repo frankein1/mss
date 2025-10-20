@@ -9,6 +9,7 @@ import {
   dateOrEmpty,
   requiredNativeEnum
 } from '.'
+import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
 export const getBudgetSchema = z.object({
   familyFileId: z.string().uuid()
@@ -116,7 +117,10 @@ export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>
 
 export const createBudgetIncomeSchema = z.object({
   budgetId: z.string().uuid(),
-  beneficiaryId: z.string().optional(),
+  beneficiaryId: z.union([
+    z.string().uuid(),
+    z.literal(BUDGET_INCOME_FOR_MEMBER_VALUE)
+  ]),
   member: z
     .object({
       lastName: beneficiaryLastNameSchema,

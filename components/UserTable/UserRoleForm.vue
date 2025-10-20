@@ -16,17 +16,17 @@
 </template>
 
 <script setup lang="ts">
-  import type { User } from '@prisma/client'
   import { nonAdminUserRoleKeys } from '~/client/options'
   import type { UserRoleEditionInput } from '~/server/schema'
   import { editUserRoleSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
+  import type { UsersOutput } from './types'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    user: User
+    user: UsersOutput[0]
   }>()
 
   const { handleSubmit } = useForm<UserRoleEditionInput>({
@@ -40,8 +40,10 @@
   const onUpdateRole = handleSubmit(user => {
     useTrpcMutation({
       mutation: () => trpcClient.user.update.mutate(user),
-      onSuccess: ({ email }) => {
-        snackbar.success(`Le rôle de l'utilisateur ${email} a été modifié.`)
+      onSuccess: () => {
+        snackbar.success(
+          `Le rôle de l'utilisateur ${props.user.email} a été modifié.`
+        )
       },
       onFailure: () => {
         snackbar.error('La modification du rôle a échoué.')

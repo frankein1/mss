@@ -15,17 +15,17 @@
 </template>
 
 <script setup lang="ts">
-  import type { User } from '@prisma/client'
   import { UserStatus } from '@prisma/client'
   import type { UserStatusEditionInput } from '~/server/schema'
   import { editUserStatusSchema } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
+  import type { UsersOutput } from './types'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    user: User
+    user: UsersOutput[0]
   }>()
 
   const { handleSubmit } = useForm<UserStatusEditionInput>({
@@ -39,11 +39,11 @@
   const onUpdateStatus = handleSubmit(user => {
     useTrpcMutation({
       mutation: () => trpcClient.user.update.mutate(user),
-      onSuccess: ({ email }) => {
+      onSuccess: () => {
         if (user.status) {
-          snackbar.success(`L'utilisateur ${email} a été activé`)
+          snackbar.success(`L'utilisateur ${props.user.email} a été activé`)
         } else {
-          snackbar.success(`L'utilisateur ${email} a été désactivé`)
+          snackbar.success(`L'utilisateur ${props.user.email} a été désactivé`)
         }
       },
       onFailure: () => {

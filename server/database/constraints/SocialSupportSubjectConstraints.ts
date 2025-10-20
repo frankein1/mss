@@ -8,6 +8,7 @@ const get = (user: SecurityRuleGrantee) => {
     return where
   }
 
+  // A non admin user should always have structure id filled
   if (!user.structureId) {
     throw new Error('social-support-subject-constraints: missing structure id')
   }
@@ -23,5 +24,6 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const SocialSupportSubjectConstraints = {
-  get
+  get,
+  update: get
 }

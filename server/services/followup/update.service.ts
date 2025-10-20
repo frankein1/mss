@@ -107,7 +107,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     })
 
   const updateSocialSupportSubject = () =>
-    SocialSupportSubjectService.markUsed(subjects)
+    SocialSupportSubjectService.markUsed(ctx, subjects)
 
   const transactions: (() => Prisma.PrismaPromise<any>)[] = [
     updateSocialSupport,

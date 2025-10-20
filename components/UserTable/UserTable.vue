@@ -55,19 +55,19 @@
             <td>{{ user.email }}</td>
             <td>
               <template v-if="authUserId !== user.id">
-                <UserRoleForm :user="user" />
+                <UserRoleForm :user />
               </template>
               <template v-else>{{
                 nonAdminUserRoleKeys.value(user.role as NonAdminUserRole)
               }}</template>
             </td>
             <td>
-              <UserAidantConnectForm :user="user" />
+              <UserAidantConnectForm :user />
             </td>
             <td>
               <UserStatusForm
                 v-if="authUserId !== user.id"
-                :user="user"
+                :user
               />
             </td>
           </tr>
@@ -78,7 +78,6 @@
 </template>
 
 <script lang="ts" setup>
-  import type { User } from '@prisma/client'
   import type { TRPCClientErrorBase } from '@trpc/client'
   import type { TRPCDefaultErrorShape } from '@trpc/server'
   import { AlertType } from '~/utils/constants/alert'
@@ -86,9 +85,10 @@
   import { userFieldLabels } from '~/client/labels'
   import type { NonAdminUserRole } from '~/types/user'
   import { useAuthState } from '~/composables/useAuthState'
+  import type { UsersOutput } from './types'
 
   defineProps<{
-    users: User[] | null
+    users: UsersOutput | null
     pending: boolean
     error: TRPCClientErrorBase<TRPCDefaultErrorShape> | null
   }>()

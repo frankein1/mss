@@ -33,7 +33,7 @@ export const updateStructureInfo = createMutation({
   inputValidation: editStructureInfoSchema,
   securityCheck,
   auditLog: {
-    key: 'user.update',
+    key: 'structure.update',
     target: UserActivityObject.Structure,
     targetId: ({ ctx }) => {
       return ctx.structure.id

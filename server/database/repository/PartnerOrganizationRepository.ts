@@ -28,12 +28,20 @@ function findUniqueOrThrow<T extends Prisma.PartnerOrganizationFindUniqueArgs>(
   return prismaClient.partnerOrganization.findUniqueOrThrow(params)
 }
 
+function update<T extends Prisma.PartnerOrganizationUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.PartnerOrganizationUpdateArgs>
+) {
+  appendConstraints(user, params, PartnerOrganizationConstraints.update)
+  return prismaClient.partnerOrganization.update(params)
+}
+
 export const PartnerOrganizationRepo = {
   findMany,
   findOne,
   findUniqueOrThrow,
+  update,
   prisma: {
-    update: prismaClient.partnerOrganization.update,
     create: prismaClient.partnerOrganization.create
   }
 }

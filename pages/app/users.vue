@@ -6,7 +6,7 @@
       <div class="fr-col-12">
         <section class="feature-section">
           <UserTable
-            :users="users"
+            :users
             :pending="usersPending"
             :error="usersError"
           />

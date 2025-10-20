@@ -35,15 +35,31 @@ function findUniqueOrThrow<
   return prismaClient.socialSupportSubject.findUniqueOrThrow(params)
 }
 
+function update<T extends Prisma.SocialSupportSubjectUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.SocialSupportSubjectUpdateArgs>
+) {
+  appendConstraints(user, params, SocialSupportSubjectConstraints.update)
+  return prismaClient.socialSupportSubject.update(params)
+}
+
+function updateMany<T extends Prisma.SocialSupportSubjectUpdateManyArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.SocialSupportSubjectUpdateManyArgs>
+) {
+  appendConstraints(user, params, SocialSupportSubjectConstraints.update)
+  return prismaClient.socialSupportSubject.updateMany(params)
+}
+
 export const SocialSupportSubjectRepo = {
   findMany,
   findUniqueOrThrow,
   count,
+  update,
+  updateMany,
   prisma: {
     create: prismaClient.socialSupportSubject.create,
     createMany: prismaClient.socialSupportSubject.createMany,
-    update: prismaClient.socialSupportSubject.update,
-    updateMany: prismaClient.socialSupportSubject.updateMany,
     delete: prismaClient.socialSupportSubject.delete,
     deleteMany: prismaClient.socialSupportSubject.deleteMany,
     findMany: prismaClient.socialSupportSubject.findMany,

@@ -39,6 +39,14 @@ function count(user: SecurityRuleGrantee, params: Prisma.UserCountArgs) {
   return prismaClient.user.count(params)
 }
 
+function update<T extends Prisma.UserUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>
+) {
+  appendConstraints(user, params, UserConstraints.update)
+  return prismaClient.user.update(params)
+}
+
 export const UserRepo = {
   prisma: {
     count: prismaClient.user.count,
@@ -53,5 +61,6 @@ export const UserRepo = {
   findMany,
   findUniqueOrThrow,
   findUnique,
-  count
+  count,
+  update
 }

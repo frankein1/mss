@@ -13,25 +13,34 @@ import { getAppContextPermissions } from '~/server/security'
 import { UserRepo } from '~/server/database'
 
 const handler = async ({
-  ctx: { user: _user },
+  ctx: { user, structure },
   input: { id, ...rest }
 }: {
   ctx: ProtectedAppContext
   input: UserEditionInput
 }) => {
   if ('status' in rest) {
-    return await UserRepo.prisma.update({
-      where: { id },
+    return await UserRepo.update(user, {
+      select: { id: true },
+      where: { id, structureId: structure.id },
       data: { status: rest.status ? UserStatus.Active : UserStatus.Disabled }
     })
   }
-  return await UserRepo.prisma.update({ where: { id }, data: rest })
+  return await UserRepo.update(user, {
+    select: { id: true },
+    where: { id, structureId: structure.id },
+    data: rest
+  })
 }
 
 const securityCheck = (ctx: SecurityRuleContext, input: UserEditionInput) => {
-  if ('role' in input && input.role === UserRole.Administrator) {
+  const tryingToChangeRoleToAdmin =
+    'role' in input && input.role === UserRole.Administrator
+
+  if (tryingToChangeRoleToAdmin) {
     return false
   }
+
   const permissions = getAppContextPermissions(ctx)
   return permissions.module.users
 }
