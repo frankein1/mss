@@ -63,8 +63,8 @@ const paymentReceivedSchema = z
 export const createExternalAttendeeSchema = z.object({
   workshopId: z.string().uuid(),
   gender: nativeEnum(Gender).optional(),
-  lastName: limitedStringConstraint().optional(),
-  firstName: limitedStringConstraint().optional(),
+  lastName: limitedStringConstraint(2, 50).toUpperCase().optional(),
+  firstName: limitedStringConstraint(2, 50).optional(),
   birthDate: dateOrEmpty,
   phone: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
