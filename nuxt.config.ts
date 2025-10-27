@@ -204,7 +204,7 @@ export default defineNuxtConfig({
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',
         tokenValidationInMinutes: parseInt(
-          process.env.TOKEN_VALIDATION_IN_MINUTES || '30'
+          process.env.TOKEN_VALIDATION_IN_MINUTES || '60'
         )
       },
       disconnect: {

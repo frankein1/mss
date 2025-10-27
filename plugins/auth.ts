@@ -25,10 +25,6 @@ export default defineNuxtPlugin(async nuxtApp => {
   let cleanupSessionRefreshHandler: NodeJS.Timeout | undefined
 
   nuxtApp.hook('app:mounted', () => {
-    // Listen for when the page is visible, if the user switches tabs
-    // and makes our tab visible again, renew the session
-    cleanupVisibilityHandler = handleSessionRefreshOnTabVisibilityChange()
-
     // Token refresh management:
     // - Store in local storage an auth session countdown
     // - Renew the token when it is about to be expired
@@ -50,27 +46,6 @@ export default defineNuxtPlugin(async nuxtApp => {
     _unmount()
   }
 })
-
-/**
- * When visibility change for tab, renew the session
- * */
-function handleSessionRefreshOnTabVisibilityChange() {
-  if (!import.meta.client) {
-    console.warn(
-      'auth-management: not on client. handleSessionRefreshOnTabVisibilityChange can only be executed onMounted'
-    )
-    return
-  }
-
-  const { refreshToken } = useAuth()
-  const { isAuthenticated } = useAuthState()
-
-  return useEventListener(document, 'visibilitychange', () => {
-    if (isAuthenticated()) {
-      return refreshToken
-    }
-  })
-}
 
 function handleSessionRefreshOnInterval() {
   if (!import.meta.client) {
