@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.51.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.50.0...v1.51.0) (2025-10-28)
+
+
+### Features
+
+* améliorations des vérifications d'autorisation ([9ab9b89](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9ab9b8957d0dd7f75b2dbb5e0b3a0405d14e0dee)), closes [#907](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/907)
+* **ateliers:** ajout des ateliers payants et somme perçue par participant ([f571704](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f571704c1688a9fae88f8fea6f49ef2171b858ab)), closes [#929](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/929)
+
+
+### Bug Fixes
+
+* **ateliers:** ordre des conditions dans formulaire atelier ([ff19bab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ff19babdcb330015687024c484cd16848c2f25f0)), closes [#940](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/940)
+* intégraton de la dépendance tsx au runtime pour la gestion des schedulers scalingo ([4353f4c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4353f4c1c0d9a8308be59df28868f363f52ea893)), closes [#936](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/936)
+* **ministre:** fix typo ([1d37d6d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1d37d6df5c53a8cd801869bec05994c39e43377b)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+* **ministres:** maj 2 octobre 2025 ([2f96bfc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2f96bfceb630bcd3d627c796f5455ec837009fb1)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+* **ministres:** Mise à jour de la liste ministres oct25 ([14709b0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14709b0098266c837a95f6b2a02e9257bb027143)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+* **sso:** suppression rafraichissement token changement tab et allongement durée token MSS ([abfea5e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/abfea5e4b4302be9bf56b4052d1ae6491eeb59da)), closes [#941](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/941)
+* **workshop:** améliore tuile participants extérieurs anonymisés ([72d0aec](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/72d0aec3b25157f16177ce3896467470ad5c2821)), closes [#936](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/936)
+* **workshop:** majuscule nom participants externes ([8cbdb8f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8cbdb8fd874141794b33cff1e26717dac6ddafce))
+
 ## [1.50.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.49.0...v1.50.0) (2025-10-09)
 
 
