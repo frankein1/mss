@@ -48,7 +48,6 @@ export async function createBeneficiary(
       createdBy: {
         connect: { id: referentId }
       },
-      draft: false,
       aidantConnectAuthorized: true,
       fileNumber,
       status: 'Deceased',

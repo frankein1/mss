@@ -14,7 +14,6 @@ type BeneficiaryFieldLabels = Omit<
   | 'createdById'
   | 'disabledById'
   | 'created'
-  | 'draft'
   | 'previousFamilyFileId'
   | 'splitFromFileById'
   | 'externalRdvspId'

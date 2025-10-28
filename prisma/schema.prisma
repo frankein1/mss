@@ -1652,8 +1652,6 @@ model Beneficiary {
   splitFromFileBy   User?   @relation(name: "split_from_file_beneficiaries", fields: [splitFromFileById], references: [id])
   splitFromFileById String? @map("split_from_file_by_id") @db.Uuid
 
-  draft Boolean @default(false)
-
   aidantConnectAuthorized Boolean @default(false) @map("aidant_connect_authorized")
 
   // General information

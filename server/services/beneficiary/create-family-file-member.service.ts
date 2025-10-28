@@ -30,7 +30,6 @@ export async function createFamilyFileMember(params: CreateParams) {
 
   const data: Prisma.BeneficiaryCreateInput = {
     status: BeneficiaryStatus.Active,
-    draft: false,
     fileNumber,
     structure: connect(ctx.structure.id),
     createdBy: connect(ctx.user.id),

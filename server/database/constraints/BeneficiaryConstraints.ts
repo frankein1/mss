@@ -16,8 +16,7 @@ const get = (user: SecurityRuleGrantee) => {
   Object.assign<Prisma.BeneficiaryWhereInput, Prisma.BeneficiaryWhereInput>(
     where,
     {
-      structureId: user.structureId,
-      draft: false
+      structureId: user.structureId
     }
   )
 
@@ -33,26 +32,7 @@ const get = (user: SecurityRuleGrantee) => {
   return where
 }
 
-const getNoDraftCondition = (user: SecurityRuleGrantee) => {
-  const where: Prisma.BeneficiaryWhereInput = {}
-  if (isAdmin(user)) {
-    return where
-  }
-  Object.assign(where, {
-    structureId: user.structureId
-  })
-
-  if (isReferent(user)) {
-    Object.assign(where, {
-      familyFile: { referents: { some: { id: user.id } } }
-    })
-  }
-
-  return where
-}
-
 export const BeneficiaryConstraints = {
   get,
-  getNoDraftCondition,
   update: get
 }

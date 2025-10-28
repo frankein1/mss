@@ -4,7 +4,7 @@ import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
 import type { IdInput } from '~/server/schema'
 
 async function getBeneficiary(ctx: SecurityRuleContext, beneficiaryId: string) {
-  return await BeneficiaryRepo.findWithNoDraftCondition(ctx.user, {
+  return await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: beneficiaryId },
     select: {
       id: true,

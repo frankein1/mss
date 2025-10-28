@@ -18,7 +18,7 @@ export function getBeneficiarySecurityTarget(
   user: SecurityRuleGrantee,
   id: string
 ) {
-  return BeneficiaryRepo.findWithNoDraftCondition(user, {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,
@@ -42,7 +42,7 @@ function getBeneficiaryArchiveSecurityTarget(
   user: SecurityRuleGrantee,
   id: string
 ) {
-  return BeneficiaryRepo.findWithNoDraftCondition(user, {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,

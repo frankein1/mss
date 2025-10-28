@@ -146,7 +146,6 @@ const adminHandler = async ({
       | 'createdById'
       | 'archiveDueDate'
       | 'archiveDueDateHistory'
-      | 'draft'
       | 'status'
       | 'created'
       | 'updated'

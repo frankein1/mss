@@ -1,8 +1,8 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 
-export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
-  .pick({
+export const createBeneficiarySchema =
+  updateBeneficiaryGeneralInformationSchema.pick({
     status: true,
     referents: true,
     title: true,
@@ -19,10 +19,5 @@ export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
     region: true,
     birthDate: true
   })
-  .merge(
-    z.object({
-      draft: z.boolean().default(false)
-    })
-  )
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
