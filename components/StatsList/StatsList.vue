@@ -104,7 +104,7 @@
         <span>Total</span>
 
         <span>
-          {{ toFixed ? sum.toFixed(toFixed) : sum
+          {{ sum !== undefined && toFixed ? sum.toFixed(toFixed) : sum
           }}<template v-if="unit">{{ unit }}</template>
         </span>
 
@@ -143,7 +143,7 @@
     statsPercentage = true,
     statsColorDot = false,
     subCountLabel = undefined,
-    totalCount: totalCountFromProps,
+    totalCount: totalCountFromProps = undefined,
     unit = '',
     toFixed = undefined,
     withSum = true,
