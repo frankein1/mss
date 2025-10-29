@@ -57,7 +57,7 @@
     "superjson": "^2.2.2",
     "trpc-nuxt": "^1.2.0",
     "tsx": "^4.20.4",
-    "uuid": "^11.1.0",
+    "uuid": "^13.0.0",
     "vee-validate": "^4.15.0",
     "vue-matomo": "^4.2.0",
     "vue-scrollto": "^2.20.0",
