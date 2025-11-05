@@ -126,28 +126,28 @@ export const statRouter = router({
     .mutation(routes.getFollowupBeneficiaryNumberQ.execute),
   getWorkshopNameStats: protectedProcedure
     .input(routes.getWorkshopNameStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopNameStatsQuery.execute),
+    .query(routes.getWorkshopNameStatsQuery.execute),
   getWorkshopPartnerStats: protectedProcedure
     .input(routes.getWorkshopPartnerStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopPartnerStatsQuery.execute),
+    .query(routes.getWorkshopPartnerStatsQuery.execute),
   getWorkshopAttendeeGenderStats: protectedProcedure
     .input(routes.getWorkshopAttendeeGenderStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendeeGenderStatsQuery.execute),
+    .query(routes.getWorkshopAttendeeGenderStatsQuery.execute),
   getWorkshopAttendanceStats: protectedProcedure
     .input(routes.getWorkshopAttendanceStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendanceStatsQuery.execute),
+    .query(routes.getWorkshopAttendanceStatsQuery.execute),
   getWorkshopCountStats: protectedProcedure
     .input(routes.getWorkshopCountStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopCountStatsQuery.execute),
+    .query(routes.getWorkshopCountStatsQuery.execute),
   getWorkshopAttendeeCountStats: protectedProcedure
     .input(routes.getWorkshopAttendeeCountStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendeeCountStatsQuery.execute),
+    .query(routes.getWorkshopAttendeeCountStatsQuery.execute),
   getWorkshopAttendeeAgeStats: protectedProcedure
     .input(routes.getWorkshopAttendeeAgeStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendeeAgeStatsQuery.execute),
+    .query(routes.getWorkshopAttendeeAgeStatsQuery.execute),
   getWorkshopAttendeeCityStats: protectedProcedure
     .input(routes.getWorkshopAttendeeCityStatsQuery.inputValidation)
-    .mutation(routes.getWorkshopAttendeeCityStatsQuery.execute),
+    .query(routes.getWorkshopAttendeeCityStatsQuery.execute),
   exportWorkshopStats: protectedProcedure
     .input(routes.exportWorkshopStatsQuery.inputValidation)
     .mutation(routes.exportWorkshopStatsQuery.execute)

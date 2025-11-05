@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -32,29 +32,16 @@
   const props = defineProps<{
     filters: StatFilterInput
   }>()
-
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
   const trpc = useTrpcClient()
-
-  const workshopNameStats = ref<StatsListPropType | null>(null)
-
-  watchEffect(async () => {
-    try {
-      const data = await trpc.stat.getWorkshopNameStats.mutate(props.filters)
-      if (data == null) {
-        throw new Error('no data')
-      }
-      workshopNameStats.value = data.map(({ id, name, _count }) => ({
+  const { data, status, error } = await trpc.stat.getWorkshopNameStats.useQuery(
+    toRef(() => props.filters)
+  )
+  const workshopNameStats: Ref<StatsListPropType> = computed(
+    () =>
+      data.value?.map(({ id, name, _count }) => ({
         key: id,
         label: name,
         count: _count
-      }))
-    } catch (err: unknown) {
-      console.error(err)
-      error.value = err as Error
-    } finally {
-      pending.value = false
-    }
-  })
+      })) ?? []
+  )
 </script>

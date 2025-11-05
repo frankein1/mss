@@ -6,6 +6,7 @@ import { createContext } from '~/server/trpc'
 export default createTRPCNuxtHandler({
   router: appRouter,
   createContext,
+  allowMethodOverride: true,
   onError({
     error,
     type: _type,

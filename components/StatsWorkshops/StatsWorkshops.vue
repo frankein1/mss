@@ -110,28 +110,8 @@
   const isDownloading = ref(false)
   const filters = ref<WorkshopStatFilterInput>({})
 
-  const error = ref<boolean>(false)
-  const pending = ref<boolean>(false)
-  const workshopCount = ref<{
-    total: number
-    future: number
-    past: number
-  } | null>(null)
-
-  watchEffect(async () => {
-    pending.value = true
-    // Do not use useMutation() or useTrpcMutation()
-    // it cause issues with response #id matching
-    const data = await trpcClient.stat.getWorkshopCountStats.mutate(
-      filters.value
-    )
-    if (data == null) {
-      error.value = true
-      return
-    }
-    workshopCount.value = data
-    pending.value = false
-  })
+  const { data: workshopCount, error } =
+    await trpcClient.stat.getWorkshopCountStats.useQuery(filters)
 
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`

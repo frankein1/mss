@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -49,32 +49,20 @@
   const props = defineProps<{
     filters: WorkshopStatFilterInput
   }>()
-
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
   const trpc = useTrpcClient()
 
-  const workshopAttendanceStats = ref<StatsPiePropType | null>(null)
+  const { data, error, status } =
+    await trpc.stat.getWorkshopAttendanceStats.useQuery(
+      toRef(() => props.filters)
+    )
 
-  watchEffect(async () => {
-    try {
-      const data = await trpc.stat.getWorkshopAttendanceStats.mutate(
-        props.filters
-      )
-      if (data == null) {
-        throw new Error('no data')
-      }
-      workshopAttendanceStats.value = data.map(({ attendance, _count }) => ({
+  const workshopAttendanceStats: Ref<StatsPiePropType> = computed(
+    () =>
+      data.value?.map(({ attendance, _count }) => ({
         key: attendance ?? STATS_NULL_KEY,
         label: getStatLabel(workshopAttendeeAttendanceKeys.byKey, attendance),
         color: getStatColor(AttendanceColor, attendance),
         count: _count
-      }))
-    } catch (err: unknown) {
-      console.error(err)
-      error.value = err as Error
-    } finally {
-      pending.value = false
-    }
-  })
+      })) ?? []
+  )
 </script>
