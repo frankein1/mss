@@ -23,6 +23,7 @@ export type FileInstructionPermissions = {
     privateSynthesis: boolean
   }
   delete: boolean
+  print?: boolean
 }
 
 const FALSY_PERMISSIONS: FileInstructionPermissions = {
@@ -35,7 +36,8 @@ const FALSY_PERMISSIONS: FileInstructionPermissions = {
   set: {
     privateSynthesis: false
   },
-  delete: false
+  delete: false,
+  print: false
 }
 
 export const getFileInstructionPermissions = ({
@@ -98,7 +100,7 @@ function getEditionPermissions({
     edit:
       manager ||
       (socialWorker && (creator || isMember)) ||
-      (instructor && (creator || isMember)) ||
+      (instructor && creator) ||
       (referent && (creator || isMember)),
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
@@ -108,6 +110,12 @@ function getEditionPermissions({
     set: {
       privateSynthesis: creator
     },
-    delete: manager || creator
+    delete: manager || creator,
+    print:
+      manager ||
+      socialWorker ||
+      (instructor && creator) ||
+      (receptionAgent && creator) ||
+      (referent && isReferent)
   }
 }

@@ -3,6 +3,7 @@
     <h2 class="title-blue fr-mb-6v">Informations générales</h2>
     <BeneficiaryFormFileInformation
       :agents
+      :permissions
       :beneficiary-referent-ids="beneficiaryReferentIds"
       :initial-beneficiary-status="initialBeneficiaryStatus"
       full
@@ -27,6 +28,7 @@
   } from '~/types/beneficiary'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import type { BeneficiaryStatus } from '@prisma/client'
+  import type { FamilyFilePermissions } from '~/server/security'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
@@ -36,6 +38,7 @@
       agents: BeneficiaryReferent[]
       initialBeneficiary: BeneficiaryIdentification | null
       initialBeneficiaryStatus: BeneficiaryStatus | undefined
+      permissions: FamilyFilePermissions
     }>(),
     {}
   )

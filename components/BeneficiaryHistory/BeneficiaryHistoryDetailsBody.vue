@@ -100,7 +100,7 @@
               Supprimer
             </button>
           </li>
-          <li v-if="printLink">
+          <li v-if="canPrint && printLink">
             <NuxtLink
               :to="printLink"
               class="fr-btn fr-btn--secondary fr-icon-printer-line"
@@ -158,7 +158,6 @@
   }>()
 
   const matomo = useMatomo()
-
   const socialSupport = computed(() => props.item.data)
   const permissions = computed(() => props.item.permissions)
 
@@ -227,6 +226,8 @@
   const canEdit = computed(() => permissions.value?.edit)
 
   const canDelete = computed(() => permissions.value?.delete)
+
+  const canPrint = computed(() => permissions.value?.print)
 
   const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 

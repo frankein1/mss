@@ -24,6 +24,7 @@ export type FollowupPermissions = {
     privateSynthesis: boolean
   }
   delete: boolean
+  print?: boolean
 }
 
 const FALSY_PERMISSIONS: FollowupPermissions = {
@@ -37,7 +38,8 @@ const FALSY_PERMISSIONS: FollowupPermissions = {
   set: {
     privateSynthesis: false
   },
-  delete: false
+  delete: false,
+  print: false
 }
 
 export const getFollowupPermissions = ({
@@ -101,7 +103,7 @@ function getEditionPermissions({
     edit:
       manager ||
       (socialWorker && (creator || isMember)) ||
-      (instructor && (creator || isMember)) ||
+      (instructor && creator) ||
       (referent && (creator || isMember)) ||
       (receptionAgent && creator),
     set: {
@@ -112,6 +114,12 @@ function getEditionPermissions({
       dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },
-    delete: manager || creator
+    delete: manager || creator,
+    print:
+      manager ||
+      socialWorker ||
+      (instructor && creator) ||
+      (receptionAgent && creator) ||
+      (referent && isReferent)
   }
 }

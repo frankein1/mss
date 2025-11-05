@@ -20,6 +20,7 @@
         v-if="bindedValues && permissions && agents?.length"
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
+        :permissions="permissions"
         :initial-beneficiary="beneficiaryIdentification"
         :initial-beneficiary-status="beneficiaryStatus"
         @update="updateSimilarBeneficiary"

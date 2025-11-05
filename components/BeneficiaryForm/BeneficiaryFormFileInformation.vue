@@ -23,6 +23,7 @@
         :options="referentOptions"
         :disabled-options="disabledReferentOptions"
         required
+        :disabled="permissions && !permissions.changeReferent"
       />
     </div>
 
@@ -58,6 +59,7 @@
   import { UserStatus, BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusKeys } from '~/client/options'
+  import type { FamilyFilePermissions } from '~/server/security'
   import type { BeneficiaryReferent } from '~/types/beneficiary'
 
   const props = withDefaults(
@@ -66,12 +68,14 @@
       beneficiaryReferentIds?: String[]
       full?: boolean
       initialBeneficiaryStatus?: BeneficiaryStatus
+      permissions?: FamilyFilePermissions
     }>(),
     {
       beneficiary: undefined,
       full: false,
       beneficiaryReferentIds: undefined,
-      initialBeneficiaryStatus: undefined
+      initialBeneficiaryStatus: undefined,
+      permissions: undefined
     }
   )
 

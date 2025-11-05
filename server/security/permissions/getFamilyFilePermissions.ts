@@ -34,6 +34,7 @@ export type FamilyFilePermissions = {
     comment: boolean
   }
   delete: boolean
+  changeReferent: boolean
 }
 
 const FALSY_PERMISSIONS: FamilyFilePermissions = {
@@ -59,7 +60,8 @@ const FALSY_PERMISSIONS: FamilyFilePermissions = {
     followup: false,
     comment: false
   },
-  delete: false
+  delete: false,
+  changeReferent: false
 }
 
 export const getFamilyFilePermissions = ({
@@ -104,7 +106,8 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       followup: false,
       comment: false
     },
-    delete: false
+    delete: false,
+    changeReferent: false
   }
 }
 
@@ -124,7 +127,7 @@ function getEditionPermissions({
   const isReferent = isReferentFor(user, familyFile)
   const isMember = isMemberOfReferents(user, familyFile)
 
-  const { manager, socialWorker, instructor, receptionAgent } =
+  const { manager, socialWorker, instructor, receptionAgent, referent } =
     getGranteRole(ctx)
 
   const hasAccessRight =
@@ -157,6 +160,8 @@ function getEditionPermissions({
       followup: hasAccessRight,
       comment: hasAccessRight
     },
-    delete: manager || socialWorker
+    delete: manager || socialWorker,
+    changeReferent:
+      manager || socialWorker || instructor || (referent && isReferent)
   }
 }

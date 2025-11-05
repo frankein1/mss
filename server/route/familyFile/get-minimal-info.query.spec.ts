@@ -84,7 +84,8 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
           history: true,
           occupationIncome: true,
           relatives: true
-        }
+        },
+        changeReferent: true
       },
       referents: [
         {

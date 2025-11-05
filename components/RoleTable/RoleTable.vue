@@ -184,7 +184,7 @@
             <td>Voir le détail de la synthèse d'entretien</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>* si créée par lui</td>
             <td>* si créée par lui</td>
             <td>* s'il est référent</td>
           </tr>
@@ -192,7 +192,7 @@
             <td>Modifier la synthèse d'entretien</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* s'il est référent ou créateur</td>
-            <td>* s'il est référent ou créateur</td>
+            <td>* si créée par lui</td>
             <td>* si créée par lui</td>
             <td>* s'il est référent ou créateur</td>
           </tr>
@@ -256,7 +256,7 @@
             <td>Modifier l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* s'il est référent ou créateur</td>
-            <td>* s'il est référent ou créateur</td>
+            <td>* si créée par lui</td>
             <td></td>
             <td>* s'il est référent ou créateur</td>
           </tr>
