@@ -2,6 +2,10 @@
   "jobs": [
     {
       "command": "0 0 * * * pnpm scheduler:workshop-anonymization"
+    },
+    {
+      "command": "0 4 * * * pnpm scheduler:metabase-anonymization",
+      "size": "XL"
     }
   ]
 }
