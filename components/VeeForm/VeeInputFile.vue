@@ -57,12 +57,7 @@
       class="fr-label"
       for="file-name"
       >Renommer le document
-      <span
-        v-if="required"
-        class="color-red"
-        >*</span
-      ></label
-    >
+    </label>
     <input
       id="file-name"
       v-model="customFileName"
