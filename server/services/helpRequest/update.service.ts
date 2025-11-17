@@ -32,7 +32,9 @@ export async function update({ input, ctx }: UpdateParams) {
               beneficiaryId: true,
               createdById: true,
               subjects: true,
-              documents: true
+              documents: true,
+              privateSynthesis: true,
+              privateSynthesisRichText: true
             }
           }
         }
@@ -82,8 +84,16 @@ export async function update({ input, ctx }: UpdateParams) {
         status,
         synthesis,
         synthesisRichText,
-        privateSynthesis,
-        privateSynthesisRichText,
+        // only social support creator can update private synthesis. see FileInstructionPermissions
+        // /server/security/permissions/getFileInstructionPermissions.ts
+        privateSynthesis:
+          ctx.user.id === target.fileInstruction.socialSupport.createdById
+            ? privateSynthesis
+            : target.fileInstruction.socialSupport.privateSynthesis,
+        privateSynthesisRichText:
+          ctx.user.id === target.fileInstruction.socialSupport.createdById
+            ? privateSynthesisRichText
+            : target.fileInstruction.socialSupport.privateSynthesisRichText,
         ministre,
         numeroPegase,
         dueDate,

@@ -25,7 +25,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       beneficiaryId: true,
       createdById: true,
       documents: true,
-      subjects: true
+      subjects: true,
+      privateSynthesis: true,
+      privateSynthesisRichText: true
     }
   })
 
@@ -70,8 +72,16 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         date,
         synthesis,
         synthesisRichText,
-        privateSynthesis,
-        privateSynthesisRichText,
+        // only social support creator can update private synthesis. see FollowupPermissions
+        // /server/security/permissions/getFollowupPermissions.ts
+        privateSynthesis:
+          ctx.user.id === target.createdById
+            ? privateSynthesis
+            : target.privateSynthesis,
+        privateSynthesisRichText:
+          ctx.user.id === target.createdById
+            ? privateSynthesisRichText
+            : target.privateSynthesisRichText,
         status,
         numeroPegase,
         dueDate
