@@ -119,22 +119,28 @@
 </script>
 
 <style lang="scss">
-  $section-padding: 1.5rem;
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
+  $section-padding: 0.9rem;
+
+  .feature-section {
+    padding: #{$section-padding};
+  }
 
   .ongoing-social-supports__header {
     margin: -#{$section-padding} -#{$section-padding} 0;
-    padding: $section-padding $section-padding 1rem;
+    padding: 1.5rem $section-padding 1rem;
     position: relative;
     margin-bottom: 2rem;
 
     .ongoing-social-supports__icon {
-      padding: 1.25rem;
+      padding: 1rem;
       border-radius: 50%;
       border-width: 2px;
       background-color: var(--text-inverted-grey);
       border-style: solid;
       position: absolute;
-      margin-top: -0.5rem;
+      margin-top: 0.1rem;
     }
 
     .ongoing-social-supports__title {
@@ -144,7 +150,11 @@
       line-height: 2rem;
       font-weight: 700;
       margin-top: 0.25rem;
-      margin-left: 5.5rem;
+      margin-left: 4.5rem;
+
+      // @include dsfr-media-query.respond-from('lg') {
+      //   margin-left: 5.5rem;
+      // }
     }
   }
 

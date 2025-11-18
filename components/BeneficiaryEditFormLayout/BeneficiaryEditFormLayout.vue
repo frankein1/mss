@@ -4,57 +4,57 @@
     v-if="beneficiaryIdentification"
     ref="form"
     novalidate
-    class="fr-grid-row form-wrapper"
     @submit.prevent="onSubmit"
   >
-    <BeneficiaryEditFormNavigation
-      class="form-navigation content beneficiaryformlayout__navigation fr-col-12 fr-col-md-3"
-      :permissions="permissions"
-      :current-route="currentRoute"
-      :beneficiary-id="beneficiaryIdentification.id"
-      :origin-tab="originTab"
-      :beneficiary-form-layout-main-container="
-        beneficiaryFormLayoutMainContainer
-      "
-      @save="saveTarget = $event"
-    />
-    <div
-      ref="beneficiaryFormLayoutMainContainer"
-      class="beneficiary-form-content content fr-col-12 fr-col-md-9 fr-container"
-    >
-      <AtomBreadcrumb
-        :links="
-          breadcrumbs.file.AppFileBeneficiaryEdit(
-            familyFileId,
-            familyIdentification,
-            beneficiaryIdentification
-          )
-        "
-      />
-      <PageTitle
-        :class="smallTitle ? 'beneficiary-form-title-small' : ''"
-        :title="title"
-        :icon="titleIcon"
-      >
-        <RequiredFields v-if="hasRequiredFields" />
-      </PageTitle>
-
-      <FormErrors
-        v-if="errors.length > 1"
-        :errors="errors"
-      />
-
-      <slot></slot>
-      <BeneficiaryEditFormNavArrows
+    <div class="layout">
+      <BeneficiaryEditFormNavigation
+        class="form-navigation content"
+        :permissions="permissions"
         :current-route="currentRoute"
         :beneficiary-id="beneficiaryIdentification.id"
         :origin-tab="originTab"
-        :permissions="permissions"
+        :beneficiary-form-layout-main-container="
+          beneficiaryFormLayoutMainContainer
+        "
         @save="saveTarget = $event"
       />
+      <div
+        ref="beneficiaryFormLayoutMainContainer"
+        class="beneficiary-form-content content fr-container"
+      >
+        <AtomBreadcrumb
+          :links="
+            breadcrumbs.file.AppFileBeneficiaryEdit(
+              familyFileId,
+              familyIdentification,
+              beneficiaryIdentification
+            )
+          "
+        />
+        <PageTitle
+          :class="smallTitle ? 'beneficiary-form-title-small' : ''"
+          :title="title"
+          :icon="titleIcon"
+        >
+          <RequiredFields v-if="hasRequiredFields" />
+        </PageTitle>
+
+        <FormErrors
+          v-if="errors.length > 1"
+          :errors="errors"
+        />
+
+        <slot></slot>
+        <BeneficiaryEditFormNavArrows
+          :current-route="currentRoute"
+          :beneficiary-id="beneficiaryIdentification.id"
+          :origin-tab="originTab"
+          :permissions="permissions"
+          @save="saveTarget = $event"
+        />
+      </div>
     </div>
     <BeneficiaryFormActions
-      class="fr-col-12"
       :is-submitting="isSubmitting"
       :saved="saved"
       @save="onSave"
@@ -201,12 +201,58 @@
   @use '~/assets/style/variables' as *;
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
-  .form-wrapper {
+  .layout {
     display: flex;
     flex-direction: column;
+    max-width: 100%;
+
+    > :first-child {
+      min-width: 100%;
+      width: 100%;
+      flex: 0 0 100%;
+    }
+
+    > :nth-child(2) {
+      width: 100%;
+      flex: 0 0 100%;
+    }
 
     @include dsfr-media-query.respond-from('md') {
+      $beneficiary-navbar-width: 12rem;
+
       flex-direction: row;
+
+      > :first-child {
+        min-width: #{$beneficiary-navbar-width};
+        width: #{$beneficiary-navbar-width};
+        flex: 0;
+      }
+
+      > :nth-child(2) {
+        $calc-w: calc(100% - #{$beneficiary-navbar-width});
+
+        min-width: #{$calc-w};
+        width: #{$calc-w};
+        flex: 0;
+      }
+    }
+
+    @include dsfr-media-query.respond-from('xl') {
+      $beneficiary-navbar-width: 20rem;
+
+      > :first-child {
+        min-width: #{$beneficiary-navbar-width};
+        width: #{$beneficiary-navbar-width};
+        flex: 0;
+      }
+
+      > :nth-child(2) {
+        $calc-w: calc(100% - #{$beneficiary-navbar-width});
+
+        min-width: #{$calc-w};
+        width: #{$calc-w};
+        flex: 0;
+      }
     }
   }
 

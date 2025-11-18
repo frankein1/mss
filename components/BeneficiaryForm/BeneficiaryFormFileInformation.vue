@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryFormSection>
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeSelect
         name="status"
         :label="beneficiaryFieldLabels.status"
@@ -16,7 +16,7 @@
         />
       </div>
     </div>
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <MultiSelect
         name="referents"
         :label="beneficiaryFieldLabels.referents"

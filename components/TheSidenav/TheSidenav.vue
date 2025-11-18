@@ -6,7 +6,7 @@
     aria-labelledby="sidemenu-title"
     tabindex="-1"
   >
-    <div class="fr-sidemenu__inner fr-p-0">
+    <div class="fr-sidemenu__inner fr-py-0 fr-px-2w">
       <button
         ref="menuButton"
         class="fr-sidemenu__btn"
@@ -21,7 +21,7 @@
         class="fr-collapse"
       >
         <header>
-          <div class="fr-sidemenu__title fr-py-1w fr-px-2w">
+          <div class="fr-sidemenu__title fr-py-1w">
             <NuxtLink
               :to="homePage"
               title="Tableau de bord - Mon Suivi Social"
@@ -69,7 +69,7 @@
             </NuxtLink>
             <li
               v-if="!authState.isAdmin()"
-              class="fr-mt-3w fr-mr-1w"
+              class="fr-mt-3w"
             >
               <NuxtLink
                 class="full fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
@@ -78,7 +78,7 @@
                 Créer un dossier
               </NuxtLink>
             </li>
-            <li class="fr-mt-3w fr-mr-1w">
+            <li class="fr-mt-3w">
               <NuxtLink
                 class="fr-link fr-sidemenu__link fr-sidemenu__help"
                 to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
@@ -266,10 +266,6 @@
     }
   }
 
-  .fr-sidemenu__list {
-    margin-left: 0.5rem;
-  }
-
   .fr-sidemenu__help {
     justify-content: center;
   }
@@ -279,7 +275,7 @@
     font-weight: $font-weight-normal;
     word-break: normal;
     overflow-wrap: anywhere;
-    padding: 0.75rem;
+    padding-right: 0;
   }
 
   @media (hover: hover) and (pointer: fine) {

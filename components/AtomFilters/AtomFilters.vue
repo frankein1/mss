@@ -368,7 +368,7 @@
   }
 
   /* To have filters on 2 columns when screen is wide enough */
-  @include dsfr-media-query.respond-from('md') {
+  @include dsfr-media-query.respond-from('lg') {
     .filters:not(.full-width-filters) {
       grid-template-columns: repeat(2, 1fr);
 
@@ -383,7 +383,7 @@
     }
   }
 
-  @include dsfr-media-query.respond-from('lg') {
+  @include dsfr-media-query.respond-from('xl') {
     .filters:not(.full-width-filters) {
       grid-template-columns: repeat(6, 1fr);
 

@@ -62,6 +62,6 @@
   }
 
   .topbar__menu {
-    padding-right: 4em;
+    padding-right: 2em;
   }
 </style>

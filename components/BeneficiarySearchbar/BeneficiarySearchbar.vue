@@ -98,7 +98,7 @@
       flex: 1;
     }
 
-    @include dsfr-media-query.respond-from('md') {
+    @include dsfr-media-query.respond-from('lg') {
       flex-direction: row;
       align-items: center;
     }

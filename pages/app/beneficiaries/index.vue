@@ -182,7 +182,7 @@
     align-items: center;
   }
 
-  @include dsfr-media-query.respond-from('md') {
+  @include dsfr-media-query.respond-from('lg') {
     .beneficiaries-header {
       grid-template-areas: 'title action';
     }

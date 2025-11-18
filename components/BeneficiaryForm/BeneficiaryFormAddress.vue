@@ -31,14 +31,14 @@
         @address-selected="onAddressSelected"
       />
     </div>
-    <div class="fr-col-12 fr-col-md-3">
+    <div class="fr-col-12 fr-col-lg-4">
       <VeeInput
         name="zipcode"
         :label="beneficiaryFieldLabels.zipcode"
         @change-value="setZipcodeValue($event)"
       />
     </div>
-    <div class="fr-col-12 fr-col-md-9">
+    <div class="fr-col-12 fr-col-lg-8">
       <VeeCityInput
         name="city"
         :label="beneficiaryFieldLabels.city"
