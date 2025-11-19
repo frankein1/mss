@@ -55,8 +55,8 @@ import {
   workshopAttendeeAttendanceKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
-import { exportBudgetSpreadsheet } from '../budget/exportBudgetSpreadsheet'
-import { createExport } from '~/utils/export/createExport'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
+import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
 
 type FieldLabels<T> = Record<keyof T, any>
 
@@ -100,8 +100,11 @@ export const exportBeneficiary = async ({
     ctx,
     familyFileId: beneficiaryDetails.familyFileId
   })
-  const budgetSpredsheet = exportBudgetSpreadsheet(budget)
-  const budgetBuffer = await createExport(ctx.user.id, budgetSpredsheet)
+  const budgetWorkbook = exportBudgetWorkbook(budget)
+  const budgetBuffer = await createExportFromWorkbook(
+    ctx.user.id,
+    budgetWorkbook
+  )
 
   // documents
   const documents = await DocumentRepo.findMany(user, {

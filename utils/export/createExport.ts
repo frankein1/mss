@@ -79,3 +79,17 @@ export async function createExport(
 
   return stream
 }
+
+export async function createExportFromWorkbook(
+  userId: string,
+  workbook: Workbook
+) {
+  const exportName = `/tmp/mss-export-${userId}.xlsx`
+
+  await workbook.xlsx.writeFile(exportName)
+  const stream = readFileSync(exportName)
+
+  unlinkSync(exportName)
+
+  return stream
+}
