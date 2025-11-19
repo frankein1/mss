@@ -29,6 +29,7 @@
   import type { CreateWorkshopInput } from '~/server/schema'
   import { createWorkshopSchema } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
+  import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -52,7 +53,7 @@
     return ''
   })
   useHead({
-    title: routes.workshop.AppWorkshopEdit.title(workshop.value || null)
+    title: routes.workshop.AppWorkshopDuplicate.title(workshop.value || null)
   })
 
   // Form
@@ -69,7 +70,8 @@
       description: workshop.value?.description,
       ageLimit: workshop.value?.ageLimit,
       ageLimitCondition: workshop.value?.ageLimitCondition,
-      attendeeLimit: workshop.value?.attendeeLimit
+      attendeeLimit: workshop.value?.attendeeLimit,
+      chargeable: workshop.value?.chargeable
     }
   })
 
