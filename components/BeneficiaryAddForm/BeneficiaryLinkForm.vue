@@ -21,18 +21,35 @@
           Sélectionner un dossier bénéficiaire
           <span class="color-red">*</span>
         </label>
-        <BeneficiarySearchCombobox
-          class="beneficiary-search"
-          label="Rechercher un dossier bénéficiaire"
-          placeholder="Rechercher un dossier bénéficiaire"
+        <ComboBox
+          v-slot="{ option, input }"
+          v-model="selectedBeneficiary"
+          label="Sélectionner un dossier bénéficiaire"
           :label-visible="false"
-          :search-fn="searchBeneficiaries"
-          :select-only="true"
-          :action="{
-            title: `Ajouter ce bénéficiaire`
-          }"
-          @on-action-click="onSelect($event)"
-        />
+          :options="results"
+          :format-display-value="formatBeneficiarySearchDisplayName"
+          @input="searchBeneficiaries"
+          @select="onSelect"
+        >
+          <div class="beneficiary">
+            <div class="beneficiary-info">
+              <span class="beneficiary-name">
+                <AtomTextEmphasis
+                  :name="formatBeneficiarySearchDisplayName(option)"
+                  :input="input"
+                ></AtomTextEmphasis>
+              </span>
+            </div>
+            <div
+              v-if="option.birthDate"
+              class="beneficiary-birth-date"
+            >
+              <p class="fr-text--sm fr-mb-0">
+                {{ formatDate(option.birthDate) }}
+              </p>
+            </div>
+          </div>
+        </ComboBox>
         <span
           v-if="linkToFamilyFileError !== null"
           class="color-red"
@@ -61,7 +78,7 @@
           <button
             class="fr-btn fr-btn fr-mb-0"
             :disabled="
-              !formValues.relationship || !linked_beneficiary || isSubmitting
+              !formValues.relationship || !selectedBeneficiary || isSubmitting
             "
             @click.prevent="onSubmit"
           >
@@ -99,8 +116,12 @@
   const matomo = useMatomo()
   const trpcClient = useTrpcClient()
   const linkToFamilyFileError = ref<string | null>(null)
-  const linked_beneficiary = ref<BeneficiarySearchResult | undefined>(undefined)
   const isSubmitting = ref(false)
+
+  const selectedBeneficiary = ref<
+    (BeneficiarySearchResult & { disabled: boolean }) | null
+  >(null)
+  const results = ref<(BeneficiarySearchResult & { disabled: boolean })[]>([])
 
   const { values: formValues } = useForm<{
     familyFileId: string
@@ -122,16 +143,15 @@
     }
   }
 
-  const onSelect = (beneficiary: BeneficiarySearchResult) => {
-    linked_beneficiary.value = beneficiary
+  const onSelect = () => {
     linkToFamilyFileError.value = null
   }
 
   async function onSubmit() {
-    if (linked_beneficiary.value !== undefined) {
+    if (selectedBeneficiary?.value != null) {
       const payload = {
         ...formValues,
-        beneficiaryId: linked_beneficiary.value.id
+        beneficiaryId: selectedBeneficiary.value.id
       }
       isSubmitting.value = true
       await trpcClient.beneficiary.linkToFamilyFile
@@ -140,11 +160,11 @@
         .then(async () => {
           await navigateTo(
             routes.file.AppFile.path(props.familyFileId, {
-              beneficiaryId: linked_beneficiary.value?.id
+              beneficiaryId: selectedBeneficiary.value?.id
             })
           )
         })
-        .then(() => emit('goToSuccessPage', linked_beneficiary.value?.id))
+        .then(() => emit('goToSuccessPage', selectedBeneficiary.value?.id))
         .then(() =>
           matomo.trackEvent(
             EventCategory.FamilyFile,
@@ -172,14 +192,16 @@
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query
     })
-    return beneficiaries.map(beneficiary => ({
-      familyFileId: beneficiary.familyFileId,
+    results.value = beneficiaries.map(beneficiary => ({
       id: beneficiary.id,
       firstName: beneficiary.firstName,
       status: beneficiary.status,
       usualName: beneficiary.usualName,
       birthDate: beneficiary.birthDate,
-      birthName: beneficiary.birthName
+      familyFileId: beneficiary.familyFileId,
+      birthName: beneficiary.birthName,
+      phone1: null,
+      disabled: false
     }))
   }
 </script>
@@ -191,5 +213,11 @@
 
   .result {
     width: 100%;
+  }
+
+  .beneficiary {
+    .beneficiary-info {
+      color: var(--primary);
+    }
   }
 </style>
