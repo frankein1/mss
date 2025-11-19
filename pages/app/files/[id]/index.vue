@@ -50,6 +50,7 @@
                   :beneficiary-id
                   :permissions="familyFile?.permissions"
                   :family-file="familyFileIdentification.length > 1"
+                  :beneficiary-relationship="selectedBeneficiary?.relationship"
                   @delete="openDeleteModal"
                   @split="openSplitModal"
                   @archive="handleClickArchiveBeneficiary"

@@ -2,12 +2,14 @@ import type { Prisma } from '@prisma/client'
 import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
 import type { IdInput } from '~/server/schema'
+import { forbiddenError } from '~/server/trpc'
 
 async function getBeneficiary(ctx: SecurityRuleContext, beneficiaryId: string) {
   return await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: beneficiaryId },
     select: {
       id: true,
+      relationship: true,
       documents: {
         select: { key: true }
       },
@@ -40,6 +42,10 @@ export async function split({
   input: IdInput
 }) {
   const beneficiary = await getBeneficiary(ctx, id)
+
+  if (beneficiary.relationship == null) {
+    throw forbiddenError('Cannont split the main beneficiary from family file')
+  }
 
   const data: Prisma.FamilyFileCreateInput = {
     structure: {

@@ -148,6 +148,7 @@ export type GetBeneficiaryOutput = Pick<
   | 'created'
   | 'updated'
   | 'status'
+  | 'relationship'
 > &
   BeneficiaryFileInformation & {
     general: GetBeneficiaryGeneral

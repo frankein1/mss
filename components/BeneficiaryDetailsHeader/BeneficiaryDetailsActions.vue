@@ -23,19 +23,24 @@
     </li>
     <li v-if="familyFile">
       <button
-        class="fr-btn fr-btn--secondary fr-mb-0"
+        class="fr-btn fr-btn--secondary fr-mb-0 fr-btn--icon-left fr-icon-user-unfollow-line edit-btn"
         data-fr-opened="false"
         aria-controls="global-modal"
+        :aria-describedby="describedBy"
         type="button"
         title="Dissocier du dossier"
+        :disabled="beneficiaryRelationship == null"
         @click="emit('split')"
       >
-        <img
-          class="fr-mr-1w"
-          src="~/assets/icons/retirer.svg"
-        />
         Dissocier du dossier
       </button>
+      <span
+        v-if="beneficiaryRelationship == null"
+        id="split-tooltip"
+        class="fr-tooltip fr-placement"
+        role="tooltip"
+        >Vous ne pouvez pas dissocier le bénéficiaire principal du foyer</span
+      >
     </li>
     <li v-if="structureManager">
       <button
@@ -64,6 +69,7 @@
   import { routes } from '~/utils/routes'
   import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import type { FamilyFilePermissions } from '~/server/security'
+  import type { RelativeRelationship } from '@prisma/client'
 
   const { isStructureManager } = useAuthState()
   const route = useRoute()
@@ -72,6 +78,7 @@
     beneficiaryId: string
     permissions: FamilyFilePermissions | undefined
     familyFile?: boolean
+    beneficiaryRelationship?: RelativeRelationship | null
   }>()
 
   const structureManager = computed(() => isStructureManager())
@@ -88,6 +95,10 @@
       props.beneficiaryId,
       currentTab.value ? { originTab: currentTab.value } : undefined
     )
+  )
+
+  const describedBy = computed(() =>
+    props.beneficiaryRelationship == null ? 'split-tooltip' : ''
   )
 </script>
 
@@ -108,6 +119,7 @@
 <style lang="scss" scoped>
   .edit-btn {
     max-width: 100% !important;
+    padding: 0.5rem 1rem !important;
   }
 
   .fr-btns-group--inline {

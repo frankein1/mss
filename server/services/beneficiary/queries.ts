@@ -160,7 +160,8 @@ const filter = (
     taxHouseholds: !isObjectEmpty(taxHouseholds) ? taxHouseholds : undefined,
     entourages: !isObjectEmpty(entourages) ? entourages : undefined,
     qpv: beneficiary.qpv,
-    history
+    history,
+    relationship: beneficiary.relationship
   }
 }
 
