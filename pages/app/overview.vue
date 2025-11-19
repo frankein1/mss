@@ -13,7 +13,6 @@
         <PartnerOrganizationOverviewCard class="fr-mb-3w" />
         <OngoingFileInstructions class="fr-mb-3w" />
         <OngoingFollowups class="fr-mb-3w" />
-        <OngoingAppointments v-if="application.module.rdv" />
       </div>
     </div>
     <OpenModalHack />
@@ -24,7 +23,6 @@
   import { routes } from '~/utils/routes'
 
   const title = routes.user.AppOverview.title
-  const { application } = usePermissions()
 
   useHead({ title })
 

@@ -139,6 +139,7 @@ export enum OverviewToHistoryEventAction {
   RdvNoShow = 'Rendez-vous - Absence non excusée',
   RdvExcused = "Rendez-vous - Annulé à l'initiative de l'usager",
   RdvRevoked = "Rendez-vous - Annulé à l'initiative du service",
+  RdvDraft = 'Rendez-vous - Brouillon',
   RdvUnknown = 'Rendez-vous - Inconnu'
 }
 

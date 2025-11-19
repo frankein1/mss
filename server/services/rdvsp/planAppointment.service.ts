@@ -101,7 +101,7 @@ async function createDraftAppointment(
 ) {
   return await SocialSupportRepo.prisma.create({
     data: {
-      status: SocialSupportStatus.RdvUnknown,
+      status: SocialSupportStatus.RdvDraft,
       socialSupportType: SocialSupportType.Appointment,
       structure: connect(ctx.structure.id),
       familyFile: connect(familyFileId),
