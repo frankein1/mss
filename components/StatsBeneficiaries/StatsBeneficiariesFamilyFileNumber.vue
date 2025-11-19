@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4>Nombre de dossiers concernés</h4>
     <AtomLoader
-      v-if="pending"
+      v-if="status === 'pending'"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -35,25 +35,14 @@
     historyType?: 'beneficiary'
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const beneficiaryCount = ref<number | null>(null)
-  const familyFileCount = ref<number | undefined>(undefined)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFamilyFileCount.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    beneficiaryCount.value = data.beneficiary
-    familyFileCount.value = data.family
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const { data, error, status } =
+    await trpcClient.stat.getFamilyFileCount.useQuery(
+      toRef(() => props.filters)
+    )
+  const beneficiaryCount = computed(() => data.value?.beneficiary)
+  const familyFileCount = computed(() => data.value?.family)
 </script>
 
 <style lang="scss" scoped>

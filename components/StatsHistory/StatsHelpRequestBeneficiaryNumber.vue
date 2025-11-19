@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
     <AtomLoader
-      v-if="pending"
+      v-if="status === 'pending'"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -10,18 +10,18 @@
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées."
     />
-    <template v-else-if="beneficiaryCounts !== null">
+    <template v-else-if="beneficiaryCounts && beneficiaryCounts > 0">
       <StatsBeneficiaryNumber
         v-if="beneficiaryCounts"
         :beneficiary-counts
         :history-type
       />
-      <p v-else>
-        Commencez à créer des instructions de dossier dans les fiches de
-        bénéficiaires pour voir apparaître les statistiques du nombre de
-        bénéficiaires concernés.
-      </p>
     </template>
+    <p v-else>
+      Commencez à créer des instructions de dossier dans les fiches de
+      bénéficiaires pour voir apparaître les statistiques du nombre de
+      bénéficiaires concernés.
+    </p>
   </div>
 </template>
 
@@ -34,24 +34,15 @@
     historyType?: 'helprequest'
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const beneficiaryCounts = ref<number | null>(null)
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getHelpRequestBeneficiaryNumber.mutate(
-      props.filters
-    )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    beneficiaryCounts.value = data
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const trpcClient = useTrpcClient()
+
+  const {
+    data: beneficiaryCounts,
+    error,
+    status
+  } = await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
+    toRef(() => props.filters)
+  )
 </script>
 
 <style lang="scss" scoped>

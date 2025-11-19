@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,14 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
   />
-  <template v-if="helpRequestWithPrescription && prescribingOrganizationStats">
+  <template
+    v-if="
+      helpRequestWithPrescription &&
+      helpRequestWithPrescription.length &&
+      prescribingOrganizationStats &&
+      prescribingOrganizationStats.length
+    "
+  >
     <StatsList
       :total-count="totalCount"
       :stats="helpRequestWithPrescription"
@@ -49,29 +56,21 @@
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const prescribingOrganizationStats = ref<StatsListPropType | null>(null)
-  const helpRequestWithPrescription = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getHelpRequestPrescribingOrganizationStats.useQuery(
+      toRef(() => props.filters)
+    )
 
-  try {
-    const trpc = useTrpcClient()
-    const data =
-      await trpc.stat.getHelpRequestPrescribingOrganizationStats.mutate(
-        props.filters
-      )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    prescribingOrganizationStats.value =
-      data.map(
+  const prescribingOrganizationStats = computed(
+    () =>
+      data.value?.map(
         ({ _count, prescribingOrganization, prescribingOrganizationId }) => ({
           key: prescribingOrganizationId,
           label: prescribingOrganization,
@@ -79,12 +78,14 @@
           count: _count
         })
       ) || []
+  )
 
-    const noOrganization = data.find(
+  const helpRequestWithPrescription = computed(() => {
+    const noOrganization = data.value?.find(
       followup => followup.prescribingOrganizationId == 'null'
     )
     const noOrganizationCount = noOrganization?._count || 0
-    helpRequestWithPrescription.value = [
+    return [
       {
         key: 'followupWithInstruction',
         label: "Dossiers d'instruction avec prescripteur renseigné",
@@ -93,10 +94,5 @@
         count: props.totalCount - noOrganizationCount
       }
     ]
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  })
 </script>

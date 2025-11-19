@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,17 +8,18 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des tranches d'âge n'ont pas pu être chargées."
   />
-  <StatsPie
-    v-if="ageStats"
-    pie-label="Répartition des tranches d'âge"
-    :stats="ageStats"
-    :total-count="beneficiaryCount"
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled: FilterBeneficiaryNotFilled.AgeGroup
-      })
-    "
-  />
+  <template v-else-if="ageStats && ageStats.length">
+    <StatsPie
+      pie-label="Répartition des tranches d'âge"
+      :stats="ageStats"
+      :total-count="beneficiaryCount"
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled: FilterBeneficiaryNotFilled.AgeGroup
+        })
+      "
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -53,26 +54,18 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const ageStats = ref<StatsPiePropType | null>(null)
+  const trpcClient = useTrpcClient()
+  const { data, error, status } = await trpcClient.stat.getAgeStats.useQuery(
+    toRef(() => props.filters)
+  )
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getAgeStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    ageStats.value = (data.map(({ _count, ageGroup }) => ({
-      key: ageGroup,
-      label: getStatLabel(ageGroupKeys.byKey, ageGroup),
-      color: getStatColor(AgeGroupColors, ageGroup),
-      count: _count
-    })) || []) as StatsPiePropType
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const ageStats = computed(
+    () =>
+      (data.value?.map(({ _count, ageGroup }) => ({
+        key: ageGroup,
+        label: getStatLabel(ageGroupKeys.byKey, ageGroup),
+        color: getStatColor(AgeGroupColors, ageGroup),
+        count: _count
+      })) || []) as StatsPiePropType
+  )
 </script>

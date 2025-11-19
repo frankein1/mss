@@ -2,7 +2,7 @@
   <div class="feature-section fr-p-2w">
     <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
     <AtomLoader
-      v-if="pending"
+      v-if="status === 'pending'"
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -33,25 +33,15 @@
     historyType?: 'followup'
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const beneficiaryFollowupCounts = ref<number | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupBeneficiaryNumber.mutate(
-      props.filters
-    )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    beneficiaryFollowupCounts.value = data
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const {
+    data: beneficiaryFollowupCounts,
+    error,
+    status
+  } = await trpcClient.stat.getFollowupBeneficiaryNumber.useQuery(
+    toRef(() => props.filters)
+  )
 </script>
 
 <style lang="scss" scoped>

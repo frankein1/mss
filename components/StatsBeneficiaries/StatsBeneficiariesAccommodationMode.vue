@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,17 +8,19 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des modes d'hébergement n'ont pas pu être chargées."
   />
-  <StatsList
-    v-if="accommodationModesStats"
-    :total-count="beneficiaryCount"
-    :stats="accommodationModesStats"
-    stats-bar
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled: FilterBeneficiaryNotFilled.BeneficiaryAccommodationMode
-      })
-    "
-  />
+  <template
+    v-else-if="accommodationModesStats && accommodationModesStats.length"
+  >
+    <StatsList
+      :total-count="beneficiaryCount"
+      :stats="accommodationModesStats"
+      stats-bar
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled: FilterBeneficiaryNotFilled.BeneficiaryAccommodationMode
+        })
+      "
+  /></template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -33,30 +35,27 @@
   import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import {
     getStatLabel,
     beneficiaryAccommodationModeKeys
   } from '~/client/options'
-  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const accommodationModesStats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getAccommodationModeStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    accommodationModesStats.value =
-      data.map(({ _count, accommodationMode }) => ({
+  const { data, error, status } =
+    await trpcClient.stat.getAccommodationModeStats.useQuery(
+      toRef(() => props.filters)
+    )
+
+  const accommodationModesStats = computed(
+    () =>
+      data.value?.map(({ _count, accommodationMode }) => ({
         key: accommodationMode || 'null',
         label: getStatLabel(
           beneficiaryAccommodationModeKeys.byKey,
@@ -64,10 +63,5 @@
         ),
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques des actions entreprises n'ont pas pu être chargées."
   />
-  <template v-else-if="followupActionsEntreprisesStats">
+  <template v-else-if="totalCount">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
       synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme des
@@ -30,36 +30,25 @@
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-  import type { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const followupActionsEntreprisesStats = ref<StatsPiePropType | null>(null)
-
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupActionsEntreprisesStats.mutate(
-      props.filters
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupActionsEntreprisesStats.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    followupActionsEntreprisesStats.value =
-      data.map(({ _count, actionEntrepriseId, actionEntreprise }) => ({
+
+  const followupActionsEntreprisesStats = computed(
+    () =>
+      data.value?.map(({ _count, actionEntrepriseId, actionEntreprise }) => ({
         key: actionEntrepriseId,
         label: actionEntreprise,
         color: SupportColor.followups,
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -9,18 +9,24 @@
     message="Les statistiques de la répartion des départements ou services de l'administration centrale n'ont pas pu être chargées."
   />
 
-  <StatsList
-    v-if="ministereDepartementServiceAcStats"
-    :total-count="beneficiaryCount"
-    :stats="ministereDepartementServiceAcStats"
-    stats-bar
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled:
-          FilterBeneficiaryNotFilled.BeneficiaryMinistereDepartementServiceAc
-      })
+  <template
+    v-else-if="
+      ministereDepartementServiceAcStats &&
+      ministereDepartementServiceAcStats.length
     "
-  />
+  >
+    <StatsList
+      :total-count="beneficiaryCount"
+      :stats="ministereDepartementServiceAcStats"
+      stats-bar
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled:
+            FilterBeneficiaryNotFilled.BeneficiaryMinistereDepartementServiceAc
+        })
+      "
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -40,27 +46,21 @@
     getStatLabel
   } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const ministereDepartementServiceAcStats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getMinistereDepartementServiceAc.mutate(
-      props.filters
+  const { data, error, status } =
+    await trpcClient.stat.getMinistereDepartementServiceAc.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    ministereDepartementServiceAcStats.value =
-      data.map(({ _count, ministereDepartementServiceAc }) => ({
+  const ministereDepartementServiceAcStats = computed(
+    () =>
+      data.value?.map(({ _count, ministereDepartementServiceAc }) => ({
         key: ministereDepartementServiceAc || 'null',
         label: getStatLabel(
           ministereDepartmentServiceAcKeys.byKey,
@@ -68,10 +68,5 @@
         ),
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

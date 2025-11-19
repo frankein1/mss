@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -9,17 +9,18 @@
     message="Les statistiques de la répartion des situations familiales n'ont pas pu être chargées."
   />
 
-  <StatsList
-    v-if="familySituationsStats"
-    :total-count="beneficiaryCount"
-    :stats="familySituationsStats"
-    stats-bar
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled: FilterBeneficiaryNotFilled.BeneficiaryFamilySituation
-      })
-    "
-  />
+  <template v-else-if="familySituationsStats && familySituationsStats.length">
+    <StatsList
+      :total-count="beneficiaryCount"
+      :stats="familySituationsStats"
+      stats-bar
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled: FilterBeneficiaryNotFilled.BeneficiaryFamilySituation
+        })
+      "
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -36,33 +37,23 @@
   import { routes } from '~/utils/routes'
   import { getStatLabel, familySituationKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const familySituationsStats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFamilyStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    familySituationsStats.value =
-      data.map(({ _count, familySituation }) => ({
+  const { data, error, status } = await trpcClient.stat.getFamilyStats.useQuery(
+    toRef(() => props.filters)
+  )
+  const familySituationsStats = computed(
+    () =>
+      data.value?.map(({ _count, familySituation }) => ({
         key: familySituation || 'null',
         label: getStatLabel(familySituationKeys.byKey, familySituation),
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

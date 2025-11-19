@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,17 +8,18 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des genres n'ont pas pu être chargées."
   />
-  <StatsPie
-    v-if="genderStats"
-    pie-label="Répartion des genres"
-    :stats="genderStats"
-    :total-count="beneficiaryCount"
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled: FilterBeneficiaryNotFilled.Gender
-      })
-    "
-  />
+  <template v-else-if="genderStats && genderStats.length">
+    <StatsPie
+      pie-label="Répartion des genres"
+      :stats="genderStats"
+      :total-count="beneficiaryCount"
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled: FilterBeneficiaryNotFilled.Gender
+        })
+      "
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -50,26 +51,18 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const genderStats = ref<StatsPiePropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getGenderStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    genderStats.value = (data.map(({ _count, gender }) => ({
-      key: gender,
-      label: getStatLabel(beneficiaryGenderKeys.byKey, gender),
-      color: getStatColor(GenderColor, gender),
-      count: _count
-    })) || []) as StatsPiePropType
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const { data, error, status } = await trpcClient.stat.getGenderStats.useQuery(
+    toRef(() => props.filters)
+  )
+  const genderStats = computed(
+    () =>
+      (data.value?.map(({ _count, gender }) => ({
+        key: gender,
+        label: getStatLabel(beneficiaryGenderKeys.byKey, gender),
+        color: getStatColor(GenderColor, gender),
+        count: _count
+      })) || []) as StatsPiePropType
+  )
 </script>

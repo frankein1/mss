@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -12,6 +12,7 @@
     v-else-if="
       housingHelpRequestContextStats &&
       housingHelpRequestCount &&
+      housingHelpRequestCount > 0 &&
       housingHelpRequestReasonStats
     "
   >
@@ -42,6 +43,11 @@
       "
     />
   </template>
+  <p v-else>
+    Commencez à créer des instructions de dossier dans les fiches de
+    bénéficiaires pour voir apparaître les statistiques de la répartition des
+    demande de logement.
+  </p>
 </template>
 
 <script lang="ts" setup>
@@ -52,7 +58,6 @@
     getStatLabel
   } from '~/client/options'
   import type { StatFilterInput } from '~/server/schema'
-  import type { StatsListPropType } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
@@ -62,42 +67,33 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const housingHelpRequestCount = ref<number | null>(null)
-  const housingHelpRequestContextStats = ref<StatsListPropType | null>(null)
-  const housingHelpRequestReasonStats = ref<StatsListPropType | null>(null)
-
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getHousingHelpRequestsStats.mutate(
-      props.filters
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getHousingHelpRequestsStats.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
 
-    housingHelpRequestCount.value = data.housingHelpRequestCount || 0
+  const housingHelpRequestCount = computed(
+    () => data.value?.housingHelpRequestCount || 0
+  )
 
-    housingHelpRequestContextStats.value =
-      data.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
+  const housingHelpRequestContextStats = computed(
+    () =>
+      data.value?.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
         key: String(isFirst),
         label: getStatLabel(isFirstKeys.byKey, String(isFirst)) as string,
         color: SupportColor.helpRequests,
         count: _count
       })) || []
+  )
 
-    housingHelpRequestReasonStats.value =
-      data.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
+  const housingHelpRequestReasonStats = computed(
+    () =>
+      data.value?.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
         key: String(reason),
         label: getStatLabel(housingReasonKeys.byKey, String(reason)) as string,
         color: SupportColor.helpRequests,
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

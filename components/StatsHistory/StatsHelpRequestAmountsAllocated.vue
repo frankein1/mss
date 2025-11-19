@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,17 +8,14 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartition des montants accordés n'ont pas pu être chargées.`"
   />
-  <template v-else-if="stats && count">
+  <template v-else-if="stats && stats.length && count">
     <StatsList
-      v-if="count"
       :stats="count"
       :display-total="false"
       :big-text="true"
       :stats-percentage="false"
     />
-
     <hr />
-
     <StatsList
       :stats
       :to-fixed="2"
@@ -41,38 +38,35 @@
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const count = ref<StatsListPropType | null>(null)
-  const stats = ref<StatsListPropType | null>(null)
-
-  try {
-    const trpc = useTrpcClient()
-    const amounts = await trpc.stat.getHelpRequestAmountsAllocated.mutate(
-      props.filters
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getHelpRequestAmountsAllocated.useQuery(
+      toRef(() => props.filters)
     )
-    if (amounts == null) {
-      throw new Error('no data')
+  if (data.value == null) {
+    throw new Error('no data')
+  }
+
+  const count = computed(() => {
+    if (data.value?.count.count == null || data.value?.count.count === 0) {
+      return null
     }
-    count.value = [
+    return [
       {
-        ...amounts.count,
+        ...data.value.count,
         color: SupportColor.helpRequests,
         emphasis: true
       }
     ]
-    stats.value = (amounts.breakdown || []).map(amount => ({
+  })
+
+  const stats = computed(() =>
+    (data.value?.breakdown || []).map(amount => ({
       ...amount,
       color: SupportColor.helpRequests
     }))
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

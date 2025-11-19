@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -37,7 +37,6 @@
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
@@ -46,27 +45,20 @@
     tab: HistoryTab.FileInstructions
   })
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const stats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const amounts =
-      await trpc.stat.getHelpRequestAmountsByInstructorOrganization.mutate(
-        props.filters
-      )
-    if (amounts == null) {
-      throw new Error('no data')
-    }
-    stats.value = (amounts || []).map(amount => ({
+  const {
+    data: amounts,
+    error,
+    status
+  } = await trpcClient.stat.getHelpRequestAmountsByInstructorOrganization.useQuery(
+    toRef(() => props.filters)
+  )
+
+  const stats = computed(() =>
+    (amounts.value || []).map(amount => ({
       ...amount,
       color: SupportColor.helpRequests
     }))
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

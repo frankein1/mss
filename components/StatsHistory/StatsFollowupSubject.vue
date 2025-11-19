@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
   />
-  <template v-else-if="subjectsStats">
+  <template v-else-if="subjectsStats && subjectsStats.length">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total de synthèses d’entretien. Les
       synthèses d'entretiens pouvant avoir plusieurs accompagnements associés,
@@ -38,30 +38,24 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const subjectsStats = ref<StatsPiePropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupSubjectStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    subjectsStats.value = (data
-      .map(({ id, name, _count }) => ({
-        key: id,
-        label: name,
-        count: _count.socialSupports,
-        color: SupportColor.followups
-      }))
-      .filter(typeCount => typeCount.count > 0) || []) as StatsPiePropType
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupSubjectStats.useQuery(
+      toRef(() => props.filters)
+    )
+
+  const subjectsStats = computed(
+    () =>
+      (data.value
+        ?.map(({ id, name, _count }) => ({
+          key: id,
+          label: name,
+          count: _count.socialSupports,
+          color: SupportColor.followups
+        }))
+        .filter(typeCount => typeCount.count > 0) || []) as StatsPiePropType
+  )
 </script>
 
 <style scoped>

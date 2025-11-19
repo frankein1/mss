@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
   />
-  <template v-else-if="subjectStats">
+  <template v-else-if="subjectStats && subjectStats.length">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total d'instructions de dossier.
     </p>
@@ -28,40 +28,29 @@
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const subjectStats = ref<StatsListPropType | null>(null)
-
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getHelpRequestSubjectStats.mutate(
-      props.filters
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getHelpRequestSubjectStats.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    subjectStats.value =
-      data
-        .map(({ id, name, _count }) => ({
+
+  const subjectStats = computed(
+    () =>
+      data.value
+        ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,
           count: _count.socialSupports,
           color: SupportColor.helpRequests
         }))
         .filter(typeCount => typeCount.count > 0) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>
 
 <style scoped>

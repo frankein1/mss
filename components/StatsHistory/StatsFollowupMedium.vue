@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,11 +8,12 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des types d'entretiens n'ont pas pu être chargées."
   />
-  <StatsList
-    v-if="followupMediumStats"
-    :total-count="totalCount"
-    :stats="followupMediumStats"
-  />
+  <template v-else-if="followupMediumStats && followupMediumStats.length">
+    <StatsList
+      :total-count="totalCount"
+      :stats="followupMediumStats"
+    />
+  </template>
   <p v-else>
     Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
     pour voir apparaître les statistiques de la répartition des types
@@ -25,34 +26,25 @@
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const followupMediumStats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupMediumStats.useQuery(
+      toRef(() => props.filters)
+    )
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupMediumStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    followupMediumStats.value =
-      data.map(({ _count, medium }) => ({
+  const followupMediumStats = computed(
+    () =>
+      data.value?.map(({ _count, medium }) => ({
         key: medium,
         label: followupMediumKeys.value(medium) || '',
         color: SupportColor.followups,
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>

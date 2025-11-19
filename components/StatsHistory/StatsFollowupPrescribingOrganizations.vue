@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,14 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
   />
-  <template v-if="followupWithInstruction && prescribingOrganizationStats">
+  <template
+    v-if="
+      followupWithInstruction &&
+      followupWithInstruction.length &&
+      prescribingOrganizationStats &&
+      prescribingOrganizationStats.length
+    "
+  >
     <StatsList
       :total-count="totalCount"
       :stats="followupWithInstruction"
@@ -46,7 +53,6 @@
   import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
-  import type { StatsListPropType, StatsPiePropType } from '~/types/stat'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
   import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
@@ -56,21 +62,15 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const prescribingOrganizationStats = ref<StatsPiePropType | null>(null)
-  const followupWithInstruction = ref<StatsListPropType | null>(null)
-
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupPrescribingOrganizationStats.mutate(
-      props.filters
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupPrescribingOrganizationStats.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    prescribingOrganizationStats.value =
-      data.map(
+
+  const prescribingOrganizationStats = computed(
+    () =>
+      data.value?.map(
         ({ _count, prescribingOrganization, prescribingOrganizationId }) => ({
           key: prescribingOrganizationId,
           label: prescribingOrganization,
@@ -78,41 +78,20 @@
           count: _count
         })
       ) || []
-    const noOrganization = data?.find(
+  )
+  const followupWithInstruction = computed(() => {
+    const noOrganization = data?.value?.find(
       followup => followup.prescribingOrganizationId == 'null'
     )
     const noOrganizationCount = noOrganization?._count || 0
-    followupWithInstruction.value = [
+    return [
       {
         key: 'followupWithInstruction',
         label: 'Entretiens avec prescripteur renseigné',
         color: SupportColor.followups,
         emphasis: true,
-        count: props.totalCount - noOrganizationCount
+        count: toRef(() => props.totalCount).value - noOrganizationCount
       }
     ]
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
-
-  // const followupWithInstruction: ComputedRef<StatsListPropType> = computed(
-  //   () => {
-  //     const noOrganization = data?.find(
-  //       followup => followup.prescribingOrganizationId == 'null'
-  //     )
-  //     const noOrganizationCount = noOrganization?._count || 0
-  //     return [
-  //       {
-  //         key: 'followupWithInstruction',
-  //         label: 'Entretiens avec prescripteur renseigné',
-  //         color: SupportColor.followups,
-  //         emphasis: true,
-  //         count: props.totalCount - noOrganizationCount
-  //       }
-  //     ]
-  //   }
-  // )
+  })
 </script>

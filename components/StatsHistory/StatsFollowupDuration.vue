@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la durée des entretiens n'ont pas pu être chargées."
   />
-  <template v-else-if="durationStats">
+  <template v-else-if="durationStats && durationStats.length">
     <StatsPie
       pie-label="Répartion des durées des entretiens"
       :stats="durationStats"
@@ -44,30 +44,23 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const durationStats = ref<StatsPiePropType | null>(null)
+  const trpcClient = useTrpcClient()
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupDurationStats.useQuery(
+      toRef(() => props.filters)
+    )
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupDurationStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    durationStats.value = (data.map(({ _count, duration }) => {
-      return {
-        key: duration || 'null',
-        label: getStatLabel(followupDurationKeys.byKey, duration),
-        color: getColor(duration),
-        count: _count
-      }
-    }) || []) as StatsPiePropType
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const durationStats = computed(
+    () =>
+      (data.value?.map(({ _count, duration }) => {
+        return {
+          key: duration || 'null',
+          label: getStatLabel(followupDurationKeys.byKey, duration),
+          color: getColor(duration),
+          count: _count
+        }
+      }) || []) as StatsPiePropType
+  )
 
   function getColor(duration: FollowupDuration | null) {
     if (duration === FollowupDuration.Half) {

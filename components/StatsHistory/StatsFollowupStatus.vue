@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,12 +8,14 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des statuts n'ont pas pu être chargées."
   />
-  <StatsPie
-    v-if="statusStats"
-    pie-label="Répartion des statuts"
-    :stats="statusStats"
-    :total-count="totalCount"
-  />
+  <template v-else-if="statusStats && statusStats.length">
+    <StatsPie
+      v-if="statusStats"
+      pie-label="Répartion des statuts"
+      :stats="statusStats"
+      :total-count="totalCount"
+    />
+  </template>
   <p v-else>
     Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
     pour voir apparaître les statistiques de la répartition des statuts.
@@ -34,27 +36,22 @@
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const statusStats = ref<StatsPiePropType | null>(null)
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFollowupStatusStats.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    statusStats.value = (data.map(({ _count, status }) => ({
-      key: status,
-      label: socialSupportStatusKeys.value.value(status) || '',
-      color: getColor(status),
-      count: _count
-    })) || []) as StatsPiePropType
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  const trpcClient = useTrpcClient()
+
+  const { data, error, status } =
+    await trpcClient.stat.getFollowupStatusStats.useQuery(
+      toRef(() => props.filters)
+    )
+
+  const statusStats = computed(
+    () =>
+      (data.value?.map(({ _count, status }) => ({
+        key: status,
+        label: socialSupportStatusKeys.value.value(status) || '',
+        color: getColor(status),
+        count: _count
+      })) || []) as StatsPiePropType
+  )
 
   function getColor(status: SocialSupportStatus) {
     if (status === SocialSupportStatus.Todo) {

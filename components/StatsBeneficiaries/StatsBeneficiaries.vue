@@ -41,192 +41,183 @@
         v-if="!alertClose"
         @close-alert="alertClose = true"
       />
-      <!-- Alert + Loader -->
       <AtomAlert
         v-if="error"
         :alert-type="AlertType.Error"
         message="Le nombre total de bénéficiaires n'a pas pu être chargé."
       />
       <AtomLoader
-        v-if="pending"
+        v-if="status === 'pending'"
         class="fr-mx-auto"
       />
 
       <!-- Cards -->
-      <template v-else-if="beneficiaryCount?.count">
-        <div class="fr-col-12">
-          <StatsBeneficiariesFamilyFileNumber
-            v-if="
-              Object.keys(filters).length === 0 ||
-              filters.period ||
-              filters.referent ||
-              filters.beneficiaryStatus
-            "
-            history-type="beneficiary"
-            :filters="filters"
-          />
-        </div>
+      <div class="fr-col-12">
+        <StatsBeneficiariesFamilyFileNumber
+          v-if="
+            Object.keys(filters).length === 0 ||
+            filters.period ||
+            filters.referent ||
+            filters.beneficiaryStatus
+          "
+          history-type="beneficiary"
+          :filters="filters"
+        />
+      </div>
 
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.gender.id"
+        :card-name="beneficiariesCardConfig.gender.name"
+      >
+        <StatsBeneficiariesGender
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.ages.id"
+        :card-name="beneficiariesCardConfig.ages.name"
+      >
+        <StatsBeneficiariesAgeGroups
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.familySituations.id"
+        :card-name="beneficiariesCardConfig.familySituations.name"
+      >
+        <StatsBeneficiariesFamilySituations
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.cities.id"
+        :card-name="beneficiariesCardConfig.cities.name"
+      >
+        <StatsBeneficiariesCities
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.counties.id"
+        :card-name="beneficiariesCardConfig.counties.name"
+      >
+        <StatsBeneficiariesDepartments
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.region.id"
+        :card-name="beneficiariesCardConfig.region.name"
+      >
+        <StatsBeneficiariesRegions
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
+        v-if="application.module.ministere"
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
+        :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
+      >
+        <StatsBeneficiariesAccommodationZone
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+      /></StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.accomodationMode.id"
+        :card-name="beneficiariesCardConfig.accomodationMode.name"
+      >
+        <StatsBeneficiariesAccommodationMode
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+      /></StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.mobility.id"
+        :card-name="beneficiariesCardConfig.mobility.name"
+      >
+        <StatsBeneficiariesMobility
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+      /></StatsCard>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.csp.id"
+        :card-name="beneficiariesCardConfig.csp.name"
+      >
+        <StatsBeneficiariesCSP
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+      /></StatsCard>
+
+      <template v-if="application.module.ministere">
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.gender.id"
-          :card-name="beneficiariesCardConfig.gender.name"
+          :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
+          :card-name="beneficiariesCardMinistereConfig.ministereStructures.name"
         >
-          <StatsBeneficiariesGender
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.ages.id"
-          :card-name="beneficiariesCardConfig.ages.name"
-        >
-          <StatsBeneficiariesAgeGroups
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.familySituations.id"
-          :card-name="beneficiariesCardConfig.familySituations.name"
-        >
-          <StatsBeneficiariesFamilySituations
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.cities.id"
-          :card-name="beneficiariesCardConfig.cities.name"
-        >
-          <StatsBeneficiariesCities
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.counties.id"
-          :card-name="beneficiariesCardConfig.counties.name"
-        >
-          <StatsBeneficiariesDepartments
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.region.id"
-          :card-name="beneficiariesCardConfig.region.name"
-        >
-          <StatsBeneficiariesRegions
-            :beneficiary-count="beneficiaryCount.count"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="application.module.ministere"
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
-          :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
-        >
-          <StatsBeneficiariesAccommodationZone
-            :beneficiary-count="beneficiaryCount.count"
+          <StatsBeneficiariesMinistereStructure
+            :beneficiary-count="beneficiaryCount?.count || 0"
             :filters="filters"
         /></StatsCard>
 
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.accomodationMode.id"
-          :card-name="beneficiariesCardConfig.accomodationMode.name"
+          :card-id="
+            beneficiariesCardMinistereConfig.ministereDepartementServices.id
+          "
+          :card-name="
+            beneficiariesCardMinistereConfig.ministereDepartementServices.name
+          "
         >
-          <StatsBeneficiariesAccommodationMode
-            :beneficiary-count="beneficiaryCount.count"
+          <StatsBeneficiariesMinistereDepartementService
+            :beneficiary-count="beneficiaryCount?.count || 0"
             :filters="filters"
         /></StatsCard>
 
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.mobility.id"
-          :card-name="beneficiariesCardConfig.mobility.name"
+          :card-id="beneficiariesCardMinistereConfig.ministereCategorie.id"
+          :card-name="beneficiariesCardMinistereConfig.ministereCategorie.name"
         >
-          <StatsBeneficiariesMobility
-            :beneficiary-count="beneficiaryCount.count"
+          <StatsBeneficiariesMinistereCategorie
+            :beneficiary-count="beneficiaryCount?.count || 0"
             :filters="filters"
         /></StatsCard>
 
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardConfig.csp.id"
-          :card-name="beneficiariesCardConfig.csp.name"
+          :card-id="beneficiariesCardMinistereConfig.ministereInterpellation.id"
+          :card-name="
+            beneficiariesCardMinistereConfig.ministereInterpellation.name
+          "
         >
-          <StatsBeneficiariesCSP
-            :beneficiary-count="beneficiaryCount.count"
+          <StatsBeneficiariesMinistereInterpellation
+            :beneficiary-count="beneficiaryCount?.count || 0"
             :filters="filters"
         /></StatsCard>
-
-        <template v-if="application.module.ministere">
-          <StatsCard
-            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
-            :card-name="
-              beneficiariesCardMinistereConfig.ministereStructures.name
-            "
-          >
-            <StatsBeneficiariesMinistereStructure
-              :beneficiary-count="beneficiaryCount.count"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="
-              beneficiariesCardMinistereConfig.ministereDepartementServices.id
-            "
-            :card-name="
-              beneficiariesCardMinistereConfig.ministereDepartementServices.name
-            "
-          >
-            <StatsBeneficiariesMinistereDepartementService
-              :beneficiary-count="beneficiaryCount.count"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="beneficiariesCardMinistereConfig.ministereCategorie.id"
-            :card-name="
-              beneficiariesCardMinistereConfig.ministereCategorie.name
-            "
-          >
-            <StatsBeneficiariesMinistereCategorie
-              :beneficiary-count="beneficiaryCount.count"
-              :filters="filters"
-          /></StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="
-              beneficiariesCardMinistereConfig.ministereInterpellation.id
-            "
-            :card-name="
-              beneficiariesCardMinistereConfig.ministereInterpellation.name
-            "
-          >
-            <StatsBeneficiariesMinistereInterpellation
-              :beneficiary-count="beneficiaryCount.count"
-              :filters="filters"
-          /></StatsCard>
-        </template>
       </template>
     </section>
   </div>
@@ -263,32 +254,11 @@
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
-  const error = ref<boolean>(false)
-  const pending = ref<boolean>(false)
-  const beneficiaryCount = ref<{ count: number; new: number } | null>(null)
-
-  const getBeneficiarycount = async (filters: StatFilterInput) => {
-    pending.value = true
-    // Do not use useMutation() or useTrpcMutation()
-    // it cause issues with response #id matching
-    const data = await trpcClient.stat.getBeneficiaryCount.mutate(filters)
-    if (data == null) {
-      error.value = true
-      return
-    }
-    beneficiaryCount.value = data
-    pending.value = false
-  }
-
-  // Use watcher to update beneficiaryCount
-  // beneficiaryCount is used to update child components
-  getBeneficiarycount({})
-  const stopWatchingIsOpen = watch(filters, value => {
-    getBeneficiarycount(value)
-  })
-  onUnmounted(() => {
-    stopWatchingIsOpen()
-  })
+  const {
+    data: beneficiaryCount,
+    error,
+    status
+  } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
 
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`

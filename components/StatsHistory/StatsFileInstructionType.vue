@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,7 +8,7 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des thématiques d'instruction n'ont pas pu être chargées."
   />
-  <template v-else-if="subjectStats">
+  <template v-else-if="subjectStats && subjectStats.length && totalCount > 0">
     <p class="fr-text--xs text--muted">
       Les instructions de dossiers de demande de logement réalisées avant le 15
       février 2024 sont comptabilisées dans la thématique "Autre".
@@ -35,39 +35,29 @@
     fileInstructionTypeFilterKeys
   } from '~/client/options'
   import { ChartColor } from '~/utils/color/chartColors'
-  import type { StatsPiePropType } from '~/types/stat'
 
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const subjectStats = ref<StatsPiePropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getFileInstructionTypeStats.mutate(
-      props.filters
+  const { data, error, status } =
+    await trpcClient.stat.getFileInstructionTypeStats.useQuery(
+      toRef(() => props.filters)
     )
-    if (data == null) {
-      throw new Error('no data')
-    }
-    subjectStats.value =
-      data.map(({ _count, subject }) => ({
+
+  const subjectStats = computed(
+    () =>
+      data.value?.map(({ _count, subject }) => ({
         key: subject,
         label: fileInstructionTypeFilterKeys.value(subject) || '',
         color: getColor(subject),
         count: _count,
         picto: fileInstructionTypePictos[subject]
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 
   function getColor(subject: FileInstructionType) {
     if (subject === FileInstructionType.Housing) {

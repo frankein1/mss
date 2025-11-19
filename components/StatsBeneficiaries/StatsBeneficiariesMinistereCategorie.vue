@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="pending"
+    v-if="status === 'pending'"
     class="fr-mx-auto"
   />
   <AtomAlert
@@ -8,17 +8,20 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des catégories n'ont pas pu être chargées."
   />
-  <StatsList
-    v-if="ministereCategorieStats"
-    :total-count="beneficiaryCount"
-    :stats="ministereCategorieStats"
-    stats-bar
-    :not-filled-route="
-      routes.beneficiary.AppBeneficiaries.path({
-        notFilled: FilterBeneficiaryNotFilled.BeneficiaryMinistereCategorie
-      })
-    "
-  />
+  <template
+    v-else-if="ministereCategorieStats && ministereCategorieStats.length"
+  >
+    <StatsList
+      :total-count="beneficiaryCount"
+      :stats="ministereCategorieStats"
+      stats-bar
+      :not-filled-route="
+        routes.beneficiary.AppBeneficiaries.path({
+          notFilled: FilterBeneficiaryNotFilled.BeneficiaryMinistereCategorie
+        })
+      "
+    />
+  </template>
   <p v-else>
     Commencez à
     <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
@@ -34,33 +37,24 @@
   import type { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministereCategorieKeys } from '~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
-  import type { StatsListPropType } from '~/types/stat'
 
   const props = defineProps<{
     beneficiaryCount: number
     filters: StatFilterInput
   }>()
 
-  const pending = ref<boolean>(true)
-  const error = ref<Error | null>(null)
-  const ministereCategorieStats = ref<StatsListPropType | null>(null)
+  const trpcClient = useTrpcClient()
 
-  try {
-    const trpc = useTrpcClient()
-    const data = await trpc.stat.getMinistereCategorie.mutate(props.filters)
-    if (data == null) {
-      throw new Error('no data')
-    }
-    ministereCategorieStats.value =
-      data.map(({ _count, ministereCategorie }) => ({
+  const { data, error, status } =
+    await trpcClient.stat.getMinistereCategorie.useQuery(
+      toRef(() => props.filters)
+    )
+  const ministereCategorieStats = computed(
+    () =>
+      data.value?.map(({ _count, ministereCategorie }) => ({
         key: ministereCategorie || 'null',
         label: getStatLabel(ministereCategorieKeys.byKey, ministereCategorie),
         count: _count
       })) || []
-  } catch (err: unknown) {
-    console.error(err)
-    error.value = err as Error
-  } finally {
-    pending.value = false
-  }
+  )
 </script>
