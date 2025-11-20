@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
-import type { UserCreationInput } from '~/server/schema'
+import type { CreateUserInput } from '~/server/schema'
 import { createUserSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
@@ -19,7 +19,7 @@ const handler = async ({
   input
 }: {
   ctx: ProtectedAppContext
-  input: UserCreationInput
+  input: CreateUserInput
 }) => {
   const { email, ...data } = input
   const userEmail = cleanEmail(email)

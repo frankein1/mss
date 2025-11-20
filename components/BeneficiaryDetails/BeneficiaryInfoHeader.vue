@@ -24,7 +24,7 @@
           :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
         >
           <div class="fr-icon-success-line field-value">
-            Registre des personnes vulnérables
+            {{ beneficiaryFieldLabels.vulnerablePerson }}
           </div>
         </div>
       </div>

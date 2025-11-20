@@ -1,8 +1,8 @@
 <template>
   <section class="feature-section bg-color-white structure-info">
-    <h2 class="fr-h4 structure-info__title">
+    <h3 class="fr-h4 structure-info__title">
       Informations sur votre structure
-    </h2>
+    </h3>
 
     <div class="fr-grid-row structure-info__content">
       <div class="fr-col-12">
@@ -48,9 +48,9 @@
       </div>
 
       <div class="fr-col-12 fr-mt-1w">
-        <h3 class="fr-mb-0 fr-text--lg grey">
+        <h4 class="fr-mb-0 fr-text--lg grey">
           Personne référente à la protection des données (DPO)&nbsp;:
-        </h3>
+        </h4>
       </div>
 
       <div class="fr-col-12">

@@ -51,6 +51,11 @@ button[type='submit'][data-submitting='true']::before,
   &.fr-btn--tertiary-no-outline {
     color: var(--text-default-error);
   }
+
+  &[disabled] {
+    background-color: var(--background-disabled-grey);
+    color: var(--text-disabled-grey);
+  }
 }
 
 .btn-primary-on-primary {

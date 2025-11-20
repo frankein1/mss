@@ -1,56 +1,90 @@
 <template>
   <PageContainer>
     <AtomBreadcrumb :links="breadcrumbs.structure.AppStructure()" />
-
     <PageTitle :title="title" />
 
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les informations de votre structure n'ont pas pu être chargées."
-    />
-    <template v-else-if="data">
-      <StructureInfo
-        class="fr-mb-5w"
-        :structure="data.structure"
-        @edit="onEdit"
-      />
+    <AtomLazyComponent
+      :error="Boolean(error)"
+      message="Les informations de votre stucture n'ont pas pu être chargées."
+      :pending="status === 'pending'"
+    >
+      <AtomTabs
+        class="stats-tabs"
+        tab-list-name="Statistiques de la structure"
+        :tab-titles="
+          authState.isStructureManager()
+            ? [userTabTitle, structureTabTitle, socialSupportSubjectsTabTitle]
+            : [structureTabTitle, socialSupportSubjectsTabTitle]
+        "
+        :heading-level="2"
+      >
+        <template
+          v-if="authState.isStructureManager()"
+          #[userTabTitle.panelId]
+        >
+          <StructureUsers />
+        </template>
 
-      <SocialSupportSubjects
-        :subjects="data.socialSupportSubjects"
-        :edit-path="routes.structure.AppStructureSubjects.path()"
-        @refresh="refresh"
-      />
-    </template>
-    <OpenModalHack />
+        <template #[structureTabTitle.panelId]>
+          <StructureInfo
+            v-if="data"
+            class="fr-mb-5w"
+            :structure="data.structure"
+            @edit="onEdit"
+          />
+        </template>
+        <template #[socialSupportSubjectsTabTitle.panelId]>
+          <SocialSupportSubjects
+            v-if="data"
+            :subjects="data.socialSupportSubjects"
+            :edit-path="routes.structure.AppStructureSubjects.path()"
+            @refresh="refresh"
+          />
+        </template>
+      </AtomTabs>
+    </AtomLazyComponent>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
   import type { EditStructureInfoInput } from '~/server/schema'
-  import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.structure.AppStructure.title
-
   useHead({ title })
 
+  const authState = useAuthState()
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
   const route = useRoute()
-
   const isSubmitting = ref(false)
 
-  const { data, pending, error, refresh } =
+  const { data, error, status, refresh } =
     await trpcClient.structure.getStructure.useQuery()
 
+  const userTabTitle = {
+    tabId: 'Utilisateurs',
+    panelId: panelId('Utilisateurs'),
+    title: 'Utilisateurs',
+    icon: 'fr-icon-group-line'
+  }
+  const structureTabTitle = {
+    tabId: 'Infos structure',
+    panelId: panelId('Infos structure'),
+    title: 'Infos structure',
+    icon: 'fr-icon-home-4-line'
+  }
+  const socialSupportSubjectsTabTitle = {
+    tabId: 'Objets d’accompagnement',
+    panelId: panelId('Objets d’accompagnement'),
+    title: 'Objets d’accompagnement',
+    icon: 'fr-icon-checkbox-circle-line'
+  }
+
+  // Structure info
   function onEdit() {
     if (!data || !data.value) {
       return
@@ -92,3 +126,9 @@
     })
   }
 </script>
+
+<style lang="scss" scoped>
+  :deep(.fr-tabs__panel) {
+    padding-top: 2rem !important;
+  }
+</style>

@@ -47,6 +47,14 @@ function update<T extends Prisma.UserUpdateArgs>(
   return prismaClient.user.update(params)
 }
 
+function deleteUser<T extends Prisma.UserDeleteArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.UserDeleteArgs>
+) {
+  appendConstraints(user, params, UserConstraints.update)
+  return prismaClient.user.delete(params)
+}
+
 export const UserRepo = {
   prisma: {
     count: prismaClient.user.count,
@@ -62,5 +70,6 @@ export const UserRepo = {
   findUniqueOrThrow,
   findUnique,
   count,
-  update
+  update,
+  delete: deleteUser
 }

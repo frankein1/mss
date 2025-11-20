@@ -96,10 +96,6 @@
       })
       if (application.value.module.users) {
         items.push({
-          to: routes.structure.AppUsers.path(),
-          label: routes.structure.AppUsers.title
-        })
-        items.push({
           to: routes.structure.AppStructureSubjects.path(),
           label: routes.structure.AppStructureSubjects.title
         })

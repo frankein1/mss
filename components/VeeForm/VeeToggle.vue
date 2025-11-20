@@ -8,6 +8,7 @@
       :checked="checked"
       :value="true"
       :aria-labelledby="labelledBy"
+      :disabled="disabled"
       @input="handleChange"
     />
     <label
@@ -43,12 +44,14 @@
       labelledBy?: string
       checkedLabel?: boolean
       hint?: string
+      disabled?: boolean
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
       checkedLabel: true,
-      hint: undefined
+      hint: undefined,
+      disabled: false
     }
   )
 

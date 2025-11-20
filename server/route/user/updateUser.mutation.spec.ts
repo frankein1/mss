@@ -9,7 +9,13 @@ describe('Authorizations', () => {
     const idUser = fixturesUsers[FixtureUserRole.StructureManager].id
 
     await expect(() =>
-      trpc.socialWorker.user.update({ id: idUser, role: 'SocialWorker' })
+      trpc.socialWorker.user.update({
+        id: idUser,
+        firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
+        lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
+        email: fixturesUsers[FixtureUserRole.StructureManager].email,
+        role: 'SocialWorker'
+      })
     ).rejects.toThrowError(/not allowed to access route/i)
   })
 
@@ -22,6 +28,9 @@ describe('Authorizations', () => {
     await expect(() =>
       trpc.structureManager.user.update({
         id: idUserOtherStructure,
+        firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
+        lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
+        email: fixturesUsers[FixtureUserRole.StructureManager].email,
         role: 'StructureManager'
       })
     ).rejects.toThrowError(/invalid(.*)prisma.user.update[\s\S]*?no record/im)
@@ -33,7 +42,13 @@ describe('Authorizations', () => {
     const idUser = fixturesUsers[FixtureUserRole.SocialWorker].id
 
     await expect(() =>
-      trpc.structureManager.user.update({ id: idUser, role: 'Administrator' })
+      trpc.structureManager.user.update({
+        id: idUser,
+        firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
+        lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
+        email: fixturesUsers[FixtureUserRole.StructureManager].email,
+        role: 'Administrator'
+      })
     ).rejects.toThrowError(/not allowed to access route/i)
   })
 })

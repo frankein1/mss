@@ -5,6 +5,9 @@ export const userRouter = router({
   update: protectedProcedure
     .input(routes.updateUserMutation.inputValidation)
     .mutation(routes.updateUserMutation.execute),
+  delete: protectedProcedure
+    .input(routes.deleteUserMutation.inputValidation)
+    .mutation(routes.deleteUserMutation.execute),
   add: protectedProcedure
     .input(routes.addUserMutation.inputValidation)
     .mutation(routes.addUserMutation.execute),
@@ -16,5 +19,8 @@ export const userRouter = router({
     .mutation(routes.acceptCGUMutation.execute),
   authorizeExport: protectedProcedure
     .input(routes.authorizeExportMutation.inputValidation)
-    .mutation(routes.authorizeExportMutation.execute)
+    .mutation(routes.authorizeExportMutation.execute),
+  get: protectedProcedure
+    .input(routes.getUserQuery.inputValidation)
+    .query(routes.getUserQuery.execute)
 })

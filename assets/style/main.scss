@@ -328,6 +328,10 @@ select:focus:not(:focus-visible) {
   color: var(--grey-425-625);
 }
 
+.text--success {
+  color: var(--text-default-success);
+}
+
 .text--uppercase {
   text-transform: uppercase;
 }
@@ -363,4 +367,19 @@ textarea {
 
 .fr-toggle input[type='checkbox']:checked ~ .fr-toggle__label::after {
   --data-uri-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234550e5' d='m10 15.17 9.2-9.2 1.4 1.42L10 18l-6.36-6.36 1.4-1.42z'/%3E%3C/svg%3E");
+}
+
+// Missing dsfr icons
+.fr-icon-delete-bin-6-line::before {
+  --icon-size: 1.5rem;
+
+  content: '';
+  background-color: currentcolor;
+  display: inline-block;
+  height: var(--icon-size);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+  width: var(--icon-size);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z'%3E%3C/path%3E%3C/svg%3E");
 }

@@ -19,26 +19,19 @@
 
 <script lang="ts" setup>
   import { routes, apiRoutes } from '~/utils/routes'
+  import type { Menu } from '~/types/menu'
 
   const { isAuthenticated, getUserName } = useAuthState()
 
-  const { application } = usePermissions()
-
   const menus = computed(() => {
-    const menus = []
+    const menus: Menu[] = [
+      {
+        label: 'Structure',
+        to: routes.structure.AppStructure.path(),
+        icon: 'fr-icon-home-4-line'
+      }
+    ]
 
-    if (application.value.module.users) {
-      menus.push({
-        label: 'Utilisateurs',
-        to: routes.structure.AppUsers.path(),
-        icon: 'fr-icon-team-line'
-      })
-    }
-    menus.push({
-      label: 'Structure',
-      to: routes.structure.AppStructure.path(),
-      icon: 'fr-icon-home-4-line'
-    })
     if (isAuthenticated()) {
       menus.push({
         label: 'Déconnexion',
