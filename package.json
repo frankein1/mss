@@ -20,7 +20,8 @@
     "prisma": "prisma",
     "release": "commit-and-tag-version",
     "prepare": "husky",
-    "scheduler:workshop-anonymization": "tsx server/scheduler/workshop/anonymize-external-attendees.ts"
+    "scheduler:workshop-anonymization": "tsx server/scheduler/workshop/anonymize-external-attendees.ts",
+    "scheduler:metabase-anonymization": "tsx server/scheduler/db-anonymizer/index.ts"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",

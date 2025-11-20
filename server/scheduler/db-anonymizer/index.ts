@@ -2,9 +2,11 @@ import { Client } from 'pg'
 import {
   TARGET_SCHEMA,
   SOURCE_DATABASE_URL,
-  ANONYMIZED_DATABASE_URL
+  ANONYMIZED_DATABASE_URL,
+  isDeployedEnvironment,
+  PGSQL_VERSION
 } from './db'
-import { cleanDumps, dumpAnonymizedDataFromSource } from './dump'
+import { cleanDumps, dumpAnonymizedDataWithPsql } from './dump'
 import {
   cleanTargetSchema,
   createQueriesForTargetDatabaseSchema,
@@ -12,6 +14,7 @@ import {
   type Queries
 } from './restore'
 import { performance } from 'node:perf_hooks'
+import { execSync } from 'node:child_process'
 
 let start: number
 let end: number
@@ -32,16 +35,16 @@ async function main() {
   console.log('MSS environment', process.env.MSS_ENVIRONMENT)
   console.log('Target schema', TARGET_SCHEMA)
 
-  // Execute dump
-  const source = new Client({ connectionString: SOURCE_DATABASE_URL })
-  await source.connect()
+  if (isDeployedEnvironment) {
+    execSync(`dbclient-fetcher postgresql ${PGSQL_VERSION}`)
+  }
 
+  // Execute dump
   start = performance.now()
   try {
-    await dumpAnonymizedDataFromSource(source)
+    await dumpAnonymizedDataWithPsql(SOURCE_DATABASE_URL)
   } catch (err) {
     console.error(err)
-    await source.end()
     await cleanDumps()
     return 1
   } finally {
@@ -53,6 +56,9 @@ async function main() {
   }
 
   // Execute restore
+  const source = new Client({ connectionString: SOURCE_DATABASE_URL })
+  await source.connect()
+
   let queries: Queries | undefined
   start = performance.now()
   try {

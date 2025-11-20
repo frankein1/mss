@@ -1,8 +1,8 @@
 import type { Client } from 'pg'
-import { maintenanceWorkMem, maxParallelWorkersPerGather } from '../db'
+import { ANONYMIZED_DATABASE_URL } from '../db'
 import { createSQLQueriesForEnums } from './enum'
 import { createSQLQueriesForTablesSchemas } from './table-schema'
-import { createSQLQueriesForTableDataRestoreToTarget } from './table-data'
+import { restoreAnonymizedDataWithPsql } from './table-data'
 import {
   createSQLQueriesForForeignKeys,
   createSQLQueriesForIndexes
@@ -17,7 +17,6 @@ export async function cleanTargetSchema(target: Client) {
 export interface Queries {
   enums: string[]
   schema: string[]
-  tableData: string[]
   indexes: string[]
   foreignKeys: string[]
 }
@@ -36,8 +35,6 @@ export async function createQueriesForTargetDatabaseSchema(
 
   const schema = await createSQLQueriesForTablesSchemas(source)
 
-  const tableData = createSQLQueriesForTableDataRestoreToTarget()
-
   const indexes = await createSQLQueriesForIndexes(source)
 
   const foreignKeys = await createSQLQueriesForForeignKeys(source)
@@ -45,7 +42,6 @@ export async function createQueriesForTargetDatabaseSchema(
   return {
     enums,
     schema,
-    tableData,
     indexes,
     foreignKeys
   }
@@ -59,25 +55,16 @@ export async function createQueriesForTargetDatabaseSchema(
  * - table structure (columns with db types)
  * - table data
  * - primary keys and foreign keys for selected tables
- *
- * The queries are encapsulated in a transaction.
  */
 export async function createDatabaseSchemaAndRestoreDataToTarget(
   target: Client,
   q: Queries
 ) {
-  const sqlRestoreToTarget = `
-SET maintenance_work_mem = '${maintenanceWorkMem}';
-SET max_parallel_workers_per_gather = ${maxParallelWorkersPerGather};
+  await target.query(
+    `BEGIN;${q.enums.join(';\n')};${q.schema.join(';\n')};COMMIT;`
+  )
 
-BEGIN;
-${q.enums.join(';\n')};
-${q.schema.join(';\n')};
-${q.tableData.join(';\n')};
-${q.indexes.join(';\n')};
-${q.foreignKeys.join(';\n')};
-COMMIT;
-`
-  // console.log(sqlRestoreToTarget)
-  await target.query(sqlRestoreToTarget)
+  await restoreAnonymizedDataWithPsql(ANONYMIZED_DATABASE_URL as string)
+
+  await target.query(`BEGIN;${q.indexes.join(';\n')};COMMIT;`)
 }
