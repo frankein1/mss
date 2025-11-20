@@ -67,4 +67,8 @@ export async function createDatabaseSchemaAndRestoreDataToTarget(
   await restoreAnonymizedDataWithPsql(ANONYMIZED_DATABASE_URL as string)
 
   await target.query(`BEGIN;${q.indexes.join(';\n')};COMMIT;`)
+
+  // Foreign keys are useful for metabase syncs
+  // See https://www.metabase.com/docs/latest/databases/sync-scan#how-database-syncs-work
+  await target.query(`BEGIN;${q.foreignKeys.join(';\n')};COMMIT;`)
 }

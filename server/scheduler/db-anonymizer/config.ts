@@ -25,8 +25,6 @@ Prisma.HousingHelpRequestScalarFieldEnum
 Prisma.AccountScalarFieldEnum
 Prisma.BeneficiaryRelativeScalarFieldEnum
 Prisma.ArchivedBeneficiaryScalarFieldEnum
-Prisma.CommentScalarFieldEnum
-Prisma.NotificationScalarFieldEnum
 Prisma.CGUHistoryScalarFieldEnum
 Prisma.WorkshopScalarFieldEnum
 Prisma.WorkshopNameScalarFieldEnum
@@ -34,6 +32,8 @@ Prisma.WorkshopAttendeeScalarFieldEnum
 Prisma.WorkshopExternalAttendeeScalarFieldEnum
 
 // NO
+Prisma.CommentScalarFieldEnum
+Prisma.NotificationScalarFieldEnum
 Prisma.UserActivityScalarFieldEnum
 Prisma.DataInclusionStructureScalarFieldEnum
 Prisma.EmailScalarFieldEnum
@@ -392,6 +392,173 @@ const configHousingHelpRequest: Record<
   file_instruction_id: true
 }
 
+const configAccount: Record<
+  SnakeCase<keyof typeof Prisma.AccountScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  type: true,
+  created: true,
+  updated: true,
+  user_id: true,
+  provider: true,
+  // -- BEGIN ANONYMIZED
+  provider_account_id: false,
+  refresh_token: false,
+  access_token: false,
+  expires_at: false,
+  token_type: false,
+  scope: false,
+  id_token: false,
+  session_state: false
+}
+
+const configBeneficiaryRelative: Record<
+  | Exclude<
+      SnakeCase<keyof typeof Prisma.BeneficiaryRelativeScalarFieldEnum>,
+      'linked_beneficiary_id'
+    >
+  | 'beneficiary_link_id',
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  relationship: true,
+  hosted: true,
+  caregiver: true,
+  beneficiary_id: true,
+  beneficiary_link_id: true,
+  // -- BEGIN ANONYMIZED
+  last_name: false,
+  first_name: false,
+  birth_date: false,
+  email: false,
+  phone: false,
+  city: false,
+  additional_information: false
+}
+
+const configArchivedBeneficiary: Record<
+  | Exclude<
+      SnakeCase<keyof typeof Prisma.ArchivedBeneficiaryScalarFieldEnum>,
+      'social_support_subjects' | 'fille_instruction_count'
+    >
+  | 'socialSupportSubjects'
+  | 'file_instruction_count',
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  structure_id: true,
+  reason: true,
+  clarification: true,
+  socialSupportSubjects: true,
+  file_instruction_count: true,
+  followup_count: true,
+  file_creation_date: true,
+  archived_by_id: true,
+  event_date_reason: true,
+  structure_type: true,
+  // -- BEGIN ANONYMIZED
+  title: false,
+  first_name: false,
+  usual_name: false,
+  birth_name: false,
+  old_beneficiary_id: true
+}
+
+const configCGUHistory: Record<
+  SnakeCase<keyof typeof Prisma.CGUHistoryScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  user_id: true,
+  date: true,
+  version: true
+}
+
+const configWorkshop: Record<
+  | Exclude<
+      SnakeCase<keyof typeof Prisma.WorkshopScalarFieldEnum>,
+      'age_limit' | 'age_limit_condition'
+    >
+  | 'ageLimit'
+  | 'ageLimitCondition',
+  boolean
+> = {
+  id: true,
+  created_at: true,
+  created_by_id: true,
+  structure_id: true,
+  partner_organization_id: true,
+  chargeable: true,
+  workshop_name_id: true,
+  location: true,
+  attendee_limit: true,
+  ageLimit: true,
+  ageLimitCondition: true,
+  date: true,
+  start_time: true,
+  end_time: true,
+  session_name: true,
+  // -- BEGIN ANONYMIZED
+  host: false,
+  description: false
+}
+
+const configWorkshopName: Record<
+  | Exclude<
+      SnakeCase<keyof typeof Prisma.WorkshopNameScalarFieldEnum>,
+      'created_at'
+    >
+  | 'created_by',
+  boolean
+> = {
+  id: true,
+  created_by: true,
+  created_by_id: true,
+  structure_id: true,
+  name: true
+}
+
+const configWorkshopAttendee: Record<
+  SnakeCase<keyof typeof Prisma.WorkshopAttendeeScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  beneficiary_id: true,
+  type: true,
+  attendance: true,
+  comment: true,
+  workshop_external_attendee_id: true,
+  workshop_id: true,
+  list_type: true,
+  payment_amount: true,
+  payment_received: true
+}
+
+const configWorkshopExternalAttendee: Record<
+  SnakeCase<keyof typeof Prisma.WorkshopExternalAttendeeScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  is_anonymized: true,
+  city: true,
+  gender: true,
+  // -- BEGIN ANONYMIZED
+  first_name: false,
+  last_name: false,
+  email: false,
+  phone: false,
+  birth_date: false
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -408,7 +575,15 @@ export const CONFIG = {
   followup: configFollowup,
   file_instruction: configFileInstruction,
   help_request: configHelpRequest,
-  housing_help_request: configHousingHelpRequest
+  housing_help_request: configHousingHelpRequest,
+  account: configAccount,
+  beneficiary_relative: configBeneficiaryRelative,
+  archived_beneficiary: configArchivedBeneficiary,
+  cgu_history: configCGUHistory,
+  workshop: configWorkshop,
+  workshop_name: configWorkshopName,
+  workshop_attendee: configWorkshopAttendee,
+  workshop_external_attendee: configWorkshopExternalAttendee
 }
 
 export type TableName = keyof typeof CONFIG
