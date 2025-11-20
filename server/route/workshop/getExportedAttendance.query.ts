@@ -25,7 +25,7 @@ const handler = async ({
 
   const workshop = await getWorkshopInfo(ctx, input)
   const attendees = workshop.workshopAttendees
-  const { rows, columns } = createFile(attendees)
+  const { sortedRows: rows, columns } = createFile(attendees)
   const header = getWorksheetHeader(workshop)
 
   // Forced to return base64 encoded version of the file in tRPC
@@ -159,7 +159,13 @@ const createFile = (attendees: Attendees) => {
     }
   ]
 
-  return { rows, columns }
+  const sortedRows = rows.sort((a, b) =>
+    (a.lastName as string)
+      .toLowerCase()
+      .localeCompare((b.lastName as string).toLowerCase())
+  )
+
+  return { sortedRows, columns }
 }
 
 const getWorkshopInfo = async (
