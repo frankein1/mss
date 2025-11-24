@@ -29,7 +29,6 @@
   import type { CreateWorkshopInput } from '~/server/schema'
   import { createWorkshopSchema } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
-  import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -85,6 +84,7 @@
       )
       return
     }
+    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.DuplicateWorkshop)
     if (input.startTime !== workshop.value?.startTime) {
       matomo.trackEvent(
         EventCategory.Workshop,
