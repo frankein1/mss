@@ -50,7 +50,7 @@ test.describe('Homepage as authenticated Structure Manager', () => {
 
     await validateHeadings(page)
     await validateLegals(page, 'manager')
-    await validateTopbarMenu(page, ['Structure', 'Déconnexion'])
+    await validateTopbarMenu(page, ['Configuration', 'Déconnexion'])
   })
 })
 
@@ -64,6 +64,6 @@ test.describe('Homepage as authenticated Social Worker', () => {
 
     await validateHeadings(page)
     await validateLegals(page, 'user')
-    await validateTopbarMenu(page, ['Structure', 'Déconnexion'])
+    await validateTopbarMenu(page, ['Configuration', 'Déconnexion'])
   })
 })

@@ -26,9 +26,9 @@
   const menus = computed(() => {
     const menus: Menu[] = [
       {
-        label: 'Structure',
+        label: 'Configuration',
         to: routes.structure.AppStructure.path(),
-        icon: 'fr-icon-home-4-line'
+        icon: 'fr-icon-settings-4-line'
       }
     ]
 
