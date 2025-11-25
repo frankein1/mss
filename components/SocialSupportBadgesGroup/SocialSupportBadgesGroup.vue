@@ -8,19 +8,9 @@
         {{ statusLabel }}
       </p>
     </li>
-    <li v-if="redirectedLabel">
-      <p class="fr-badge fr-badge--purple-glycine">
-        {{ redirectedLabel }}
-      </p>
-    </li>
     <li v-if="hasUnreadNotifications">
       <p class="fr-badge fr-badge--new fr-badge--no-icon">
         <span class="fr-icon-notification-3-fill fr-icon--sm"></span>
-      </p>
-    </li>
-    <li v-if="firstFollowup">
-      <p class="fr-badge fr-badge--info fr-badge--no-icon">
-        {{ firstFollowup }}
       </p>
     </li>
   </ul>
@@ -34,8 +24,6 @@
   const props = defineProps<{
     status: SocialSupportStatus | 'RdvUpcoming' | 'RdvObsolete'
     hasUnreadNotifications?: boolean
-    redirectedLabel?: string
-    firstFollowup?: string
     isAppointment?: boolean
   }>()
 

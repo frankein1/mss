@@ -35,6 +35,7 @@ const fixturesFollowupSocialSupports = [
     },
     date: new Date('2022-10-20'),
     socialSupportType: 'Followup',
+    subtype: 'PlannedInPerson',
     followup: {
       create: {
         medium: 'PlannedInPerson'
@@ -53,6 +54,7 @@ const fixturesFollowupSocialSupports = [
     },
     date: new Date('2022-10-21'),
     socialSupportType: 'Followup',
+    subtype: 'PhoneCall',
     followup: {
       create: {
         medium: 'PhoneCall'
@@ -74,6 +76,7 @@ const fixturesFollowupSocialSupports = [
     },
     date: new Date('2022-10-22'),
     socialSupportType: 'Followup',
+    subtype: 'Videoconference',
     followup: {
       create: {
         medium: 'Videoconference'
@@ -92,6 +95,7 @@ const fixturesFollowupSocialSupports = [
     },
     date: new Date('2022-10-23'),
     socialSupportType: 'Followup',
+    subtype: 'UnplannedInPerson',
     followup: {
       create: {
         medium: 'UnplannedInPerson'
@@ -113,6 +117,7 @@ const fixturesFollowupSocialSupports = [
     },
     date: new Date('2022-10-24'),
     socialSupportType: 'Followup',
+    subtype: 'PlannedInPerson',
     followup: {
       create: {
         medium: 'PlannedInPerson'
@@ -174,6 +179,7 @@ const fixturesFollowupSocialSupports = [
       }
     },
     socialSupportType: 'Followup',
+    subtype: 'PhoneCall',
     followup: {
       create: {
         medium: 'PhoneCall'
@@ -219,6 +225,7 @@ const fixturesHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
+    subtype: FileInstructionType.Other,
     date: new Date('2022-10-27'),
     fileInstruction: {
       create: {
@@ -242,6 +249,7 @@ const fixturesHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
+    subtype: FileInstructionType.Financial,
     date: new Date('2022-10-18'),
     fileInstruction: {
       create: {
@@ -269,6 +277,7 @@ const fixturesHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
+    subtype: FileInstructionType.Financial,
     date: new Date('2022-11-03'),
     fileInstruction: {
       create: {
@@ -300,6 +309,7 @@ const fixturesHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
+    subtype: FileInstructionType.Financial,
     date: new Date('2022-12-09'),
     fileInstruction: {
       create: {
@@ -335,6 +345,7 @@ const fixturesHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
+    subtype: FileInstructionType.Financial,
     date: new Date('2023-10-19'),
     fileInstruction: {
       create: {
@@ -363,6 +374,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2024-10-26'),
     fileInstruction: {
       create: {
@@ -388,6 +400,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2022-10-27'),
     fileInstruction: {
       create: {
@@ -412,6 +425,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2024-10-18'),
     fileInstruction: {
       create: {
@@ -438,6 +452,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2024-11-03'),
     fileInstruction: {
       create: {
@@ -467,6 +482,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2024-12-09'),
     fileInstruction: {
       create: {
@@ -499,6 +515,7 @@ const fixturesHousingHelpRequestSocialSupports = [
     familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequestHousing',
+    subtype: FileInstructionType.Housing,
     date: new Date('2024-10-19'),
     fileInstruction: {
       create: {

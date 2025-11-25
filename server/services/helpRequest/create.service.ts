@@ -93,6 +93,9 @@ export async function create({ input, ctx }: CreateParams) {
               date,
               status,
               socialSupportType: SocialSupportType.HelpRequest,
+              subtype: financialSupport
+                ? FileInstructionType.Financial
+                : FileInstructionType.Other,
               createdById: ctx.user.id,
               familyFileId,
               beneficiaryId,

@@ -24,9 +24,11 @@
         <span class="history-details__date">
           le {{ formatDate(data.date) }}
         </span>
-        <template v-if="data.appointment?.time">
+        <template
+          v-if="data.socialSupportType === SocialSupportType.Appointment"
+        >
           <span class="history-details__date">
-            à {{ getUTCTimeFromDate(data.appointment?.time) }}
+            à {{ getUTCTimeFromDate(data.date) }}
           </span>
         </template>
         <template v-if="!singleBeneficiary">
@@ -36,26 +38,10 @@
           </span>
         </template>
       </h4>
-      <div
-        v-if="data.lastUpdatedBy"
-        class="fr-text--xs fr-mb-1v"
-      >
-        Mis à jour par {{ formatUserDisplayName(data.lastUpdatedBy) }} le
-        {{ formatDate(data.updated) }}
-      </div>
-      <div
-        v-if="data.appointment?.subject"
-        class="fr-mt-1v"
-      >
-        <p class="fr-mb-0">Motif : {{ data.appointment.subject }}</p>
-      </div>
-      <ul
-        v-else
-        class="fr-tags-group social-support-subjects-tags"
-      >
+      <ul class="fr-tags-group social-support-subjects-tags">
         <li
           v-for="socialSupportSubject in data.subjects"
-          :key="socialSupportSubject.id"
+          :key="socialSupportSubject.name"
         >
           <p class="fr-tag">{{ socialSupportSubject.name }}</p>
         </li>
@@ -64,13 +50,8 @@
     <div class="history-details__status">
       <SocialSupportBadgesGroup
         :status
-        :redirected-label
-        :has-unread-notifications
-        :is-appointment="Boolean(data.appointment)"
-        :first-followup="
-          data.followup?.firstFollowup
-            ? followupFieldLabels.firstFollowup
-            : undefined
+        :is-appointment="
+          data.socialSupportType === SocialSupportType.Appointment
         "
       />
       <button
@@ -91,13 +72,16 @@
 
 <script setup lang="ts">
   import type { SocialSupportData } from './types'
-  import { fileInstructionTypePictos } from '~/client/options'
+  import {
+    fileInstructionTypePictos,
+    followupMediumKeys
+  } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { getUTCTimeFromDate } from '~/utils/getUTCTimeFromDate'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { followupFieldLabels } from '~/client/labels'
   import dayjs from 'dayjs'
+  import { FileInstructionType, SocialSupportType } from '@prisma/client'
 
   const route = useRoute()
 
@@ -106,10 +90,9 @@
       data: SocialSupportData
       collapseId: string
       expanded?: boolean
-      hasUnreadNotifications?: boolean
       singleBeneficiary?: boolean
     }>(),
-    { expanded: false, hasUnreadNotifications: false, singleBeneficiary: true }
+    { expanded: false, singleBeneficiary: true }
   )
 
   const emit = defineEmits<{
@@ -118,36 +101,15 @@
 
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
-  const redirectedLabel = computed(() => {
-    const followup = props.data.followup
-    if (!followup) {
-      return ''
-    }
-    if (followup.redirected) {
-      const label = 'Réorienté'
-      return followup.structureName
-        ? `${label} : ${followup.structureName}`
-        : label
-    }
-  })
-
   const status = computed(() => {
     if (props.data.socialSupportType !== 'Appointment') {
       return props.data.status
     }
-
     switch (props.data.status) {
       case 'RdvUnknown': {
-        const now = dayjs(new Date())
-        const time = props.data.appointment?.time
-          ? dayjs(props.data.appointment?.time)
-          : now.set('hour', 23).set('minute', 59)
-
-        const datetime = dayjs(props.data.date)
-          .set('hour', time.get('hour'))
-          .set('minute', time.get('minute'))
-
-        return dateIsSameOrAfter(datetime, now) ? 'RdvUpcoming' : 'RdvObsolete'
+        return dateIsSameOrAfter(dayjs(props.data.date), dayjs(new Date()))
+          ? 'RdvUpcoming'
+          : 'RdvObsolete'
       }
       default:
         return props.data.status
@@ -160,27 +122,33 @@
         return {
           icon: 'fr-icon-followup-fill',
           picto: undefined,
-          title: "Synthèse d'entretien",
+          title:
+            "Synthèse d'entretien" +
+            (props.data.subtype
+              ? ` · ${followupMediumKeys.value(props.data.subtype)}`
+              : ''),
           collapseTitle: "Voir les détails de la synthèse d'entretien"
         }
       case 'Appointment':
         return {
           icon: 'fr-icon-calendar-event-line',
           picto: undefined,
-          title: 'Rendez-vous',
+          title:
+            'Rendez-vous' +
+            (props.data.subtype ? ` · ${props.data.subtype}` : ''),
           collapseTitle: 'Voir les détails du rendez-vous'
         }
       case 'HelpRequest': {
         let title: string, picto: string
-        if (props.data.fileInstruction?.type === 'Housing') {
+        if (props.data.subtype === FileInstructionType.Housing) {
           picto = fileInstructionTypePictos.Housing
-          title = 'Instruction de dossier - Demande de logement'
-        } else if (props.data.fileInstruction?.type === 'Financial') {
+          title = 'Instruction de dossier · Demande de logement'
+        } else if (props.data.subtype === FileInstructionType.Financial) {
           picto = fileInstructionTypePictos.Financial
-          title = 'Instruction de dossier - Aide financière'
+          title = 'Instruction de dossier · Aide financière'
         } else {
           picto = fileInstructionTypePictos.Other
-          title = 'Instruction de dossier - Autre'
+          title = 'Instruction de dossier · Autre'
         }
         return {
           icon: 'fr-icon-help-request-fill',
@@ -190,7 +158,7 @@
         }
       }
       default: {
-        if (props.data.fileInstruction?.type === 'Housing') {
+        if (props.data.subtype === FileInstructionType.Housing) {
           return {
             icon: 'fr-icon-help-request-fill',
             picto: fileInstructionTypePictos.Housing,

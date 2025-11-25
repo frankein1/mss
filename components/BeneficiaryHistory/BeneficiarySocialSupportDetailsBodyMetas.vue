@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportData } from './types'
+  import type { SocialSupportDetailData } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { ministerKeys } from '~/client/options'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   defineProps<{
-    socialSupport: SocialSupportData
+    socialSupport: SocialSupportDetailData
   }>()
 </script>
 <style scoped lang="scss">

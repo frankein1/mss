@@ -255,6 +255,7 @@ const configSocialSupport: Record<
   ministre: true,
   status: true,
   due_date: true,
+  subtype: true,
   // -- BEGIN ANONYMIZED
   synthesis: false,
   synthesis_rich_text: false,

@@ -9,12 +9,13 @@
       :data="itemData"
       :collapse-id="collapseId"
       :expanded="expanded"
-      :has-unread-notifications="hasUnreadNotifications"
       :single-beneficiary="singleBeneficiary"
       @toggle-expand="expanded = !expanded"
     />
     <BeneficiaryHistoryDetailsBody
+      :expanded
       :item="item"
+      :social-support-id="socialSupportId"
       :collapse-id="collapseId"
       :family-file-permissions="familyFilePermissions"
       @deleted="emit('deleted', socialSupportId)"
@@ -44,7 +45,7 @@
 
   const expanded = ref(false)
 
-  const itemData = computed(() => props.item.data)
+  const itemData = computed(() => props.item)
   const socialSupportId = computed(() => itemData.value.id)
   const collapseId = computed(() => `collapse-${socialSupportId.value}`)
 
@@ -60,10 +61,6 @@
         return 'help-request-details'
     }
   })
-
-  const hasUnreadNotifications = computed(
-    () => !!itemData.value.hasUnreadNotifications
-  )
 
   onMounted(() => {
     const tab = route.hash.slice(1)

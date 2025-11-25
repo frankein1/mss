@@ -94,6 +94,7 @@ export async function create({ input, ctx }: CreateParams) {
             create: {
               status,
               socialSupportType: SocialSupportType.HelpRequestHousing,
+              subtype: FileInstructionType.Housing,
               createdById: ctx.user.id,
               familyFileId,
               beneficiaryId,

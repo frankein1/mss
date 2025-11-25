@@ -119,6 +119,7 @@ const adminHandler = async ({
       | 'created'
       | 'updated'
       | 'socialSupportType'
+      | 'subtype'
     >
   > = {
     synthesis: null,

@@ -5,7 +5,6 @@
       <BeneficiaryHistoryFilters
         v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
-        :family-file-id="familyFileId"
         :family-file-identification="familyFileIdentification"
       />
     </section>
@@ -28,7 +27,7 @@
           <ul class="history-list">
             <BeneficiaryHistoryDetails
               v-for="item in items"
-              :key="item.data.id"
+              :key="item.id"
               :item="item"
               :family-file-permissions="familyFilePermissions"
               :single-beneficiary="
@@ -47,7 +46,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { FamilyFilePermissions } from '~/server/security'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
-  import type { FamilyFileHistoryFilterInput } from '~/server/schema'
+  import type { SocialSupportFilterInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const { familyFileId, familyFilePermissions, familyFileIdentification } =
@@ -56,7 +55,7 @@
       familyFilePermissions: FamilyFilePermissions
       familyFileIdentification: BeneficiaryFileIdentification[]
     }>()
-  const socialSupportsFilters = ref<FamilyFileHistoryFilterInput>({})
+  const socialSupportsFilters = ref<SocialSupportFilterInput>({})
 
   const socialSupportsQueryInput = computed(() => ({
     familyFileId,
@@ -69,27 +68,19 @@
 
   const emit = defineEmits<{ refresh: [] }>()
 
-  const items = computed(() => socialSupports.value?.items || [])
-
-  const totalCount = computed(() => socialSupports.value?.totalCount || 0)
+  const items = computed(() => socialSupports.value ?? [])
 
   const resultsLabel = computed(() => {
     const plural = items.value.length > 1 ? 's' : ''
-
-    if (items.value.length === totalCount.value) {
-      return `${items.value.length} accompagnement${plural}`
-    }
-
-    return `${items.value.length} accompagnement${plural} affiché${plural} sur ${totalCount.value}`
+    return `${items.value.length} accompagnement${plural}`
   })
 
   function onHistoryItemDeleted(socialSupportId: string) {
     if (!socialSupports.value) {
       return
     }
-    socialSupports.value.totalCount--
-    socialSupports.value.items = socialSupports.value.items.filter(
-      ({ data: { id } }) => id !== socialSupportId
+    socialSupports.value = socialSupports.value.filter(
+      ({ id }) => id !== socialSupportId
     )
     emit('refresh')
   }

@@ -19,16 +19,16 @@
 
 <script setup lang="ts">
   import type {
-    SocialSupportData,
     CommentData,
     CommentItem,
-    CommentItems
+    CommentItems,
+    SocialSupportDetailData
   } from './types'
   import type { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
     items: CommentItems
-    socialSupport: SocialSupportData
+    socialSupport: SocialSupportDetailData
     familyFilePermissions: FamilyFilePermissions
   }>()
 

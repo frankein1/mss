@@ -32,48 +32,23 @@
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
-    FollowupFilterEventAction,
-    HelpRequestFilterEventAction
+    FollowupFilterEventAction
   } from '~/types/matomo'
-  import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+  import { followupFieldLabels } from '~/client/labels'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const { familyFileIdentification, familyFileId, values, resultsLabel } =
-    defineProps<{
-      resultsLabel: string
-      values: FamilyFileHistoryFilterInput
-      familyFileId: string
-      familyFileIdentification: BeneficiaryFileIdentification[]
-    }>()
+  const { familyFileIdentification, values, resultsLabel } = defineProps<{
+    resultsLabel: string
+    values: FamilyFileHistoryFilterInput
+    familyFileIdentification: BeneficiaryFileIdentification[]
+  }>()
 
-  const authState = useAuthState()
-  const isReferent = authState.isReferent()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
-  const trpcClient = useTrpcClient()
-  const { application } = usePermissions()
 
   const emit = defineEmits<{
     'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
-
-  const {
-    data: examinationDateOptions,
-    pending: examinationDateOptionsPending,
-    error: examinationDateOptionsError
-  } = await (application.value.module.helpRequest
-    ? trpcClient.file.getExaminationDates.useQuery(
-        { id: familyFileId },
-        {
-          transform: dates =>
-            dates.map(({ examinationDate: date }) => ({
-              value: date?.toString() || '',
-              label: formatDate(date)
-            })),
-          queryKey: 'getFamilyFile.fileInstructions.examinationDates'
-        }
-      )
-    : { data: ref([]), pending: ref(false), error: ref(null) })
 
   const { agents, subjects } = inject(
     getStructureInfoInjectionKey
@@ -92,10 +67,7 @@
   } = subjects
 
   const pending = computed(
-    () =>
-      agentOptionsPending.value ||
-      socialSupportSubjectOptionsPending.value ||
-      examinationDateOptionsPending.value
+    () => agentOptionsPending.value || socialSupportSubjectOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -104,9 +76,6 @@
     }
     if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
-    }
-    if (examinationDateOptionsError.value) {
-      return "La liste des dates de passage en commission n'a pas pu être chargée."
     }
     return ''
   })
@@ -131,7 +100,6 @@
   const filters = computed(() => {
     if (
       !socialSupportSubjectOptions.value ||
-      !examinationDateOptions.value ||
       !agentOptions.value ||
       !familyFileIdentification
     ) {
@@ -189,34 +157,6 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
-      })
-    }
-
-    if (application.value.module.helpRequest) {
-      if (examinationDateOptions.value.length) {
-        filters.push({
-          name: 'examinationDate',
-          label: helpRequestFieldLabels.examinationDate,
-          options: withEmptyValue(
-            examinationDateOptions.value,
-            'Toutes les commissions'
-          ),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-        })
-      }
-    }
-
-    if (!isReferent) {
-      filters.push({
-        name: 'referents',
-        label: 'Référent',
-        options: agentOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: BeneficiaryHistoryFilterEventAction.Referent,
-        alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }
 

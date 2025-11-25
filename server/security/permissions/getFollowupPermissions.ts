@@ -110,7 +110,13 @@ function getEditionPermissions({
       privateSynthesis: creator
     },
     get: {
-      details: manager || socialWorker || instructor || referent || creator,
+      details:
+        manager ||
+        socialWorker ||
+        instructor ||
+        referent ||
+        creator ||
+        receptionAgent,
       dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },

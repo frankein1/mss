@@ -17,7 +17,7 @@ const STRUCTURE_COUNT = 200
 const USERS_PER_STRUCTURE: number | null = null
 const FAMILY_FILE_PER_STRUCTURE_COUNT = 1000
 // if SOCIAL_SUPPORTS_PER_STRUCTURE is null do not create social supports
-const SOCIAL_SUPPORTS_PER_STRUCTURE: number | null = null
+const SOCIAL_SUPPORTS_PER_BENEFICIARY: number | null = 15
 
 type SocialSupportSubjectsCreateInput = Omit<
   ArrayElement<
@@ -97,7 +97,7 @@ function randomFollowupStatus(): SocialSupportStatus {
 
 async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
-    console.log('starting seed', i)
+    console.log('starting seed', `${i}/${STRUCTURE_COUNT}`)
     const structure = await prismaClient.structure.create({
       data: {
         type: 'Ccas',
@@ -189,21 +189,22 @@ async function main() {
       })
     ])
 
-    if (SOCIAL_SUPPORTS_PER_STRUCTURE !== null && beneficiaries[0]) {
-      const beneficiaryId = beneficiaries[0].id
-      const familyFileId = beneficiaries[0].familyFileId
-      const data = new Array(SOCIAL_SUPPORTS_PER_STRUCTURE)
-        .fill(null)
-        .map(() => ({
-          createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
-          lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,
-          beneficiaryId,
-          familyFileId,
-          socialSupportType: 'Followup' as const,
-          structureId: structure.id,
-          status: randomFollowupStatus(),
-          date: faker.date.between({ from: '2022-01-01', to: new Date() })
-        }))
+    if (SOCIAL_SUPPORTS_PER_BENEFICIARY !== null) {
+      // data contains FAMILY_FILE_PER_STRUCTURE_COUNT * SOCIAL_SUPPORTS_PER_BENEFICIARY items
+      const data: Prisma.SocialSupportCreateManyInput[] = beneficiaries.flatMap(
+        beneficiary =>
+          new Array(SOCIAL_SUPPORTS_PER_BENEFICIARY).fill(null).map(() => ({
+            createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+            lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+            beneficiaryId: beneficiary.id,
+            familyFileId: beneficiary.familyFileId,
+            socialSupportType: 'Followup' as const,
+            structureId: structure.id,
+            status: randomFollowupStatus(),
+            subtype: randomMedium(),
+            date: faker.date.between({ from: '2022-01-01', to: new Date() })
+          }))
+      )
 
       const supports = await prismaClient.socialSupport.createManyAndReturn({
         select: { id: true },
@@ -219,7 +220,7 @@ async function main() {
         }),
         prismaClient.socialSupportSubject.update({
           where: {
-            name_ownedByStructureId: {
+            ownedByStructureId_name: {
               name: socialSupportSubjects[0]?.name as string,
               ownedByStructureId: structure.id
             }

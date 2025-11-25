@@ -63,6 +63,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     data: {
       status,
       socialSupportType: SocialSupportType.Followup,
+      subtype: medium,
       date,
       structure: connect(structure.id),
       familyFile: connect(familyFileId),

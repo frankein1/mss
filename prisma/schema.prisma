@@ -306,7 +306,10 @@ model SocialSupportSubject {
   ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id], onDelete: Cascade)
   ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
 
-  @@unique([name, ownedByStructureId])
+  @@unique([ownedByStructureId, name])
+  // The following syntax (index + include) is not supported by Prisma yet
+  // The index was created manually in 20251111175315_fix_broken_index_on_followup_type
+  // @@index([id], include: [name])
   @@map("followup_type")
 }
 
@@ -362,7 +365,7 @@ model SocialSupport {
 
   subjects SocialSupportSubject[] @relation("social_support_to_followup_type")
 
-  date DateTime @default(now()) @db.Date
+  date DateTime @default(now())
 
   documents     Document[]     @relation("document_to_social_support")
   comments      Comment[]
@@ -384,11 +387,15 @@ model SocialSupport {
   updated DateTime? @updatedAt
 
   socialSupportType SocialSupportType @map("social_support_type")
+  // subtype is equals to followup.medium | fileInstruction.type | appointment.subject
+  // depending on the type of SocialSupport
+  subtype           String?
 
   followup        Followup?
   fileInstruction FileInstruction?
   appointment     Appointment?
 
+  @@index(fields: [structureId, familyFileId], map: "social_support_structure_id_family_file_id_idx")
   @@index(fields: [beneficiaryId], map: "social_support_beneficiary_id_idx")
   @@map("social_support")
 }
@@ -1753,9 +1760,11 @@ model Beneficiary {
 
   workshopAttendees WorkshopAttendee[]
 
-  @@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_usual_name_normalized_idx")
-  @@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_birth_name_normalized_idx")
-  @@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_first_name_normalized_idx")
+  // Commented in this schema because Prisma does not support special indexes
+  // Applied in 20250508143349_add_normalized_beneficiary_name_fields
+  //@@index([structureId(ops: raw("")), usualNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_usual_name_normalized_idx")
+  //@@index([structureId(ops: raw("")), birthNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_birth_name_normalized_idx")
+  //@@index([structureId(ops: raw("")), firstNameNormalized(ops: raw("gin_trgm_ops"))], type: Gin, map: "beneficiary_structure_id_first_name_normalized_idx")
   @@index(fields: [structureId], map: "beneficiary_structure_id_idx")
   @@index(fields: [familyFileId], map: "beneficiary_family_file_id_idx")
   @@index(fields: [structureId, familyFileId], map: "beneficiary_structure_id_family_file_id_idx")
@@ -2205,7 +2214,9 @@ model WorkshopAttendee {
   /// workshopExternalAttendeeId will be defined if type is not 'beneficiary', and null otherwise. Enforced by 'check_attendee_type_and_ids'
   workshopExternalAttendeeId String?                   @unique @map("workshop_external_attendee_id") @db.Uuid
 
-  @@unique([workshopId, beneficiaryId])
+  // Commented in this schema because Prisma does not support filtered or partial indexes
+  // Applied in 20250716075254_workshopattendee_unique_constraint
+  // @@unique([workshopId, beneficiaryId],  where: { beneficiaryId: {not: null} })
   @@map("workshop_attendee")
 }
 

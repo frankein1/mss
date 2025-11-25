@@ -3,152 +3,21 @@
     :id="collapseId"
     class="fr-collapse beneficiary-history-details-body"
   >
-    <template v-if="socialSupport.socialSupportType === 'Appointment'">
-      <hr class="fr-mb-1v" />
-      <ul
-        v-if="socialSupport.appointment"
-        class="information-list"
-      >
-        <BeneficiaryAppointmentDetailsBodyMetas
-          :appointment="socialSupport.appointment"
-        />
-      </ul>
-      <ul
-        class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
-      >
-        <li>
-          <NuxtLink
-            :to="socialSupport.appointment?.url"
-            class="fr-btn fr-btn--secondary fr-icon-edit-line"
-            external
-            @click="
-              matomo.trackEvent(
-                EventCategory.Beneficiary,
-                BeneficiaryHistoryAction.UpdateAppointment
-              )
-            "
-          >
-            Modifier dans RDV Service Public
-          </NuxtLink>
-        </li>
-      </ul>
-    </template>
-
-    <template v-else>
-      <hr
-        v-if="canViewHistoryDetails"
-        class="fr-mb-1v"
-      />
-
-      <template v-if="canViewHistoryDetails">
-        <ul class="information-list">
-          <BeneficiarySocialSupportDetailsBodyMetas
-            :social-support="socialSupport"
-          />
-          <BeneficiaryFollowupDetailsBodyMetas
-            v-if="socialSupport.followup"
-            :followup="socialSupport.followup"
-          />
-          <BeneficiaryHelpRequestDetailsBodyMetas
-            v-else-if="socialSupport.fileInstruction?.helpRequest"
-            :file-instruction="socialSupport.fileInstruction"
-            :help-request="socialSupport.fileInstruction.helpRequest"
-            :status="socialSupport.status"
-          />
-          <BeneficiaryHousingHelpRequestDetailsBodyMetas
-            v-else-if="socialSupport.fileInstruction?.housingHelpRequest"
-            :file-instruction="socialSupport.fileInstruction"
-            :housing-help-request="
-              socialSupport.fileInstruction.housingHelpRequest
-            "
-            :status="socialSupport.status"
-          />
-        </ul>
-
-        <BeneficiaryHistoryDetailsBodyDocuments
-          v-if="socialSupport.documents?.length"
-          :documents="socialSupport.documents"
-        />
-
-        <template v-if="socialSupport.synthesis">
-          <h3 class="synthesis-title">Compte rendu</h3>
-          <AtomTextEditorReader
-            :value="socialSupport.synthesisRichText"
-            :raw-text="socialSupport.synthesis"
-          />
-        </template>
-
-        <template v-if="socialSupport.privateSynthesis">
-          <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
-          <AtomTextEditorReader
-            :value="socialSupport.privateSynthesisRichText"
-            :raw-text="socialSupport.privateSynthesis"
-          />
-        </template>
-
-        <ul
-          class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--icon-left fr-btns-group--left"
-        >
-          <li v-if="canDelete">
-            <button
-              class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
-              data-fr-opened="false"
-              aria-controls="global-modal"
-              type="button"
-              @click="onDelete"
-            >
-              Supprimer
-            </button>
-          </li>
-          <li v-if="canPrint && printLink">
-            <NuxtLink
-              :to="printLink"
-              class="fr-btn fr-btn--secondary fr-icon-printer-line"
-            >
-              Imprimer
-            </NuxtLink>
-          </li>
-          <li v-if="canEdit && editLink">
-            <NuxtLink
-              :to="editLink"
-              class="fr-btn fr-btn--secondary fr-icon-edit-line"
-            >
-              Modifier
-            </NuxtLink>
-          </li>
-        </ul>
-
-        <hr
-          v-if="
-            familyFilePermissions.create.document || commentItems.length > 0
-          "
-          class="fr-pb-3v"
-        />
-      </template>
-
-      <BeneficiaryHistoryComments
-        :items="commentItems"
-        :social-support="socialSupport"
-        :family-file-permissions="familyFilePermissions"
-        @comment-added="onCommentAdded"
-        @comment-edited="onCommentEdited"
-        @comment-deleted="onCommentDeleted"
-      />
-    </template>
+    <BeneficiaryHistoryDetailsBodyContentProvider
+      v-if="expanded"
+      :social-support-id="socialSupportId"
+      :family-file-permissions="familyFilePermissions"
+      @deleted="emit('deleted')"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionType } from '@prisma/client'
-  import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
-  import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import type { FamilyFilePermissions } from '~/server/security'
-  import { TypeSuivi } from '~/client/options'
-  import { routes } from '~/utils/routes'
-  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
-  const props = defineProps<{
-    item: SocialSupportItem
+  defineProps<{
+    expanded: boolean
+    socialSupportId: string
     collapseId: string
     familyFilePermissions: FamilyFilePermissions
   }>()
@@ -156,114 +25,6 @@
   const emit = defineEmits<{
     deleted: []
   }>()
-
-  const matomo = useMatomo()
-  const socialSupport = computed(() => props.item.data)
-  const permissions = computed(() => props.item.permissions)
-
-  const isFollowup = computed(
-    () => socialSupport.value.socialSupportType === 'Followup'
-  )
-
-  const commentItems = ref(socialSupport.value.comments || [])
-
-  const printLink = computed(() => {
-    if (socialSupport.value.followup) {
-      return routes.file.AppHistoryPrint.path(
-        socialSupport.value.followup.id,
-        TypeSuivi.Followup
-      )
-    }
-    const helpRequest = socialSupport.value.fileInstruction?.helpRequest
-    if (helpRequest?.id) {
-      return routes.file.AppHistoryPrint.path(
-        helpRequest.id,
-        TypeSuivi.AllHelpRequest
-      )
-    }
-
-    if (socialSupport.value.fileInstruction?.housingHelpRequest) {
-      return routes.file.AppHistoryPrint.path(
-        socialSupport.value.fileInstruction?.housingHelpRequest.id,
-        TypeSuivi.HousingHelpRequest
-      )
-    }
-    return null
-  })
-
-  const editLink = computed(() => {
-    if (socialSupport.value.followup) {
-      return routes.followup.AppBeneficiaryFollowupEdit.path(
-        socialSupport.value.familyFileId,
-        socialSupport.value.followup.id
-      )
-    }
-    const helpRequest = socialSupport.value.fileInstruction?.helpRequest
-    if (helpRequest) {
-      const subject = helpRequest.financialSupport
-        ? FileInstructionType.Financial
-        : FileInstructionType.Other
-      return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
-        socialSupport.value.familyFileId,
-        helpRequest.id,
-        subject
-      )
-    }
-
-    const housingHelpRequest =
-      socialSupport.value.fileInstruction?.housingHelpRequest
-    if (housingHelpRequest) {
-      return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
-        socialSupport.value.familyFileId,
-        housingHelpRequest.id,
-        FileInstructionType.Housing
-      )
-    }
-
-    return null
-  })
-
-  const canEdit = computed(() => permissions.value?.edit)
-
-  const canDelete = computed(() => permissions.value?.delete)
-
-  const canPrint = computed(() => permissions.value?.print)
-
-  const canViewHistoryDetails = computed(() => permissions.value?.get.details)
-
-  function onDelete() {
-    useModal().open(BeneficiaryHistoryDeleteForm, {
-      title: isFollowup.value
-        ? "Supprimer la synthèse d'entretien"
-        : "Supprimer l'instruction de dossier",
-      socialSupportId: socialSupport.value.id,
-      isFollowup: isFollowup.value,
-      deleted: onSocialSupportItemDeleted
-    })
-  }
-
-  function onCommentAdded(commentItem: CommentItem) {
-    commentItems.value.push(commentItem)
-  }
-
-  function onCommentEdited(editedComment: CommentData) {
-    commentItems.value = commentItems.value.map(commentItem =>
-      commentItem.comment.id === editedComment.id
-        ? { comment: editedComment, permissions: commentItem.permissions }
-        : commentItem
-    )
-  }
-
-  function onCommentDeleted(deletedComment: CommentData) {
-    commentItems.value = commentItems.value.filter(
-      ({ comment }) => comment.id !== deletedComment.id
-    )
-  }
-
-  function onSocialSupportItemDeleted() {
-    emit('deleted')
-    useSnackbar().success("L'accompagnement a été supprimé.")
-  }
 </script>
 
 <style lang="scss" scoped>
@@ -277,44 +38,6 @@
 
     &.fr-collapse--expanded {
       padding: 0.5rem 1.5rem 1rem;
-    }
-  }
-
-  .synthesis-title {
-    @include dsfr.text-style(md);
-
-    margin-bottom: 0.5rem;
-    color: var(--text-mention-grey);
-    font-weight: 400;
-
-    &::before {
-      margin-right: 0.25rem;
-    }
-  }
-
-  .synthesis-content {
-    white-space: pre-line;
-    font-weight: 500;
-  }
-
-  .btn-delete {
-    box-shadow: inset 0 0 0 1px var(--red-marianne-main-472);
-    color: var(--red-marianne-main-472);
-  }
-
-  .information-list {
-    margin-bottom: 0.5rem;
-
-    @include dsfr-media-query.respond-from('md') {
-      column-gap: 2rem;
-      column-count: 2;
-    }
-  }
-
-  .fr-btns-group--left {
-    @include dsfr-media-query.respond-from('md') {
-      text-align: right;
-      justify-content: flex-end;
     }
   }
 </style>

@@ -220,6 +220,7 @@ async function validateDraftAppointment({
         status:
           APPOINTMENT_STATUS[rdv.status as RdvspStatus] ||
           SocialSupportStatus.RdvUnknown,
+        subtype: rdv.subject,
         date: rdv.date
       }
     }),
