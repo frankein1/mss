@@ -90,10 +90,10 @@ function getEditionPermissions({
   }
 
   const creator = isCreator(user, socialSupport)
+  // isReferent = is member of referent list for this family file and has role Referent
   const isReferent = isReferentFor(user, familyFile)
   const { manager, socialWorker, instructor, receptionAgent, referent } =
     getGranteRole(ctx)
-
   const isMember = isMemberOfReferents(user, familyFile)
 
   return {
@@ -115,7 +115,6 @@ function getEditionPermissions({
       manager ||
       socialWorker ||
       (instructor && creator) ||
-      (receptionAgent && creator) ||
       (referent && isReferent)
   }
 }
