@@ -31,10 +31,36 @@
         Agent(s) référent(s)&nbsp;: {{ referentNames }}
       </p>
       <BeneficiaryStatusBadge
-        class="fr-mb-2w"
+        class="fr-mb-4v"
         :status="beneficiary.status"
       />
-      <p><RequiredFields /></p>
+
+      <template v-if="socialSupportSubjects.length > 0">
+        <hr class="fr-mt-4v" />
+        <p class="fr-text--bold fr-mb-1w">Accompagnements&nbsp;:</p>
+        <ul class="fr-tags-group">
+          <li
+            v-for="subject in socialSupportSubjects.slice(
+              0,
+              maxSocialSupportSubjects
+            )"
+            :key="subject.id"
+          >
+            <p class="fr-tag fr-mb-0">{{ subject.name }}</p>
+          </li>
+          <li v-if="socialSupportSubjects.length > maxSocialSupportSubjects">
+            <button
+              type="button"
+              class="fr-tag"
+              @click="maxSocialSupportSubjects = socialSupportSubjects.length"
+            >
+              Voir plus
+            </button>
+          </li>
+        </ul>
+      </template>
+
+      <p class="fr-mt-4w"><RequiredFields /></p>
       <ArchiveChoiceForm
         :pending="downloadPending"
         :archive-due-date-history="archiveDueDateHistory"
@@ -97,6 +123,7 @@
   const deleteSection = ref<HTMLElement | null>(null)
   const archiveSection = ref<HTMLElement | null>(null)
   const exportBeneficiaryInput = ref<ExportBeneficiaryInput | null>(null)
+  const maxSocialSupportSubjects = ref(10)
 
   type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
 
@@ -122,6 +149,9 @@
   )
   const familyFileId: ComputedRef<string | null> = computed(
     () => beneficiary?.value?.familyFileId || null
+  )
+  const socialSupportSubjects = computed(
+    () => beneficiary.value?.history.subjects || []
   )
 
   const beneficiaryName = computed(() => {
