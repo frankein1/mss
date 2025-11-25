@@ -123,7 +123,7 @@
   const deleteSection = ref<HTMLElement | null>(null)
   const archiveSection = ref<HTMLElement | null>(null)
   const exportBeneficiaryInput = ref<ExportBeneficiaryInput | null>(null)
-  const maxSocialSupportSubjects = ref(10)
+  const maxSocialSupportSubjects = ref(3)
 
   type ArchiveFormStatus = 'delete' | 'archive' | 'delay' | null
 
