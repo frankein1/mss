@@ -104,7 +104,7 @@ function getEditionPermissions({
       (referent && (creator || isMember)),
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
-      details: manager || socialWorker || instructor || isReferent,
+      details: manager || socialWorker || (instructor && creator) || isReferent,
       privateSynthesis: creator
     },
     set: {
