@@ -87,7 +87,6 @@
 
   // Refs
   const selectedBeneficiary = ref<string | undefined>(undefined)
-
   const modal = useModal()
 
   const beneficiaryOptions = computed(() => {
@@ -105,7 +104,11 @@
   const { handleSubmit } = useForm<CreateBudgetIncomeInput>({
     validationSchema: toTypedSchema(createBudgetIncomeSchema),
     initialValues: {
-      budgetId: props.budgetId
+      budgetId: props.budgetId,
+      beneficiaryId:
+        props.familyFileIdentification.length > 0
+          ? selectedBeneficiary.value
+          : BUDGET_INCOME_FOR_MEMBER_VALUE
     }
   })
 
