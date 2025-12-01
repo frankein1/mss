@@ -11,6 +11,12 @@
     "enabled": false,
     "recreateWhen": "never"
   },
+  "minimumReleaseAge": "15 days",
+  "internalChecksFilter": "strict",
+  "prCreation": "not-pending",
+  "timezone": "Europe/Paris",
+  "updateNotScheduled": false,
+  "prConcurrentLimit": 5,
   "ignoreDeps": ["pnpm", "h3", "html-to-image", "@nuxt/test-utils"],
   "packageRules": [
     {
@@ -45,8 +51,5 @@
       "groupName": "nuxt-dev",
       "matchPackageNames": ["/@nuxt/eslint/", "/@nuxt/test-utils/"]
     }
-  ],
-  "timezone": "Europe/Paris",
-  "updateNotScheduled": false,
-  "prConcurrentLimit": 5
+  ]
 }

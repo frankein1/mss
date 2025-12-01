@@ -41,7 +41,8 @@ pnpm:install:
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
   before_script:
-    - npm install --global corepack@latest
+    - which pnpm
+    - which corepack
     - corepack enable
     - corepack prepare pnpm@latest --activate
     - pnpm config set store-dir .pnpm-store
