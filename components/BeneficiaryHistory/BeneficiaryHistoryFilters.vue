@@ -24,11 +24,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { FamilyFileHistoryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import {
-    followupMediumKeys,
-    typeSuiviKeys,
-    TypeSuivi
-  } from '~/client/options'
+  import { typeSuiviKeys, TypeSuivi } from '~/client/options'
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
@@ -82,9 +78,9 @@
 
   const typeSuiviValue = computed(() => values.typeSuivi)
 
-  const isFilteringHelpRequests = computed(
-    () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
-  )
+  // const isFilteringHelpRequests = computed(
+  //   () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
+  // )
 
   const isFilteringHousingHelpRequests = computed(
     () => typeSuiviValue.value === TypeSuivi.HousingHelpRequest
@@ -148,17 +144,17 @@
       })
     }
 
-    if (!isFilteringHelpRequests.value) {
-      filters.push({
-        name: 'medium',
-        label: followupFieldLabels.medium,
-        options: followupMediumKeys.options,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: FollowupFilterEventAction.Medium
-      })
-    }
+    // if (!isFilteringHelpRequests.value) {
+    //   filters.push({
+    //     name: 'medium',
+    //     label: followupFieldLabels.medium,
+    //     options: followupMediumKeys.options,
+    //     type: FilterType.SelectMultiple,
+    //     alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+    //     matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+    //     matomoEventAction: FollowupFilterEventAction.Medium
+    //   })
+    // }
 
     if (familyFileIdentification.length > 1) {
       filters.push({
