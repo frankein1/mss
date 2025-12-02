@@ -116,7 +116,7 @@ function getEditionPermissions({
         instructor ||
         referent ||
         creator ||
-        receptionAgent,
+        (receptionAgent && creator),
       dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },

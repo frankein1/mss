@@ -1,10 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
-import {
-  getSocialSupportPermissions,
-  type SecurityRuleContext
-} from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import { SocialSupportRepo, StructureRepo } from '~/server/database'
