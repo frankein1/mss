@@ -190,7 +190,7 @@
         'Pas de sélection'
       ),
       type: FilterType.NotFilled,
-      alwaysExpanded: false,
+      alwaysExpanded: true,
       matomoEventCategory: EventCategory.FollowupFilter,
       matomoEventAction: FollowupFilterEventAction.NotFilled
     })

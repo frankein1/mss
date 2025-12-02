@@ -172,7 +172,7 @@
         'Pas de sélection'
       ),
       type: FilterType.NotFilled,
-      alwaysExpanded: false,
+      alwaysExpanded: true,
       matomoEventCategory: EventCategory.BeneficiaryFilter,
       matomoEventAction: BeneficiaryFilterEventAction.NotFilled
     })

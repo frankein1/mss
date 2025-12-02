@@ -26,6 +26,16 @@
       </template>
     </div>
   </form>
+  <ul
+    v-if="hiddenTag.label"
+    class="fr-tags-group fr-mt-4v"
+  >
+    <li>
+      <p class="fr-tag fr-icon-filter-line fr-tag--icon-left fr-mb-0">
+        {{ hiddenTag.label }} : {{ hiddenTag.value }}
+      </p>
+    </li>
+  </ul>
   <div
     v-if="!noReset || collapsedByDefaultFilters.length"
     class="filter-summary"
@@ -41,22 +51,6 @@
       >
         {{ resultsLabel }}
       </p>
-      <ul
-        v-show="showCollapsedFiltersSummary"
-        class="fr-tags-group"
-      >
-        <li
-          v-for="(
-            { filterLabel, valueLabel }, name
-          ) in collapsedSelectedFilters"
-          v-show="!expanded || name === 'notFilled'"
-          :key="name"
-        >
-          <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
-            {{ filterLabel }} : {{ valueLabel }}
-          </p>
-        </li>
-      </ul>
     </div>
     <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline">
       <li v-if="!noReset">
@@ -169,6 +163,22 @@
   const hasFilters = computed<boolean>(
     () => !!Object.values(selectedFilters.value).filter(isSetValue).length
   )
+
+  const hiddenTag = computed(() => {
+    const notFilled = selectedFilters.value.notFilled
+    const notFiledFilter = props.filters.find(
+      filter => filter.type === FilterType.NotFilled
+    )
+    if (!notFiledFilter) {
+      return {}
+    }
+    const options = notFiledFilter.options
+
+    return {
+      label: options.find(o => o.value === notFilled)?.label || undefined,
+      value: 'non renseigné'
+    }
+  })
 
   const collapsedSelectedFilters = computed<SelectedFilters>(() =>
     Object.entries(selectedFilters.value).reduce(
