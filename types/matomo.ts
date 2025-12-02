@@ -18,7 +18,8 @@ export enum EventCategory {
   FamilyFile = 'Dossier Foyer',
   FollowupForm = 'Formulaire Entretien',
   CreateFollowup = 'Créer une synthèse',
-  Workshop = 'Atelier'
+  Workshop = 'Atelier',
+  User = 'Utilisateur'
 }
 
 export enum FamilyFileAction {
@@ -169,6 +170,10 @@ export enum WorkshopAction {
   ExportWorkshops = 'Export de la liste des ateliers'
 }
 
+export enum UserAction {
+  DeleteUser = 'Supprimier un utilisateur'
+}
+
 export type EventAction =
   | BeneficiaryFilterEventAction
   | BeneficiaryHistoryFilterEventAction
@@ -188,6 +193,7 @@ export type EventAction =
   | FollowupFormAction
   | FollowupAction
   | WorkshopAction
+  | UserAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

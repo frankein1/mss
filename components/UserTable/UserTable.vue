@@ -46,9 +46,9 @@
               </td>
               <td>
                 <NuxtLink
-                  class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
+                  class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line fr-btn--sm"
                   :to="routes.structure.AppStructureUserEdit.path(user.id)"
-                  >Modifier l'utilisateur
+                  >Modifier
                 </NuxtLink>
               </td>
             </tr>
@@ -77,6 +77,13 @@
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
+  .table-container,
+  .fr-table {
+    width: 100%;
+    max-width: 100%;
+    min-width: 200px;
+  }
+
   .fr-icon-delete-bin-6-line {
     max-height: 2rem;
     max-width: 2rem;
@@ -102,7 +109,7 @@
 
     td {
       @include dsfr-media-query.respond-from('md') {
-        padding: 2rem 1rem;
+        padding: 0.75rem;
       }
     }
   }

@@ -11,10 +11,10 @@
     >
       <template #detailedMessage>
         <p>
-          Le nouveau nom/prénom est alors MAJ sur l’ensemble des activités
-          générées par ce compte utilisateur&nbsp;: ces anciens suivis ont le
-          nouveau nom, ETQ qu’agent référent, le nouveau nom est présent dans
-          tous les dossiers, etc…
+          Le nouveau nom/prénom est alors mis à jour sur l’ensemble des
+          activités générées par ce compte utilisateur&nbsp;: ses anciens suivis
+          ont le nouveau nom, il est modifié également comme agent référent sur
+          les dossiers sélectionnés, etc…
         </p>
       </template>
     </AtomAlert>

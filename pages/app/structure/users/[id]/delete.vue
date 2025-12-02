@@ -24,7 +24,7 @@
             éléments saisis.
           </h2>
           <p class="fr-text--bold">
-            Rapprochez de l'équipe de Mon Suivi Social si besoin.
+            Rapprochez vous de l'équipe de Mon Suivi Social si besoin.
           </p>
         </template>
         <h2
@@ -34,6 +34,28 @@
           La suppression est définitive et a des impacts sur les suivis déjà
           réalisés.
         </h2>
+
+        <ul v-if="userHasFiles && user?._count">
+          <li>
+            Nombre de dossier dont la personne est référente&nbsp;:
+            {{ user._count.referentFor }}
+          </li>
+          <li>
+            Nombre d'accompagnements créés&nbsp;:
+            {{ user._count.createdSocialSupports }}
+          </li>
+          <li>
+            Nombre de documents créés&nbsp;: {{ user._count.createdDocuments }}
+          </li>
+          <li>
+            Nombre de commentaires créés&nbsp;:
+            {{ user._count.createdComments }}
+          </li>
+          <li>Nombre d'atelier créés&nbsp;: {{ user._count.workshops }}</li>
+          <li>
+            Nombre de nom d'atelier créés&nbsp;: {{ user._count.workshopNames }}
+          </li>
+        </ul>
 
         <div class="image-text-container">
           <img
@@ -100,6 +122,7 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { AlertType } from '~/utils/constants/alert'
+  import { EventCategory, UserAction } from '~/types/matomo'
 
   const route = useRoute()
   const userId = route.params.id as string
@@ -107,6 +130,7 @@
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
   const authState = useAuthState()
+  const matomo = useMatomo()
 
   const authUserId = authState.getUserId
 
@@ -156,6 +180,7 @@
       )
       return
     }
+    matomo.trackEvent(EventCategory.User, UserAction.DeleteUser)
     snackbar.success("L'utilisateur a été supprimé avec succès.")
     await navigateTo(routes.structure.AppStructure.path())
   }

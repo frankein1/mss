@@ -21,10 +21,16 @@
       le faire pour vous.
     </p>
 
-    <div class="title-btn-container border">
-      <p id="status-label">Accès à Mon Suivi Social</p>
+    <div class="title-btn-container border access-switch">
+      <p
+        id="status-label"
+        class="fr-mb-0 fr-mb-md-4v"
+      >
+        Accès à Mon Suivi Social
+      </p>
       <VeeToggle
         name="status"
+        class="fr-mb-0 fr-mb-md-4v"
         labelled-by="status-label"
         :label="userFieldLabels.status"
         no-label
@@ -97,6 +103,12 @@
       &.border {
         box-shadow: inset 0 -1px 0 0 var(--border-default-grey);
       }
+    }
+  }
+
+  .access-switch {
+    @include dsfr-media-query.respond-from('md') {
+      align-items: center;
     }
   }
 </style>
