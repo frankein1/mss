@@ -41,8 +41,6 @@ pnpm:install:
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
   before_script:
-    - which pnpm
-    - which corepack
     - corepack enable
     - corepack prepare pnpm@latest --activate
     - pnpm config set store-dir .pnpm-store
