@@ -11,19 +11,18 @@
       }"
     >
       <AtomFilter
-        v-for="filter in expandedByDefaultFilters"
+        v-for="filter in filters.expanded"
         :key="filter.name"
         :filter="filter"
         @change-filter="onChangeFilter(filter)"
       />
-      <template v-if="expanded && collapsedByDefaultFilters.length">
-        <AtomFilter
-          v-for="filter in collapsedByDefaultFilters"
-          :key="filter.name"
-          :filter="filter"
-          @change-filter="onChangeFilter(filter)"
-        />
-      </template>
+      <AtomFilter
+        v-for="filter in filters.collapsed"
+        v-show="expanded"
+        :key="filter.name"
+        :filter="filter"
+        @change-filter="onChangeFilter(filter)"
+      />
     </div>
   </form>
   <ul
@@ -37,12 +36,12 @@
     </li>
   </ul>
   <div
-    v-if="!noReset || collapsedByDefaultFilters.length"
+    v-if="!noReset || filters.collapsed.length"
     class="filter-summary"
     :class="{ 'filter-summary__no-margin': noMargin }"
   >
     <div
-      v-if="collapsedByDefaultFilters.length"
+      v-if="filters.collapsed.length"
       class="filter-left-section"
     >
       <p
@@ -51,6 +50,19 @@
       >
         {{ resultsLabel }}
       </p>
+      <ul
+        v-show="showSummary"
+        class="fr-tags-group"
+      >
+        <li
+          v-for="(f, index) in collapsedFiltersSummary"
+          :key="index"
+        >
+          <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
+            {{ f.label }} : {{ f.value }}
+          </p>
+        </li>
+      </ul>
     </div>
     <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline">
       <li v-if="!noReset">
@@ -63,14 +75,14 @@
           Réinitialiser
         </button>
       </li>
-      <li v-if="collapsedByDefaultFilters.length">
+      <li v-if="filters.collapsed.length">
         <button
           class="fr-btn fr-btn--tertiary-no-outline fr-icon-filter-fill"
           aria-expanded="false"
           :aria-controls="FILTERS_ID"
           @click="expanded = !expanded"
         >
-          {{ expandBtnLabel }}
+          {{ expanded ? 'Voir moins de filtres' : 'Voir tous les filtres' }}
         </button>
       </li>
     </ul>
@@ -80,13 +92,7 @@
 <script lang="ts" setup>
   import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
-  import type {
-    FilterProp,
-    SelectedFilters,
-    SelectedFilter,
-    FilterValue,
-    FilterValues
-  } from '~/types/filter'
+  import type { FilterProp, FilterValue, FilterValues } from '~/types/filter'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
   import { getOptionLabel } from '~/utils/options'
 
@@ -96,6 +102,7 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
+      /** Remove the reinitialization button */
       noReset?: boolean
       /**
        * Use initial values if the initial values must not persist on form reset
@@ -126,13 +133,10 @@
     }
   )
 
-  const collapsedByDefaultFilters = computed(() =>
-    props.filters.filter(filter => !filter.alwaysExpanded)
-  )
-
-  const expandedByDefaultFilters = computed(() =>
-    props.filters.filter(filter => filter.alwaysExpanded)
-  )
+  const filters = computed(() => ({
+    collapsed: props.filters.filter(f => !f.alwaysExpanded),
+    expanded: props.filters.filter(f => f.alwaysExpanded)
+  }))
 
   const emit = defineEmits<{
     filter: [filter: FilterValues]
@@ -149,10 +153,6 @@
   } = useForm({
     initialValues: props.initialSelectedValues || props.defaultValues || {}
   })
-
-  const expandBtnLabel = computed(() =>
-    expanded.value ? 'Voir moins de filtres' : 'Voir tous les filtres'
-  )
 
   function isSetValue(
     value: FilterValue | null | undefined
@@ -180,55 +180,34 @@
     }
   })
 
-  const collapsedSelectedFilters = computed<SelectedFilters>(() =>
-    Object.entries(selectedFilters.value).reduce(
-      (_collapsedSelectedFilters, [name, value]) => {
-        if (!isSetValue(value)) {
-          return _collapsedSelectedFilters
-        }
+  type CollapsedSummary = { label: string; value: string | string[] }[]
 
-        const filter = collapsedByDefaultFilters.value.find(
-          collapsed => collapsed.name === name
-        )
+  /** Summary of collapsed fields that contain values. Displayed when filters are not expanded  */
+  const collapsedFiltersSummary = computed(() => {
+    const names = Object.keys(selectedFilters.value)
+    const summary: CollapsedSummary = []
 
-        if (!filter) {
-          return _collapsedSelectedFilters
-        }
+    names.forEach(name => {
+      const selectedValue = selectedFilters.value[name]
+      if (!isSetValue(selectedValue)) {
+        return
+      }
 
-        const selectedFilter: SelectedFilter =
-          filter.type === FilterType.NotFilled
-            ? {
-                filterLabel: getFilterValueLabel(filter, value),
-                value: getFilterValue(filter, value),
-                valueLabel: filter.label
-              }
-            : {
-                filterLabel: filter.label,
-                value: getFilterValue(filter, value),
-                valueLabel: getFilterValueLabel(filter, value)
-              }
+      const filter = filters.value.collapsed.find(f => f.name === name)
+      if (!filter) {
+        return
+      }
 
-        return { ..._collapsedSelectedFilters, [name]: selectedFilter }
-      },
-      {} as SelectedFilters
-    )
-  )
+      const value = getFilterValueLabel(filter, selectedValue)
+      summary.push({ value, label: filter.label })
+    })
 
-  const hasCollapsedSelectedFilters = computed(
-    () => !!Object.keys(collapsedSelectedFilters.value).length
-  )
+    return summary
+  })
 
-  const hasNotFilledFilterActive = computed(
-    () => !!collapsedSelectedFilters.value['notFilled']
-  )
-
-  /** Collapsed filters summary is shown if the filters are not is the expanded state
-   *  When the not-filled filter is active its summary is always shown even if the expanded state
-   */
-  const showCollapsedFiltersSummary = computed(
-    () =>
-      (!expanded.value || hasNotFilledFilterActive.value) &&
-      hasCollapsedSelectedFilters.value
+  /** Collapsed filters summary is shown if the filters are not is the expanded state */
+  const showSummary = computed(
+    () => !expanded.value && collapsedFiltersSummary.value.length
   )
 
   const emitableSelectedFilters = computed(() =>
@@ -293,15 +272,6 @@
       }
     }
   )
-
-  function getFilterValue(
-    filter: FilterProp,
-    value: FilterValue
-  ): string | string[] {
-    return filter.type === FilterType.Date
-      ? dayjs(value as string | Date).format('YYYY-MM-DD')
-      : (value as string | string[])
-  }
 
   function onReset() {
     form.value?.reset()
