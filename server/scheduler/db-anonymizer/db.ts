@@ -1,7 +1,7 @@
 export const PGSQL_VERSION = '14'
 
 export const SOURCE_SCHEMA = 'public'
-export const SOURCE_DATABASE_URL = process.env.DATABASE_URL
+export const SOURCE_DATABASE_URL = process.env.READONLY_DATABASE_URL
 
 export const isProductionEnvironment =
   process.env.MSS_ENVIRONMENT === 'production'

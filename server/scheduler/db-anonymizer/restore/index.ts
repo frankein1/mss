@@ -1,5 +1,5 @@
 import type { Client } from 'pg'
-import { ANONYMIZED_DATABASE_URL } from '../db'
+import { ANONYMIZED_DATABASE_URL, isProductionEnvironment } from '../db'
 import { createSQLQueriesForEnums } from './enum'
 import { createSQLQueriesForTablesSchemas } from './table-schema'
 import { restoreAnonymizedDataWithPsql } from './table-data'
@@ -9,9 +9,11 @@ import {
 } from './db-indexes'
 
 export async function cleanTargetSchema(target: Client) {
-  await target.query(
-    'BEGIN;DROP SCHEMA IF EXISTS metabase CASCADE;CREATE SCHEMA metabase;COMMIT;'
-  )
+  if (!isProductionEnvironment) {
+    await target.query(
+      'BEGIN;DROP SCHEMA IF EXISTS metabase CASCADE;CREATE SCHEMA metabase;COMMIT;'
+    )
+  }
 }
 
 export interface Queries {
