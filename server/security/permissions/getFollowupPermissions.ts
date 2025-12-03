@@ -113,9 +113,8 @@ function getEditionPermissions({
       details:
         manager ||
         socialWorker ||
-        instructor ||
-        referent ||
-        creator ||
+        (instructor && creator) ||
+        isReferent ||
         (receptionAgent && creator),
       dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
@@ -126,6 +125,6 @@ function getEditionPermissions({
       socialWorker ||
       (instructor && creator) ||
       (receptionAgent && creator) ||
-      (referent && isReferent)
+      isReferent
   }
 }
