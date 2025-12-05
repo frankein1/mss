@@ -178,7 +178,7 @@ async function addDocument(
       type,
       size: file.size,
       filenameDownload: sanitizeFilename(file.name),
-      migrated: true,
+      migrated: false,
       documentContent: {
         create: {
           content: multipartFormData.data
