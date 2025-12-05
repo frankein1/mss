@@ -2,7 +2,8 @@ import { protectedProcedure, router } from '..'
 import {
   createViewUrlMutation,
   deleteDocumentMutation,
-  editDocumentMutation
+  editDocumentMutation,
+  prepareUpload
 } from '~/server/route/document'
 
 export const documentRouter = router({
@@ -14,5 +15,8 @@ export const documentRouter = router({
     .mutation(createViewUrlMutation.execute),
   delete: protectedProcedure
     .input(deleteDocumentMutation.inputValidation)
-    .mutation(deleteDocumentMutation.execute)
+    .mutation(deleteDocumentMutation.execute),
+  prepareUpload: protectedProcedure
+    .input(prepareUpload.inputValidation)
+    .mutation(prepareUpload.execute)
 })

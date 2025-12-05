@@ -192,6 +192,13 @@ export default defineNuxtConfig({
       smtpSecure: (process.env.EMAIL_SMTP_SECURE || 'false') === 'true',
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
+    s3: {
+      accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+      region: process.env.S3_REGION || '',
+      bucket: process.env.S3_BUCKET || '',
+      endpoint: process.env.S3_ENDPOINT || ''
+    },
     public: {
       version: {
         commitSha: process.env.COMMIT_SHA || '',
