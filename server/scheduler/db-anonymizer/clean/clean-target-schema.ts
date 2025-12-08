@@ -12,7 +12,7 @@ async function createQueriesForDropEnums(target: Client) {
   })
 
   const res = await target.query(
-    'select typname from pg_type t join pg_namespace n on t.typnamespace = n.oid where n.nspname = $1;',
+    'select typname from pg_type t join pg_enum e on t.oid = e.enumtypid join pg_namespace n on t.typnamespace = n.oid where n.nspname = $1 group by typname;',
     [TARGET_SCHEMA]
   )
 
@@ -31,13 +31,13 @@ async function createQueriesForDropTables(target: Client) {
   const querySchema = z.object({
     rows: z.array(
       z.object({
-        table_name: z.string()
+        tablename: z.string()
       })
     )
   })
 
   const res = await target.query(
-    `select table_name from information_schema.columns where table_schema = $1;`,
+    `select tablename from pg_tables where schemaname = $1;`,
     [TARGET_SCHEMA]
   )
 
@@ -46,7 +46,7 @@ async function createQueriesForDropTables(target: Client) {
     throw new Error('dropTables: wrong schema for request result')
   }
 
-  return validated.data.rows.map(({ table_name }) => sqlDropTable(table_name))
+  return validated.data.rows.map(({ tablename }) => sqlDropTable(tablename))
 }
 
 export async function cleanTargetSchema(target: Client) {

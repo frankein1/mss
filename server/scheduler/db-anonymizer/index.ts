@@ -32,7 +32,7 @@ async function main() {
     throw new Error('Missing target database url')
   }
 
-  console.log('MSS environment', process.env.MSS_ENVIRONMENT)
+  console.log('MSS environment', process.env.NUXT_PUBLIC_MSS_ENVIRONMENT)
   console.log('Target schema', TARGET_SCHEMA)
 
   if (isDeployedEnvironment) {
