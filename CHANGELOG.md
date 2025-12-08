@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.52.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.1...v1.52.2) (2025-12-08)
+
+
+### Bug Fixes
+
+* **db-anonymizer:** correction de la suppression des tables en production ([d885bed](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d885bede26b7382d93ad7b7825edeeee0398ddfb))
+
 ## [1.52.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.0...v1.52.1) (2025-12-08)
 
 
