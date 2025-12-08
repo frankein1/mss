@@ -30,11 +30,11 @@ Prisma.WorkshopScalarFieldEnum
 Prisma.WorkshopNameScalarFieldEnum
 Prisma.WorkshopAttendeeScalarFieldEnum
 Prisma.WorkshopExternalAttendeeScalarFieldEnum
+Prisma.UserActivityScalarFieldEnum
 
 // NO
 Prisma.CommentScalarFieldEnum
 Prisma.NotificationScalarFieldEnum
-Prisma.UserActivityScalarFieldEnum
 Prisma.DataInclusionStructureScalarFieldEnum
 Prisma.EmailScalarFieldEnum
 Prisma.ApiTokenScalarFieldEnum
@@ -560,6 +560,23 @@ const configWorkshopExternalAttendee: Record<
   birth_date: false
 }
 
+const configUserActivity: Record<
+  SnakeCase<keyof typeof Prisma.UserActivityScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  user_id: true,
+  structure_id: true,
+  date: true,
+  key: true,
+  object: true,
+  object_id: true,
+  activity: true,
+  // -- BEGIN ANONYMIZED
+  content: false,
+  diff: false
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -584,7 +601,8 @@ export const CONFIG = {
   workshop: configWorkshop,
   workshop_name: configWorkshopName,
   workshop_attendee: configWorkshopAttendee,
-  workshop_external_attendee: configWorkshopExternalAttendee
+  workshop_external_attendee: configWorkshopExternalAttendee,
+  user_activity: configUserActivity
 }
 
 export type TableName = keyof typeof CONFIG

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { SOURCE_SCHEMA, TARGET_SCHEMA } from '../db'
 import { includeTable } from '../utils'
 
-//TODO:doc
+/** Index definition can be directly applied. Only schema name needs to be updated */
 const sqlCreateIndex = (row: { indexdef: string }) =>
   row.indexdef.replaceAll(`ON ${SOURCE_SCHEMA}.`, `ON ${TARGET_SCHEMA}.`)
 

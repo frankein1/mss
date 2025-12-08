@@ -1,5 +1,5 @@
 import type { Client } from 'pg'
-import { ANONYMIZED_DATABASE_URL, isProductionEnvironment } from '../db'
+import { ANONYMIZED_DATABASE_URL } from '../db'
 import { createSQLQueriesForEnums } from './enum'
 import { createSQLQueriesForTablesSchemas } from './table-schema'
 import { restoreAnonymizedDataWithPsql } from './table-data'
@@ -7,14 +7,6 @@ import {
   createSQLQueriesForForeignKeys,
   createSQLQueriesForIndexes
 } from './db-indexes'
-
-export async function cleanTargetSchema(target: Client) {
-  if (!isProductionEnvironment) {
-    await target.query(
-      'BEGIN;DROP SCHEMA IF EXISTS metabase CASCADE;CREATE SCHEMA metabase;COMMIT;'
-    )
-  }
-}
 
 export interface Queries {
   enums: string[]
@@ -70,7 +62,13 @@ export async function createDatabaseSchemaAndRestoreDataToTarget(
 
   await target.query(`BEGIN;${q.indexes.join(';\n')};COMMIT;`)
 
-  // Foreign keys are useful for metabase syncs
+  // Foreign keys are useful for metabase auto joins
   // See https://www.metabase.com/docs/latest/databases/sync-scan#how-database-syncs-work
-  await target.query(`BEGIN;${q.foreignKeys.join(';\n')};COMMIT;`)
+  for (const query of q.foreignKeys) {
+    try {
+      await target.query(`${query};`)
+    } catch (e: unknown) {
+      console.error(`foreign key restore: ${e}`)
+    }
+  }
 }

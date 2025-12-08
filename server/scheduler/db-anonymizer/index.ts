@@ -8,13 +8,13 @@ import {
 } from './db'
 import { cleanDumps, dumpAnonymizedDataWithPsql } from './dump'
 import {
-  cleanTargetSchema,
   createQueriesForTargetDatabaseSchema,
   createDatabaseSchemaAndRestoreDataToTarget,
   type Queries
 } from './restore'
 import { performance } from 'node:perf_hooks'
 import { execSync } from 'node:child_process'
+import { cleanTargetSchema } from './clean/clean-target-schema'
 
 let start: number
 let end: number

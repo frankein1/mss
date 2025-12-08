@@ -3,10 +3,10 @@ export const PGSQL_VERSION = '14'
 export const SOURCE_SCHEMA = 'public'
 export const SOURCE_DATABASE_URL = process.env.READONLY_DATABASE_URL
 
-export const isProductionEnvironment =
-  process.env.MSS_ENVIRONMENT === 'production'
-export const isDeployedEnvironment =
-  process.env.MSS_ENVIRONMENT && process.env.MSS_ENVIRONMENT !== 'local'
+const env =
+  process.env.NUXT_PUBLIC_MSS_ENVIRONMENT || process.env.MSS_ENVIRONMENT
+export const isProductionEnvironment = env === 'production'
+export const isDeployedEnvironment = env && env !== 'local'
 
 // Write in the public schema on production to keep the same metabases queries, otherwise use a specific schema
 export const TARGET_SCHEMA = isProductionEnvironment ? 'public' : 'metabase'

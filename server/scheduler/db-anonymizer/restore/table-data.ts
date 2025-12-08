@@ -1,5 +1,5 @@
 import { escapeIdentifier } from 'pg'
-import { isDeployedEnvironment, TARGET_SCHEMA } from '../db'
+import { TARGET_SCHEMA } from '../db'
 import { getCsvFilename, getFilteredColumnNames } from '../utils'
 import { TABLE_NAMES, type TableName } from '../config'
 import { execSync } from 'node:child_process'
