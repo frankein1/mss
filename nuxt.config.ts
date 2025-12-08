@@ -18,6 +18,47 @@ const connectSrcCsp = [
 ]
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-08-30',
+  // --- BEGIN Keep V3 arch ----
+  srcDir: '.',
+  dir: {
+    app: 'app'
+  },
+  experimental: {
+    scanPageMeta: 'after-resolve',
+    sharedPrerenderData: false,
+    // compileTemplate: true,
+    // resetAsyncDataToUndefined: true,
+    // templateUtils: true,
+    // relativeWatchPaths: true,
+    normalizeComponentNames: false,
+    spaLoadingTemplateLocation: 'within',
+    parseErrorData: false,
+    pendingWhenIdle: true,
+    alwaysRunFetchOnKeyChange: true,
+    defaults: {
+      useAsyncData: {
+        deep: true
+      }
+    }
+  },
+  features: {
+    inlineStyles: true
+  },
+  unhead: {
+    renderSSRHeadOptions: {
+      omitLineBreaks: false
+    }
+  },
+  // --- END Keep V3 arch ----
+
+  nitro: {
+    experimental: {
+      tasks: true
+    },
+    scheduledTasks: {}
+  },
+
   // https://nuxt.com/blog/v3-8
   typescript: {
     tsConfig: {
@@ -32,55 +73,9 @@ export default defineNuxtConfig({
   css: [
     // DSFR STYLES
     '@gouvfr/dsfr/dist/core/core.min.css',
-    '@gouvfr/dsfr/dist/dsfr.print.css',
-    '@gouvfr/dsfr/dist/component/accordion/accordion.min.css',
-    '@gouvfr/dsfr/dist/component/alert/alert.min.css',
-    '@gouvfr/dsfr/dist/component/badge/badge.min.css',
-    '@gouvfr/dsfr/dist/component/breadcrumb/breadcrumb.min.css',
-    '@gouvfr/dsfr/dist/component/button/button.min.css',
-    '@gouvfr/dsfr/dist/component/callout/callout.min.css',
-    '@gouvfr/dsfr/dist/component/card/card.min.css',
-    '@gouvfr/dsfr/dist/component/checkbox/checkbox.min.css',
-    '@gouvfr/dsfr/dist/component/content/content.min.css',
-    '@gouvfr/dsfr/dist/component/download/download.min.css',
-    '@gouvfr/dsfr/dist/component/footer/footer.min.css',
-    '@gouvfr/dsfr/dist/component/form/form.min.css',
-    '@gouvfr/dsfr/dist/component/header/header.min.css',
-    '@gouvfr/dsfr/dist/component/input/input.min.css',
-    '@gouvfr/dsfr/dist/component/link/link.min.css',
-    '@gouvfr/dsfr/dist/component/logo/logo.min.css',
-    '@gouvfr/dsfr/dist/component/modal/modal.min.css',
-    '@gouvfr/dsfr/dist/component/navigation/navigation.min.css',
-    '@gouvfr/dsfr/dist/component/pagination/pagination.min.css',
-    '@gouvfr/dsfr/dist/component/quote/quote.min.css',
-    '@gouvfr/dsfr/dist/component/radio/radio.min.css',
-    '@gouvfr/dsfr/dist/component/search/search.min.css',
-    '@gouvfr/dsfr/dist/component/select/select.min.css',
-    '@gouvfr/dsfr/dist/component/sidemenu/sidemenu.min.css',
-    '@gouvfr/dsfr/dist/component/tab/tab.min.css',
-    '@gouvfr/dsfr/dist/component/table/table.min.css',
-    '@gouvfr/dsfr/dist/component/tag/tag.min.css',
-    '@gouvfr/dsfr/dist/component/toggle/toggle.min.css',
-    '@gouvfr/dsfr/dist/component/tooltip/tooltip.min.css',
-    '@gouvfr/dsfr/dist/component/notice/notice.min.css',
-    '@gouvfr/dsfr/dist/component/segmented/segmented.min.css',
-    '@gouvfr/dsfr/dist/component/skiplink/skiplink.min.css',
-
-    // DSFR ICONS
-    '@gouvfr/dsfr/dist/utility/icons/icons-buildings/icons-buildings.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-business/icons-business.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-communication/icons-communication.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-design/icons-design.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-document/icons-document.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-media/icons-media.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-system/icons-system.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-user/icons-user.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-map/icons-map.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-device/icons-device.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-finance/icons-finance.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-weather/icons-weather.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-others/icons-others.min.css',
-    '@gouvfr/dsfr/dist/utility/icons/icons-arrows/icons-arrows.min.css',
+    '@gouvfr/dsfr/dist/component/component.main.min.css',
+    '@gouvfr/dsfr/dist/utility/utility.main.min.css',
+    '@gouvminint/vue-dsfr/styles',
 
     // GLOBAL STYLES
     '@/assets/style/main.scss',
@@ -95,7 +90,6 @@ export default defineNuxtConfig({
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
   modules: [
     '@vee-validate/nuxt',
-    'nuxt-scheduler',
     'nuxt-security',
     'vue-dsfr-nuxt-module',
     '@nuxt/eslint',
@@ -291,7 +285,5 @@ export default defineNuxtConfig({
         }
       }
     }
-  },
-
-  compatibilityDate: '2024-08-30'
+  }
 })
