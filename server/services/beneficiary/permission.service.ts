@@ -107,16 +107,19 @@ export const getArchivePermissions = async ({
 
   if (manager) {
     return {
-      archive: true
+      archive: true,
+      lastActivity: lastActivity
     }
   }
   if (receptionAgent) {
     return {
-      archive: false
+      archive: false,
+      lastActivity: lastActivity
     }
   }
   return {
-    archive: isMember && toArchived
+    archive: isMember && toArchived,
+    lastActivity: lastActivity
   }
 }
 

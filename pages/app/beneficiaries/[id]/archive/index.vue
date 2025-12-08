@@ -27,13 +27,21 @@
         :title="pageTitle"
         icon="fr-icon-folder-2-line"
       />
-      <p class="fr-text--bold fr-mb-1w">
-        Agent(s) référent(s)&nbsp;: {{ referentNames }}
+      <p class="fr-mb-1w">
+        <span class="fr-text--bold">Agent(s) référent(s)&nbsp;:</span>
+        {{ referentNames }}
       </p>
       <BeneficiaryStatusBadge
         class="fr-mb-4v"
         :status="beneficiary.status"
       />
+      <p
+        v-if="lastActivity"
+        class="fr-mb-4v"
+      >
+        <span class="fr-text--bold"> Dernière activité&nbsp;:</span>
+        {{ lastActivity.toLocaleDateString() }}
+      </p>
 
       <template v-if="socialSupportSubjects.length > 0">
         <hr class="fr-mt-4v" />
@@ -142,6 +150,9 @@
     })
   const archivePermission = computed(
     () => archivePermissionData?.value?.archive
+  )
+  const lastActivity = computed(
+    () => archivePermissionData?.value?.lastActivity
   )
 
   const deletepermission: ComputedRef<boolean> = computed(
