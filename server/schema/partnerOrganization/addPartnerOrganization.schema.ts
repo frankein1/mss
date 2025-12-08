@@ -20,16 +20,20 @@ const contactPartnerOrganizationSchema = z
   )
   .nullish()
 
+export const limitPOName = 300
+export const limitPOAddress = 100
+export const limitPOWorkingHours = 1200
+
 export const addCustomPartnerOrganizationSchema = z.object({
-  name: requiredLimitedStringConstraint(300),
+  name: requiredLimitedStringConstraint(limitPOName),
   siret: siretConstraint,
-  address: limitedStringConstraint(null, 100).nullish(),
+  address: limitedStringConstraint(null, limitPOAddress).nullish(),
   zipcode: limitedStringConstraint(null, 10).nullish(),
   city: limitedStringConstraint().nullish(),
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
-  workingHours: limitedStringConstraint(null, 400).nullish(),
+  workingHours: limitedStringConstraint(null, limitPOWorkingHours).nullish(),
   contacts: contactPartnerOrganizationSchema
 })
 

@@ -18,7 +18,10 @@
   import type { AddPartnerOrganizationInput } from '~/server/schema'
   import {
     addCustomPartnerOrganizationSchema,
-    addDataInclusionPartnerOrganizationSchema
+    addDataInclusionPartnerOrganizationSchema,
+    limitPOAddress,
+    limitPOName,
+    limitPOWorkingHours
   } from '~/server/schema'
 
   const props = defineProps<{
@@ -71,16 +74,18 @@
     }
 
     hasDataInclusionStructure.value = true
+    // Some fields from data inclusion can evolve to be very long. Tey are truncated
+    // to the limit specified in the schema
     setValues({
       dataInclusionId: structure.id,
-      name: structure.name,
+      name: structure.name.substring(0, limitPOName),
       siret: structure.siret || null,
-      address: structure.address,
+      address: structure.address?.substring(0, limitPOAddress),
       zipcode: structure.zipcode,
       city: structure.city,
       email: structure.email,
       phone1: structure.phone,
-      workingHours: structure.workingHours
+      workingHours: structure.workingHours?.substring(0, limitPOWorkingHours)
     })
   }
 </script>
