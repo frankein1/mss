@@ -96,7 +96,7 @@ describe('prepareBeneficiaryFilters', () => {
   it('should return a valid BeneficiaryWhereInput object when multiple parameters are passed', () => {
     const output = prepareBeneficiaryFilters({
       search: 'Jean Paul',
-      ageGroup: [AgeGroup.Group18_24, AgeGroup.Group45_54],
+      ageGroup: AgeGroup.Group18_24,
       qpv: false,
       status: 'Active',
       referents: ['1E26CD', '878DEG']
@@ -145,22 +145,6 @@ describe('prepareBeneficiaryFilters', () => {
           {
             "OR": [
               {
-                "birthDate": {
-                  "gte": 2000-04-15T00:00:00.000Z,
-                  "lte": 2007-04-14T00:00:00.000Z,
-                },
-              },
-              {
-                "birthDate": {
-                  "gte": 1970-04-15T00:00:00.000Z,
-                  "lte": 1980-04-14T00:00:00.000Z,
-                },
-              },
-            ],
-          },
-          {
-            "OR": [
-              {
                 "qpv": null,
               },
               {
@@ -169,6 +153,10 @@ describe('prepareBeneficiaryFilters', () => {
             ],
           },
         ],
+        "birthDate": {
+          "gte": 2000-04-15T00:00:00.000Z,
+          "lte": 2007-04-14T00:00:00.000Z,
+        },
         "familyFile": {
           "referents": {
             "some": {

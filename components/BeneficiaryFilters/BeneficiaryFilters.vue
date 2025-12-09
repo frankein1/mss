@@ -10,10 +10,11 @@
     class="fr-mx-auto"
   />
   <AtomFilters
-    v-else-if="beneficiaryFilters"
-    :filters="beneficiaryFilters"
+    class="beneficiary-filters"
+    :filters="beneficiaryFilters || []"
     :expanded-by-default="true"
     :initial-selected-values="filtersState.beneficiary.value || {}"
+    :validation-schema="beneficiaryFilterSchema"
     @filter="onFilter"
   />
 </template>
@@ -27,10 +28,14 @@
     ageGroupKeys,
     yesNoOptions,
     ministereDepartmentServiceAcKeys,
-    ministereStructureKeys
+    ministereStructureKeys,
+    AgeGroup
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
-  import type { BeneficiaryFilterInput } from '~/server/schema'
+  import {
+    beneficiaryFilterSchema,
+    type BeneficiaryFilterInput
+  } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
   import { beneficiaryFieldLabels } from '~/client/labels'
@@ -119,38 +124,28 @@
       })
     }
 
-    filters.push(
-      {
-        name: 'status',
-        label: 'Statut',
-        options: withEmptyValue(
-          beneficiaryStatusKeys.options,
-          'Tous les statuts'
-        ),
-        type: FilterType.SelectOne,
-        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.Status
-      },
-      {
-        name: 'ageGroup',
-        label: "Tranche d'âge",
-        options: ageGroupKeys.options,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
-      },
-      {
-        name: 'qpv',
-        label: 'Quartier prioritaire',
-        options: withEmptyValue(yesNoOptions, 'Tous'),
-        type: FilterType.SelectOne,
-        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.QPV
-      }
-    )
+    filters.push({
+      name: 'status',
+      label: 'Statut',
+      options: withEmptyValue(
+        beneficiaryStatusKeys.options,
+        'Tous les statuts'
+      ),
+      type: FilterType.SelectOne,
+      alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.Status
+    })
+
+    filters.push({
+      name: 'qpv',
+      label: 'Quartier prioritaire',
+      options: withEmptyValue(yesNoOptions, 'Tous'),
+      type: FilterType.SelectOne,
+      alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.QPV
+    })
 
     if (application.value.module.vulnerablePerson) {
       filters.push({
@@ -163,19 +158,6 @@
         matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
       })
     }
-
-    filters.push({
-      name: 'notFilled',
-      label: 'non renseigné',
-      options: withEmptyValue(
-        beneficiaryNotFilledKeys.options,
-        'Pas de sélection'
-      ),
-      type: FilterType.NotFilled,
-      alwaysExpanded: true,
-      matomoEventCategory: EventCategory.BeneficiaryFilter,
-      matomoEventAction: BeneficiaryFilterEventAction.NotFilled
-    })
 
     if (application.value.module.ministere) {
       filters.push({
@@ -198,6 +180,49 @@
         matomoEventAction: BeneficiaryFilterEventAction.MinistereStructure
       })
     }
+
+    filters.push({
+      name: 'ageGroup',
+      label: "Tranche d'âge",
+      options: withEmptyValue(
+        ageGroupKeys.options,
+        "Toutes les tranches d'âge"
+      ),
+      type: FilterType.SelectOne,
+      alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
+    })
+
+    if (filtersState.beneficiary.value?.ageGroup === AgeGroup.Custom) {
+      filters.push(
+        {
+          name: 'fromAge',
+          label: 'De (âge minimum)',
+          type: FilterType.Number,
+          alwaysExpanded: filters.length < maxAlwaysExpandedNb
+        },
+        {
+          name: 'toAge',
+          label: 'À (âge maximum)',
+          type: FilterType.Number,
+          alwaysExpanded: filters.length < maxAlwaysExpandedNb
+        }
+      )
+    }
+
+    filters.push({
+      name: 'notFilled',
+      label: 'non renseigné',
+      options: withEmptyValue(
+        beneficiaryNotFilledKeys.options,
+        'Pas de sélection'
+      ),
+      type: FilterType.NotFilled,
+      alwaysExpanded: true,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.NotFilled
+    })
 
     return filters
   })

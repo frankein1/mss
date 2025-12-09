@@ -1,7 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import RemoveAccents from 'remove-accents'
+import { AgeGroup } from '~/client/options'
 import type { BeneficiaryFilterServerInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
+import dayjs from 'dayjs'
 
 export function prepareBeneficiarySearchConditions(query: string): {
   AND: Prisma.BeneficiaryWhereInput[]
@@ -63,22 +65,27 @@ export function prepareBeneficiaryFilters(
     formattedFilters.status = filters.status
   }
 
-  if (filters.ageGroup) {
-    const ageFilters = filters.ageGroup.reduce<
-      {
-        birthDate: Prisma.DateTimeNullableFilter
-      }[]
-    >((acc, ageGroup) => {
-      const dateRange = ageGroupToDateRange(ageGroup)
-      acc.push({
-        birthDate: {
-          gte: dateRange.lower?.toDate(),
-          lte: dateRange.upper?.toDate()
-        }
-      })
-      return acc
-    }, [])
-    formattedFilters.AND.push({ OR: ageFilters })
+  if (filters.ageGroup && filters.ageGroup !== AgeGroup.Custom) {
+    const dateRange = ageGroupToDateRange(filters.ageGroup)
+    formattedFilters.birthDate = {
+      gte: dateRange.lower?.toDate(),
+      lte: dateRange.upper?.toDate()
+    }
+  }
+
+  if (filters.fromAge || filters.toAge) {
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0)
+    formattedFilters.birthDate = {
+      gte: filters.toAge
+        ? today
+            .subtract(filters.toAge + 1, 'year')
+            .add(1, 'day')
+            ?.toDate()
+        : undefined,
+      lte: filters.fromAge
+        ? today.subtract(filters.fromAge, 'year').toDate()
+        : undefined
+    }
   }
 
   if (filters.vulnerablePerson !== undefined) {

@@ -41,7 +41,8 @@
     [AgeGroup.Group35_44]: ChartColor.Yellow,
     [AgeGroup.Group45_54]: ChartColor.Pink,
     [AgeGroup.Group55_64]: ChartColor.DeepBlue,
-    [AgeGroup.More65]: ChartColor.Green
+    [AgeGroup.More65]: ChartColor.Green,
+    [AgeGroup.Custom]: ChartColor.Gray
   }
 
   const props = defineProps<{

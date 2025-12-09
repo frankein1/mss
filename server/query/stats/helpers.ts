@@ -1,14 +1,11 @@
 import type { Prisma } from '@prisma/client'
-import {
-  FileInstructionType,
-  SocialSupportType,
-  WorkshopAttendeeType
-} from '@prisma/client'
+import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~/types/stat'
+import { AgeGroup } from '~/client/options'
 
 export function preparePrescribingOrganizationStats(
   historyItems: {
@@ -131,10 +128,28 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     }
   }
 
-  if (filters.ageGroup) {
+  if (filters.ageGroup && filters.ageGroup !== AgeGroup.Custom) {
     const dateRange = ageGroupToDateRange(filters.ageGroup)
     const gte = dateRange.lower?.toDate()
     const lte = dateRange.upper?.toDate()
+
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.birthDate = { gte, lte }
+    } else {
+      socialSupport.beneficiary = { birthDate: { gte, lte } }
+    }
+  }
+  if (filters.fromAge || filters.toAge) {
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0)
+    const gte = filters.toAge
+      ? today
+          .subtract(filters.toAge + 1, 'year')
+          .add(1, 'day')
+          ?.toDate()
+      : undefined
+    const lte = filters.fromAge
+      ? today.subtract(filters.fromAge, 'year').toDate()
+      : undefined
 
     if (socialSupport.beneficiary) {
       socialSupport.beneficiary.birthDate = { gte, lte }
@@ -246,11 +261,26 @@ export function prepareBeneficiaryStatFilters(
     formattedFilters.status = filters.beneficiaryStatus
   }
 
-  if (filters.ageGroup) {
+  if (filters.ageGroup && filters.ageGroup !== AgeGroup.Custom) {
     const dateRange = ageGroupToDateRange(filters.ageGroup)
     formattedFilters.birthDate = {
       gte: dateRange.lower?.toDate(),
       lte: dateRange.upper?.toDate()
+    }
+  }
+
+  if (filters.fromAge || filters.toAge) {
+    const today = dayjs().hour(0).minute(0).second(0).millisecond(0)
+    formattedFilters.birthDate = {
+      gte: filters.toAge
+        ? today
+            .subtract(filters.toAge + 1, 'year')
+            .add(1, 'day')
+            ?.toDate()
+        : undefined,
+      lte: filters.fromAge
+        ? today.subtract(filters.fromAge, 'year').toDate()
+        : undefined
     }
   }
 

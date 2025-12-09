@@ -18,7 +18,7 @@ import {
   stringConstraint,
   withEmptyValueOptionalNativeEnum
 } from './helpers.schema'
-import { maxStringLengthMessage } from '~/utils/zod'
+import { maxStringLengthMessage, validIntNumber } from '~/utils/zod'
 import { TypeSuivi, AgeGroup } from '~/client/options'
 import { StatPeriodFilter } from '~/types/stat'
 import { FollowupPeriodFilter } from '~/types/followup'
@@ -54,7 +54,17 @@ const statFilterSchema = z.object({
   ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
   beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish()
+  ageGroup: z.nativeEnum(AgeGroup).nullish(),
+  fromAge: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
+  toAge: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish()
 })
 
 const workshopStatFilterSchema = z.object({
@@ -92,7 +102,17 @@ const beneficiaryFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.array(z.nativeEnum(AgeGroup)).nullish(),
+  ageGroup: z.nativeEnum(AgeGroup).nullish(),
+  fromAge: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
+  toAge: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
   ministereDepartementServiceAc: z
     .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),

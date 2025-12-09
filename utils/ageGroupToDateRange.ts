@@ -37,5 +37,7 @@ export function ageGroupToDateRange(ageGroup: AgeGroup): {
       }
     case AgeGroup.More65:
       return { upper: today.subtract(65, 'year') }
+    default:
+      return {}
   }
 }

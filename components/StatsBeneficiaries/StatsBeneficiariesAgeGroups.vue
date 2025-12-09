@@ -38,6 +38,7 @@
   import type { StatsPiePropType } from '~/types/stat'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { ChartColor } from '~/utils/color/chartColors'
+  import { getCustomAgeGroupLabel } from '~/utils/stats'
 
   const AgeGroupColors = {
     [AgeGroup.Less18]: ChartColor.LightPink,
@@ -46,7 +47,8 @@
     [AgeGroup.Group35_44]: ChartColor.Yellow,
     [AgeGroup.Group45_54]: ChartColor.Pink,
     [AgeGroup.Group55_64]: ChartColor.DeepBlue,
-    [AgeGroup.More65]: ChartColor.Green
+    [AgeGroup.More65]: ChartColor.Green,
+    [AgeGroup.Custom]: ChartColor.Gray
   }
 
   const props = defineProps<{
@@ -59,13 +61,18 @@
     toRef(() => props.filters)
   )
 
-  const ageStats = computed(
-    () =>
-      (data.value?.map(({ _count, ageGroup }) => ({
-        key: ageGroup,
-        label: getStatLabel(ageGroupKeys.byKey, ageGroup),
-        color: getStatColor(AgeGroupColors, ageGroup),
-        count: _count
-      })) || []) as StatsPiePropType
-  )
+  const ageStats = computed(() => {
+    const stats = (data.value?.map(({ _count, ageGroup, fromAge, toAge }) => ({
+      key: ageGroup,
+      fromAge,
+      toAge,
+      label:
+        ageGroup === AgeGroup.Custom
+          ? getCustomAgeGroupLabel(fromAge, toAge)
+          : getStatLabel(ageGroupKeys.byKey, ageGroup),
+      color: getStatColor(AgeGroupColors, ageGroup),
+      count: _count
+    })) || []) as StatsPiePropType
+    return stats
+  })
 </script>

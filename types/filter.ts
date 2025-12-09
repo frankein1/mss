@@ -40,6 +40,10 @@ export type RadioFilterProp = SelectFilterProp & {
   rich?: boolean
 }
 
+export type NumberFilterProp = FilterPropBase & {
+  type: FilterType.Number
+}
+
 export type NotFilledFilterProp = SelectFilterProp & {
   type: FilterType.NotFilled
 }
@@ -50,6 +54,7 @@ export type FilterProp =
   | SelectMultipleFilterProp
   | SearchFilterProp
   | RadioFilterProp
+  | NumberFilterProp
   | NotFilledFilterProp
 
 export type SelectedFilter = {
@@ -62,7 +67,7 @@ export type SelectedFilters = {
   [name: string]: SelectedFilter
 }
 
-export type FilterValue = string | string[] | Date
+export type FilterValue = string | string[] | Date | number
 
 export type FilterValues = {
   [filterName: string]: FilterValue | null | undefined

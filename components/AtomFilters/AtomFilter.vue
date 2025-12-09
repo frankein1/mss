@@ -2,6 +2,7 @@
   <VeeInput
     v-if="filter.type === FilterType.Date"
     :name="filter.name"
+    :class="filter.name"
     :label="filter.label"
     type="date"
     :disabled="filter.disabled"
@@ -10,6 +11,7 @@
   <VeeSearchInput
     v-else-if="filter.type === FilterType.Search"
     :name="filter.name"
+    :class="filter.name"
     :label="filter.label"
     :label-visible="true"
     :placeholder="filter.placeholder"
@@ -20,6 +22,7 @@
     v-else-if="filter.type === FilterType.SelectMultiple"
     class="multi-select-filters fr-select-group"
     :name="filter.name"
+    :class="filter.name"
     :label="filter.label"
     :options="filter.options"
     :placeholder="filter.placeholder"
@@ -29,6 +32,7 @@
   <VeeSelect
     v-else-if="filter.type === FilterType.SelectOne"
     :name="filter.name"
+    :class="filter.name"
     :label="filter.label"
     :options="filter.options"
     :disabled="filter.disabled"
@@ -36,8 +40,11 @@
   />
   <VeeRadioButtons
     v-else-if="filter.type === FilterType.Radio"
-    class="filter-radio"
-    :class="{ 'filter-radio--as-tag': filter.asTag }"
+    :class="[
+      'filter-radio',
+      filter.name,
+      { 'filter-radio--as-tag': filter.asTag }
+    ]"
     :name="filter.name"
     :label="filter.label"
     :options="filter.options"
@@ -48,10 +55,20 @@
     :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
+  <VeeInput
+    v-else-if="filter.type === FilterType.Number"
+    type="number"
+    :name="filter.name"
+    :class="filter.name"
+    :label="filter.label"
+    :disabled="filter.disabled"
+    @change-value="emit('changeFilter', $event)"
+  />
   <VeeSelect
     v-else
     style="display: none"
     :name="filter.name"
+    :class="filter.name"
     :label="filter.label"
     :options="filter.options"
     :disabled="filter.disabled"

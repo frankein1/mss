@@ -17,7 +17,7 @@
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <h2 class="fr-sr-only">Filtres</h2>
-        <section class="feature-section">
+        <section class="feature-section beneficiary-filters">
           <BeneficiaryFilters @filter="filters = $event" />
         </section>
         <section class="feature-section fr-mt-2w">
@@ -195,4 +195,26 @@
   .action {
     grid-area: action;
   }
+
+  /* stylelint-disable selector-class-pattern */
+  .beneficiary-filters {
+    :deep(.fromAge),
+    :deep(.toAge) {
+      .fr-input-wrap::before {
+        bottom: 0.75rem;
+        margin: auto;
+        pointer-events: none;
+        position: absolute;
+        right: 1.75rem;
+        top: 0.75rem;
+        content: 'an(s)';
+        line-height: 1rem;
+      }
+
+      .fr-input {
+        padding-right: 4rem;
+      }
+    }
+  }
+  /* stylelint-enable selector-class-pattern */
 </style>

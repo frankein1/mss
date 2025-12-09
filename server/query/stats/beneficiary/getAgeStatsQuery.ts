@@ -32,6 +32,17 @@ export async function getAgeStatsQuery(
     orderBy: { _count: { birthDate: 'desc' } }
   })
 
+  if (input.ageGroup === AgeGroup.Custom && (input.fromAge || input.toAge)) {
+    const total = ageCounts.reduce((acc, cur) => acc + cur._count, 0)
+    return [
+      {
+        _count: total,
+        ageGroup: AgeGroup.Custom,
+        fromAge: input.fromAge,
+        toAge: input.toAge
+      }
+    ]
+  }
   const ageGroupsFilters: { [k in AgeGroup]?: AgeGroupsFilter } = {}
   Object.values(AgeGroup).forEach(value => {
     const { lower, upper } = ageGroupToDateRange(value)
@@ -40,6 +51,7 @@ export async function getAgeStatsQuery(
       upper
     }
   })
+
   const ageGroupsCounts: { [k in AgeGroupOrNull]?: number } = {}
   ageCounts.forEach(
     ({ birthDate, _count }: { birthDate: Date | null; _count: number }) => {
@@ -68,11 +80,14 @@ export async function getAgeStatsQuery(
       }
     }
   )
+
   const ageGroupsCountsResults = (
     Object.entries(ageGroupsCounts) as Array<[AgeGroupOrNull, number]>
   ).map(([key, value]) => ({
     ageGroup: key !== STATS_NULL_KEY ? key : null,
-    _count: value
+    _count: value,
+    fromAge: null,
+    toAge: null
   }))
   ageGroupsCountsResults.sort((a, b) => b._count - a._count)
 

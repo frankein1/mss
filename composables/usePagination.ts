@@ -2,7 +2,10 @@ export function usePagination(
   page: Ref<number>,
   perPage: Ref<number>,
   filters?: Ref<
-    Record<string, string | string[] | Date | boolean | undefined | null>
+    Record<
+      string,
+      string | string[] | Date | boolean | number | undefined | null
+    >
   >
 ) {
   if (filters) {

@@ -10,6 +10,7 @@
       :filters="statsFilters"
       :default-values="defaultValues"
       :expanded-by-default="true"
+      :validation-schema="validationSchema"
       @filter="emit('update:filters', $event)"
     />
   </section>
@@ -24,7 +25,8 @@
     ministerKeys,
     ageGroupKeys,
     ministereDepartmentServiceAcKeys,
-    ministereStructureKeys
+    ministereStructureKeys,
+    AgeGroup
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import type { Options } from '~/utils/options'
@@ -45,10 +47,11 @@
       beneficiariesCitiesOptions: Options
       agentOptions: Options
       filters: StatFilterInput
+      validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    { isHelpRequest: false, isHistory: false }
+    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
   )
 
   const emit = defineEmits<{
@@ -186,6 +189,23 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
     })
+
+    if (props.filters.ageGroup === AgeGroup.Custom) {
+      statsFilters.push(
+        {
+          name: 'fromAge',
+          label: 'De (âge minimum)',
+          type: FilterType.Number,
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        },
+        {
+          name: 'toAge',
+          label: 'À (âge maximum)',
+          type: FilterType.Number,
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        }
+      )
+    }
 
     return statsFilters
   })

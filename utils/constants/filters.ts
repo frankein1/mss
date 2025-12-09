@@ -4,7 +4,8 @@ export enum FilterType {
   SelectMultiple = 'selectMultiple',
   Search = 'search',
   Radio = 'radio',
-  NotFilled = 'notFilled'
+  NotFilled = 'notFilled',
+  Number = 'number'
 }
 
 export enum PeriodFilter {

@@ -22,6 +22,7 @@
                 beneficiariesCitiesOptions &&
                 agentsOptions
               "
+              class="stats-filters"
               :social-support-subject-options="socialSupportSubjectOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
@@ -166,7 +167,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   :deep(.main-container) {
     min-height: 100%;
   }
@@ -182,4 +183,26 @@
   .stats-tabs {
     height: calc(var(--tabs-height) + 30px);
   }
+
+  /* stylelint-disable selector-class-pattern */
+  .stats-filters {
+    :deep(.fromAge),
+    :deep(.toAge) {
+      .fr-input-wrap::before {
+        bottom: 0.75rem;
+        margin: auto;
+        pointer-events: none;
+        position: absolute;
+        right: 1.75rem;
+        top: 0.75rem;
+        content: 'an(s)';
+        line-height: 1rem;
+      }
+
+      .fr-input {
+        padding-right: 4rem;
+      }
+    }
+  }
+  /* stylelint-enable selector-class-pattern */
 </style>

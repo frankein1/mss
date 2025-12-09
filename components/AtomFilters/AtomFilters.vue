@@ -92,7 +92,12 @@
 <script lang="ts" setup>
   import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
-  import type { FilterProp, FilterValue, FilterValues } from '~/types/filter'
+  import type {
+    FilterProp,
+    FilterValue,
+    FilterValues,
+    NumberFilterProp
+  } from '~/types/filter'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
   import { getOptionLabel } from '~/utils/options'
 
@@ -122,6 +127,7 @@
        * All filters are expanded by default
        */
       expandedByDefault?: boolean
+      validationSchema?: any
     }>(),
     {
       fullWidthFilters: false,
@@ -129,7 +135,8 @@
       initialSelectedValues: undefined,
       resultsLabel: undefined,
       defaultValues: undefined,
-      expandedByDefault: false
+      expandedByDefault: false,
+      validationSchema: undefined
     }
   )
 
@@ -146,13 +153,14 @@
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(props.expandedByDefault)
 
-  const {
-    controlledValues: selectedFilters,
-    resetForm,
-    setFieldValue
-  } = useForm({
-    initialValues: props.initialSelectedValues || props.defaultValues || {}
+  const { controlledValues, resetForm, setFieldValue, validate } = useForm({
+    initialValues: props.initialSelectedValues || props.defaultValues || {},
+    validationSchema: toTypedSchema(props.validationSchema)
   })
+
+  const selectedFilters: ComputedRef<FilterValues> = computed(
+    () => controlledValues.value
+  )
 
   function isSetValue(
     value: FilterValue | null | undefined
@@ -161,7 +169,8 @@
   }
 
   const hasFilters = computed<boolean>(
-    () => !!Object.values(selectedFilters.value).filter(isSetValue).length
+    () =>
+      !!Object.values(selectedFilters.value).filter(v => isSetValue(v)).length
   )
 
   const hiddenTag = computed(() => {
@@ -256,10 +265,19 @@
     }
   )
 
-  watch(emitableSelectedFilters, (emitable, oldvalue) => {
+  watch(emitableSelectedFilters, async (emitable, oldvalue) => {
     const filterContentHasChanged =
       JSON.stringify(oldvalue) !== JSON.stringify(emitable)
-    if (filterContentHasChanged) {
+    if (!filterContentHasChanged) {
+      return
+    }
+
+    if (!props.validationSchema) {
+      emit('filter', emitable)
+      return
+    }
+    const { valid } = await validate()
+    if (valid) {
       emit('filter', emitable)
     }
   })
@@ -291,6 +309,8 @@
       filter.type === FilterType.NotFilled
     ) {
       valueLabel = getSelectedOptionsLabel(filter, value as string | string[])
+    } else if (filter.type === FilterType.Number) {
+      valueLabel = value.toString()
     } else {
       valueLabel = value as string
     }
@@ -298,7 +318,7 @@
   }
 
   function getSelectedOptionsLabel(
-    filter: FilterProp,
+    filter: Exclude<FilterProp, NumberFilterProp>,
     value: string | string[]
   ): string {
     if (filter.type === FilterType.Date || filter.type === FilterType.Search) {

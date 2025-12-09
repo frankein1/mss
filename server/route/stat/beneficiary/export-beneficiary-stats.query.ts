@@ -10,7 +10,9 @@ import {
   ageGroupKeys,
   ministereCategorieKeys,
   ministereDepartmentServiceAcKeys,
-  ministereStructureKeys
+  ministereStructureKeys,
+  getStatLabel,
+  AgeGroup
 } from '~/client/options'
 import {
   getBeneficiaryCountQuery,
@@ -36,7 +38,7 @@ import { createExport } from '~/utils/export/createExport'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { getPercentage } from '~/utils/stats'
+import { getCustomAgeGroupLabel, getPercentage } from '~/utils/stats'
 import { getColumns } from '~/utils/export/getColumns'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
@@ -66,8 +68,11 @@ const handler = async ({
   // Age
   const ages = await getAgeStatsQuery(user, input)
   const ageColumns = getColumns("Tranches d'âge")
-  const ageRows = ages.map(({ ageGroup, _count }) => ({
-    label: ageGroupKeys.value(ageGroup) || STATS_NULL_LABEL,
+  const ageRows = ages.map(({ ageGroup, _count, fromAge, toAge }) => ({
+    label:
+      ageGroup === AgeGroup.Custom
+        ? getCustomAgeGroupLabel(fromAge, toAge)
+        : getStatLabel(ageGroupKeys.byKey, ageGroup),
     number: _count.toString(),
     percent: `${getPercentage(_count, beneficiaryCount.count)}%`
   }))

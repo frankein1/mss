@@ -7,7 +7,8 @@ export enum AgeGroup {
   Group35_44 = '35-44',
   Group45_54 = '45-54',
   Group55_64 = '55-64',
-  More65 = '65-more'
+  More65 = '65-more',
+  Custom = 'custom'
 }
 
 export const ageGroupKeys = buildKeys({
@@ -17,5 +18,6 @@ export const ageGroupKeys = buildKeys({
   [AgeGroup.Group35_44]: '35 à 44 ans',
   [AgeGroup.Group45_54]: '45 à 54 ans',
   [AgeGroup.Group55_64]: '55 à 64 ans',
-  [AgeGroup.More65]: '65 ans et +'
+  [AgeGroup.More65]: '65 ans et +',
+  [AgeGroup.Custom]: 'Personnalisée'
 })

@@ -7,6 +7,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
+      :validation-schema="statFilterSchema"
     />
 
     <section class="fr-grid-row fr-grid-row--gutters">
@@ -226,14 +227,13 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import type { Options } from '~/utils/options'
-  import type { StatFilterInput } from '~/server/schema'
+  import { statFilterSchema, type StatFilterInput } from '~/server/schema'
   import type { Menu } from '~/types/menu'
   import { StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
 
   const alertClose = ref<boolean>(true)
-
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
   const matomo = useMatomo()

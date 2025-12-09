@@ -24,7 +24,7 @@ export const workshopLabels: FieldLabels<WorkshopFieldLabels> = {
   description: 'Description / notes',
   attendeeLimit: 'Nombre de personnes participantes',
   ageLimitCondition: 'Conditions d’âge (à titre informatif)',
-  ageLimit: 'Age (ans)',
+  ageLimit: 'Âge (ans)',
   chargeable: 'Atelier payant'
 }
 
