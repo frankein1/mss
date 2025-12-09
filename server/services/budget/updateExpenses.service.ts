@@ -2,7 +2,11 @@ import type {
   SecurityRuleContext,
   SecurityRuleGrantee
 } from '~/server/security'
-import { BudgetExpensesRepo } from '~/server/database/repository'
+import {
+  BeneficiaryRepo,
+  BudgetExpensesRepo,
+  WorkshopAttendeeRepo
+} from '~/server/database/repository'
 import type { UpdateBudgetExpensesInput } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 
@@ -10,6 +14,23 @@ async function getExpensesWithLoansAndDebts(
   user: SecurityRuleGrantee,
   id: string
 ) {
+  const expenses = await BudgetExpensesRepo.findUniqueOrThrow(user, {
+    where: { id },
+    select: {
+      budget: { select: { familyFileId: true } }
+    }
+  })
+
+  const ben = await BeneficiaryRepo.findMany(user, {
+    where: { familyFileId: expenses.budget.familyFileId },
+    select: { id: true }
+  })
+
+  await WorkshopAttendeeRepo.findUniqueOrThrow(user, {
+    where: { id },
+    select: { beneficiaryId: true }
+  })
+
   return await BudgetExpensesRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
