@@ -1,12 +1,12 @@
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { v4 } from 'uuid'
 import { prepareUploadSchema, type PrepareUploadInput } from '~/server/schema'
-import { getPresignedUrlForUploadWithPOST } from '~/server/lib/s3/signed-url'
+import { getPresignedUrlForUpload } from '~/server/lib/s3/signed-url'
 import { BeneficiaryRepo, DocumentRepo } from '~/server/database'
 import { UserActivityType } from '@prisma/client'
 import { FamilyFileService } from '~/server/services'
+import { generateFilenameForDocument } from './helper'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -41,36 +41,45 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: PrepareUploadInput
 }) => {
-  const filename = `${sanitizeFilename(input.file.name)}_${v4()}`
+  const filename = generateFilenameForDocument(input.file.name)
   const filepath = `${ctx.structure.id}/${input.beneficiaryId}/${filename}`
 
   // user asks for signed url for filename
   const config = useRuntimeConfig()
-  const post = await getPresignedUrlForUploadWithPOST(config.s3, filename)
+  const url = await getPresignedUrlForUpload(
+    config.s3,
+    filepath,
+    input.file.mimeType,
+    input.file.size,
+    60
+  )
 
   // create document preparation
   const { key } = await DocumentRepo.create(ctx.user, {
     select: { key: true },
     data: {
-      createdById: ctx.user.id,
+      createdBy: {
+        connect: { id: ctx.user.id }
+      },
+      familyFile: {
+        connect: { id: input.familyFileId }
+      },
+      beneficiary: {
+        connect: { id: input.beneficiaryId }
+      },
       name: filename,
       filenameDisk: filepath,
       filenameDownload: filepath,
-      familyFileId: input.familyFileId,
-      beneficiaryId: input.beneficiaryId,
       type: input.type,
       confidential: input.confidential,
       tags: input.tags,
       size: input.file.size,
       mimeType: input.file.mimeType,
-      migrated: true
+      migrated: true // migrated to S3
     }
   })
 
-  return {
-    key,
-    ...post
-  }
+  return { key, url }
 }
 
 export const prepareUpload = createMutation({

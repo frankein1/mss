@@ -58,7 +58,17 @@ export async function getPageDocuments({
       orderBy,
       take,
       skip,
-      include: {
+      select: {
+        key: true,
+        name: true,
+        type: true,
+        size: true,
+        tags: true,
+        confidential: true,
+        createdById: true,
+        beneficiaryId: true,
+        created: true,
+        migrated: true,
         _count: {
           select: {
             notifications: {
