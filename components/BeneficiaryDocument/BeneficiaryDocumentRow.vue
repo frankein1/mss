@@ -136,7 +136,7 @@
     () => !!props.document._count.notifications
   )
 
-  const { download, open } = useDownload()
+  const { legacyBlob, open, download } = useDownload()
 
   function formatBeneficiary(beneficiaryId: string) {
     const selected = props.familyFileIdentification.filter(
@@ -150,18 +150,52 @@
 
   async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
-    const data = await $fetch<Blob>(
-      `/api/document/download?key=${props.document.key}`
-    )
-    open(data)
+    // If document has not been migrated, fetch document from DB
+    if (!props.document.migrated) {
+      const data = await $fetch<Blob>(
+        `/api/document/download?key=${props.document.key}`
+      )
+      legacyBlob.open(data)
+
+      return
+    }
+
+    // Else, fetch document from S3
+    const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
+      key: props.document.key
+    })
+
+    if (!data || status === 'error') {
+      snackbar.error('Le chargement du document a échoué.')
+      return
+    }
+
+    open(data.value.url)
   }
 
   async function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
-    const data = await $fetch<Blob>(
-      `/api/document/download?key=${props.document.key}`
-    )
-    download(data, props.document.name)
+    // If document has not been migrated, fetch document from DB
+    if (!props.document.migrated) {
+      const data = await $fetch<Blob>(
+        `/api/document/download?key=${props.document.key}`
+      )
+      legacyBlob.download(data, props.document.name)
+
+      return
+    }
+
+    // Else, fetch document from S3
+    const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
+      key: props.document.key
+    })
+
+    if (!data || status === 'error') {
+      snackbar.error('Le chargement du document a échoué.')
+      return
+    }
+
+    download(data.value.url, props.document.name, props.document.type)
   }
 
   function onEdit() {
