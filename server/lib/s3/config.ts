@@ -1,14 +1,24 @@
 import { S3Client } from '@aws-sdk/client-s3'
 
+let instance: S3Client | null = null
+
 export function getS3Client() {
+  if (instance) {
+    return instance
+  }
+
   const config = useRuntimeConfig()
 
-  return new S3Client({
+  instance = new S3Client({
     credentials: {
       accessKeyId: config.s3.accessKeyId,
       secretAccessKey: config.s3.accessKeyId
     },
     region: config.s3.region,
-    endpoint: config.s3.endpoint
+    endpoint: config.s3.endpoint,
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED'
   })
+
+  return instance
 }
