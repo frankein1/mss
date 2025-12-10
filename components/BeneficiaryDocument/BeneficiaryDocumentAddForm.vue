@@ -42,16 +42,16 @@
 
     <VeeInputFile
       label="Selectionner un fichier"
-      hint="Taille maximum: 20Mo"
+      hint="Taille maximum: 20 Mo. Type de fichiers accepté: pdf, image, Excel (.xls, .xlsx), Word (.doc, .docx), OpenDocument (.ods, .odt)"
       name="file"
-      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
+      :accept="documentFileAllowedTypes.join(', ')"
       required
     />
     <button
       class="fr-btn fr-mt-3w"
       type="submit"
-      :data-submitting="isSubmitting"
-      :disabled="isSubmitting"
+      :data-submitting="upload.status === 'pending'"
+      :disabled="upload.status === 'pending'"
     >
       Ajouter le document
     </button>
@@ -62,7 +62,11 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import type { UploadBrowserDocumentInput } from '~/server/schema'
   import { uploadBrowserDocumentSchema } from '~/server/schema'
-  import { documentTypeKeys, documentTagKeys } from '~/client/options'
+  import {
+    documentTypeKeys,
+    documentTagKeys,
+    documentFileAllowedTypes
+  } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
@@ -83,6 +87,8 @@
     )
   }
 
+  const snackbar = useSnackbar()
+
   const beneficiaryOptions = computed(() =>
     props.familyFileIdentification.map(m => ({
       label: formatBeneficiaryShortenedName(m),
@@ -91,7 +97,6 @@
   )
 
   const form = ref<HTMLFormElement | null>(null)
-  const isSubmitting = ref(false)
 
   const initialBeneficiaryId =
     props.beneficiaryId || props.familyFileIdentification[0]?.id
@@ -110,40 +115,52 @@
     }
   })
 
-  const { onSubmit, caughtErrors } = useCatchFormErrors(
-    handleSubmit,
-    async values => {
-      isSubmitting.value = true
-      const { file, ...data } = values
+  const { onSubmit, caughtErrors } = useCatchFormErrors(handleSubmit, onUpload)
 
-      const input = JSON.stringify({
+  const upload = ref({
+    status: 'idle',
+    error: undefined as any,
+    res: null as string | null
+  })
+
+  const showError = (message: string) => {
+    upload.value.status = 'error'
+    snackbar.error(message, () => form.value?.querySelector('select')?.focus())
+  }
+
+  async function onUpload(values: UploadBrowserDocumentInput) {
+    upload.value.status = 'pending'
+    upload.value.error = undefined
+
+    // Create unvalidated document entry in DB and return S3 presigned URL for upload
+    const { file, ...data } = values
+
+    const formData = new FormData()
+    formData.append(
+      'input',
+      JSON.stringify({
         ...data,
-        file: {
-          size: file.size,
-          mimeType: file.type,
-          name: file.name
-        }
+        file: { size: file.size, mimeType: file.type, name: file.name }
       })
+    )
+    formData.append('file', file)
 
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('input', input)
-
-      try {
-        const key = await $fetch<string>('/api/document/upload', {
-          method: 'POST',
-          body: formData
-        })
-        props.newDocument(key, file.name)
-      } catch {
-        useSnackbar().error("L'ajout du document a échoué.", () =>
-          form.value?.querySelector('select')?.focus()
-        )
-      } finally {
-        isSubmitting.value = false
-      }
+    // Upload document to S3 bucket via MSS server
+    try {
+      upload.value.res = await $fetch<string>('/api/document/upload', {
+        method: 'POST',
+        body: formData
+      })
+    } catch (e: unknown) {
+      upload.value.error = e
+      showError('Le téléversement du document a échoué.')
+      throw e
     }
-  )
+
+    upload.value.status = 'success'
+    console.log(upload.value.res)
+    props.newDocument(upload.value.res, file.name)
+  }
 
   const { errors } = useDisplayFormErrors(
     form,
