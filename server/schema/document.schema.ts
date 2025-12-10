@@ -14,7 +14,6 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
-import { MAX_UPLOAD_SIZE_BYTES } from '~/utils/constants'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
   documentFileMaxSize
@@ -37,7 +36,7 @@ export const uploadBrowserDocumentSchema = z.object({
   confidential: z.boolean().default(false),
   file: z.instanceof(File, { message: requiredErrorMessage }).refine(
     // ajout taille minimale
-    file => file.size <= MAX_UPLOAD_SIZE_BYTES,
+    file => file.size <= documentFileMaxSize,
     documentSizeValidationErrorMessage
     // ajout validation du mime type dans le frontend
   )
@@ -69,6 +68,10 @@ export const prepareUploadSchema = z.object({
   })
 })
 
+export const validateUploadSchema = z.object({
+  key: z.string().uuid()
+})
+
 export const deleteDocumentSchema = z.object({
   documentKey: z.string()
 })
@@ -94,6 +97,7 @@ export const createViewUrlSchema = z.object({ key: z.string() })
 
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
 type PrepareUploadInput = z.infer<typeof prepareUploadSchema>
+type ValidateUploadInput = z.infer<typeof validateUploadSchema>
 type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
 type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
@@ -103,6 +107,7 @@ type CreateViewUrlInput = z.infer<typeof createViewUrlSchema>
 export type {
   AddDocumentInput,
   PrepareUploadInput,
+  ValidateUploadInput,
   EditDocumentInput,
   DeleteDocumentInput,
   CreateUploadUrlInput,

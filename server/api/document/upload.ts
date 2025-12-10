@@ -1,7 +1,6 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
 import type { Document } from '@prisma/client'
 import { NotificationType } from '@prisma/client'
-import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
@@ -11,9 +10,9 @@ import type { FamilyFileSecurityTarget } from '~/server/services'
 import { FamilyFileService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
-import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
+import { generateFilenameForDocument } from '~/server/route/document/helper'
 
 export interface MultiPartData {
   data: Buffer
@@ -50,7 +49,8 @@ export default defineEventHandler(async event => {
   let input
   try {
     input = addDocumentSchema.parse(data)
-  } catch {
+  } catch (e: unknown) {
+    console.log(e)
     throw createError({
       statusCode: 400,
       message: 'Les données entrantes ne sont pas valides'
@@ -89,8 +89,8 @@ export default defineEventHandler(async event => {
     input.familyFileId
   )
 
-  if (!permissions.create) {
-    throw forbiddenError()
+  if (!permissions.create.document) {
+    throw forbiddenError('User is not allowed to create document')
   }
 
   if (!multipartFormData?.length) {
@@ -106,7 +106,7 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const document = await addDocument(input, user, file)
+  const document = await addDocument(input, user)
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
 
@@ -115,7 +115,10 @@ export default defineEventHandler(async event => {
 
 async function addNotification(
   ctx: SecurityRuleContext,
-  document: Document,
+  document: Pick<
+    Document,
+    'key' | 'confidential' | 'createdById' | 'confidential'
+  >,
   familyFile: NonNullable<FamilyFileSecurityTarget>,
   beneficiaryId: string
 ) {
@@ -148,33 +151,36 @@ async function addNotification(
   await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
-async function addDocument(
-  input: AddDocumentInput,
-  user: JwtUser,
-  multipartFormData: MultiPartData
-) {
-  const key = v4()
-  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
-  const document = await DocumentRepo.prisma.create({
+async function addDocument(input: AddDocumentInput, user: JwtUser) {
+  const filename = generateFilenameForDocument(input.file.name)
+  const filepath = `${user.structureId}/${input.beneficiaryId}/${filename}`
+
+  const document = await DocumentRepo.create(user, {
+    select: {
+      key: true,
+      confidential: true,
+      beneficiaryId: true,
+      createdById: true
+    },
     data: {
-      key,
-      name: sanitizeFilename(file.name),
-      familyFileId,
-      beneficiaryId,
-      filenameDisk: key,
-      mimeType: file.mimeType,
-      confidential,
-      tags,
-      createdById: user.id,
-      type,
-      size: file.size,
-      filenameDownload: sanitizeFilename(file.name),
-      migrated: false,
-      documentContent: {
-        create: {
-          content: multipartFormData.data
-        }
-      }
+      createdBy: {
+        connect: { id: user.id }
+      },
+      familyFile: {
+        connect: { id: input.familyFileId }
+      },
+      beneficiary: {
+        connect: { id: input.beneficiaryId }
+      },
+      name: filename,
+      filenameDisk: filepath,
+      filenameDownload: filepath,
+      type: input.type,
+      confidential: input.confidential,
+      tags: input.tags,
+      size: input.file.size,
+      mimeType: input.file.mimeType,
+      migrated: true // migrated to S3
     }
   })
 
