@@ -29,43 +29,66 @@ import {
 } from '~/utils/constants/filters'
 import { WorkshopPeriodFilter } from '~/types/workshop'
 
-const statFilterSchema = z.object({
-  helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
-  period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
-  fromDate: z.coerce.date().nullish(),
-  toDate: z.coerce
-    .date()
-    .nullish()
-    .transform(v => {
-      if (v === undefined || v === null) {
-        return v
-      }
-      return dayjs(v).hour(23).minute(59).second(59).toDate()
-    }),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
-  cities: z
-    .array(stringConstraint.max(50, maxStringLengthMessage(50)))
-    .nullish(),
-  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
-  ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
-    .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
-  createdById: z.array(z.string().uuid()).nullish(),
-  beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish(),
-  fromAge: z.coerce
-    .number()
-    .int(validIntNumber)
-    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish(),
-  toAge: z.coerce
-    .number()
-    .int(validIntNumber)
-    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish()
-})
+const statFilterSchema = z
+  .object({
+    helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
+    period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
+    fromDate: z.coerce.date().nullish(),
+    toDate: z.coerce
+      .date()
+      .nullish()
+      .transform(v => {
+        if (v === undefined || v === null) {
+          return v
+        }
+        return dayjs(v).hour(23).minute(59).second(59).toDate()
+      }),
+    socialSupportSubjects: z.array(z.string().uuid()).nullish(),
+    cities: z
+      .array(stringConstraint.max(50, maxStringLengthMessage(50)))
+      .nullish(),
+    referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+    ministre: z.array(z.nativeEnum(Minister)).nullish(),
+    ministereDepartementServiceAc: z
+      .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+      .nullish(),
+    ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
+    createdById: z.array(z.string().uuid()).nullish(),
+    beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
+    ageGroup: z.nativeEnum(AgeGroup).nullish(),
+    fromAge: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    toAge: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish()
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.fromAge != null &&
+      data.toAge != null &&
+      data.fromAge > data.toAge
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "L'âge maximum doit être supérieur ou égal à l'âge minimum.",
+        path: ['toAge']
+      })
+    }
+  })
+  .superRefine((data, ctx) => {
+    if (data.fromAge === 0 && data.toAge === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Veuillez entrer un nombre supérieur à 0.',
+        path: ['toAge']
+      })
+    }
+  })
 
 const workshopStatFilterSchema = z.object({
   period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
@@ -97,36 +120,59 @@ type StatFilterInput = Omit<
     | ''
 }
 
-const beneficiaryFilterSchema = z.object({
-  search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
-  referents: z.array(z.string().uuid()).nullish(),
-  status: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish(),
-  fromAge: z.coerce
-    .number()
-    .int(validIntNumber)
-    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish(),
-  toAge: z.coerce
-    .number()
-    .int(validIntNumber)
-    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish(),
-  ministereDepartementServiceAc: z
-    .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
-    .nullish(),
-  ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
-  vulnerablePerson: z
-    .string()
-    .nullish()
-    .transform(val => (val ? val === 'true' : undefined)),
-  qpv: z
-    .string()
-    .nullish()
-    .transform(val => (val ? val === 'true' : undefined)),
-  notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
-})
+const beneficiaryFilterSchema = z
+  .object({
+    search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+    socialSupportSubjects: z.array(z.string().uuid()).nullish(),
+    referents: z.array(z.string().uuid()).nullish(),
+    status: z.nativeEnum(BeneficiaryStatus).nullish(),
+    ageGroup: z.nativeEnum(AgeGroup).nullish(),
+    fromAge: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    toAge: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    ministereDepartementServiceAc: z
+      .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
+      .nullish(),
+    ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
+    vulnerablePerson: z
+      .string()
+      .nullish()
+      .transform(val => (val ? val === 'true' : undefined)),
+    qpv: z
+      .string()
+      .nullish()
+      .transform(val => (val ? val === 'true' : undefined)),
+    notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.fromAge != null &&
+      data.toAge != null &&
+      data.fromAge > data.toAge
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "L'âge maximum doit être supérieur ou égal à l'âge minimum.",
+        path: ['toAge']
+      })
+    }
+  })
+  .superRefine((data, ctx) => {
+    if (data.fromAge === 0 && data.toAge === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Veuillez entrer un nombre supérieur à 0.',
+        path: ['toAge']
+      })
+    }
+  })
 
 type BeneficiaryFilterInput = z.input<typeof beneficiaryFilterSchema>
 type BeneficiaryFilterServerInput = z.output<typeof beneficiaryFilterSchema>
