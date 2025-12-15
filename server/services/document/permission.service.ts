@@ -9,7 +9,10 @@ export async function getEditionPermissions(
 ) {
   const document = await DocumentRepo.findUniqueOrThrow(ctx.user, {
     where: { key },
-    include: {
+    select: {
+      key: true,
+      confidential: true,
+      createdById: true,
       familyFile: {
         select: {
           id: true,
