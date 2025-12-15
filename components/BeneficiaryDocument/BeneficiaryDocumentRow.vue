@@ -7,7 +7,7 @@
         <span
           class="name-container"
           :title="document.name"
-          >{{ document.name }}</span
+          >{{ document.name }} {{ document.migrated ? '[S3]' : '[DB]' }}</span
         >
         <template v-if="familyFileIdentification.length > 1">
           <br />
@@ -165,12 +165,12 @@
       key: props.document.key
     })
 
-    if (!data || status === 'error') {
+    if (!data.value || status.value === 'error') {
       snackbar.error('Le chargement du document a échoué.')
       return
     }
 
-    open(data.value.url)
+    open(data.value)
   }
 
   async function onDownload() {
@@ -190,12 +190,12 @@
       key: props.document.key
     })
 
-    if (!data || status === 'error') {
+    if (!data.value || status.value === 'error') {
       snackbar.error('Le chargement du document a échoué.')
       return
     }
 
-    download(data.value.url, props.document.name, props.document.type)
+    download(data.value, props.document.name, props.document.type)
   }
 
   function onEdit() {

@@ -4,7 +4,6 @@ import type { DeleteDocumentInput } from '~/server/schema'
 import { deleteDocumentSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
-import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
 
 const securityCheck = async (
@@ -19,17 +18,16 @@ const securityCheck = async (
 }
 
 const handler = async ({
+  ctx,
   input
 }: {
   ctx: ProtectedAppContext
   input: DeleteDocumentInput
-}) => {
-  const { documentKey } = input
-
-  await DocumentRepo.prisma.delete({
-    where: { key: documentKey }
+}) =>
+  DocumentService.deleteDocument({
+    user: ctx.user,
+    key: input.documentKey
   })
-}
 
 export const deleteDocumentMutation = createMutation({
   inputValidation: deleteDocumentSchema,
