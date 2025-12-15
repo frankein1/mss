@@ -24,7 +24,8 @@ export function getPresignedUrlForUpload(
 
 export function getSignedUrlForRead(
   runtimeConfig: RuntimeConfig['s3'],
-  key: string
+  key: string,
+  expiresInSeconds = 60
 ) {
   const client = getS3Client()
 
@@ -33,5 +34,5 @@ export function getSignedUrlForRead(
     Key: key
   })
 
-  return getSignedUrl(client, command)
+  return getSignedUrl(client, command, { expiresIn: expiresInSeconds })
 }
