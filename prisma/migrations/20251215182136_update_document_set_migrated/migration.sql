@@ -1,0 +1,1 @@
+update "public"."document" set migrated = 'false';
