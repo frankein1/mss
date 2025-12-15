@@ -89,6 +89,15 @@ const statFilterSchema = z
       })
     }
   })
+  .superRefine((data, ctx) => {
+    if (data.toAge && data.toAge >= dayjs().year()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Âge maximum invalide.',
+        path: ['toAge']
+      })
+    }
+  })
 
 const workshopStatFilterSchema = z.object({
   period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
@@ -169,6 +178,15 @@ const beneficiaryFilterSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Veuillez entrer un nombre supérieur à 0.',
+        path: ['toAge']
+      })
+    }
+  })
+  .superRefine((data, ctx) => {
+    if (data.toAge && data.toAge >= dayjs().year()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Âge maximum invalide.',
         path: ['toAge']
       })
     }
