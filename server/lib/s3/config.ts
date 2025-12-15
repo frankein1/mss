@@ -12,7 +12,7 @@ export function getS3Client() {
   instance = new S3Client({
     credentials: {
       accessKeyId: config.s3.accessKeyId,
-      secretAccessKey: config.s3.accessKeyId
+      secretAccessKey: config.s3.secretAccessKey
     },
     region: config.s3.region,
     endpoint: config.s3.endpoint
