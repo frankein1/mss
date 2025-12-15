@@ -6,7 +6,10 @@ import { getPresignedUrlForUpload } from '~/server/lib/s3/signed-url'
 import { BeneficiaryRepo, DocumentRepo } from '~/server/database'
 import { UserActivityType } from '@prisma/client'
 import { FamilyFileService } from '~/server/services'
-import { generateFilenameForDocument } from './helper'
+import {
+  generateFilenameForDocument,
+  generateFileRootForDocument
+} from './helper'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -42,7 +45,7 @@ const handler = async ({
   input: PrepareUploadInput
 }) => {
   const filename = generateFilenameForDocument(input.file.name)
-  const filepath = `${ctx.structure.id}/${input.beneficiaryId}/${filename}`
+  const filepath = `${generateFileRootForDocument(ctx.structure.id, input.beneficiaryId)}/${filename}`
 
   // user asks for signed url for filename
   const config = useRuntimeConfig()
