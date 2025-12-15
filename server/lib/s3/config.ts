@@ -15,9 +15,7 @@ export function getS3Client() {
       secretAccessKey: config.s3.accessKeyId
     },
     region: config.s3.region,
-    endpoint: config.s3.endpoint,
-    requestChecksumCalculation: 'WHEN_REQUIRED',
-    responseChecksumValidation: 'WHEN_REQUIRED'
+    endpoint: config.s3.endpoint
   })
 
   return instance
