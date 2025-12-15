@@ -49,6 +49,7 @@ async function inactiveQuery() {
 
 async function inactiveQueryFromNotification() {
   return await NotificationRepo.prisma.findMany({
+    relationLoadStrategy: 'query',
     distinct: ['beneficiaryId'],
     where: {
       type: NotificationType.ArchiveDueOneMonth,

@@ -105,14 +105,13 @@ function archiveScheduler() {
   const isLocalOrDev = ['local', 'development'].includes(
     publicConfig.mssEnvironment
   )
+  // For test on dev deployment use 30 min scheduler
   if (isLocalOrDev) {
     scheduler
       .run(async () => {
         await createArchiveDueOneMonthNotifications()
         await createArchiveDueRemindersNotifications()
       })
-      // .dailyAt(1, 0)
-      // FIXME for test on dev deployment use 30 min scheduler
       .everyThirtyMinutes()
     return
   }
