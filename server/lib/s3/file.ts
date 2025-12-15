@@ -1,4 +1,5 @@
-import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import { getS3Client } from './config'
 import type { RuntimeConfig } from 'nuxt/schema'
 
@@ -10,16 +11,19 @@ export async function upload(
 ) {
   const client = getS3Client()
 
-  const command = new PutObjectCommand({
-    Bucket: runtimeConfig.bucket,
-    Body: data,
-    Key: key,
-    ContentType: contentType
+  const upload = new Upload({
+    client,
+    params: {
+      Bucket: runtimeConfig.bucket,
+      Body: data,
+      Key: key,
+      ContentType: contentType
+    }
   })
 
-  await client.send(command)
+  const res = await upload.done()
 
-  return key
+  return res.Key
 }
 
 export async function deleteFile(
