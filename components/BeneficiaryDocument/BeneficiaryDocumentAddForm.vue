@@ -139,7 +139,11 @@
       'input',
       JSON.stringify({
         ...data,
-        file: { size: file.size, mimeType: file.type, name: file.name }
+        file: {
+          size: file.size,
+          mimeType: file.type,
+          name: file.name
+        }
       })
     )
     formData.append('file', file)
