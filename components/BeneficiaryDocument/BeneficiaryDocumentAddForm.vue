@@ -161,7 +161,6 @@
     }
 
     upload.value.status = 'success'
-    console.log(upload.value.res)
     props.newDocument(upload.value.res, file.name)
   }
 
