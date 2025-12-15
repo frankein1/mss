@@ -102,7 +102,7 @@ export default defineEventHandler(async event => {
     throw invalidError('No multipart form data')
   }
 
-  const file = multipartFormData[0]
+  const file = multipartFormData.find(el => el.name === 'file')
 
   if (!file || !validateDocumentType(file.data)) {
     throw createError({
