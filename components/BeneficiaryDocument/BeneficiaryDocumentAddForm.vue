@@ -132,7 +132,6 @@
     upload.value.status = 'pending'
     upload.value.error = undefined
 
-    // Create unvalidated document entry in DB and return S3 presigned URL for upload
     const { file, ...data } = values
 
     const formData = new FormData()
