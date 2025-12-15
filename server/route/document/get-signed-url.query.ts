@@ -1,15 +1,16 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { CreateViewUrlInput } from '~/server/schema'
-import { createViewUrlSchema } from '~/server/schema'
+import { createQuery } from '~/server/route'
+import type { GetSignedUrlInput } from '~/server/schema'
+import { getSignedUrlSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
 import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
+import { getSignedUrlForRead } from '~/server/lib/s3/signed-url'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: CreateViewUrlInput
+  input: GetSignedUrlInput
 ) => {
   const { permissions } = await DocumentService.getEditionPermissions(
     ctx,
@@ -24,32 +25,29 @@ const handler = async ({
   input
 }: {
   ctx: ProtectedAppContext
-  input: CreateViewUrlInput
+  input: GetSignedUrlInput
 }) => {
+  const config = useRuntimeConfig()
+
   const { key } = input
-  const document = await DocumentRepo.findUniqueOrThrow(user, {
+  const { filenameDisk } = await DocumentRepo.findUniqueOrThrow(user, {
     where: { key },
-    include: {
-      documentContent: true
-    }
+    select: { filenameDisk: true }
   })
 
-  return {
-    content: document.documentContent?.content,
-    name: document.name
-  }
+  const url = await getSignedUrlForRead(config.s3, filenameDisk)
+
+  return url
 }
 
-export const createViewUrlMutation = createMutation({
-  inputValidation: createViewUrlSchema,
+export const getSignedUrlQuery = createQuery({
+  inputValidation: getSignedUrlSchema,
   securityCheck,
   handler,
   auditLog: {
-    key: 'document.getViewUrl',
+    key: 'document.getSignedUrl',
     target: 'Document',
-    targetId: ({ input }) => {
-      return input.key
-    },
+    targetId: ({ input }) => input.key,
     action: UserActivityType.VIEW
   }
 })

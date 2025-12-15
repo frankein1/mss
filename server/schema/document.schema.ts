@@ -87,13 +87,7 @@ export const editDocumentSchema = z.object({
   confidential: z.boolean().default(false)
 })
 
-export const createUploadUrlSchema = z.object({
-  name: stringConstraint.max(150, maxStringLengthMessage(150)),
-  mimeType: stringConstraint.max(50, maxStringLengthMessage(50)),
-  beneficiaryId: z.string().uuid()
-})
-
-export const createViewUrlSchema = z.object({ key: z.string() })
+export const getSignedUrlSchema = z.object({ key: z.string() })
 
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
 type PrepareUploadInput = z.infer<typeof prepareUploadSchema>
@@ -101,8 +95,7 @@ type ValidateUploadInput = z.infer<typeof validateUploadSchema>
 type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
 type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
-type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
-type CreateViewUrlInput = z.infer<typeof createViewUrlSchema>
+type GetSignedUrlInput = z.infer<typeof getSignedUrlSchema>
 
 export type {
   AddDocumentInput,
@@ -110,8 +103,7 @@ export type {
   ValidateUploadInput,
   EditDocumentInput,
   DeleteDocumentInput,
-  CreateUploadUrlInput,
-  CreateViewUrlInput,
+  GetSignedUrlInput,
   UploadBrowserDocumentInput
 }
 export const getDocumentKeySchema = z.object({

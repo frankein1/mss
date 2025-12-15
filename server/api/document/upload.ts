@@ -12,7 +12,11 @@ import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
-import { generateFilenameForDocument } from '~/server/route/document/helper'
+import {
+  generateFilenameForDocument,
+  generateFileRootForDocument
+} from '~/server/route/document/helper'
+import { upload } from '~/server/lib/s3/file'
 
 export interface MultiPartData {
   data: Buffer
@@ -22,6 +26,7 @@ export interface MultiPartData {
 }
 
 export default defineEventHandler(async event => {
+  const config = useRuntimeConfig()
   const user = event.context.auth?.user
   if (
     !user ||
@@ -50,7 +55,7 @@ export default defineEventHandler(async event => {
   try {
     input = addDocumentSchema.parse(data)
   } catch (e: unknown) {
-    console.log(e)
+    console.log('error in parsing', e)
     throw createError({
       statusCode: 400,
       message: 'Les données entrantes ne sont pas valides'
@@ -106,7 +111,11 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const document = await addDocument(input, user)
+  const filename = generateFilenameForDocument(input.file.name)
+  const filepath = `${generateFileRootForDocument(user.structureId, input.beneficiaryId)}/${filename}`
+
+  await upload(config.s3, filepath, file.data, input.type)
+  const document = await addDocument(input, user, filename, filepath)
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
 
@@ -151,10 +160,12 @@ async function addNotification(
   await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
-async function addDocument(input: AddDocumentInput, user: JwtUser) {
-  const filename = generateFilenameForDocument(input.file.name)
-  const filepath = `${user.structureId}/${input.beneficiaryId}/${filename}`
-
+async function addDocument(
+  input: AddDocumentInput,
+  user: JwtUser,
+  filename: string,
+  filepath: string
+) {
   const document = await DocumentRepo.create(user, {
     select: {
       key: true,
