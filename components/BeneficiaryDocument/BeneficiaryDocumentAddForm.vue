@@ -21,14 +21,6 @@
         required
       />
     </template>
-
-    <VeeInputFile
-      label="selectionner un fichier"
-      hint="Taille maximum: 20 Mo. Type de fichiers accepté: pdf, image, Excel (.xls, .xlsx), Word (.doc, .docx), OpenDocument (.ods, .odt)"
-      name="file"
-      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
-      required
-    />
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
@@ -48,6 +40,13 @@
       name="confidential"
     />
 
+    <VeeInputFile
+      label="Selectionner un fichier"
+      hint="Taille maximum: 20Mo"
+      name="file"
+      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
+      required
+    />
     <button
       class="fr-btn fr-mt-3w"
       type="submit"

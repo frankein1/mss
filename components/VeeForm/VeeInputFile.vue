@@ -16,39 +16,23 @@
         class="color-red"
         >*</span
       >
-    </label>
-    <div
-      class="dropdown-zone"
-      :class="{ 'is-dragover': isDragOver }"
-      @dragover.prevent="onDragOver"
-      @dragleave="onDragLeave"
-      @drop="onDrop"
-    >
-      <p
-        v-if="selectedFile"
-        class="text--success fr-text--bold"
-      >
-        Document ajouté !
-      </p>
-      <p class="fr-mb-1v">
-        Glissez-déposez un document, ou
-        <button
-          type="button"
-          class=""
-          :aria-describedby="ariaDescribedby"
-          :aria-labelledby="labelledBy"
-          @click="triggerFileInput"
-        >
-          {{ label }}</button
-        >.
-      </p>
-      <p
+      <span
         v-if="hint"
         class="fr-hint-text"
       >
         {{ hint }}
-      </p>
-    </div>
+      </span>
+    </label>
+    <button
+      type="button"
+      class="fr-btn fr-btn--secondary fr-btn--sm"
+      :aria-describedby="ariaDescribedby"
+      :aria-labelledby="labelledBy"
+      @click="triggerFileInput"
+    >
+      {{ label }}
+    </button>
+    <span class="fr-ml-2v fr-text--sm">{{ selectedFile?.name }}</span>
     <input
       :id="id"
       ref="fileInput"
@@ -177,63 +161,4 @@
       fileInput.value.click()
     }
   }
-
-  // Drag n drop
-
-  const isDragOver = ref(false)
-
-  const onDragOver = (event: DragEvent) => {
-    event.preventDefault()
-    isDragOver.value = true
-  }
-  const onDragLeave = () => {
-    isDragOver.value = false
-  }
-
-  const onDrop = (event: DragEvent) => {
-    event.preventDefault()
-    if (!event.dataTransfer?.files?.length) {
-      return
-    }
-    const file = event.dataTransfer.files[0]
-    if (!file) {
-      return
-    }
-    selectedFile.value = file
-    customFileName.value = file.name
-    if (fileInput.value) {
-      const dt = new DataTransfer()
-      dt.items.add(file)
-      fileInput.value.files = dt.files
-    }
-    setValue(file)
-  }
 </script>
-<style lang="scss" scoped>
-  .dropdown-zone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3rem;
-    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%234550E5' stroke-width='2' stroke-dasharray='6%2c 6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
-    border-radius: 16px;
-    margin-top: 1rem;
-
-    &.is-dragover {
-      background-color: rgb(69 80 229 / 5%);
-    }
-
-    p {
-      text-align: center;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      background: none;
-      color: blue;
-      padding: 0;
-      display: inline-block;
-    }
-  }
-</style>
