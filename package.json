@@ -1,6 +1,6 @@
 {
   "name": "monsuivisocial-v2",
-  "version": "1.52.2",
+  "version": "1.52.3",
   "scripts": {
     "dev": "nuxt dev",
     "dev:log": "FORCE_COLOR=1 LOG=prisma,trpc npm run dev",

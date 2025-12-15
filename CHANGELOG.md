@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.52.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.2...v1.52.3) (2025-12-15)
+
+
+### Bug Fixes
+
+* **document:** ajout d'une zone de versement ([e794c55](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e794c557980c95228a2db105634c9adab5056546))
+* **filtres:** ajout de règle de vérification des tranches d'ages personnalisées ([3ae02e7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3ae02e75f6da040e634eec2c89f9b8dad8bd1f9e)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/974#note_2947525890](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/974/issues/note_2947525890)
+
 ## [1.52.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.1...v1.52.2) (2025-12-08)
 
 
