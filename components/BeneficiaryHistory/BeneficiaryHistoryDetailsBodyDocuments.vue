@@ -39,7 +39,6 @@
     }
 
     // Else, fetch document from S3
-
     const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
       key
     })
