@@ -42,7 +42,6 @@ export const DocumentRepo = {
   count,
   create,
   prisma: {
-    create: prismaClient.document.create,
     delete: prismaClient.document.delete,
     deleteMany: prismaClient.document.deleteMany,
     update: prismaClient.document.update
