@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid'
+import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 
 /** Sanitize filename and deduplicate by adding a random string before the file extension */
 export function generateFilenameForDocument(name: string) {
