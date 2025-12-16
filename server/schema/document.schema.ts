@@ -55,19 +55,6 @@ export const addDocumentSchema = z.object({
   })
 })
 
-export const prepareUploadSchema = z.object({
-  familyFileId: z.string(errorMessages).uuid(),
-  beneficiaryId: z.string(errorMessages).uuid(),
-  type: requiredNativeEnum(DocumentType),
-  tags: z.array(z.string()),
-  confidential: z.boolean().default(false),
-  file: z.object({
-    name: limitedStringConstraint(0, 200),
-    mimeType: documentMimeTypeValidation,
-    size: documentSizeValidation
-  })
-})
-
 export const validateUploadSchema = z.object({
   key: z.string().uuid()
 })
@@ -94,7 +81,6 @@ export const createUploadUrlSchema = z.object({
 })
 
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
-type PrepareUploadInput = z.infer<typeof prepareUploadSchema>
 type ValidateUploadInput = z.infer<typeof validateUploadSchema>
 type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
@@ -103,7 +89,6 @@ type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
 
 export type {
   AddDocumentInput,
-  PrepareUploadInput,
   ValidateUploadInput,
   EditDocumentInput,
   DeleteDocumentInput,
