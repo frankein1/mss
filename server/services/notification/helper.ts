@@ -36,6 +36,7 @@ export async function getInactiveBeneficiariesWithOneMonthNotification(
 async function inactiveQuery() {
   const start = performance.now()
   const res = await BeneficiaryRepo.prisma.findMany({
+    relationLoadStrategy: 'query',
     where: where(),
     select: select()
   })
