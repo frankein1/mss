@@ -147,6 +147,7 @@ const adminHandler = async ({
       | 'createdById'
       | 'archiveDueDate'
       | 'archiveDueDateHistory'
+      | 'lastActivity'
       | 'status'
       | 'created'
       | 'updated'

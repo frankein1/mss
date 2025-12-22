@@ -166,6 +166,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   aidant_connect_authorized: true,
   archive_due_date: true,
   archive_due_date_history: true,
+  last_activity: true,
   service_providers: true,
   socio_professional_category: true,
   study_level: true,

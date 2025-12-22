@@ -22,7 +22,8 @@
     "prepare": "husky",
     "scheduler:workshop-anonymization": "tsx server/scheduler/workshop/anonymize-external-attendees.ts",
     "scheduler:metabase-anonymization": "tsx server/scheduler/db-anonymizer/index.ts",
-    "scheduler:cleanup-user-activities": "tsx server/scheduler/user-activity/cleanup-user-activities.ts"
+    "scheduler:cleanup-user-activities": "tsx server/scheduler/user-activity/cleanup-user-activities.ts",
+    "scheduler:update-last-activity": "tsx server/scheduler/beneficiary/update-last-activity.ts"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",

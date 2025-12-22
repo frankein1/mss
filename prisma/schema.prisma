@@ -1749,6 +1749,7 @@ model Beneficiary {
   // archive due date
   archiveDueDate        DateTime?  @map("archive_due_date") @db.Date
   archiveDueDateHistory DateTime[] @map("archive_due_date_history") @db.Date
+  lastActivity          DateTime?  @map("last_activity")
 
   relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")

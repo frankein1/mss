@@ -1,11 +1,12 @@
 import type { H3Event } from 'h3'
 import type { ZodType, z } from 'zod'
-import type { UserActivityObject, UserActivityType } from '@prisma/client'
 import { isAdmin } from '../security/rules/helpers'
 import { forbiddenError } from '~/server/trpc'
 import { addUserActivity } from '~/server/query'
 import type { SecurityRule, SecurityRuleGrantee } from '~/server/security'
 import type { SecurityRuleStructure } from '~/server/security/rules/types'
+import { UserActivityType, type UserActivityObject } from '@prisma/client'
+import { handleBeneficiariesLastActivityUpdate } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 
 export type AdminRouteHandlerContext<Grantee> = {
   user: Grantee
@@ -130,14 +131,34 @@ export const createRoute = <
     if (options.auditLog) {
       const { user } = ctx
       const { key, target, targetId, action } = options.auditLog
+      const objectId = targetId({ ctx, input, routeResult })
       await addUserActivity({
         key,
         user,
         activity: action,
         object: target,
-        objectId: targetId({ ctx, input, routeResult }),
+        objectId,
         content: mutation ? input : null
       })
+      if (
+        action === UserActivityType.CREATE ||
+        action === UserActivityType.UPDATE
+      ) {
+        // Do not wait for this action
+        handleBeneficiariesLastActivityUpdate({
+          target,
+          input,
+          objectId,
+          key
+        })
+          .then(() => {
+            console.debug(`update beneficiaries last activity: ${action}`)
+          })
+          .catch((e: unknown) => {
+            /* TODO/ Management de l'erreur, envoi à sentry ? */
+            console.error(e)
+          })
+      }
     }
 
     return routeResult

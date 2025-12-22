@@ -24,6 +24,7 @@ export async function create(params: CreateParams) {
     createdBy: {
       connect: { id: ctx.user.id }
     },
+    lastActivity: new Date(),
     ...restOfInput,
     familyFile: {
       create: {

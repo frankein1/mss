@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import RemoveAccents from 'remove-accents'
 import { AgeGroup } from '~/client/options'
 import type { BeneficiaryFilterServerInput } from '~/server/schema'
@@ -119,4 +120,84 @@ export function prepareBeneficiaryFilters(
   }
 
   return formattedFilters
+}
+
+// Helpers for updating lastActivity
+const prismaClient = new PrismaClient()
+export const update = async (beneficiaryId: string, lastActivity: Date) => {
+  return await prismaClient.beneficiary.update({
+    where: { id: beneficiaryId },
+    data: {
+      lastActivity: lastActivity
+    }
+  })
+}
+
+export const getBeneficiariesWithLimit = async (limit: number) => {
+  return await prismaClient.beneficiary.findMany({
+    relationLoadStrategy: 'query',
+    take: limit,
+    where: {
+      lastActivity: null
+    },
+    select: {
+      id: true,
+      updated: true,
+      created: true,
+      documents: {
+        select: {
+          created: true
+        }
+      },
+      socialSupports: {
+        select: {
+          updated: true
+        }
+      },
+      familyFile: {
+        select: {
+          budget: {
+            select: {
+              updated: true,
+              expenses: {
+                select: {
+                  updated: true,
+                  loans: {
+                    select: {
+                      updated: true
+                    }
+                  },
+                  debts: {
+                    select: {
+                      updated: true
+                    }
+                  },
+                  customs: {
+                    select: {
+                      updated: true
+                    }
+                  }
+                }
+              },
+              incomes: {
+                select: {
+                  updated: true,
+                  customs: {
+                    select: {
+                      updated: true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      workshopAttendees: {
+        select: {
+          updated: true
+        }
+      }
+    }
+  })
 }

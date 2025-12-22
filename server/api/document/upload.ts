@@ -13,6 +13,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
 import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
+import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 
 export interface MultiPartData {
   data: Buffer
@@ -107,6 +108,7 @@ export default defineEventHandler(async event => {
 
   const document = await addDocument(input, user, file)
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
+  await updateBeneficiariesLastActivity([document.beneficiaryId])
 
   return send(event, document.key)
 })

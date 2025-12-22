@@ -33,6 +33,7 @@ export async function createFamilyFileMember(params: CreateParams) {
     fileNumber,
     structure: connect(ctx.structure.id),
     createdBy: connect(ctx.user.id),
+    lastActivity: new Date(),
     familyFile: {
       ...connect(familyFileId)
     },

@@ -97,6 +97,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   updated: 'Dernière mise à jour',
   archiveDueDate: "Date d'archivage",
   archiveDueDateHistory: "Historique des dates d'archivage",
+  lastActivity: 'Date de dernière activité',
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',

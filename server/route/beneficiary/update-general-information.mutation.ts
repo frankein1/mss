@@ -7,6 +7,7 @@ import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
+import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

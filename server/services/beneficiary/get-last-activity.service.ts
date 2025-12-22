@@ -70,28 +70,6 @@ export const getBeneficiaryLastActivity = (
         .filter(Boolean) as Date[])
     : []
 
-  const { public: publicConfig } = useRuntimeConfig()
-  if (
-    publicConfig.mssEnvironment === 'local' ||
-    publicConfig.mssEnvironment === 'demo' ||
-    publicConfig.mssEnvironment === 'development'
-  ) {
-    console.info('Activities', [
-      beneficiary.updated,
-      beneficiary.created,
-      beneficiary.familyFile.budget?.updated,
-      beneficiary.familyFile.budget?.expenses?.updated,
-      socialSupportActivites,
-      documentsActivites,
-      incomesActivites,
-      loanActivities,
-      debtsActivities,
-      customExpenseActivities,
-      customIncomeActivities,
-      workshopActivities
-    ])
-  }
-
   const migrationDate = new Date('2024-06-03T23:06:59.476Z')
   const activities = [
     beneficiary.updated,
