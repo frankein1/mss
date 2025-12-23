@@ -31,7 +31,6 @@ function cleanInput({
 }) {
   const {
     status,
-    handlingDate,
     refusalReason,
     dispatchDate,
     decisionDate,
@@ -63,7 +62,6 @@ function cleanInput({
       ? instructorOrganizationContactId
       : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
-    handlingDate: isAccepted ? handlingDate : null,
     refusalReason: isRefused ? refusalReason : null,
     dispatchDate: isExternalStructure ? dispatchDate : null,
     examinationDate: !isExternalStructure ? examinationDate : null,

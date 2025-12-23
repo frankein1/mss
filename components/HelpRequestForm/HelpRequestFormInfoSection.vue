@@ -61,13 +61,21 @@
       <div
         v-if="isAnswered"
         class="fr-col-12 fr-col-lg-6"
-        :class="{
-          'fr-col-offset-lg-6--right': isRefused && !isFinancialSupport
-        }"
       >
         <VeeInput
           name="decisionDate"
           :label="helpRequestFieldLabels.decisionDate"
+          type="date"
+        />
+      </div>
+
+      <div
+        class="fr-col-12 fr-col-lg-6"
+        :class="{ 'fr-col-offset-lg-6--right': !isAnswered }"
+      >
+        <VeeInput
+          name="handlingDate"
+          :label="helpRequestFieldLabels.handlingDate"
           type="date"
         />
       </div>
@@ -80,14 +88,6 @@
           <VeeCurrencyInput
             name="allocatedAmount"
             :label="helpRequestFieldLabels.allocatedAmount"
-          />
-        </div>
-
-        <div class="fr-col-12 fr-col-lg-6">
-          <VeeInput
-            name="handlingDate"
-            :label="helpRequestFieldLabels.handlingDate"
-            type="date"
           />
         </div>
 

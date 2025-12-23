@@ -102,6 +102,12 @@
   >
     Ce dossier est complet
   </li>
+  <li v-if="housingHelpRequest.handlingDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.handlingDate }} :</span
+    >
+    {{ formatDate(housingHelpRequest.handlingDate) }}
+  </li>
   <li v-if="fileInstruction.dispatchDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.dispatchDate }}&nbsp;:</span

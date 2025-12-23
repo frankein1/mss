@@ -104,7 +104,8 @@
       reason: housingHelpRequest.value.reason,
       uniqueId: housingHelpRequest.value.uniqueId,
       taxHouseholdAdditionalInformation:
-        housingHelpRequest.value.taxHouseholdAdditionalInformation
+        housingHelpRequest.value.taxHouseholdAdditionalInformation,
+      handlingDate: housingHelpRequest.value.handlingDate
     }
   })
 

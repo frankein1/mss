@@ -59,20 +59,18 @@
     >
     {{ formatDate(fileInstruction.decisionDate) }}
   </li>
-  <template v-if="status === SocialSupportStatus.Accepted">
-    <li v-if="allocatedAmount">
-      <span class="information-label"
-        >{{ helpRequestFieldLabels.allocatedAmount }} :</span
-      >
-      {{ allocatedAmount }}
-    </li>
-    <li v-if="helpRequest.handlingDate">
-      <span class="information-label"
-        >{{ helpRequestFieldLabels.handlingDate }} :</span
-      >
-      {{ formatDate(helpRequest.handlingDate) }}
-    </li>
-  </template>
+  <li v-if="helpRequest.handlingDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.handlingDate }} :</span
+    >
+    {{ formatDate(helpRequest.handlingDate) }}
+  </li>
+  <li v-if="status === SocialSupportStatus.Accepted && allocatedAmount">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.allocatedAmount }} :</span
+    >
+    {{ allocatedAmount }}
+  </li>
   <li v-if="hasRefusalReason">
     <span class="information-label"
       >{{ helpRequestFieldLabels.refusalReason }} :</span

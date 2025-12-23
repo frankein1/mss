@@ -199,6 +199,7 @@ export function filterHousingHelpRequest({
     ),
     maxRent: show(housingHelpRequest.maxRent, details),
     maxCharges: show(housingHelpRequest.maxCharges, details),
+    handlingDate: show(housingHelpRequest.handlingDate, details),
     housingType: show(housingHelpRequest.housingType, details),
     roomCount: show(housingHelpRequest.roomCount, details),
     isPmr: show(housingHelpRequest.isPmr, details),

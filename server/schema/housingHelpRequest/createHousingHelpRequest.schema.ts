@@ -48,6 +48,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   externalStructure: kindOfBooleanSchema(true),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,
+  handlingDate: dateOrEmpty,
   refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   dispatchDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
