@@ -181,6 +181,11 @@
           {{{housingHelpRequest.isFirst}}}
         </li>
 
+        {{#if housingHelpRequest.handlingDate}}
+          <li><span class='bold'>Date de la fin de prise en charge :
+            </span>{{{housingHelpRequest.handlingDate}}}</li>
+        {{/if}}
+
         {{#if housingHelpRequest.firstOpeningDate}}
           <li><span class='bold'>Date de la première demande :
             </span>{{{housingHelpRequest.firstOpeningDate}}}</li>

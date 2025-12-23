@@ -394,7 +394,6 @@ type BaseFileInstruction = Omit<
   status: string | null
   instructorOrganization: string | null
   instructorOrganizationContact: string | null
-  handlingDate: Date | null
 }
 
 type HelpRequestData = FieldLabels<
@@ -417,6 +416,7 @@ type HelpRequestData = FieldLabels<
       prescribingOrganization: string | null
       prescribingOrganizationContact: string | null
       dueDate: string | null
+      handlingDate: Date | null
     }
 >
 
@@ -465,10 +465,6 @@ const getHelpRequestData = (
       socialSupport.fileInstruction?.examinationDate?.toLocaleDateString(),
     decisionDate:
       socialSupport.fileInstruction?.decisionDate?.toLocaleDateString('fr-FR'),
-    handlingDate:
-      socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(
-        'fr-FR'
-      ),
     refusalReason: helpRequestRefusalReasonKeys.value(
       socialSupport.fileInstruction?.refusalReason
     ),
@@ -560,7 +556,11 @@ const getHelpRequestData = (
             .join(', '),
         isPmr: socialSupport.fileInstruction?.housingHelpRequest?.isPmr
           ? 'oui'
-          : 'non'
+          : 'non',
+        handlingDate:
+          socialSupport.fileInstruction?.housingHelpRequest?.handlingDate?.toLocaleDateString(
+            'fr-FR'
+          )
       }
     })
   }

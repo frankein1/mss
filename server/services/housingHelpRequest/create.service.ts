@@ -37,6 +37,7 @@ export async function create({ input, ctx }: CreateParams) {
     instructorOrganizationId,
     instructorOrganizationContactId,
     dispatchDate,
+    handlingDate,
     synthesis,
     synthesisRichText,
     privateSynthesis,
@@ -68,6 +69,7 @@ export async function create({ input, ctx }: CreateParams) {
       firstOpeningDate,
       isFirst,
       maxCharges,
+      handlingDate,
       maxRent,
       prescribingOrganization: prescribingOrganizationId
         ? connect(prescribingOrganizationId)

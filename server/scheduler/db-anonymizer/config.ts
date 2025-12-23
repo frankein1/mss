@@ -391,7 +391,8 @@ const configHousingHelpRequest: Record<
   is_pmr: true,
   reason: true,
   low_income_housing_type: true,
-  file_instruction_id: true
+  file_instruction_id: true,
+  handling_date: true
 }
 
 const configAccount: Record<

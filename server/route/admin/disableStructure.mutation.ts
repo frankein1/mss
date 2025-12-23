@@ -420,7 +420,8 @@ async function updateHousingHelpRequests(structureId: string) {
     roomCount: { set: [] },
     isPmr: null,
     reason: null,
-    lowIncomeHousingType: { set: [] }
+    lowIncomeHousingType: { set: [] },
+    handlingDate: null
   }
   await HousingHelpRequestRepo.prisma.updateMany({
     where: {
