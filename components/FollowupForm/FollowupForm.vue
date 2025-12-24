@@ -438,13 +438,41 @@
   )
 
   const doraWidgetUrl = computed(() => {
-    const code_commune = '59350' // Code commune est différent de zipcode
+    const code_commune = '93048' // Code commune est différent de zipcode
     const config = useRuntimeConfig()
     const token = config.public.dataInclusion.token
     const score_qualite_minimum = '0.8'
-    const cols = '3'
+    // const cols = '3'
     const rows = '4'
-    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols}&y=${rows}`
+    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols.value}&y=${rows}`
+  })
+
+  // Colonnes responsive TODO composable ?
+  const cols = ref<'1' | '2' | '3'>('1')
+  const updateCols = () => {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      cols.value = '1'
+      return
+    }
+
+    if (window.matchMedia('(max-width: 1247px)').matches) {
+      cols.value = '2'
+      return
+    }
+    cols.value = '3'
+  }
+  onMounted(() => {
+    updateCols()
+    const mqSmall = window.matchMedia('(max-width: 767px)')
+    const mqMedium = window.matchMedia('(max-width: 1247px)')
+
+    mqSmall.addEventListener('change', updateCols)
+    mqMedium.addEventListener('change', updateCols)
+
+    onBeforeUnmount(() => {
+      mqSmall.removeEventListener('change', updateCols)
+      mqMedium.removeEventListener('change', updateCols)
+    })
   })
 
   const socialSupportSubjectOptions = computed(() =>
