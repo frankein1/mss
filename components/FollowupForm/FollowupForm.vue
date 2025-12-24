@@ -290,6 +290,17 @@
         </div>
       </div>
 
+      <div>
+        <!-- Pour une hauteur adapté au contenu, le widget doit renvoyer sa hauteur via postMessage -->
+        <iframe
+          id="data-inclusion-frame"
+          ref="iframe"
+          :src="doraWidgetUrl"
+          height="900px"
+          width="100%"
+        ></iframe>
+      </div>
+
       <div class="fr-mb-4w">
         <h2 class="fr-h5 fr-mt-3w">Documents</h2>
 
@@ -425,6 +436,16 @@
       value: m.id
     }))
   )
+
+  const doraWidgetUrl = computed(() => {
+    const code_commune = '59350' // Code commune est différent de zipcode
+    const config = useRuntimeConfig()
+    const token = config.public.dataInclusion.token
+    const score_qualite_minimum = '0.8'
+    const cols = '3'
+    const rows = '4'
+    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols}&y=${rows}`
+  })
 
   const socialSupportSubjectOptions = computed(() =>
     toOptions(props.socialSupportSubjects, 'id', 'name')

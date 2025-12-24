@@ -229,6 +229,9 @@ export default defineNuxtConfig({
       },
       metabase: {
         publicUrl: process.env.METABASE_PUBLIC_URL
+      },
+      dataInclusion: {
+        token: process.env.DATA_INCLUSION_TOKEN
       }
     }
   },
