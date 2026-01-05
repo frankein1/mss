@@ -5,7 +5,7 @@
     message="Les informations de l'atelier n'ont pas pu être chargées."
   />
   <AtomLoader
-    v-else-if="pending"
+    v-else-if="status === 'pending' && !data"
     class="fr-mx-auto"
   />
   <div v-else-if="workshop">
@@ -54,7 +54,7 @@
   const route = useRoute()
   const workshopId = route.params.id as string
 
-  const { data, pending, error, refresh } =
+  const { data, status, error, refresh } =
     await trpcClient.workshop.getOne.useQuery({
       id: workshopId,
       includeAttendees: true
