@@ -1,3 +1,5 @@
 export * from './delete-document.mutation'
 export * from './edit-document.mutation'
 export * from './get-signed-url.query'
+export * from './get-upload-presigned-url.query'
+export * from './create.mutation'

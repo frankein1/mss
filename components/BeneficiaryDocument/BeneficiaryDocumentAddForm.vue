@@ -88,6 +88,7 @@
   }
 
   const snackbar = useSnackbar()
+  const tprcClient = useTrpcClient()
 
   const beneficiaryOptions = computed(() =>
     props.familyFileIdentification.map(m => ({
@@ -134,34 +135,75 @@
 
     const { file, ...data } = values
 
-    const formData = new FormData()
-    formData.append(
-      'input',
-      JSON.stringify({
-        ...data,
+    // const formData = new FormData()
+    // formData.append(
+    //   'input',
+    //   JSON.stringify({
+    //     ...data,
+    //     file: {
+    //       size: file.size,
+    //       mimeType: file.type,
+    //       name: file.name
+    //     }
+    //   })
+    // )
+    // formData.append('file', file)
+
+    // Get url for upload
+    const { data: url, error } =
+      await tprcClient.documents.getUploadPresignedUrl.useQuery({
+        beneficiaryId: values.beneficiaryId,
         file: {
-          size: file.size,
-          mimeType: file.type,
-          name: file.name
+          name: values.file.name,
+          size: values.file.size,
+          mimeType: values.file.type
         }
       })
-    )
-    formData.append('file', file)
 
-    // Upload document to S3 bucket via MSS server
+    if (error.value || url.value === null) {
+      upload.value.error = error.value
+      showError('Le téléversement du document a échoué [1].')
+      return
+    }
+
+    // Upload document to S3 bucket via url
+    console.log('youpi')
     try {
-      upload.value.res = await $fetch<string>('/api/document/upload', {
+      upload.value.res = await $fetch<string>(url.value.url, {
         method: 'POST',
-        body: formData
+        body: file
       })
     } catch (e: unknown) {
       upload.value.error = e
-      showError('Le téléversement du document a échoué.')
-      throw e
+      showError('Le téléversement du document a échoué [2].')
+    }
+
+    // Create document entry in DB
+    const {
+      mutate,
+      status: s,
+      error: e
+    } = tprcClient.documents.create.useMutation()
+
+    const res = await mutate({
+      ...data,
+      filename: url.value.filename,
+      filepath: url.value.filepath,
+      file: {
+        size: file.size,
+        mimeType: file.type,
+        name: file.name
+      }
+    })
+
+    if (e.value || !res) {
+      upload.value.error = e.value
+      showError('Le téléversement du document a échoué [3].')
+      return
     }
 
     upload.value.status = 'success'
-    props.newDocument(upload.value.res, file.name)
+    props.newDocument(res.key, file.name)
   }
 
   const { errors } = useDisplayFormErrors(

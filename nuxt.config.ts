@@ -197,7 +197,10 @@ export default defineNuxtConfig({
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
       region: process.env.S3_REGION || '',
       bucket: process.env.S3_BUCKET || '',
-      endpoint: process.env.S3_ENDPOINT || ''
+      endpoint: process.env.S3_ENDPOINT || '',
+      useEncryptionProxy:
+        (process.env.S3_USE_ENCRYPTION_PROXY || 'false') === 'true',
+      encryptionProxyEndpoint: process.env.S3_ENCRYPTION_PROXY_ENDPOINT || ''
     },
     public: {
       version: {
