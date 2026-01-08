@@ -46,13 +46,12 @@ Vous pouvez également nous contacter à l’adresse : ${from}.
 L'équipe de Mon Suivi Social`
 })
 
-export function getUserCreationEmailContent(
-  user: User & {
-    structure: {
-      siret: string | null
-    } | null
-  }
-) {
+export function getUserCreationEmailContent(user: {
+  email: string
+  structure: {
+    siret: string | null
+  } | null
+}) {
   const {
     public: {
       appUrl,

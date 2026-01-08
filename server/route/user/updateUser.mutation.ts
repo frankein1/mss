@@ -1,7 +1,6 @@
 import {
   UserActivityObject,
   UserActivityType,
-  UserRole,
   UserStatus
 } from '@prisma/client'
 import { createMutation } from '~/server/route'
@@ -31,7 +30,7 @@ const handler = async ({
       message: 'user cannot change is own status or role'
     })
   }
-  return await UserRepo.update(user, {
+  const { id } = await UserRepo.update(user, {
     select: { id: true },
     where: { id: input.id },
     data: {
@@ -42,14 +41,11 @@ const handler = async ({
       status: input.status ? UserStatus.Active : UserStatus.Disabled
     }
   })
+
+  return { id }
 }
 
-const securityCheck = (ctx: SecurityRuleContext, input: UpdateUserInput) => {
-  // trying to change role to Admin
-  if (input.role === UserRole.Administrator) {
-    return false
-  }
-
+const securityCheck = (ctx: SecurityRuleContext) => {
   const permissions = getAppContextPermissions(ctx)
   return permissions.module.users
 }

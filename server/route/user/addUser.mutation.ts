@@ -10,6 +10,7 @@ import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { UserActivityObject, UserActivityType } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users
@@ -35,15 +36,20 @@ const handler = async ({
   }
 
   const createdUser = await UserRepo.prisma.create({
-    data: {
-      structureId: user.structureId,
-      email: userEmail,
-      ...data
-    },
-    include: {
+    select: {
+      id: true,
+      email: true,
       structure: {
         select: { siret: true }
       }
+    },
+    data: {
+      structureId: user.structureId,
+      email: userEmail,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      role: data.role,
+      aidantConnectAuthorisation: data.aidantConnectAuthorisation
     }
   })
 
@@ -59,5 +65,11 @@ const handler = async ({
 export const addUserMutation = createMutation({
   securityCheck,
   inputValidation: createUserSchema,
-  handler
+  handler,
+  auditLog: {
+    key: 'user.create',
+    target: UserActivityObject.User,
+    targetId: ({ routeResult }) => routeResult.id,
+    action: UserActivityType.CREATE
+  }
 })

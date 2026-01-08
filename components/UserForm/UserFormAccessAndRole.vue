@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
   import { userFieldLabels } from '~/client/labels'
+  /** Role management by a Structure Manager cannot target the Administrator role */
   import { nonAdminUserRoleKeys } from '~/client/options'
   import { useAuthState } from '~/composables/useAuthState'
   import type { UpdateUserInput } from '~/server/schema'

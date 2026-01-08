@@ -44,6 +44,7 @@
   const userId = route.params.id as string
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+
   const {
     data: user,
     status: initialUserStatus,
@@ -67,7 +68,12 @@
   const { handleSubmit } = useForm<UpdateUserInput>({
     validationSchema: toTypedSchema(editUserSchema),
     initialValues: {
-      ...user.value,
+      id: user.value?.id,
+      firstName: user.value?.firstName,
+      lastName: user.value?.lastName,
+      email: user.value?.email,
+      role: user.value?.role,
+      aidantConnectAuthorisation: user.value?.aidantConnectAuthorisation,
       status: user.value?.status === 'Active'
     }
   })
