@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { NonAdminUserRole } from '~/types/user'
 import { z } from 'zod'
 import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import {
@@ -16,7 +16,8 @@ const createUserSchema = z.object({
     .max(30, maxStringLengthMessage(30))
     .min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
-  role: requiredNativeEnum(UserRole),
+  // User cannot create an Administrator or update to an Administrator
+  role: requiredNativeEnum(NonAdminUserRole),
   aidantConnectAuthorisation: z.coerce.boolean().nullish()
 })
 type CreateUserInput = z.infer<typeof createUserSchema>

@@ -47,8 +47,9 @@ describe('Authorizations', () => {
         firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
         lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
         email: fixturesUsers[FixtureUserRole.StructureManager].email,
+        //@ts-expect-error Type administrator not assignable to role.
         role: 'Administrator'
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrowError(/Administrator[\s\S]*?invalid_enum_value/i)
   })
 })
