@@ -781,6 +781,7 @@ enum Nationality {
   KGZ
   KIR
   KNA
+  XKO
   KWT
   LAO
   LSO
