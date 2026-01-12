@@ -9,7 +9,7 @@ import type {
   ProConnectClient
 } from '~/server/lib/proconnect.client'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UserRepo } from '~/server/database'
+import { UnsafeUserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
@@ -227,7 +227,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  await UserRepo.prisma.update({
+  await UnsafeUserRepo.prisma.update({
     where: {
       id: user.id
     },
@@ -381,7 +381,7 @@ async function upsertAccount({
 }
 
 async function getUser(email: string) {
-  return await UserRepo.prisma.findUnique({
+  return await UnsafeUserRepo.prisma.findUnique({
     where: { email: cleanEmail(email) },
     select: userSelect.select
   })

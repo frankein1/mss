@@ -1,6 +1,6 @@
 import type { Structure, User } from '@prisma/client'
 import { JobStatus, UserStatus } from '@prisma/client'
-import { UserRepo } from '~/server/database'
+import { UnsafeUserRepo } from '~/server/database'
 import { brevoClient } from '~/server/lib'
 import { JobResultService } from '~/server/services'
 
@@ -133,7 +133,7 @@ function buildJson(
 }
 
 async function getUsers(date: Date) {
-  const users = await UserRepo.prisma.findMany({
+  const users = await UnsafeUserRepo.prisma.findMany({
     where: {
       OR: [
         {

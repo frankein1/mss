@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { UserRepo } from '~/server/database'
+import { UnsafeUserRepo } from '~/server/database'
 import { useScheduler } from '#scheduler'
 import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
@@ -24,7 +24,7 @@ const startScheduler = () => {
 // Send a reminder email to inactive users, 2 weeks after account creation
 const createAccountReminderEmail = async () => {
   const inactiveUsers = await prismaClient.$transaction(async () => {
-    const inactiveUsers = await UserRepo.prisma.findMany({
+    const inactiveUsers = await UnsafeUserRepo.prisma.findMany({
       where: {
         lastAccess: null,
         created: {
@@ -43,7 +43,7 @@ const createAccountReminderEmail = async () => {
       }
     })
 
-    await UserRepo.prisma.updateMany({
+    await UnsafeUserRepo.prisma.updateMany({
       where: {
         id: {
           in: inactiveUsers.map((user: User) => user.id)

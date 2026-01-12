@@ -58,13 +58,8 @@ function deleteUser<T extends Prisma.UserDeleteArgs>(
 export const UserRepo = {
   prisma: {
     count: prismaClient.user.count,
-    update: prismaClient.user.update,
-    updateMany: prismaClient.user.updateMany,
-    findUnique: prismaClient.user.findUnique,
-    findUniqueOrThrow: prismaClient.user.findUniqueOrThrow,
-    findFirst: prismaClient.user.findFirst,
-    create: prismaClient.user.create,
-    findMany: prismaClient.user.findMany
+
+    create: prismaClient.user.create
   },
   findMany,
   findUniqueOrThrow,
@@ -72,4 +67,14 @@ export const UserRepo = {
   count,
   update,
   delete: deleteUser
+}
+
+export const UnsafeUserRepo = {
+  prisma: {
+    findUnique: prismaClient.user.findUnique,
+    findUniqueOrThrow: prismaClient.user.findUniqueOrThrow,
+    findMany: prismaClient.user.findMany,
+    update: prismaClient.user.update,
+    updateMany: prismaClient.user.updateMany
+  }
 }

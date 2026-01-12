@@ -15,7 +15,7 @@ import {
   NotificationRepo,
   SocialSupportRepo,
   StructureRepo,
-  UserRepo
+  UnsafeUserRepo
 } from '~/server/database'
 import { createMutation } from '~/server/route'
 import type { IdInput } from '~/server/schema'
@@ -322,7 +322,7 @@ const adminHandler = async ({
       accountReminderEmail: 0
     }
     const updateUser = () =>
-      UserRepo.prisma.update({
+      UnsafeUserRepo.prisma.update({
         where: { id: user.id },
         data: userUpdate
       })

@@ -1,4 +1,9 @@
-import { BeneficiaryRepo, StructureRepo, UserRepo } from '~/server/database'
+import {
+  BeneficiaryRepo,
+  StructureRepo,
+  UnsafeUserRepo,
+  UserRepo
+} from '~/server/database'
 import { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import {
   createCompany,
@@ -17,7 +22,7 @@ export async function createOrUpdateUser(userId: string) {
     return
   }
   const [user, overseenBeneficiaryCount] = await Promise.all([
-    UserRepo.prisma.findUniqueOrThrow({
+    UnsafeUserRepo.prisma.findUniqueOrThrow({
       select: {
         id: true,
         email: true,

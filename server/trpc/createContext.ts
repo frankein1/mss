@@ -2,7 +2,7 @@ import type { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
 import { parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
-import { UserRepo } from '~/server/database'
+import { UnsafeUserRepo } from '~/server/database'
 
 export const structureContextQuery = () => ({
   // FIXME: move 'externalRdvspActive' to the token
@@ -32,7 +32,7 @@ export const createContext = async (event: H3Event) => {
 
   try {
     // FIXME: remove this call & retrieve info directly from the token
-    const user = await UserRepo.prisma.findUniqueOrThrow({
+    const user = await UnsafeUserRepo.prisma.findUniqueOrThrow({
       where: { id: userData.id },
       select: {
         ...userContextQuery().select,
