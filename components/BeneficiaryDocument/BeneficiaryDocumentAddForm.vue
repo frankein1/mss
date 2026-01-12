@@ -167,15 +167,16 @@
     }
 
     // Upload document to S3 bucket via url
-    console.log('youpi')
+    console.log('youpi', url.value.url)
     try {
       upload.value.res = await $fetch<string>(url.value.url, {
-        method: 'POST',
+        method: 'PUT',
         body: file
       })
     } catch (e: unknown) {
       upload.value.error = e
       showError('Le téléversement du document a échoué [2].')
+      return
     }
 
     // Create document entry in DB

@@ -12,7 +12,7 @@ import {
   NotificationRepo
 } from '~/server/database'
 import { FamilyFileService } from '~/server/services'
-import { getSignedUrlForHead } from '~/server/lib/s3/signed-url'
+import { getSignedUrlForRead } from '~/server/lib/s3/signed-url'
 import { NotificationType, UserActivityType } from '@prisma/client'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 
@@ -49,14 +49,17 @@ const handler = async ({
   // Get presigned url for reading first bytes. You don't have to load the whole file in memory.
   // For validating a file uploaded to S3 using Lambda for example, it may be
   // enough to load the files first 100 bytes and validate against them.
-  const headUrl = await getSignedUrlForHead(config.s3, input.filepath)
+  const nBytes = 100
+  const url = await getSignedUrlForRead(config.s3, input.filepath, 60, nBytes)
 
-  // Fetch decrypted document HEAD for first bytes validation
-  const reponseHead = await fetch(headUrl, { method: 'HEAD' })
-  const head = await reponseHead.json()
-  const buffer = Buffer.from(head)
+  // Fetch decrypted document GET for first bytes validation
+  console.log(url)
+  const response = await fetch(url, { method: 'GET' })
+  const bytes = await response.bytes()
 
-  if (!validateDocumentType(buffer)) {
+  console.log('after buffer creation', bytes.length)
+
+  if (!validateDocumentType(Buffer.from(bytes))) {
     // TODO delete document in S3
     throw forbiddenError('Invalid file format from document type analysis')
   }

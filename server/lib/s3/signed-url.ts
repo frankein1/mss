@@ -2,31 +2,16 @@
  * If an encryption proxy is setup, a step of url domain replacement by the proxy url
  * is integrated
  */
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  HeadObjectCommand
-} from '@aws-sdk/client-s3'
+import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { getS3Client } from './config'
+import { getDSProxyS3Client, getS3Client } from './config'
 import type { RuntimeConfig } from 'nuxt/schema'
 
-const replaceUrlIfEncryptionActivated = (
-  config: RuntimeConfig['s3'],
-  url: string
-) => {
-  if (!config.useEncryptionProxy) {
-    return url
-  }
+const getProxyClient = (config: RuntimeConfig['s3']) =>
+  config.useEncryptionProxy ? getDSProxyS3Client() : getS3Client()
 
-  const replaced = new URL(url)
-
-  replaced.host = new URL(config.encryptionProxyEndpoint).host
-  replaced.protocol = new URL(config.encryptionProxyEndpoint).protocol
-  replaced.pathname = `/upstream${replaced.pathname}`
-
-  return replaced.toString()
-}
+const getProxyBucket = (config: RuntimeConfig['s3']) =>
+  config.useEncryptionProxy ? 'upstream' : config.bucket
 
 export async function getPresignedUrlForUpload(
   runtimeConfig: RuntimeConfig['s3'],
@@ -35,60 +20,43 @@ export async function getPresignedUrlForUpload(
   contentLength: number,
   expiresInSeconds = 60
 ) {
-  const client = getS3Client()
+  console.log(
+    'runtimeConfig.useEncryptionProxy',
+    runtimeConfig.useEncryptionProxy
+  )
 
-  const command = new PutObjectCommand({
-    Bucket: runtimeConfig.bucket,
-    Key: key
-    // ContentLength: contentLength,
-    // ContentType: contentType
-  })
+  const client = getProxyClient(runtimeConfig)
+  const Bucket = getProxyBucket(runtimeConfig)
+
+  const command = new PutObjectCommand({ Bucket, Key: key })
 
   const url = await getSignedUrl(client, command, {
     expiresIn: expiresInSeconds
   })
 
-  console.log(url)
+  console.log('url produced by aws sdk for upload', url)
 
-  return replaceUrlIfEncryptionActivated(runtimeConfig, url)
+  return url
 }
 
 export async function getSignedUrlForRead(
   runtimeConfig: RuntimeConfig['s3'],
   key: string,
-  nBytes = 100,
-  expiresInSeconds = 60
+  expiresInSeconds = 60,
+  nFirstBytes: number | undefined = undefined
 ) {
-  const client = getS3Client()
+  const client = getProxyClient(runtimeConfig)
+  const Bucket = getProxyBucket(runtimeConfig)
 
   const command = new GetObjectCommand({
-    Bucket: runtimeConfig.bucket,
+    Bucket,
     Key: key,
-    Range: `bytes=0-${nBytes}`
+    ...(nFirstBytes !== undefined && { Range: `bytes=0-${nFirstBytes}` })
   })
 
   const url = await getSignedUrl(client, command, {
     expiresIn: expiresInSeconds
   })
 
-  return replaceUrlIfEncryptionActivated(runtimeConfig, url)
-}
-
-export async function getSignedUrlForHead(
-  runtimeConfig: RuntimeConfig['s3'],
-  key: string,
-  expiresInSeconds = 60
-) {
-  const client = getS3Client()
-
-  const command = new HeadObjectCommand({
-    Bucket: runtimeConfig.bucket,
-    Key: key
-  })
-
-  const url = await getSignedUrl(client, command, {
-    expiresIn: expiresInSeconds
-  })
-
-  return replaceUrlIfEncryptionActivated(runtimeConfig, url)
+  return url
 }

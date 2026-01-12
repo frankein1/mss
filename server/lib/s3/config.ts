@@ -20,3 +20,25 @@ export function getS3Client() {
 
   return instance
 }
+
+let proxyInstance: S3Client | null = null
+
+export function getDSProxyS3Client() {
+  if (proxyInstance) {
+    return proxyInstance
+  }
+
+  const config = useRuntimeConfig()
+
+  proxyInstance = new S3Client({
+    credentials: {
+      accessKeyId: config.s3.accessKeyId,
+      secretAccessKey: config.s3.secretAccessKey
+    },
+    region: config.s3.region,
+    endpoint: config.s3.encryptionProxyEndpoint,
+    forcePathStyle: true
+  })
+
+  return proxyInstance
+}
