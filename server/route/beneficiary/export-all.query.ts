@@ -35,6 +35,7 @@ const handler = async ({
 
 export const exportBeneficiariesQuery = createQuery({
   inputValidation: exportBeneficiariesSchema,
+  // All roles can export beneficiary data, the data provided depends on the specific role
   securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {

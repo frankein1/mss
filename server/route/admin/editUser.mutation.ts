@@ -16,7 +16,15 @@ const adminHandler = async ({
 
   const updatedUser = await UserRepo.prisma.update({
     where: { id },
-    data: user
+    data: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      status: user.status,
+      role: user.role,
+      structureId: user.structureId,
+      aidantConnectAuthorisation: user.aidantConnectAuthorisation
+    }
   })
   createOrUpdateUser(updatedUser.id).catch(error => {
     console.error(error)

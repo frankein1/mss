@@ -71,7 +71,6 @@
       id: user.value?.id,
       firstName: user.value?.firstName,
       lastName: user.value?.lastName,
-      email: user.value?.email,
       role: user.value?.role,
       aidantConnectAuthorisation: user.value?.aidantConnectAuthorisation,
       status: user.value?.status === 'Active'

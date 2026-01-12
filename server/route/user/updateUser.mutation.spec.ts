@@ -13,7 +13,6 @@ describe('Authorizations', () => {
         id: idUser,
         firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
         lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
-        email: fixturesUsers[FixtureUserRole.StructureManager].email,
         role: 'SocialWorker'
       })
     ).rejects.toThrowError(/not allowed to access route/i)
@@ -30,7 +29,6 @@ describe('Authorizations', () => {
         id: idUserOtherStructure,
         firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
         lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
-        email: fixturesUsers[FixtureUserRole.StructureManager].email,
         role: 'StructureManager'
       })
     ).rejects.toThrowError(/invalid(.*)prisma.user.update[\s\S]*?no record/im)
@@ -46,7 +44,6 @@ describe('Authorizations', () => {
         id: idUser,
         firstName: fixturesUsers[FixtureUserRole.StructureManager].firstName,
         lastName: fixturesUsers[FixtureUserRole.StructureManager].lastName,
-        email: fixturesUsers[FixtureUserRole.StructureManager].email,
         //@ts-expect-error Type administrator not assignable to role.
         role: 'Administrator'
       })

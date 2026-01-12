@@ -22,10 +22,12 @@ const createUserSchema = z.object({
 })
 type CreateUserInput = z.infer<typeof createUserSchema>
 
-const editUserSchema = createUserSchema.extend({
-  id: z.string().uuid(),
-  status: z.boolean().default(false)
-})
+const editUserSchema = createUserSchema
+  .extend({
+    id: z.string().uuid(),
+    status: z.boolean().default(false)
+  })
+  .omit({ email: true }) // Cannot update user email
 type UpdateUserInput = z.infer<typeof editUserSchema>
 
 const getUserSchema = z.object({
