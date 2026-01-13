@@ -157,7 +157,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Menu } from '~/types/menu'
+  import type { MenuItem } from '~/types/menu'
   import type { WorkshopAttendee } from '~/types/workshop'
   import {
     BeneficiaryTitle,
@@ -230,15 +230,15 @@
   })
 
   // Option button dropdown
-  const menus: Menu[] = [
+  const menus: MenuItem[] = [
     {
       label: 'Modifier les informations',
-      callback: () => onUpdateAttendee(attendee),
+      onClick: () => onUpdateAttendee(attendee),
       icon: 'fr-icon-edit-line'
     },
     {
       label: 'Retirer de l’atelier',
-      callback: () => emit('deleteAttendee', attendee),
+      onClick: () => emit('deleteAttendee', attendee),
       icon: 'ri-user-unfollow-line'
     }
   ]
@@ -246,7 +246,7 @@
   if (attendee.listType === WorkshopAttendeeListType.Waiting) {
     menus.push({
       label: 'Transférer comme participant',
-      callback: () => emit('transferAttendee', attendee.id),
+      onClick: () => emit('transferAttendee', attendee.id),
       icon: 'ri-user-shared-line',
       disabled: isWorkshopFull,
       title: isWorkshopFull ? 'Atelier complet' : undefined

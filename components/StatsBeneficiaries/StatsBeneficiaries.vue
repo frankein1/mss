@@ -228,7 +228,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { Options } from '~/utils/options'
   import { statFilterSchema, type StatFilterInput } from '~/server/schema'
-  import type { Menu } from '~/types/menu'
+  import type { MenuItem } from '~/types/menu'
   import { StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
@@ -356,13 +356,13 @@
     }
   }
 
-  const menus: ComputedRef<Menu[]> = computed(() => {
-    const menus: Menu[] = []
+  const menus: ComputedRef<MenuItem[]> = computed(() => {
+    const menus: MenuItem[] = []
 
     if (beneficiaryCount.value?.count != 0) {
       menus.push({
         label: 'En images (.zip)',
-        callback: async () => {
+        onClick: async () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
             ExportEventAction.DownloadBeneficiaryStatsImages
@@ -388,7 +388,7 @@
     if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        callback: () => {
+        onClick: () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
             ExportEventAction.DownloadBeneficiaryStatsExcel

@@ -3,22 +3,28 @@
     :id="collapseId"
     class="fr-collapse beneficiary-history-details-body"
   >
-    <BeneficiaryHistoryDetailsBodyContentProvider
-      v-if="expanded"
-      :social-support-id="socialSupportId"
-      :family-file-permissions="familyFilePermissions"
-      @deleted="emit('deleted')"
-    />
+    <template v-if="expanded">
+      <BeneficiaryHistoryDetailsAppointment
+        v-if="type === 'Appointment'"
+        :id="Number(socialSupportId)" />
+      <BeneficiaryHistoryDetailsBodyContentProvider
+        v-else
+        :social-support-id="socialSupportId"
+        :family-file-permissions="familyFilePermissions"
+        @deleted="emit('deleted')"
+    /></template>
   </div>
 </template>
 
 <script setup lang="ts">
+  import type { SocialSupportType } from '@prisma/client'
   import type { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
     expanded: boolean
     socialSupportId: string
     collapseId: string
+    type: SocialSupportType
     familyFilePermissions: FamilyFilePermissions
   }>()
 

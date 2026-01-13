@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 
-type LogFeature = 'prisma' | 'trpc'
+type LogFeature = 'prisma' | 'trpc' | 'rdvsp'
 
 export function shouldLog(logFeature: LogFeature) {
   if (process.env.NODE_ENV === 'production') {

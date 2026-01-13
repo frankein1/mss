@@ -6,7 +6,7 @@
     :class="[typeClass, expanded ? 'expanded' : '']"
   >
     <BeneficiaryHistoryDetailsHeader
-      :data="itemData"
+      :social-support="itemData"
       :collapse-id="collapseId"
       :expanded="expanded"
       :single-beneficiary="singleBeneficiary"
@@ -14,7 +14,7 @@
     />
     <BeneficiaryHistoryDetailsBody
       :expanded
-      :item="item"
+      :type="item.socialSupportType"
       :social-support-id="socialSupportId"
       :collapse-id="collapseId"
       :family-file-permissions="familyFilePermissions"

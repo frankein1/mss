@@ -145,6 +145,7 @@ async function createOrUpdateToken(
       where: { id: account.id },
       data: {
         accessToken: token.access_token,
+        refreshToken: token.refresh_token,
         expiresAt: token.expires_in,
         scope: token.scope,
         sessionState: state

@@ -1,10 +1,15 @@
 import {
   FileInstructionType,
   SocialSupportStatus,
-  type Prisma
+  SocialSupportType,
+  type Beneficiary,
+  type Prisma,
+  type SocialSupport,
+  type User
 } from '@prisma/client'
 import { TypeSuivi } from '~/client/options'
 import { SocialSupportRepo } from '~/server/database'
+import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
 import { createQuery } from '~/server/route'
 import {
   getSocialSupportsSchema,
@@ -13,6 +18,7 @@ import {
 import type { SecurityRuleContext } from '~/server/security'
 import { FamilyFileService, RdvspService } from '~/server/services'
 import type { ProtectedAppContext } from '~/server/trpc'
+import { RdvspStatus } from '~/types/rdvsp'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -30,7 +36,7 @@ function prepareSocialSupportFilters(
 ) {
   // validated appointments, followups and instructions
   const formattedFilters: Prisma.SocialSupportWhereInput = {
-    status: { not: SocialSupportStatus.RdvDraft }
+    socialSupportType: { not: SocialSupportType.Appointment }
   }
 
   if (filters.beneficiaryId) {
@@ -73,47 +79,94 @@ function prepareSocialSupportFilters(
   return formattedFilters
 }
 
+type SocialSupportItem = Pick<
+  SocialSupport,
+  'id' | 'status' | 'date' | 'socialSupportType' | 'subtype'
+> & {
+  createdBy: Pick<User, 'firstName' | 'lastName'>
+  beneficiary: Pick<Beneficiary, 'firstName' | 'usualName'>
+  subjects?: { name: string }[]
+}
+
+function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {
+  switch (status) {
+    case RdvspStatus.Excused:
+      return SocialSupportStatus.RdvExcused
+    case RdvspStatus.NoShow:
+      return SocialSupportStatus.RdvNoShow
+    case RdvspStatus.Revoked:
+      return SocialSupportStatus.RdvRevoked
+    case RdvspStatus.Seen:
+      return SocialSupportStatus.RdvSeen
+    case RdvspStatus.Unknown:
+      return SocialSupportStatus.RdvUnknown
+  }
+}
+
+function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
+  return {
+    id: rdv.id.toString(),
+    createdBy: {
+      firstName: rdv.agents[0]?.first_name ?? '',
+      lastName: rdv.agents[0]?.last_name ?? ''
+    },
+    beneficiary: {
+      firstName: rdv.users[0]?.first_name ?? '',
+      usualName: rdv.users[0]?.last_name ?? ''
+    },
+    status: mapRdvspRdvStatusToAppointmentStatus(rdv.status),
+    date: new Date(rdv.starts_at),
+    socialSupportType: SocialSupportType.Appointment,
+    subtype: rdv.motif.name
+  }
+}
+
 const handler = async ({
   input,
   ctx
 }: {
   input: GetSocialSupportsInput
   ctx: ProtectedAppContext
-}) => {
+}): Promise<SocialSupportItem[]> => {
   const filters = prepareSocialSupportFilters(input.filters)
 
-  try {
-    await RdvspService.validateDraftAppointmentsForFamilyFile({
-      ctx,
-      input: { familyFileId: input.familyFileId }
-    })
-  } catch (e: unknown) {
-    console.log(
-      'rdvsp: synchronization failed in get social supports, should fail silently',
-      e
-    )
-  }
-  const socialSupports = await SocialSupportRepo.findMany(ctx.user, {
-    select: {
-      id: true,
-      status: true,
-      createdBy: { select: { firstName: true, lastName: true } },
-      date: true,
-      beneficiary: {
-        select: { firstName: true, usualName: true }
+  // TODO: Handle socialSupportType filter!
+  const [appointments, socialSupports] = await Promise.all([
+    ctx.structure.externalRdvspActive
+      ? RdvspService.getAppointments({
+          input: { familyFileId: input.familyFileId },
+          ctx
+        })
+          .then(rdvs => rdvs.map(mapRdvspRdvToSocialSupportItem))
+          .catch(error => {
+            console.error(error)
+            return []
+          })
+      : [],
+    SocialSupportRepo.findMany(ctx.user, {
+      select: {
+        id: true,
+        status: true,
+        createdBy: { select: { firstName: true, lastName: true } },
+        date: true,
+        beneficiary: {
+          select: { firstName: true, usualName: true }
+        },
+        socialSupportType: true,
+        subtype: true,
+        subjects: { select: { name: true } }
       },
-      socialSupportType: true,
-      subtype: true,
-      subjects: { select: { name: true } }
-    },
-    where: {
-      ...filters,
-      familyFileId: input.familyFileId
-    },
-    orderBy: [{ date: 'desc' }, { created: 'desc' }]
-  })
+      where: {
+        ...filters,
+        familyFileId: input.familyFileId
+      },
+      orderBy: [{ date: 'desc' }, { created: 'desc' }]
+    })
+  ])
 
-  return socialSupports
+  return [...socialSupports, ...appointments].sort(
+    (a, b) => a.date.getTime() - b.date.getTime()
+  )
 }
 
 export const getSocialSupports = createQuery({

@@ -1,43 +1,91 @@
-import { UserRepo } from '~/server/database'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { getConfig, refreshToken } from '~/server/lib/rdvsp-oauth.client'
 import { forbiddenError, unauthorizedError } from '~/server/trpc'
+import { ofetch, type FetchHooks } from 'ofetch'
+import { shouldLog } from '~/server/utils/logging.js'
 
-export async function getAgentAuthInfo(user: SecurityRuleGrantee) {
-  const u = await UserRepo.findUniqueOrThrow(user, {
-    where: { id: user.id },
+import { prismaClient } from '~/server/prisma'
+import picocolors from 'picocolors'
+
+export async function getAgentAuthInfo(userId: string) {
+  const externalAccount = await prismaClient.externalAccount.findUniqueOrThrow({
+    where: {
+      userId_type_provider: { userId, type: 'rdvsp', provider: 'Email' }
+    },
     select: {
-      externalRdvspId: true,
-      externalAccounts: {
-        where: {
-          type: 'rdvsp',
-          accessToken: { not: null }
-        },
-        select: {
-          accessToken: true
+      id: true,
+      accessToken: true,
+      refreshToken: true
+    }
+  })
+  if (!externalAccount.accessToken || !externalAccount.refreshToken) {
+    throw unauthorizedError('rdvsp: account not connected')
+  }
+  return {
+    id: externalAccount.id,
+    accessToken: externalAccount.accessToken,
+    refreshToken: externalAccount.refreshToken
+  }
+}
+
+const onResponseDebug: FetchHooks['onResponse'] = ({
+  request,
+  response,
+  options
+}) => {
+  const duration = Date.now() - (options as any).startTime
+  console.log(
+    picocolors.bgCyan(picocolors.bold(picocolors.whiteBright(' RDVSP '))),
+    picocolors[response.status < 400 ? 'green' : 'red'](
+      picocolors.bold(response.status)
+    ),
+    picocolors.bold(options.method ?? 'GET'),
+    '|',
+    picocolors.underline(
+      typeof request === 'string' ? request : 'request_path'
+    ),
+    '|',
+    picocolors.bold(duration + 'ms')
+  )
+}
+
+const onResponse = shouldLog('rdvsp') ? onResponseDebug : undefined
+
+export async function getAgentClient({ user_id }: { user_id: string }) {
+  const config = getConfig()
+  const agentAuthInfo = await getAgentAuthInfo(user_id)
+  const client = ofetch.create({
+    baseURL: `${config.issuer}/api/v1`,
+    headers: {
+      Authorization: `Bearer ${agentAuthInfo.accessToken}`
+    },
+    onRequest({ options }) {
+      ;(options as any).startTime = Date.now()
+      options.headers.set('x-start-time', Date.now().toString())
+    },
+    onResponse,
+    onResponseError: async error => {
+      try {
+        onResponse?.(error)
+        if (error.response?.status === 401) {
+          // Try to refresh token
+          const data = await refreshToken(agentAuthInfo.refreshToken)
+          await prismaClient.externalAccount.update({
+            where: { id: agentAuthInfo.id },
+            data: {
+              accessToken: data.access_token,
+              refreshToken: data.refresh_token,
+              scope: data.scope
+              // TODO: handle expiresAt
+            }
+          })
         }
+      } catch (error) {
+        console.error(error)
       }
     }
   })
 
-  if (!u.externalRdvspId) {
-    throw unauthorizedError(
-      'rdvsp: integration not activated yet for this user'
-    )
-  }
-
-  const connectedRdvspAccounts = u.externalAccounts.filter(
-    acc => acc.accessToken !== null
-  )
-
-  // no token
-  if (!connectedRdvspAccounts[0] || !connectedRdvspAccounts[0].accessToken) {
-    throw unauthorizedError('rdvsp: account not connected')
-  }
-
-  return {
-    externalRdvspId: u.externalRdvspId,
-    accessToken: connectedRdvspAccounts[0].accessToken as string
-  }
+  return client
 }
 
 export function checkIntegrationSetupForStructure(structure: {
@@ -69,5 +117,3 @@ export const APPOINTMENT_STATUS = {
   excused: 'RdvExcused',
   revoked: 'RdvRevoked'
 } as const
-
-export type RdvspStatus = keyof typeof APPOINTMENT_STATUS

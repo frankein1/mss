@@ -58,7 +58,7 @@ export async function planAppointment({
 
   checkIntegrationSetupForStructure(structure)
 
-  const { accessToken } = await getAgentAuthInfo(ctx.user)
+  const { accessToken } = await getAgentAuthInfo(ctx.user.id)
 
   const draft = await createDraftAppointment(ctx, ben.familyFileId, ben.id)
 
@@ -72,7 +72,7 @@ export async function planAppointment({
     }
   )}`
 
-  let rdvPlan: { id: number; url: string }
+  let rdvPlan: { id: number; url: string; user_id: number }
 
   try {
     rdvPlan = await createRdvspPlan(
@@ -81,6 +81,12 @@ export async function planAppointment({
       beneficiaryHistoryUrl,
       beneficiaryHistoryUrl
     )
+    if (!ben.externalRdvspId) {
+      await BeneficiaryRepo.update(ctx.user, {
+        where: { id: ben.id },
+        data: { externalRdvspId: rdvPlan.user_id.toString() }
+      })
+    }
   } catch (e: unknown) {
     await deleteDraftAppointment(ctx, draft.id)
     throw e

@@ -1,7 +1,11 @@
+import getAppointment from './get-appointment.service'
+import updateAppointmentStatus from './update-appointment-status.service'
+import getAppointments from './get-appointments.service'
 import { planAppointment } from './planAppointment.service'
-import { validateDraftAppointmentsForFamilyFile } from './validateDraftAppointment.service'
 
 export const RdvspService = {
   planAppointment,
-  validateDraftAppointmentsForFamilyFile
+  getAppointments,
+  getAppointment,
+  updateAppointmentStatus
 }

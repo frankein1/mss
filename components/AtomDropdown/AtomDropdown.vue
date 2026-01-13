@@ -9,23 +9,30 @@
   >
     <button
       ref="dropdownBtn"
-      class="fr-btn fr-icon-arrow-down-s-line fr-btn--icon-right dropdown-btn"
+      :disabled="loading"
+      class="fr-btn fr-btn--sm fr-icon-arrow-down-s-line fr-btn--icon-right dropdown-btn"
       :class="dropdownBtnClass"
-      aria-expanded="false"
+      :aria-expanded="expanded"
       :aria-controls="MENU_ID"
       @focus="expanded = true"
-      @click.prevent
     >
+      <AtomLoader
+        v-if="loading"
+        border-color="#DDDDDD"
+        :diameter="20"
+        class="fr-mr-1w"
+      />
       <span
-        v-if="icon"
+        v-else-if="icon"
         :class="icon"
         class="fr-mr-1w"
         aria-hidden="true"
-      ></span>
+      />
 
       {{ label }}
     </button>
     <ul
+      v-show="expanded"
       :id="MENU_ID"
       class="menu"
     >
@@ -49,7 +56,7 @@
           :disabled="menu.disabled"
           :class="menuClass(menu.icon)"
           :title="menu.title"
-          @click.prevent="menu.callback"
+          @click.prevent="onMenuItemClick(menu)"
           @focus="expanded = true"
         >
           {{ menu.label }}
@@ -60,12 +67,13 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Menu } from '~/types/menu'
+  import type { MenuItem } from '~/types/menu'
 
   withDefaults(
     defineProps<{
       label: string
-      menus: Menu[]
+      menus: MenuItem[]
+      loading?: boolean
       dropdownBtnClass?: string
       alignRight?: boolean
       icon?: string
@@ -73,7 +81,8 @@
     {
       dropdownBtnClass: '',
       alignRight: false,
-      icon: undefined
+      icon: undefined,
+      loading: false
     }
   )
 
@@ -83,9 +92,10 @@
   const expanded = ref(false)
   const dropdownBtn = ref<HTMLButtonElement | null>(null)
 
-  watch(expanded, _expanded => {
-    dropdownBtn.value?.setAttribute('aria-expanded', `${expanded.value}`)
-  })
+  function onMenuItemClick(menu: MenuItem) {
+    menu.onClick?.(menu)
+    expanded.value = false
+  }
 
   function menuClass(icon: string | undefined) {
     const base = 'fr-btn fr-btn--tertiary-no-outline'
@@ -110,16 +120,10 @@
 
     .menu {
       animation: slide-down 0.15s ease 1;
-      display: none;
       left: 0;
       max-height: 50vh;
       overflow-y: auto;
       width: initial;
-    }
-
-    &.active .menu,
-    &:focus-within .menu {
-      display: block;
     }
 
     &.dropdown-right {

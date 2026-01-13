@@ -19,12 +19,12 @@
 
 <script lang="ts" setup>
   import { routes, apiRoutes } from '~/utils/routes'
-  import type { Menu } from '~/types/menu'
+  import type { MenuItem } from '~/types/menu'
 
   const { isAuthenticated, getUserName } = useAuthState()
 
   const menus = computed(() => {
-    const menus: Menu[] = [
+    const menus: MenuItem[] = [
       {
         label: 'Configuration',
         to: routes.structure.AppStructure.path(),

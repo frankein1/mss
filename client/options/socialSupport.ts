@@ -35,7 +35,7 @@ export const appointmentStatusKeys = buildKeys({
   [SocialSupportStatus.RdvNoShow]: 'Absence non excusée',
   [SocialSupportStatus.RdvExcused]: "Annulé à l'initiative de l'usager",
   [SocialSupportStatus.RdvRevoked]: "Annulé à l'initiative du service",
-  [SocialSupportStatus.RdvUnknown]: 'Status du rendez-vous inconnu',
+  [SocialSupportStatus.RdvUnknown]: 'Statut du rendez-vous inconnu',
   [SocialSupportStatus.RdvDraft]: 'Brouillon de rendez-vous',
   RdvUpcoming: 'À venir',
   RdvObsolete: 'Rendez-vous passé'

@@ -17,30 +17,32 @@
       </p>
       <h4 class="history-details__title">
         <span class="fr-sr-only">{{ attrs.title }} - </span>
-        <template v-if="data.createdBy">
-          {{ formatUserDisplayName(data.createdBy) }}
+        <template v-if="socialSupport.createdBy">
+          {{ formatUserDisplayName(socialSupport.createdBy) }}
           <span> · </span>
         </template>
         <span class="history-details__date">
-          le {{ formatDate(data.date) }}
+          le {{ formatDate(socialSupport.date) }}
         </span>
         <template
-          v-if="data.socialSupportType === SocialSupportType.Appointment"
+          v-if="
+            socialSupport.socialSupportType === SocialSupportType.Appointment
+          "
         >
           <span class="history-details__date">
-            à {{ getUTCTimeFromDate(data.date) }}
+            à {{ dayjs(socialSupport.date).format('H[h]mm') }}
           </span>
         </template>
         <template v-if="!singleBeneficiary">
           <span> · </span>
           <span class="fr-text--regular">
-            suivi {{ formatBeneficiaryDisplayName(data.beneficiary) }}
+            suivi {{ formatBeneficiaryDisplayName(socialSupport.beneficiary) }}
           </span>
         </template>
       </h4>
       <ul class="fr-tags-group social-support-subjects-tags">
         <li
-          v-for="socialSupportSubject in data.subjects"
+          v-for="socialSupportSubject in socialSupport.subjects"
           :key="socialSupportSubject.name"
         >
           <p class="fr-tag">{{ socialSupportSubject.name }}</p>
@@ -49,19 +51,28 @@
     </div>
     <div class="history-details__status">
       <SocialSupportBadgesGroup
-        :status
+        v-if="socialSupport.status !== SocialSupportStatus.RdvUnknown"
         :is-appointment="
-          data.socialSupportType === SocialSupportType.Appointment
+          socialSupport.socialSupportType === SocialSupportType.Appointment
         "
+        :status
+      />
+      <AtomDropdown
+        v-else
+        :menus="menus"
+        :label="rdvStatusLabel"
+        :align-right="true"
+        :loading="mutationStatus === 'pending'"
+        dropdown-btn-class="fr-btn--tertiary fr-mb-1w"
       />
       <button
         ref="collapseBtn"
-        class="fr-btn collapse-btn fr-btn--tertiary"
+        class="fr-btn fr-btn--sm collapse-btn fr-btn--tertiary"
         :class="{ expanded: expanded }"
         aria-expanded="false"
         :aria-controls="collapseId"
         :title="attrs.collapseTitle"
-        @click="emit('toggleExpand')"
+        @click.prevent="emit('toggleExpand')"
       >
         {{ collapse.label }}
         <span :class="[collapse.icon]"></span>
@@ -77,55 +88,109 @@
     followupMediumKeys
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
-  import { getUTCTimeFromDate } from '~/utils/getUTCTimeFromDate'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import dayjs from 'dayjs'
-  import { FileInstructionType, SocialSupportType } from '@prisma/client'
+  import {
+    FileInstructionType,
+    SocialSupportStatus,
+    SocialSupportType
+  } from '@prisma/client'
+  import type { MenuItem } from '~/types/menu'
+  import { RdvspStatus } from '~/types/rdvsp'
 
   const route = useRoute()
 
-  const props = withDefaults(
-    defineProps<{
-      data: SocialSupportData
-      collapseId: string
-      expanded?: boolean
-      singleBeneficiary?: boolean
-    }>(),
-    { expanded: false, singleBeneficiary: true }
-  )
+  const {
+    socialSupport,
+    expanded = false,
+    singleBeneficiary = true
+  } = defineProps<{
+    socialSupport: SocialSupportData
+    collapseId: string
+    expanded?: boolean
+    singleBeneficiary?: boolean
+  }>()
 
   const emit = defineEmits<{
     toggleExpand: []
   }>()
 
+  const trpcClient = useTrpcClient()
+
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
   const status = computed(() => {
-    if (props.data.socialSupportType !== 'Appointment') {
-      return props.data.status
+    if (socialSupport.socialSupportType !== 'Appointment') {
+      return socialSupport.status
     }
-    switch (props.data.status) {
+    switch (socialSupport.status) {
       case 'RdvUnknown': {
-        return dateIsSameOrAfter(dayjs(props.data.date), dayjs(new Date()))
+        return dateIsSameOrAfter(dayjs(socialSupport.date), dayjs(new Date()))
           ? 'RdvUpcoming'
           : 'RdvObsolete'
       }
       default:
-        return props.data.status
+        return socialSupport.status
     }
   })
 
+  const { mutate, status: mutationStatus } =
+    trpcClient.rdvsp.updateAppointmentStatus.useMutation()
+
+  async function updateStatus(item: MenuItem<RdvspStatus>) {
+    await mutate({
+      id: Number(socialSupport.id),
+      status: item.value!
+    })
+    await refreshNuxtData(['getFamilyFile.history'])
+  }
+
+  const menus = computed(() => {
+    const results = []
+    if (status.value !== 'RdvUpcoming') {
+      results.push(
+        {
+          label: 'RDV honoré',
+          value: RdvspStatus.Seen,
+          onClick: updateStatus
+        },
+        {
+          label: 'Absence non excusée',
+          value: RdvspStatus.NoShow,
+          onClick: updateStatus
+        }
+      )
+    }
+    results.push(
+      {
+        label: 'Annulé par l‘usager',
+        value: RdvspStatus.Excused,
+        onClick: updateStatus
+      },
+      {
+        label: 'Annulé par la structure',
+        value: RdvspStatus.Revoked,
+        onClick: updateStatus
+      }
+    )
+    return results
+  })
+
+  const rdvStatusLabel = computed(() =>
+    status.value === 'RdvUpcoming' ? 'À venir' : 'À renseigner'
+  )
+
   const attrs = computed(() => {
-    switch (props.data.socialSupportType) {
+    switch (socialSupport.socialSupportType) {
       case 'Followup':
         return {
           icon: 'fr-icon-followup-fill',
           picto: undefined,
           title:
             "Synthèse d'entretien" +
-            (props.data.subtype
-              ? ` · ${followupMediumKeys.value(props.data.subtype)}`
+            (socialSupport.subtype
+              ? ` · ${followupMediumKeys.value(socialSupport.subtype)}`
               : ''),
           collapseTitle: "Voir les détails de la synthèse d'entretien"
         }
@@ -135,15 +200,15 @@
           picto: undefined,
           title:
             'Rendez-vous' +
-            (props.data.subtype ? ` · ${props.data.subtype}` : ''),
+            (socialSupport.subtype ? ` · ${socialSupport.subtype}` : ''),
           collapseTitle: 'Voir les détails du rendez-vous'
         }
       case 'HelpRequest': {
         let title: string, picto: string
-        if (props.data.subtype === FileInstructionType.Housing) {
+        if (socialSupport.subtype === FileInstructionType.Housing) {
           picto = fileInstructionTypePictos.Housing
           title = 'Instruction de dossier · Demande de logement'
-        } else if (props.data.subtype === FileInstructionType.Financial) {
+        } else if (socialSupport.subtype === FileInstructionType.Financial) {
           picto = fileInstructionTypePictos.Financial
           title = 'Instruction de dossier · Aide financière'
         } else {
@@ -158,7 +223,7 @@
         }
       }
       default: {
-        if (props.data.subtype === FileInstructionType.Housing) {
+        if (socialSupport.subtype === FileInstructionType.Housing) {
           return {
             icon: 'fr-icon-help-request-fill',
             picto: fileInstructionTypePictos.Housing,
@@ -172,7 +237,7 @@
   })
 
   const collapse = computed(() => {
-    return props.expanded
+    return expanded
       ? { label: 'Voir moins', icon: 'fr-icon-arrow-up-s-line' }
       : { label: 'Voir plus', icon: 'fr-icon-arrow-down-s-line' }
   })
@@ -180,7 +245,7 @@
   onMounted(() => {
     // Expand item if selected in URL
     const { item } = route.query
-    if (item === props.data.id && collapseBtn.value) {
+    if (item === socialSupport.id && collapseBtn.value) {
       collapseBtn.value.click()
       collapseBtn.value.ariaExpanded = 'true'
     }
@@ -304,19 +369,19 @@
       color: var(--text-default-grey);
     }
 
-    &::before {
-      content: '';
-      display: block;
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      outline-offset: 2px;
-      outline-style: inherit;
-      outline-color: inherit;
-      outline-width: 2px;
-      border-radius: 0.5rem;
-    }
+    // &::before {
+    //   content: '';
+    //   display: block;
+    //   position: absolute;
+    //   inset: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   outline-offset: 2px;
+    //   outline-style: inherit;
+    //   outline-color: inherit;
+    //   outline-width: 2px;
+    //   border-radius: 0.5rem;
+    // }
 
     &.expanded::before {
       border-radius: 0.5rem 0.5rem 0 0;

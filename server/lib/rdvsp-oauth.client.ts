@@ -4,6 +4,7 @@ import { apiRoutes } from '~/utils/routes'
 import { formatDate } from '~/utils/formatDate'
 import { ofetch, FetchError } from 'ofetch'
 import { invalidError, unauthorizedError } from '~/server/trpc'
+import type { RdvspStatus } from '~/types/rdvsp'
 
 interface RdvspConfig {
   clientId: string
@@ -60,15 +61,18 @@ interface RdvspRdvSummary {
 export interface RdvspRdv {
   id: number
   address: string
-  agents: { id: number }[]
+  agents: { id: number; first_name: string; last_name: string }[]
+  created_by_id: number
   duration_in_min: number
   motif: {
     id: number
     name: string
   }
-  status: string
+  status: RdvspStatus
   starts_at: string
-  users: { id: number }[]
+  users: { id: number; first_name: string; last_name: string }[]
+  participations: { id: number; first_name: string; last_name: string }[]
+  url_for_agents: string
 }
 
 let config: RdvspConfig | null = null
@@ -106,6 +110,20 @@ export function authorize(cfg: RdvspConfig, nonce: string, state: string) {
   return `${cfg.issuer}/oauth/authorize?${params}`
 }
 
+export async function refreshToken(refresh_token: string) {
+  const config = getConfig()
+  return ofetch(`${config.issuer}/oauth/token`, {
+    method: 'post',
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      client_id: config.clientId,
+      client_secret: config.clientSecret,
+      refresh_token
+    }).toString(),
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+
 export async function getToken(cfg: RdvspConfig, code: string) {
   const response = await fetch(`${cfg.issuer}/oauth/token`, {
     method: 'post',
@@ -139,7 +157,8 @@ async function getWrapper<T>(
     const res = await ofetch(`${cfg.issuer}${path}`, {
       headers,
       onRequest: () => console.log('rdvsp: request', path),
-      onRequestError: req => console.log('rdvsp: request error', req.error),
+      onRequestError: req =>
+        console.log('rdvsp: request error', req.error, req),
       onResponseError: res => console.log('rdvsp: response error', res.error)
     })
     if ('error' in res) {
@@ -182,52 +201,6 @@ export async function getOrganisation(cfg: RdvspConfig, accessToken: string) {
   )
 }
 
-export async function getRdvSummaryFromPlan(
-  cfg: RdvspConfig,
-  accessToken: string,
-  id: string
-) {
-  return await getWrapper<RdvspRdvSummary | null>(
-    cfg,
-    `/api/v1/rdv_plans/${id}`,
-    accessToken,
-    (t: any) => t.rdv_plan.rdv
-  )
-}
-
-// FIXME refactor this when a better API endpoint becomes available
-export async function getRdvsStartingAfter(
-  cfg: RdvspConfig,
-  accessToken: string,
-  organisationId: string,
-  starts_after: string
-) {
-  const list: RdvspRdv[] = []
-  let isLastPage = false
-  let nPages = 0
-
-  while (!isLastPage) {
-    const res = await getWrapper<{
-      rdvs: RdvspRdv[]
-      meta: { next_page: number | null }
-    }>(
-      cfg,
-      `/api/v1/organisations/${organisationId}/rdvs?starts_after=${starts_after}&page=${nPages}`,
-      accessToken
-    )
-    if (res.meta.next_page === null) {
-      isLastPage = true
-    }
-    list.push(...res.rdvs)
-    nPages += 1
-  }
-
-  console.log(`rdvsp: ${list.length} rdvs for organisation ${organisationId}`)
-  console.log(`rdvsp: ${nPages} pages for paginated rdvs request`)
-
-  return list
-}
-
 export async function createRdvPlan(
   cfg: RdvspConfig,
   accessToken: string,
@@ -249,7 +222,9 @@ export async function createRdvPlan(
   returnUrl: string,
   dossierUrl: string
 ): Promise<
-  { id: number; url: string } | RdvspMutationError | GenericFetchError
+  | { id: number; url: string; user_id: number }
+  | RdvspMutationError
+  | GenericFetchError
 > {
   const address = formatAddress(beneficiary)
   const body = {
@@ -287,7 +262,11 @@ export async function createRdvPlan(
   }
 
   if (response.ok) {
-    return { id: res.rdv_plan.id as number, url: res.rdv_plan.url as string }
+    return {
+      id: res.rdv_plan.id as number,
+      url: res.rdv_plan.url as string,
+      user_id: res.rdv_plan.user_id as number
+    }
   }
   console.log('rdvsp: draft rdv creation failed', res)
   return res as RdvspMutationError

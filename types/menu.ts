@@ -1,9 +1,10 @@
-export type Menu = {
+export interface MenuItem<V = any> {
   label: string
   to?: string
   href?: string
   icon?: string
-  callback?: () => void
+  onClick?: (item: this) => void
   disabled?: boolean
   title?: string
+  value?: V
 }

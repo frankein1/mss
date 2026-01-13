@@ -97,7 +97,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import type { WorkshopStatFilterInput } from '~/server/schema'
-  import type { Menu } from '~/types/menu'
+  import type { MenuItem } from '~/types/menu'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
 
@@ -164,13 +164,13 @@
     }
   }
 
-  const menus: ComputedRef<Menu[]> = computed(() => {
-    const menus: Menu[] = []
+  const menus: ComputedRef<MenuItem[]> = computed(() => {
+    const menus: MenuItem[] = []
 
     if (workshopCount.value?.total != 0) {
       menus.push({
         label: 'En images (.zip)',
-        callback: async () => {
+        onClick: async () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
             ExportEventAction.DownloadWorkshopStatsImages
@@ -194,7 +194,7 @@
     if (workshopCount.value?.total != 0 && application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        callback: () => {
+        onClick: () => {
           matomo.trackEvent(
             EventCategory.ExportStats,
             ExportEventAction.DownloadWorkshopStatsExcel
