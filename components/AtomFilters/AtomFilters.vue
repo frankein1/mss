@@ -90,6 +90,7 @@
 </template>
 
 <script lang="ts" setup>
+  import type { z } from 'zod'
   import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
   import type {
@@ -127,7 +128,7 @@
        * All filters are expanded by default
        */
       expandedByDefault?: boolean
-      validationSchema?: any
+      validationSchema?: z.ZodTypeAny
     }>(),
     {
       fullWidthFilters: false,
@@ -155,7 +156,9 @@
 
   const { controlledValues, resetForm, setFieldValue, validate } = useForm({
     initialValues: props.initialSelectedValues || props.defaultValues || {},
-    validationSchema: toTypedSchema(props.validationSchema)
+    ...(props.validationSchema !== undefined && {
+      validationSchema: toTypedSchema(props.validationSchema)
+    })
   })
 
   const selectedFilters: ComputedRef<FilterValues> = computed(

@@ -10,7 +10,6 @@
     class="fr-mx-auto"
   />
   <AtomFilters
-    class="beneficiary-filters"
     :filters="beneficiaryFilters || []"
     :expanded-by-default="true"
     :initial-selected-values="filtersState.beneficiary.value || {}"
