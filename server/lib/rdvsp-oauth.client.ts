@@ -224,6 +224,33 @@ export async function createRdvPlan(
   | GenericFetchError
 > {
   const address = formatAddress(beneficiary)
+
+  if (beneficiary.externalRdvspId) {
+    try {
+      const userUpdateBody = {
+        id: beneficiary.externalRdvspId,
+        first_name: beneficiary.firstName || 'Non renseigné',
+        last_name:
+          beneficiary.usualName || beneficiary.birthName || 'Non renseigné',
+        ...(beneficiary.email && { email: beneficiary.email }),
+        ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
+        ...(address && { address }),
+        ...(beneficiary.birthDate && {
+          birth_date: formatDate(beneficiary.birthDate, 'YYYY-MM-DD')
+        })
+      }
+      await fetch(`${cfg.issuer}/api/v1/users/${beneficiary.externalRdvspId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(userUpdateBody),
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      console.error('rdvsp user update error', error)
+    }
+  }
   const body = {
     user: {
       ...(beneficiary.externalRdvspId && { id: beneficiary.externalRdvspId }),
@@ -242,7 +269,7 @@ export async function createRdvPlan(
   }
 
   const response = await fetch(`${cfg.issuer}/api/v1/rdv_plans`, {
-    method: 'post',
+    method: 'POST',
     body: JSON.stringify(body),
     headers: {
       'Authorization': `Bearer ${accessToken}`,
