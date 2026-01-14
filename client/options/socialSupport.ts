@@ -7,7 +7,8 @@ export enum TypeSuivi {
   AllHelpRequest = 'AllHelpRequest',
   HousingHelpRequest = 'HousingHelpRequest',
   FinancialHelpRequest = 'FinancialHelpRequest',
-  OtherHelpRequest = 'OtherHelpRequest'
+  OtherHelpRequest = 'OtherHelpRequest',
+  Rdv = 'Rdv'
 }
 
 export const typeSuiviKeys = buildKeys({
@@ -15,7 +16,8 @@ export const typeSuiviKeys = buildKeys({
   [TypeSuivi.AllHelpRequest]: 'Instructions - toutes',
   [TypeSuivi.HousingHelpRequest]: 'Instructions - demande de logement',
   [TypeSuivi.FinancialHelpRequest]: 'Instructions - aide financière',
-  [TypeSuivi.OtherHelpRequest]: 'Instructions - autre'
+  [TypeSuivi.OtherHelpRequest]: 'Instructions - autre',
+  [TypeSuivi.Rdv]: 'Rendez-vous'
 })
 
 export const fileInstructionStatusKeys = buildKeys({

@@ -34,7 +34,7 @@ const securityCheck = async (
 function prepareSocialSupportFilters(
   filters: GetSocialSupportsInput['filters']
 ) {
-  // validated appointments, followups and instructions
+  // followups and instructions
   const formattedFilters: Prisma.SocialSupportWhereInput = {
     socialSupportType: { not: SocialSupportType.Appointment }
   }
@@ -130,9 +130,12 @@ const handler = async ({
 }): Promise<SocialSupportItem[]> => {
   const filters = prepareSocialSupportFilters(input.filters)
 
-  // TODO: Handle socialSupportType filter!
+  const shouldRetrieveAppointments =
+    ctx.structure.externalRdvspActive &&
+    (!input.filters.typeSuivi || input.filters.typeSuivi === TypeSuivi.Rdv)
+  const shouldRetrieveSocialSupports = input.filters.typeSuivi !== TypeSuivi.Rdv
   const [appointments, socialSupports] = await Promise.all([
-    ctx.structure.externalRdvspActive
+    shouldRetrieveAppointments
       ? RdvspService.getAppointments({
           input: { familyFileId: input.familyFileId },
           ctx
@@ -143,25 +146,27 @@ const handler = async ({
             return []
           })
       : [],
-    SocialSupportRepo.findMany(ctx.user, {
-      select: {
-        id: true,
-        status: true,
-        createdBy: { select: { firstName: true, lastName: true } },
-        date: true,
-        beneficiary: {
-          select: { firstName: true, usualName: true }
-        },
-        socialSupportType: true,
-        subtype: true,
-        subjects: { select: { name: true } }
-      },
-      where: {
-        ...filters,
-        familyFileId: input.familyFileId
-      },
-      orderBy: [{ date: 'desc' }, { created: 'desc' }]
-    })
+    shouldRetrieveSocialSupports
+      ? SocialSupportRepo.findMany(ctx.user, {
+          select: {
+            id: true,
+            status: true,
+            createdBy: { select: { firstName: true, lastName: true } },
+            date: true,
+            beneficiary: {
+              select: { firstName: true, usualName: true }
+            },
+            socialSupportType: true,
+            subtype: true,
+            subjects: { select: { name: true } }
+          },
+          where: {
+            ...filters,
+            familyFileId: input.familyFileId
+          },
+          orderBy: [{ date: 'desc' }, { created: 'desc' }]
+        })
+      : []
   ])
 
   return [...socialSupports, ...appointments].sort(
