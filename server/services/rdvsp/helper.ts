@@ -7,7 +7,7 @@ import { prismaClient } from '~/server/prisma'
 import picocolors from 'picocolors'
 
 export async function getAgentAuthInfo(userId: string) {
-  const externalAccount = await prismaClient.externalAccount.findUniqueOrThrow({
+  const externalAccount = await prismaClient.externalAccount.findUnique({
     where: {
       userId_type_provider: { userId, type: 'rdvsp', provider: 'Email' }
     },
@@ -17,6 +17,9 @@ export async function getAgentAuthInfo(userId: string) {
       refreshToken: true
     }
   })
+  if (externalAccount === null) {
+    throw unauthorizedError('rdvsp: account has not been setup yet')
+  }
   if (!externalAccount.accessToken || !externalAccount.refreshToken) {
     throw unauthorizedError('rdvsp: account not connected')
   }
