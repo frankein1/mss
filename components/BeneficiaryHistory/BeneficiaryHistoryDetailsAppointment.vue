@@ -11,6 +11,14 @@
           <span class="information-label">Durée :</span>
           {{ appointment.durationInMin }} min
         </li>
+        <li v-if="appointment.type">
+          <span class="information-label">Type :</span>
+          {{
+            appointment.type === 'public_office'
+              ? 'RDV en physique'
+              : 'RDV téléphonique'
+          }}
+        </li>
         <li v-if="appointment.place">
           <span class="information-label">Lieu :</span> {{ appointment.place }}
         </li>

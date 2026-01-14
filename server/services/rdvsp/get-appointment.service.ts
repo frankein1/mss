@@ -25,7 +25,8 @@ export default async function getAppointment({
     agents,
     duration_in_min,
     address,
-    url_for_agents
+    url_for_agents,
+    motif
   } = rdvs[0]
 
   const createdBy = { id: created_by_id, firstName: '', lastName: '' }
@@ -55,6 +56,7 @@ export default async function getAppointment({
     durationInMin: duration_in_min,
     place: address,
     url: url_for_agents,
-    createdBy
+    createdBy,
+    type: motif.location_type
   }
 }

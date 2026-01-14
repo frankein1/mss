@@ -63,6 +63,7 @@ export interface RdvspRdv {
     id: number
     name: string
     collectif: boolean
+    location_type: 'public_office' | 'phone'
   }
   status: RdvspStatus
   starts_at: string
