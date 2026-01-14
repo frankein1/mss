@@ -53,11 +53,6 @@ interface RdvspOrganisation {
   verticale: string
 }
 
-interface RdvspRdvSummary {
-  id: number
-  status: string
-}
-
 export interface RdvspRdv {
   id: number
   address: string
@@ -67,6 +62,7 @@ export interface RdvspRdv {
   motif: {
     id: number
     name: string
+    collectif: boolean
   }
   status: RdvspStatus
   starts_at: string

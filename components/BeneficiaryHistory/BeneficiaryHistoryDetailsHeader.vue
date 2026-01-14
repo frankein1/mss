@@ -148,32 +148,35 @@
 
   const menus = computed(() => {
     const results = []
+    const isCollectiveAppointment =
+      socialSupport.subtype?.includes('[Collectif]')
     if (status.value !== 'RdvUpcoming') {
-      results.push(
-        {
-          label: 'RDV honoré',
-          value: RdvspStatus.Seen,
-          onClick: updateStatus
-        },
-        {
+      results.push({
+        label: 'RDV honoré',
+        value: RdvspStatus.Seen,
+        onClick: updateStatus
+      })
+
+      if (!isCollectiveAppointment) {
+        results.push({
           label: 'Absence non excusée',
           value: RdvspStatus.NoShow,
           onClick: updateStatus
-        }
-      )
+        })
+      }
     }
-    results.push(
-      {
+    if (!isCollectiveAppointment) {
+      results.push({
         label: 'Annulé par l‘usager',
         value: RdvspStatus.Excused,
         onClick: updateStatus
-      },
-      {
-        label: 'Annulé par la structure',
-        value: RdvspStatus.Revoked,
-        onClick: updateStatus
-      }
-    )
+      })
+    }
+    results.push({
+      label: 'Annulé par la structure',
+      value: RdvspStatus.Revoked,
+      onClick: updateStatus
+    })
     return results
   })
 

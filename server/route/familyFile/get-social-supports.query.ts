@@ -117,7 +117,9 @@ function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
     status: mapRdvspRdvStatusToAppointmentStatus(rdv.status),
     date: new Date(rdv.starts_at),
     socialSupportType: SocialSupportType.Appointment,
-    subtype: rdv.motif.name
+    // Be careful, the frontend checks the presence of the [Collectif] fragment
+    // in "subtype" to determine allowed status updates on appointments.
+    subtype: `${rdv.motif.collectif ? '[Collectif] ' : ''}${rdv.motif.name}`
   }
 }
 
@@ -170,7 +172,7 @@ const handler = async ({
   ])
 
   return [...socialSupports, ...appointments].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
+    (a, b) => b.date.getTime() - a.date.getTime()
   )
 }
 
