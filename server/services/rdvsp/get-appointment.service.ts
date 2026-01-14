@@ -1,6 +1,7 @@
 import type { ProtectedAppContext } from '~/server/trpc'
 import { getAgentClient } from './helper'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
+import { UserRepo } from '~/server/database'
 
 export default async function getAppointment({
   input,
@@ -18,12 +19,42 @@ export default async function getAppointment({
     throw new Error('Appointment not found')
   }
 
-  const { id, duration_in_min, address, url_for_agents } = rdvs[0]
+  const {
+    id,
+    created_by_id,
+    agents,
+    duration_in_min,
+    address,
+    url_for_agents
+  } = rdvs[0]
+
+  const createdBy = { id: created_by_id, firstName: '', lastName: '' }
+  if (created_by_id === agents[0]?.id) {
+    createdBy.firstName = agents[0].first_name
+    createdBy.lastName = agents[0].last_name
+  } else {
+    const users = await UserRepo.findMany(ctx.user, {
+      select: {
+        firstName: true,
+        lastName: true
+      },
+      where: {
+        externalAccounts: {
+          some: { type: 'rdvsp', providerAccountId: String(created_by_id) }
+        }
+      }
+    })
+    if (users[0]) {
+      createdBy.firstName = users[0].firstName
+      createdBy.lastName = users[0].lastName
+    }
+  }
 
   return {
     id,
     durationInMin: duration_in_min,
     place: address,
-    url: url_for_agents
+    url: url_for_agents,
+    createdBy
   }
 }

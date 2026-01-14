@@ -106,6 +106,8 @@ function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {
 function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
   return {
     id: rdv.id.toString(),
+    // Only a single participating agent is displayed for now,
+    // although multiple agents can participate to a single appointment.
     createdBy: {
       firstName: rdv.agents[0]?.first_name ?? '',
       lastName: rdv.agents[0]?.last_name ?? ''

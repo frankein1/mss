@@ -1,157 +1,122 @@
 <template>
-  <template v-if="socialSupport.socialSupportType === 'Appointment'">
-    <hr class="fr-mb-1v" />
-    <ul
-      v-if="socialSupport.appointment"
-      class="information-list"
-    >
-      <BeneficiaryAppointmentDetailsBodyMetas
-        :appointment="socialSupport.appointment"
+  <hr
+    v-if="canViewHistoryDetails"
+    class="fr-mb-1v"
+  />
+
+  <template v-if="canViewHistoryDetails">
+    <div class="header">
+      <div
+        v-if="socialSupport.lastUpdatedBy"
+        class="fr-text--xs fr-mb-1v"
+      >
+        Mis à jour par
+        {{ formatUserDisplayName(socialSupport.lastUpdatedBy) }} le
+        {{ formatDate(socialSupport.updated) }}
+      </div>
+      <div class="spacer"></div>
+      <ul class="fr-badges-group">
+        <li v-if="redirectedLabel">
+          <p class="fr-badge fr-badge--purple-glycine">
+            {{ redirectedLabel }}
+          </p>
+        </li>
+        <li v-if="socialSupport.followup?.firstFollowup">
+          <p class="fr-badge fr-badge--info fr-badge--no-icon">
+            {{ followupFieldLabels.firstFollowup }}
+          </p>
+        </li>
+      </ul>
+    </div>
+    <ul class="information-list">
+      <BeneficiarySocialSupportDetailsBodyMetas
+        :social-support="socialSupport"
+      />
+      <BeneficiaryFollowupDetailsBodyMetas
+        v-if="socialSupport.followup"
+        :followup="socialSupport.followup"
+      />
+      <BeneficiaryHelpRequestDetailsBodyMetas
+        v-else-if="socialSupport.fileInstruction?.helpRequest"
+        :file-instruction="socialSupport.fileInstruction"
+        :help-request="socialSupport.fileInstruction.helpRequest"
+        :status="socialSupport.status"
+      />
+      <BeneficiaryHousingHelpRequestDetailsBodyMetas
+        v-else-if="socialSupport.fileInstruction?.housingHelpRequest"
+        :file-instruction="socialSupport.fileInstruction"
+        :housing-help-request="socialSupport.fileInstruction.housingHelpRequest"
+        :status="socialSupport.status"
       />
     </ul>
-    <ul
-      class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
-    >
-      <li>
-        <NuxtLink
-          :to="socialSupport.appointment?.url"
-          class="fr-btn fr-btn--secondary fr-icon-edit-line"
-          external
-          @click="
-            matomo.trackEvent(
-              EventCategory.Beneficiary,
-              BeneficiaryHistoryAction.UpdateAppointment
-            )
-          "
-        >
-          Modifier dans RDV Service Public
-        </NuxtLink>
-      </li>
-    </ul>
-  </template>
 
-  <template v-else>
-    <hr
-      v-if="canViewHistoryDetails"
-      class="fr-mb-1v"
+    <BeneficiaryHistoryDetailsBodyDocuments
+      v-if="socialSupport.documents?.length"
+      :documents="socialSupport.documents"
     />
 
-    <template v-if="canViewHistoryDetails">
-      <div class="header">
-        <div
-          v-if="socialSupport.lastUpdatedBy"
-          class="fr-text--xs fr-mb-1v"
-        >
-          Mis à jour par
-          {{ formatUserDisplayName(socialSupport.lastUpdatedBy) }} le
-          {{ formatDate(socialSupport.updated) }}
-        </div>
-        <div class="spacer"></div>
-        <ul class="fr-badges-group">
-          <li v-if="redirectedLabel">
-            <p class="fr-badge fr-badge--purple-glycine">
-              {{ redirectedLabel }}
-            </p>
-          </li>
-          <li v-if="socialSupport.followup?.firstFollowup">
-            <p class="fr-badge fr-badge--info fr-badge--no-icon">
-              {{ followupFieldLabels.firstFollowup }}
-            </p>
-          </li>
-        </ul>
-      </div>
-      <ul class="information-list">
-        <BeneficiarySocialSupportDetailsBodyMetas
-          :social-support="socialSupport"
-        />
-        <BeneficiaryFollowupDetailsBodyMetas
-          v-if="socialSupport.followup"
-          :followup="socialSupport.followup"
-        />
-        <BeneficiaryHelpRequestDetailsBodyMetas
-          v-else-if="socialSupport.fileInstruction?.helpRequest"
-          :file-instruction="socialSupport.fileInstruction"
-          :help-request="socialSupport.fileInstruction.helpRequest"
-          :status="socialSupport.status"
-        />
-        <BeneficiaryHousingHelpRequestDetailsBodyMetas
-          v-else-if="socialSupport.fileInstruction?.housingHelpRequest"
-          :file-instruction="socialSupport.fileInstruction"
-          :housing-help-request="
-            socialSupport.fileInstruction.housingHelpRequest
-          "
-          :status="socialSupport.status"
-        />
-      </ul>
-
-      <BeneficiaryHistoryDetailsBodyDocuments
-        v-if="socialSupport.documents?.length"
-        :documents="socialSupport.documents"
-      />
-
-      <template v-if="socialSupport.synthesis">
-        <h3 class="synthesis-title">Compte rendu</h3>
-        <AtomTextEditorReader
-          :value="socialSupport.synthesisRichText"
-          :raw-text="socialSupport.synthesis"
-        />
-      </template>
-
-      <template v-if="socialSupport.privateSynthesis">
-        <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
-        <AtomTextEditorReader
-          :value="socialSupport.privateSynthesisRichText"
-          :raw-text="socialSupport.privateSynthesis"
-        />
-      </template>
-
-      <ul
-        class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--icon-left fr-btns-group--left"
-      >
-        <li v-if="canDelete">
-          <button
-            class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
-            data-fr-opened="false"
-            aria-controls="global-modal"
-            type="button"
-            @click="onDelete"
-          >
-            Supprimer
-          </button>
-        </li>
-        <li v-if="canPrint && printLink">
-          <NuxtLink
-            :to="printLink"
-            class="fr-btn fr-btn--secondary fr-icon-printer-line"
-          >
-            Imprimer
-          </NuxtLink>
-        </li>
-        <li v-if="canEdit && editLink">
-          <NuxtLink
-            :to="editLink"
-            class="fr-btn fr-btn--secondary fr-icon-edit-line"
-          >
-            Modifier
-          </NuxtLink>
-        </li>
-      </ul>
-
-      <hr
-        v-if="familyFilePermissions.create.document || commentItems.length > 0"
-        class="fr-pb-3v"
+    <template v-if="socialSupport.synthesis">
+      <h3 class="synthesis-title">Compte rendu</h3>
+      <AtomTextEditorReader
+        :value="socialSupport.synthesisRichText"
+        :raw-text="socialSupport.synthesis"
       />
     </template>
 
-    <BeneficiaryHistoryComments
-      :items="commentItems"
-      :social-support="socialSupport"
-      :family-file-permissions="familyFilePermissions"
-      @comment-added="onCommentAdded"
-      @comment-edited="onCommentEdited"
-      @comment-deleted="onCommentDeleted"
+    <template v-if="socialSupport.privateSynthesis">
+      <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
+      <AtomTextEditorReader
+        :value="socialSupport.privateSynthesisRichText"
+        :raw-text="socialSupport.privateSynthesis"
+      />
+    </template>
+
+    <ul
+      class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--icon-left fr-btns-group--left"
+    >
+      <li v-if="canDelete">
+        <button
+          class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          type="button"
+          @click="onDelete"
+        >
+          Supprimer
+        </button>
+      </li>
+      <li v-if="canPrint && printLink">
+        <NuxtLink
+          :to="printLink"
+          class="fr-btn fr-btn--secondary fr-icon-printer-line"
+        >
+          Imprimer
+        </NuxtLink>
+      </li>
+      <li v-if="canEdit && editLink">
+        <NuxtLink
+          :to="editLink"
+          class="fr-btn fr-btn--secondary fr-icon-edit-line"
+        >
+          Modifier
+        </NuxtLink>
+      </li>
+    </ul>
+
+    <hr
+      v-if="familyFilePermissions.create.document || commentItems.length > 0"
+      class="fr-pb-3v"
     />
   </template>
+
+  <BeneficiaryHistoryComments
+    :items="commentItems"
+    :social-support="socialSupport"
+    :family-file-permissions="familyFilePermissions"
+    @comment-added="onCommentAdded"
+    @comment-edited="onCommentEdited"
+    @comment-deleted="onCommentDeleted"
+  />
 </template>
 
 <script setup lang="ts">
@@ -165,7 +130,6 @@
   import type { FamilyFilePermissions } from '~/server/security'
   import { TypeSuivi } from '~/client/options'
   import { routes } from '~/utils/routes'
-  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
   import { formatUserDisplayName } from '~/utils/user'
   import { followupFieldLabels } from '~/client/labels'
 
@@ -178,7 +142,6 @@
     deleted: []
   }>()
 
-  const matomo = useMatomo()
   const socialSupport = computed(() => props.item.data)
 
   const permissions = computed(() => props.item.permissions)

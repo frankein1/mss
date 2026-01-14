@@ -14,6 +14,10 @@
         <li v-if="appointment.place">
           <span class="information-label">Lieu :</span> {{ appointment.place }}
         </li>
+        <li v-if="appointment.createdBy">
+          <span class="information-label">Créé par :</span>
+          {{ formatUserDisplayName(appointment.createdBy) }}
+        </li>
       </ul>
       <ul
         class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
@@ -39,6 +43,7 @@
 </template>
 <script setup lang="ts">
   import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const props = defineProps<{
     id: number
