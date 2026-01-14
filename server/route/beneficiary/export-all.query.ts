@@ -4,7 +4,7 @@ import type { ExportBeneficiariesInput } from '~/server/schema'
 import { exportBeneficiariesSchema } from '~/server/schema'
 import { BeneficiaryService, UserService } from '~/server/services'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { createExport } from '~/utils/export/createExport'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
@@ -19,17 +19,11 @@ const handler = async ({
     input: { code: input.code }
   })
 
-  const { rows, columns } = await BeneficiaryService.exportAll({
-    ctx,
-    input
-  })
-
+  const workbook = await BeneficiaryService.exportWorkbook({ ctx, input })
+  const stream = await createExportFromWorkbook(ctx.user.id, workbook)
   // Forced to return base64 encoded version of the file in tRPC
   // Cf. https://github.com/trpc/trpc/discussions/658
   // & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
-  const stream = await createExport(ctx.user.id, [
-    { name: 'Bénéficiaires', columns, rows }
-  ])
   return { data: stream.toString('base64') }
 }
 

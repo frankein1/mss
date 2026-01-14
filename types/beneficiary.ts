@@ -147,6 +147,7 @@ export type GetBeneficiaryOutput = Pick<
   | 'createdById'
   | 'created'
   | 'updated'
+  | 'lastActivity'
   | 'status'
   | 'relationship'
 > &

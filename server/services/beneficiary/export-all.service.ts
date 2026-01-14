@@ -4,10 +4,8 @@ import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
 import type { ExportBeneficiariesInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
-import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
-import { formatDate } from '~/utils/formatDate'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import type {
   GetBeneficiaryOutput,
@@ -30,6 +28,7 @@ import {
 } from '~/client/options'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
+import ExcelPkg from 'exceljs'
 
 const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels)[] =
   [
@@ -81,7 +80,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'subjects',
     'referents',
     'aidantConnectAuthorized',
-    'updated',
+    'lastActivity',
     'fileNumber'
   ]
 
@@ -111,39 +110,51 @@ export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryField
     'subjects'
   ]
 
-export async function exportAll({
+// NEW
+export const exportWorkbook = async ({
   ctx,
   input
 }: {
   ctx: SecurityRuleContext
   input: ExportBeneficiariesInput
-}) {
-  const columns = getColumns(ctx.user.role)
-
+}) => {
+  // 1 get information from db
   const where: Prisma.BeneficiaryWhereInput = {
     ...prepareBeneficiaryFilters(input.filters)
   }
-
   const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
+  const formatedBeneficiaries = dataRequest.map(({ beneficiary }) =>
+    formatData(beneficiary, ctx.user.role)
+  )
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
+  const worksheet = workbook.addWorksheet('Bénéficiaires')
+  worksheet.columns = getColumns(ctx.user.role)
+  worksheet.getRow(1).font = { bold: true }
 
-  const rows: RowType[] = []
+  formatedBeneficiaries.forEach((beneficiary, index) => {
+    const row = worksheet.getRow(index + 2) // header row is 1!
+    row.values = beneficiary
+    // format numbers
+    row.getCell('minorChildren').numFmt = '0'
+    row.getCell('majorChildren').numFmt = '0'
+    row.getCell('zipcode').numFmt = '00000'
+  })
 
-  for (const { beneficiary } of dataRequest) {
-    rows.push(formatData(beneficiary, ctx.user.role))
-  }
-
-  return { columns, rows }
+  return workbook
 }
 
 function getColumns(userRole: UserRole) {
   return userRole === UserRole.StructureManager
     ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE.map(key => ({
         key,
-        header: beneficiaryFieldLabels[key]
+        header: beneficiaryFieldLabels[key],
+        width: 32
       }))
     : BENEFICIARY_EXPORTED_FIELDS_PARTIAL.map(key => ({
         key,
-        header: beneficiaryFieldLabels[key]
+        header: beneficiaryFieldLabels[key],
+        width: 32
       }))
 }
 
@@ -154,7 +165,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     usualName: general.usualName || '',
     birthName: general.birthName || '',
     firstName: general.firstName || '',
-    birthDate: formatDate(general.birthDate, 'DD/MM/YYYY'),
+    birthDate: general.birthDate || '',
     status: beneficiaryStatusKeys.byKey[beneficiary.status],
     gender: general.gender ? beneficiaryGenderKeys.byKey[general.gender] : '',
     accommodationMode: general.accommodationMode
@@ -165,7 +176,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       general.accommodationAdditionalInformation || '',
     street: general.street || '',
     addressComplement: general.addressComplement || '',
-    zipcode: general.zipcode || '',
+    zipcode: general.zipcode ? parseInt(general.zipcode) : '',
     city: general.city || '',
     region: general.region || '',
     department: general.department || '',
@@ -175,8 +186,8 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     familySituation: taxHouseholds?.familySituation
       ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
-    minorChildren: taxHouseholds?.minorChildren?.toString() || '',
-    majorChildren: taxHouseholds?.majorChildren?.toString() || ''
+    minorChildren: Number(taxHouseholds?.minorChildren) || '',
+    majorChildren: Number(taxHouseholds?.majorChildren) || ''
   }
 
   if (userRole !== UserRole.StructureManager) {
@@ -192,13 +203,13 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       beneficiary.aidantConnectAuthorized
     ),
     fileNumber: readableFileNumber(beneficiary.id),
-    deathDate: formatDate(general.deathDate, 'DD-MM-YYYY'),
+    deathDate: general.deathDate || '',
     nationality: general.nationality
       ? nationalityKeys.byKey[general.nationality]
       : '',
     qpv: getBooleanOrEmpty(general.qpv) || '',
-    weddingDate: formatDate(taxHouseholds?.weddingDate, 'DD-MM-YYYY'),
-    divorceDate: formatDate(taxHouseholds?.divorceDate, 'DD-MM-YYYY'),
+    weddingDate: taxHouseholds?.weddingDate || '',
+    divorceDate: taxHouseholds?.divorceDate || '',
     caregiver: getBooleanOrEmpty(taxHouseholds?.caregiver),
     mobility: general.mobility
       ? beneficiaryMobilityKeys.byKey[general.mobility]
@@ -244,8 +255,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
-    // Ideally it should be converted into timezone of the user
-    updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm')
+    lastActivity: beneficiary.lastActivity
   }
 }
 

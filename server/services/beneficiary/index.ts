@@ -4,7 +4,7 @@ import { getPage } from './getPage.service'
 import getBeneficiaryList from './getBeneficiaryList.service'
 
 import { updateTaxHousehold } from './updateTaxHousehold.service'
-import { exportAll } from './export-all.service'
+import { exportWorkbook } from './export-all.service'
 import { exportBeneficiary } from './exportBeneficiary.service'
 import { search } from './search.service'
 import { getSimilar } from './getSimilar.service'
@@ -32,7 +32,7 @@ export const BeneficiaryService = {
   get,
   getPage,
   updateTaxHousehold,
-  exportAll,
+  exportWorkbook,
   exportBeneficiary,
   search,
   getSimilar,
