@@ -437,12 +437,30 @@
     }))
   )
 
+  const structureInfo = useStructureInfo()
+
+  const getCodeCommune = async () => {
+    const response = await fetch(
+      `https://geo.api.gouv.fr/communes?codePostal=${structureInfo.value?.zipcode}`
+    )
+    const data = (await response.json()) as {
+      code: string
+      population: number
+    }[]
+    if (data.length === 1) {
+      return data[0]?.code
+    }
+    // municipality with the highest population
+    return data.reduce((a, b) => (b.population > a.population ? b : a)).code
+  }
+
+  const { data: codeCommune } = await useAsyncData(getCodeCommune)
+
   const doraWidgetUrl = computed(() => {
-    const code_commune = '93048' // Code commune est différent de zipcode
+    const code_commune = codeCommune.value || '71014'
     const config = useRuntimeConfig()
     const token = config.public.dataInclusion.token
     const score_qualite_minimum = '0.8'
-    // const cols = '3'
     const rows = '4'
     return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols.value}&y=${rows}`
   })
