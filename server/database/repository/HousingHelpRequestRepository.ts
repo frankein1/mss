@@ -26,6 +26,7 @@ export const HousingHelpRequestRepo = {
   findUniqueOrThrow,
   count,
   prisma: {
+    findMany: prismaClient.housingHelpRequest.findMany,
     create: prismaClient.housingHelpRequest.create,
     update: prismaClient.housingHelpRequest.update,
     updateMany: prismaClient.housingHelpRequest.updateMany,

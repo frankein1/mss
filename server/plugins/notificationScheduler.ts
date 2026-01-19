@@ -3,6 +3,7 @@ import { NotificationType } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
   HelpRequestRepo,
+  HousingHelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo
 } from '~/server/database'
@@ -84,7 +85,24 @@ async function createEndOfSupportHelpRequestNotifications() {
     }
   })
 
-  const endOfSupportHelpRequestNotifications = endOfSupportHelpRequests
+  const endOfSupportHousinhHelpRequests =
+    await HousingHelpRequestRepo.prisma.findMany({
+      include: {
+        fileInstruction: {
+          include: {
+            socialSupport: true
+          }
+        }
+      },
+      where: {
+        handlingDate: new Date()
+      }
+    })
+
+  const endOfSupportHelpRequestNotifications = [
+    ...endOfSupportHelpRequests,
+    ...endOfSupportHousinhHelpRequests
+  ]
     .filter(hr => hasDefinedCreatedBy(hr.fileInstruction))
     .map(({ fileInstruction: { socialSupport } }) => ({
       recipientId: socialSupport.createdById,
