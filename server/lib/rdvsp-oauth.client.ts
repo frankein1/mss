@@ -66,6 +66,7 @@ export interface RdvspRdv {
     location_type: 'public_office' | 'phone'
   }
   status: RdvspStatus
+  collectif: boolean
   starts_at: string
   users: { id: number; first_name: string; last_name: string }[]
   participations: { id: number; first_name: string; last_name: string }[]

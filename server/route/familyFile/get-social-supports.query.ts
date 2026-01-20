@@ -1,6 +1,5 @@
 import {
   FileInstructionType,
-  SocialSupportStatus,
   SocialSupportType,
   type Beneficiary,
   type Prisma,
@@ -18,7 +17,7 @@ import {
 import type { SecurityRuleContext } from '~/server/security'
 import { FamilyFileService, RdvspService } from '~/server/services'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { RdvspStatus } from '~/types/rdvsp'
+import { mapRdvspRdvStatusToAppointmentStatus } from './helpers'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -86,21 +85,6 @@ type SocialSupportItem = Pick<
   createdBy: Pick<User, 'firstName' | 'lastName'>
   beneficiary: Pick<Beneficiary, 'firstName' | 'usualName'>
   subjects?: { name: string }[]
-}
-
-function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {
-  switch (status) {
-    case RdvspStatus.Excused:
-      return SocialSupportStatus.RdvExcused
-    case RdvspStatus.NoShow:
-      return SocialSupportStatus.RdvNoShow
-    case RdvspStatus.Revoked:
-      return SocialSupportStatus.RdvRevoked
-    case RdvspStatus.Seen:
-      return SocialSupportStatus.RdvSeen
-    case RdvspStatus.Unknown:
-      return SocialSupportStatus.RdvUnknown
-  }
 }
 
 function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {

@@ -2,6 +2,7 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import { getAgentClient } from './helper'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
 import { UserRepo } from '~/server/database'
+import { mapRdvspRdvStatusToAppointmentStatus } from '~/server/route/familyFile/helpers'
 
 export default async function getAppointment({
   input,
@@ -26,7 +27,10 @@ export default async function getAppointment({
     duration_in_min,
     address,
     url_for_agents,
-    motif
+    motif,
+    collectif,
+    status,
+    starts_at
   } = rdvs[0]
 
   const createdBy = { id: created_by_id, firstName: '', lastName: '' }
@@ -57,6 +61,9 @@ export default async function getAppointment({
     place: address,
     url: url_for_agents,
     createdBy,
-    type: motif.location_type
+    type: motif.location_type,
+    collectif,
+    status: mapRdvspRdvStatusToAppointmentStatus(status),
+    date: starts_at
   }
 }

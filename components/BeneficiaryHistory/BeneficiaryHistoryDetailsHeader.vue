@@ -51,19 +51,10 @@
     </div>
     <div class="history-details__status">
       <SocialSupportBadgesGroup
-        v-if="socialSupport.status !== SocialSupportStatus.RdvUnknown"
         :is-appointment="
           socialSupport.socialSupportType === SocialSupportType.Appointment
         "
         :status
-      />
-      <AtomDropdown
-        v-else
-        :menus="menus"
-        :label="rdvStatusLabel"
-        :align-right="true"
-        :loading="mutationStatus === 'pending'"
-        dropdown-btn-class="fr-btn--tertiary fr-mb-1w"
       />
       <button
         ref="collapseBtn"
@@ -91,13 +82,7 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import dayjs from 'dayjs'
-  import {
-    FileInstructionType,
-    SocialSupportStatus,
-    SocialSupportType
-  } from '@prisma/client'
-  import type { MenuItem } from '~/types/menu'
-  import { RdvspStatus } from '~/types/rdvsp'
+  import { FileInstructionType, SocialSupportType } from '@prisma/client'
 
   const route = useRoute()
 
@@ -116,8 +101,6 @@
     toggleExpand: []
   }>()
 
-  const trpcClient = useTrpcClient()
-
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
   const status = computed(() => {
@@ -134,55 +117,6 @@
         return socialSupport.status
     }
   })
-
-  const { mutate, status: mutationStatus } =
-    trpcClient.rdvsp.updateAppointmentStatus.useMutation()
-
-  async function updateStatus(item: MenuItem<RdvspStatus>) {
-    await mutate({
-      id: Number(socialSupport.id),
-      status: item.value!
-    })
-    await refreshNuxtData(['getFamilyFile.history'])
-  }
-
-  const menus = computed(() => {
-    const results = []
-    const isCollectiveAppointment =
-      socialSupport.subtype?.includes('[Collectif]')
-    if (status.value !== 'RdvUpcoming') {
-      results.push({
-        label: 'RDV honoré',
-        value: RdvspStatus.Seen,
-        onClick: updateStatus
-      })
-
-      if (!isCollectiveAppointment) {
-        results.push({
-          label: 'Absence non excusée',
-          value: RdvspStatus.NoShow,
-          onClick: updateStatus
-        })
-      }
-    }
-    if (!isCollectiveAppointment) {
-      results.push({
-        label: 'Annulé par l‘usager',
-        value: RdvspStatus.Excused,
-        onClick: updateStatus
-      })
-    }
-    results.push({
-      label: 'Annulé par la structure',
-      value: RdvspStatus.Revoked,
-      onClick: updateStatus
-    })
-    return results
-  })
-
-  const rdvStatusLabel = computed(() =>
-    status.value === 'RdvUpcoming' ? 'À venir' : 'À renseigner'
-  )
 
   const attrs = computed(() => {
     switch (socialSupport.socialSupportType) {
@@ -372,19 +306,19 @@
       color: var(--text-default-grey);
     }
 
-    // &::before {
-    //   content: '';
-    //   display: block;
-    //   position: absolute;
-    //   inset: 0;
-    //   width: 100%;
-    //   height: 100%;
-    //   outline-offset: 2px;
-    //   outline-style: inherit;
-    //   outline-color: inherit;
-    //   outline-width: 2px;
-    //   border-radius: 0.5rem;
-    // }
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      outline-offset: 2px;
+      outline-style: inherit;
+      outline-color: inherit;
+      outline-width: 2px;
+      border-radius: 0.5rem;
+    }
 
     &.expanded::before {
       border-radius: 0.5rem 0.5rem 0 0;
