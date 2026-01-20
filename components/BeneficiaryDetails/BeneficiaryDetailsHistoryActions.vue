@@ -125,10 +125,6 @@
     row-gap: 0.5rem;
     align-items: center;
 
-    @include dsfr-media-query.respond-from('sm') {
-      align-items: baseline;
-    }
-
     .fr-btn {
       margin-bottom: 0;
     }
