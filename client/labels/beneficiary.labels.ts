@@ -52,7 +52,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   qpv: 'Quartier prioritaire de la politique de la ville',
   noPhone: "N'a pas de téléphone",
   phone1: 'Numéro de téléphone',
-  phone2: 'Numéro de téléphone',
+  phone2: 'Numéro de téléphone 2',
   email: 'Email',
   familySituation: 'Situation familiale',
   divorceDate: 'Date de séparation / divorce',
