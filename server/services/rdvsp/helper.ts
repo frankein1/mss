@@ -6,6 +6,10 @@ import { shouldLog } from '~/server/utils/logging.js'
 import { prismaClient } from '~/server/prisma'
 import picocolors from 'picocolors'
 
+import { SocialSupportStatus } from '@prisma/client'
+import { RdvspStatus } from '~/types/rdvsp'
+import dayjs from 'dayjs'
+
 export async function getAgentAuthInfo(userId: string) {
   const externalAccount = await prismaClient.externalAccount.findUnique({
     where: {
@@ -114,9 +118,33 @@ export function getAppointmentRdvspUrl(
   return `${baseUrl}/admin/organisations/${organisationId}/rdvs/${rdvId}`
 }
 
-export const APPOINTMENT_STATUS = {
-  seen: 'RdvSeen',
-  noshow: 'RdvNoShow',
-  excused: 'RdvExcused',
-  revoked: 'RdvRevoked'
-} as const
+export function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {
+  switch (status) {
+    case RdvspStatus.Excused:
+      return SocialSupportStatus.RdvExcused
+    case RdvspStatus.NoShow:
+      return SocialSupportStatus.RdvNoShow
+    case RdvspStatus.Revoked:
+      return SocialSupportStatus.RdvRevoked
+    case RdvspStatus.Seen:
+      return SocialSupportStatus.RdvSeen
+    case RdvspStatus.Unknown:
+      return SocialSupportStatus.RdvUnknown
+  }
+}
+
+/** Dates in RDV SP entered by the user are in the timezone "Europe/Paris".
+ *
+ * Here the raw datetime information is retrieved and the UTC timezone applied
+ * with NO CHANGE to the time and date e.g:
+ *
+ * - 2026-01-27 12:00 +0100 -> 2026-01-27T12:00Z
+ * - 2026-06-01 12:00 +0200 -> 2026-06-01T12:00Z for summer time
+ *
+ * In the frontend, the conversion will be made to utc to retrieve the original date and time.
+ */
+export function castAppointmentDatestringToUTC(startsAt: string) {
+  return new Date(
+    dayjs(startsAt).tz('Europe/Paris').format('YYYY-MM-DDTHH:mm[Z]')
+  )
+}

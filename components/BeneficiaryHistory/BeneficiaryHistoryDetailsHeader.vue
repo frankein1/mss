@@ -30,7 +30,7 @@
           "
         >
           <span class="history-details__date">
-            à {{ dayjs(socialSupport.date).format('H[h]mm') }}
+            à {{ getUTCTimeFromDate(socialSupport.date) }}
           </span>
         </template>
         <template v-if="!singleBeneficiary">

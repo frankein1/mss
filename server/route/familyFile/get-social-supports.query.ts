@@ -17,7 +17,10 @@ import {
 import type { SecurityRuleContext } from '~/server/security'
 import { FamilyFileService, RdvspService } from '~/server/services'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { mapRdvspRdvStatusToAppointmentStatus } from './helpers'
+import {
+  castAppointmentDatestringToUTC,
+  mapRdvspRdvStatusToAppointmentStatus
+} from '~/server/services/rdvsp/helper'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -101,7 +104,7 @@ function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
       usualName: rdv.users[0]?.last_name ?? ''
     },
     status: mapRdvspRdvStatusToAppointmentStatus(rdv.status),
-    date: new Date(rdv.starts_at),
+    date: castAppointmentDatestringToUTC(rdv.starts_at),
     socialSupportType: SocialSupportType.Appointment,
     // Be careful, the frontend checks the presence of the [Collectif] fragment
     // in "subtype" to determine allowed status updates on appointments.

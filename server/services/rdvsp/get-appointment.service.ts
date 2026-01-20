@@ -1,8 +1,11 @@
 import type { ProtectedAppContext } from '~/server/trpc'
-import { getAgentClient } from './helper'
+import {
+  castAppointmentDatestringToUTC,
+  getAgentClient,
+  mapRdvspRdvStatusToAppointmentStatus
+} from './helper'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
 import { UserRepo } from '~/server/database'
-import { mapRdvspRdvStatusToAppointmentStatus } from '~/server/route/familyFile/helpers'
 
 export default async function getAppointment({
   input,
@@ -64,6 +67,6 @@ export default async function getAppointment({
     type: motif.location_type,
     collectif,
     status: mapRdvspRdvStatusToAppointmentStatus(status),
-    date: starts_at
+    date: castAppointmentDatestringToUTC(starts_at)
   }
 }
