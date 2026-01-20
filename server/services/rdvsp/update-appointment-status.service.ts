@@ -10,7 +10,7 @@ export default async function updateAppointmentStatus({
   input: { id: number; status: RdvspStatus }
   ctx: ProtectedAppContext
 }) {
-  const agentClient = await getAgentClient({ user_id: ctx.user.id })
+  const agentClient = getAgentClient({ user_id: ctx.user.id })
   const data = await agentClient<Pick<RdvspRdv, 'status'>>(
     `/rdvs/${id}/update_status`,
     { body: { status }, method: 'PATCH' }

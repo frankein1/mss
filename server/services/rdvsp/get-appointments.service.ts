@@ -11,7 +11,7 @@ export default async function getAppointments({
   input: { familyFileId: string }
   ctx: ProtectedAppContext
 }) {
-  const agentClient = await getAgentClient({ user_id: ctx.user.id })
+  const agentClient = getAgentClient({ user_id: ctx.user.id })
   const beneficiaries = await BeneficiaryRepo.findMany(ctx.user, {
     where: { familyFileId: input.familyFileId },
     select: { externalRdvspId: true }

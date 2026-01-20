@@ -10,5 +10,8 @@ export const rdvspRouter = router({
     .mutation(rdvspRoutes.updateAppointmentStatusMutation.execute),
   planAppointment: protectedProcedure
     .input(rdvspRoutes.planAppointment.inputValidation)
-    .mutation(rdvspRoutes.planAppointment.execute)
+    .mutation(rdvspRoutes.planAppointment.execute),
+  getAuthStatus: protectedProcedure
+    .input(rdvspRoutes.getAuthStatusQuery.inputValidation)
+    .query(rdvspRoutes.getAuthStatusQuery.execute)
 })

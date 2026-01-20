@@ -9,6 +9,19 @@
       />
     </section>
     <AtomAlert
+      v-if="rdvspAuthStatus === 'no_account'"
+      :alert-type="AlertType.Error"
+      closeable
+      message="Connexion à RDVSP impossible"
+      ><template #detailedMessage
+        ><p>
+          Vous n'avez pas de compte RDVSP, vous ne pouvez donc pas voir les
+          rendez-vous déjà pris ni en prendre de nouveaux. Rapprochez-vous de
+          votre responsable de structure pour activer votre compte
+        </p>
+      </template></AtomAlert
+    >
+    <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
       message="L'historique du bénéficiaire n'a pas pu être chargé."
@@ -65,6 +78,8 @@
     await trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
       queryKey: 'getFamilyFile.history'
     })
+  const { data: rdvspAuthStatus } =
+    await trpcClient.rdvsp.getAuthStatus.useQuery()
 
   const emit = defineEmits<{ refresh: [] }>()
 
@@ -95,5 +110,9 @@
     > *:not(:last-child) {
       margin-bottom: 2rem;
     }
+  }
+
+  .fr-alert {
+    margin-bottom: 2rem;
   }
 </style>

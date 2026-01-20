@@ -57,17 +57,20 @@ const onResponseDebug: FetchHooks['onResponse'] = ({
 
 const onResponse = shouldLog('rdvsp') ? onResponseDebug : undefined
 
-export async function getAgentClient({ user_id }: { user_id: string }) {
+export function getAgentClient({ user_id }: { user_id: string }) {
   const config = getConfig()
-  const agentAuthInfo = await getAgentAuthInfo(user_id)
   const client = ofetch.create({
     baseURL: `${config.issuer}/api/v1`,
-    headers: {
-      Authorization: `Bearer ${agentAuthInfo.accessToken}`
-    },
-    onRequest({ options }) {
+    retryStatusCodes: [401, 408, 409, 425, 429, 500, 502, 503, 504],
+    async onRequest({ options }) {
       ;(options as any).startTime = Date.now()
       options.headers.set('x-start-time', Date.now().toString())
+
+      const agentAuthInfo = await getAgentAuthInfo(user_id)
+      options.headers.set(
+        'Authorization',
+        `Bearer ${agentAuthInfo.accessToken}`
+      )
     },
     onResponse,
     onResponseError: async error => {
@@ -75,6 +78,7 @@ export async function getAgentClient({ user_id }: { user_id: string }) {
         onResponse?.(error)
         if (error.response?.status === 401) {
           // Try to refresh token
+          const agentAuthInfo = await getAgentAuthInfo(user_id)
           const data = await refreshToken(agentAuthInfo.refreshToken)
           await prismaClient.externalAccount.update({
             where: { id: agentAuthInfo.id },

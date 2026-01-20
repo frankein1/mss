@@ -133,6 +133,8 @@ const handler = async ({
         })
           .then(rdvs => rdvs.map(mapRdvspRdvToSocialSupportItem))
           .catch(error => {
+            // Only log the error silently, we still want to displaye
+            // the social supports.
             console.error(error)
             return []
           })

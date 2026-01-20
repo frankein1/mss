@@ -14,7 +14,7 @@ export default async function getAppointment({
   input: { id: number }
   ctx: ProtectedAppContext
 }) {
-  const agentClient = await getAgentClient({ user_id: ctx.user.id })
+  const agentClient = getAgentClient({ user_id: ctx.user.id })
   const { rdvs } = await agentClient<{ rdvs: RdvspRdv[] }>('/rdvs', {
     query: { id: input.id }
   })
