@@ -151,6 +151,17 @@ async function createOrUpdateToken(
       })
     ])
   } else {
+    // Note : An external account should never have been created for a user without the proper org
+    //
+    // However, to manage the cases where a connexion trial has been performed before the date of
+    // the implementation of the organisation verification (2026/01/21), we always perform the check
+    // even if it looks useless when reading the code
+    if (structure.externalRdvspId) {
+      await throwIfInvalidRdvspOrganisationId(
+        structure.externalRdvspId,
+        token.access_token
+      )
+    }
     console.log('update account', account.id)
     await prismaClient.externalAccount.update({
       where: { id: account.id },
