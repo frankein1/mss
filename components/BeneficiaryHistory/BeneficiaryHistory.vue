@@ -12,13 +12,13 @@
       v-if="rdvspAuthStatus === 'no_account' && !isRdvspAlertHidden"
       :alert-type="AlertType.Error"
       closeable
-      message="Connexion à RDVSP impossible"
+      message="Connexion à Rendez-vous Service Public impossible"
       @close="isRdvspAlertHidden = true"
       ><template #detailedMessage
         ><p>
           Vous n'avez pas de compte RDVSP, vous ne pouvez donc pas voir les
           rendez-vous déjà pris ni en prendre de nouveaux. Rapprochez-vous de
-          votre responsable de structure pour activer votre compte
+          votre responsable de structure pour activer votre compte.
         </p>
       </template></AtomAlert
     >
