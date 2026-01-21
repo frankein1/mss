@@ -9,10 +9,11 @@
       />
     </section>
     <AtomAlert
-      v-if="rdvspAuthStatus === 'no_account'"
+      v-if="rdvspAuthStatus === 'no_account' && !isRdvspAlertHidden"
       :alert-type="AlertType.Error"
       closeable
       message="Connexion à RDVSP impossible"
+      @close="isRdvspAlertHidden = true"
       ><template #detailedMessage
         ><p>
           Vous n'avez pas de compte RDVSP, vous ne pouvez donc pas voir les
@@ -80,6 +81,7 @@
     })
   const { data: rdvspAuthStatus } =
     await trpcClient.rdvsp.getAuthStatus.useQuery()
+  const isRdvspAlertHidden = ref(false)
 
   const emit = defineEmits<{ refresh: [] }>()
 
