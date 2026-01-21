@@ -99,7 +99,13 @@ export function getAgentClient({ user_id }: { user_id: string }) {
   return client
 }
 
-export function checkIntegrationSetupForStructure(structure: {
+/** In order to use the integration :
+ * 1. the structure must be activated through the app back-office : route toggleRdvsp.
+ * 2. the app must hold the RDV SP id of the structure. If not, a 401 error is thrown and the
+ * frontend will redirect to the RDV SP login page to perform first login and retrieve
+ * the RDVSP ID of the structure.
+ */
+export function throwIfStructureIsNotSetup(structure: {
   externalRdvspActive: boolean | null
   externalRdvspId: string | null
 }) {

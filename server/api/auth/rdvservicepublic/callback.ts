@@ -4,7 +4,7 @@ import * as client from '~/server/lib/rdvsp-oauth.client'
 import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'
 import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
-import { unauthorized, badrequest } from '~/utils/api/errors'
+import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 
 const { auth } = useRuntimeConfig()
 
@@ -17,13 +17,15 @@ export default defineEventHandler(async event => {
   const { code, state } = getQuery(event)
 
   if (!code || !state) {
-    throw unauthorized('No code or state returned from RDVSP OAuth')
+    throw unauthorized(
+      'rdvsp-auth-callback: No code or state returned from RDVSP OAuth'
+    )
   }
 
   const user = event.context.auth?.user
 
   if (!user) {
-    throw unauthorized('No user found from RDVSP OAuth')
+    throw unauthorized('rdvsp-auth-callback: No user found from RDVSP OAuth')
   }
 
   checkUserIsAuthenticated(user)
@@ -67,14 +69,16 @@ async function createOrUpdateToken(
   const { nonce: sessionNonce, state: sessionState } = session.data
 
   if (!sessionNonce || !sessionState || sessionState !== state) {
-    throw unauthorized('Missing or invalid state or nonce')
+    throw unauthorized('rdvsp-auth-callback: Missing or invalid state or nonce')
   }
 
   const cfg = client.getConfig()
   const token = await client.getToken(cfg, code as string)
 
   if ('error' in token || !token) {
-    throw badrequest('Could not retrieve authentication token')
+    throw unauthorized(
+      'rdvsp-auth-callback: Could not retrieve authentication token'
+    )
   }
 
   // FIXME nonce verification could be implemented here
@@ -83,7 +87,7 @@ async function createOrUpdateToken(
   console.log(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
 
   if ('error' in agent || !agent) {
-    throw badrequest('Could not retrieve agent info')
+    throw badrequest('rdvsp-auth-callback: Could not retrieve agent info')
   }
 
   const structure = await prismaClient.structure.findUnique({
@@ -92,7 +96,9 @@ async function createOrUpdateToken(
   })
 
   if (!structure?.externalRdvspActive) {
-    throw unauthorized('Rdvsp integration not active for this structure')
+    throw forbidden(
+      'rdvsp-auth-callback: Rdvsp integration not active for this structure'
+    )
   }
 
   const getProvider = (agent: any) =>
@@ -116,6 +122,11 @@ async function createOrUpdateToken(
 
     if (!structure.externalRdvspId) {
       await importRdvspOrganisationId(structureId, token.access_token)
+    } else {
+      await throwIfInvalidRdvspOrganisationId(
+        structure.externalRdvspId,
+        token.access_token
+      )
     }
 
     await Promise.all([
@@ -166,12 +177,52 @@ async function importRdvspOrganisationId(
 
   const org = await client.getOrganisation(cfg, accessToken)
 
-  if ('error' in org || !org) {
-    throw badrequest('Could not retrieve agent organization')
+  if (!org) {
+    throw forbidden(
+      'rdvsp-auth-callback: Rdvsp integration not active for this user'
+    )
+  }
+
+  if ('error' in org) {
+    throw badrequest(
+      'rdvsp-auth-callback: Could not retrieve agent organization'
+    )
   }
 
   await prismaClient.structure.update({
     where: { id: structureId },
     data: { externalRdvspId: org.id.toString() }
   })
+}
+
+/** A user can create a rdvsp account independently but to use the integration,
+ * the rdvsp organisation administrator must invite her to join the organization.
+ *
+ * If the rdvsp org id of the user and the one of the structure do NOT
+ * match, the authentication process FAILS then the nuxt error page manages
+ * the error triggered.
+ */
+async function throwIfInvalidRdvspOrganisationId(
+  structureExternalRdvspId: string,
+  accessToken: string
+) {
+  const cfg = client.getConfig()
+  const org = await client.getOrganisation(cfg, accessToken)
+
+  if (!org) {
+    throw forbidden(
+      'rdvsp-auth-callback: Rdvsp integration not active for this user'
+    )
+  }
+  if ('error' in org) {
+    throw badrequest(
+      'rdvsp-auth-callback: Could not retrieve agent organization for validation'
+    )
+  }
+
+  if (org.id.toString() !== structureExternalRdvspId) {
+    throw forbidden(
+      'rdvsp-auth-callback: user is not assigned to the proper organisation'
+    )
+  }
 }

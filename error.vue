@@ -41,12 +41,20 @@
           >Réessayer une connexion</NuxtLink
         >
       </li>
+      <li v-if="hasOverviewLink">
+        <NuxtLink
+          class="fr-btn"
+          :to="routes.user.AppOverview.path()"
+          external
+          >Retourner au tableau de bord</NuxtLink
+        >
+      </li>
     </ul>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-  import { apiRoutes } from '~/utils/routes'
+  import { apiRoutes, routes } from '~/utils/routes'
   import { APP_NAME } from '~/utils/constants'
 
   const {
@@ -63,6 +71,10 @@
       data: any
     }
   }>()
+
+  const isRdvspAuthError = computed(() =>
+    props.error.message.match(/rdvsp-auth-callback/i)
+  )
 
   const pageTitle = computed(() => {
     switch (props.error.statusCode) {
@@ -120,10 +132,25 @@
 
   const hasHomeLink = computed(() => props.error.statusCode === 404)
   const hasSignoutLink = computed(
-    () => props.error.statusCode === 403 || props.error.statusCode === 401
+    () =>
+      !isRdvspAuthError.value &&
+      (props.error.statusCode === 403 || props.error.statusCode === 401)
   )
+  const hasOverviewLink = computed(() => isRdvspAuthError.value)
 
   function manage401Error() {
+    if (isRdvspAuthError.value) {
+      return {
+        pageTitle:
+          "Échec d'authentification de l'intégration Rendez-Vous Service Public",
+        intro:
+          "Vos informations d'authentification sont invalides ou expirées.",
+        solutions: [
+          'Veuillez vous authentifier à nouveau.',
+          "En cas d'échec répété, contactez-nous pour que nous puissions solutionner vos problèmes d'accès."
+        ]
+      }
+    }
     if (props.error.message.match(/logout failure/i)) {
       return {
         pageTitle: 'Échec de déconnexion',
@@ -145,6 +172,17 @@
   }
 
   function manage403Error() {
+    if (isRdvspAuthError.value) {
+      return {
+        pageTitle: "Accès à l'intégration MSS - RDV SP impossible",
+        intro:
+          "Vous n'avez pas les droits suffisants pour utiliser l'intégration.",
+        solutions: [
+          "Si vous êtes le ou la responsable de votre structure, contactez-nous pour que nous puissions solutionner vos problèmes d'accès.",
+          'Sinon, veuillez vous rapprocher de votre responsable de structure pour mettre en place votre accès.'
+        ]
+      }
+    }
     if (props.error.message.match(/unknown user/i)) {
       return {
         pageTitle: 'Utilisateur inconnu',

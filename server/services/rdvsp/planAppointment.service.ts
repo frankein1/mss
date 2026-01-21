@@ -8,7 +8,7 @@ import type { PlanAppointmentInput } from '~/server/schema'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { invalidError, unauthorizedError } from '~/server/trpc'
-import { getAgentAuthInfo, checkIntegrationSetupForStructure } from './helper'
+import { getAgentAuthInfo, throwIfStructureIsNotSetup } from './helper'
 import { SocialSupportStatus, SocialSupportType } from '@prisma/client'
 import { connect } from '~/utils/prisma'
 import { routes } from '~/utils/routes'
@@ -56,7 +56,7 @@ export async function planAppointment({
     })
   ])
 
-  checkIntegrationSetupForStructure(structure)
+  throwIfStructureIsNotSetup(structure)
 
   const { accessToken } = await getAgentAuthInfo(ctx.user.id)
 
