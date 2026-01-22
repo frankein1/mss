@@ -5,6 +5,7 @@ import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'
 import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
+import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
 const { auth } = useRuntimeConfig()
 
@@ -52,10 +53,17 @@ export default defineEventHandler(async event => {
     action: session.data.metadata.action,
     id: session.data.metadata.id
   }
-  const redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+  let redirect = routes.user.AppOverview.path()
 
+  if (options.action === 'planAppointment') {
+    redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+  } else if (options.action === 'goToFamilyFileHistory') {
+    redirect = routes.file.AppFile.path(options.id, {
+      tab: BeneficiaryTab.History
+    })
+  }
   await session.clear()
-  return sendRedirect(event, redirect || routes.user.AppOverview.path())
+  return sendRedirect(event, redirect)
 })
 
 /** Update external_account table with RDVSP auth token for the user */

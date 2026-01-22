@@ -9,17 +9,54 @@
       />
     </section>
     <AtomAlert
-      v-if="rdvspAuthStatus === 'no_account' && !isRdvspAlertHidden"
+      v-if="
+        (rdvspAuthStatus === 'no_account' ||
+          rdvspAuthStatus === 'disconnected') &&
+        !isRdvspAlertHidden
+      "
       :alert-type="AlertType.Error"
       closeable
       message="Connexion à Rendez-vous Service Public impossible"
       @close="isRdvspAlertHidden = true"
-      ><template #detailedMessage
-        ><p>
-          Vous n'avez pas de compte RDVSP, vous ne pouvez donc pas voir les
-          rendez-vous déjà pris ni en prendre de nouveaux. Rapprochez-vous de
-          votre responsable de structure pour activer votre compte.
-        </p>
+      ><template #detailedMessage>
+        <template v-if="rdvspAuthStatus === 'no_account'">
+          <p>
+            Vous ne pouvez pas voir les rendez-vous déjà pris avec le module de
+            prise de rdv.
+          </p>
+          <ul>
+            <li>
+              Soit votre compte RDV Service Public n’est pas encore actif :
+              prenez un nouveau rdv !
+            </li>
+            <li>
+              Soit votre compte n’existe pas, votre responsable de structure
+              doit vous le créer sur RDV Service Public
+            </li>
+          </ul>
+        </template>
+        <template v-else>
+          <div>
+            <p>
+              Vous avez été déconnecté de RDVSP, reconnectez-vous pour afficher
+              les rendez-vous.
+            </p>
+            <div class="fr-pt-2v">
+              <NuxtLink
+                class="fr-btn fr-btn--secondary"
+                :to="
+                  apiRoutes.rdvsp.ApiSignIn.path({
+                    action: 'goToFamilyFileHistory',
+                    id: familyFileId
+                  })
+                "
+                external
+                @click="trackRdvspReconnection"
+                >Se connecter à RDV SP</NuxtLink
+              >
+            </div>
+          </div>
+        </template>
       </template></AtomAlert
     >
     <AtomAlert
@@ -61,6 +98,8 @@
   import type { FamilyFilePermissions } from '~/server/security'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import type { SocialSupportFilterInput } from '~/server/schema'
+  import { apiRoutes } from '~/utils/routes'
+  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const { familyFileId, familyFilePermissions, familyFileIdentification } =
@@ -101,6 +140,14 @@
     )
     emit('refresh')
   }
+
+  function trackRdvspReconnection() {
+    const matomo = useMatomo()
+    matomo.trackEvent(
+      EventCategory.History,
+      BeneficiaryHistoryAction.ReconnectToRdsvp
+    )
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -116,5 +163,10 @@
 
   .fr-alert {
     margin-bottom: 2rem;
+  }
+
+  .test {
+    display: flex;
+    place-content: center space-between;
   }
 </style>
