@@ -7,19 +7,20 @@ const ministerMap = {
     firstName: 'François',
     lastName: 'Braun',
     function: 'Santé et Prévention',
-    former: false
+    former: true
   },
   AgnesFirminLeBodo: {
     firstName: 'Agnès',
     lastName: 'Firmin-Le Bodo',
-    function: 'Ministre déléguée',
-    former: false
+    function: 'Santé et Prévention',
+    former: true
   },
   JeanChristopheCombe: {
     firstName: 'Jean-Christophe',
     lastName: 'Combe',
     function: 'Solidarités, Autonomie et Personnes handicapées',
-    former: false
+    ministry: 'Solidarités, Autonomie et Personnes handicapées',
+    former: true
   },
   GenevieveDarrieussecq: {
     firstName: 'Geneviève',
@@ -31,129 +32,135 @@ const ministerMap = {
     firstName: 'Geneviève',
     lastName: 'Darrieussecq',
     function: 'Ministre de la Santé et de l’Accès aux soins',
-    former: false
+    government: 'Barnier 1',
+    former: true
   },
   OlivierDussopt: {
     firstName: 'Olivier',
     lastName: 'Dussopt',
     function: 'Travail, Plein emploi et Insertion',
-    former: false
+    former: true
   },
   CaroleGrandjean: {
     firstName: 'Carole',
     lastName: 'Grandjean',
     function: 'Enseignement, Formation professionnels',
-    former: false
+    former: true
   },
   AurelienRousseau: {
     firstName: 'Aurélien',
-    lastName: 'Aurélien',
+    lastName: 'Rousseau',
     function: 'Santé et Prévention',
-    former: false
+    former: true
   },
   AuroreBerge: {
     firstName: 'Aurore',
     lastName: 'Bergé',
     function: 'Solidarités et Familles',
-    former: false
+    former: true
   },
   FadilaKhattabi: {
     firstName: 'Fadila',
     lastName: 'Khattabi',
     function: 'Personnes handicapées',
-    former: false
+    former: true
   },
   CatherineVautrin: {
     firstName: 'Catherine',
     lastName: 'Vautrin',
     function: 'Travail, Santé et Solidarités',
-    former: false
+    former: true
   },
   FredericValletoux: {
     firstName: 'Frédéric',
     lastName: 'Valletoux',
     function: 'Délégué Santé et Prévention',
-    former: false
+    former: true
   },
   SarahElHairy: {
     firstName: 'Sarah',
     lastName: 'El Haïry',
     function: 'Déléguée Enfance, Jeunesse et Familles',
-    former: false
+    former: true
   },
   AstridPanosyanBouvet: {
     firstName: 'Astrid',
     lastName: 'Panosyan-Bouvet',
     function: 'Ministre du Travail et de l’Emploi',
-    former: false
+    former: true
   },
   PaulChristophe: {
     firstName: 'Paul',
     lastName: 'Christophe',
     function:
       'Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes',
-    former: false
+    ministry:
+      'Ministère des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes',
+    former: true
   },
   AgnesCanayer: {
     firstName: 'Agnès',
     lastName: 'Canayer',
     function:
       'Ministre déléguée, chargée de la Famille et de la Petite Enfance',
-    former: false
+    ministry: 'Ministère de la Famille et de la Petite Enfance',
+    former: true
   },
   SalimaSaa: {
     firstName: 'Salima',
     lastName: 'Saa',
     function:
       "Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes",
-    former: false
+    former: true
   },
   CharlotteParmentierLecocq: {
     firstName: 'Charlotte',
     lastName: 'Parmentier-Lecocq',
     function:
       'Ministre déléguée, chargée des Personnes en situation de handicap',
-    former: false
+    former: true
   },
   CatherineVautrinBayrou1: {
     firstName: 'Catherine',
     lastName: 'Vautrin',
     function:
       'Ministre du Travail, de la Santé, des Solidarités et des Familles',
-    government: 'Bayrou 1',
-    former: false
+    government: 'Bayrou',
+    former: true
   },
   AstridPanosyanBouvetBayrou1: {
     firstName: 'Astrid',
     lastName: 'Panosyan-Bouvet',
     function: "Ministre chargée du Travail et de l'Emploi",
-    government: 'Bayrou 1',
-    former: false
+    government: 'Bayrou',
+    former: true
   },
   YannickNeuder: {
     firstName: 'Yannick',
     lastName: 'Neuder',
     function: "Ministre chargé de la Santé et de l'Accès aux soins",
-    former: false
+    government: 'Bayrou',
+    former: true
   },
   CharlotteParmentierLecocqBayrou1: {
     firstName: 'Charlotte',
     lastName: 'Parmentier-Lecocq',
     function: 'Ministre chargée de l’Autonomie et du Handicap',
-    government: 'Bayrou 1',
-    former: false
+    government: 'Bayrou',
+    former: true
   },
   SarahElHairyBayrou1: {
     firstName: 'Sarah',
     lastName: 'El Haïry',
     function: 'Haut-commissaire à l’enfance',
-    government: 'Bayrou 1',
-    former: false
+    government: 'Bayrou',
+    former: true
   },
   JeanPierreFarandou: {
     firstName: 'Jean-Pierre',
     lastName: 'Farandou',
     function: 'Ministre du Travail et des Solidarités',
+    government: 'Lecornu',
     former: false
   },
   StephanieRist: {
@@ -161,6 +168,7 @@ const ministerMap = {
     lastName: 'Rist',
     function:
       'Ministre de la Santé, des Familles, de l’Autonomie et des Personnes handicapées',
+    government: 'Lecornu',
     former: false
   },
   CharlotteParmentierLecornu2: {
