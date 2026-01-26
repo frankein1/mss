@@ -34,8 +34,7 @@
         <p>
           L’ensemble des données relatives au dossier seront supprimées de Mon
           Suivi Social. Le dossier et ses accompagnements ne seront plus
-          comptabilisés dans les statistiques. Seuls le nom et le prénom seront
-          conservés si vous avez sélectionné l’option.
+          comptabilisés dans les statistiques.
         </p>
       </template>
     </AtomAlertMSS>
