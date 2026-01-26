@@ -35,6 +35,9 @@ importers:
       '@sentry/node':
         specifier: ^10.5.0
         version: 10.5.0
+      '@scaleway/sdk':
+        specifier: ^3.1.5
+        version: 3.1.5(@scaleway/sdk-client@2.1.0)
       '@sentry/vue':
         specifier: ^10.5.0
         version: 10.5.0(vue@3.5.18(typescript@5.9.2))
@@ -2073,6 +2076,290 @@ packages:
     resolution: {integrity: sha512-aRXd7tRZkWLqGbChgcMMDEHjOKudo1kChb1Jt1IfR8cY/KIpgNviLeJy5FUb9IpSuQj8dU2fAYNMPW/hLKOSTw==}
     cpu: [x64]
     os: [win32]
+
+  '@scaleway/random-name@5.1.2':
+    resolution: {integrity: sha512-WBiqKPnJdncl2mcA7t89rZrxaSIRF/eiyo69sbIiVsOj413+zg3Royzv4ddkRdNTnNg0l21GZpA6O8pfZyPAQQ==}
+    engines: {node: '>=20.x'}
+
+  '@scaleway/sdk-account@2.2.0':
+    resolution: {integrity: sha512-hdvVd3OC7mGV6Sny83sKOxRSprOx0BjkYKzN1dARwSQDrHgq6JIRfG/Pa/klAr5NpRzFHOy8xZdok2IxftVHXg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-applesilicon@2.3.0':
+    resolution: {integrity: sha512-m3mxghw7YqTreOANnJVmQtXJHQiLXRGYpYTPE2aiGCe72Ad2r9YG2qH69b0JgqxL8rq57Hxwu0nLdQVnVhJ5hw==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-audit-trail@2.3.0':
+    resolution: {integrity: sha512-06CZmEVTApIky9NSFVZrn7UAv8yxwi9bGmaF0bsVg6CRe53svNfDXMAyZU4GZFzvmsDOCLIOJe+3mPfcx4ch0w==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-autoscaling@2.2.0':
+    resolution: {integrity: sha512-CjiA/vpcCchdRhENJbzInmthAJfN8izftP2ONld9Kd9htza+2LcF8+Yl+8Ai/hzL4Y5exEC5TMgyqsYsjsYXhg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-baremetal@2.2.0':
+    resolution: {integrity: sha512-jhA6zqQEuDPU5a9h3/yLbLc3RDDGSDEaZLafphJ1yysgXUnag1SVVePwYEKiIevPNHgBU8R7JdNxVaznjsgZ1A==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-billing@2.2.0':
+    resolution: {integrity: sha512-ivTYhJgnvfJOh5QJE082aBqPxU0P5hYVpQrPBO13O7iIZhJKbHRB4ew5F9pLUwFvN1NXm3HIGl9VtDJ5Nk7e4Q==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-block@2.2.1':
+    resolution: {integrity: sha512-qb5q09Rl49Fjgmy0saDzKwxh1R7UxN/2OrnfZzjeJtmL1UZWnkywjg2sqiQJ/Ynqe1Pi/0NZWwKTiFbxWXPqwA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-client@2.1.0':
+    resolution: {integrity: sha512-/2Sw30paGDWyY+UMZeynOIoJlwCtlnEf8H91+HtwAffZ+coT5SNqP/S2Mu7eFPT+nsRVTDrnaHF2VCt/FqExTg==}
+    engines: {node: '>=20.19.6'}
+
+  '@scaleway/sdk-cockpit@2.2.0':
+    resolution: {integrity: sha512-nltcaS2M+X9hLpH+wfMvAo7MQOgWJHWPHobKP7gcd9DLWY7gj8Wb/G2fX4y5BoZJnyY5FX3+/ouUKA4Wg6nPvA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-container@2.3.0':
+    resolution: {integrity: sha512-UHVcCyfv1aKQnTSJajJuqM7coOgcOksZ8ippQY6JCD6HuI50Vx3PPP8NZe/M3VHbbeOfb9W0PPc2QgajtLo38w==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-datawarehouse@2.2.0':
+    resolution: {integrity: sha512-7xTygGMqJ4/PvMHacSZHovKrcfPO9LiHeygYozjFDwoAz7vl0wQF/9EN6FC//L17YhgUDtAJVbU1GWuoD6KlZA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-dedibox@2.2.0':
+    resolution: {integrity: sha512-JnGRmeTduAfNn9ps0JRy5amxlvURuOs/NwAPLH0aP3CeivEoTdN/zoUabMXFKZbtqyasvVP2sIRmfv+vP2PDUg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-domain@2.2.1':
+    resolution: {integrity: sha512-I9FYgiWvzJoTXA5b0F6YlknocX6o2+w3e3eDi8ryxPAuNZ8w6C0aGFXyLs81KWG/coXAfJDZ+r+ytHEA+mfZNA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-edge-services@2.3.0':
+    resolution: {integrity: sha512-yptH8Bj3IGAXglZBtNNWwcoeSgjYZSpgTeg9mL8gmc2Yh33EFjqbMbzLIbsSiOv1NYy0akbUNd8mdlKO58Qzlw==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-environmental-footprint@2.4.0':
+    resolution: {integrity: sha512-bg6NZ9WqwkVl5K9GAnAqkDnce6f6Jp/UGA6nxueM7x1pxqO6QnaZ4uPBNo7jUvCS/x5E0exZyVz+qq5y8BMaUg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-file@2.2.0':
+    resolution: {integrity: sha512-it2FIijwIZOg2r1YLUu+4ekzeaXxjylZ6xwBJ4nYWEiyntxPeI3XjdaPczcLWTaKWG9ehMfReYQNL5k/kfy35w==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-flexibleip@2.2.0':
+    resolution: {integrity: sha512-XA0LH7EuphPjIrjhHYwrnUislwC725tGx28b6Y1In/FPBXRQ9wL1uoQGtwWzbvuoJ7psJ8/wHh5gjFwXa5CDCA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-function@2.2.0':
+    resolution: {integrity: sha512-n58b1h7zhzNJinlmFqTG5xpY0TqKNoG0nTcK87e516yA7Wc+mumuMXmQ/CGGeL4EeU3Rk5UF8QRI7EL50vac6A==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-iam@2.2.0':
+    resolution: {integrity: sha512-FjdVCIvWoI6h9mgP5xhnKUGwlTpE1tUTop4sthoGhoQrO5tngv+8FLTdpFMItefhB71A0LUY4kfdRWoRQ8VuYA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-inference@2.2.0':
+    resolution: {integrity: sha512-VRZUm5p5LDecXb6yxnXvo4hvztm5czPBniZTde7o5tv3vfBQZfYIXpNHGufK40+cLewJeroRcNNftaN2aE7b+g==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-instance@2.2.0':
+    resolution: {integrity: sha512-2SAd9415SpNvRDQxAT/1M5LlyKr3VeuNYQWKee10/UOgm1S882fLDMSAGkN3bX1vp1Xt7F3DAu1usxuG+1/IzA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-interlink@2.2.0':
+    resolution: {integrity: sha512-J8lP+/XGiHwagmyBdAwxaxk1uq0G+O6artx2bBpXs/uf4dZf/S7h3htNLwC0FDPWJtaqHr+ObE48KReQlN5uxQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-iot@2.2.0':
+    resolution: {integrity: sha512-CC5+LKN4Yud3C4KP8O0aYMaQ1qLD01I2MXDn/VwixIiVa1M8sD/zQJjQqG1QsRbDiwwAUA+7oZdJxuiGTJe/ig==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-ipam@2.2.0':
+    resolution: {integrity: sha512-bXSjCCXQMaqpnxPRBfE/Jjm+d75MK4utyOsrl4hmsL0T9KUzQOmb7K8MxzLMaadvm+Mg8QMrusHpAexGkQlzcg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-jobs@2.2.0':
+    resolution: {integrity: sha512-7t/BtdIS4p9A+m0mNCWme2R6PfeHtI3rGZpJTWsWD8/Jkvvxqp7TNp6oLmFYMRLzQkXSjgYO2qXwlgnSCeIa3w==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-k8s@2.3.0':
+    resolution: {integrity: sha512-5mFnQJei8uAcd6Ky94QSq/RuyUnFUl+lH5iSAmV56uJUavf2XshVxCLpW1HHn8Hm4fCLDkbxr9EZ0mvaqRZ8Jw==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-kafka@2.2.0':
+    resolution: {integrity: sha512-aSIvS1K5IkCfN/LRBLE9w1dQqEjkkIg9TOOmc2MWu6zOsjkjvdInnGqxh9EROq2IZhtlFVCabjRsYPUTAInwfw==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-key-manager@2.2.0':
+    resolution: {integrity: sha512-5s2FcHj3O48hhLXCR4+NonACbHKhI4bsof/ont03r07IkJgM0HOaWwLplfNFlGpGV/LOCWMmsJ0kpSKHNHGRjQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-lb@2.2.0':
+    resolution: {integrity: sha512-t18MnkCscYs9JeJHd2t6xRQBltFD3GJYU4HSCE7LiVDzghpGGm3a86cXv637+e4OoV60pQwowqpjnUZOihbqAA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-marketplace@2.2.0':
+    resolution: {integrity: sha512-887xfDDCuRa2lyfbCazbQpDtdYbwHZJc2nOhiz787hbkfYXfBb/mayYfpX8Rwi/lWUd9BlsnZGJDSLzOGqfuNA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-mnq@2.2.0':
+    resolution: {integrity: sha512-sSO+TjRyoPFSq2nImR6Q9MIybMISJ4PMEoQv7gux8Uh/4nRQeM2z6MF/ybqH673Cd7yKvQ+W+nT0eOr2PfYBoA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-mongodb@2.2.0':
+    resolution: {integrity: sha512-hHq7MAuUzLw3N7QwbVKEyEW6WSWGgb0dz+eLHammAr9gIgYTNANbxZFGNqRvtjXLhGbQ1g72YjicRG1QGJXIXg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-product-catalog@2.3.0':
+    resolution: {integrity: sha512-PvYkeqoo1B60TvKw210IWl+WtMUsCA4JTNeia35jh1m/H5u3kz7NymmcQnA5LjipFGgnHlSP68DX8HFS/4aAdQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-qaas@2.2.0':
+    resolution: {integrity: sha512-IomGWOjIM7TE2WVMDQu2q2c1UZUujC7f6d+HvMVV6Nvc6nmOVchpz0E+9fMW3Iwc/UTaxEJswZDhvMUpyGr54A==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-rdb@2.2.0':
+    resolution: {integrity: sha512-PfVTGDNgOtUx9WxEhUypLijDGLYr8b6NSHp3Sbb+cFmEa2lEIGIcn4uhh+gAg4VA7UoGmJkt/s5+Ahgdm5BOeQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-redis@2.2.0':
+    resolution: {integrity: sha512-8ZoQzz3xwBFsxj/q+MVguQCpnngqb1zR0nuTtQ2RrEVFz6Hy9o0q6OiUP6vk7gGHtb3DAyrrsJH52/U1O7WXzg==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-registry@2.2.0':
+    resolution: {integrity: sha512-aiRqqHHW5Y28FFhcWsfN9EoFAuu82d3REg5oQOXgSOgs7zPg1JQRXWHKu80d9CCPpuHdTv5gX3tKSkCIHLtSDA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-s2s-vpn@2.3.0':
+    resolution: {integrity: sha512-65VY/Bq5/REG3GvNSe1kBMD+NJwTzQeu3qnFLPHRR6FIppeYosBPhyczxx//hfKIFlceZWk2YBongezZVt2log==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-secret@2.2.0':
+    resolution: {integrity: sha512-Xf0mcVcxqhMl1+GuXj6NsJnXjMcNTEQAeqaAJUjNgqtWzZ9Y/zLe7kY/a8Ayt2FGlrTQLWVC5D/FQqQ9cj3DLA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-serverless-sqldb@2.2.0':
+    resolution: {integrity: sha512-x22iClIavEgF5qgqTsJjt5upjm2x3C+hS99vuk0mV3aMsd7R6wrjhdhVSOX915o4caWgWGfnbaVNrjSj4QjNqA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-std@2.1.0':
+    resolution: {integrity: sha512-HFgYPp9NMtCLq7cXelEdGEqRNRzanCHeCa3P8X9R0hLph7ew2Jk3SD+tSCoQWrREgtCppElh8upnKF6/SbHfXA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-tem@2.2.0':
+    resolution: {integrity: sha512-pUXzjn+z5h5FKRY+Ytr8VmnQZDD96KGd6ilJyPwq4s0s5UjB8YMGQSx+2SEEFJQw7TtA5BkAmpD+W8aglwHJLQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-test@2.2.0':
+    resolution: {integrity: sha512-ectVcmqwFJrNUuQxXpp8eeYaW6FrwPrQa1j+zvWXJk0wDo6BDoH8tnsfJQcqNNFwlqSSSTQbEbQRsIUqgS5rvw==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-vpc@2.2.0':
+    resolution: {integrity: sha512-EiRnrYaUy3D/g9YQ1SuuYJDdQ+2j1ERcGsbK+jcisVLLOa8LNWHZhSyGmHESL2YOs1RV/UWpHRIZ5l9wxkpT7w==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-vpcgw@2.2.0':
+    resolution: {integrity: sha512-Y+uzKqLy3HqLqIJX5HR76I1IkD+SfsSwxy/78lMmR/fvYRkv7FIm/fipXxa/g3pRQBkNmpeTh3FY6v2yND46SQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk-webhosting@2.2.0':
+    resolution: {integrity: sha512-y18P1JXGHEe569wMrTCjXmd78zS7bYFXpniYTBlAqfpfV/35LOrn1QAglPwiT5+JcJmaD/gjmiDE8ohu7x6SlQ==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
+
+  '@scaleway/sdk@3.1.5':
+    resolution: {integrity: sha512-tE67YFv5g+Zcsp546idJk/3BcNvYjbE+DwD3ykMRqyMAWfIfrH9FlVqSDy7dPj9J5+42Kk3RFfC62iG2vWxFpA==}
+    engines: {node: '>=20.19.6'}
+    peerDependencies:
+      '@scaleway/sdk-client': ^2.1.0
 
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
@@ -11121,6 +11408,327 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.36.0':
     optional: true
+
+  '@scaleway/random-name@5.1.2': {}
+
+  '@scaleway/sdk-account@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-applesilicon@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-audit-trail@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-autoscaling@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-baremetal@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-billing@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-block@2.2.1(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-client@2.1.0': {}
+
+  '@scaleway/sdk-cockpit@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-container@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-datawarehouse@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-dedibox@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-domain@2.2.1(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-edge-services@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-environmental-footprint@2.4.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-file@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-flexibleip@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-function@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-iam@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-inference@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-instance@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-interlink@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-iot@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-ipam@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-jobs@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-k8s@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-kafka@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-key-manager@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-lb@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-marketplace@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-mnq@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-mongodb@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-product-catalog@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-qaas@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-rdb@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-redis@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-registry@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-s2s-vpn@2.3.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-secret@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-serverless-sqldb@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-std@2.1.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/sdk-client': 2.1.0
+
+  '@scaleway/sdk-tem@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-test@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-vpc@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-vpcgw@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk-webhosting@2.2.0(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/random-name': 5.1.2
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+
+  '@scaleway/sdk@3.1.5(@scaleway/sdk-client@2.1.0)':
+    dependencies:
+      '@scaleway/sdk-account': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-applesilicon': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-audit-trail': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-autoscaling': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-baremetal': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-billing': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-block': 2.2.1(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-client': 2.1.0
+      '@scaleway/sdk-cockpit': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-container': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-datawarehouse': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-dedibox': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-domain': 2.2.1(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-edge-services': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-environmental-footprint': 2.4.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-file': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-flexibleip': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-function': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-iam': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-inference': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-instance': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-interlink': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-iot': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-ipam': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-jobs': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-k8s': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-kafka': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-key-manager': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-lb': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-marketplace': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-mnq': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-mongodb': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-product-catalog': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-qaas': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-rdb': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-redis': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-registry': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-s2s-vpn': 2.3.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-secret': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-serverless-sqldb': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-std': 2.1.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-tem': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-test': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-vpc': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-vpcgw': 2.2.0(@scaleway/sdk-client@2.1.0)
+      '@scaleway/sdk-webhosting': 2.2.0(@scaleway/sdk-client@2.1.0)
 
   '@sec-ant/readable-stream@0.4.1': {}
 

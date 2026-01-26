@@ -7,7 +7,7 @@ import { forbiddenError, invalidError } from '~/server/trpc'
 import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import type { FamilyFileSecurityTarget } from '~/server/services'
-import { FamilyFileService } from '~/server/services'
+import { DocumentService, FamilyFileService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
@@ -16,8 +16,9 @@ import { addUserActivity } from '~/server/query'
 import {
   generateFilenameForDocument,
   generateFileRootForDocument
-} from '~/server/route/document/helper'
-import { upload } from '~/server/lib/s3/file'
+} from '~/server/services/document/helper'
+import { uploadWithEncryption } from '~/server/lib/s3/file'
+import { randomUUID } from 'node:crypto'
 
 export interface MultiPartData {
   data: Buffer
@@ -90,12 +91,12 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await FamilyFileService.getEditionPermissions(
+  const canCreateDocument = await DocumentService.getCreationPermissions(
     ctx,
     input.familyFileId
   )
 
-  if (!permissions.create.document) {
+  if (!canCreateDocument) {
     throw forbiddenError('User is not allowed to create document')
   }
 
@@ -113,10 +114,36 @@ export default defineEventHandler(async event => {
   }
 
   const filename = generateFilenameForDocument(input.file.name)
-  const filepath = `${generateFileRootForDocument(user.structureId, input.beneficiaryId)}/${filename}`
+  const bucketKey = `${generateFileRootForDocument(user.structureId, input.beneficiaryId)}/${filename}`
+  const documentKey = randomUUID()
 
-  await upload(config.s3, filepath, file.data, input.type)
-  const document = await addDocument(input, user, filename, filepath)
+  // if (config.document.encryptionEnabled) {
+  await uploadWithEncryption({
+    config,
+    bucketKey,
+    plainData: file.data,
+    dataForEncryptionContext: {
+      documentKey,
+      contentType: input.file.mimeType,
+      contentLength: input.file.size
+    }
+  })
+  // } else {
+  //   await upload({
+  //     config,
+  //     bucketKey,
+  //     data: file.data,
+  //     contentType: input.type
+  //   })
+  // }
+
+  const document = await addDocument(
+    documentKey,
+    input,
+    user,
+    filename,
+    bucketKey
+  )
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
   addUserActivity({
@@ -170,6 +197,7 @@ async function addNotification(
 }
 
 async function addDocument(
+  documentKey: string,
   input: AddDocumentInput,
   user: JwtUser,
   filename: string,
@@ -183,6 +211,7 @@ async function addDocument(
       createdById: true
     },
     data: {
+      key: documentKey,
       createdBy: {
         connect: { id: user.id }
       },
