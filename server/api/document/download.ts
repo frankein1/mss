@@ -3,7 +3,9 @@ import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
 import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
-import { badrequest, forbidden } from '~/utils/api/errors'
+import { badrequest, forbidden, internal } from '~/utils/api/errors'
+import { prismaClient } from '~/server/prisma'
+import { downloadWithEncryption } from '~/server/lib/s3/file'
 
 export default defineEventHandler(async event => {
   const user = event.context.auth?.user
@@ -48,19 +50,59 @@ export default defineEventHandler(async event => {
       mimeType: true,
       name: true,
       size: true,
-      documentContent: {
-        select: {
-          id: true,
-          content: true
-        }
-      }
+      migrated: true,
+      filenameDownload: true
     }
   })
 
-  const documentContent = document.documentContent
+  let documentContent: Uint8Array
+
+  if (!document.migrated) {
+    // Retrieve document from local database
+
+    // The use of prismaClient is possible here because the document key has already
+    // been validated for access with `DocumentService.getEditionPermissions`
+    const d = await prismaClient.documentContent.findUniqueOrThrow({
+      where: { documentKey: key },
+      select: { content: true }
+    })
+    documentContent = d.content
+  } else {
+    // Retrieve document from S3 bucket
+    const config = useRuntimeConfig()
+
+    // if (config.document.encryptionEnabled) {
+    if (!document.filenameDownload) {
+      throw internal('download: missing bucket key')
+    }
+
+    if (!document.mimeType || !document.size) {
+      throw internal('download: missing document metadata')
+    }
+
+    const res = await downloadWithEncryption({
+      config,
+      bucketKey: document.filenameDownload,
+      dataForEncryptionContext: {
+        documentKey: key,
+        contentType: document.mimeType,
+        contentLength: document.size
+      }
+    })
+
+    if (!res.success) {
+      throw badrequest(`download: ${res.reason}`)
+    }
+
+    documentContent = Buffer.from(res.fileContent)
+    // } else {
+    //   // Not implemented
+    //   throw internal('download: not implemented')
+    // }
+  }
 
   if (!documentContent) {
-    throw createError('No document found')
+    throw badrequest('download: could not retrieve document content')
   }
 
   addUserActivity({
@@ -72,6 +114,7 @@ export default defineEventHandler(async event => {
     content: null
   }).catch(error => console.error(error))
 
+  // TODO: add headers for more security cache ? csp ?hsts ?
   event.node.res.setHeader('Content-Type', document.mimeType)
   event.node.res.setHeader('Content-Length', '' + document.size)
   event.node.res.setHeader(
@@ -79,5 +122,5 @@ export default defineEventHandler(async event => {
     `attachment; filename="${encodeURIComponent(document.name)}"`
   )
 
-  return documentContent.content
+  return documentContent
 })

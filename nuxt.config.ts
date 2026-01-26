@@ -212,6 +212,20 @@ export default defineNuxtConfig({
       bucket: process.env.S3_BUCKET || '',
       endpoint: process.env.S3_ENDPOINT || ''
     },
+    kms: {
+      accessKeyId: process.env.KMS_ACCESS_KEY_ID || '',
+      secretKey: process.env.KMS_SECRET_KEY || '',
+      organizationId: process.env.KMS_ORGANIZATION_ID || '',
+      projectId: process.env.KMS_PROJECT_ID || '',
+      region: process.env.KMS_REGION || '',
+      apiUrl: process.env.KMS_API_URL || '',
+      keyId: process.env.KMS_KEY_ID || ''
+    },
+    document: {
+      encryptionEnabled: true,
+      encryptionVersion: '1',
+      encryptionAlgorithm: 'aes_256_gcm'
+    },
     public: {
       version: {
         commitSha: process.env.COMMIT_SHA || '',
