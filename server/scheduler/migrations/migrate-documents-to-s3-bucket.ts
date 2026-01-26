@@ -15,7 +15,7 @@ import { PrismaClient } from '@prisma/client'
 import {
   generateFileRootForDocument,
   generateFilenameForDocument
-} from '~/server/route/document/helper'
+} from '~/server/services/document/helper'
 import { performance } from 'node:perf_hooks'
 import { Upload } from '@aws-sdk/lib-storage'
 import * as Sentry from '@sentry/node'
