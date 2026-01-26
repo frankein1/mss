@@ -1,6 +1,9 @@
 import { adminProcedure, router } from '~/server/trpc'
 
 import { adminRoutes } from '~/server/route'
+import { update } from '~/server/services/helpRequest/update.service'
+import { updateMinister } from '~/server/route/admin/updateMinister.mutation'
+import { ad } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js'
 
 export const adminRouter = router({
   createStructure: adminProcedure
@@ -68,5 +71,8 @@ export const adminRouter = router({
     .query(adminRoutes.getMinisters.executeAsAdmin),
   getMinister: adminProcedure
     .input(adminRoutes.getMinister.inputValidation)
-    .query(adminRoutes.getMinister.executeAsAdmin)
+    .query(adminRoutes.getMinister.executeAsAdmin),
+  updateMinister: adminProcedure
+    .input(adminRoutes.updateMinister.inputValidation)
+    .mutation(adminRoutes.updateMinister.executeAsAdmin)
 })

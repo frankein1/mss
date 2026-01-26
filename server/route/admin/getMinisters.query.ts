@@ -14,7 +14,8 @@ const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
       ministry: true,
       government: true,
       former: true
-    }
+    },
+    orderBy: { lastName: 'asc' }
   })
 }
 

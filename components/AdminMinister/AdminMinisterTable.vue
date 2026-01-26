@@ -27,7 +27,7 @@
             :key="minister.id"
             v-slot="{ navigate }"
             custom
-            :to="routes.admin.AdminMinisterUpdate.path(minister.id)"
+            :to="routes.admin.AdminMinisterEdit.path(minister.id)"
           >
             <tr
               class="clickable-row"

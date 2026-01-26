@@ -20,6 +20,7 @@ import { disableStructure } from './disableStructure.mutation'
 import { toggleRdvsp } from '././toggleRdvsp.mutation'
 import { getMinisters } from './getMinisters.query'
 import { getMinister } from './getMinister.query'
+import { updateMinister } from './updateMinister.mutation'
 
 export const adminRoutes = {
   createStructure,
@@ -43,5 +44,6 @@ export const adminRoutes = {
   disableStructure,
   toggleRdvsp,
   getMinisters,
-  getMinister
+  getMinister,
+  updateMinister
 }

@@ -1,0 +1,63 @@
+<template>
+  <PageContainer>
+    <PageTitle
+      class="fr-mt-4v"
+      :title="minister ? minister.firstName + ' ' + minister.lastName : '-'"
+    />
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12">
+        <div class="main-container fr-p-5w">
+          <AtomAlert
+            v-if="error"
+            :alert-type="AlertType.Error"
+            message="Les informations de l'utilisateur n'ont pas pu être chargées."
+          />
+
+          <AtomLoader
+            v-if="pending"
+            class="fr-mx-auto"
+          />
+          <AdminMinisterForm
+            v-else-if="minister"
+            :minister="minister"
+            :is-submitting="isSubmitting"
+            @update-minister="onUpdateMinister($event as UpdateMinisterInput)"
+          />
+        </div>
+      </div>
+    </div>
+  </PageContainer>
+</template>
+
+<script setup lang="ts">
+  import type { UpdateMinisterInput } from '~/server/schema'
+  import { AlertType } from '~/utils/constants/alert'
+  import { routes } from '~/utils/routes'
+
+  const route = useRoute()
+  const ministerId = route.params.id as string
+  const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
+
+  const isSubmitting = ref(false)
+
+  const {
+    data: minister,
+    pending,
+    error
+  } = await trpcClient.admin.getMinister.useQuery({
+    id: ministerId
+  })
+
+  const router = trpcClient.admin
+  const { mutate, error: updateError } = router.updateMinister.useMutation()
+  const onUpdateMinister = async (input: UpdateMinisterInput) => {
+    const ministerUpdated = await mutate(input)
+    if (updateError.value || ministerUpdated === null) {
+      snackbar.error('La modification du ministre a échoué.')
+      return
+    }
+    snackbar.success('Le ministre a été modifié avec succès.')
+    navigateTo(routes.admin.AdminMinisters.path())
+  }
+</script>

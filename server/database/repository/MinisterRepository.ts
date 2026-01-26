@@ -20,6 +20,14 @@ function findUnique<T extends Prisma.MinisterEntityFindUniqueOrThrowArgs>(
   return prismaClient.ministerEntity.findUnique(params)
 }
 
+function update<T extends Prisma.MinisterEntityUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.MinisterEntityUpdateArgs>
+) {
+  appendConstraints(user, params, MinisterConstraints.update)
+  return prismaClient.ministerEntity.update(params)
+}
+
 export const MinisterRepo = {
   prisma: {
     update: prismaClient.ministerEntity.update,
@@ -28,5 +36,6 @@ export const MinisterRepo = {
     findMany: prismaClient.ministerEntity.findMany
   },
   findMany,
-  findUnique
+  findUnique,
+  update
 }

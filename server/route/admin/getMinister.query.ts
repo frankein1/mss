@@ -18,7 +18,7 @@ const adminHandler = async ({
       id: true,
       firstName: true,
       lastName: true,
-      // function: true,
+      function: true,
       ministry: true,
       government: true,
       former: true

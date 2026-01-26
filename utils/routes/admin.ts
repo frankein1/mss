@@ -67,9 +67,9 @@ export const routes = {
     title: 'Ajouter un ministre',
     path: () => `${AdminRoute}/ministers/add`
   },
-  AdminMinisterUpdate: {
-    name: 'AdminMinisterUpdate',
+  AdminMinisterEdit: {
+    name: 'AdminMinisterEdit',
     title: 'Modifier un ministre',
-    path: (ministerId: string) => `${AdminRoute}/ministers/${ministerId}/update`
+    path: (ministerId: string) => `${AdminRoute}/ministers/${ministerId}/edit`
   }
 } as const
