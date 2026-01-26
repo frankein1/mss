@@ -13,6 +13,7 @@
         <PartnerOrganizationOverviewCard class="fr-mb-3w" />
         <OngoingFileInstructions class="fr-mb-3w" />
         <OngoingFollowups class="fr-mb-3w" />
+        <OngoingAppointments class="fr-mb-3w" />
       </div>
     </div>
     <OpenModalHack />

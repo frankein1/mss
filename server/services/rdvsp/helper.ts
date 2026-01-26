@@ -9,6 +9,7 @@ import picocolors from 'picocolors'
 import { SocialSupportStatus } from '@prisma/client'
 import { RdvspStatus } from '~/types/rdvsp'
 import dayjs from 'dayjs'
+import { MSS_ERROR_CODES } from '~/utils/error'
 
 export async function getAgentAuthInfo(userId: string) {
   const externalAccount = await prismaClient.externalAccount.findUnique({
@@ -17,20 +18,28 @@ export async function getAgentAuthInfo(userId: string) {
     },
     select: {
       id: true,
+      providerAccountId: true,
       accessToken: true,
       refreshToken: true
     }
   })
   if (externalAccount === null) {
-    throw unauthorizedError('rdvsp: account has not been setup yet')
+    throw unauthorizedError(
+      'rdvsp: account has not been setup yet',
+      MSS_ERROR_CODES.RDVSP_NO_ACCOUNT
+    )
   }
   if (!externalAccount.accessToken || !externalAccount.refreshToken) {
-    throw unauthorizedError('rdvsp: account not connected')
+    throw unauthorizedError(
+      'rdvsp: account not connected',
+      MSS_ERROR_CODES.RDVSP_UNAUTHENTICATED
+    )
   }
   return {
     id: externalAccount.id,
     accessToken: externalAccount.accessToken,
-    refreshToken: externalAccount.refreshToken
+    refreshToken: externalAccount.refreshToken,
+    providerAccountId: externalAccount.providerAccountId
   }
 }
 

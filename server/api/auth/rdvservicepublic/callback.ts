@@ -52,10 +52,13 @@ export default defineEventHandler(async event => {
     action: session.data.metadata.action,
     id: session.data.metadata.id
   }
-  const redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+  let redirect = routes.user.AppOverview.path()
 
+  if (options.action === 'planAppointment') {
+    redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+  }
   await session.clear()
-  return sendRedirect(event, redirect || routes.user.AppOverview.path())
+  return sendRedirect(event, redirect)
 })
 
 /** Update external_account table with RDVSP auth token for the user */
