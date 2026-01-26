@@ -251,6 +251,7 @@ const configSocialSupport: Record<
   beneficiary_id: true,
   created_by_id: true,
   last_updated_by_id: true,
+  minister_id: true,
   date: true,
   social_support_type: true,
   ministre: true,
