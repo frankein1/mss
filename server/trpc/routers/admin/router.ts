@@ -62,5 +62,11 @@ export const adminRouter = router({
     .mutation(adminRoutes.launchBrevoExport.executeAsAdmin),
   toggleRdvsp: adminProcedure
     .input(adminRoutes.toggleRdvsp.inputValidation)
-    .mutation(adminRoutes.toggleRdvsp.executeAsAdmin)
+    .mutation(adminRoutes.toggleRdvsp.executeAsAdmin),
+  getMinisters: adminProcedure
+    .input(adminRoutes.getMinisters.inputValidation)
+    .query(adminRoutes.getMinisters.executeAsAdmin),
+  getMinister: adminProcedure
+    .input(adminRoutes.getMinister.inputValidation)
+    .query(adminRoutes.getMinister.executeAsAdmin)
 })
