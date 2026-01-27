@@ -52,10 +52,8 @@
       params.postcode = props.zipCode
     }
 
-    const res = await $fetch<BanResponse>(
-      'https://api-adresse.data.gouv.fr/search/',
-      { params }
-    )
+    const geocodageApiUrl = 'https://data.geopf.fr/geocodage/search/'
+    const res = await $fetch<BanResponse>(geocodageApiUrl, { params })
 
     addresses.value = res.features.map(({ properties }) => properties)
     return addresses.value.map(({ id, name, postcode, city }) => ({

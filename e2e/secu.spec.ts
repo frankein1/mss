@@ -19,7 +19,7 @@ test.describe.skip('[nuxt-security]', async () => {
     const nonceValue = cspHeaderValue?.match(/'nonce-(.*?)'/)?.[1]
     expect(cspHeaderValue).toBeTruthy()
     expect(cspHeaderValue).toBe(
-      `base-uri 'none'; font-src 'self' https: data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; object-src 'none'; script-src-attr 'none'; style-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'strict-dynamic' 'nonce-${nonceValue}'; upgrade-insecure-requests; connect-src 'self' https://api-adresse.data.gouv.fr https://geo.api.gouv.fr https://matomo.dev.incubateur.anct.gouv.fr https://matomo.incubateur.anct.gouv.fr https://sentry.incubateur.net https://conversations-widget.brevo.com/;`
+      `base-uri 'none'; font-src 'self' https: data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; object-src 'none'; script-src-attr 'none'; style-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'strict-dynamic' 'nonce-${nonceValue}'; upgrade-insecure-requests; connect-src 'self' https://data.geopf.fr https://geo.api.gouv.fr https://matomo.dev.incubateur.anct.gouv.fr https://matomo.incubateur.anct.gouv.fr https://sentry.incubateur.net https://conversations-widget.brevo.com/;`
     )
     expect(nonceValue).toBeTruthy()
     expect(nonceValue).toHaveLength(24)
