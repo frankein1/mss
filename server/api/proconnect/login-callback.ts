@@ -35,7 +35,8 @@ const {
   },
   public: {
     mssEnvironment,
-    auth: { cookieKey, tokenValidationInMinutes }
+    auth: { cookieKey, tokenValidationInMinutes },
+    appUrl
   }
 } = useRuntimeConfig()
 
@@ -259,7 +260,7 @@ export default defineEventHandler(async event => {
   // - redirect to user panel otherwise
   // Fetching user information and permissions will be executed on first page loading with auth plugin
   if (redirectUrl) {
-    return sendRedirect(event, redirectUrl)
+    return sendRedirect(event, `${appUrl}${redirectUrl}`)
   }
 
   if (user.role === 'Administrator') {

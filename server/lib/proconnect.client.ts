@@ -56,19 +56,10 @@ export class ProConnectClient {
     this.postLogoutRedirectUri = postLogoutRedirectUri
   }
 
-  public getRedirectUri(appRedirectUrl?: string) {
-    if (!appRedirectUrl) {
-      return this.redirectUri
-    }
-    const params = new URLSearchParams({ redirectUrl: appRedirectUrl })
-    return `${this.redirectUri}?${params}`
-  }
-
   public async getToken({
     code
   }: {
     code: string
-    appRedirectUrl?: string
   }): Promise<ProConnectTokenResponse> {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
