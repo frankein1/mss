@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.53.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.3...v1.53.0) (2026-01-27)
+
+
+### Features
+
+* **rdvsp:** affiche le type de rdv ([f0221d3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f0221d35697bf4e609293c174b9767237aff2595))
+* **rdvsp:** afficher le créateur d'un RDV ([4bc667b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4bc667bc41eba3aea279bcfc741df62c382662b0))
+* **rdvsp:** amélioration ui de la carte rdv ([eb907ae](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eb907aea6c1f7593f10f847a3b5fb5092fe39b82))
+* **rdvsp:** mettre à jour les infos bénéficiaires sur rdvsp avant de prendre un RDV ([38803e0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/38803e0edb30debbc0a75ca1afaf2702e691fbd7))
+* **rdvsp:** refonte de l'intégration ([84af401](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/84af401691d1b6c2042b68ba58aab7cc048b6828))
+* **rdvsp:** un utilisateur sans org rdvsp est redirigé vers une page d'erreur après connexion ([7935a8f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7935a8fc3acca2cb5eb35992d36839ab7b59f0ae)), closes [#734](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/734)
+
+
+### Bug Fixes
+
+* **archivage:** supression de la mention de conservation du nom et prénom ([0224569](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0224569be14bb870644549824da8162e36e6cdac))
+* **atelier:** éviter le rechargement de la page lors de la mise à jour d'une présence ([d66732b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d66732be3cfea3f07eaf748b097d507fd66e93bb)), closes [#1010](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1010)
+* **auth:** add app host to redirect ([8903b74](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8903b744368acab3f9b7df228245624723597e9b))
+* **bénéficiaires:** ajout de la nationalité kosovare ([69636fe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/69636fe313b033a19fe57043d65e240314f0b7c4)), closes [#1012](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1012)
+* **bénéficiaires:** amélioration du fichier d'export ([ce70e94](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ce70e944d32899208b1cbfd770625362fb8da1c0)), closes [#1007](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1007)
+* **export bénéficiaires:** colonne numéro téléphone 2 ([a420844](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a420844a3413a3b93528d3d308554770026a8a43)), closes [#1007](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1007) [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/1007#note_3019319856](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/1007/issues/note_3019319856)
+* **fileInstruction:** fix handling date's display ([abf69e6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/abf69e6fbb92bf42753eebe61cefd098b528e48e)), closes [#970](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/970)
+* **filtres:** erreur safeParseAsync ([446b717](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/446b717214906d42ca8f1f248038d3d0a89e4c26))
+* **historique:** gérer le cas où l'utilisateur est déconnecté de RDVSP ([67d054d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/67d054d5224d9839de694027d98d0e194097a613))
+* **historique:** pouvoir fermer l'alerte RDVSP ([40babf4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/40babf4cc3133cbbb5fe8326ba3dc065826f7579))
+* **notification:** Date de fin de prise en charge des Demande de logement ([4390385](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/43903852b5ee5926dae1caacc0c7a0f54805834a)), closes [#1008](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1008)
+* **rdvsp:** afficher le nom complet  ([c16853b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c16853b86f430699782ec47b46dd540dd3061147))
+* **rdvsp:** alignement des buttons d'action ([cd8d67e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cd8d67e75a651eed24abebf17ee1a7494a113c1c)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/1450#note_3019199638](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/1450/issues/note_3019199638)
+* **rdvsp:** check organisation validity even if the rdvsp connection should work ([0e62215](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0e62215f7dc8e0a65986e3e96dd9b5f3cea2d9d5))
+* **rdvsp:** corrige la MAJ du statut des RDVs collectifs ([32abc98](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/32abc98c8f8759ac6a0e53a6acec09ecba1493ec))
+* **rdvsp:** erreur 401 en cas de compte external_account inexistant ([99bd951](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/99bd95113a60bc8ee7ac142a494c314a26010380)), closes [#734](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/734)
+* **rdvsp:** gestion fuseaux horaires formatte les dates des rdv en utc ([33152ee](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/33152ee165574ff65a06bc7df02698b79e787854)), closes [/www.notion.so/incubateurdesterritoires/Commandes-utiles-1f9744bf03dd8041aeb4d5f151082040#240744bf03dd80799df1e3bf625](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//www.notion.so/incubateurdesterritoires/Commandes-utiles-1f9744bf03dd8041aeb4d5f151082040/issues/240744bf03dd80799df1e3bf625)
+* **rdvsp:** ne plus stocker le champ expires_in des tokens ([b718964](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b71896465c2fe5eb33801bfe76bb8844b1192725))
+* **rdvsp:** permet la reconnexion en cas d'invalidité du refresh token ([ae7e2fd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ae7e2fdb791c019c94530358846c857819d80004))
+* **socialSupports:** corrige le filtre sur les types d'accompagnements ([31b27e6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/31b27e6a8d0f08a3a3965fbc416723178d90cc8c))
+* **user:** permissions de création et de lecture d'utilisateur dans la configuration de la structure ([e84d7c8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e84d7c8ed893a00472a7b65f24f8f56e53c2ed82)), closes [#1011](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1011)
+
 ## [1.52.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.2...v1.52.3) (2025-12-15)
 
 
