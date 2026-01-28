@@ -43,9 +43,12 @@ export function useAuthState() {
 
   function hasAcceptedCgu(cguVersion: string) {
     if (!user.value) {
-      return false
+      return { status: false, latestVersionAccepted: null }
     }
-    return user.value.CGUHistoryVersion === cguVersion
+    return {
+      status: user.value.CGUHistoryVersion === cguVersion,
+      latestVersionAccepted: user.value.CGUHistoryVersion
+    }
   }
 
   return {

@@ -1,16 +1,20 @@
 <template>
   <div class="landing-main-container fr-container fr-mt-5w">
-    <article v-if="!$route.query.readonly">
-      <h1>Veuillez lire et accepter les CGU</h1>
-      <p>
-        Afin de pouvoir utiliser Mon Suivi Social, merci de lire et accepter les
-        CGU.
-      </p>
-    </article>
-    <article class="cgu-container">
+    <div class="cgu-container">
       <h1>
         Conditions générales d’utilisation de Mon Suivi Social - Plateforme
       </h1>
+
+      <template v-if="!$route.query.readonly">
+        <h2>Veuillez lire et accepter les CGU</h2>
+        <p>
+          Afin de pouvoir utiliser Mon Suivi Social, merci de lire et accepter
+          les CGU.
+        </p>
+      </template>
+
+      <CGUChangesSummaryUser v-if="$route.query.showSummary" />
+
       <p>
         Les présentes conditions générales d’utilisation (dites
         «&nbsp;CGU&nbsp;») fixent et définissent les conditions d’accès et
@@ -20,9 +24,11 @@
       <h2>Article 1 - Champ d’application</h2>
       <p>
         Après la création d’un compte, la plateforme est ouverte gratuitement
-        aux agents des ministères sociaux, des Centres Communaux d’Action
-        Sociale (CCAS), des Centres intercommunaux d'Action sociale (CIAS), des
-        communes et des structures d’accompagnement social
+        aux agents des ministères chargés du travail, de la santé et des
+        solidarités, des académies relevant du ministère chargé de l’Éducation
+        nationale, des Centres Communaux d’Action Sociale (CCAS), des Centres
+        intercommunaux d’Action sociale (CIAS), des communes et des structures
+        d’accompagnement social
         <NuxtLink
           href="#structure-definition"
           external
@@ -32,9 +38,10 @@
       <h2>Article 2 - Objet</h2>
       <p>
         La plateforme Mon Suivi Social a pour objectif de faciliter le suivi
-        social des Bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
-        communes et des structures d’accompagnement social par la création d’un
-        dossier social unique.
+        social des Bénéficiaires des ministères chargés du travail, de la santé
+        et des solidarités, des académies, des CCAS, des CIAS, des communes et
+        des structures d’accompagnement social par la création d’un dossier
+        social unique.
       </p>
       <p>Ce dossier social unique permet notamment&nbsp;:</p>
       <ul>
@@ -66,7 +73,7 @@
           Suivi Social.
         </li>
         <li>
-          L'«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
+          L’«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
           social, instructeur, agent d’accueil, référent) d’une structure
           d’accompagnement social autorisée par le responsable de structure à
           ajouter et gérer des Bénéficiaires.
@@ -75,6 +82,7 @@
           Le «&nbsp;Bénéficiaire&nbsp;» est toute personne qui bénéficie d’un
           suivi social opéré par un ministère, un CCAS, un CIAS, une commune ou
           une structure d’accompagnement social, par le biais de la plateforme.
+          Cette personne peut être mineure.
         </li>
         <li>
           Les «&nbsp;Services&nbsp;» sont les fonctionnalités offertes par la
@@ -168,27 +176,36 @@
           modifier les informations d’un Bénéficiaire ou relatives au suivi
           socio-médical d’un Bénéficiaire&nbsp;;
         </li>
-        <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
-        <li>exporter les données.</li>
+        <li>
+          gérer les rendez-vous pris par les Bénéficiaires (via RDV Service
+          Public)&nbsp;;
+        </li>
+        <li>
+          gérer les liens avec les partenaires par l’intermédiaire de l’annuaire
+          des partenaires&nbsp;;
+        </li>
+        <li>exporter / imprimer les données&nbsp;;</li>
+        <li>supprimer un Bénéficiaire.</li>
       </ul>
       <p>
         Les habilitations sont accessibles sous format numérique à partir
         <NuxtLink
-          href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
+          :href="HABILITATION_TABLE_URL"
           target="_blank"
           external
           >de ce lien</NuxtLink
         >.
       </p>
       <p>
-        Seules les CCAS et les CIAS peuvent accéder au Numéro d’inscription au
-        répertoire (NIR).
+        Seules les structures habilitées peuvent accéder au Numéro d’inscription
+        au répertoire (NIR).
       </p>
       <p>
-        Les ministères sociaux ou structures d’accompagnement social ne
-        justifiant pas d’une base légale conforme à l’article 9 du RGPD ne
-        doivent pas collecter de données de santé comme&nbsp;: Groupe
-        iso-ressources (GIR), médecin traitant, informations médico-sociales.
+        Les ministères ministères chargés du travail, de la santé et des
+        solidarités ou structures d’accompagnement social ne justifiant pas
+        d’une base légale conforme à l’article 9 du RGPD ne doivent pas
+        collecter de données de santé comme&nbsp;: Groupe iso-ressources (GIR),
+        médecin traitant, informations médico-sociales.
       </p>
       <p>
         Le Responsable de structure devra indiquer lors de sa demande de
@@ -196,29 +213,34 @@
         données.
       </p>
       <p>
-        Au sein des CCAS et des CIAS, seuls certains profils peuvent accéder aux
-        NIR (Responsables de structures, travailleurs sociaux et instructeurs
-        uniquement s’ils sont identifiés comme référent du Bénéficiaire). Il en
-        est de même des données de santé au sein des structures habilitées à les
-        traiter. Il revient au Responsable de structure lors de la création du
-        compte de vérifier que l’Utilisateur dispose des habilitations
-        nécessaires pour traiter ces données.
+        Parmi les structures habilitées à traiter le NIR, seuls certains profils
+        peuvent accéder aux NIR (Responsables de structures, travailleurs
+        sociaux et instructeurs uniquement s’ils sont identifiés comme référent
+        du Bénéficiaire). Il en est de même des données de santé au sein des
+        structures habilitées à les traiter. Il revient au Responsable de
+        structure lors de la création du compte de vérifier que l’Utilisateur
+        dispose des habilitations nécessaires pour traiter ces données.
       </p>
       <p>
         Les Utilisateurs peuvent se connecter à Mon Suivi Social via la
-        plateforme Inclusion Connect, sous réserve de l’acceptation des CGU de
-        cette plateforme.
+        plateforme ProConnect, sous réserve de l’acceptation des CGU de cette
+        plateforme.
+      </p>
+      <p>
+        Les Utilisateurs peuvent gérer les prises de rendez-vous bénéficiaires
+        via la plateforme RDV Service Public, sous réserve de l’acceptation des
+        CGU de cette plateforme.
       </p>
       <h2>Article 5 - Responsabilités</h2>
       <h3>5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»</h3>
       <p>
         Tout événement ayant pour conséquence un dysfonctionnement de la
         plateforme et sous réserve de toute interruption ou modification en cas
-        de maintenance, n'engage pas la responsabilité de l’éditeur de la
+        de maintenance, n’engage pas la responsabilité de l’éditeur de la
         plateforme «&nbsp;Mon Suivi Social&nbsp;».
       </p>
       <p>
-        L’éditeur s’autorise à suspendre ou révoquer n'importe quel compte et
+        L’éditeur s’autorise à suspendre ou révoquer n’importe quel compte et
         toutes les actions réalisées par ce biais, s’il estime que l’usage
         réalisé du service porte préjudice à son image ou ne correspond pas aux
         exigences de sécurité.
@@ -248,14 +270,14 @@
       </p>
       <h3>5.2 L’Utilisateur</h3>
       <p>
-        L'Utilisateur s’engage à utiliser la plateforme conformément à sa
+        L’Utilisateur s’engage à utiliser la plateforme conformément à sa
         destination, à utiliser les données reçues dans le cadre prévues par les
         présentes CGU pour le suivi social des Bénéficiaires, à respecter la
         confidentialité de ces données, à ne pas les commercialiser et à ne pas
         les communiquer à des tiers en dehors des cas prévus par la loi.
       </p>
       <p>
-        Toute information transmise par l'Utilisateur est de sa seule
+        Toute information transmise par l’Utilisateur est de sa seule
         responsabilité. Il est rappelé que toute personne procédant à une fausse
         déclaration pour elle-même ou pour autrui s’expose, notamment, aux
         sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines
@@ -263,7 +285,7 @@
         d’amende.
       </p>
       <p>
-        L'Utilisateur s'engage à ne pas mettre en ligne de contenus ou
+        L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou
         informations contraires aux dispositions légales et réglementaires en
         vigueur.
       </p>
@@ -321,12 +343,12 @@
       <p>
         En raison de l’obligation de sécurité et de confidentialité dans le
         traitement des données à caractère personnel qui incombe au Responsable
-        de traitement, la demande n’est traitée que si les ministères sociaux,
-        la commune, le CCAS, le CIAS, la structure d’accompagnement social
-        concernée est en mesure d’identifier le demandeur de manière certaine.
-        En cas de doute sérieux sur l’identité du demandeur, le Responsable de
-        traitement peut être amené à demander la communication d’une preuve
-        d’identité.
+        de traitement, la demande n’est traitée que si les ministères chargés du
+        travail, de la santé et des solidarités, les académies, la commune, le
+        CCAS, le CIAS, la structure d’accompagnement social concernée est en
+        mesure d’identifier le demandeur de manière certaine. En cas de doute
+        sérieux sur l’identité du demandeur, le Responsable de traitement peut
+        être amené à demander la communication d’une preuve d’identité.
       </p>
       <p>
         Pour plus d’informations sur le traitement de données à caractère
@@ -366,10 +388,14 @@
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.
       </p>
-    </article>
+    </div>
     <CGUAcceptForm v-if="!$route.query.readonly" />
   </div>
 </template>
+
+<script setup lang="ts">
+  import { HABILITATION_TABLE_URL } from '~/utils/constants'
+</script>
 
 <style scoped lang="scss">
   @use '~/assets/style/cgu' as *;
