@@ -34,6 +34,8 @@ export const APP_DESCRIPTION = 'Logiciel de suivi des bénéficiaires'
 export const CODE_URL =
   'https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2'
 export const SUPPORT_EMAIL = 'support@monsuivisocial.incubateur.anct.gouv.fr'
+export const HABILITATION_TABLE_URL =
+  'https://docs-ia.beta.numerique.gouv.fr/docs/20bcdeba-384a-4f49-af18-ae54196001db/'
 
 // Interval upon which the values for countdown are refreshed in local storage
 export const DEFAULT_INTERVAL_TIME_FOR_STORAGE_REFRESH = 5 * 1000 // minutesToMillis(5)

@@ -1,11 +1,21 @@
 type CGURouteOptions = {
-  readonly: boolean
+  /** Display CGU without accepting form */
+  readonly?: boolean
+  /** If the user has previously accepted a version of the CGU,
+   * show a summary with the changes with respect to the previous version */
+  showSummary?: boolean
 }
 
 const getCGURoute = (route: string, options?: CGURouteOptions) => {
-  if (options?.readonly) {
+  const hasParams = Object.keys(options || {}).length > 0
+  if (hasParams) {
     const params = new URLSearchParams()
-    params.append('readonly', 'true')
+    if (options?.readonly) {
+      params.append('readonly', 'true')
+    }
+    if (options?.showSummary) {
+      params.append('showSummary', 'true')
+    }
 
     return `${route}?${params}`
   }

@@ -106,7 +106,7 @@ export const fixturesUsers = [
   Prisma.UserCreateManyInput
 ]
 
-const CGU_VERSION = '1.1'
+const CGU_VERSION = '1.2'
 
 export const fixturesCGUHistory = [
   {

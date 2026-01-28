@@ -1,17 +1,21 @@
 <template>
   <div class="landing-main-container fr-container fr-mt-5w">
-    <article v-if="!$route.query.readonly">
-      <h1>Veuillez lire et accepter les CGU</h1>
-      <p>
-        Afin de pouvoir utiliser Mon Suivi Social, merci de lire et accepter les
-        CGU.
-      </p>
-    </article>
-    <article class="cgu-container">
+    <div class="cgu-container">
       <h1>
         Conditions générales d’utilisation de Mon Suivi Social – Responsable de
         structures d’accompagnement social
       </h1>
+
+      <template v-if="!$route.query.readonly">
+        <h2>Veuillez lire et accepter les CGU</h2>
+        <p>
+          Afin de pouvoir utiliser Mon Suivi Social, merci de lire et accepter
+          les CGU.
+        </p>
+      </template>
+
+      <CGUChangesSummaryStructureManager v-if="$route.query.showSummary" />
+
       <p>
         Les présentes conditions générales d’utilisation (dites
         «&nbsp;CGU&nbsp;») fixent et définissent les conditions d’accès et
@@ -21,9 +25,11 @@
       <h2>Article 1 – Champ d’application</h2>
       <p>
         Après la création d’un compte, la plateforme est ouverte gratuitement
-        aux agents des ministères sociaux, des Centres Communaux d’Action
-        Sociale (CCAS), des Centres intercommunaux d’Action sociale (CIAS), des
-        communes et des structures d’accompagnement social
+        aux agents des ministères chargés du travail, de la santé et des
+        solidarités, des académies relevant du ministère chargé de l’Éducation
+        nationale, des Centres Communaux d’Action Sociale (CCAS), des Centres
+        intercommunaux d’Action sociale (CIAS), des communes et des structures
+        d’accompagnement social
         <NuxtLink
           href="#structure-definition"
           external
@@ -33,9 +39,10 @@
       <h2>Article 2 – Objet</h2>
       <p>
         La plateforme Mon Suivi Social a pour objectif de faciliter le suivi
-        social des Bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
-        communes et structures d’accompagnement social par la création d’un
-        dossier social unique.
+        social des Bénéficiaires des ministères chargés du travail, de la santé
+        et des solidarités, des académies relevant du ministère chargé de
+        l’Éducation nationale, des CCAS, des CIAS, des communes et structures
+        d’accompagnement social par la création d’un dossier social unique.
       </p>
       <p>Ce dossier social unique permet notamment&nbsp;:</p>
       <ul>
@@ -67,7 +74,7 @@
           Suivi Social
         </li>
         <li>
-          L'«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
+          L’«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
           social, instructeur, agent d’accueil, référent) autorisé par le
           Responsable de structure à ajouter et gérer des Bénéficiaires.
         </li>
@@ -75,6 +82,7 @@
           Le «&nbsp;Bénéficiaire&nbsp;» est toute personne qui bénéficie d’un
           suivi social opéré par un ministère, un CCAS, un CIAS, une commune ou
           une structure d’accompagnement social, par le biais de la plateforme.
+          Cette personne peut être mineure.
         </li>
         <li>
           Les «&nbsp;Services&nbsp;» sont les fonctionnalités offertes par la
@@ -130,10 +138,11 @@
       <p>Mon Suivi Social permet à tout Responsable de structure de&nbsp;:</p>
       <ul>
         <li>
-          enregistrer et modifier une structure (ministères sociaux, CCAS, CIAS,
-          commune, structure d’accompagnement social) sur la plateforme en
-          collectant et saisissant les informations générales la
-          concernant&nbsp;;
+          enregistrer et modifier une structure (ministères chargés du travail,
+          de la santé et des solidarités, le ministère chargé de l’Éducation
+          Nationale, CCAS, CIAS, commune, structure d’accompagnement social) sur
+          la plateforme en collectant et saisissant les informations générales
+          la concernant&nbsp;;
         </li>
         <li>
           créer et modifier des comptes pour les Utilisateurs de la plateforme.
@@ -149,12 +158,17 @@
           gérer les droits d’accès des Utilisateurs aux différentes
           structures&nbsp;;
         </li>
+        <li>
+          activer le champ relatif au Numéro de sécurité sociale en vue que les
+          Utilisateurs ne puissent y mentionner le Numéro de sécurité sociale
+          des Bénéficiaires&nbsp;;
+        </li>
         <li>supprimer un Bénéficiaire.</li>
       </ul>
       <p>
         Le Responsable de structure peut se connecter à Mon Suivi Social via la
-        plateforme Inclusion Connect, sous réserve de l’acceptation des CGU de
-        cette plateforme.
+        plateforme ProConnect, sous réserve de l’acceptation des CGU de cette
+        plateforme.
       </p>
       <h3>
         4.2 Fonctionnalités ouvertes aux Responsables de structures et
@@ -174,7 +188,7 @@
         </li>
         <li>créer une synthèse d’entretien avec un Bénéficiaire&nbsp;;</li>
         <li>
-          instruire ou aider à la constitution d'une demande d’aide légale ou
+          instruire ou aider à la constitution d’une demande d’aide légale ou
           facultative&nbsp;;
         </li>
         <li>
@@ -189,19 +203,25 @@
           créer et exporter des rapports statistiques et d’activités de la
           structure&nbsp;;
         </li>
-        <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
+        <li>
+          gérer les rendez-vous pris par les Bénéficiaires (via RDV Service
+          Public)&nbsp;;
+        </li>
         <li>
           modifier les informations d’un Bénéficiaire ou relatives au suivi
           socio-médical d’un Bénéficiaire&nbsp;;
         </li>
         <li>supprimer un Bénéficiaire&nbsp;;</li>
-        <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
-        <li>exporter les données.</li>
+        <li>
+          gérer les liens avec les partenaires par l’intermédiaire de l’annuaire
+          des partenaires&nbsp;;
+        </li>
+        <li>exporter / imprimer les données.</li>
       </ul>
       <p>
         Les habilitations sont accessibles sous format numérique à partir
         <NuxtLink
-          href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
+          :href="HABILITATION_TABLE_URL"
           target="_blank"
           external
           >de ce lien</NuxtLink
@@ -209,12 +229,12 @@
       </p>
       <p>
         Les Utilisateurs peuvent se connecter à Mon Suivi Social via la
-        plateforme Inclusion Connect, sous réserve de l’acceptation des CGU de
-        cette plateforme. Seules les CCAS et les CIAS peuvent accéder au Numéro
-        d’inscription au répertoire (NIR). Les structures ne justifiant pas
-        d’une base légale conforme à l’article 9 du RGPD ne doivent pas
-        collecter de données de santé comme&nbsp;: Groupe iso-ressources (GIR),
-        médecin traitant, informations médico-sociales.
+        plateforme ProConnect, sous réserve de l’acceptation des CGU de cette
+        plateforme. Seules les structures d’accompagnement social habilitées
+        peuvent traiter le Numéro d’inscription au répertoire (NIR). Les
+        structures ne justifiant pas d’une base légale conforme à l’article 9 du
+        RGPD ne doivent pas collecter de données de santé comme&nbsp;: Groupe
+        iso-ressources (GIR), médecin traitant, informations médico-sociales.
       </p>
       <p>
         Le Responsable de structure devra indiquer lors de sa demande de
@@ -222,27 +242,32 @@
         données.
       </p>
       <p>
-        Au sein des CCAS et des CIAS, seuls certains profils peuvent accéder aux
-        NIR (responsables de structures, travailleurs sociaux et instructeurs
-        uniquement s’ils sont identifiés comme référent du Bénéficiaire). Il en
-        est de même des données de santé au sein des structures habilitées à les
-        traiter.
+        Au sein des structures d’accompagnement habilitées, seuls certains
+        profils peuvent accéder aux NIR (responsables de structures,
+        travailleurs sociaux et instructeurs uniquement s’ils sont identifiés
+        comme référent du Bénéficiaire). Il en est de même des données de santé
+        au sein des structures habilitées à les traiter.
       </p>
       <p>
         Il revient au Responsable de structure lors de la création du compte de
         vérifier que l’Utilisateur dispose des habilitations nécessaires pour
         traiter ces données.
       </p>
+      <p>
+        Les Utilisateurs peuvent gérer les prises de rendez-vous bénéficiaires
+        via la plateforme RDV Service Public, sous réserve de l’acceptation des
+        CGU de cette plateforme.
+      </p>
       <h2>Article 5 – Responsabilités</h2>
       <h3>5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»</h3>
       <p>
         Tout événement ayant pour conséquence un dysfonctionnement de la
         plateforme et sous réserve de toute interruption ou modification en cas
-        de maintenance, n'engage pas la responsabilité de de l’éditeur de Mon
+        de maintenance, n’engage pas la responsabilité de de l’éditeur de Mon
         Suivi Social.
       </p>
       <p>
-        L’éditeur s’autorise à suspendre ou révoquer n'importe quel compte et
+        L’éditeur s’autorise à suspendre ou révoquer n’importe quel compte et
         toutes les actions réalisées par ce biais, s’il estime que l’usage
         réalisé du service porte préjudice à son image ou ne correspond pas aux
         exigences de sécurité.
@@ -295,7 +320,7 @@
         jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
       </p>
       <p>
-        Il s'engage à ne pas mettre en ligne de contenus ou informations
+        Il s’engage à ne pas mettre en ligne de contenus ou informations
         contraires aux dispositions légales et réglementaires en vigueur.
       </p>
       <p>
@@ -315,10 +340,11 @@
         caractère personnel
       </h2>
       <p>
-        La structure accompagnatrice (ministères sociaux, commune, CCAS, CIAS ou
-        structure d’accompagnement social) est Responsable de traitement à
-        l’égard des données à caractère personnel traitées dans le cadre des
-        Services.
+        La structure accompagnatrice (ministères chargés du travail, de la santé
+        et des solidarités, le ministère chargé de l’Éducation Nationale,
+        commune, CCAS, CIAS ou structure d’accompagnement social) est
+        Responsable de traitement à l’égard des données à caractère personnel
+        traitées dans le cadre des Services.
       </p>
       <p>
         L’Agence Nationale de la Cohésion des Territoires a la qualité de
@@ -363,11 +389,12 @@
       <p>
         L’Agence Nationale de Cohésion des Territoires (ANCT), en qualité de
         sous-traitant, est autorisée à traiter pour le compte des ministères
-        sociaux, communes, CCAS et des CIAS ou des structures d’accompagnement
-        social, en qualité de Responsable(s) du traitement des données à
-        caractère personnel nécessaires à la mise à disposition, la maintenance
-        et l’hébergement des Services, dans les conditions décrites à la
-        présente Annexe.
+        chargés du travail, de la santé et des solidarités, le ministère chargé
+        de l’Éducation Nationale, communes, CCAS et des CIAS ou des structures
+        d’accompagnement social, en qualité de Responsable(s) du traitement des
+        données à caractère personnel nécessaires à la mise à disposition, la
+        maintenance et l’hébergement des Services, dans les conditions décrites
+        à la présente Annexe.
       </p>
       <h3>Description du traitement de données à caractère personnel</h3>
       <p>Sont concernées par le traitement les données suivantes&nbsp;:</p>
@@ -436,7 +463,8 @@
               <td>
                 <p>
                   NIR des bénéficiaires de l’accompagnement social et
-                  médico-social&nbsp;;
+                  médico-social (uniquement pour les structures
+                  habilitées)&nbsp;;
                 </p>
                 <p>
                   Données de santé relatives à l’évaluation socio-médicale
@@ -478,7 +506,23 @@
               <td>Données relatives aux agents utilisant l’application</td>
               <td>
                 <p>Données d’état civil (nom, prénom)</p>
-                <p>données de contact (adresse e-mail,)</p>
+                <p>données de contact (adresse e-mail)</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Données relatives au Délégué à la protection des données ou au
+                référent protection des données
+              </td>
+              <td>
+                <p>Données d’état civil (nom, prénom)</p>
+                <p>données de contact (adresse e-mail)</p>
+              </td>
+            </tr>
+            <tr>
+              <td>Données de connexion</td>
+              <td>
+                <p>Identifiant utilisateur, logs, adresse IP</p>
               </td>
             </tr>
             <tr>
@@ -490,6 +534,12 @@
           </tbody>
         </table>
       </div>
+      <p>
+        Dans le cas d’ateliers ponctuels organisés par les structures
+        d’accompagnement avec les bénéficiaires, seuls les noms et prénoms des
+        bénéficiaires sont collectés ainsi que les données d’identification
+        relatives aux professionnels de ces structures.
+      </p>
 
       <p>Le traitement de ces données a pour finalité de&nbsp;:</p>
       <ul>
@@ -531,12 +581,13 @@
         structure d’accompagnement social est responsable de traitement.
       </p>
       <p>
-        Spécifiquement, le NIR est traité uniquement par les CCAS ou CIAS sur le
-        fondement de l’article L.263-4-1 du code de l’action sociale et des
-        familles et du Décret n°219-341 du 19 avril 2019 relatif à la mise en
-        œuvre de traitements comportant l’usage du numéro d’inscription au
-        répertoire national d’identification des personnes physiques ou
-        nécessitant la consultation de ce répertoire.
+        Le NIR ne peut être traité par le Responsable de traitement que s’il y
+        est habilité au titre de l’article 31 de la Loi n°78-17 du 6 janvier
+        1978 relative à l’informatique, aux fichiers et aux libertés et du
+        Décret n°219-341 du 19 avril 2019 relatif à la mise en œuvre de
+        traitements comportant l’usage du numéro d’inscription au répertoire
+        national d’identification des personnes physiques ou nécessitant la
+        consultation de ce répertoire.
       </p>
       <p>
         Le Responsable de traitement doit disposer d’une base légale au sens de
@@ -544,33 +595,46 @@
       </p>
       <p>
         Chaque Responsable de traitement devra être en mesure de démontrer sur
-        quelle base légale repose le présent traitement.
+        quelle base légale repose le présent traitement et son habilitation à
+        traiter le NIR au titre de la loi et du décret précités.
       </p>
       <p>Ces données sont conservées pour une durée de&nbsp;:</p>
       <ul>
         <li>
           deux (2) ans en base active à compter du dernier contact émanant de la
           personne ayant fait l’objet de l’accompagnement par les ministères
-          sociaux, commune, CCAS, CIAS ou la structure d’accompagnement social
-          concerné&nbsp;; au-delà, les données pourront être exportées par les
-          structures pour un archivage intermédiaire (Durée Utilité
-          Administrative - DUA) 10 ans pour les demandes d’aides sociales et
-          prestations financières)
+          chargés du travail, de la santé et des solidarités, des académies
+          relevant du ministère chargé de l’Éducation nationale, commune, CCAS,
+          CIAS ou la structure d’accompagnement social concernée&nbsp;; au-delà,
+          les données pourront être exportées par les structures pour un
+          archivage intermédiaire (Durée Utilité Administrative - DUA) 10 ans
+          pour les demandes d’aides sociales et prestations financières). Après
+          export, les données personnelles sont supprimées de l’application. Les
+          données relatives aux bénéficiaires collectées dans le cadre des
+          ateliers ponctuels organisés par les structures d’accompagnement sont
+          anonymisés au terme de 3 mois.
         </li>
+        <li>Les données de connexion sont conservées 12 mois.</li>
         <li>
           Les données relatives aux cookies sont conservées pour une durée de 13
           mois.
         </li>
       </ul>
+      <p>
+        En cas d’inactivité des comptes d’une structure, les données associées
+        sont supprimées dans un délai de 6 mois.
+      </p>
       <h3>
-        Obligations générales des ministères sociaux, communes, CCAS, CIAS et
-        des structures d’accompagnement social, en qualité de Responsable de
-        traitement.
+        Obligations générales des ministères chargés du travail, de la santé et
+        des solidarités, des académies relevant du ministère chargé de
+        l’Éducation nationale, communes, CCAS, CIAS et des structures
+        d’accompagnement social, en qualité de Responsable de traitement.
       </h3>
       <p>
-        En qualité Responsables de traitement, les ministères sociaux, les
-        communes, les CCAS, les CIAS et les structures d’accompagnement social
-        s’engagent à&nbsp;:
+        En qualité Responsables de traitement, les ministères chargés du
+        travail, de la santé et des solidarités, des académies relevant du
+        ministère chargé de l’Éducation nationale, les communes, les CCAS, les
+        CIAS et les structures d’accompagnement social s’engagent à&nbsp;:
       </p>
       <ul>
         <li>
@@ -613,10 +677,11 @@
         </li>
       </ul>
       <p>
-        Les ministères sociaux, les communes, les CCAS, les CIAS ou les
-        structures d’accompagnement social sont responsables du respect du RGPD
-        en ce qui concerne le présent traitement de données à caractère
-        personnel.
+        Les ministères chargés du travail, de la santé et des solidarités, des
+        académies relevant du ministère chargé de l’Éducation nationale, les
+        communes, les CCAS, les CIAS ou les structures d’accompagnement social
+        sont responsables du respect du RGPD en ce qui concerne le présent
+        traitement de données à caractère personnel.
       </p>
       <p>
         Le Responsable de traitement demeure chargé d’intégrer dans ses propres
@@ -640,17 +705,20 @@
         </li>
         <li>
           traiter les données personnelles conformément aux instructions des
-          ministères sociaux, des communes, des CCAS, des CIAS et des structures
-          d’accompagnement social. Si l’ANCT considère qu’une instruction
-          constitue une violation du RGPD, il en informe immédiatement la
-          structure concernée. En outre, si l’ANCT est tenue de procéder à un
-          transfert de données à caractère personnel vers un pays tiers ou à une
-          organisation internationale, en vertu du droit de l’Union ou du droit
-          de l’Etat membre auquel il est soumis, il doit informer les ministères
-          sociaux, les communes, les CCAS, les CIAS et les structures
-          d’accompagnement social de cette obligation juridique avant le
-          traitement, sauf si le droit concerné interdit une telle information
-          pour des motifs importants d'intérêt public&nbsp;;
+          ministères chargés du travail, de la santé et des solidarités, des
+          académies relevant du ministère chargé de l’Éducation nationale, des
+          communes, des CCAS, des CIAS et des structures d’accompagnement
+          social. Si l’ANCT considère qu’une instruction constitue une violation
+          du RGPD, il en informe immédiatement la structure concernée. En outre,
+          si l’ANCT est tenue de procéder à un transfert de données à caractère
+          personnel vers un pays tiers ou à une organisation internationale, en
+          vertu du droit de l’Union ou du droit de l’Etat membre auquel il est
+          soumis, il doit informer les ministères chargés du travail, de la
+          santé et des solidarités, des académies relevant du ministère chargé
+          de l’Éducation nationale, les communes, les CCAS, les CIAS et les
+          structures d’accompagnement social de cette obligation juridique avant
+          le traitement, sauf si le droit concerné interdit une telle
+          information pour des motifs importants d’intérêt public&nbsp;;
         </li>
         <li>
           garantir la confidentialité des données à caractère personnel&nbsp;;
@@ -676,9 +744,11 @@
       </ul>
       <p>
         L’ANCT ne sera en aucun cas responsable du non-respect par les
-        ministères sociaux, communes, CCAS, CIAS et structures d’accompagnement
-        social de leurs obligations légales ou conventionnelles au regard du
-        présent traitement de données à caractère personnel.
+        ministères chargés du travail, de la santé et des solidarités, des
+        académies relevant du ministère chargé de l’Éducation nationale,
+        communes, CCAS, CIAS et structures d’accompagnement social de leurs
+        obligations légales ou conventionnelles au regard du présent traitement
+        de données à caractère personnel.
       </p>
       <h3>Obligations relatives au(x) sous-traitant(s) ultérieur(s)</h3>
       <p>
@@ -704,7 +774,7 @@
           d’accompagnement).
         </li>
         <li>
-          les indépendants de Scopyleft, membres de l’équipe produit Mon Suivi
+          les indépendants d’Omnicité, membres de l’équipe produit Mon Suivi
           Social.
         </li>
       </ul>
@@ -715,14 +785,17 @@
       <p>
         Tout Sous-traitant Ultérieur est tenu de respecter les obligations des
         présentes CGU pour le compte et selon les instructions des ministères
-        sociaux, communes, CCAS, des CIAS et des structures d’accompagnement
-        social. Il appartient à l’ANCT de s’assurer que le Sous-traitant
-        Ultérieur présente les mêmes garanties suffisantes quant à la mise en
-        œuvre de mesures techniques et organisationnelles appropriées de manière
-        que le traitement des données à caractère personnel réponde aux
-        exigences du RGPD. Si le Sous-traitant Ultérieur ne remplit pas ses
-        obligations en matière de protection des données, l’ANCT demeure
-        pleinement responsable devant les ministères sociaux, communes, CCAS,
+        chargés du travail, de la santé et des solidarités, des académies
+        relevant du ministère chargé de l’Éducation nationale, communes, CCAS,
+        des CIAS et des structures d’accompagnement social. Il appartient à
+        l’ANCT de s’assurer que le Sous-traitant Ultérieur présente les mêmes
+        garanties suffisantes quant à la mise en œuvre de mesures techniques et
+        organisationnelles appropriées de manière que le traitement des données
+        à caractère personnel réponde aux exigences du RGPD. Si le Sous-traitant
+        Ultérieur ne remplit pas ses obligations en matière de protection des
+        données, l’ANCT demeure pleinement responsable devant les ministères
+        chargés du travail, de la santé et des solidarités, des académies
+        relevant du ministère chargé de l’Éducation nationale, communes, CCAS,
         CIAS et structures d’accompagnement social de l’exécution par le
         Sous-traitant Ultérieur de ses obligations.
       </p>
@@ -771,39 +844,47 @@
       <p>
         En raison de l’obligation de sécurité et de confidentialité dans le
         traitement des données à caractère personnel qui incombe au Responsable
-        de traitement, la demande n’est traitée que si les ministères sociaux,
-        la commune, le CCAS, le CIAS, la structure d’accompagnement social
-        concernée est en mesure d’identifier le demandeur de manière certaine.
-        En cas de doute sérieux sur l’identité du demandeur, le Responsable de
-        traitement peut être amené à demander la communication d’une preuve
-        d’identité.
+        de traitement, la demande n’est traitée que si les ministères chargés du
+        travail, de la santé et des solidarités, des académies relevant du
+        ministère chargé de l’Éducation nationale, la commune, le CCAS, le CIAS,
+        la structure d’accompagnement social concernée est en mesure
+        d’identifier le demandeur de manière certaine. En cas de doute sérieux
+        sur l’identité du demandeur, le Responsable de traitement peut être
+        amené à demander la communication d’une preuve d’identité.
       </p>
       <h3>Notification des violations de données à caractère personnel</h3>
       <p>
-        L’ANCT notifie, par courriel, aux ministères sociaux, communes, CCAS,
-        CIAS, structures d’accompagnement social toute violation de données à
-        caractère personnel dans un délai maximum de vingt-quatre (24) heures
-        après en avoir pris connaissance. Cette notification est accompagnée de
-        toute documentation utile afin de permettre aux ministères sociaux,
-        communes, CCAS, CIAS, structures d’accompagnement social si nécessaire,
-        de notifier cette violation à l’autorité de contrôle compétente et aux
-        personnes concernées par ladite violation.
+        L’ANCT notifie, par courriel, aux ministères chargés du travail, de la
+        santé et des solidarités, des académies relevant du ministère chargé de
+        l’Éducation nationale, communes, CCAS, CIAS, structures d’accompagnement
+        social toute violation de données à caractère personnel dans un délai
+        maximum de vingt-quatre (24) heures après en avoir pris connaissance.
+        Cette notification est accompagnée de toute documentation utile afin de
+        permettre aux ministères chargés du travail, de la santé et des
+        solidarités, des académies relevant du ministère chargé de l’Éducation
+        nationale, communes, CCAS, CIAS, structures d’accompagnement social si
+        nécessaire, de notifier cette violation à l’autorité de contrôle
+        compétente et aux personnes concernées par ladite violation.
       </p>
       <h3>
-        Aide de l’ANCT dans le cadre du respect par les ministères sociaux, les
-        communes, les CCAS, les CIAS et les structures d’accompagnement social
-        de leurs obligations
+        Aide de l’ANCT dans le cadre du respect par les ministères chargés du
+        travail, de la santé et des solidarités, des académies relevant du
+        ministère chargé de l’Éducation nationale, les communes, les CCAS, les
+        CIAS et les structures d’accompagnement social de leurs obligations
       </h3>
       <p>
-        Les ministères sociaux, les communes, les CCAS, les CIAS et les
-        structures d’accompagnement social élaborent conjointement avec l’ANCT
-        la réalisation d’analyses d’impact relatives à la protection des
-        données.
+        Les ministères chargés du travail, de la santé et des solidarités, des
+        académies relevant du ministère chargé de l’Éducation nationale, les
+        communes, les CCAS, les CIAS et les structures d’accompagnement social
+        élaborent conjointement avec l’ANCT la réalisation d’analyses d’impact
+        relatives à la protection des données.
       </p>
       <p>
-        L’ANCT aide les ministères sociaux, les CCAS, les CIAS et les structures
-        d’accompagnement social dans le cas où la réalisation de la consultation
-        préalable de l’autorité de contrôle est nécessaire.
+        L’ANCT aide les ministères chargés du travail, de la santé et des
+        solidarités, des académies relevant du ministère chargé de l’Éducation
+        nationale, les CCAS, les CIAS et les structures d’accompagnement social
+        dans le cas où la réalisation de la consultation préalable de l’autorité
+        de contrôle est nécessaire.
       </p>
       <h3>Mesures de sécurité</h3>
       <p>
@@ -860,10 +941,14 @@
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.
       </p>
-    </article>
+    </div>
     <CGUAcceptForm v-if="!$route.query.readonly" />
   </div>
 </template>
+
+<script setup lang="ts">
+  import { HABILITATION_TABLE_URL } from '~/utils/constants'
+</script>
 
 <style scoped lang="scss">
   @use '~/assets/style/cgu' as *;

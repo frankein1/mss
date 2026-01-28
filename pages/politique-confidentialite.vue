@@ -13,9 +13,11 @@
         </p>
         <ul>
           <li>
-            les ministères sociaux, les communes, les Centres communaux d’action
-            sociale (CCAS) et les Centre intercommunaux d’action sociale (CIAS)
-            ainsi que les structures d’accompagnement social
+            les ministères chargés du travail, de la santé et des solidarités,
+            des académies relevant du ministère chargé de l’Éducation nationale,
+            les communes, les Centres communaux d’action sociale (CCAS) et les
+            Centre intercommunaux d’action sociale (CIAS) ainsi que les
+            structures d’accompagnement social
             <NuxtLink
               href="#structure-definition"
               external
@@ -28,8 +30,10 @@
           <li>
             l’Agence Nationale des Collectivités Territoriales (ANCT) traite les
             données à caractère personnel au nom et pour le compte des
-            ministères sociaux, communes, CCAS et des CIAS, et des autres
-            structures d’accompagnement social en qualité de sous-traitants.
+            ministères chargés du travail, de la santé et des solidarités, des
+            académies relevant du ministère chargé de l’Éducation nationale,
+            communes, CCAS et des CIAS, et des autres structures
+            d’accompagnement social en qualité de sous-traitants.
           </li>
         </ul>
       </section>
@@ -37,7 +41,7 @@
         <h2>Quelles données sommes-nous amenés à traiter&nbsp;?</h2>
         <p>
           Nous sommes susceptibles de traiter les données à caractère personnel
-          des bénéficiaires suivantes&nbsp;:
+          des bénéficiaires (y compris mineurs) suivantes&nbsp;:
         </p>
         <ul>
           <li>
@@ -49,8 +53,8 @@
             numéro de sécurité sociale, nationalité, âge)&nbsp;;
           </li>
           <li>
-            NIR des bénéficiaires de l’accompagnement social et
-            médico-social&nbsp;;
+            NIR des bénéficiaires de l’accompagnement social et médico-social
+            (uniquement pour les structures d’accompagnement habilitées)&nbsp;;
           </li>
           <li>
             Données relatives à la vie personnelle (situation et composition
@@ -86,8 +90,15 @@
           </li>
         </ul>
         <p>
-          S’agissant des tiers concourant à la prise en charge, la plateforme
-          peut traiter les données à caractère personnel suivantes&nbsp;:
+          Ces données sont entrées sur la plateforme par le membre ou l’agent de
+          la structure d’accompagnement. Elles sont collectées soit auprès des
+          bénéficiaires, soit directement auprès des tiers de confiance ou des
+          aidants familiaux.
+        </p>
+        <p>
+          S’agissant des tiers de confiance concourant à la prise en charge, la
+          plateforme peut traiter les données à caractère personnel
+          suivantes&nbsp;:
         </p>
         <ul>
           <li>
@@ -99,6 +110,11 @@
             courriel, numéro de téléphone des aidants professionnels&nbsp;;
           </li>
         </ul>
+        <p>
+          Ces données sont entrées sur la plateforme par le membre ou l’agent de
+          la structure d’accompagnement. Elles sont collectées soit auprès des
+          bénéficiaires, soit directement auprès des personnes concernées.
+        </p>
         <p>
           S’agissant des tiers «&nbsp;aidants familiaux&nbsp;», la plateforme
           peut traiter les données à caractère personnel suivantes&nbsp;:
@@ -112,14 +128,27 @@
           </li>
         </ul>
         <p>
-          S’agissant des agents ou des membres habilités de la structure
-          d’accompagnement social, la plateforme peut traiter les données à
-          caractère personnel suivantes&nbsp;:
+          Ces données sont entrées sur la plateforme par le membre ou l’agent de
+          la structure d’accompagnement. Elles sont collectées soit auprès des
+          bénéficiaires, soit directement auprès des personnes concernées.
+        </p>
+        <p>
+          S’agissant des responsables de structure, agents ou des membres
+          habilités de la structure d’accompagnement social, la plateforme peut
+          traiter les données à caractère personnel suivantes&nbsp;:
         </p>
         <ul>
           <li>données d’état civil (nom, prénom)&nbsp;;</li>
           <li>données de contact (adresse e-mail, numéro de téléphone).</li>
         </ul>
+        <p>
+          Les données des responsables de structure sont collectées soit
+          directement auprès de ces derniers, soit via la start-up d’Etat Domifa
+          portée par les ministères chargés du travail, de la santé et des
+          solidarités. Les données des agents ou membres de la structure
+          habilitée sont entrées par le responsable de structure sur la
+          plateforme.
+        </p>
         <p>
           S’agissant du délégué à la protection des données ou du référent
           protection des données au sein de la structure d’accompagnement
@@ -130,8 +159,19 @@
           <li>données de contact (adresse e-mail).</li>
         </ul>
         <p>
+          Ces données sont transmises par le responsable de la structure
+          d’accompagnement.
+        </p>
+        <p>
           La plateforme collecte également des données de connexion et des
           cookies.
+        </p>
+        <p>
+          Dans le cas d’ateliers ponctuels organisés par les structures
+          d’accompagnement avec les bénéficiaires, seuls les noms et prénoms des
+          bénéficiaires sont collectés ainsi que les données d’identification
+          relatives aux professionnels de ces structures, les données de
+          connexion et les cookies.
         </p>
       </section>
 
@@ -141,9 +181,11 @@
           données&nbsp;?
         </h2>
         <p>
-          La plateforme mon Suivi Social a pour objectif de faciliter le suivi
-          social des bénéficiaires des ministères sociaux, des communes, des
-          CCAS, des CIAS ou structures d’accompagnement social.
+          La plateforme Mon Suivi Social a pour objectif de faciliter le suivi
+          social des bénéficiaires des ministères chargés du travail, de la
+          santé et des solidarités, des académies relevant du ministère chargé
+          de l’Éducation nationale, des communes, des CCAS, des CIAS ou
+          structures d’accompagnement social.
         </p>
         <p>Des données à caractère personnel seront traitées pour&nbsp;:</p>
         <ul>
@@ -186,11 +228,15 @@
           du RGPD.
         </p>
         <p>
-          Lorsque Mon Suivi Social est utilisé par les ministères sociaux ou les
-          communes, le traitement est fondé sur l’exécution d’une mission
-          d’intérêt public ou relevant de l’exercice de l’autorité publique dont
-          sont investis les ministères sociaux ou communes en tant que
-          responsables de traitement au sens de l’article 6-e du RGPD.
+          Lorsque Mon Suivi Social est utilisé par les ministères chargés du
+          travail, de la santé et des solidarités, des académies relevant du
+          ministère chargé de l’Éducation nationale ou les communes, le
+          traitement est fondé sur l’exécution d’une mission d’intérêt public ou
+          relevant de l’exercice de l’autorité publique dont sont investis les
+          ministères chargés du travail, de la santé et des solidarités, des
+          académies relevant du ministère chargé de l’Éducation nationale ou
+          communes en tant que responsables de traitement au sens de l’article
+          6-e du RGPD.
         </p>
         <p>
           Lorsque Mon Suivi Social est utilisé par un CCAS ou un CIAS, le
@@ -222,9 +268,9 @@
           être en mesure de démontrer le respect de ces conditions.
         </p>
         <p>
-          Spécifiquement, le NIR est traité uniquement par les collectivités
-          territoriales, CCAS et les CIAS sur le fondement de l’article L.
-          263-4-1 du code de l’action sociale et des familles et du
+          Le responsable de traitement ne peut traiter le NIR que s’il y est
+          habilité au titre de l’article 31 de la Loi n°78-17 du 6 janvier 1978
+          relative à l’informatique, aux fichiers et aux libertés et du
           <NuxtLink
             href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000038396526/"
             target="_blank"
@@ -239,198 +285,32 @@
 
       <section>
         <h2>Combien de temps conservons-nous vos données&nbsp;?</h2>
-        <p>Les données à caractère personnel sont conservées&nbsp;:</p>
-
-        <div class="fr-table fr-table--no-caption">
-          <table aria-label="Conservation des données">
-            <thead>
-              <tr>
-                <th scope="col">Catégorie de données traitées</th>
-                <th scope="col">Données à caractère personnel traitées</th>
-                <th scope="col">Durée de conservation des données</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td>
-                  Données d’identification des parties prenantes à l’action
-                  sociale
-                </td>
-                <td>
-                  <p>
-                    Données des bénéficiaires&nbsp;: Nom de naissance, usuel,
-                    marital, prénoms&nbsp;; Sexe&nbsp;; Adresses
-                    personnelles&nbsp;; Téléphone/Mobile et adresse
-                    électronique&nbsp;; Âge&nbsp;; Date et lieu de
-                    naissance&nbsp;; Nationalité&nbsp;; Numéro d’identification
-                    de rattachement à un organisme, numéro pégase
-                  </p>
-                  <p>
-                    Données des professionnels des structures
-                    d’accompagnement&nbsp;: Nom, prénom&nbsp;; e-mail&nbsp;;
-                    numéro de téléphone&nbsp;;
-                  </p>
-                  <p>
-                    Données des tiers-professionnels concourant à la prise en
-                    charge des bénéficiaires ou dans le cadre de
-                    l’accompagnement numérique&nbsp;: Nom et prénom du médecin
-                    traitant&nbsp;; des médecins experts&nbsp;; des aidants
-                    professionnels&nbsp;; Qualité&nbsp;; Organisme
-                    d’appartenance&nbsp;; Numéro de téléphone de
-                    l’organisme&nbsp;; Adresse de l’organisme&nbsp;;
-                    Courriel&nbsp;; Numéro de téléphone des aidants
-                    professionnels&nbsp;;
-                  </p>
-                  <p>
-                    Données des tiers-aidants familiaux&nbsp;: Nom et
-                    prénom&nbsp;; Lien familial (époux/ épouse, frère/ sœur,
-                    fils/ fille, etc.)&nbsp;; numéro de téléphone, date de
-                    naissance, adresse e-mail&nbsp;; le fait de vivre ou non au
-                    domicile du bénéficiaire&nbsp;; le statut
-                    d’aidant-familial&nbsp;;
-                  </p>
-                  <p>Pièces justificatives associées.</p>
-                </td>
-                <td>
-                  <p>
-                    2 ans en base active à compter du dernier contact émanant de
-                    la personne ayant fait l’objet de cet accompagnement.
-                  </p>
-                  <p>
-                    Au-delà les données pourront être exportées par les
-                    structures pour un archivage intermédiaire (Durée d’Utilité
-                    Administrative 10 ans pour les demandes d’aides sociales et
-                    prestations financières).
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Données relatives à l’accompagnement médico-social</td>
-                <td>
-                  <p>
-                    Domaines d’intervention&nbsp;; Historique des mesures
-                    d’accompagnement&nbsp;; Objectifs&nbsp;; Parcours&nbsp;;
-                    Actions d’insertion prévues&nbsp;; Entretien&nbsp;;
-                    Suivi&nbsp;;
-                  </p>
-                  <p>Pièces justificatives associées.</p>
-                </td>
-                <td>
-                  <p>
-                    2 ans en base active à compter du dernier contact émanant de
-                    la personne ayant fait l’objet de cet accompagnement.
-                  </p>
-                  <p>
-                    Au-delà les données pourront être exportées par les
-                    structures pour un archivage intermédiaire (Durée d’Utilité
-                    Administrative 10 ans pour les demandes d’aides sociales et
-                    prestations financières).
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Données relatives à la couverture sociale et à la situation
-                  familiale et financière des bénéficiaires
-                </td>
-                <td>
-                  <p>
-                    Données relatives aux conditions de vie matérielle des
-                    bénéficiaires&nbsp;: Situation et composition familiale du
-                    foyer&nbsp;; Situation face au logement et à
-                    l’hébergement&nbsp;; Moyens de mobilité&nbsp;; Situation
-                    financière&nbsp;; Prestations et avantages sociaux
-                    perçus&nbsp;; Coordonnées bancaires (dans la mesure où
-                    l’information est nécessaire au versement d’une
-                    prestation)&nbsp;;
-                  </p>
-                  <p>
-                    Données relatives au parcours professionnel et de formation
-                    dans le cadre de l’aide à l’insertion professionnelle des
-                    personnes&nbsp;;
-                  </p>
-                  <p>
-                    Données relatives à la couverture sociale des
-                    bénéficiaires&nbsp;: Organismes de rattachement&nbsp;;
-                    Régimes d’affiliation&nbsp;; Droits ouverts&nbsp;;
-                  </p>
-                  <p>Pièces justificatives associées.</p>
-                </td>
-                <td>
-                  <p>
-                    2 ans en base active à compter du dernier contact émanant de
-                    la personne ayant fait l’objet de cet accompagnement
-                  </p>
-                  <p>
-                    Au-delà les données pourront être exportées par les
-                    structures pour un archivage intermédiaire (Durée d’Utilité
-                    Administrative 10 ans pour les demandes d’aides sociales et
-                    prestations financières)
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Données sensibles relatives à la santé</td>
-                <td>
-                  <p>
-                    Données relatives à l’évaluation sociale et médico-sociale
-                    de la personne concernée&nbsp;; Autres données de santé
-                    (champ libre)&nbsp;; Groupe Iso Ressources&nbsp;;
-                  </p>
-                  <p>Pièces justificatives associées.</p>
-                </td>
-                <td>
-                  <p>
-                    2 ans en base active à compter du dernier contact émanant de
-                    la personne ayant fait l’objet de cet accompagnement.
-                  </p>
-                  <p>
-                    Au-delà, les données pourront être exportées par les
-                    structures pour un archivage intermédiaire (Durée d’Utilité
-                    Administrative 10 ans pour les demandes d’aides sociales et
-                    prestations financières).
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Numéro de sécurité sociale des bénéficiaires</td>
-                <td>Numéro de sécurité sociale des bénéficiaires</td>
-                <td>
-                  2 ans en base active à compter du dernier contact émanant de
-                  la personne ayant fait l’objet de cet accompagnement
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Données relatives au Délégué à la protection des données ou au
-                  référent protection des données
-                </td>
-                <td>
-                  <p>Données d’état civil&nbsp;: nom, prénom</p>
-                  <p>Données de contact&nbsp;: adresse e-mail</p>
-                </td>
-                <td>
-                  Ces données sont conservées jusqu’à la fin de l’utilisation de
-                  la plateforme Mon Suivi Social par la structure
-                </td>
-              </tr>
-              <tr>
-                <td>Données de connexion</td>
-                <td>
-                  Logs et adresse IP des professionnels des structures
-                  d’accompagnement social
-                </td>
-                <td>Ces données sont conservées 12 mois</td>
-              </tr>
-              <tr>
-                <td>Cookies</td>
-                <td>Cookies</td>
-                <td>Ces données sont conservées 13 mois</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul>
+          <li>
+            Les données sont conservées deux (2) ans en base active à compter du
+            dernier contact émanant de la personne ayant fait l’objet de
+            l’accompagnement par les ministères chargés du travail, de la santé
+            et des solidarités, des académies relevant du ministère chargé de
+            l’Éducation nationale, commune, CCAS, CIAS ou la structure
+            d’accompagnement social concerné ; au-delà, les données pourront
+            être exportées par les structures pour un archivage intermédiaire
+            (Durée Utilité Administrative - DUA) 10 ans pour les demandes
+            d’aides sociales et prestations financières). Après export, les
+            données personnelles sont supprimées de l’application. Dans le cas
+            d’ateliers ponctuels organisés avec les bénéficiaires, le nom et le
+            prénom des bénéficiaires sont anonymisés dans un délai de 3 mois
+            suivants l’atelier ;
+          </li>
+          <li>
+            A l’exception des données de connexion qui sont conservées 12 mois
+            et des données relatives aux cookies qui sont conservées pour une
+            durée de 13 mois.
+          </li>
+        </ul>
+        <p>
+          En cas d’inactivité des comptes d’une structure, les données associées
+          sont supprimées dans un délai de 6 mois.
+        </p>
       </section>
 
       <section>
@@ -503,9 +383,10 @@
         </p>
         <p>
           La demande peut également être effectuée directement auprès des
-          ministères sociaux, de la commune, du CCAS ou du CIAS ou de la
-          structure d’accompagnement social concernée, qui sont chargés de la
-          mettre en œuvre.
+          ministères chargés du travail, de la santé et des solidarités, des
+          académies relevant du ministère chargé de l’Éducation nationale, de la
+          commune, du CCAS ou du CIAS ou de la structure d’accompagnement social
+          concernée, qui sont chargés de la mettre en œuvre.
         </p>
         <p>
           En raison de l’obligation de sécurité et de confidentialité dans le
@@ -539,10 +420,16 @@
             les agents ou membres habilités des structures utilisant Mon Suivi
             Social&nbsp;;
           </li>
-          <li>agents habilités de l’équipe Mon Suivi Social&nbsp;;</li>
+          <li>membres habilités de l’équipe Mon Suivi Social&nbsp;;</li>
           <li>
-            agents habilités de l’équipe Inclusion Connect&nbsp;pour les données
+            membres habilités de l’équipe ProConnect pour les données
             d’identification des professionnels des structures d’accompagnement.
+          </li>
+          <li>
+            membres habilités de l’équipe RDV Service public pour les données
+            d’identification (uniquement le nom, prénom, coordonnées
+            téléphoniques, adresses emails) des bénéficiaires utilisant le
+            service numérique.
           </li>
         </ul>
       </section>
@@ -552,26 +439,32 @@
         <p>
           L’ANCT en qualité de sous-traitant&nbsp;: conçoit la plateforme, la
           met à disposition techniquement des CCAS et des CIAS, des communes,
-          des ministères sociaux et des structures d’accompagnement social,
-          héberge la plateforme, fournit à ces structures les moyens techniques
-          leur permettant de réaliser le traitement de données. Cet
-          accompagnement entre dans les missions de l’ANCT telles que définies à
-          l’article L. 1231-2 I et V du code général des collectivités
-          territoriales, à savoir&nbsp;: l’ANCT est chargée de soutenir les
-          collectivités territoriales et leurs groupements notamment dans
-          l’accès aux services publics, l’accès aux soins, le développement des
-          usages du numérique. Elle a pour mission également de favoriser le
-          développement des services numériques dans les territoires. Un accord
-          de sous-traitance est conclu entre les ministères sociaux, les
-          communes, les CCAS, les CIAS ou les structures d’accompagnement social
-          et l’ANCT, disponible à cette adresse [compléter].
+          des ministères chargés du travail, de la santé et des solidarités, des
+          académies relevant du ministère chargé de l’Éducation nationale et des
+          structures d’accompagnement social, héberge la plateforme, fournit à
+          ces structures les moyens techniques leur permettant de réaliser le
+          traitement de données. Cet accompagnement entre dans les missions de
+          l’ANCT telles que définies à l’article L. 1231-2 I et V du code
+          général des collectivités territoriales, à savoir&nbsp;: l’ANCT est
+          chargée de soutenir les collectivités territoriales et leurs
+          groupements notamment dans l’accès aux services publics, l’accès aux
+          soins, le développement des usages du numérique. Elle a pour mission
+          également de favoriser le développement des services numériques dans
+          les territoires.
+        </p>
+        <p>
+          Un accord de sous-traitance est conclu entre les ministères chargés du
+          travail, de la santé et des solidarités, des académies relevant du
+          ministère chargé de l’Éducation nationale, les communes, les CCAS, les
+          CIAS ou les structures d’accompagnement social et l’ANCT, disponible à
+          cette adresse [compléter].
         </p>
         <p>
           Certaines données sont envoyées par l’ANCT à des sous-traitants
           ultérieurs pour réaliser certaines missions.
         </p>
         <p>
-          L’ANCT s'est assurée de la mise en œuvre par ses sous-traitants
+          L’ANCT s’est assurée de la mise en œuvre par ses sous-traitants
           ultérieurs de garanties adéquates et du respect de conditions strictes
           de conﬁdentialité, d’usage et de protection des données.
         </p>
@@ -643,20 +536,12 @@
                 </td>
               </tr>
               <tr>
-                <td>Scopyleft</td>
+                <td>Omnicité</td>
                 <td>
                   Indépendants membres de l’équipe produit de Mon Suivi Social
                 </td>
                 <td>France</td>
-                <td>
-                  <NuxtLink
-                    href=""
-                    target="_blank"
-                    external
-                  >
-                    [en attente de retours de l’incubateur]
-                  </NuxtLink>
-                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -686,8 +571,8 @@
           anonymes qui ne nécessitent pas de bandeau cookies, toujours au sens
           des dernières recommandations de la CNIL à ce sujet.
         </p>
-        <p>Mon Suivi Social n'utilise aucun cookies dits &quot;tiers&quot;.</p>
-        <p>Il convient d'indiquer que&nbsp;:</p>
+        <p>Mon Suivi Social n’utilise aucun cookies dits &quot;tiers&quot;.</p>
+        <p>Il convient d’indiquer que&nbsp;:</p>
         <ul>
           <li>
             Les données collectées ne sont pas recoupées avec d’autres
@@ -707,7 +592,7 @@
         </p>
         <p>
           Pour aller plus loin, vous pouvez consulter les ﬁches proposées par la
-          Commission Nationale de l'Informatique et des Libertés (CNIL)&nbsp;:
+          Commission Nationale de l’Informatique et des Libertés (CNIL)&nbsp;:
         </p>
         <ul>
           <li>
