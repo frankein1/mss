@@ -97,7 +97,7 @@
         name: 'search',
         label: 'Recherche',
         type: FilterType.Search,
-        placeholder: 'Rechercher un dossier bénéficiaire',
+        placeholder: 'Rechercher par nom ou numéro de dossier complet',
         alwaysExpanded: true
       },
       {

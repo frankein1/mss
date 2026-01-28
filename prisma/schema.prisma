@@ -1772,6 +1772,7 @@ model Beneficiary {
   @@index(fields: [structureId], map: "beneficiary_structure_id_idx")
   @@index(fields: [familyFileId], map: "beneficiary_family_file_id_idx")
   @@index(fields: [structureId, familyFileId], map: "beneficiary_structure_id_family_file_id_idx")
+  @@index(fields: [structureId, fileNumber], map: "beneficiary_structure_id_file_number_idx")
   @@map("beneficiary")
 }
 
