@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.53.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.0...v1.53.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* **auth:** déstructuration incorrecte mène à des erreurs 404 lors de l'expiration du token auth ([9fb41b9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9fb41b9e51f07b0dd2595505a4f7be6cac0e74ab))
+
 ## [1.53.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.52.3...v1.53.0) (2026-01-27)
 
 
