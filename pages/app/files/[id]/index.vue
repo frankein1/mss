@@ -23,6 +23,7 @@
         :is-submitting-appointment-plan
         class="fr-pb-3w"
         @plan-appointment="handleAppointmentPlan"
+        @prefill-simulation="handlePrefillSimulation"
       />
       <hr />
 
@@ -336,6 +337,22 @@
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
       reloadData
+    })
+  }
+
+  function handlePrefillSimulation() {
+    return prefillSimulation(familyFileId.value)
+  }
+
+  async function prefillSimulation(familyFileId: string) {
+    await useTrpcMutation({
+      mutation: () =>
+        trpcClient.mesAides.prefillSimulation.mutate({ familyFileId: familyFileId }),
+      onSuccess: ({url}) => {
+        window.location.href = url
+      },
+      onFailure: (e: unknown) =>
+        console.log(e, familyFileId)
     })
   }
 

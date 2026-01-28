@@ -56,15 +56,15 @@
           Rendez-vous
         </button>
       </li>
-      <li class="mesdroitssociaux-btn-container">
-        <NuxtLink
-          to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
-          class="fr-link"
-          title="Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr - nouvelle fenêtre"
-          target="_blank"
-          rel="noopener external"
-          >Simulation de droits sociaux</NuxtLink
+      <li>
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0"
+          type="button"
+          title="Simulation"
+          @click="emit('prefillSimulation')"
         >
+          Simulation préremplie
+        </button>
       </li>
     </ul>
   </div>
@@ -84,7 +84,7 @@
     familyFile: boolean
   }>()
 
-  const emit = defineEmits<{ planAppointment: [] }>()
+  const emit = defineEmits<{ planAppointment: [], prefillSimulation: [] }>()
   const modal = useModal()
   const { application } = usePermissions()
 

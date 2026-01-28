@@ -216,6 +216,9 @@ export default defineNuxtConfig({
         host: process.env.MATOMO_HOST,
         siteId: parseInt(process.env.MATOMO_SITE_ID || '1')
       },
+      mesAides: {
+        host: process.env.MES_AIDES_HOST
+      },
       mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
       email: {
         from: process.env.EMAIL_FROM || ''
