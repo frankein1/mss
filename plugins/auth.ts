@@ -1,7 +1,6 @@
 import { getHeader } from 'h3'
 import { useAuth } from '~/composables/useAuth'
 import { minutesToMillis } from '~/utils/time'
-import { useEventListener } from '@vueuse/core'
 
 export default defineNuxtPlugin(async nuxtApp => {
   const { getSession } = useAuth()

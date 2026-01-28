@@ -3,7 +3,7 @@
   "version": "1.53.1",
   "scripts": {
     "dev": "nuxt dev",
-    "dev:log": "FORCE_COLOR=1 LOG=prisma,trpc,rdvsp npm run dev",
+    "dev:log": "FORCE_COLOR=1 LOG=prisma,trpc,rdvsp pnpm run dev",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

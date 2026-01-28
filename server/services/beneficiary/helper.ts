@@ -5,10 +5,24 @@ import { AgeGroup } from '~/client/options'
 import type { BeneficiaryFilterServerInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import dayjs from 'dayjs'
+import { generatorRegExp } from '~/utils/generateFileNumber'
 
 export function prepareBeneficiarySearchConditions(query: string): {
   AND: Prisma.BeneficiaryWhereInput[]
 } {
+  // Search a beneficiary by exact fileNumber
+  if (generatorRegExp.test(query.trim())) {
+    return {
+      AND: [
+        {
+          fileNumber: {
+            equals: query.trim()
+          }
+        }
+      ]
+    }
+  }
+
   const tokens = RemoveAccents.remove(
     query.trim().replace(/%/g, '').toLowerCase()
   ).split(/\s+/g)
