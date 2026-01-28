@@ -1,14 +1,9 @@
 export default defineNuxtRouteMiddleware(to => {
   const authState = useAuthState()
-  const {
-    public: { appUrl }
-  } = useRuntimeConfig()
   if (authState.isAuthenticated()) {
-    const hasRedirect = !!to.query.redirectUrl
     const redirectUrl =
-      (hasRedirect
-        ? `${appUrl}${to.query.redirectUrl as string | undefined}`
-        : undefined) || useHomePage()
+      (to.query.redirectUrl as string | undefined) || useHomePage()
+    // Nuxt navigation only authorizes relative urls
     return navigateTo(redirectUrl)
   }
 })
