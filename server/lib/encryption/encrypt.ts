@@ -49,8 +49,8 @@ export async function encrypt(
   const extractable = false
   const encryptionKey = await webcrypto.subtle.importKey(
     'raw',
-    Buffer.from(dataKey.plaintext),
-    algorithm,
+    Buffer.from(dataKey.plaintext, 'base64'),
+    { name: algorithm },
     extractable,
     ['encrypt']
   )
