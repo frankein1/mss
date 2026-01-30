@@ -2,7 +2,7 @@ import type { RuntimeConfig } from 'nuxt/schema'
 import { internal } from '~/utils/api/errors'
 
 export const ALGORITHMS = {
-  aes_256_gcm: 'AES_GCM'
+  aes_256_gcm: 'AES-GCM'
 }
 
 export interface DataForEncryptionContext {
