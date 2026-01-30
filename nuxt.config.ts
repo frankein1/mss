@@ -164,6 +164,19 @@ export default defineNuxtConfig({
     transpile: ['trpc-nuxt']
   },
 
+  ignore: [
+    '**/*.stories.{js,cts,mts,ts,jsx,tsx}',
+    '**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}',
+    '**/*.d.{cts,mts,ts}',
+    '**/.{pnpm-store,vercel,netlify,output,git,cache,data}',
+    '**/*.sock',
+    '.nuxt/analyze',
+    '.nuxt',
+    '**/-*.*',
+    '**/*.story.{js,cts,mts,ts,jsx,tsx}',
+    'scheduler'
+  ],
+
   runtimeConfig: {
     auth: {
       jwtKey: process.env.AUTH_JWT_KEY || 'secretJWT',

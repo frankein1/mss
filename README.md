@@ -115,6 +115,22 @@ git push --follow-tags origin main
 La création d'un tag génère une action de de déploiement sur l'environnement de demo. Le
 déploiement en production est une action manuelle à réaliser depuis le pipeline de CI.
 
+## Exécutions planifiées
+
+Les exécutions planifiées se déroulent dans un serveur secondaire.
+
+Pour compiler les tâches du serveur secondaire : `pnpm build:scheduler`.
+
+Pour lancer le serveur secondaire : `pnpm start:scheduler`.
+
+### Environnement Scalingo
+
+Démarrage du serveur de gestion de tâches
+
+```
+scalingo --app my-app scale scheduler:1
+```
+
 ## Antisèche
 
 - Générer une migration Prisma suite à une modification du schéma

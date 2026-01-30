@@ -4,8 +4,12 @@
   "scripts": {
     "dev": "nuxt dev",
     "dev:log": "FORCE_COLOR=1 LOG=prisma,trpc,rdvsp pnpm run dev",
-    "build": "nuxt build",
+    "dev:scheduler": "tsx scheduler/index.ts",
+    "build": "pnpm build:nuxt && pnpm build:scheduler",
+    "build:nuxt": "nuxt build",
+    "build:scheduler": "rm -rf .output-scheduler && tsup scheduler/* --out-dir .output-scheduler",
     "start": "nuxt start",
+    "start:scheduler": "node .output-scheduler/index.js",
     "generate": "nuxt generate",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
     "lint:typecheck": "nuxt typecheck",
@@ -30,6 +34,7 @@
     "@gouvfr/dsfr": "~1.14.1",
     "@gouvminint/vue-dsfr": "^8.8.0",
     "@prisma/client": "^6.14.0",
+    "@sentry/node": "^10.5.0",
     "@sentry/vue": "^10.5.0",
     "@tiptap/core": "^3.2.0",
     "@tiptap/pm": "^3.2.0",
@@ -73,7 +78,6 @@
     "@nuxt/eslint": "^1.9.0",
     "@nuxt/test-utils": "^3.19.2",
     "@playwright/test": "^1.55.0",
-    "@sentry/node": "^10.5.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^22.17.2",
@@ -98,6 +102,7 @@
     "stylelint-config-recommended-vue": "^1.6.1",
     "stylelint-config-standard-scss": "^15.0.1",
     "ts-node": "^10.9.2",
+    "tsup": "^8.5.1",
     "typescript": "~5.9.2",
     "vitest": "^3.2.4",
     "vue-dsfr-nuxt-module": "^2.0.0",
@@ -117,7 +122,7 @@
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache --fix",
     "*.{css,scss,sass,html,vue}": "stylelint",
-    "*.**": "prettier --check {.,**/*.prisma}"
+    "*.**": "prettier --ignore-unknown --check {.,**/*.prisma}"
   },
   "packageManager": "pnpm@10.13.1"
 }
