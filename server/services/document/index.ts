@@ -1,4 +1,3 @@
-import { deleteDocument } from './delete.service'
 import {
   getEditionPermissions,
   getCreationPermissions
@@ -6,6 +5,5 @@ import {
 
 export const DocumentService = {
   getEditionPermissions,
-  getCreationPermissions,
-  deleteDocument
+  getCreationPermissions
 }

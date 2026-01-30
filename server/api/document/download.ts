@@ -71,7 +71,6 @@ export default defineEventHandler(async event => {
     // Retrieve document from S3 bucket
     const config = useRuntimeConfig()
 
-    // if (config.document.encryptionEnabled) {
     if (!document.filenameDownload) {
       throw internal('download: missing bucket key')
     }
@@ -95,10 +94,6 @@ export default defineEventHandler(async event => {
     }
 
     documentContent = Buffer.from(res.fileContent)
-    // } else {
-    //   // Not implemented
-    //   throw internal('download: not implemented')
-    // }
   }
 
   if (!documentContent) {
