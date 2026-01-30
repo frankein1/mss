@@ -222,7 +222,6 @@ export default defineNuxtConfig({
       keyId: process.env.KMS_KEY_ID || ''
     },
     document: {
-      encryptionEnabled: true,
       encryptionVersion: '1',
       encryptionAlgorithm: 'aes_256_gcm'
     },
