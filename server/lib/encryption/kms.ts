@@ -2,7 +2,7 @@ import { createClient, KeyManagerv1alpha1 } from '@scaleway/sdk'
 
 let instance: any = null
 
-export function getScalewayClient() {
+function getScalewayClient() {
   if (instance) {
     return instance
   }

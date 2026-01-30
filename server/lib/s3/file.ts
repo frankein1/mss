@@ -6,41 +6,15 @@ import { encrypt } from '../encryption/encrypt'
 import type { DataForEncryptionContext } from '../encryption/helper'
 import { decrypt } from '../encryption/decrypt'
 
-interface UploadInput {
-  config: Pick<RuntimeConfig, 's3'>
-  bucketKey: string
-  data: Buffer
-  contentType: string
-}
-export async function upload({
-  config,
-  bucketKey,
-  data,
-  contentType
-}: UploadInput) {
-  const client = getS3Client()
-
-  const upload = new Upload({
-    client,
-    params: {
-      Bucket: config.s3.bucket,
-      Body: data,
-      Key: bucketKey,
-      ContentType: contentType
-    }
-  })
-
-  const res = await upload.done()
-
-  return res.Key
-}
-
-export async function deleteFile(config: RuntimeConfig['s3'], key: string) {
+export async function deleteFile(
+  config: Pick<RuntimeConfig, 'document' | 's3'>,
+  key: string
+) {
   const client = getS3Client()
 
   await client.send(
     new DeleteObjectCommand({
-      Bucket: config.bucket,
+      Bucket: config.s3.bucket,
       Key: key
     })
   )
