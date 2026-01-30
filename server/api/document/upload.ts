@@ -117,7 +117,6 @@ export default defineEventHandler(async event => {
   const bucketKey = `${generateFileRootForDocument(user.structureId, input.beneficiaryId)}/${filename}`
   const documentKey = randomUUID()
 
-  // if (config.document.encryptionEnabled) {
   await uploadWithEncryption({
     config,
     bucketKey,
@@ -128,14 +127,6 @@ export default defineEventHandler(async event => {
       contentLength: input.file.size
     }
   })
-  // } else {
-  //   await upload({
-  //     config,
-  //     bucketKey,
-  //     data: file.data,
-  //     contentType: input.type
-  //   })
-  // }
 
   const document = await addDocument(
     documentKey,
