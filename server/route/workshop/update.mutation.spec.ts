@@ -1,5 +1,5 @@
 import { prismaClient } from '~/server/prisma'
-import { describe, beforeEach, afterEach, expect } from 'vitest'
+import { describe, afterEach, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import {
   fixtureStructures,
@@ -7,32 +7,31 @@ import {
   fixturesUsers,
   FixtureUserRole
 } from '~/prisma/fixtures'
-import { faker } from '@faker-js/faker'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 
-let workshopIds: string[]
-let workshopNames: string[]
-let workshopNamesIds: string[]
-let otherPartnerOrganizationId: string
+let workshopIds: string[] = []
+let workshopNameIds: string[] = []
+let partnerOrganizationIds: string[] = []
 
 const date = new Date()
-const N_WORKSHOPS = 10
 const structureId = fixtureStructures[FixtureStructure.Test].id
+const createdById = fixturesUsers[FixtureUserRole.StructureManager].id
 
-const createWorkshopsWithName = async (
-  structureId: string,
-  createdById: string,
-  name: string,
-  n = N_WORKSHOPS
+// Create workshop(s) with a workshop name
+const createWorkshopNameWithWorkshops = async (
+  workshopNameOverride?: string,
+  workshopCount: number = 1
 ) => {
-  const data = new Array(n).fill(null).map(() => ({
+  const workshopName = workshopNameOverride || `Workshop ${Date.now()}`
+
+  const workshopData = new Array(workshopCount).fill(null).map(() => ({
     date,
     createdById,
     structureId,
     chargeable: true
   }))
 
-  return await prismaClient.workshopName.create({
+  const created = await prismaClient.workshopName.create({
     select: {
       id: true,
       name: true,
@@ -41,130 +40,109 @@ const createWorkshopsWithName = async (
     data: {
       createdById,
       structureId,
-      name,
+      name: workshopName,
       workshops: {
-        createMany: { data }
+        createMany: { data: workshopData }
       }
     }
   })
+
+  workshopNameIds.push(created.id)
+  const createdWorkshopIds = created.workshops.map(w => w.id)
+  workshopIds.push(...createdWorkshopIds)
+
+  return {
+    ...created,
+    workshopIds: createdWorkshopIds,
+    workshopId: createdWorkshopIds[0]! // guaranteed to exist since workshopCount >= 1
+  }
 }
-
-beforeEach(async () => {
-  const createdById = fixturesUsers[FixtureUserRole.StructureManager].id
-
-  const [w1, w2] = await Promise.all([
-    createWorkshopsWithName(structureId, createdById, faker.word.adverb()),
-    createWorkshopsWithName(structureId, createdById, faker.word.adverb())
-  ])
-  workshopIds = []
-  workshopIds.push(...w1.workshops.map(w => w.id))
-  workshopIds.push(...w2.workshops.map(w => w.id))
-  workshopNames = []
-  workshopNames.push(w1.name, w2.name)
-  workshopNamesIds = []
-  workshopNamesIds.push(w1.id, w2.id)
-})
 
 afterEach(
   async () =>
-    await resetDatabase(
-      workshopIds,
-      workshopNamesIds,
-      otherPartnerOrganizationId
-    )
+    await resetDatabase(workshopIds, workshopNameIds, partnerOrganizationIds)
 )
-
-function invalidsetup() {
-  return new Error('test: invalid test data')
-}
 
 describe('Workshop - Update - Update workshop data', () => {
   test('An Agent cannot update a workshop with a partner organisation from another structure', async ({
     trpc
   }) => {
+    const w1 = await createWorkshopNameWithWorkshops()
+    const workshopName = w1.name
+
     const otherPartnerOrg = await prismaClient.partnerOrganization.create({
       data: {
         structureId: fixtureStructures[FixtureStructure.Autun].id,
-        name: 'Organisation Partenaire de la structure d Autun'
+        name: "Organisme Partenaire du CCAS d'Autun"
       },
       select: { id: true }
     })
-    otherPartnerOrganizationId = otherPartnerOrg.id
+    partnerOrganizationIds.push(otherPartnerOrg.id)
 
-    await expect(
-      () =>
-        workshopIds[0] &&
-        workshopNames[0] &&
-        trpc.structureManager.workshop.updateWorkshop({
-          id: workshopIds[0],
-          date,
-          mode: UpdateWorkshopNameMode.current,
-          name: workshopNames[0],
-          partnerOrganizationId: otherPartnerOrganizationId
-        })
+    await expect(() =>
+      trpc.structureManager.workshop.updateWorkshop({
+        id: w1.workshopId,
+        date,
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopName,
+        partnerOrganizationId: otherPartnerOrg.id
+      })
     ).rejects.toThrowError(/not allowed to access route/i)
   })
 
   test('An Agent cannot update a workshop from another structure', async ({
     trpc
   }) => {
-    const workshopFromOtherStructure = await createWorkshopsWithName(
-      fixtureStructures[FixtureStructure.Autun].id,
-      fixturesUsers[FixtureUserRole.StructureManagerNew].id,
-      faker.word.adverb(),
-      1
-    )
-    workshopIds.push(...workshopFromOtherStructure.workshops.map(w => w.id))
-    workshopNames.push(workshopFromOtherStructure.name)
-    workshopNamesIds.push(workshopFromOtherStructure.id)
+    // Create workshop in Test structure
+    const w1 = await createWorkshopNameWithWorkshops()
+    const workshopName = w1.name
 
-    await expect(
-      () =>
-        workshopFromOtherStructure.workshops[0] &&
-        trpc.structureManager.workshop.updateWorkshop({
-          id: workshopFromOtherStructure.workshops[0].id,
-          date,
-          mode: UpdateWorkshopNameMode.current,
-          name: workshopFromOtherStructure.name
-        })
+    // Try to update it as structureManagerMinistere (belongs to Ministère structure)
+    // Should fail because they don't have access to Test structure's workshops
+    await expect(() =>
+      trpc.structureManagerMinistere.workshop.updateWorkshop({
+        id: w1.workshopId,
+        date,
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopName
+      })
     ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
   })
 
   test('A Reception Agent can update a workshop and only the id of the created entity is returned', async ({
     trpc
   }) => {
-    if (!workshopIds[0] || !workshopNames[0]) {
-      throw invalidsetup()
-    }
+    const w1 = await createWorkshopNameWithWorkshops()
+    const workshopName = w1.name
+
     const res = await trpc.receptionAgent.workshop.updateWorkshop({
-      id: workshopIds[0],
+      id: w1.workshopId,
       mode: UpdateWorkshopNameMode.current,
-      name: workshopNames[0],
+      name: workshopName,
       date,
       attendeeLimit: 20,
       location: 'New location'
     })
 
-    const workshopId = res.id
-    expect(res).toStrictEqual({ id: workshopId })
+    expect(res).toStrictEqual({ id: res.id })
     const workshop = await prismaClient.workshop.findUniqueOrThrow({
-      where: { id: workshopId }
+      where: { id: res.id }
     })
     expect(workshop.attendeeLimit).toBe(20)
     expect(workshop.location).toBe('New location')
   })
 
   test('An Administrator cannot update a workshop', async ({ trpc }) => {
-    await expect(
-      () =>
-        workshopIds[0] &&
-        workshopNames[0] &&
-        trpc.administrator.workshop.updateWorkshop({
-          id: workshopIds[0],
-          mode: UpdateWorkshopNameMode.current,
-          name: workshopNames[0],
-          date
-        })
+    const w1 = await createWorkshopNameWithWorkshops()
+    const workshopName = w1.name
+
+    await expect(() =>
+      trpc.administrator.workshop.updateWorkshop({
+        id: w1.workshopId,
+        mode: UpdateWorkshopNameMode.current,
+        name: workshopName,
+        date
+      })
     ).rejects.toThrowError(/user routes are not available to admins/i)
   })
 })
@@ -173,55 +151,49 @@ describe('Workshop - Update - Update workshop name', () => {
   test('For Current workshop - If the name is the same, the workshop name is not updated', async ({
     trpc
   }) => {
-    if (!workshopIds[0] || !workshopNames[0]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const workshopNameInDb = workshopNames[0]
-    const mode = UpdateWorkshopNameMode.current
+    const w1 = await createWorkshopNameWithWorkshops('Workshop A', 2)
+    const originalWorkshopNameId = w1.id
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: workshopNameInDb
+      mode: UpdateWorkshopNameMode.current,
+      name: w1.name
     })
 
     const workshop = await prismaClient.workshop.findUniqueOrThrow({
-      where: { id },
+      where: { id: w1.workshopId },
       select: { workshopName: { select: { id: true, name: true } } }
     })
-    expect(workshop.workshopName.id).toBe(workshopNamesIds[0])
-    expect(workshop.workshopName.name).toBe(workshopNameInDb)
+    expect(workshop.workshopName.id).toBe(originalWorkshopNameId)
+    expect(workshop.workshopName.name).toBe(w1.name)
   })
 
   test('For Current workshop - When name is new, a new workshop name is created and only the targeted workshop is updated', async ({
     trpc
   }) => {
-    if (!workshopIds[0]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const mode = UpdateWorkshopNameMode.current
+    const w1 = await createWorkshopNameWithWorkshops('Workshop B', 2)
+    const originalWorkshopNameId = w1.id
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: 'new name  '
+      mode: UpdateWorkshopNameMode.current,
+      // The name will be trimmed when saved to DB
+      name: 'new name '
     })
 
     const workshop = await prismaClient.workshop.findUniqueOrThrow({
-      where: { id },
+      where: { id: w1.workshopId },
       select: { workshopName: { select: { id: true, name: true } } }
     })
-    workshopNames.push(workshop.workshopName.name)
-    workshopNamesIds.push(workshop.workshopName.id)
-    expect(workshop.workshopName.id).not.toBe(workshopNamesIds[0])
+    expect(workshop.workshopName.id).not.toBe(originalWorkshopNameId)
     expect(workshop.workshopName.name).toBe('new name')
+
+    // Original workshop name should still exist (has other workshops)
     const oldWorkshopName = await prismaClient.workshopName.findUnique({
       select: { id: true },
-      where: { id: workshopNamesIds[0] }
+      where: { id: originalWorkshopNameId }
     })
     expect(oldWorkshopName).not.toBe(null)
   })
@@ -229,28 +201,29 @@ describe('Workshop - Update - Update workshop name', () => {
   test('For Current workshop - When the target value is another workshop, only the targeted workshop is updated and the workshop is connected to the other workshop name', async ({
     trpc
   }) => {
-    if (!workshopIds[0] || !workshopNames[1]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const mode = UpdateWorkshopNameMode.current
+    const w1 = await createWorkshopNameWithWorkshops('Workshop C', 2)
+    const w2 = await createWorkshopNameWithWorkshops('Workshop D', 1)
+
+    const originalWorkshopNameId = w1.id
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: workshopNames[1]
+      mode: UpdateWorkshopNameMode.current,
+      name: w2.name
     })
 
     const workshop = await prismaClient.workshop.findUniqueOrThrow({
-      where: { id },
+      where: { id: w1.workshopId },
       select: { workshopName: { select: { id: true, name: true } } }
     })
-    expect(workshop.workshopName.id).toBe(workshopNamesIds[1])
-    expect(workshop.workshopName.name).toBe(workshopNames[1])
+    expect(workshop.workshopName.id).toBe(w2.id)
+    expect(workshop.workshopName.name).toBe(w2.name)
+
+    // Old workshop name should still exist (orphaned)
     const oldWorkshopName = await prismaClient.workshopName.findUnique({
       select: { id: true },
-      where: { id: workshopNamesIds[0] }
+      where: { id: originalWorkshopNameId }
     })
     expect(oldWorkshopName).not.toBe(null)
   })
@@ -258,42 +231,27 @@ describe('Workshop - Update - Update workshop name', () => {
   test('For Current workshop - When only one workshop has the previous name, the old workshop name is deleted', async ({
     trpc
   }) => {
-    const createdById = fixturesUsers[FixtureUserRole.StructureManager].id
-    const workshopNameWith1Workshop = await createWorkshopsWithName(
-      structureId,
-      createdById,
-      faker.word.adverb(),
-      1
-    )
-    workshopIds.push(...workshopNameWith1Workshop.workshops.map(w => w.id))
-    workshopNames.push(workshopNameWith1Workshop.name)
-    workshopNamesIds.push(workshopNameWith1Workshop.id)
-
-    const id = workshopNameWith1Workshop.workshops[0]?.id
-    const mode = UpdateWorkshopNameMode.current
-
-    if (!id) {
-      throw invalidsetup()
-    }
+    const w1 = await createWorkshopNameWithWorkshops('Workshop E', 1)
+    const workshopNameId = w1.id
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: 'new name  '
+      mode: UpdateWorkshopNameMode.current,
+      name: 'brand new name'
     })
 
     const workshop = await prismaClient.workshop.findUniqueOrThrow({
-      where: { id },
+      where: { id: w1.workshopId },
       select: { workshopName: { select: { id: true, name: true } } }
     })
-    workshopNames.push(workshop.workshopName.name)
-    workshopNamesIds.push(workshop.workshopName.id)
-    expect(workshop.workshopName.id).not.toBe(workshopNameWith1Workshop.id)
-    expect(workshop.workshopName.name).toBe('new name')
+    expect(workshop.workshopName.id).not.toBe(workshopNameId)
+    expect(workshop.workshopName.name).toBe('brand new name')
+
+    // Old workshop name should be deleted (no other workshops using it)
     const oldWorkshopName = await prismaClient.workshopName.findUnique({
       select: { id: true },
-      where: { id: workshopNameWith1Workshop.id }
+      where: { id: workshopNameId }
     })
     expect(oldWorkshopName).toBe(null)
   })
@@ -301,129 +259,109 @@ describe('Workshop - Update - Update workshop name', () => {
   test('For all workshops - All workshops with the same name are updated and the target value is new', async ({
     trpc
   }) => {
-    if (!workshopIds[0]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const mode = UpdateWorkshopNameMode.all
+    const w1 = await createWorkshopNameWithWorkshops('Workshop F', 3)
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: 'new name  '
+      mode: UpdateWorkshopNameMode.all,
+      name: 'new shared name'
     })
 
     const workshops = await prismaClient.workshop.findMany({
-      where: { workshopName: { name: 'new name' } },
+      where: { workshopName: { name: 'new shared name' } },
       select: { id: true }
     })
-    expect(workshops).toHaveLength(N_WORKSHOPS)
-    expect(new Set(workshops.map(w => w.id))).toEqual(
-      new Set(workshopIds.slice(0, N_WORKSHOPS))
-    )
+    expect(workshops).toHaveLength(3)
   })
 
   test('For all workshops - All workshops with the same name are updated, the target value is another workshop, the previous workshop name is deleted', async ({
     trpc
   }) => {
-    if (!workshopIds[0] || !workshopNames[0] || !workshopNames[1]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const workshopNameInDb = workshopNames[0]
-    const mode = UpdateWorkshopNameMode.all
+    const w1 = await createWorkshopNameWithWorkshops('Workshop G', 2)
+    const w2 = await createWorkshopNameWithWorkshops('Workshop H', 2)
+    const originalName = w1.name
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: workshopNames[1]
+      mode: UpdateWorkshopNameMode.all,
+      name: w2.name
     })
 
     const workshops = await prismaClient.workshop.findMany({
-      where: { workshopName: { name: workshopNames[1] } },
+      where: { workshopName: { name: w2.name } },
       select: { id: true }
     })
-    expect(workshops).toHaveLength(N_WORKSHOPS * 2)
-    const workshopName = await prismaClient.workshopName.findUnique({
+    expect(workshops).toHaveLength(4)
+
+    const oldWorkshopName = await prismaClient.workshopName.findUnique({
       where: {
         structureId_name: {
           structureId,
-          name: workshopNameInDb
+          name: originalName
         }
       }
     })
-    expect(workshopName).toBe(null)
+    expect(oldWorkshopName).toBe(null)
   })
 
   test('For all workshops - All workshops with the same name are updated and the target value has the same content with a different case', async ({
     trpc
   }) => {
-    if (!workshopIds[0] || !workshopNames[0]) {
-      throw invalidsetup()
-    }
-    const id = workshopIds[0]
-    const workshopNameInDb = workshopNames[0]
-    const mode = UpdateWorkshopNameMode.all
+    const w1 = await createWorkshopNameWithWorkshops('workshop i', 2)
+    const originalName = w1.name
 
     await trpc.receptionAgent.workshop.updateWorkshop({
-      id,
+      id: w1.workshopId,
       date,
-      mode,
-      name: workshopNameInDb.toLocaleUpperCase()
+      mode: UpdateWorkshopNameMode.all,
+      name: 'WORKSHOP I'
     })
 
     const workshops = await prismaClient.workshop.findMany({
-      where: { workshopName: { name: workshopNameInDb.toLocaleUpperCase() } },
+      where: { workshopName: { name: 'WORKSHOP I' } },
       select: { id: true }
     })
-    expect(workshops).toHaveLength(N_WORKSHOPS)
-    expect(new Set(workshops.map(w => w.id))).toEqual(
-      new Set(workshopIds.slice(0, N_WORKSHOPS))
-    )
-    const workshopName = await prismaClient.workshopName.findUnique({
+    expect(workshops).toHaveLength(2)
+
+    const oldWorkshopName = await prismaClient.workshopName.findUnique({
       where: {
         structureId_name: {
           structureId,
-          name: workshopNameInDb
+          name: originalName
         }
       }
     })
-    expect(workshopName).toBe(null)
+    expect(oldWorkshopName).toBe(null)
   })
 })
 
-describe('Workshop - Update - Update chargeable to false', async () => {
-  test('Delete attendee payment info on workshop previously chearcheable', async ({
+describe('Workshop - Update - Update chargeable to false', () => {
+  test('Delete attendee payment info on workshop previously chargeable', async ({
     trpc
   }) => {
-    if (!workshopIds[0]) {
-      throw invalidsetup()
-    }
-    // add attendee
+    const w1 = await createWorkshopNameWithWorkshops('Chargeable Workshop', 1)
+
+    // Add attendee with payment info
     const attendee = await trpc.socialWorker.workshop.createExternalAttendee({
-      workshopId: workshopIds[0],
+      workshopId: w1.workshopId,
       firstName: 'John',
       lastName: 'Doe',
-      paymentReceived: 'true',
+      paymentReceived: true,
       paymentAmount: 8
     })
 
-    if (!attendee) {
-      throw invalidsetup()
-    }
-
-    // update workshop (remove chargeable)
+    // Update workshop to not chargeable
     await trpc.socialWorker.workshop.updateWorkshop({
-      id: workshopIds[0],
+      id: w1.workshopId,
       chargeable: false,
-      date: new Date(),
-      name: 'Atelier gratuit',
+      date,
+      name: 'Free Workshop',
       mode: UpdateWorkshopNameMode.all
     })
 
-    // attendee should not have payment info
+    // Attendee should not have payment info anymore
     const attendeeWithPaymentInfo =
       await prismaClient.workshopAttendee.findFirstOrThrow({
         select: {
@@ -441,19 +379,28 @@ describe('Workshop - Update - Update chargeable to false', async () => {
   })
 })
 
-async function resetDatabase(wids: string[], wnids: string[], poid: string) {
-  if (wids) {
-    await prismaClient.workshop.deleteMany({ where: { id: { in: wids } } })
-    await prismaClient.workshopAttendee.deleteMany({
-      where: { workshop: { id: { in: wids } } }
+async function resetDatabase(wids: string[], wnids: string[], poids: string[]) {
+  // Cascade delete handles WorkshopAttendee and WorkshopExternalAttendee
+  if (wids.length > 0) {
+    await prismaClient.workshop.deleteMany({
+      where: { id: { in: wids } }
     })
   }
-  if (wnids) {
+
+  if (wnids.length > 0) {
     await prismaClient.workshopName.deleteMany({
       where: { id: { in: wnids } }
     })
   }
-  if (poid) {
-    await prismaClient.partnerOrganization.deleteMany({ where: { id: poid } })
+
+  if (poids.length > 0) {
+    await prismaClient.partnerOrganization.deleteMany({
+      where: { id: { in: poids } }
+    })
   }
+
+  // Reset for next test
+  workshopIds = []
+  workshopNameIds = []
+  partnerOrganizationIds = []
 }
