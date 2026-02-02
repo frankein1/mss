@@ -221,7 +221,8 @@ const createBeneficiaries = async () => {
             fileNumber: v4(),
             firstName: 'Paul',
             created: twoYearsMinusTwoMonthsBeforeNow,
-            updated: twoYearsMinusTwoMonthsBeforeNow
+            updated: twoYearsMinusTwoMonthsBeforeNow,
+            lastActivity: twoYearsMinusTwoMonthsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -229,7 +230,8 @@ const createBeneficiaries = async () => {
             fileNumber: v4(),
             firstName: 'Leto',
             created: threeYearsBeforeNow,
-            updated: threeYearsBeforeNow
+            updated: threeYearsBeforeNow,
+            lastActivity: threeYearsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -237,7 +239,8 @@ const createBeneficiaries = async () => {
             fileNumber: v4(),
             firstName: 'Siona',
             created: twoYearsMinusOneMonthsBeforeNow,
-            updated: twoYearsMinusOneMonthsBeforeNow
+            updated: twoYearsMinusOneMonthsBeforeNow,
+            lastActivity: twoYearsMinusOneMonthsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -246,7 +249,8 @@ const createBeneficiaries = async () => {
             firstName: 'Vorian',
             archiveDueDate: inOneMonth,
             created: twoYearsMinusTwoMonthsBeforeNow,
-            updated: twoYearsMinusTwoMonthsBeforeNow
+            updated: twoYearsMinusTwoMonthsBeforeNow,
+            lastActivity: twoYearsMinusTwoMonthsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -255,7 +259,8 @@ const createBeneficiaries = async () => {
             firstName: 'Jessica',
             archiveDueDate: inOneMonth,
             created: twoYearsBeforeNow,
-            updated: twoYearsBeforeNow
+            updated: twoYearsBeforeNow,
+            lastActivity: twoYearsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -264,7 +269,8 @@ const createBeneficiaries = async () => {
             firstName: 'Alia',
             archiveDueDate: oneMonthBeforeNow,
             created: twoYearsBeforeNow,
-            updated: twoYearsMinusTwoMonthsBeforeNow
+            updated: twoYearsMinusTwoMonthsBeforeNow,
+            lastActivity: twoYearsMinusTwoMonthsBeforeNow
           },
           {
             ...beneficiaryBaseObject,
@@ -273,7 +279,8 @@ const createBeneficiaries = async () => {
             firstName: 'Ghanima',
             archiveDueDate: oneMonthBeforeNow,
             created: twoYearsBeforeNow,
-            updated: twoYearsBeforeNow
+            updated: twoYearsBeforeNow,
+            lastActivity: twoYearsBeforeNow
           }
         ]
       }

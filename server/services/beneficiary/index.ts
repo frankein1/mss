@@ -18,11 +18,6 @@ import {
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
 import { createFamilyFileMember } from './create-family-file-member.service'
 import { updateEntourage } from './update-entourage.service'
-import {
-  getArchiveDate,
-  getBeneficiaryLastActivity,
-  getLastActivity
-} from './get-last-activity.service'
 import { linkToFamilyFile } from './linkToFamilyFile.service'
 import getByFamileFileId from './get-by-family-file-id'
 
@@ -43,9 +38,6 @@ export const BeneficiaryService = {
   getIdFromFamilyFileId,
   createFamilyFileMember,
   updateEntourage,
-  getLastActivity,
-  getArchiveDate,
-  getBeneficiaryLastActivity,
   linkToFamilyFile,
   getBeneficiaryList,
   getByFamileFileId

@@ -12,7 +12,6 @@ import {
   isInSameStructure,
   isMemberOfReferents
 } from '~/server/security/rules/helpers'
-import { BeneficiaryService } from '.'
 
 export function getBeneficiarySecurityTarget(
   user: SecurityRuleGrantee,
@@ -49,6 +48,7 @@ function getBeneficiaryArchiveSecurityTarget(
       created: true,
       updated: true,
       archiveDueDate: true,
+      lastActivity: true,
       familyFile: {
         select: {
           structureId: true,
@@ -98,11 +98,7 @@ export const getArchivePermissions = async ({
   const { user } = ctx
   const beneficiary = await getBeneficiaryArchiveSecurityTarget(ctx.user, id)
   const isMember = isMemberOfReferents(user, beneficiary.familyFile)
-  const lastActivity = await BeneficiaryService.getLastActivity({
-    ctx,
-    beneficiaryId: beneficiary.id
-  })
-  const toArchived = hasToBeArchived(lastActivity)
+  const toArchived = hasToBeArchived(beneficiary.lastActivity)
   const { manager, receptionAgent } = getGranteRole(ctx)
 
   if (manager) {
@@ -123,7 +119,10 @@ export const getArchivePermissions = async ({
 /** A beneficiary can be archived 1 year and 11 months after their last activity if
  * no delay has been set
  */
-const hasToBeArchived = (lastActivity: Date) => {
+const hasToBeArchived = (lastActivity: Date | null) => {
+  if (lastActivity == null) {
+    return false
+  }
   const twoYearsMinusOneMonthsBeforeNow = dayjs()
     .subtract(2, 'year')
     .add(1, 'month')

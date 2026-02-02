@@ -10,6 +10,7 @@ export const notificationInclude = {
       firstName: true,
       usualName: true,
       birthName: true,
+      archiveDueDate: true,
       familyFile: {
         select: {
           id: true
@@ -77,6 +78,16 @@ export function getDescriptionHint(
   notification: Notification & {
     itemCreatedBy: Pick<User, 'firstName' | 'lastName'> | null
     socialSupport: Pick<SocialSupport, 'socialSupportType'> | null
+    beneficiary: {
+      id: string
+      firstName: string | null
+      usualName: string | null
+      birthName: string | null
+      archiveDueDate: Date | null
+      familyFile: {
+        id: string
+      }
+    } | null
   }
 ) {
   const userName = notification.itemCreatedBy
@@ -89,6 +100,16 @@ export function getDescriptionHint(
     notification.archiveDate &&
     notification.created &&
     notification.archiveDate.getTime() < notification.created.getTime()
+  if (
+    (notification.type === 'ArchiveDueToday' ||
+      notification.type === 'ArchiveDueOneMonth' ||
+      notification.type === 'ArchiveDueSevenDays') &&
+    dayjs(notification.beneficiary?.archiveDueDate).isSame(
+      dayjs(notification.archiveDate)
+    )
+  ) {
+    return "Ce dossier a été conservé un an supplémentaire après une période d'inactivité"
+  }
 
   switch (notification.type) {
     case 'DueDateOneMonth':

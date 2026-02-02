@@ -26,10 +26,13 @@ async function handleCreation() {
   // Filter all beneficiaries that must be archived in less than 7 days
   const mustBeArchivedBeneficiaries = (
     await getInactiveBeneficiariesWithOneMonthNotification()
-  ).filter(b => dueDateInNDays(b.archiveDate, 7))
+  ).filter(b => b && dueDateInNDays(b.archiveDate, 7))
 
   const archiveNotifications = mustBeArchivedBeneficiaries
     .map(beneficiary => {
+      if (!beneficiary) {
+        return []
+      }
       return beneficiary.referentIds.flatMap(referentId => ({
         archiveDate: beneficiary.archiveDate,
         beneficiaryId: beneficiary.id,

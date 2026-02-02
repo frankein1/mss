@@ -27,7 +27,9 @@
     "scheduler:workshop-anonymization": "tsx server/scheduler/workshop/anonymize-external-attendees.ts",
     "scheduler:metabase-anonymization": "tsx server/scheduler/db-anonymizer/index.ts",
     "scheduler:cleanup-user-activities": "tsx server/scheduler/user-activity/cleanup-user-activities.ts",
-    "scheduler:update-last-activity": "tsx server/scheduler/beneficiary/update-last-activity.ts"
+    "scheduler:update-last-activity": "tsx server/scheduler/beneficiary/update-last-activity.ts",
+    "scheduler:archive-notifications": "tsx server/scheduler/notifications/archive-notifications.ts",
+    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",

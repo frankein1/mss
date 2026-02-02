@@ -1,9 +1,8 @@
 import { NotificationType } from '@prisma/client'
-import dayjs from 'dayjs'
 import { NotificationRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
-import { getInactiveBeneficiaries } from './helper'
 import { performance } from 'node:perf_hooks'
+import { getInactiveBeneficiaries } from './helper'
 
 /** Notifications for inactive beneficiaries due to be archived in 1 month */
 export const createArchiveDueOneMonthNotifications = async () => {
@@ -19,9 +18,7 @@ export const createArchiveDueOneMonthNotifications = async () => {
 }
 
 async function handleCreation() {
-  const mustBeArchivedBeneficiaries = (await getInactiveBeneficiaries()).filter(
-    b => dayjs(b.archiveDate).subtract(1, 'month').isBefore(dayjs())
-  )
+  const mustBeArchivedBeneficiaries = await getInactiveBeneficiaries()
 
   const archiveNotifications = mustBeArchivedBeneficiaries
     .map(beneficiary => {

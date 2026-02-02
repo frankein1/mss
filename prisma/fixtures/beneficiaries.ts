@@ -175,7 +175,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Max',
     gender: 'Male',
     created: new Date('2021-01-01'),
-    updated: new Date('2021-01-01')
+    updated: new Date('2021-01-01'),
+    lastActivity: new Date('2021-01-01')
   },
   {
     id: '8cc24c93-a73e-4bf6-bf37-a791f79bcd3e',
@@ -187,7 +188,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Sandra',
     gender: 'Female',
     created: new Date('2021-01-01'),
-    updated: dayjs().subtract(2, 'years').add(3, 'days').toDate()
+    updated: dayjs().subtract(2, 'years').add(3, 'days').toDate(),
+    lastActivity: dayjs().subtract(2, 'years').add(3, 'days').toDate()
   }
 ] satisfies [
   Prisma.BeneficiaryUncheckedCreateInput,
