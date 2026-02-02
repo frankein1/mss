@@ -11,10 +11,10 @@
       "command": "0 23 * * * pnpm scheduler:cleanup-user-activities"
     },
     {
-      "command": "'0 1 * * 0 pnpm scheduler:archive-notifications"
+      "command": "0 1 * * * pnpm scheduler:archive-notifications"
     },
     {
-      "command": "'0 2 * * * pnpm scheduler:archive-reminders-notifications"
+      "command": "0 2 * * * pnpm scheduler:archive-reminders-notifications"
     }
   ]
 }
