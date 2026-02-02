@@ -1,6 +1,7 @@
 import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
-import { forbiddenError } from '~/server/trpc'
+import { DocumentService } from '~/server/services'
+import { badrequest, forbidden } from '~/utils/api/errors'
 
 export default defineEventHandler(async event => {
   const user = event.context.auth?.user
@@ -10,16 +11,37 @@ export default defineEventHandler(async event => {
     user.role === 'Administrator' ||
     !user.structureId
   ) {
-    throw forbiddenError()
+    throw forbidden('download: not authorized')
   }
   const query = getQuery(event)
 
-  const key = query.key
+  const key = query.key?.toString()
+
+  if (!key) {
+    throw badrequest('download: missing document id')
+  }
+
+  if (!user.structureType) {
+    throw badrequest('download: missing structure type')
+  }
+
+  const ctx = {
+    user,
+    structure: {
+      id: user.structureId,
+      type: user.structureType,
+      externalRdvspActive: null
+    }
+  }
+
+  const { permissions } = await DocumentService.getEditionPermissions(ctx, key)
+
+  if (!permissions.view) {
+    throw forbidden('download: user is not allowed to view document')
+  }
 
   const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: {
-      key: '' + key
-    },
+    where: { key },
     select: {
       mimeType: true,
       name: true,
