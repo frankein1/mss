@@ -195,6 +195,7 @@
     results.value = beneficiaries.map(beneficiary => ({
       id: beneficiary.id,
       firstName: beneficiary.firstName,
+      fileNumber: beneficiary.fileNumber,
       status: beneficiary.status,
       usualName: beneficiary.usualName,
       birthDate: beneficiary.birthDate,

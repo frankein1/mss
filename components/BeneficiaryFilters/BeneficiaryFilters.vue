@@ -97,7 +97,7 @@
         name: 'search',
         label: 'Recherche',
         type: FilterType.Search,
-        placeholder: 'Rechercher par nom ou numéro de dossier complet',
+        placeholder: 'Rechercher par nom ou numéro de dossier',
         alwaysExpanded: true
       },
       {

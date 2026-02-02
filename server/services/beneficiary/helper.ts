@@ -10,37 +10,48 @@ import { generatorRegExp } from '~/utils/generateFileNumber'
 export function prepareBeneficiarySearchConditions(query: string): {
   AND: Prisma.BeneficiaryWhereInput[]
 } {
-  // Search a beneficiary by exact fileNumber
-  if (generatorRegExp.test(query.trim())) {
-    return {
-      AND: [
-        {
-          fileNumber: {
-            equals: query.trim()
-          }
-        }
-      ]
-    }
-  }
+  const trimmedQuery = query.trim()
 
-  const tokens = RemoveAccents.remove(
-    query.trim().replace(/%/g, '').toLowerCase()
-  ).split(/\s+/g)
-
-  const fields = [
+  const nameFields = [
     'usualNameNormalized',
     'birthNameNormalized',
     'firstNameNormalized'
   ] as const
 
-  const searchConditions = tokens.map(token => ({
-    OR: fields.map(field => ({
-      [field]: {
-        contains: token
-      }
+  // Normalize for name search
+  const normalizedQuery = RemoveAccents.remove(
+    trimmedQuery.replace(/%/g, '').toLowerCase()
+  )
+  const tokens = normalizedQuery.split(/\s+/g).filter(Boolean)
+
+  // Name search: each token must match at least one name field
+  // (token1 in firstName OR lastName OR birthName) AND (token2 in firstName OR lastName OR birthName)
+  const nameTokenConditions = tokens.map(token => ({
+    OR: nameFields.map(field => ({
+      [field]: { contains: token }
     }))
   }))
-  return { AND: searchConditions }
+
+  // If query looks like a fileNumber, also allow matching by fileNumber prefix
+  const looksLikeFileNumber =
+    trimmedQuery.length >= 3 && generatorRegExp.test(trimmedQuery.toUpperCase())
+
+  if (looksLikeFileNumber) {
+    // Match by fileNumber OR by name
+    return {
+      AND: [
+        {
+          OR: [
+            { fileNumber: { startsWith: trimmedQuery.toUpperCase() } },
+            { AND: nameTokenConditions }
+          ]
+        }
+      ]
+    }
+  }
+
+  // Name search only
+  return { AND: nameTokenConditions }
 }
 
 export function prepareBeneficiaryFilters(

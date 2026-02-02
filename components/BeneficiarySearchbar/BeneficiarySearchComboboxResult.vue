@@ -16,19 +16,22 @@
       />
     </div>
     <div
-      v-if="beneficiary.birthDate || beneficiary.phone1"
       class="fr-grid-row text--muted fr-text--regular fr-text--sm whitespace-pre-wrap fr-mt-1v"
     >
-      <span v-if="beneficiary.birthDate && !showAge">{{
-        formatDate(beneficiary.birthDate)
-      }}</span>
+      <span class="fr-sr-only">Numéro de dossier : </span>
+      <AtomTextEmphasis
+        :name="beneficiary.fileNumber"
+        :input="search"
+      />
+      <span v-if="beneficiary.birthDate && !showAge">
+        - {{ formatDate(beneficiary.birthDate) }}
+      </span>
       <span v-if="beneficiary.birthDate && showAge">{{
         calculateAge(beneficiary.birthDate) + ' ans'
       }}</span>
       <template v-if="beneficiary.phone1">
-        <span v-if="beneficiary.birthDate"> – </span>
         <span class="fr-sr-only">Téléphone : </span>
-        <span>{{ beneficiary.phone1 }}</span>
+        <span> - {{ beneficiary.phone1 }}</span>
       </template>
     </div>
   </div>
