@@ -3,9 +3,9 @@
     <div class="toolbar-search">
       <BeneficiarySearchCombobox
         class="beneficiary-search fr-mr-2w"
-        label="Rechercher un dossier bénéficiaire"
+        label="Rechercher un bénéficiaire par nom, prénom ou n° de dossier"
         :label-visible="false"
-        placeholder="Rechercher un dossier bénéficiaire"
+        placeholder="Rechercher un bénéficiaire par nom, prénom ou n° de dossier"
         :search-fn="searchBeneficiaries"
         :action="{
           title: `Créer une synthèse`

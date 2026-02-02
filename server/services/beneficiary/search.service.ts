@@ -25,6 +25,7 @@ export async function search({
     select: {
       id: true,
       familyFileId: true,
+      fileNumber: true,
       usualName: true,
       firstName: true,
       birthName: true,
