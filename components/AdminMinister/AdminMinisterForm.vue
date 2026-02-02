@@ -77,12 +77,14 @@
   import { ministerFieldLabels } from '~/client/labels/minister.label'
 
   const props = defineProps<{
-    minister: AdminMinisterOutput
+    minister: AdminMinisterOutput | null
     isSubmitting: boolean
+    create: boolean
   }>()
 
   const emit = defineEmits<{
     UpdateMinister: [minister: UpdateMinisterInput | CreateMinisterInput]
+    CreateMinister: [minister: CreateMinisterInput | UpdateMinisterInput]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
@@ -105,7 +107,9 @@
   const { onSubmit: onUpdateMinister, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     minister => {
-      emit('UpdateMinister', minister)
+      return props.create
+        ? emit('CreateMinister', minister)
+        : emit('UpdateMinister', minister)
     }
   )
 

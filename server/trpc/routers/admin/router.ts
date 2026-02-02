@@ -74,5 +74,8 @@ export const adminRouter = router({
     .query(adminRoutes.getMinister.executeAsAdmin),
   updateMinister: adminProcedure
     .input(adminRoutes.updateMinister.inputValidation)
-    .mutation(adminRoutes.updateMinister.executeAsAdmin)
+    .mutation(adminRoutes.updateMinister.executeAsAdmin),
+  createMinister: adminProcedure
+    .input(adminRoutes.createMinister.inputValidation)
+    .mutation(adminRoutes.createMinister.executeAsAdmin)
 })

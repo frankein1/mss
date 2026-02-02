@@ -22,25 +22,25 @@
           </tr>
         </thead>
         <tbody>
-          <NuxtLink
+          <tr
             v-for="minister in ministers"
             :key="minister.id"
-            v-slot="{ navigate }"
-            custom
-            :to="routes.admin.AdminMinisterEdit.path(minister.id)"
+            class="clickable-row"
           >
-            <tr
-              class="clickable-row"
-              @click="navigate"
-            >
-              <td>{{ minister.firstName }}</td>
-              <td>{{ minister.lastName }}</td>
-              <td>{{ minister.function }}</td>
-              <td>{{ minister.ministry ? minister.ministry : '–' }}</td>
-              <td>{{ minister.government }}</td>
-              <td>{{ minister.former ? 'Oui' : 'Non' }}</td>
-            </tr>
-          </NuxtLink>
+            <td>
+              <NuxtLink
+                class="table-row-link"
+                :to="routes.admin.AdminMinisterEdit.path(minister.id)"
+              >
+                {{ minister.firstName }}
+              </NuxtLink>
+            </td>
+            <td>{{ minister.lastName }}</td>
+            <td>{{ minister.function }}</td>
+            <td>{{ minister.ministry ? minister.ministry : '–' }}</td>
+            <td>{{ minister.government }}</td>
+            <td>{{ minister.former ? 'Oui' : 'Non' }}</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -63,10 +63,6 @@
       width: 100%;
       max-width: 100%;
       overflow-x: auto;
-    }
-
-    .clickable-row {
-      cursor: pointer;
     }
   }
 </style>

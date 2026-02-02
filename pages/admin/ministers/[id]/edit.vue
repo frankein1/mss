@@ -19,6 +19,7 @@
           />
           <AdminMinisterForm
             v-else-if="minister"
+            :create="false"
             :minister="minister"
             :is-submitting="isSubmitting"
             @update-minister="onUpdateMinister($event as UpdateMinisterInput)"
