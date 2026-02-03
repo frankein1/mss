@@ -286,6 +286,7 @@
         .filter(notification => !notification.read)
         .map(notification => ({
           archiveDate: notification.archiveDate,
+          archiveDueDate: notification.beneficiary?.archiveDueDate,
           beneficiary: notification.beneficiary,
           actionUrl: notification.beneficiary?.id
             ? routes.beneficiary.AppBeneficiariesArchive.path(
@@ -295,6 +296,7 @@
         }))
     }
   })
+  type BeneficiariesToArchived = typeof beneficiariesToArchived.value
 
   const modal = useModal()
   const unwatch = watch([modal.isReady, beneficiariesToArchived], () => {
@@ -313,10 +315,10 @@
       )
       modal.open(ArchiveNotificationModal, {
         triggerOpen: true,
-        title:
-          beneficiariesToArchived.value.length > 1
-            ? `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
-            : `Le dossier de ${beneficiaryNames[0]} est inactif depuis 2 ans : une action est requise.`,
+        title: archiveModalTitle(
+          beneficiariesToArchived.value,
+          beneficiaryNames
+        ),
         beneficiaryNames: Array.from(new Set(beneficiaryNames)),
         validate: () => {
           navigateTo(firstNotification.actionUrl)
@@ -327,6 +329,23 @@
       unwatch()
     }
   })
+
+  const archiveModalTitle = (
+    beneficiariesToArchived: BeneficiariesToArchived,
+    beneficiaryNames: string[]
+  ) => {
+    if (beneficiariesToArchived && beneficiariesToArchived.length > 1) {
+      return `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
+    }
+    if (
+      beneficiariesToArchived &&
+      beneficiariesToArchived[0] &&
+      beneficiariesToArchived[0].archiveDueDate
+    ) {
+      return `Le dossier de ${beneficiaryNames[0]} a été conservé 1 an supplémentaire : une action est requise.`
+    }
+    return `Le dossier de ${beneficiaryNames[0]} est inactif depuis 2 ans : une action est requise.`
+  }
 </script>
 
 <style lang="scss" scoped>

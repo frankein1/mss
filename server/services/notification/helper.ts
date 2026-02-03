@@ -38,7 +38,9 @@ export const getInactiveBeneficiaries = async () => {
               // family file referents except reception agents
 
               ...b.familyFile.referents
-                .filter(referent => referent.role !== UserRole.ReceptionAgent)
+                .filter(referent =>
+                  getArchivePermission(referent, b.lastActivity)
+                )
                 .map(r => r.id),
               // structure managers
               ...b.structure.users.map(u => u.id)
