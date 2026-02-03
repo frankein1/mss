@@ -941,6 +941,7 @@
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.
       </p>
+      <p class="last-modification-date">Dernière modification : février 2026</p>
     </div>
     <CGUAcceptForm v-if="!$route.query.readonly" />
   </div>
@@ -952,4 +953,8 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/cgu' as *;
+
+  .last-modification-date {
+    font-style: italic;
+  }
 </style>

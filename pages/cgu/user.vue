@@ -388,6 +388,10 @@
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.
       </p>
+
+      <section class="last-modification-date">
+        Dernière modification : février 2026
+      </section>
     </div>
     <CGUAcceptForm v-if="!$route.query.readonly" />
   </div>
@@ -399,4 +403,8 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/cgu' as *;
+
+  .last-modification-date {
+    font-style: italic;
+  }
 </style>

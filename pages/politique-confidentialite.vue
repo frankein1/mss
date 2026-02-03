@@ -457,7 +457,14 @@
           travail, de la santé et des solidarités, des académies relevant du
           ministère chargé de l’Éducation nationale, les communes, les CCAS, les
           CIAS ou les structures d’accompagnement social et l’ANCT, disponible à
-          cette adresse [compléter].
+          cette adresse&nbsp;:
+          <NuxtLink
+            href="https://monsuivisocial-app.incubateur.anct.gouv.fr/cgu/manager?readonly=true"
+            target="_blank"
+            external
+          >
+            Conditions générales d'utilisation </NuxtLink
+          >.
         </p>
         <p>
           Certaines données sont envoyées par l’ANCT à des sous-traitants
@@ -620,6 +627,9 @@
           ou des personnes accompagnées.
         </p>
       </section>
+      <section class="last-modification-date">
+        Dernière modification : 03 février 2026
+      </section>
     </article>
   </div>
 </template>
@@ -638,4 +648,8 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/cgu' as *;
+
+  .last-modification-date {
+    font-style: italic;
+  }
 </style>
