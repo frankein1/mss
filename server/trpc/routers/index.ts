@@ -5,7 +5,6 @@ import { budgetRouter } from './budgetRouter'
 import { configRouter } from './configRouter'
 import { followupRouter } from './followup/router'
 import { statRouter } from './stat'
-import { permissionsRouter } from './permissions/router'
 import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequest/router'
@@ -43,7 +42,6 @@ export const appRouter = router({
   fileInstruction: fileInstructionRouter,
   documents: documentRouter,
   comment: commentRouter,
-  permissions: permissionsRouter,
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,
   file: fileRouter,

@@ -73,21 +73,17 @@ export const createUploadUrlSchema = z.object({
   beneficiaryId: z.string().uuid()
 })
 
-export const createViewUrlSchema = z.object({ key: z.string() })
-
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
 type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
 type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
 type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
-type CreateViewUrlInput = z.infer<typeof createViewUrlSchema>
 
 export type {
   AddDocumentInput,
   EditDocumentInput,
   DeleteDocumentInput,
   CreateUploadUrlInput,
-  CreateViewUrlInput,
   UploadBrowserDocumentInput
 }
 export const getDocumentKeySchema = z.object({

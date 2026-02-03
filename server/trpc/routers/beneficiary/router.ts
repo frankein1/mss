@@ -61,8 +61,5 @@ export const beneficiaryRouter = router({
     .mutation(routes.createFamilyFileMemberMutation.execute),
   linkToFamilyFile: protectedProcedure
     .input(routes.linkToFamilyFileMutation.inputValidation)
-    .mutation(routes.linkToFamilyFileMutation.execute),
-  getByFamilyFileId: protectedProcedure
-    .input(routes.getByFamileFileIdQuery.inputValidation)
-    .query(routes.getByFamileFileIdQuery.execute)
+    .mutation(routes.linkToFamilyFileMutation.execute)
 })

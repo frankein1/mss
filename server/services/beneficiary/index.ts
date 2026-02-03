@@ -19,7 +19,6 @@ import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
 import { createFamilyFileMember } from './create-family-file-member.service'
 import { updateEntourage } from './update-entourage.service'
 import { linkToFamilyFile } from './linkToFamilyFile.service'
-import getByFamileFileId from './get-by-family-file-id'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -39,8 +38,7 @@ export const BeneficiaryService = {
   createFamilyFileMember,
   updateEntourage,
   linkToFamilyFile,
-  getBeneficiaryList,
-  getByFamileFileId
+  getBeneficiaryList
 }
 
 export type { BeneficiarySecurityTarget }
