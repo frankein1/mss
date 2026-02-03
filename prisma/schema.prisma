@@ -2067,6 +2067,7 @@ enum UserActivityObject {
   SocialSupportSubject
   Workshop
   WorkshopName
+  Minister
 }
 
 model UserActivity {

@@ -1,3 +1,4 @@
+import { UserActivityObject, UserActivityType } from '@prisma/client'
 import { MinisterRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { updateMinisterSchema, type UpdateMinisterInput } from '~/server/schema'
@@ -19,5 +20,13 @@ export const adminHandler = async ({
 
 export const updateMinister = createMutation({
   adminHandler,
-  inputValidation: updateMinisterSchema
+  inputValidation: updateMinisterSchema,
+  auditLog: {
+    key: 'admin.minister.update',
+    target: UserActivityObject.Minister,
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })
