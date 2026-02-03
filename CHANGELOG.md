@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.53.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.1...v1.53.2) (2026-02-03)
+
+
+### Bug Fixes
+
+* **auth:** rétablissement fonctionnement initial du middleware skip auth ([c0e6bb8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c0e6bb8f09d4a242129f960c25b82a00564dbe47))
+* **cgu:** ajout date de dernière modification ([eac338a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eac338ade022c2063e23ab91534b682df910c058))
+* **cgu:** maj 2026 CGU et PC ([88a3f42](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/88a3f4221e286289b32b5cd6046bfffac41ac644)), closes [#678](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/678)
+* **document:** vérifie l'accès suivant la structure, le rôle et le statut confidentiel ([e6090e3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e6090e3889990eb8da1623cff8af5c03259008b1)), closes [#1019](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1019)
+* **recherche:** autocomplétion sur recherche par numéro de dossier ([2745096](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27450966500aa848769a7a887555a4419e363e35))
+* rechercher un bénéficiaire par numéro de dossier ([418d088](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/418d088a736ed0ec2d823554b24ab7ea73295631))
+
 ## [1.53.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.0...v1.53.1) (2026-01-28)
 
 
