@@ -1,16 +1,9 @@
-import {
-  AppointmentRepo,
-  BeneficiaryRepo,
-  SocialSupportRepo,
-  StructureRepo
-} from '~/server/database'
+import { BeneficiaryRepo, StructureRepo } from '~/server/database'
 import type { PlanAppointmentInput } from '~/server/schema'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { invalidError, unauthorizedError } from '~/server/trpc'
 import { getAgentAuthInfo, throwIfStructureIsNotSetup } from './helper'
-import { SocialSupportStatus, SocialSupportType } from '@prisma/client'
-import { connect } from '~/utils/prisma'
 import { routes } from '~/utils/routes'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
@@ -60,74 +53,29 @@ export async function planAppointment({
 
   const { accessToken } = await getAgentAuthInfo(ctx.user.id)
 
-  const draft = await createDraftAppointment(ctx, ben.familyFileId, ben.id)
-
   const beneficiaryHistoryUrl = `${appUrl}${routes.file.AppFile.path(
     ben.familyFileId,
     {
       beneficiaryId: ben.id,
       tab: BeneficiaryTab.History,
-      item: draft.id,
       originPage: 'ExternalRdvsp'
     }
   )}`
 
-  let rdvPlan: { id: number; url: string; user_id: number }
-
-  try {
-    rdvPlan = await createRdvspPlan(
-      accessToken,
-      ben,
-      beneficiaryHistoryUrl,
-      beneficiaryHistoryUrl
-    )
-    if (!ben.externalRdvspId) {
-      await BeneficiaryRepo.update(ctx.user, {
-        where: { id: ben.id },
-        data: { externalRdvspId: rdvPlan.user_id.toString() }
-      })
-    }
-  } catch (e: unknown) {
-    await deleteDraftAppointment(ctx, draft.id)
-    throw e
+  const rdvPlan = await createRdvspPlan(
+    accessToken,
+    ben,
+    beneficiaryHistoryUrl,
+    beneficiaryHistoryUrl
+  )
+  if (!ben.externalRdvspId) {
+    await BeneficiaryRepo.update(ctx.user, {
+      where: { id: ben.id },
+      data: { externalRdvspId: rdvPlan.user_id.toString() }
+    })
   }
 
-  await AppointmentRepo.update(ctx.user, {
-    where: { id: draft.appointment?.id as string },
-    data: { externalDraftId: rdvPlan.id.toString() }
-  })
-
   return rdvPlan.url
-}
-
-async function createDraftAppointment(
-  ctx: ProtectedAppContext,
-  familyFileId: string,
-  beneficiaryId: string
-) {
-  return await SocialSupportRepo.prisma.create({
-    data: {
-      status: SocialSupportStatus.RdvDraft,
-      socialSupportType: SocialSupportType.Appointment,
-      structure: connect(ctx.structure.id),
-      familyFile: connect(familyFileId),
-      beneficiary: connect(beneficiaryId),
-      createdBy: connect(ctx.user.id),
-      appointment: {
-        create: {
-          draft: true
-        }
-      }
-    },
-    select: { id: true, appointment: { select: { id: true } } }
-  })
-}
-
-async function deleteDraftAppointment(
-  ctx: ProtectedAppContext,
-  socialSupportId: string
-) {
-  await SocialSupportRepo.delete(ctx.user, { where: { id: socialSupportId } })
 }
 
 async function createRdvspPlan(
