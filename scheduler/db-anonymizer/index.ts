@@ -16,6 +16,7 @@ import { performance } from 'node:perf_hooks'
 import { execSync } from 'node:child_process'
 import { cleanTargetSchema } from './clean/clean-target-schema'
 import { withErrorCapture } from '../utils'
+import { SCHEDULER_ENV } from '../env'
 
 let start: number
 let end: number
@@ -33,7 +34,7 @@ async function exportAnonymizedDatabase() {
     throw new Error('Missing target database url')
   }
 
-  console.log('MSS environment', process.env.NUXT_PUBLIC_MSS_ENVIRONMENT)
+  console.log('MSS environment', SCHEDULER_ENV.public.mssEnvironment)
   console.log('Target schema', TARGET_SCHEMA)
 
   if (isDeployedEnvironment) {

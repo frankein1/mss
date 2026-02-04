@@ -1,5 +1,6 @@
 import { performance } from 'node:perf_hooks'
 import * as Sentry from '@sentry/node'
+import { SCHEDULER_ENV } from './env'
 
 /** Fail graciously upon exception and send log to sentry
  *
@@ -31,7 +32,7 @@ export async function withErrorCapture<Return>(
 }
 
 function hasDefinedSentryEnv() {
-  return !!process.env.SENTRY_DSN
+  return !!SCHEDULER_ENV.public.sentry.dsn
 }
 
 export function initSentry() {
@@ -40,10 +41,8 @@ export function initSentry() {
     return false
   }
 
-  const sentryDsn = process.env.SENTRY_DSN
-  const tracesSampleRate = parseFloat(
-    process.env.SENTRY_TRACE_SAMPLE_RATE || '0.1'
-  )
+  const sentryDsn = SCHEDULER_ENV.public.sentry.dsn
+  const tracesSampleRate = SCHEDULER_ENV.public.sentry.tracesSampleRate
 
   console.log(
     `scheduler: [${new Date().toISOString()}]: sentry client initialization`

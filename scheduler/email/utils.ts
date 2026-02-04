@@ -1,9 +1,10 @@
 import { EmailRepo } from '~/server/database'
 import { createTransport } from 'nodemailer'
+import { SCHEDULER_ENV } from '../env'
 
 /** This is a copy of the utility without the dependency on nuxt */
 export const createEmailSubject = (subject: string) => {
-  const mssEnvironment = process.env.MSS_ENVIRONMENT || 'local'
+  const mssEnvironment = SCHEDULER_ENV.public.mssEnvironment
 
   if (mssEnvironment === 'development') {
     return `[DEV] ${subject}`
@@ -29,7 +30,7 @@ export const createEmail = async ({
   text: string
   html: string
 }) => {
-  const from = process.env.EMAIL_FROM || ''
+  const from = SCHEDULER_ENV.public.email.from
 
   if (!from) {
     throw new Error(
@@ -61,11 +62,11 @@ export const sendEmail = async ({
   text: string
   html: string
 }) => {
-  const host = process.env.EMAIL_SMTP_HOST || ''
-  const port = parseInt(process.env.EMAIL_SMTP_PORT || '587')
-  const secure = (process.env.EMAIL_SMTP_SECURE || 'false') === 'true'
-  const user = process.env.EMAIL_SMTP_USER || ''
-  const pass = process.env.EMAIL_SMTP_PASSWORD || ''
+  const host = SCHEDULER_ENV.email.smtpHost
+  const port = SCHEDULER_ENV.email.smtpPort
+  const secure = SCHEDULER_ENV.email.smtpSecure
+  const user = SCHEDULER_ENV.email.smtpUser
+  const pass = SCHEDULER_ENV.email.smtpPassword
 
   const transporter = createTransport({
     host,
