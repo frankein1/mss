@@ -108,9 +108,10 @@ export function authorize(cfg: RdvspConfig, nonce: string, state: string) {
   return `${cfg.issuer}/oauth/authorize?${params}`
 }
 
+// Exchanges an RDVSP refresh token for a new access & refresh token.
 export async function refreshToken(refresh_token: string) {
   const config = getConfig()
-  return ofetch(`${config.issuer}/oauth/token`, {
+  return ofetch<RdvspAuthToken>(`${config.issuer}/oauth/token`, {
     method: 'post',
     body: new URLSearchParams({
       grant_type: 'refresh_token',

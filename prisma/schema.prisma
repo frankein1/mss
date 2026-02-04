@@ -44,13 +44,13 @@ model ExternalAccount {
   created DateTime @default(now())
   updated DateTime @updatedAt
 
-  userId            String  @map("user_id") @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
   type              String
   provider          String
-  providerAccountId String  @map("provider_account_id")
-  refreshToken      String? @map("refresh_token") @db.Text
-  accessToken       String? @map("access_token") @db.Text
-  expiresAt         Int?    @map("expires_at")
+  providerAccountId String    @map("provider_account_id")
+  refreshToken      String?   @map("refresh_token") @db.Text
+  accessToken       String?   @map("access_token") @db.Text
+  expiresAt         DateTime? @map("expires_at")
 
   scope        String?
   idToken      String? @map("id_token") @db.Text

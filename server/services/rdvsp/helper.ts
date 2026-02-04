@@ -10,6 +10,7 @@ import { SocialSupportStatus } from '@prisma/client'
 import { RdvspStatus } from '~/types/rdvsp'
 import dayjs from 'dayjs'
 
+// Given an MSS userId, it retrieves the matching RDVSP agent's auth info
 export async function getAgentAuthInfo(userId: string) {
   const externalAccount = await prismaClient.externalAccount.findUnique({
     where: {
@@ -17,6 +18,7 @@ export async function getAgentAuthInfo(userId: string) {
     },
     select: {
       id: true,
+      expiresAt: true,
       accessToken: true,
       refreshToken: true
     }
@@ -30,8 +32,31 @@ export async function getAgentAuthInfo(userId: string) {
   return {
     id: externalAccount.id,
     accessToken: externalAccount.accessToken,
+    expiresAt: externalAccount.expiresAt,
     refreshToken: externalAccount.refreshToken
   }
+}
+
+// Given an MSS userId, it retrieves the matching RDVSP agent's auth info,
+// and refreshes the access token. It returns the updated auth info.
+export async function refreshAgentToken(userId: string) {
+  const agentAuthInfo = await getAgentAuthInfo(userId)
+  const data = await refreshToken(agentAuthInfo.refreshToken)
+  return prismaClient.externalAccount.update({
+    where: { id: agentAuthInfo.id },
+    select: {
+      id: true,
+      expiresAt: true,
+      accessToken: true,
+      refreshToken: true
+    },
+    data: {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+      scope: data.scope,
+      expiresAt: new Date((data.created_at + data.expires_in) * 1000)
+    }
+  })
 }
 
 const onResponseDebug: FetchHooks['onResponse'] = ({
@@ -61,34 +86,33 @@ export function getAgentClient({ user_id }: { user_id: string }) {
   const config = getConfig()
   const client = ofetch.create({
     baseURL: `${config.issuer}/api/v1`,
+    // Include 401 in retried status codes, so that expired access tokens (2H)
+    // are refreshed, and the initial HTTP request is retried.
     retryStatusCodes: [401, 408, 409, 425, 429, 500, 502, 503, 504],
     async onRequest({ options }) {
       ;(options as any).startTime = Date.now()
       options.headers.set('x-start-time', Date.now().toString())
 
       const agentAuthInfo = await getAgentAuthInfo(user_id)
-      options.headers.set(
-        'Authorization',
-        `Bearer ${agentAuthInfo.accessToken}`
-      )
+      let accessToken = agentAuthInfo.accessToken
+      if (
+        !agentAuthInfo.expiresAt ||
+        new Date(agentAuthInfo.expiresAt).getTime() + 5000 < Date.now()
+      ) {
+        const refreshedAgentAuthInfo = await refreshAgentToken(user_id)
+        if (!refreshedAgentAuthInfo.accessToken) {
+          throw new Error('rdsvp: Failed to retrieve agent token after refresh')
+        }
+        accessToken = refreshedAgentAuthInfo.accessToken
+      }
+      options.headers.set('Authorization', `Bearer ${accessToken}`)
     },
     onResponse,
     onResponseError: async error => {
       try {
         onResponse?.(error)
         if (error.response?.status === 401) {
-          // Try to refresh token
-          const agentAuthInfo = await getAgentAuthInfo(user_id)
-          const data = await refreshToken(agentAuthInfo.refreshToken)
-          await prismaClient.externalAccount.update({
-            where: { id: agentAuthInfo.id },
-            data: {
-              accessToken: data.access_token,
-              refreshToken: data.refresh_token,
-              scope: data.scope
-              // TODO: handle expiresAt
-            }
-          })
+          await refreshAgentToken(user_id)
         }
       } catch (error) {
         console.error(error)

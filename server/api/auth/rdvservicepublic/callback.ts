@@ -146,7 +146,7 @@ async function createOrUpdateToken(
           providerAccountId: agent.id.toString(),
           accessToken: token.access_token,
           refreshToken: token.refresh_token,
-          //expiresAt: token.expires_in,
+          expiresAt: new Date((token.created_at + token.expires_in) * 1000),
           scope: token.scope,
           sessionState: state
         }
@@ -176,7 +176,7 @@ async function createOrUpdateToken(
       data: {
         accessToken: token.access_token,
         refreshToken: token.refresh_token,
-        //expiresAt: token.expires_in,
+        expiresAt: new Date((token.created_at + token.expires_in) * 1000),
         scope: token.scope,
         sessionState: state
       }
