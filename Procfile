@@ -1,3 +1,3 @@
 postdeploy: pnpm prisma migrate deploy
 web: node --max-old-space-size=3072 .output/server/index.mjs
-scheduler: node .output-scheduler/index.js
+scheduler: node .output-scheduler/index.mjs
