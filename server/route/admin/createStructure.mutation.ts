@@ -1,4 +1,4 @@
-import { DefaultSocialSupportSubject } from '@prisma/client'
+import { DefaultSocialSupportSubject, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { CreateStructureInput } from '~/server/schema'
 import { createStructureSchema } from '~/server/schema'
@@ -51,5 +51,13 @@ const adminHandler = async ({
 
 export const createStructure = createMutation({
   inputValidation: createStructureSchema,
-  adminHandler
+  adminHandler,
+  auditLog: {
+    key: 'admin.structure.create',
+    target: 'Structure',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

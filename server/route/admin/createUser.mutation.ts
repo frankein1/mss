@@ -9,6 +9,7 @@ import type { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
+import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
@@ -55,5 +56,13 @@ const adminHandler = async ({
 
 export const createUser = createMutation({
   inputValidation: adminCreateUserSchema,
-  adminHandler
+  adminHandler,
+  auditLog: {
+    key: 'admin.user.create',
+    target: 'User',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

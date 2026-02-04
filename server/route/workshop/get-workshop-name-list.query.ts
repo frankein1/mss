@@ -1,4 +1,4 @@
-import { createMutation } from '~/server/route'
+import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -12,7 +12,7 @@ const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
     where: { structureId: ctx.structure.id }
   })
 
-export const getWorkshopNameList = createMutation({
+export const getWorkshopNameList = createQuery({
   inputValidation: emptySchema,
   securityCheck,
   handler

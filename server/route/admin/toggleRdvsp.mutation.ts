@@ -22,9 +22,8 @@ export const toggleRdvsp = createMutation({
   adminHandler,
   auditLog: {
     key: 'admin.toggleRdvsp',
-    // FIXME fix rdvsp
-    target: UserActivityObject.Beneficiary,
+    target: UserActivityObject.Structure,
     targetId: tg => tg.input.id,
-    action: UserActivityType.CREATE
+    action: UserActivityType.UPDATE
   }
 })

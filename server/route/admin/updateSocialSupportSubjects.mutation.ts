@@ -5,6 +5,7 @@ import { updateAdminStructureSubjectsSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { StructureService } from '~/server/services'
 import { structureContextQuery } from '~/server/trpc/createContext'
+import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({
   input,
@@ -30,5 +31,13 @@ const adminHandler = async ({
 
 export const updateSocialSupportSubjects = createMutation({
   adminHandler,
-  inputValidation: updateAdminStructureSubjectsSchema
+  inputValidation: updateAdminStructureSubjectsSchema,
+  auditLog: {
+    key: 'admin.socialSupportSubjects.update',
+    target: 'SocialSupportSubject',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

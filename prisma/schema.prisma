@@ -2018,6 +2018,7 @@ enum UserActivityType {
   VIEW
   ARCHIVE
   EXPORT
+  IMPORT
 }
 
 enum UserActivityObject {
@@ -2040,6 +2041,7 @@ enum UserActivityObject {
   PartnerOrganization
   Appointment
   FileInstruction
+  SocialSupportSubject
   Workshop
   WorkshopName
 }

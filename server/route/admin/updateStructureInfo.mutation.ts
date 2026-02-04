@@ -4,6 +4,7 @@ import type { EditStructureAdminInfoInput } from '~/server/schema'
 import { editStructureAdminInfoSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
+import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({
   input,
@@ -29,5 +30,13 @@ const adminHandler = async ({
 
 export const updateStructureInfo = createMutation({
   adminHandler,
-  inputValidation: editStructureAdminInfoSchema
+  inputValidation: editStructureAdminInfoSchema,
+  auditLog: {
+    key: 'admin.structure.update',
+    target: 'Structure',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

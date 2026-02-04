@@ -1,5 +1,7 @@
+import { UserActivityType } from '@prisma/client'
 import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
+import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
 import { badrequest, forbidden } from '~/utils/api/errors'
 
@@ -60,6 +62,15 @@ export default defineEventHandler(async event => {
   if (!documentContent) {
     throw createError('No document found')
   }
+
+  addUserActivity({
+    key: 'document.download',
+    user,
+    activity: UserActivityType.EXPORT,
+    object: 'Document',
+    objectId: key,
+    content: null
+  }).catch(error => console.error(error))
 
   event.node.res.setHeader('Content-Type', document.mimeType)
   event.node.res.setHeader('Content-Length', '' + document.size)

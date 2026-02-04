@@ -32,7 +32,7 @@ export const updateStructureSubject = createMutation({
   securityCheck,
   auditLog: {
     key: 'structure.update-subject',
-    target: UserActivityObject.Structure,
+    target: UserActivityObject.SocialSupportSubject,
     targetId: ({ input }) => {
       return input.id
     },

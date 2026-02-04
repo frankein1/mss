@@ -1,6 +1,6 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
 import type { Document } from '@prisma/client'
-import { NotificationType } from '@prisma/client'
+import { NotificationType, UserActivityType } from '@prisma/client'
 import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
@@ -14,6 +14,7 @@ import { getDocumentPermissions } from '~/server/security'
 import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
+import { addUserActivity } from '~/server/query'
 
 export interface MultiPartData {
   data: Buffer
@@ -109,6 +110,14 @@ export default defineEventHandler(async event => {
   const document = await addDocument(input, user, file)
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
+  addUserActivity({
+    key: 'document.upload',
+    user,
+    activity: UserActivityType.IMPORT,
+    object: 'Document',
+    objectId: document.key,
+    content: null
+  }).catch(error => console.error(error))
 
   return send(event, document.key)
 })

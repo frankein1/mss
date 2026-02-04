@@ -3,6 +3,7 @@ import { exportBrevoContactsSchema } from '~/server/schema'
 import type { AdminContext } from '~/server/trpc'
 import { AdminService, JobResultService } from '~/server/services'
 import { createMutation } from '~/server/route'
+import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({
   ctx: _ctx,
@@ -23,5 +24,11 @@ const adminHandler = async ({
 
 export const launchBrevoExport = createMutation({
   inputValidation: exportBrevoContactsSchema,
-  adminHandler
+  adminHandler,
+  auditLog: {
+    key: 'admin.brevo.export',
+    target: 'User',
+    targetId: ({ ctx }) => ctx.user.id,
+    action: UserActivityType.EXPORT
+  }
 })

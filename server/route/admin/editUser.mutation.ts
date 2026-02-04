@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import { UserRepo } from '~/server/database'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
 import { createMutation } from '~/server/route'
@@ -27,5 +28,13 @@ const adminHandler = async ({
 
 export const editUser = createMutation({
   inputValidation: adminEditUserSchema,
-  adminHandler
+  adminHandler,
+  auditLog: {
+    key: 'admin.user.edit',
+    target: 'User',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

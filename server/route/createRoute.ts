@@ -164,7 +164,7 @@ export const createRoute = <
     return routeResult
   }
 
-  const executeAsAdmin = ({
+  const executeAsAdmin = async ({
     ctx,
     input
   }: {
@@ -184,7 +184,29 @@ export const createRoute = <
       )
     }
 
-    return adminHandler({ ctx, input })
+    const routeResult = await adminHandler({ ctx, input })
+
+    if (options.auditLog) {
+      const { user } = ctx
+      const { key, target, targetId, action } = options.auditLog
+      // There is a design flaw in createRoute. Since non-admin users
+      // and admin ones don't have the same context (admins are not linked to a structure),
+      // there should be two distincts "createRoute" functions, with different types.
+      // However, this would be a huge refactor.
+      // Make sure not to use ctx.structure in admin actions
+      // @ts-expect-error: ctx.structure is undefined for admins
+      const objectId = targetId({ ctx, input, routeResult })
+      await addUserActivity({
+        key,
+        user,
+        activity: action,
+        object: target,
+        objectId,
+        content: mutation ? input : null
+      })
+    }
+
+    return routeResult
   }
 
   return {
