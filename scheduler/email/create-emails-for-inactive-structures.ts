@@ -1,25 +1,10 @@
 import dayjs from 'dayjs'
 import { StructureRepo } from '~/server/database'
-import { useScheduler } from '#scheduler'
-import { createEmail } from '~/server/query'
 import { getInactiveStructureAlert } from '~/server/email'
 import { UserStatus } from '@prisma/client'
-import { createEmailSubject } from '../email/createEmailSubject'
-
-export default defineNitroPlugin(() => {
-  startScheduler()
-})
-
-async function inactiveStructuresScheduler() {
-  await sendFirstEmail()
-  await sendSecondEmail()
-}
-
-function startScheduler() {
-  const scheduler = useScheduler()
-
-  scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
-}
+import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { withErrorCapture } from '../utils'
+import { createEmail } from './utils'
 
 async function sendFirstEmail() {
   const inactiveStructures = await StructureRepo.prisma.findMany({
@@ -106,4 +91,16 @@ async function sendEmail(users: { email: string }[]) {
       ...getInactiveStructureAlert()
     })
   }
+}
+
+async function createEmailForInactiveStructures() {
+  await sendFirstEmail()
+  await sendSecondEmail()
+}
+
+/** Structure that have had no activity in the last 6 months receive 2 mails spaced of 2 weeks
+ * to remind them that their account and data will be deleted
+ */
+export default async function handler() {
+  return await withErrorCapture(createEmailForInactiveStructures)
 }

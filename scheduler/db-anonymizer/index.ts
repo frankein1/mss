@@ -15,6 +15,7 @@ import {
 import { performance } from 'node:perf_hooks'
 import { execSync } from 'node:child_process'
 import { cleanTargetSchema } from './clean/clean-target-schema'
+import { withErrorCapture } from '../utils'
 
 let start: number
 let end: number
@@ -23,7 +24,7 @@ let end: number
  * Use:
  * > ANONYMIZED_DATABASE_URL="postgresql://xx:yy@localhost:5432/mss" DATABASE_URL="postgresql://xx:yy@localhost:5432/mss" tsx server/scheduler/db-anonymizer/index.ts
  */
-async function main() {
+async function exportAnonymizedDatabase() {
   if (!SOURCE_DATABASE_URL) {
     throw new Error('Missing source database url')
   }
@@ -101,4 +102,7 @@ async function main() {
   return 0
 }
 
-main()
+/** Database content is anonymized and exported to external schema to be used by BI tool (metabase) */
+export default async function handler() {
+  return await withErrorCapture(exportAnonymizedDatabase)
+}

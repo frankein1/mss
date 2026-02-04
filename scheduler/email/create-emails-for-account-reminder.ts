@@ -1,28 +1,13 @@
 import dayjs from 'dayjs'
 import { UserRepo } from '~/server/database'
-import { useScheduler } from '#scheduler'
-import { createEmail } from '~/server/query'
+import { createEmail, createEmailSubject } from './utils'
 import { getUserCreationEmailContent } from '~/server/email'
 import type { User } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
-import { createEmailSubject } from '../email/createEmailSubject'
+import { withErrorCapture } from '../utils'
 
-export default defineNitroPlugin(() => {
-  startScheduler()
-})
-
-const inactiveStructuresScheduler = async () => {
-  await createAccountReminderEmail()
-}
-
-const startScheduler = () => {
-  const scheduler = useScheduler()
-  scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
-}
-
-// Send a reminder email to inactive users, 2 weeks after account creation
-const createAccountReminderEmail = async () => {
+const createAccountReminderMails = async () => {
   const inactiveUsers = await prismaClient.$transaction(async () => {
     const inactiveUsers = await UserRepo.prisma.findMany({
       where: {
@@ -72,4 +57,9 @@ const createAccountReminderEmail = async () => {
       ...getUserCreationEmailContent(userData)
     })
   }
+}
+
+/** Send a reminder email to inactive users, 2 weeks after account creation */
+export default async function handler() {
+  return await withErrorCapture(createAccountReminderMails)
 }

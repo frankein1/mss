@@ -1,16 +1,6 @@
 {
   "jobs": [
     {
-      "command": "0 0 * * * pnpm scheduler:workshop-anonymization"
-    },
-    {
-      "command": "0 4 * * * pnpm scheduler:metabase-anonymization",
-      "size": "XL"
-    },
-    {
-      "command": "0 23 * * * pnpm scheduler:cleanup-user-activities"
-    },
-    {
       "command": "0 1 * * * pnpm scheduler:archive-notifications"
     },
     {

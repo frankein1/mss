@@ -4,7 +4,7 @@ import { ArchivedBeneficiaryRepo } from '~/server/database'
 export const deleteArchivedNames = async () => {
   const oneYearAgo = dayjs().subtract(1, 'year').toDate()
 
-  await ArchivedBeneficiaryRepo.prisma.updateMany({
+  const res = await ArchivedBeneficiaryRepo.prisma.updateMany({
     where: {
       updated: { lte: oneYearAgo }
     },
@@ -15,4 +15,8 @@ export const deleteArchivedNames = async () => {
       firstName: null
     }
   })
+
+  console.log(
+    `delete-archive-names: [${new Date().toISOString()}]: ${res.count} archived beneficiaries anonymized`
+  )
 }

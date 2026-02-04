@@ -1,17 +1,12 @@
 import dayjs from 'dayjs'
 import { EmailStatus } from '@prisma/client'
-import { useScheduler } from '#scheduler'
 import { EmailRepo } from '~/server/database'
-import { sendEmail } from '~/server/lib/email'
+import { sendEmail } from './utils'
 import { minutesToMillis } from '~/utils/time'
+import { withErrorCapture } from '../utils'
 
-const SCHEDULER_IN_SECONDS = 30
 const MAX_EMAIL_RETRY = 3
 const EMAIL_RETRY_DELAY = minutesToMillis(60)
-
-export default defineNitroPlugin(() => {
-  startScheduler()
-})
 
 async function sendEmails() {
   const emails = await findEmailsToSend()
@@ -29,12 +24,6 @@ async function sendEmails() {
       await markInError(id, JSON.stringify(err))
     }
   }
-}
-
-function startScheduler() {
-  const scheduler = useScheduler()
-
-  scheduler.run(sendEmails).everySeconds(SCHEDULER_IN_SECONDS)
 }
 
 function findEmailsToSend() {
@@ -96,4 +85,9 @@ function markAsSent(id: string) {
       sentDate: new Date()
     }
   })
+}
+
+/** Queued mails are read from DB and sent */
+export default async function handler() {
+  return await withErrorCapture(sendEmails)
 }

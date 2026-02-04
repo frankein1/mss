@@ -7,11 +7,7 @@ import {
   NotificationRepo,
   SocialSupportRepo
 } from '~/server/database'
-import { useScheduler } from '#scheduler'
-
-export default defineNitroPlugin(() => {
-  startScheduler()
-})
+import { withErrorCapture } from '../utils'
 
 function socialSupportHasDefinedCreatedBy<
   T extends { createdById: string | null }
@@ -38,7 +34,7 @@ async function createDueSocialSupportNotifications(
       type
     }))
 
-  await NotificationRepo.prisma.createMany({
+  return await NotificationRepo.prisma.createMany({
     data: dueFollowupNotifications
   })
 }
@@ -50,9 +46,13 @@ async function createDueInAMonthSocialSupportNotifications() {
     }
   })
 
-  await createDueSocialSupportNotifications(
+  const res = await createDueSocialSupportNotifications(
     dueSocialSupports,
     NotificationType.DueDateOneMonth
+  )
+
+  console.log(
+    `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for supports due in a month`
   )
 }
 
@@ -63,9 +63,13 @@ async function createDueTodaySocialSupportNotifications() {
     }
   })
 
-  await createDueSocialSupportNotifications(
+  const res = await createDueSocialSupportNotifications(
     dueSocialSupports,
     NotificationType.DueDateToday
+  )
+
+  console.log(
+    `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for supports due today`
   )
 }
 
@@ -109,19 +113,20 @@ async function createEndOfSupportHelpRequestNotifications() {
       type: NotificationType.EndOfSupport
     }))
 
-  await NotificationRepo.prisma.createMany({
+  const res = await NotificationRepo.prisma.createMany({
     data: endOfSupportHelpRequestNotifications
   })
+
+  console.log(
+    `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for help request end of support`
+  )
 }
 
-function startScheduler() {
-  const scheduler = useScheduler()
-
-  scheduler
-    .run(async () => {
-      await createDueInAMonthSocialSupportNotifications()
-      await createDueTodaySocialSupportNotifications()
-      await createEndOfSupportHelpRequestNotifications()
-    })
-    .dailyAt(1, 0)
+export default {
+  createDueInAMonthSocialSupportNotifications: async () =>
+    await withErrorCapture(createDueInAMonthSocialSupportNotifications),
+  createDueTodaySocialSupportNotifications: async () =>
+    await withErrorCapture(createDueTodaySocialSupportNotifications),
+  createEndOfSupportHelpRequestNotifications: async () =>
+    withErrorCapture(createEndOfSupportHelpRequestNotifications)
 }

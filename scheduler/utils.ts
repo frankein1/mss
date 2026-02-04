@@ -6,12 +6,14 @@ import * as Sentry from '@sentry/node'
  * **WARNING** This should always be used when creating a scheduler job
  * otherwise the job will crash the container
  */
-export function withErrorCapture<Return>(fn: () => Promise<Return> | Return) {
+export async function withErrorCapture<Return>(
+  fn: () => Promise<Return> | Return
+) {
   const method = String(fn.name)
   const start = performance.now()
 
   try {
-    return fn()
+    return await fn()
   } catch (e: unknown) {
     console.error(`${method}: error during execution`)
     console.error(e)
