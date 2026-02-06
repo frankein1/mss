@@ -1,9 +1,9 @@
 import { UserRole, UserStatus } from '@prisma/client'
-import type { JwtUser } from '~/server/lib/jwt'
+import type { UserAuthenticatedInfo } from '~/types/auth'
 import { formatUserDisplayName } from '~/utils/user'
 
 export function useAuthState() {
-  const user = useState<JwtUser | undefined | null>(
+  const user = useState<UserAuthenticatedInfo | undefined | null>(
     'auth:state',
     () => undefined
   )
@@ -45,9 +45,10 @@ export function useAuthState() {
     if (!user.value) {
       return { status: false, latestVersionAccepted: null }
     }
+    const version = user.value.CGUHistory[0]?.version || null
     return {
-      status: user.value.CGUHistoryVersion === cguVersion,
-      latestVersionAccepted: user.value.CGUHistoryVersion
+      status: version === cguVersion,
+      latestVersionAccepted: version
     }
   }
 

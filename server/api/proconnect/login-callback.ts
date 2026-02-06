@@ -12,10 +12,9 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
-import { includeOrderedCGUHistory } from '~/server/query'
 import type { AuthSession } from '~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
-import { structureContextQuery } from '~/server/trpc/createContext'
+import { structureContextQuery } from '~/server/auth/auth-middleware'
 import { cookieOptions } from '~/utils/cookie'
 import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
@@ -183,30 +182,9 @@ export default defineEventHandler(async event => {
   }
 
   // Generate MSS token
-  const {
-    firstName,
-    lastName,
-    id,
-    role,
-    status,
-    CGUHistory,
-    structure,
-    firstAccess
-  } = user
+  const { id, firstAccess } = user
 
-  const CGUHistoryVersion = CGUHistory[0]?.version || null
-
-  const jwtUser: JwtUser = {
-    firstName,
-    lastName,
-    id,
-    email,
-    role,
-    status,
-    structureId: structure?.id || null,
-    CGUHistoryVersion,
-    structureType: structure?.type || null
-  }
+  const jwtUser: JwtUser = { id }
 
   // Create auth mss token
   const sessionToken = signJwt(jwtUser, jwtKey, tokenValidationInMinutes)
@@ -303,15 +281,8 @@ async function updateEmail(userId: string, email: string) {
 
 const userSelect: { select: Prisma.UserSelect } = {
   select: {
-    firstName: true,
-    lastName: true,
     id: true,
-    email: true,
-    role: true,
-    status: true,
     firstAccess: true,
-    structureId: true,
-    ...includeOrderedCGUHistory(),
     structure: {
       select: {
         ...structureContextQuery().select,

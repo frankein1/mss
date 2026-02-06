@@ -1,11 +1,7 @@
 import { useAuthState } from './useAuthState'
 import type { AppContextPermissions } from '~/server/security'
 import type { JwtUser } from '~/server/lib/jwt'
-
-interface UserSession {
-  user: JwtUser
-  permissions: AppContextPermissions
-}
+import type { UserAuthenticatedInfo } from '~/types/auth'
 
 export function useAuth() {
   const state = useAuthState()
@@ -16,28 +12,6 @@ export function useAuth() {
     reset()
   }
 
-  async function verifySession() {
-    let session: UserSession | null = null
-    const headers = useRequestHeaders(['cookie'])
-
-    try {
-      session = await $fetch<UserSession>('/api/auth/verify-session', {
-        headers
-      })
-    } catch (e: unknown) {
-      logout()
-      console.error(e)
-      throw e
-    }
-
-    if (session) {
-      state.user.value = session.user
-      application.value = session.permissions
-    } else {
-      logout()
-    }
-  }
-
   /** Fetch a new auth token after having verified the current one */
   function refreshToken() {
     return $fetch<JwtUser>('/api/auth/refresh-token')
@@ -46,7 +20,7 @@ export function useAuth() {
   async function getSession() {
     const headers = useRequestHeaders(['cookie'])
     const session = await $fetch<{
-      user: JwtUser
+      user: UserAuthenticatedInfo
       permissions: AppContextPermissions
     }>('/api/auth/get-session', {
       headers
@@ -57,5 +31,5 @@ export function useAuth() {
     }
   }
 
-  return { logout, refreshToken, getSession, verifySession }
+  return { logout, refreshToken, getSession }
 }

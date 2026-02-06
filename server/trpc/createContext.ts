@@ -1,8 +1,8 @@
 import type { H3Event } from 'h3'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { setAuthenticatedContext } from '~/server/auth/auth-middleware'
 
 export const createContext = async (event: H3Event) => {
-  await requireAuthenticated(event)
+  await setAuthenticatedContext(event)
   const user = event.context.auth?.user
 
   if (!user) {

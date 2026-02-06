@@ -1,17 +1,17 @@
 import type { H3Event } from 'h3'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { setAuthenticatedContext } from '~/server/auth/auth-middleware'
 import { signJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
 
 /** Regenerate a new session token using the information
- * from the former token. This does not fetch
+ * from the former token. This DOES fetch
  * the latest user information from the database
  *
  * If the refresh fails, the user is logged out of Proconnect
  */
 export default defineEventHandler({
-  onRequest: [requireAuthenticated],
+  onRequest: [setAuthenticatedContext],
   handler: event => {
     const user = event.context.auth?.user
 
@@ -19,7 +19,6 @@ export default defineEventHandler({
     const { cookieKey, tokenValidationInMinutes } = config.public.auth
 
     if (!user) {
-      deleteCookie(event, cookieKey)
       return redirectLogOut(event)
     }
 

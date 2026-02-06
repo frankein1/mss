@@ -1,23 +1,17 @@
 import { UserActivityType } from '@prisma/client'
 import { defineEventHandler } from 'h3'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { requireAuthenticationForNuxtRoute } from '~/server/auth/auth-middleware'
 import { DocumentRepo } from '~/server/database'
 import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
 import { badrequest, forbidden } from '~/utils/api/errors'
 
 export default defineEventHandler({
-  onRequest: [requireAuthenticated],
+  onRequest: [requireAuthenticationForNuxtRoute],
   handler: async event => {
-    const user = event.context.auth?.user
-    if (
-      !user ||
-      user.status !== 'Active' ||
-      user.role === 'Administrator' ||
-      !user.structureId
-    ) {
-      throw forbidden('download: not authorized')
-    }
+    // The middleware garantees the existence
+    const user = event.context.auth!.user!
+
     const query = getQuery(event)
 
     const key = query.key?.toString()
@@ -26,15 +20,15 @@ export default defineEventHandler({
       throw badrequest('download: missing document id')
     }
 
-    if (!user.structureType) {
+    if (!user.structure?.type) {
       throw badrequest('download: missing structure type')
     }
 
     const ctx = {
       user,
       structure: {
-        id: user.structureId,
-        type: user.structureType,
+        id: user.structureId!,
+        type: user.structure.type,
         externalRdvspActive: null
       }
     }

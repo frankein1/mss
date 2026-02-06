@@ -3,10 +3,9 @@ import type { RdvspAuthSession } from '~/server/types/session'
 import * as client from '~/server/lib/rdvsp-oauth.client'
 import { prismaClient } from '~/server/prisma'
 import { routes } from '~/utils/routes'
-import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { requireAuthenticationForNuxtRoute } from '~/server/auth/auth-middleware'
 
 const { auth } = useRuntimeConfig()
 
@@ -15,7 +14,7 @@ const { auth } = useRuntimeConfig()
  * which will handle the action to be performed after signin
  */
 export default defineEventHandler({
-  onRequest: [requireAuthenticated],
+  onRequest: [requireAuthenticationForNuxtRoute],
   handler: async event => {
     console.log('in rdvsp callback for auth')
     const { code, state } = getQuery(event)
@@ -26,13 +25,8 @@ export default defineEventHandler({
       )
     }
 
-    const user = event.context.auth?.user
-
-    if (!user) {
-      throw unauthorized('rdvsp-auth-callback: No user found from RDVSP OAuth')
-    }
-
-    checkUserIsAuthenticated(user)
+    // The requireAuthenticationForNuxtRoute middleware garantees the existence
+    const user = event.context.auth!.user!
 
     const session = await useSession<RdvspAuthSession>(event, {
       password: auth.sessionSecret

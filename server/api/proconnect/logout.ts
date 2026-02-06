@@ -2,14 +2,17 @@ import { UserActivityType } from '@prisma/client'
 import { getProConnectClient } from '~/server/lib'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import type { H3Event } from 'h3'
 import { unauthorized } from '~/utils/api/errors'
-import type { JwtUser } from '~/server/lib/jwt'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { setAuthenticatedContext } from '~/server/auth/auth-middleware'
 
 export default defineEventHandler({
-  onRequest: [requireAuthenticated],
+  onRequest: [setAuthenticatedContext],
   handler: async event => {
+    const user = event.context.auth?.user
+    if (!user) {
+      throw unauthorized('[ProConnect] Logout failure: missing data')
+    }
+
     const { inactive } = getQuery(event)
 
     const {
@@ -19,17 +22,17 @@ export default defineEventHandler({
       }
     } = useRuntimeConfig()
 
-    const jwtUser = deleteMSSToken(event, cookieKey)
+    deleteCookie(event, cookieKey)
 
     await addUserActivity({
       key: 'auth.logout',
-      user: jwtUser,
+      user,
       activity: UserActivityType.LOGOUT,
       object: 'User',
-      objectId: jwtUser.id
+      objectId: user.id
     })
 
-    const account = await cleanAccountData(jwtUser.id, proconnectProvider)
+    const account = await cleanAccountData(user.id, proconnectProvider)
 
     const client = getProConnectClient()
     const logoutUrl = client.getLogoutUrl({
@@ -42,17 +45,6 @@ export default defineEventHandler({
     return sendRedirect(event, url)
   }
 })
-
-function deleteMSSToken(event: H3Event, cookieKey: string) {
-  const jwtUser = event.context.auth?.user
-  if (!jwtUser) {
-    throw unauthorized('[ProConnect] Logout failure: missing data')
-  }
-
-  deleteCookie(event, cookieKey)
-
-  return jwtUser as JwtUser
-}
 
 async function cleanAccountData(userId: string, proconnectProvider: string) {
   const accounts = await prismaClient.account.findMany({

@@ -15,7 +15,7 @@ import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
-import { requireAuthenticated } from '~/server/auth/auth-middleware'
+import { requireAuthenticationForNuxtRoute } from '~/server/auth/auth-middleware'
 
 export interface MultiPartData {
   data: Buffer
@@ -25,17 +25,11 @@ export interface MultiPartData {
 }
 
 export default defineEventHandler({
-  onRequest: [requireAuthenticated],
+  onRequest: [requireAuthenticationForNuxtRoute],
   handler: async event => {
-    const user = event.context.auth?.user
-    if (
-      !user ||
-      user.status !== 'Active' ||
-      user.role === 'Administrator' ||
-      !user.structureId
-    ) {
-      throw forbiddenError()
-    }
+    // The requireAuthenticationForNuxtRoute middleware garantees the existence
+    const user = event.context.auth!.user!
+
     const multipartFormData = await readMultipartFormData(event)
     if (!multipartFormData) {
       throw createError({
@@ -73,7 +67,7 @@ export default defineEventHandler({
       })
     }
 
-    const structureType = user.structureType
+    const structureType = user.structure?.type
 
     if (!structureType) {
       throw invalidError('No structure type')
@@ -82,7 +76,7 @@ export default defineEventHandler({
     const ctx = {
       user,
       structure: {
-        id: user.structureId,
+        id: user.structureId!,
         type: structureType,
         externalRdvspActive: null
       }

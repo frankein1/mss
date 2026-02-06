@@ -2,8 +2,9 @@ import { verifyJwt } from '~/server/lib/jwt'
 import type { H3Event } from 'h3'
 import { setUser } from '@sentry/node'
 import { UserRepo } from '../database'
+import { forbidden, unauthorized } from '~/utils/api/errors'
 
-type UserSession = Awaited<ReturnType<typeof getSession>>
+type UserSession = Awaited<ReturnType<typeof getMSSSession>>
 
 declare module 'h3' {
   interface H3EventContext {
@@ -19,10 +20,10 @@ export const structureContextQuery = () => ({
 })
 
 export const userContextQuery = () => ({
-  select: { id: true, role: true, status: true }
+  select: { id: true, role: true, status: true, structureId: true }
 })
 
-async function getSession(event: H3Event) {
+export async function getMSSSession(event: H3Event) {
   const cookies = parseCookies(event)
 
   if (!cookies) {
@@ -53,10 +54,10 @@ async function getSession(event: H3Event) {
   return user
 }
 
-export async function requireAuthenticated(event: H3Event) {
+export async function setAuthenticatedContext(event: H3Event) {
   try {
     console.log('middleware-auth: retrieving authed session')
-    const user = await getSession(event)
+    const user = await getMSSSession(event)
 
     setUser({ id: user.id })
     event.context.auth = { user }
@@ -67,6 +68,22 @@ export async function requireAuthenticated(event: H3Event) {
 
     deleteCookie(event, cookieKey)
     setUser(null)
-    event.context.auth = undefined
+  }
+}
+
+export async function requireAuthenticationForNuxtRoute(event: H3Event) {
+  await setAuthenticatedContext(event)
+
+  const user = event.context.auth?.user
+
+  if (!user) {
+    throw unauthorized('Not authenticated')
+  }
+  if (
+    user.status !== 'Active' ||
+    user.role === 'Administrator' ||
+    !user.structureId
+  ) {
+    throw forbidden('Not allowed to access route')
   }
 }

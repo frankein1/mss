@@ -31,11 +31,6 @@ const t = initTRPC.context<AppContext>().create({
 
 export const { router, createCallerFactory } = t
 
-/**
- * Unprotected procedure
- * */
-export const publicProcedure = t.procedure
-
 export const loggingMidleware = t.middleware(async opts => {
   const start = Date.now()
   const result = await opts.next()
@@ -61,7 +56,7 @@ const baseMiddleware = shouldLog('trpc')
  * Reusable middleware to ensure
  * users are logged in
  */
-const userMiddleware = baseMiddleware(({ ctx, next }) => {
+const authedMiddleware = baseMiddleware(({ ctx, next }) => {
   if (!ctx.user) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
@@ -69,7 +64,7 @@ const userMiddleware = baseMiddleware(({ ctx, next }) => {
     })
   }
   if (ctx.user.status !== 'Active') {
-    throw forbiddenError('User status non active')
+    throw forbiddenError('deactivated user')
   }
   return next({
     ctx: {
@@ -79,23 +74,24 @@ const userMiddleware = baseMiddleware(({ ctx, next }) => {
   })
 })
 
-const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
-  if (ctx.user.role === 'Administrator' || !ctx.user.structure?.id) {
+const userMiddleware = authedMiddleware.unstable_pipe(({ ctx, next }) => {
+  if (
+    ctx.user.role === 'Administrator' ||
+    !ctx.user.structure?.id ||
+    !ctx.user.structureId
+  ) {
     throw forbiddenError('User routes are not available to admins')
   }
-  if (!ctx.user.structure?.id) {
-    throw forbiddenError('User is not part of any structure')
-  }
+
   return next({
     ctx: {
-      // infers the user as part of structure
-      user: { ...ctx.user, structureId: ctx.user.structure.id },
+      user: ctx.user,
       structure: ctx.user.structure
     }
   })
 })
 
-const adminMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
+const adminMiddleware = authedMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role !== 'Administrator') {
     throw forbiddenError('User is not an administrator')
   }
@@ -105,12 +101,6 @@ const adminMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
     }
   })
 })
-
-/**
- * Auth procedure
- */
-
-export const authProcedure = t.procedure.use(userMiddleware)
 
 // FIXME: There is no way to infer the context type of protectedProcedure
 export type AuthContext = {
@@ -122,7 +112,7 @@ export type AuthContext = {
  * App procedure
  */
 
-export const protectedProcedure = t.procedure.use(structureMiddleware)
+export const protectedProcedure = t.procedure.use(userMiddleware)
 
 export type ProtectedAppContext = AuthContext & {
   structure: SecurityRuleStructure
