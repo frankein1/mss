@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.54.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.1...v1.54.0) (2026-02-06)
+
+
+### Features
+
+* **cgu:** ajout date de dernière modification ([aff0d01](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/aff0d0104f178a16c91354feb98695ddb8627479))
+* **cgu:** maj 2026 CGU et PC ([dfdfca0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dfdfca082c1560dd1c7d96ba500915c22aad301e)), closes [#678](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/678)
+* **logs:** add logs on admin actions ([c065625](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c06562514724d7ec07f07194b8014fcadb4fcb88))
+* rechercher un bénéficiaire par numéro de dossier ([074a999](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/074a9992a5fbedb098e8baea6c669fe8228b65a6))
+* **scheduler:** initialisation serveur tâches planifiées ([8b47bd4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8b47bd4ac196ecb064d4282a6974b607feb9c4cb)), closes [#959](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/959)
+* **scheduler:** transfert des tâches planifiées (hors notifications) vers le serveur secondaire ([6402581](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/64025818bc02a361dee45ce48584aba290a8c8e8)), closes [#959](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/959)
+
+
+### Bug Fixes
+
+* **auth:** rétablissement fonctionnement initial du middleware skip auth ([b6d702f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b6d702fd090f7dcec3c2d397de0ec8ad7caca2f8))
+* correction des tests ([2456b0a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2456b0a5f2128bdfd6c60a2f1f68c0d2b7bff7b8))
+* **document:** vérifie l'accès suivant la structure, le rôle et le statut confidentiel ([ceba3dd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ceba3dd13b04dd385c37a86e48816b4b7a97d750)), closes [#1019](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1019)
+* **notification:** liste des recepteurs de notifications d'archivage ([828bd49](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/828bd4964a5a5f0a759501f87ba951d007cbef00))
+* **recherche:** autocomplétion sur recherche par numéro de dossier ([301a1da](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/301a1da7945c40c92afb28d858a57ec5716e5777))
+* **scheduler:** chargement par défaut des variables d'env déployé (NUXT_*) ([a75ad3e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a75ad3eccc58b3466150b553979a0b2c9513cd40))
+* **scheduler:** déploiement en échec car compilation en esm ([a3604b7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a3604b78fd203d78519fbbbabe0fc1a695175df2))
+* **scheduler:** déploiement en échec car compilation en esm (procfile) ([d8a0472](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d8a047218cc8b1f074e0e09ea8044c5b5c54c528))
+* typo cron ([59d0596](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/59d0596469e576e2080affd12f43b281b89af48d))
+
 ## [1.53.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.0...v1.53.1) (2026-01-28)
 
 
