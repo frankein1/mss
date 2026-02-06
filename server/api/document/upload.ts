@@ -15,6 +15,7 @@ import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
+import { requireAuthenticated } from '~/server/auth/auth-middleware'
 
 export interface MultiPartData {
   data: Buffer
@@ -23,103 +24,106 @@ export interface MultiPartData {
   type?: string
 }
 
-export default defineEventHandler(async event => {
-  const user = event.context.auth?.user
-  if (
-    !user ||
-    user.status !== 'Active' ||
-    user.role === 'Administrator' ||
-    !user.structureId
-  ) {
-    throw forbiddenError()
-  }
-  const multipartFormData = await readMultipartFormData(event)
-  if (!multipartFormData) {
-    throw createError({
-      statusCode: 400,
-      message: 'multipart form data non présent'
-    })
-  }
-  const data = getFormData(multipartFormData)
-  if (!data) {
-    throw createError({
-      statusCode: 400,
-      message: 'Aucune donnée présente dans le multipart form data'
-    })
-  }
-
-  let input
-  try {
-    input = addDocumentSchema.parse(data)
-  } catch {
-    throw createError({
-      statusCode: 400,
-      message: 'Les données entrantes ne sont pas valides'
-    })
-  }
-
-  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
-    user,
-    input.familyFileId
-  )
-
-  if (!familyFile) {
-    throw createError({
-      statusCode: 400,
-      message: `Aucun foyer avec l'id ${input.familyFileId}`
-    })
-  }
-
-  const structureType = user.structureType
-
-  if (!structureType) {
-    throw invalidError('No structure type')
-  }
-
-  const ctx = {
-    user,
-    structure: {
-      id: user.structureId,
-      type: structureType,
-      externalRdvspActive: null
+export default defineEventHandler({
+  onRequest: [requireAuthenticated],
+  handler: async event => {
+    const user = event.context.auth?.user
+    if (
+      !user ||
+      user.status !== 'Active' ||
+      user.role === 'Administrator' ||
+      !user.structureId
+    ) {
+      throw forbiddenError()
     }
+    const multipartFormData = await readMultipartFormData(event)
+    if (!multipartFormData) {
+      throw createError({
+        statusCode: 400,
+        message: 'multipart form data non présent'
+      })
+    }
+    const data = getFormData(multipartFormData)
+    if (!data) {
+      throw createError({
+        statusCode: 400,
+        message: 'Aucune donnée présente dans le multipart form data'
+      })
+    }
+
+    let input
+    try {
+      input = addDocumentSchema.parse(data)
+    } catch {
+      throw createError({
+        statusCode: 400,
+        message: 'Les données entrantes ne sont pas valides'
+      })
+    }
+
+    const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
+      user,
+      input.familyFileId
+    )
+
+    if (!familyFile) {
+      throw createError({
+        statusCode: 400,
+        message: `Aucun foyer avec l'id ${input.familyFileId}`
+      })
+    }
+
+    const structureType = user.structureType
+
+    if (!structureType) {
+      throw invalidError('No structure type')
+    }
+
+    const ctx = {
+      user,
+      structure: {
+        id: user.structureId,
+        type: structureType,
+        externalRdvspActive: null
+      }
+    }
+
+    const permissions = await FamilyFileService.getEditionPermissions(
+      ctx,
+      input.familyFileId
+    )
+
+    if (!permissions.create) {
+      throw forbiddenError()
+    }
+
+    if (!multipartFormData?.length) {
+      throw invalidError('No multipart form data')
+    }
+
+    const file = multipartFormData[0]
+
+    if (!file || !validateDocumentType(file.data)) {
+      throw createError({
+        statusCode: 400,
+        message: 'Format de fichier invalide'
+      })
+    }
+
+    const document = await addDocument(input, user, file)
+    await addNotification(ctx, document, familyFile, input.beneficiaryId)
+    await updateBeneficiariesLastActivity([document.beneficiaryId])
+    addUserActivity({
+      key: 'document.upload',
+      user,
+      activity: UserActivityType.IMPORT,
+      object: 'Document',
+      objectId: document.key,
+      content: null
+    }).catch(error => console.error(error))
+
+    return send(event, document.key)
   }
-
-  const permissions = await FamilyFileService.getEditionPermissions(
-    ctx,
-    input.familyFileId
-  )
-
-  if (!permissions.create) {
-    throw forbiddenError()
-  }
-
-  if (!multipartFormData?.length) {
-    throw invalidError('No multipart form data')
-  }
-
-  const file = multipartFormData[0]
-
-  if (!file || !validateDocumentType(file.data)) {
-    throw createError({
-      statusCode: 400,
-      message: 'Format de fichier invalide'
-    })
-  }
-
-  const document = await addDocument(input, user, file)
-  await addNotification(ctx, document, familyFile, input.beneficiaryId)
-  await updateBeneficiariesLastActivity([document.beneficiaryId])
-  addUserActivity({
-    key: 'document.upload',
-    user,
-    activity: UserActivityType.IMPORT,
-    object: 'Document',
-    objectId: document.key,
-    content: null
-  }).catch(error => console.error(error))
-
-  return send(event, document.key)
 })
 
 async function addNotification(

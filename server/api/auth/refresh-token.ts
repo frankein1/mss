@@ -1,4 +1,5 @@
 import type { H3Event } from 'h3'
+import { requireAuthenticated } from '~/server/auth/auth-middleware'
 import { signJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
@@ -9,30 +10,33 @@ import { apiRoutes } from '~/utils/routes'
  *
  * If the refresh fails, the user is logged out of Proconnect
  */
-export default defineEventHandler(event => {
-  const user = event.context.auth?.user
+export default defineEventHandler({
+  onRequest: [requireAuthenticated],
+  handler: event => {
+    const user = event.context.auth?.user
 
-  const config = useRuntimeConfig()
-  const { cookieKey, tokenValidationInMinutes } = config.public.auth
+    const config = useRuntimeConfig()
+    const { cookieKey, tokenValidationInMinutes } = config.public.auth
 
-  if (!user) {
-    deleteCookie(event, cookieKey)
-    return redirectLogOut(event)
+    if (!user) {
+      deleteCookie(event, cookieKey)
+      return redirectLogOut(event)
+    }
+
+    const {
+      auth: { jwtKey }
+    } = config
+
+    const newSessionToken = signJwt(user, jwtKey, tokenValidationInMinutes)
+
+    setCookie(
+      event,
+      cookieKey,
+      newSessionToken,
+      cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
+    )
+    return { user }
   }
-
-  const {
-    auth: { jwtKey }
-  } = config
-
-  const newSessionToken = signJwt(user, jwtKey, tokenValidationInMinutes)
-
-  setCookie(
-    event,
-    cookieKey,
-    newSessionToken,
-    cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
-  )
-  return { user }
 })
 
 function redirectLogOut(event: H3Event) {

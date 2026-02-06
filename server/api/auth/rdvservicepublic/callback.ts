@@ -6,6 +6,7 @@ import { routes } from '~/utils/routes'
 import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import { requireAuthenticated } from '~/server/auth/auth-middleware'
 
 const { auth } = useRuntimeConfig()
 
@@ -13,57 +14,60 @@ const { auth } = useRuntimeConfig()
  * Register rdvsp auth token in database and redirect to page
  * which will handle the action to be performed after signin
  */
-export default defineEventHandler(async event => {
-  console.log('in rdvsp callback for auth')
-  const { code, state } = getQuery(event)
+export default defineEventHandler({
+  onRequest: [requireAuthenticated],
+  handler: async event => {
+    console.log('in rdvsp callback for auth')
+    const { code, state } = getQuery(event)
 
-  if (!code || !state) {
-    throw unauthorized(
-      'rdvsp-auth-callback: No code or state returned from RDVSP OAuth'
-    )
-  }
+    if (!code || !state) {
+      throw unauthorized(
+        'rdvsp-auth-callback: No code or state returned from RDVSP OAuth'
+      )
+    }
 
-  const user = event.context.auth?.user
+    const user = event.context.auth?.user
 
-  if (!user) {
-    throw unauthorized('rdvsp-auth-callback: No user found from RDVSP OAuth')
-  }
+    if (!user) {
+      throw unauthorized('rdvsp-auth-callback: No user found from RDVSP OAuth')
+    }
 
-  checkUserIsAuthenticated(user)
+    checkUserIsAuthenticated(user)
 
-  const session = await useSession<RdvspAuthSession>(event, {
-    password: auth.sessionSecret
-  })
-
-  try {
-    await createOrUpdateToken(
-      code as string,
-      state as string,
-      session,
-      user.id,
-      user.structureId as string
-    )
-  } catch (e) {
-    await session.clear()
-    throw e
-  }
-
-  // After successful signin, perform intended action through browser
-  const options = {
-    action: session.data.metadata.action,
-    id: session.data.metadata.id
-  }
-  let redirect = routes.user.AppOverview.path()
-
-  if (options.action === 'planAppointment') {
-    redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
-  } else if (options.action === 'goToFamilyFileHistory') {
-    redirect = routes.file.AppFile.path(options.id, {
-      tab: BeneficiaryTab.History
+    const session = await useSession<RdvspAuthSession>(event, {
+      password: auth.sessionSecret
     })
+
+    try {
+      await createOrUpdateToken(
+        code as string,
+        state as string,
+        session,
+        user.id,
+        user.structureId as string
+      )
+    } catch (e) {
+      await session.clear()
+      throw e
+    }
+
+    // After successful signin, perform intended action through browser
+    const options = {
+      action: session.data.metadata.action,
+      id: session.data.metadata.id
+    }
+    let redirect = routes.user.AppOverview.path()
+
+    if (options.action === 'planAppointment') {
+      redirect = `${routes.rdvsp.AppRdvspAfterSignIn.path(options)}`
+    } else if (options.action === 'goToFamilyFileHistory') {
+      redirect = routes.file.AppFile.path(options.id, {
+        tab: BeneficiaryTab.History
+      })
+    }
+    await session.clear()
+    return sendRedirect(event, redirect)
   }
-  await session.clear()
-  return sendRedirect(event, redirect)
 })
 
 /** Update external_account table with RDVSP auth token for the user */

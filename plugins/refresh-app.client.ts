@@ -20,5 +20,5 @@ export default defineNuxtPlugin(({ $config }) => {
 })
 
 function getVersion() {
-  return $fetch<{ version: string }>('/api/version')
+  return $fetch<{ version: string }>('/api/public/version')
 }

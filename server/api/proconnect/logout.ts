@@ -5,38 +5,42 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import type { H3Event } from 'h3'
 import { unauthorized } from '~/utils/api/errors'
 import type { JwtUser } from '~/server/lib/jwt'
+import { requireAuthenticated } from '~/server/auth/auth-middleware'
 
-export default defineEventHandler(async event => {
-  const { inactive } = getQuery(event)
+export default defineEventHandler({
+  onRequest: [requireAuthenticated],
+  handler: async event => {
+    const { inactive } = getQuery(event)
 
-  const {
-    auth: { proconnectProvider },
-    public: {
-      auth: { cookieKey }
-    }
-  } = useRuntimeConfig()
+    const {
+      auth: { proconnectProvider },
+      public: {
+        auth: { cookieKey }
+      }
+    } = useRuntimeConfig()
 
-  const jwtUser = deleteMSSToken(event, cookieKey)
+    const jwtUser = deleteMSSToken(event, cookieKey)
 
-  await addUserActivity({
-    key: 'auth.logout',
-    user: jwtUser,
-    activity: UserActivityType.LOGOUT,
-    object: 'User',
-    objectId: jwtUser.id
-  })
+    await addUserActivity({
+      key: 'auth.logout',
+      user: jwtUser,
+      activity: UserActivityType.LOGOUT,
+      object: 'User',
+      objectId: jwtUser.id
+    })
 
-  const account = await cleanAccountData(jwtUser.id, proconnectProvider)
+    const account = await cleanAccountData(jwtUser.id, proconnectProvider)
 
-  const client = getProConnectClient()
-  const logoutUrl = client.getLogoutUrl({
-    idToken: account.idToken || '',
-    state: account.sessionState || ''
-  })
+    const client = getProConnectClient()
+    const logoutUrl = client.getLogoutUrl({
+      idToken: account.idToken || '',
+      state: account.sessionState || ''
+    })
 
-  const url = inactive ? `${logoutUrl}?inactive` : logoutUrl
+    const url = inactive ? `${logoutUrl}?inactive` : logoutUrl
 
-  return sendRedirect(event, url)
+    return sendRedirect(event, url)
+  }
 })
 
 function deleteMSSToken(event: H3Event, cookieKey: string) {
