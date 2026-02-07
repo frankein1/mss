@@ -10,6 +10,7 @@ export {
   router,
   type ProtectedAppContext,
   type AuthContext,
-  type AdminContext
-} from './createRouter'
-export { type AppContext, createContext } from './createContext'
+  type AdminContext,
+  type AppContext,
+  createContext
+} from './router'

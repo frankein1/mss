@@ -61,8 +61,8 @@ export async function setAuthenticatedContext(event: H3Event) {
 
     setUser({ id: user.id })
     event.context.auth = { user }
-  } catch {
-    console.log('middleware-auth: error in authed session retrieval')
+  } catch (e) {
+    console.log('middleware-auth: error in authed session retrieval', e)
     const config = useRuntimeConfig()
     const { cookieKey } = config.public.auth
 
@@ -72,6 +72,7 @@ export async function setAuthenticatedContext(event: H3Event) {
 }
 
 export async function requireAuthenticationForNuxtRoute(event: H3Event) {
+  console.log('requireAuthenticationForNuxtRoute')
   await setAuthenticatedContext(event)
 
   const user = event.context.auth?.user

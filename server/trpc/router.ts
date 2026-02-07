@@ -1,5 +1,5 @@
 import picocolors from 'picocolors'
-import { initTRPC, TRPCError } from '@trpc/server'
+import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import type { H3Event } from 'h3'
 import { UserRole } from '@prisma/client'
@@ -7,9 +7,23 @@ import type {
   SecurityRuleGrantee,
   SecurityRuleStructure
 } from '../security/rules/types'
-import type { AppContext } from './createContext'
-import { forbiddenError } from './trpcErrors'
+import { forbiddenError, unauthorizedError } from './trpcErrors'
 import { shouldLog } from '~/server/utils/logging'
+import { setAuthenticatedContext } from '~/server/auth/auth-middleware'
+
+/** Create authenticated trpc context */
+export const createContext = async (event: H3Event) => {
+  await setAuthenticatedContext(event)
+  const user = event.context.auth?.user
+
+  if (!user) {
+    return { event }
+  }
+
+  return { event, user }
+}
+
+export type AppContext = Awaited<ReturnType<typeof createContext>>
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson,
@@ -52,16 +66,10 @@ const baseMiddleware = shouldLog('trpc')
   ? loggingMidleware.unstable_pipe
   : t.middleware
 
-/**
- * Reusable middleware to ensure
- * users are logged in
- */
+/** User is authenticated and active */
 const authedMiddleware = baseMiddleware(({ ctx, next }) => {
   if (!ctx.user) {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'Not authenticated'
-    })
+    throw unauthorizedError('Not authenticated')
   }
   if (ctx.user.status !== 'Active') {
     throw forbiddenError('deactivated user')
@@ -74,6 +82,7 @@ const authedMiddleware = baseMiddleware(({ ctx, next }) => {
   })
 })
 
+/** Authenticated User is active, belongs to a structure and has no Admin role */
 const userMiddleware = authedMiddleware.unstable_pipe(({ ctx, next }) => {
   if (
     ctx.user.role === 'Administrator' ||
@@ -91,6 +100,7 @@ const userMiddleware = authedMiddleware.unstable_pipe(({ ctx, next }) => {
   })
 })
 
+/** Authenticated User is active and has an admin role */
 const adminMiddleware = authedMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role !== 'Administrator') {
     throw forbiddenError('User is not an administrator')
@@ -109,7 +119,7 @@ export type AuthContext = {
 }
 
 /**
- * App procedure
+ * User authenticated app procedure
  */
 
 export const protectedProcedure = t.procedure.use(userMiddleware)
@@ -119,7 +129,7 @@ export type ProtectedAppContext = AuthContext & {
 }
 
 /**
- * Admin procedure
+ * Admin authenticated app procedure
  */
 
 export const adminProcedure = t.procedure.use(adminMiddleware)

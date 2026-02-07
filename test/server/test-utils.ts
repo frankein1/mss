@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3'
 import { test as base } from 'vitest'
-import { test as t } from '~/server/trpc/createRouter'
+import { test as t } from '~/server/trpc/router'
 import { appRouter } from '~/server/trpc/routers'
 import type { AppContext } from '~/server/trpc'
 import {
@@ -42,37 +42,43 @@ const users = {
     id: fixturesUsers[FixtureUserRole.StructureManager].id,
     structure,
     role: fixturesUsers[FixtureUserRole.StructureManager].role,
-    status: fixturesUsers[FixtureUserRole.StructureManager].status
+    status: fixturesUsers[FixtureUserRole.StructureManager].status,
+    structureId: structure.id
   },
   receptionAgent: {
     id: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
     structure,
     role: fixturesUsers[FixtureUserRole.ReceptionAgent].role,
-    status: fixturesUsers[FixtureUserRole.ReceptionAgent].status
+    status: fixturesUsers[FixtureUserRole.ReceptionAgent].status,
+    structureId: structure.id
   },
   socialWorker: {
     id: fixturesUsers[FixtureUserRole.SocialWorker].id,
     structure,
     role: fixturesUsers[FixtureUserRole.SocialWorker].role,
-    status: fixturesUsers[FixtureUserRole.SocialWorker].status
+    status: fixturesUsers[FixtureUserRole.SocialWorker].status,
+    structureId: structure.id
   },
   referent: {
     id: fixturesUsers[FixtureUserRole.Referent].id,
     structure,
     role: fixturesUsers[FixtureUserRole.Referent].role,
-    status: fixturesUsers[FixtureUserRole.Referent].status
+    status: fixturesUsers[FixtureUserRole.Referent].status,
+    structureId: structure.id
   },
   administrator: {
     id: fixturesUsers[FixtureUserRole.Administrator].id,
     structure,
     role: fixturesUsers[FixtureUserRole.Administrator].role,
-    status: fixturesUsers[FixtureUserRole.Administrator].status
+    status: fixturesUsers[FixtureUserRole.Administrator].status,
+    structureId: structure.id
   },
   structureManagerMinistere: {
     id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id,
     structure: structureMinistere,
     role: fixturesUsers[FixtureUserRole.StructureManagerMinistere].role,
-    status: fixturesUsers[FixtureUserRole.StructureManagerMinistere].status
+    status: fixturesUsers[FixtureUserRole.StructureManagerMinistere].status,
+    structureId: structureMinistere.id
   }
 }
 

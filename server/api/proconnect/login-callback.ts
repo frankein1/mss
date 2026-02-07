@@ -177,7 +177,6 @@ export default defineEventHandler(async event => {
   // Update email information with current proconnect info. This allows to update the email
   // of the user when she changes her proconnect account (when proconnect allow email change)
   if (user.email !== email) {
-    //console.log('updating email', JSON.stringify(user, undefined, 2))
     updateEmail(user.id, email)
   }
 
@@ -279,10 +278,14 @@ async function updateEmail(userId: string, email: string) {
   })
 }
 
-const userSelect: { select: Prisma.UserSelect } = {
+const userSelect = {
   select: {
     id: true,
+    email: true,
+    status: true,
+    role: true,
     firstAccess: true,
+    structureId: true,
     structure: {
       select: {
         ...structureContextQuery().select,
