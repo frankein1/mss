@@ -2,9 +2,8 @@ import dayjs from 'dayjs'
 import { StructureRepo } from '~/server/database'
 import { getInactiveStructureAlert } from '~/server/email'
 import { UserStatus } from '@prisma/client'
-import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { withErrorCapture } from '../utils'
-import { createEmail } from './utils'
+import { createEmail, createEmailSubject } from './utils'
 
 async function sendFirstEmail() {
   const inactiveStructures = await StructureRepo.prisma.findMany({

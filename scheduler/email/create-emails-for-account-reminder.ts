@@ -9,7 +9,9 @@ import { withErrorCapture } from '../utils'
 
 const createAccountReminderMails = async () => {
   const inactiveUsers = await prismaClient.$transaction(async () => {
+    // TODO improve this query by removing user activities
     const inactiveUsers = await UserRepo.prisma.findMany({
+      relationLoadStrategy: 'query',
       where: {
         lastAccess: null,
         created: {
