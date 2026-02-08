@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.54.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.54.0...v1.54.1) (2026-02-08)
+
+
+### Bug Fixes
+
+* **scheduler:** errors in queries and import ([a864ea9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a864ea90895af0570ab81edddf1932521b258f4d))
+
 ## [1.54.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.53.1...v1.54.0) (2026-02-06)
 
 
