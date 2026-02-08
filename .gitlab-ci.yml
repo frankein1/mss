@@ -4,18 +4,17 @@ stages:
   - deploy
 
 include:
-  - template: Code-Quality.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
 
 variables:
-  NODE_VERSION: 22
+  NODE_VERSION: 24
   # A synchroniser avec la version présente dans package.json
   PLAYWRIGHT_VERSION: 1.55.0
   #A synchroniser avec la version présente en production
-  POSTGRES_VERSION: 14.12
+  POSTGRES_VERSION: 16.11
 
 container_scanning:
   environment:
@@ -181,20 +180,6 @@ deploy:scalingo-demo:
     - .scalingo
   environment:
     name: demo
-  only:
-    - tags
-  script:
-    - git checkout tags/$CI_COMMIT_TAG -b latest
-    - git push scalingo latest:main -f
-
-deploy:scalingo-prod:
-  stage: deploy
-  extends:
-    - .scalingo
-  environment:
-    name: production
-  when: manual
-  needs: ['deploy:scalingo-demo']
   only:
     - tags
   script:
