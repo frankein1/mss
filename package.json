@@ -16,8 +16,8 @@
     "lint:js": "eslint .",
     "lint:style": "stylelint \"**/*.{css,scss,sass,html,vue}\"",
     "lint:prettier": "prettier --check {.,**/*.prisma}",
-    "lint": "npm run lint:typecheck && npm run lint:js && npm run lint:style && npm run lint:prettier",
-    "lintfix": "prettier --write --list-different {.,**/*.prisma} && npm run lint:js -- --fix && npm run lint:style -- --fix",
+    "lint": "pnpm run /^lint:.*/",
+    "lintfix": "prettier --write --list-different {.,**/*.prisma} && pnpm run lint:js -- --fix && pnpm run lint:style -- --fix",
     "test": "TZ=UTC vitest",
     "test:e2e": "playwright test",
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
@@ -73,11 +73,11 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.10.2",
+    "@axe-core/playwright": "^4.11.0",
     "@faker-js/faker": "^10.0.0",
     "@nuxt/eslint": "^1.9.0",
     "@nuxt/test-utils": "^3.19.2",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.58.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^22.17.2",
@@ -115,12 +115,13 @@
     }
   },
   "engines": {
-    "pnpm": ">=10 <11"
+    "pnpm": ">=10 <11",
+    "node": "^24"
   },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache --fix",
     "*.{css,scss,sass,html,vue}": "stylelint",
     "*.**": "prettier --ignore-unknown --check {.,**/*.prisma}"
   },
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.29.2"
 }
