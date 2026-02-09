@@ -57,6 +57,11 @@ export const SCHEDULER_ENV = {
       dsn: getenvString('SENTRY_DSN', '', true),
       debug: getenvBool('SENTRY_DEBUG', 'false', true),
       tracesSampleRate: getenvFloat('SENTRY_TRACE_SAMPLE_RATE', '0.1', true)
-    }
+    },
+    landingPageUrl: getenvString(
+      'LANDING_PAGE_URL',
+      'https://monsuivisocial.incubateur.anct.gouv.fr',
+      true
+    )
   }
 }
