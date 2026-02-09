@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '~/prisma/generated/prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 import type { DefaultArgs } from '@prisma/client/runtime/library'
 import { shouldLog, formatPrismaQueryLog } from '~/server/utils/logging.js'
 import picocolors from 'picocolors'
@@ -18,15 +19,18 @@ if (shouldLogPrisma) {
   prismaLogLevels.push({ emit: 'event', level: 'query' })
 }
 
+function buildPrismaClient() {
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+  const prisma = new PrismaClient({ adapter, log: prismaLogLevels })
+
+  return prisma
+}
+
 export const prismaClient: PrismaClient<
   Prisma.PrismaClientOptions,
   Prisma.LogLevel,
   DefaultArgs
-> =
-  global.prismaClient ||
-  new PrismaClient({
-    log: prismaLogLevels
-  })
+> = global.prismaClient || buildPrismaClient()
 
 export * from '@prisma/client'
 
