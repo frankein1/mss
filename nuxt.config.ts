@@ -8,8 +8,8 @@ const prismaClientPath = createRequire(import.meta.url).resolve(
 
 const connectSrcCsp = [
   "'self'",
-  'https://api-adresse.data.gouv.fr',
   'https://data.geopf.fr',
+  'https://geo.api.gouv.fr',
   // FIXME: Use runtime config once it is allowed by nuxt-security - See https://github.com/Baroshem/nuxt-security/pull/233
   'https://matomo.dev.incubateur.anct.gouv.fr',
   'https://matomo.incubateur.anct.gouv.fr',
