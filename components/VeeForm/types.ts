@@ -40,7 +40,7 @@ export type GeoApiGouvFrDepartment = {
 
 export type GeoApiGouvFrQueryParams = {
   nom: string
-  limit: number
+  limit: number | null
   codePostal?: string
 }
 

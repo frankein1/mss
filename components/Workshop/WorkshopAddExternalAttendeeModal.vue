@@ -67,6 +67,7 @@
       <VeeCityInput
         class="fr-col-12"
         name="city"
+        :request-limit="null"
         :label="workshopExternalAttendeeLabels.city"
       />
 

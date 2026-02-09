@@ -25,8 +25,9 @@
       zipCode?: string | null
       required?: boolean
       disabled?: boolean
+      requestLimit?: number | null
     }>(),
-    { zipCode: '', required: false, disabled: false }
+    { zipCode: '', required: false, disabled: false, requestLimit: 3 }
   )
 
   const emit = defineEmits<{
@@ -38,13 +39,13 @@
 
   async function searchCitiesFn(search: string) {
     selectedValue.value = search
-    if (search.length < 3) {
+    if (search.length < 1) {
       return []
     }
 
     const params: GeoApiGouvFrQueryParams = {
       nom: search.toLocaleLowerCase(),
-      limit: 3
+      limit: props.requestLimit
     }
     if (props.zipCode) {
       params.codePostal = props.zipCode
@@ -56,7 +57,6 @@
     )
 
     cities.value = []
-
     /**
      * Big cities oftenly have multiple zip code.
      * The BAN API always returns the full list of zip codes associated to the city, even if a zip code is provided in the request.
