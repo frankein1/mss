@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationType } from '~/prisma/generated/client'
 import { NotificationRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { performance } from 'node:perf_hooks'

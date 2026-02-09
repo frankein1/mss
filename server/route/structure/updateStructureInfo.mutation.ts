@@ -5,7 +5,7 @@ import { editStructureInfoSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { StructureRepo } from '~/server/database'
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { UserActivityObject, UserActivityType } from '~/prisma/generated/client'
 
 const handler = async ({
   input,

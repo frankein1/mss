@@ -104,7 +104,7 @@
   import {
     BeneficiaryPensionOrganisation,
     BeneficiarySocioProfessionalCategory
-  } from '@prisma/client'
+  } from '~/prisma/generated/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,

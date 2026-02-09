@@ -1,4 +1,4 @@
-import type { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '~/prisma/generated/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<

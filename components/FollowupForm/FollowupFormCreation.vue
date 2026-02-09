@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-  import type { SocialSupportSubject } from '@prisma/client'
-  import { SocialSupportStatus } from '@prisma/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/client'
+  import { SocialSupportStatus } from '~/prisma/generated/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { AddFollowupInput } from '~/server/schema'
   import { addFollowupSchema } from '~/server/schema'

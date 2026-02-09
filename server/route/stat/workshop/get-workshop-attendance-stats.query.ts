@@ -9,7 +9,7 @@ import {
   prepareDateFilters,
   prepareWorkshopStatFilters
 } from '~/server/query/stats/helpers'
-import { WorkshopAttendeeListType } from '@prisma/client'
+import { WorkshopAttendeeListType } from '~/prisma/generated/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats

@@ -1,4 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
+import { SocialSupportType } from '~/prisma/generated/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import {
   SocialSupportConstraints,

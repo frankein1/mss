@@ -1,4 +1,4 @@
-import type { Document } from '@prisma/client'
+import type { Document } from '~/prisma/generated/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type DocumentFieldLabels = Pick<

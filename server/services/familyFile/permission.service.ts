@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { FamilyFileRepo } from '~/server/database'
 import type {
   FamilyFilePermissions,
@@ -23,8 +22,8 @@ export function getFamilyFileSecurityTarget(
   })
 }
 
-export type FamilyFileSecurityTarget = Prisma.PromiseReturnType<
-  typeof getFamilyFileSecurityTarget
+export type FamilyFileSecurityTarget = Awaited<
+  ReturnType<typeof getFamilyFileSecurityTarget>
 >
 
 export async function getEditionPermissions(

@@ -1,6 +1,10 @@
 import { test as setup } from '@playwright/test'
 import type { BrowserContext } from '@playwright/test'
-import type { StructureType, UserRole, UserStatus } from '@prisma/client'
+import type {
+  StructureType,
+  UserRole,
+  UserStatus
+} from '~/prisma/generated/client'
 import {
   fixturesCGUHistory,
   FixtureStructure,

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus } from '@prisma/client'
+  import { BeneficiaryStatus } from '~/prisma/generated/client'
   import { beneficiaryStatusBadgeType } from '~/client/classes/beneficiary'
   import { beneficiaryStatusDetailedKeys } from '~/client/options'
 

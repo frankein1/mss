@@ -3,7 +3,7 @@ import {
   SocialSupportStatus,
   Minister,
   PaymentMethod
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { z } from 'zod'
 import {
   numeroPegaseContraint,

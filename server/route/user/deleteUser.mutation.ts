@@ -1,4 +1,4 @@
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { UserActivityObject, UserActivityType } from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { DeleteUserInput } from '~/server/schema'

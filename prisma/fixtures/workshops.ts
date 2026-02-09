@@ -1,11 +1,11 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import {
   AgeLimitCondition,
   Gender,
   WorkshopAttendeeAttendance,
   WorkshopAttendeeListType,
   WorkshopAttendeeType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import {
   fixtureStructures,

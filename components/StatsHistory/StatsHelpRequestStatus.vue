@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportStatus } from '~/prisma/generated/client'
   import type { StatFilterInput } from '~/server/schema'
   import { ChartColor } from '~/utils/color/chartColors'
   import { AlertType } from '~/utils/constants/alert'

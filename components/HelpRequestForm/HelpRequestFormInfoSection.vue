@@ -134,7 +134,10 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus, FileInstructionType } from '@prisma/client'
+  import {
+    SocialSupportStatus,
+    FileInstructionType
+  } from '~/prisma/generated/client'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {

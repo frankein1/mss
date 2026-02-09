@@ -1,4 +1,4 @@
-import type { Structure } from '@prisma/client'
+import type { Structure } from '~/prisma/generated/client'
 import type { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import { URLSearchParams } from 'url'
 

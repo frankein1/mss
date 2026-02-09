@@ -4,7 +4,7 @@ import {
   WorkshopAttendeeAttendance,
   WorkshopAttendeeListType,
   WorkshopAttendeeType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import {
   amountNumber,
   dateOrEmpty,

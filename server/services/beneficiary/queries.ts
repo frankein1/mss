@@ -1,4 +1,4 @@
-import type { Prisma, SocialSupportSubject } from '@prisma/client'
+import type { Prisma, SocialSupportSubject } from '~/prisma/generated/client'
 import { BeneficiaryRepo } from '~/server/database'
 import type {
   AppContextPermissions,
@@ -69,7 +69,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-type BeneficiaryOutput = Prisma.PromiseReturnType<typeof findOne>
+type BeneficiaryOutput = Awaited<ReturnType<typeof findOne>>
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const beneficiary = await findOne(ctx.user, id)

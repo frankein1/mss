@@ -1,4 +1,4 @@
-import { ArchiveReason } from '@prisma/client'
+import { ArchiveReason } from '~/prisma/generated/client'
 import { z } from 'zod'
 
 export const exportBeneficiarySchema = z.object({

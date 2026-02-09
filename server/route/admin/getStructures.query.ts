@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { AdminGetStructuresInput } from '~/server/schema'
 import { adminGetStructuresSchema } from '~/server/schema'
@@ -69,9 +69,7 @@ const adminHandler = async ({
   }
 }
 
-export type AdminStructuresOutput = Prisma.PromiseReturnType<
-  typeof adminHandler
->
+export type AdminStructuresOutput = Awaited<ReturnType<typeof adminHandler>>
 
 export const getStructures = createQuery({
   inputValidation: adminGetStructuresSchema,

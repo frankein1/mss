@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import {
   filterFileInstruction,
   filterHelpRequest,
@@ -69,7 +69,7 @@ function findMany(
 }
 
 type FileInstructionOutput = NonNullable<
-  Prisma.PromiseReturnType<typeof findMany>
+  Awaited<ReturnType<typeof findMany>>
 >[0]
 
 export async function getPage(

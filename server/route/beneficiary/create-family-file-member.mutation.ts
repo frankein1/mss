@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 import { createMutation } from '~/server/route'

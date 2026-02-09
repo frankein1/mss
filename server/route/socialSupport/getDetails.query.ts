@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
@@ -101,8 +100,8 @@ const handler = async ({
   )
 }
 
-export type SocialSupportDetail = Prisma.PromiseReturnType<
-  typeof getSocialSupportDetail
+export type SocialSupportDetail = Awaited<
+  ReturnType<typeof getSocialSupportDetail>
 >
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {

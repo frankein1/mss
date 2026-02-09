@@ -10,7 +10,7 @@ import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { UserActivityObject, UserActivityType } from '~/prisma/generated/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users

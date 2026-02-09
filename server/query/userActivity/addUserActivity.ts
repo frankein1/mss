@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { UserActivityType, UserActivityObject } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { UserActivityType, UserActivityObject } from '~/prisma/generated/client'
 import {
   createOrUpdateStructure,
   createOrUpdateUser

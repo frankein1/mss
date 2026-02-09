@@ -1,5 +1,8 @@
-import type { Prisma } from '@prisma/client'
-import { UserActivityType, WorkshopAttendeeListType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import {
+  UserActivityType,
+  WorkshopAttendeeListType
+} from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateWorkShopInput } from '~/server/schema'

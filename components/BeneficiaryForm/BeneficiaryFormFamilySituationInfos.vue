@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { BeneficiaryFamilySituation } from '@prisma/client'
+  import type { BeneficiaryFamilySituation } from '~/prisma/generated/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryFamilySituationKeys } from '~/client/options'
 

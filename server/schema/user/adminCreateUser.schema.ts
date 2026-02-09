@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '@prisma/client'
+import { UserRole, UserStatus } from '~/prisma/generated/client'
 import { z } from 'zod'
 import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import {

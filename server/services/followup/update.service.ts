@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { FollowupMedium, NotificationType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { FollowupMedium, NotificationType } from '~/prisma/generated/client'
 import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import {

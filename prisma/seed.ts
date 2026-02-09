@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { PrismaClient } from '@prisma/client'
 import {
   fixtureStructures,
   fixturesPartnerOrganizations,
@@ -19,8 +18,9 @@ import {
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './fixtures'
+import { buildPrismaClient } from './client'
 
-const prismaClient = new PrismaClient()
+const prismaClient = buildPrismaClient()
 
 function loadFixtureStructure() {
   console.log('🏛 Structure...')

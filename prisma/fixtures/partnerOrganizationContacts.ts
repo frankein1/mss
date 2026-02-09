@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { fixturesPartnerOrganizations } from './'
 
 export const fixturesPartnerOrganizationContacts = [

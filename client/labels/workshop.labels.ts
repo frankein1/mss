@@ -1,4 +1,7 @@
-import type { Workshop, WorkshopExternalAttendee } from '@prisma/client'
+import type {
+  Workshop,
+  WorkshopExternalAttendee
+} from '~/prisma/generated/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type WorkshopFieldLabels = Omit<

@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
+  import { FileInstructionType } from '~/prisma/generated/client'
   import type { FileInstruction } from '~/server/trpc/routers'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatUserDisplayName } from '~/utils/user'

@@ -1,4 +1,7 @@
-import type { Beneficiary, BeneficiaryRelative } from '@prisma/client'
+import type {
+  Beneficiary,
+  BeneficiaryRelative
+} from '~/prisma/generated/client'
 
 export type BeneficiaryRelativeWithLinkedBeneficiary = BeneficiaryRelative & {
   linkedBeneficiary: Beneficiary | null

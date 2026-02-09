@@ -1,4 +1,4 @@
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { UserActivityObject, UserActivityType } from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { ToggleRdvspInput } from '~/server/schema'
 import { toggleRdvspSchema } from '~/server/schema'

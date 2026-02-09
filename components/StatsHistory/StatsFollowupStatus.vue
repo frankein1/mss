@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportStatus } from '~/prisma/generated/client'
   import type { StatFilterInput } from '~/server/schema'
   import type { StatsPiePropType } from '~/types/stat'
   import { ChartColor } from '~/utils/color/chartColors'

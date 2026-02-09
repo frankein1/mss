@@ -105,7 +105,7 @@
   import {
     WorkshopAttendeeAttendance,
     WorkshopAttendeeListType
-  } from '@prisma/client'
+  } from '~/prisma/generated/client'
 
   const props = defineProps<{
     workshop: WorkshopWithAttendeesDetails

@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { emptySchema } from '~/server/schema'
 import { StructureRepo, UserRepo } from '~/server/database'
@@ -11,7 +10,7 @@ const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
   return { users, structures }
 }
 
-export type AdminOverviewOutput = Prisma.PromiseReturnType<typeof adminHandler>
+export type AdminOverviewOutput = Awaited<ReturnType<typeof adminHandler>>
 
 export const getOverview = createQuery({
   inputValidation: emptySchema,

@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { ExportBeneficiariesInput } from '~/server/schema'
 import { exportBeneficiariesSchema } from '~/server/schema'

@@ -5,7 +5,7 @@ import { updateAdminStructureSubjectsSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { StructureService } from '~/server/services'
 import { structureContextQuery } from '~/server/trpc/createContext'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 
 const adminHandler = async ({
   input,

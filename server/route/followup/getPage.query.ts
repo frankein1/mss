@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { GetFollowupsInput } from '~/server/schema'
 import { getFollowupsSchema } from '~/server/schema'
@@ -22,6 +21,6 @@ export const getPage = createQuery({
   handler
 })
 
-type FollowupPage = Prisma.PromiseReturnType<typeof handler>
+type FollowupPage = Awaited<ReturnType<typeof handler>>
 export type FollowupPageItems = FollowupPage['items']
 export type FollowupPageItem = FollowupPageItems[0]

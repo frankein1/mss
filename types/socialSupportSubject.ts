@@ -1,4 +1,4 @@
-import type { SocialSupportSubject } from '@prisma/client'
+import type { SocialSupportSubject } from '~/prisma/generated/client'
 
 export type SocialSupportSubjectIdAndName = Pick<
   SocialSupportSubject,

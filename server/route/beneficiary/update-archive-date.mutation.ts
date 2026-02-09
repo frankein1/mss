@@ -1,4 +1,4 @@
-import { NotificationType, UserActivityType } from '@prisma/client'
+import { NotificationType, UserActivityType } from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'

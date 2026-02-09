@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { UpdateNotificationInput } from '~/server/schema'
 import { updateNotificationSchema } from '~/server/schema'

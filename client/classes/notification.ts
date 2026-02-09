@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationType } from '~/prisma/generated/client'
 
 export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.DueDateToday]: 'fr-icon-calendar-event-line',

@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { BudgetIncomeType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { BudgetIncomeType } from '~/prisma/generated/client'
 import { BudgetIncomeRepo } from '~/server/database'
 import type { CreateBudgetIncomeInput } from '~/server/schema'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'

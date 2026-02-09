@@ -1,4 +1,4 @@
-import type { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '~/prisma/generated/client'
 import { formatAddress } from '~/utils'
 import { apiRoutes } from '~/utils/routes'
 import { formatDate } from '~/utils/formatDate'

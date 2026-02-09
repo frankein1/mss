@@ -11,7 +11,7 @@ import type {
   User,
   PartnerOrganizationContact,
   FamilyFile
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
 function show<T>(val: T, condition: boolean): T | null {

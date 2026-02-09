@@ -10,7 +10,7 @@ import {
   FixtureBeneficiary
 } from '~/prisma/fixtures'
 import { faker } from '@faker-js/faker'
-import { WorkshopAttendeeType } from '@prisma/client'
+import { WorkshopAttendeeType } from '~/prisma/generated/client'
 
 let workshopId: string
 let workshopNameId: string

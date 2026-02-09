@@ -170,7 +170,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus } from '@prisma/client'
+  import { BeneficiaryStatus } from '~/prisma/generated/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { BeneficiaryReferent } from '~/types/beneficiary'
   import type { CreateBeneficiaryInput } from '~/server/schema'

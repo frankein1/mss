@@ -1,6 +1,6 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
-import type { Document } from '@prisma/client'
-import { NotificationType, UserActivityType } from '@prisma/client'
+import type { Document } from '~/prisma/generated/client'
+import { NotificationType, UserActivityType } from '~/prisma/generated/client'
 import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
@@ -181,7 +181,7 @@ async function addDocument(
       migrated: true,
       documentContent: {
         create: {
-          content: multipartFormData.data
+          content: Buffer.from(multipartFormData.data)
         }
       }
     }

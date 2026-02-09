@@ -2,7 +2,7 @@ import {
   type Prisma,
   AgeLimitCondition,
   UserActivityType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { ExportWorkshopsInput } from '~/server/schema'
 import { exportWorkshopsSchema } from '~/server/schema'

@@ -139,7 +139,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPensionOrganisation } from '@prisma/client'
+  import { BeneficiaryPensionOrganisation } from '~/prisma/generated/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { requiredNativeEnum } from '../helpers.schema'
-import { RelativeRelationship } from '@prisma/client'
+import { RelativeRelationship } from '~/prisma/generated/client'
 
 export const linkToFamilyFileSchema = z.object({
   beneficiaryId: z.string().uuid(),

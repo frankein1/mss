@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { StructureConstraints } from '../constraints'
 import { appendConstraints } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'

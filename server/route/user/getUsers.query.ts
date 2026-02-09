@@ -4,7 +4,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { forbiddenError, type ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { UserRepo } from '~/server/database'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users

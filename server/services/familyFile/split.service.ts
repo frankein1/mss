@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
 import type { IdInput } from '~/server/schema'

@@ -1,4 +1,4 @@
-import { BeneficiaryFamilySituation } from '@prisma/client'
+import { BeneficiaryFamilySituation } from '~/prisma/generated/client'
 
 export function isSeparate(
   familySituation?: BeneficiaryFamilySituation | null

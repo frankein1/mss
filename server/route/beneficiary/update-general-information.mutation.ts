@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
@@ -7,7 +7,6 @@ import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

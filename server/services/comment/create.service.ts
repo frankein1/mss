@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { NotificationType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { NotificationType } from '~/prisma/generated/client'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
 import type { AddCommentInput } from '~/server/schema'
 import type { SecurityRuleGrantee } from '~/server/security'
@@ -20,8 +20,8 @@ function getTargetedSocialSupport(
   })
 }
 
-type TargetedSocialSupport = Prisma.PromiseReturnType<
-  typeof getTargetedSocialSupport
+type TargetedSocialSupport = Awaited<
+  ReturnType<typeof getTargetedSocialSupport>
 >
 
 function prepareNotifications(

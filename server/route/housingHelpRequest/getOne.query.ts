@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
@@ -30,6 +29,4 @@ export const getOne = createQuery({
   handler
 })
 
-export type GetHousingHelpRequestOutput = Prisma.PromiseReturnType<
-  typeof handler
->
+export type GetHousingHelpRequestOutput = Awaited<ReturnType<typeof handler>>

@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client'
+import type { User } from '~/prisma/generated/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 export const userFieldLabels: FieldLabels<User> = {

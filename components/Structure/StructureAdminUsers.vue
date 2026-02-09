@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus } from '@prisma/client'
+  import { UserStatus } from '~/prisma/generated/client'
   import type { StructureUsers } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { nonAdminUserRoleKeys } from '~/client/options'

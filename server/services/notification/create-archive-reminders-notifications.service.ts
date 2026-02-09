@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationType } from '~/prisma/generated/client'
 import dayjs from 'dayjs'
 import { NotificationRepo } from '~/server/database'
 import { getInactiveBeneficiariesWithOneMonthNotification } from './helper'

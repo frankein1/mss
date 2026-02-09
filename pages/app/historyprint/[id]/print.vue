@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { FileInstructionType } from '@prisma/client'
+  import type { FileInstructionType } from '~/prisma/generated/client'
   import { AlertType } from '~/utils/constants/alert'
   import { TypeSuivi } from '~/client/options'
   import type {

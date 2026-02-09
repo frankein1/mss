@@ -2,7 +2,7 @@ import {
   UserActivityObject,
   UserActivityType,
   UserStatus
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateUserInput } from '~/server/schema'

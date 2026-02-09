@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { getFamilyFileSecurityTarget } from './permission.service'
 import { DocumentRepo } from '~/server/database'
 import type {

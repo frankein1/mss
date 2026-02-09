@@ -147,7 +147,7 @@
     hasIdentityInformations
   } from '~/utils/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { BeneficiaryStatus } from '@prisma/client'
+  import { BeneficiaryStatus } from '~/prisma/generated/client'
 
   const props = defineProps<{
     general: GetBeneficiaryGeneral

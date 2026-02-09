@@ -2,7 +2,7 @@ import {
   FileInstructionType,
   NotificationType,
   SocialSupportType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { SocialSupportSubjectService } from '..'
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'

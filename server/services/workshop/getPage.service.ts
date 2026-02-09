@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { WorkshopRepo } from '~/server/database'
 import type { GetWorkshopListInput } from '~/server/schema/workshop/getWorkshopList.schema'
 import type { SecurityRuleContext } from '~/server/security'

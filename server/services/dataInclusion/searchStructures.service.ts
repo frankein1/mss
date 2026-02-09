@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import type { SecurityRuleContext } from '~/server/security'
 import { DataInclusionStructureRepo } from '~/server/database/repository'
 import type { SearchDataInclusionStructureInput } from '~/server/schema'

@@ -19,4 +19,4 @@ coverage
 /ignore/
 .vscode
 .output-scheduler
-prisma/generated/prisma
+prisma/generated

@@ -1,4 +1,4 @@
-import { JobStatus } from '@prisma/client'
+import { JobStatus } from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const jobResultStatusKeys = buildKeys({

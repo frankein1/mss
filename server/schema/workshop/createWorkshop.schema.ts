@@ -10,7 +10,7 @@ import {
   limitedStringConstraint,
   withEmptyValueOptionalNativeEnum
 } from '../helpers.schema'
-import { AgeLimitCondition } from '@prisma/client'
+import { AgeLimitCondition } from '~/prisma/generated/client'
 import { timeGroup } from '~/client/options'
 
 export const createWorkshopSchemaBase = z.object({

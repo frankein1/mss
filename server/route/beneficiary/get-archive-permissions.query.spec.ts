@@ -9,7 +9,7 @@ import {
 import { test } from '~/test/server/test-utils'
 import { prismaClient } from '~/server/prisma'
 import dayjs from 'dayjs'
-import { BeneficiaryStatus } from '@prisma/client'
+import { BeneficiaryStatus } from '~/prisma/generated/client'
 import { v4 } from 'uuid'
 
 let familyFileId: string

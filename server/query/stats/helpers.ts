@@ -1,5 +1,8 @@
-import type { Prisma } from '@prisma/client'
-import { FileInstructionType, SocialSupportType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import {
+  FileInstructionType,
+  SocialSupportType
+} from '~/prisma/generated/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'

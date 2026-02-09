@@ -1,5 +1,5 @@
-import type { Structure, User } from '@prisma/client'
-import { JobStatus, UserStatus } from '@prisma/client'
+import type { Structure, User } from '~/prisma/generated/client'
+import { JobStatus, UserStatus } from '~/prisma/generated/client'
 import { UserRepo } from '~/server/database'
 import { brevoClient } from '~/server/lib'
 import { JobResultService } from '~/server/services'

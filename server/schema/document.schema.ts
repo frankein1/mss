@@ -1,4 +1,4 @@
-import { DocumentType } from '@prisma/client'
+import { DocumentType } from '~/prisma/generated/client'
 import { z } from 'zod'
 import { File } from 'node-fetch-native'
 import { stringConstraint, requiredNativeEnum } from './helpers.schema'

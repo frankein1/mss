@@ -1,4 +1,4 @@
-import { DocumentType } from '@prisma/client'
+import { DocumentType } from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 // Max size in bytes

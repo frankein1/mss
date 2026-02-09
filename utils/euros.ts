@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 
 export function euros(
   price: Prisma.Decimal | number | string | undefined | null

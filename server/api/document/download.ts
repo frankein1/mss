@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
 import { addUserActivity } from '~/server/query'

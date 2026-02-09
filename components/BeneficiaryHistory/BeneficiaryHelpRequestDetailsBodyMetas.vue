@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportStatus } from '~/prisma/generated/client'
   import type { FileInstructionData, HelpRequestData } from './types'
   import {
     paymentMethodKeys,

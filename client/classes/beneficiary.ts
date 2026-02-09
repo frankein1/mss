@@ -1,5 +1,5 @@
 import type { DsfrBadgeProps } from '@gouvminint/vue-dsfr'
-import { BeneficiaryStatus } from '@prisma/client'
+import { BeneficiaryStatus } from '~/prisma/generated/client'
 
 export const beneficiaryStatusBadgeType: Record<
   BeneficiaryStatus,

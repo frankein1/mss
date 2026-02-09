@@ -4,7 +4,7 @@ import type { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 import { updateSocialSupportSubjectSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { UserActivityObject, UserActivityType } from '@prisma/client'
+import { UserActivityObject, UserActivityType } from '~/prisma/generated/client'
 import { SocialSupportSubjectRepo } from '~/server/database'
 
 const handler = async ({

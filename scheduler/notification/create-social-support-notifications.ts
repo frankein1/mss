@@ -1,5 +1,5 @@
-import type { SocialSupport } from '@prisma/client'
-import { NotificationType } from '@prisma/client'
+import type { SocialSupport } from '~/prisma/generated/client'
+import { NotificationType } from '~/prisma/generated/client'
 import dayjs from 'dayjs'
 import {
   HelpRequestRepo,

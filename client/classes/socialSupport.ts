@@ -1,4 +1,4 @@
-import { SocialSupportStatus } from '@prisma/client'
+import { SocialSupportStatus } from '~/prisma/generated/client'
 
 export const socialSupportStatusClasses = {
   [SocialSupportStatus.Todo]: 'fr-badge--info',

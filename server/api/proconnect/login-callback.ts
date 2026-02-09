@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { UserStatus, UserActivityType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { UserStatus, UserActivityType } from '~/prisma/generated/client'
 import pkg from 'jsonwebtoken'
 import { signJwt } from '~/server/lib/jwt'
 import { getProConnectClient } from '~/server/lib/proconnect.client'

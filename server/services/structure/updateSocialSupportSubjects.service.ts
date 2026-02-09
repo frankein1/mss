@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationType } from '~/prisma/generated/client'
 import { NotificationRepo, StructureRepo } from '~/server/database'
 import type { UpdateSocialSupportSubjectsInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'

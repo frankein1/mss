@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { NotificationType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { NotificationType } from '~/prisma/generated/client'
 import { SocialSupportSubjectService } from '..'
 import { cleanUpdateInput } from './helper'
 import {

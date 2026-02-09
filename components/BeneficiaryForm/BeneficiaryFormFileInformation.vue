@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-  import { UserStatus, BeneficiaryStatus } from '@prisma/client'
+  import { UserStatus, BeneficiaryStatus } from '~/prisma/generated/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusKeys } from '~/client/options'
   import type { FamilyFilePermissions } from '~/server/security'

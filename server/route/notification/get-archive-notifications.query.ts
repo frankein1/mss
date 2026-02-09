@@ -9,7 +9,7 @@ import {
   getDescriptionHint,
   notificationInclude
 } from './utils'
-import { NotificationType } from '@prisma/client'
+import { NotificationType } from '~/prisma/generated/client'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   const res = await NotificationRepo.findMany(user, {

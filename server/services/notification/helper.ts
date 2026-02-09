@@ -1,4 +1,8 @@
-import { NotificationType, UserRole, UserStatus } from '@prisma/client'
+import {
+  NotificationType,
+  UserRole,
+  UserStatus
+} from '~/prisma/generated/client'
 import { prismaClient } from '~/server/prisma'
 import dayjs from 'dayjs'
 import { NotificationRepo } from '~/server/database'

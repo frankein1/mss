@@ -5,7 +5,7 @@ import { getUserSchema } from '~/server/schema'
 import { UserRepo, WorkshopNameRepo, WorkshopRepo } from '~/server/database'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { getAppContextPermissions } from '~/server/security'
-import { UserRole, type Prisma } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users
@@ -78,7 +78,7 @@ const handler = async ({
   }
 }
 
-export type SructureUser = Prisma.PromiseReturnType<typeof handler>
+export type SructureUser = Awaited<ReturnType<typeof handler>>
 
 export const getUserQuery = createQuery({
   inputValidation: getUserSchema,

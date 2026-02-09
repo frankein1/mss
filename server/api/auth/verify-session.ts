@@ -1,5 +1,5 @@
 import { getAppContextPermissions } from '~/server/security'
-import type { StructureType } from '@prisma/client'
+import type { StructureType } from '~/prisma/generated/client'
 import { StructureRepo } from '~/server/database'
 
 /* Verify current session and initialize permissions after login */

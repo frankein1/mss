@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { BudgetIncomeType } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { BudgetIncomeType } from '~/prisma/generated/client'
 import { BeneficiaryRepo, BudgetIncomeRepo } from '~/server/database'
 import type { CreateBeneficiaryInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'

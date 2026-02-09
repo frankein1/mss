@@ -6,7 +6,7 @@ import { WorkshopAttendeeRepo, WorkshopRepo } from '~/server/database'
 import { getWorkshopSchema } from '~/server/schema/workshop/getWorkshop.schema'
 import { isReferent } from '~/server/security'
 import { formatWorkshopAttendees } from '~/server/services/workshop/helper'
-import { WorkshopAttendeeListType } from '@prisma/client'
+import { WorkshopAttendeeListType } from '~/prisma/generated/client'
 
 export const handler = async ({
   ctx: { user },

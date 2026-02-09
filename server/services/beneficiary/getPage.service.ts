@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { getPage as getPageFn } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
 import type { SecurityRuleContext } from '~/server/security'

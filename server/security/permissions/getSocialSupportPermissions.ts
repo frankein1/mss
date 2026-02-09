@@ -1,4 +1,4 @@
-import type { SocialSupport } from '@prisma/client'
+import type { SocialSupport } from '~/prisma/generated/client'
 import type {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,

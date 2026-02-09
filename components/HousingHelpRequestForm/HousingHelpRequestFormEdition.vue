@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { AskedHousing, FileInstructionType } from '@prisma/client'
+  import { AskedHousing, FileInstructionType } from '~/prisma/generated/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { EditHousingHelpRequestInput } from '~/server/schema'
   import { editHousingHelpRequestSchema } from '~/server/schema'

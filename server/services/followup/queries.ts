@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { filterFollowup, filterSocialSupport } from '../helper'
 import { FollowupRepo } from '~/server/database'
 import type {
@@ -47,7 +47,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-type FollowupOutput = NonNullable<Prisma.PromiseReturnType<typeof findOne>>
+type FollowupOutput = NonNullable<Awaited<ReturnType<typeof findOne>>>
 
 export async function getPage(
   ctx: SecurityRuleContext,

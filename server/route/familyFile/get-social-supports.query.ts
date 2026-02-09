@@ -5,7 +5,7 @@ import {
   type Prisma,
   type SocialSupport,
   type User
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { TypeSuivi } from '~/client/options'
 import { SocialSupportRepo } from '~/server/database'
 import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'

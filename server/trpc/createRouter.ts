@@ -2,7 +2,7 @@ import picocolors from 'picocolors'
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import type { H3Event } from 'h3'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 import type {
   SecurityRuleGrantee,
   SecurityRuleStructure

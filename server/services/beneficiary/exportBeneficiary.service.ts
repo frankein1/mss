@@ -23,7 +23,7 @@ import type {
   HelpRequest,
   FileInstruction,
   HousingHelpRequest
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import {
   documentTypeKeys,
   ministerKeys,

@@ -11,7 +11,7 @@ import {
   BeneficiaryStudyLevel,
   Gender,
   RelativeRelationship
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 import { beneficiaryFieldLabels } from '../labels'

@@ -16,7 +16,7 @@ import {
   BeneficiaryTitle,
   Gender,
   Nationality
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { z } from 'zod'
 import { createOrUpdateEntourageSchema } from '../relative.schema'
 import {

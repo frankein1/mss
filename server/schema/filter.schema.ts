@@ -12,7 +12,7 @@ import {
   JobStatus,
   BeneficiaryMinistereDepartementServiceAc,
   BeneficiaryMinistereStructure
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import {
   kindOfBooleanSchema,
   stringConstraint,

@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'

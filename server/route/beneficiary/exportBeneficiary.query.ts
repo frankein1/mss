@@ -4,7 +4,7 @@ import { exportBeneficiarySchema } from '~/server/schema/beneficiary/exportbenef
 import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryService } from '~/server/services'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: ExportBeneficiaryInput

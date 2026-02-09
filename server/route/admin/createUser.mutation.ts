@@ -9,7 +9,7 @@ import type { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 
 const adminHandler = async ({
   ctx,

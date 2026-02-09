@@ -5,13 +5,14 @@ import type {
   Gender,
   Prisma,
   SocialSupportStatus
-} from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+} from '~/prisma/generated/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import type { ArrayElement } from '~/types/utils'
 import { equiRandomEnum } from './fixtures/utils'
+import { buildPrismaClient } from './client'
 
-const prismaClient = new PrismaClient()
+const prismaClient = buildPrismaClient()
+
 const STRUCTURE_COUNT = 200
 // if USERS_PER_STRUCTURE is null use Jeanne Responsable
 const USERS_PER_STRUCTURE: number | null = null

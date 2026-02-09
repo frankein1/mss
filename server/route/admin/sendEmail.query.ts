@@ -1,4 +1,4 @@
-import { EmailStatus } from '@prisma/client'
+import { EmailStatus } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { AdminSendEmailInput } from '~/server/schema'
 import { adminSendEmailSchema } from '~/server/schema'

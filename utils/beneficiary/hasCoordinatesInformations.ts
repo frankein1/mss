@@ -1,4 +1,4 @@
-import type { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '~/prisma/generated/client'
 
 function hasAddress(
   beneficiary: Pick<Beneficiary, 'street' | 'zipcode' | 'city' | 'region'>

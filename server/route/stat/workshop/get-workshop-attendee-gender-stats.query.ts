@@ -5,7 +5,10 @@ import { workshopStatFilterSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { WorkshopAttendeeRepo } from '~/server/database'
-import { WorkshopAttendeeListType, type Gender } from '@prisma/client'
+import {
+  WorkshopAttendeeListType,
+  type Gender
+} from '~/prisma/generated/client'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 

@@ -1,4 +1,4 @@
-import { AgeLimitCondition } from '@prisma/client'
+import { AgeLimitCondition } from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const ageConditionKeys = buildKeys({

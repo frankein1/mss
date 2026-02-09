@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-  import { NotificationType } from '@prisma/client'
+  import { NotificationType } from '~/prisma/generated/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'

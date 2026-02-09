@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { BeneficiaryRepo } from '~/server/database'
 import type {
@@ -34,8 +33,8 @@ export function getBeneficiarySecurityTarget(
   })
 }
 
-export type BeneficiarySecurityTarget = Prisma.PromiseReturnType<
-  typeof getBeneficiarySecurityTarget
+export type BeneficiarySecurityTarget = Awaited<
+  ReturnType<typeof getBeneficiarySecurityTarget>
 >
 function getBeneficiaryArchiveSecurityTarget(
   user: SecurityRuleGrantee,

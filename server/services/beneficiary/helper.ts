@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { prismaClient } from '~/server/prisma'
 import RemoveAccents from 'remove-accents'
 import { AgeGroup } from '~/client/options'
 import type { BeneficiaryFilterServerInput } from '~/server/schema'
@@ -148,7 +148,6 @@ export function prepareBeneficiaryFilters(
 }
 
 // Helpers for updating lastActivity
-const prismaClient = new PrismaClient()
 export const update = async (beneficiaryId: string, lastActivity: Date) => {
   return await prismaClient.beneficiary.update({
     where: { id: beneficiaryId },

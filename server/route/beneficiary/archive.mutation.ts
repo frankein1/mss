@@ -1,5 +1,5 @@
-import type { Prisma, SocialSupportSubject } from '@prisma/client'
-import { UserActivityType } from '@prisma/client'
+import type { Prisma, SocialSupportSubject } from '~/prisma/generated/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import {
   BeneficiaryRepo,
   FamilyFileRepo,

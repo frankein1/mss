@@ -1,4 +1,4 @@
-import { DefaultSocialSupportSubject } from '@prisma/client'
+import { DefaultSocialSupportSubject } from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const socialSupportSubjectKeys = buildKeys({

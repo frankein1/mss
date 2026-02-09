@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import {
   filterFileInstruction,
   filterHousingHelpRequest,
@@ -57,9 +56,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-type HousingHelpRequestOutput = NonNullable<
-  Prisma.PromiseReturnType<typeof findOne>
->
+type HousingHelpRequestOutput = NonNullable<Awaited<ReturnType<typeof findOne>>>
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const housingHelpRequest = await findOne(ctx.user, id)

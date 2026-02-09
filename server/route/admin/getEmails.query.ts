@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type {
   AdminGetEmailsInput,
@@ -57,7 +57,7 @@ const adminHandler = async ({
   return { emails, totalPages }
 }
 
-export type AdminEmailsOutput = Prisma.PromiseReturnType<typeof adminHandler>
+export type AdminEmailsOutput = Awaited<ReturnType<typeof adminHandler>>
 
 function prepareEmailFilters(filters: EmailAdminFilterInput) {
   const formattedFilters: Prisma.EmailWhereInput = {}

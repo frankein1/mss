@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportStatus } from '@prisma/client'
+  import type { SocialSupportStatus } from '~/prisma/generated/client'
 
   defineProps<{
     title: string

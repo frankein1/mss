@@ -1,4 +1,4 @@
-import { FileInstructionType } from '@prisma/client'
+import { FileInstructionType } from '~/prisma/generated/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import type { StatFilterInput } from '~/server/schema'

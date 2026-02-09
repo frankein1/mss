@@ -10,7 +10,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus, FileInstructionType } from '@prisma/client'
+  import {
+    SocialSupportStatus,
+    FileInstructionType
+  } from '~/prisma/generated/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { CreateHousingHelpRequestInput } from '~/server/schema'
   import { createHousingHelpRequestSchema } from '~/server/schema'

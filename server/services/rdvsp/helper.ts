@@ -6,7 +6,7 @@ import { shouldLog } from '~/server/utils/logging.js'
 import { prismaClient } from '~/server/prisma'
 import picocolors from 'picocolors'
 
-import { SocialSupportStatus } from '@prisma/client'
+import { SocialSupportStatus } from '~/prisma/generated/client'
 import { RdvspStatus } from '~/types/rdvsp'
 import dayjs from 'dayjs'
 

@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { GetNotificationsInput } from '~/server/schema'
 import { getNotificationsSchema } from '~/server/schema'
@@ -67,5 +67,5 @@ export const getNotificationsQuery = createQuery({
   securityCheck: AllowSecurityCheck
 })
 
-type GetNotificationOutput = Prisma.PromiseReturnType<typeof handler>
+type GetNotificationOutput = Awaited<ReturnType<typeof handler>>
 export type NotificationItem = GetNotificationOutput['notifications'][number]

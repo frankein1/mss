@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-  import { NotificationType } from '@prisma/client'
+  import { NotificationType } from '~/prisma/generated/client'
   import { AlertType } from '~/utils/constants/alert'
   import { NotificationTypeFilterValue } from '~/client/options'
   import { NOTIFICATIONS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'

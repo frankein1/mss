@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { UserRole } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { UserRole } from '~/prisma/generated/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
 import type { ExportBeneficiariesInput } from '~/server/schema'

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma } from '~/prisma/generated/client'
 import { z } from 'zod'
 import { beneficiaryFilterSchema } from '../filter.schema'
 import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'

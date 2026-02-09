@@ -1,7 +1,7 @@
 import { test, describe, expect } from 'vitest'
 import { getCommentPermissions } from './getCommentPermissions'
 import type { SecurityRuleContext } from '../rules'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 
 const CTX_BASE: SecurityRuleContext = {
   user: {

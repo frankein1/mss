@@ -2,7 +2,7 @@ import {
   FollowupMedium,
   NotificationType,
   SocialSupportType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import { FamilyFileRepo, SocialSupportRepo } from '~/server/database'

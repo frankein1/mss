@@ -8,7 +8,7 @@ import {
   FixtureUserRole
 } from '~/prisma/fixtures'
 import { getSocialSupportPermissions } from './getSocialSupportPermissions'
-import { SocialSupportType } from '@prisma/client'
+import { SocialSupportType } from '~/prisma/generated/client'
 
 const CTX_SM: SecurityRuleContext = {
   user: {

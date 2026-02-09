@@ -1,4 +1,4 @@
-import { StructureType } from '@prisma/client'
+import { StructureType } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import {
   beneficiaryAccommodationModeKeys,

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { FileInstructionType } from '@prisma/client'
+  import type { FileInstructionType } from '~/prisma/generated/client'
   import PrintFinancialHelpRequest from './PrintFinancialHelpRequest.vue'
   import PrintOtherHelpRequest from './PrintOtherHelpRequest.vue'
   import type { HelpRequestOutput } from './types'

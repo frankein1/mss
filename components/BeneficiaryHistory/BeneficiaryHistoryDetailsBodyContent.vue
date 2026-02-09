@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionType } from '@prisma/client'
+  import { FileInstructionType } from '~/prisma/generated/client'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type {
     CommentData,

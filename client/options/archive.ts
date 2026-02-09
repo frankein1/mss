@@ -1,5 +1,5 @@
 import { buildKeys } from '~/utils/keys/keyBuilder'
-import { ArchiveReason } from '@prisma/client'
+import { ArchiveReason } from '~/prisma/generated/client'
 
 export const archiveReasonKeys = buildKeys({
   [ArchiveReason.NoActivity]:

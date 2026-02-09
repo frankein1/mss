@@ -7,7 +7,7 @@ import {
   FileInstructionType,
   SocialSupportStatus,
   SocialSupportType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 
 export async function getHelpRequestAmountsAllocatedQuery(
   user: SecurityRuleGrantee,

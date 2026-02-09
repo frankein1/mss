@@ -116,7 +116,7 @@
   import {
     WorkshopAttendeeListType,
     type WorkshopAttendeeAttendance
-  } from '@prisma/client'
+  } from '~/prisma/generated/client'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
     INVALID_CODE_ERROR_MESSAGE

@@ -3,7 +3,7 @@ import type { AdminContext } from '~/server/trpc'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import { SocialSupportSubjectRepo } from '~/server/database'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 
 const adminHandler = async ({
   input: { id },

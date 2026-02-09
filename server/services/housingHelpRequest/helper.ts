@@ -1,5 +1,5 @@
-import type { AskedHousing } from '@prisma/client'
-import { SocialSupportStatus } from '@prisma/client'
+import type { AskedHousing } from '~/prisma/generated/client'
+import { SocialSupportStatus } from '~/prisma/generated/client'
 import type { CreateHousingHelpRequestInput } from '~/server/schema'
 
 export const cleanCreateInput = cleanInput

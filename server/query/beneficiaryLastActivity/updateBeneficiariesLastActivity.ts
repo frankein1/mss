@@ -1,4 +1,4 @@
-import { UserActivityObject } from '@prisma/client'
+import { UserActivityObject } from '~/prisma/generated/client'
 import type { z } from 'zod'
 import { prismaClient } from '~/server/prisma'
 

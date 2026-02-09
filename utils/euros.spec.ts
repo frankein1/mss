@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { Decimal } from '@prisma/client/runtime/library'
+import { Decimal } from '@prisma/client/runtime/client'
 import { euros } from './euros'
 
 describe('euros transformation', () => {

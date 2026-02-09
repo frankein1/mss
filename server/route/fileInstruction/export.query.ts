@@ -6,7 +6,7 @@ import { getAppContextPermissions } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FileInstructionService, UserService } from '~/server/services'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 
 const handler = async ({
   input,

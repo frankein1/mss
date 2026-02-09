@@ -3,7 +3,7 @@ import type {
   BeneficiaryRelative,
   User,
   UserStatus
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import type { RouterOutput } from '~/server/trpc/routers'
 
 export type BeneficiaryReferent = {

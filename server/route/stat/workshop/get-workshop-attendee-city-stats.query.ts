@@ -6,7 +6,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { WorkshopAttendeeRepo } from '~/server/database'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
-import { WorkshopAttendeeListType } from '@prisma/client'
+import { WorkshopAttendeeListType } from '~/prisma/generated/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats

@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { UserRole } from '~/prisma/generated/client'
 import type { getUsers } from '~/server/route/user/getUsers.query'
 
 const { Administrator: _, ...otherRoles } = UserRole

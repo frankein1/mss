@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
+  import { FileInstructionType } from '~/prisma/generated/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import type { CreateHousingHelpRequestInput } from '~/server/schema'
   import { fileInstructionTypePictos } from '~/client/options'

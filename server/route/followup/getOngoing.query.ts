@@ -1,4 +1,4 @@
-import type { SocialSupportStatus } from '@prisma/client'
+import type { SocialSupportStatus } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'

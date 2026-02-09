@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { UserStatus } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { UserStatus } from '~/prisma/generated/client'
 import type { GetSimilarBeneficiaryInput } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database/repository'
 import { BeneficiaryConstraints } from '~/server/database/constraints'

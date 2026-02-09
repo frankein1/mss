@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { GetSimilarBeneficiaryInput } from '~/server/schema'
@@ -20,4 +19,4 @@ export const getSimilarBeneficiaryQuery = createQuery({
   handler
 })
 
-export type SimilarBeneficiary = Prisma.PromiseReturnType<typeof handler>
+export type SimilarBeneficiary = Awaited<ReturnType<typeof handler>>

@@ -1,4 +1,4 @@
-import type { Beneficiary } from '@prisma/client'
+import type { Beneficiary } from '~/prisma/generated/client'
 
 export function formatBeneficiaryDisplayPhone(
   beneficiary: Pick<Beneficiary, 'phone1' | 'phone2'>

@@ -3,13 +3,13 @@ import type {
   Prisma,
   WorkshopAttendee,
   WorkshopExternalAttendee
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import {
   BeneficiaryTitle,
   Gender,
   WorkshopAttendeeListType,
   WorkshopAttendeeType
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import dayjs from 'dayjs'
 import type { WorkshopFilterInput } from '~/server/schema'
 import { WorkshopPeriodFilter } from '~/types/workshop'

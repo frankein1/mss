@@ -1,4 +1,7 @@
-import { DefaultSocialSupportSubject, UserActivityType } from '@prisma/client'
+import {
+  DefaultSocialSupportSubject,
+  UserActivityType
+} from '~/prisma/generated/client'
 import { createMutation } from '~/server/route'
 import type { CreateStructureInput } from '~/server/schema'
 import { createStructureSchema } from '~/server/schema'

@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export function incrementBudgetTotal(

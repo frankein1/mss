@@ -2,7 +2,7 @@ import pkg from 'jsonwebtoken'
 import { minutesToSeconds } from '~/utils/time'
 import { z } from 'zod'
 import { requiredNativeEnum } from '~/server/schema'
-import { StructureType, UserRole, UserStatus } from '@prisma/client'
+import { StructureType, UserRole, UserStatus } from '~/prisma/generated/client'
 
 const { sign, verify } = pkg
 

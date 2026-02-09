@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { RelativeRelationship } from '@prisma/client'
+import { RelativeRelationship } from '~/prisma/generated/client'
 import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
 import { beneficiaryFirstNameSchema } from './beneficiary/beneficiaryFirstName.schema'
 import {

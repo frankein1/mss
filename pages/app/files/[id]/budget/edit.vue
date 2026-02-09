@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Prisma } from '@prisma/client'
+  import type { Prisma } from '~/prisma/generated/client'
   import { AlertType } from '~/utils/constants/alert'
   import type { UpdateBudgetInfoInput } from '~/server/schema'
   import { updateBudgetInfoSchema } from '~/server/schema'

@@ -6,7 +6,7 @@ import {
   fixtureStructures,
   fixturesUsers
 } from '~/prisma/fixtures'
-import { BeneficiaryTitle, StructureType } from '@prisma/client'
+import { BeneficiaryTitle, StructureType } from '~/prisma/generated/client'
 import { deleteArchivedNames } from './delete-archive-names.service'
 
 let beneficiaryId: string | null = null

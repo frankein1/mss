@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { FileInstructionConstraints } from './FileInstructionConstraints'
 import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'

@@ -82,7 +82,10 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import dayjs from 'dayjs'
-  import { FileInstructionType, SocialSupportType } from '@prisma/client'
+  import {
+    FileInstructionType,
+    SocialSupportType
+  } from '~/prisma/generated/client'
 
   const route = useRoute()
 

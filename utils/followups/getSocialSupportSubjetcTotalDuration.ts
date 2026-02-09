@@ -1,4 +1,4 @@
-import { FollowupDuration } from '@prisma/client'
+import { FollowupDuration } from '~/prisma/generated/client'
 
 type SocialSupport = {
   followup: {

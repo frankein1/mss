@@ -34,7 +34,7 @@
   import type { StatsPiePropType } from '~/types/stat'
   import { getStatColor } from '~/client/colors'
   import { beneficiaryGenderKeys, getStatLabel } from '~/client/options'
-  import { Gender } from '@prisma/client'
+  import { Gender } from '~/prisma/generated/client'
   import { ChartColor } from '~/utils/color/chartColors'
   import { STATS_NULL_KEY } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'

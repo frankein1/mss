@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
 import { WorkshopConstraints } from './WorkshopConstraints'
 import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin, isReferent } from '~/server/security/rules/helpers'

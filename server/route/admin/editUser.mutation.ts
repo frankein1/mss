@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 import { UserRepo } from '~/server/database'
 import { createOrUpdateUser } from '~/server/integrations/brevo/service'
 import { createMutation } from '~/server/route'

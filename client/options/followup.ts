@@ -2,7 +2,7 @@ import {
   FollowupMedium,
   SocialSupportStatus,
   FollowupDuration
-} from '@prisma/client'
+} from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 import { FilterFollowupNotFilled } from '~/utils/constants/filters'
 import { followupFieldLabels } from '../labels'

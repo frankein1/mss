@@ -5,7 +5,10 @@ import { forbiddenError } from '~/server/trpc'
 import { addUserActivity } from '~/server/query'
 import type { SecurityRule, SecurityRuleGrantee } from '~/server/security'
 import type { SecurityRuleStructure } from '~/server/security/rules/types'
-import { UserActivityType, type UserActivityObject } from '@prisma/client'
+import {
+  UserActivityType,
+  type UserActivityObject
+} from '~/prisma/generated/client'
 import { handleBeneficiariesLastActivityUpdate } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 
 export type AdminRouteHandlerContext<Grantee> = {

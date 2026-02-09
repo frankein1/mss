@@ -164,7 +164,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
+  import { FileInstructionType } from '~/prisma/generated/client'
   import { AlertType } from '~/utils/constants/alert'
   import type { StatFilterInput } from '~/server/schema'
   import type { Options } from '~/utils/options'

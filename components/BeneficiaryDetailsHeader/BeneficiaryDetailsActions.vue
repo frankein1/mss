@@ -69,7 +69,7 @@
   import { routes } from '~/utils/routes'
   import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import type { FamilyFilePermissions } from '~/server/security'
-  import type { RelativeRelationship } from '@prisma/client'
+  import type { RelativeRelationship } from '~/prisma/generated/client'
 
   const { isStructureManager } = useAuthState()
   const route = useRoute()

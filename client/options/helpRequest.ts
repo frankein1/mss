@@ -1,4 +1,4 @@
-import { PaymentMethod } from '@prisma/client'
+import { PaymentMethod } from '~/prisma/generated/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const externalOrganisationKeys = buildKeys({

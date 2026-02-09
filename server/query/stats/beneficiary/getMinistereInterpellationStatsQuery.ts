@@ -1,4 +1,4 @@
-import type { Minister, Prisma } from '@prisma/client'
+import type { Minister, Prisma } from '~/prisma/generated/client'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import { BeneficiaryRepo } from '~/server/database'
 import type { StatFilterInput } from '~/server/schema'

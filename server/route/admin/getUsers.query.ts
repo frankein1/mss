@@ -1,5 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import { UserRole } from '@prisma/client'
+import type { Prisma } from '~/prisma/generated/client'
+import { UserRole } from '~/prisma/generated/client'
 import { createQuery } from '~/server/route'
 import type { AdminGetUsersInput, UserAdminFilterInput } from '~/server/schema'
 import { adminGetUsersSchema } from '~/server/schema'
@@ -63,7 +63,7 @@ const adminHandler = async ({
   return { users }
 }
 
-export type AdminUsersOutput = Prisma.PromiseReturnType<typeof adminHandler>
+export type AdminUsersOutput = Awaited<ReturnType<typeof adminHandler>>
 
 function prepareUserFilters(filters: UserAdminFilterInput) {
   const formattedFilters: Prisma.UserWhereInput = {}

@@ -4,7 +4,7 @@ import type { EditStructureAdminInfoInput } from '~/server/schema'
 import { editStructureAdminInfoSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { createOrUpdateStructure } from '~/server/integrations/brevo/service'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType } from '~/prisma/generated/client'
 
 const adminHandler = async ({
   input,

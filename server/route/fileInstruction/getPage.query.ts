@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { FileInstructionPageInput } from '~/server/schema'
@@ -22,7 +21,7 @@ export const getPage = createQuery({
   handler
 })
 
-type FileInstructionPage = Prisma.PromiseReturnType<typeof handler>
+type FileInstructionPage = Awaited<ReturnType<typeof handler>>
 
 export type FileInstructions = FileInstructionPage['items']
 export type FileInstruction = FileInstructions[0]
