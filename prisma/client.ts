@@ -32,3 +32,5 @@ export function buildPrismaClient() {
 
   return prisma
 }
+
+export type MSSPrismaClient = ReturnType<typeof buildPrismaClient>

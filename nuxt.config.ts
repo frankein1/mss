@@ -1,10 +1,4 @@
-// https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
-import { createRequire } from 'module'
 import { MAX_UPLOAD_SIZE_BYTES } from './utils/constants'
-
-const prismaClientPath = createRequire(import.meta.url).resolve(
-  '@prisma/client'
-)
 
 const connectSrcCsp = [
   "'self'",
@@ -117,7 +111,6 @@ export default defineNuxtConfig({
     // https://github.com/nuxt/nuxt/issues/24196
     optimizeDeps: {
       include: [
-        '@prisma/client',
         'vee-validate',
         '@vee-validate/zod',
         'zod',
@@ -148,14 +141,6 @@ export default defineNuxtConfig({
           // See https://sass-lang.com/documentation/breaking-changes/import/
           quietDeps: true
         }
-      }
-    },
-    resolve: {
-      alias: {
-        '.prisma/client/index-browser': prismaClientPath.replace(
-          '@prisma/client/default.js',
-          '.prisma/client/index-browser.js'
-        )
       }
     }
   },
