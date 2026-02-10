@@ -1,4 +1,4 @@
-import { SocialSupportStatus } from '~/prisma/generated/client'
+import { SocialSupportStatus } from '~/prisma/generated/browser'
 import { followupStatusKeys } from './followup'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 

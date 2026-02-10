@@ -1,4 +1,4 @@
-import type { Beneficiary } from '~/prisma/generated/client'
+import type { Beneficiary } from '~/prisma/generated/browser'
 
 export function hasMobilityInformations(
   beneficiary: Pick<Beneficiary, 'mobility'>

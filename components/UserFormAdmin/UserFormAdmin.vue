@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus } from '~/prisma/generated/client'
+  import { UserStatus } from '~/prisma/generated/browser'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { AdminUserOutput } from './types'
   import { userFieldLabels } from '~/client/labels'

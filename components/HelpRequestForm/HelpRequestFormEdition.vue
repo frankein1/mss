@@ -13,8 +13,8 @@
 </template>
 
 <script lang="ts" setup>
-  import type { SocialSupportSubject } from '~/prisma/generated/client'
-  import { FileInstructionType } from '~/prisma/generated/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/browser'
+  import { FileInstructionType } from '~/prisma/generated/browser'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { HelpRequestPageItem } from './types'
   import type { EditHelpRequestInput } from '~/server/schema'

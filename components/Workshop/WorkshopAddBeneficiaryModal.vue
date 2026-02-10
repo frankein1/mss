@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-  import { WorkshopAttendeeListType } from '~/prisma/generated/client'
+  import { WorkshopAttendeeListType } from '~/prisma/generated/browser'
   import { AlertType } from '~/utils/constants/alert'
   import {
     createBeneficiaryAttendeeSchema,

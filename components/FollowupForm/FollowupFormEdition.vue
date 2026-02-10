@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { SocialSupportSubject } from '~/prisma/generated/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/browser'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { FollowupPageItem } from './types'
   import type { EditFollowupInput } from '~/server/schema'

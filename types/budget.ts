@@ -7,7 +7,7 @@ import type {
   BudgetExpensesLoan,
   BudgetExpensesCustom,
   BudgetIncomeCustom
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import type { BeneficiaryFileIdentification } from './beneficiary'
 import type { getBudget } from '~/server/services/budget/getBudget.service'
 

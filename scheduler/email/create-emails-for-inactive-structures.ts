@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { StructureRepo } from '~/server/database'
-import { UserStatus } from '~/prisma/generated/client'
+import { UserStatus } from '~/prisma/generated/browser'
 import { withErrorCapture } from '../utils'
 import { createEmail, createEmailSubject } from './utils'
 import { routes } from '~/utils/routes'

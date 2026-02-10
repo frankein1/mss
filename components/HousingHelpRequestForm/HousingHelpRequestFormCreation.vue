@@ -13,7 +13,7 @@
   import {
     SocialSupportStatus,
     FileInstructionType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { CreateHousingHelpRequestInput } from '~/server/schema'
   import { createHousingHelpRequestSchema } from '~/server/schema'

@@ -85,6 +85,8 @@ La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
 On part d'une base de données vide pour les tests (si besoin on
 supprime son contenu avec `docker compose -f docker-compose.dev.yml down -v`)
 
+Copier `.env.test.sample` dans `.env.test` pour permettre à vitest d'initialiser la connexion à la DB.
+
 ```
 pnpm dev:db:start
 pnpm prisma migrate deploy

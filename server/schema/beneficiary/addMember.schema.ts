@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { RelativeRelationship } from '~/prisma/generated/client'
+import { RelativeRelationship } from '~/prisma/generated/enums'
 import { requiredNativeEnum } from '../helpers.schema'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'

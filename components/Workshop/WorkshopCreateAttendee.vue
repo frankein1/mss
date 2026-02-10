@@ -66,7 +66,7 @@
     WorkshopWithAttendeesDetails
   } from '~/types/workshop'
   import WorkshopAddExternalAttendeeModal from '~/components/Workshop/WorkshopAddExternalAttendeeModal.vue'
-  import { WorkshopAttendeeType } from '~/prisma/generated/client'
+  import { WorkshopAttendeeType } from '~/prisma/generated/browser'
   import WorkshopCapacityModal from './WorkshopCapacityModal.vue'
 
   const { attendees, workshop } = defineProps<{

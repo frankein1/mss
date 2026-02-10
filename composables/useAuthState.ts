@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '~/prisma/generated/client'
+import { UserRole, UserStatus } from '~/prisma/generated/browser'
 import type { JwtUser } from '~/server/lib/jwt'
 import { formatUserDisplayName } from '~/utils/user'
 

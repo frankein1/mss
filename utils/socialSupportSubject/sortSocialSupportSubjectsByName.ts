@@ -1,4 +1,4 @@
-import type { SocialSupportSubject } from '~/prisma/generated/client'
+import type { SocialSupportSubject } from '~/prisma/generated/browser'
 
 export const sortSocialSupportSubjectsByName = (
   socialSupportSujects: SocialSupportSubject[]

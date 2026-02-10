@@ -1,7 +1,7 @@
 import type {
   Workshop,
   WorkshopExternalAttendee
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type WorkshopFieldLabels = Omit<

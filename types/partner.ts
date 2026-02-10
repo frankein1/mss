@@ -1,7 +1,7 @@
 import type {
   PartnerOrganization,
   PartnerOrganizationContact
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 
 export type PartnerOrganizationIdName = Pick<
   PartnerOrganization,

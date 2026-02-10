@@ -96,7 +96,7 @@
   import { routes } from '~/utils/routes'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { commonRelationshipKeys } from '~/client/options'
-  import type { RelativeRelationship } from '~/prisma/generated/client'
+  import type { RelativeRelationship } from '~/prisma/generated/browser'
   import { MSS_ERROR_CODES, isTRPCClientErrorWithMSSCode } from '~/utils/error'
   import type { ArrayElement } from '~/types/utils'
   import { EventCategory, FamilyFileAction } from '~/types/matomo'

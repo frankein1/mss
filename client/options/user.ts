@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '~/prisma/generated/client'
+import { UserRole, UserStatus } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const nonAdminUserRoleKeys = buildKeys({

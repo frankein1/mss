@@ -4,7 +4,7 @@ import {
   HousingRoomCount,
   HousingType,
   LowIncomeHousingType
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const isFirstKeys = buildKeys({

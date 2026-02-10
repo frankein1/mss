@@ -24,7 +24,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import type { WorkshopStatFilterInput } from '~/server/schema'
-  import { WorkshopAttendeeListType } from '~/prisma/generated/client'
+  import { WorkshopAttendeeListType } from '~/prisma/generated/browser'
 
   const props = defineProps<{
     filters: WorkshopStatFilterInput

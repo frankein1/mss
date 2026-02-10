@@ -1,4 +1,4 @@
-import { EmailStatus } from '~/prisma/generated/client'
+import { EmailStatus } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const emailStatusKeys = buildKeys({

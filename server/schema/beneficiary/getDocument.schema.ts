@@ -1,4 +1,4 @@
-import { Prisma } from '~/prisma/generated/client'
+import { Prisma } from '~/prisma/generated/browser'
 import { z } from 'zod'
 import { optionalPaginatedSchema } from '../helpers.schema'
 import { beneficiaryDocumentFilterSchema } from '../filter.schema'

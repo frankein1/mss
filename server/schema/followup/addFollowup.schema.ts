@@ -3,7 +3,7 @@ import {
   SocialSupportStatus,
   Minister,
   FollowupDuration
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/enums'
 import { z } from 'zod'
 import {
   requiredNativeEnum,

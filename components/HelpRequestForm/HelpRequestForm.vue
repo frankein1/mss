@@ -99,7 +99,7 @@
     SocialSupportSubject,
     SocialSupportStatus,
     FileInstructionType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
   import type { FormErrors } from 'vee-validate'
   import {
     helpRequestFieldLabels,

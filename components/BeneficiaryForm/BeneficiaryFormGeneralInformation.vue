@@ -27,7 +27,7 @@
     BeneficiaryReferent
   } from '~/types/beneficiary'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
-  import type { BeneficiaryStatus } from '~/prisma/generated/client'
+  import type { BeneficiaryStatus } from '~/prisma/generated/browser'
   import type { FamilyFilePermissions } from '~/server/security'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)

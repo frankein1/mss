@@ -320,8 +320,8 @@
 </template>
 
 <script lang="ts" setup>
-  import type { SocialSupportSubject } from '~/prisma/generated/client'
-  import { FollowupMedium } from '~/prisma/generated/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/browser'
+  import { FollowupMedium } from '~/prisma/generated/browser'
   import type { FormErrors } from 'vee-validate'
   import type { JSONContent } from '@tiptap/vue-3'
   import {

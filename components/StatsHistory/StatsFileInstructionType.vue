@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '~/prisma/generated/client'
+  import { FileInstructionType } from '~/prisma/generated/browser'
   import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import {

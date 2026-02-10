@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus } from '~/prisma/generated/client'
+  import { SocialSupportStatus } from '~/prisma/generated/browser'
   import type { FileInstructionData, HousingHelpRequestData } from './types'
   import {
     fileInstructionRefusalReasonKeys,

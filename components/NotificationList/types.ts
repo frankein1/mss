@@ -1,7 +1,7 @@
 import type {
   NotificationType,
   SocialSupportType
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 
 export type NotificationItemType = {
   id: string

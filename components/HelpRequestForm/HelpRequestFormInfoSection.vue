@@ -137,7 +137,7 @@
   import {
     SocialSupportStatus,
     FileInstructionType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {

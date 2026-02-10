@@ -1,7 +1,7 @@
-import type { Prisma } from '~/prisma/generated/client'
+import type { Prisma } from '~/prisma/generated/browser'
 
 export function euros(
-  price: Prisma.Decimal | number | string | undefined | null
+  price: Prisma.DecimalJsLike | number | string | undefined | null
 ) {
   if (price !== 0 && !price) {
     return ''

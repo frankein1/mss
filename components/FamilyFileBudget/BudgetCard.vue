@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Prisma } from '~/prisma/generated/client'
+  import type { Decimal } from '~/utils/prisma'
 
   withDefaults(
     defineProps<{
@@ -103,8 +103,8 @@
       hasSubsections?: boolean
       subsectionItems?: {
         type: string | null
-        amountTotal: Prisma.Decimal | null
-        amountPerMonth: Prisma.Decimal | null
+        amountTotal: Decimal | null
+        amountPerMonth: Decimal | null
         dueDate: Date | null
       }[]
     }>(),

@@ -1,4 +1,4 @@
-import { NotificationType } from '~/prisma/generated/client'
+import { NotificationType } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const notificationTypeKeys = buildKeys({

@@ -1,4 +1,4 @@
-import type { Beneficiary, BudgetIncome } from '~/prisma/generated/client'
+import type { Beneficiary, BudgetIncome } from '~/prisma/generated/browser'
 import { taxHouseHoldRelationshipKeys } from '~/client/options'
 
 export const formatBudgetMemberLabel = (

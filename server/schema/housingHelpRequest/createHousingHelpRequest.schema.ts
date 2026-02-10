@@ -7,7 +7,7 @@ import {
   HousingType,
   HousingRoomCount,
   LowIncomeHousingType
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/enums'
 import { z } from 'zod'
 import {
   numeroPegaseContraint,

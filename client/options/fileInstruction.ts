@@ -1,7 +1,7 @@
 import {
   FileInstructionRefusalReason,
   FileInstructionType
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 import {

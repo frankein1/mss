@@ -7,7 +7,7 @@ import {
   LowIncomeHousingType,
   BeneficiaryMinistereDepartementServiceAc,
   BeneficiaryMinistereStructure
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/enums'
 import dayjs from 'dayjs'
 import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 import { withEmptyValueOptionalNativeEnum } from '../helpers.schema'

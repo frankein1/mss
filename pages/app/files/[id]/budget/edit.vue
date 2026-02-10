@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Prisma } from '~/prisma/generated/client'
+  import type { Decimal } from '~/utils/prisma'
   import { AlertType } from '~/utils/constants/alert'
   import type { UpdateBudgetInfoInput } from '~/server/schema'
   import { updateBudgetInfoSchema } from '~/server/schema'
@@ -95,7 +95,7 @@
 
   function getRemainingAfterExpenses(
     deltaIncomeExpenses: number | null | undefined,
-    nMembers: number | Prisma.Decimal | null | undefined
+    nMembers: number | Decimal | null | undefined
   ) {
     const nm =
       typeof nMembers === 'number' ? nMembers : prismaDecimalToNumber(nMembers)

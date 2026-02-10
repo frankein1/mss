@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '~/prisma/generated/client'
+  import { FileInstructionType } from '~/prisma/generated/browser'
   import type { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { fileInstructionTypePictos } from '~/client/options'

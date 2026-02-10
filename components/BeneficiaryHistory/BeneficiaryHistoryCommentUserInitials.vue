@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { User } from '~/prisma/generated/client'
+  import type { User } from '~/prisma/generated/browser'
 
   const props = defineProps<{
     user: Pick<User, 'firstName' | 'lastName'>

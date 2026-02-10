@@ -35,7 +35,7 @@
     getStatLabel,
     workshopAttendeeAttendanceKeys
   } from '~/client/options'
-  import { WorkshopAttendeeAttendance } from '~/prisma/generated/client'
+  import { WorkshopAttendeeAttendance } from '~/prisma/generated/browser'
   import { ChartColor } from '~/utils/color/chartColors'
   import { STATS_NULL_KEY } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'

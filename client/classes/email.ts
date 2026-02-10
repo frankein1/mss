@@ -1,4 +1,4 @@
-import { EmailStatus } from '~/prisma/generated/client'
+import { EmailStatus } from '~/prisma/generated/browser'
 
 export const emailStatusBadgeClasses: {
   [key in EmailStatus]: string

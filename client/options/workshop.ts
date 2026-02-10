@@ -1,4 +1,4 @@
-import { WorkshopAttendeeAttendance } from '~/prisma/generated/client'
+import { WorkshopAttendeeAttendance } from '~/prisma/generated/browser'
 import { PeriodFilter } from '~/utils/constants/filters'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 

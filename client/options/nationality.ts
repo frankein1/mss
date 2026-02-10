@@ -1,4 +1,4 @@
-import { Nationality } from '~/prisma/generated/client'
+import { Nationality } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const nationalityKeys = buildKeys({

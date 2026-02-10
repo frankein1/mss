@@ -1,4 +1,4 @@
-import { NotificationType } from '~/prisma/generated/client'
+import { NotificationType } from '~/prisma/generated/enums'
 import { z } from 'zod'
 import { paginatedSchema } from './helpers.schema'
 

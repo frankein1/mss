@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-  import type { SocialSupportSubject } from '~/prisma/generated/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/browser'
   import {
     SocialSupportStatus,
     FileInstructionType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { CreateHelpRequestInput } from '~/server/schema'
   import { createHelpRequestSchema } from '~/server/schema'

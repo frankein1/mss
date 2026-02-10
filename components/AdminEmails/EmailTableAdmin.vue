@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-  import { EmailStatus } from '~/prisma/generated/client'
+  import { EmailStatus } from '~/prisma/generated/browser'
   import type { Emails } from './types'
   import { emailStatusKeys } from '~/client/options'
   import type { EmailAdminSort } from '~/types/table'

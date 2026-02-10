@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupMedium } from '~/prisma/generated/client'
+  import { FollowupMedium } from '~/prisma/generated/browser'
   import type { FollowupData } from './types'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
   import { followupFieldLabels } from '~/client/labels'

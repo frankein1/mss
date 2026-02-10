@@ -1,4 +1,4 @@
-import type { Structure } from '~/prisma/generated/client'
+import type { Structure } from '~/prisma/generated/browser'
 import dayjs from 'dayjs'
 
 export const canBeDisabled = (

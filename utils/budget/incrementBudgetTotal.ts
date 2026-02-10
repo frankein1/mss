@@ -1,9 +1,9 @@
-import type { Prisma } from '~/prisma/generated/client'
+import type { Decimal } from '~/utils/prisma'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export function incrementBudgetTotal(
   acc: number | null,
-  value: Prisma.Decimal | number | string | null | undefined
+  value: Decimal | number | string | null | undefined
 ) {
   const amount = typeof value === 'string' ? parseFloat(value) : value
 

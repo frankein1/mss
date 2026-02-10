@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-  import { JobStatus } from '~/prisma/generated/client'
+  import { JobStatus } from '~/prisma/generated/browser'
   import type { JobResultAdminSort } from '~/types/table'
   import { jobResultStatusKeys } from '~/client/options'
   import type { JobResult } from '~/server/schema'

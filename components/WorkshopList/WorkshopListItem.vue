@@ -61,7 +61,7 @@
   import { routes } from '~/utils/routes'
   import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
   import { BadgeColor } from '~/types/badge'
-  import { WorkshopAttendeeListType } from '~/prisma/generated/client'
+  import { WorkshopAttendeeListType } from '~/prisma/generated/browser'
 
   const { workshop, timeDirection } = defineProps<{
     workshop: WorkshopsPageItem

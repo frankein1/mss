@@ -165,7 +165,7 @@
     WorkshopAttendeeAttendance,
     WorkshopAttendeeListType,
     WorkshopAttendeeType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
   import { beneficiaryTitleKeys } from '~/client/options'
   import WorkshopUpdateAttendeeModal from './WorkshopUpdateAttendeeModal.vue'
 

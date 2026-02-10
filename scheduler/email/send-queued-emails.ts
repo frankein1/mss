@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { EmailStatus } from '~/prisma/generated/client'
+import { EmailStatus } from '~/prisma/generated/browser'
 import { EmailRepo } from '~/server/database'
 import { sendEmail } from './utils'
 import { minutesToMillis } from '~/utils/time'

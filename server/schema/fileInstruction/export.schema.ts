@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { Prisma } from '~/prisma/generated/client'
+import { Prisma } from '~/prisma/generated/browser'
 import { fileInstructionFilterSchema } from './filter.schema'
 import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 

@@ -1,4 +1,4 @@
-import type { FileInstructionType } from '~/prisma/generated/client'
+import type { FileInstructionType } from '~/prisma/generated/browser'
 import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import type { BeneficiaryNames } from '~/types/beneficiary'

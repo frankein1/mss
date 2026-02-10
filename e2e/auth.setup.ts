@@ -4,7 +4,7 @@ import type {
   StructureType,
   UserRole,
   UserStatus
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import {
   fixturesCGUHistory,
   FixtureStructure,

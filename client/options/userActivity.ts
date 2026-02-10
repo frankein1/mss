@@ -1,4 +1,4 @@
-import { UserActivityType } from '~/prisma/generated/client'
+import { UserActivityType } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const userActivityTypeKeys = buildKeys({

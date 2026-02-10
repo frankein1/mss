@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
   import { z } from 'zod'
-  import { FileInstructionType } from '~/prisma/generated/client'
+  import { FileInstructionType } from '~/prisma/generated/browser'
   import {
     fileInstructionTypeKeys,
     fileInstructionTypePictos

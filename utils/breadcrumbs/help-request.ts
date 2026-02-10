@@ -1,4 +1,4 @@
-import type { FileInstructionType } from '~/prisma/generated/client'
+import type { FileInstructionType } from '~/prisma/generated/browser'
 import { breadcrumbs as ben } from './beneficiary'
 import { breadcrumbs as file } from './file'
 import type {

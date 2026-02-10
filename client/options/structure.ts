@@ -1,4 +1,4 @@
-import { StructureType } from '~/prisma/generated/client'
+import { StructureType } from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const structureTypeKeys = buildKeys({

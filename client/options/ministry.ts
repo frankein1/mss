@@ -3,7 +3,7 @@ import {
   BeneficiaryMinistereStructure,
   BeneficiaryMinistereCategorie,
   BeneficiaryMinistereDepartementServiceAc
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export const ministerKeys = buildKeys({

@@ -1,4 +1,4 @@
-import { BeneficiaryFamilySituation } from '~/prisma/generated/client'
+import { BeneficiaryFamilySituation } from '~/prisma/generated/browser'
 
 export function isMarried(familySituation?: BeneficiaryFamilySituation | null) {
   return (

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DefaultSocialSupportSubject } from '~/prisma/generated/client'
+import { DefaultSocialSupportSubject } from '~/prisma/generated/enums'
 import { stringConstraint } from './helpers.schema'
 import { minStringLengthMessage, maxStringLengthMessage } from '~/utils/zod'
 

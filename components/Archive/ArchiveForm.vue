@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ArchiveReason } from '~/prisma/generated/client'
+  import { ArchiveReason } from '~/prisma/generated/browser'
   import { archiveReasonKeys } from '~/client/options/archive'
   import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
   import { AlertType } from '~/utils/constants/alert'

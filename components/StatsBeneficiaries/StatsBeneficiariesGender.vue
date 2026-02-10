@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Gender } from '~/prisma/generated/client'
+  import { Gender } from '~/prisma/generated/browser'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import type { StatFilterInput } from '~/server/schema'

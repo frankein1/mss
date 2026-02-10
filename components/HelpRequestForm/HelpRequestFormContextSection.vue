@@ -211,7 +211,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportSubject } from '~/prisma/generated/client'
+  import type { SocialSupportSubject } from '~/prisma/generated/browser'
   import {
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels

@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Gender } from '~/prisma/generated/client'
+  import { Gender } from '~/prisma/generated/browser'
   import type { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 

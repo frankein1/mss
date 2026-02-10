@@ -1,7 +1,7 @@
 import type {
   Beneficiary,
   BeneficiaryRelative
-} from '~/prisma/generated/client'
+} from '~/prisma/generated/browser'
 
 export type BeneficiaryRelativeWithLinkedBeneficiary = BeneficiaryRelative & {
   linkedBeneficiary: Beneficiary | null

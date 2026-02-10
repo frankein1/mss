@@ -85,7 +85,7 @@
   import {
     FileInstructionType,
     SocialSupportType
-  } from '~/prisma/generated/client'
+  } from '~/prisma/generated/browser'
 
   const route = useRoute()
 

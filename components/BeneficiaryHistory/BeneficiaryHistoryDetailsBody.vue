@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportType } from '~/prisma/generated/client'
+  import type { SocialSupportType } from '~/prisma/generated/browser'
   import type { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
