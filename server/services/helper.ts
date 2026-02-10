@@ -36,6 +36,7 @@ export function filterSocialSupport({
   conditions: {
     details: boolean
     minister: boolean
+    ministerId: boolean
     privateSynthesis: boolean
   }
 }) {
@@ -80,6 +81,7 @@ export function filterSocialSupport({
     documents: show(socialSupport.documents, conditions.details),
 
     ministre: show(socialSupport.ministre, conditions.minister),
+    ministerId: show(socialSupport.ministerId, conditions.minister),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
   }
 }

@@ -32,6 +32,7 @@ const socialSupportSubjects = [
 ]
 
 const main = async () => {
+  console.log('⏱️ Loading fixtures...')
   // Ajouter des socialsupportsubject à la structure Ministere
   await prismaClient.socialSupportSubject.createMany({
     data: socialSupportSubjects
@@ -74,6 +75,8 @@ const main = async () => {
       data: { socialSupports: { connect: followupSupports } }
     })
   ])
+
+  console.log(`✅ Done! ${followupSupports.length} social supports created`)
 }
 
 main()

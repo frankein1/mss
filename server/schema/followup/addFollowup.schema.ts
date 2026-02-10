@@ -35,6 +35,7 @@ export const addFollowupSchemaBase = z.object({
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
   synthesisRichText: openRichText().nullish(),

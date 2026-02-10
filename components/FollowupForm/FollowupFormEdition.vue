@@ -51,7 +51,7 @@
     () => followup.value.documents?.map(d => d.key) || []
   )
 
-  const { handleSubmit, values, meta } = useForm<EditFollowupInput>({
+  const { handleSubmit, values, meta, errors } = useForm<EditFollowupInput>({
     validationSchema: toTypedSchema(editFollowupSchema),
     initialValues: {
       id: followup.value.id,
@@ -82,7 +82,8 @@
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
       isMinistry: application.value.module.ministere,
-      duration: followup.value.duration
+      duration: followup.value.duration,
+      ministerId: followup.value.ministerId
     }
   })
 
@@ -99,4 +100,12 @@
       emit('saveFollowup', values)
     }
   )
+
+  watch(caughtErrors, () => {
+    console.log(caughtErrors.value)
+  })
+
+  watch(errors, () => {
+    console.log(errors.value)
+  })
 </script>
