@@ -21,7 +21,7 @@
     "lintfix": "prettier --write --list-different {.,**/*.prisma} && pnpm run lint:js -- --fix && pnpm run lint:style -- --fix",
     "test": "TZ=UTC vitest",
     "test:e2e": "playwright test",
-    "postinstall": "DISABLE_ERD=true nuxt prepare && prisma generate",
+    "postinstall": "nuxt prepare && DISABLE_ERD=true prisma generate",
     "prisma": "prisma",
     "release": "commit-and-tag-version",
     "prepare": "husky",
