@@ -9,16 +9,16 @@ export const getInactiveBeneficiaries = async () => {
   return await prismaClient.beneficiary
     .findMany({
       where: {
-        lastActivity: {
-          lt: dayjs().subtract(23, 'month').toDate()
-        },
         OR: [
           {
-            archiveDueDate: null
+            archiveDueDate: null,
+            lastActivity: {
+              lt: dayjs().subtract(23, 'months').toDate()
+            }
           },
           {
             archiveDueDate: {
-              lte: dayjs().toDate()
+              gte: dayjs().subtract(1, 'month').toDate()
             }
           }
         ]
@@ -26,28 +26,37 @@ export const getInactiveBeneficiaries = async () => {
       select: select()
     })
     .then(beneficiaries =>
-      beneficiaries.map(b => {
-        return {
-          ...b,
-          structure: {
-            name: b.structure.name
-          },
-          archiveDate: getArchiveDate(b.lastActivity, b.archiveDueDate),
-          referentIds: [
-            ...new Set([
-              // family file referents except reception agents
+      beneficiaries
+        .filter(
+          b =>
+            b.archiveDueDate == null ||
+            (b.archiveDueDate != null &&
+              dayjs(b.lastActivity).isBefore(
+                dayjs(b.archiveDueDate).subtract(1, 'year')
+              ))
+        )
+        .map(b => {
+          return {
+            ...b,
+            structure: {
+              name: b.structure.name
+            },
+            archiveDate: getArchiveDate(b.lastActivity, b.archiveDueDate),
+            referentIds: [
+              ...new Set([
+                // family file referents except reception agents
 
-              ...b.familyFile.referents
-                .filter(referent =>
-                  getArchivePermission(referent, b.lastActivity)
-                )
-                .map(r => r.id),
-              // structure managers
-              ...b.structure.users.map(u => u.id)
-            ])
-          ]
-        }
-      })
+                ...b.familyFile.referents
+                  .filter(referent =>
+                    getArchivePermission(referent, b.lastActivity)
+                  )
+                  .map(r => r.id),
+                // structure managers
+                ...b.structure.users.map(u => u.id)
+              ])
+            ]
+          }
+        })
     )
 }
 

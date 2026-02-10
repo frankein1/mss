@@ -108,7 +108,7 @@ export function getDescriptionHint(
       dayjs(notification.archiveDate)
     )
   ) {
-    return "Ce dossier a été conservé un an supplémentaire après une période d'inactivité"
+    return "Ce dossier a été conservé un an supplémentaire après une période d'inactivité."
   }
 
   switch (notification.type) {

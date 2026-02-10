@@ -335,7 +335,7 @@
     beneficiaryNames: string[]
   ) => {
     if (beneficiariesToArchived && beneficiariesToArchived.length > 1) {
-      return `Plusieurs dossiers sont inactifs depuis 2 ans : une action est requise.`
+      return `Plusieurs dossiers sont inactifs : une action est requise.`
     }
     if (
       beneficiariesToArchived &&
