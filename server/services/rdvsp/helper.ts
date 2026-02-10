@@ -14,7 +14,7 @@ import dayjs from 'dayjs'
 export async function getAgentAuthInfo(userId: string) {
   const externalAccount = await prismaClient.externalAccount.findUnique({
     where: {
-      userId_type_provider: { userId, type: 'rdvsp', provider: 'Email' }
+      userId_provider: { userId, provider: 'rdvsp' }
     },
     select: {
       id: true,

@@ -45,7 +45,6 @@ model ExternalAccount {
   updated DateTime @updatedAt
 
   userId            String    @map("user_id") @db.Uuid
-  type              String
   provider          String
   providerAccountId String    @map("provider_account_id")
   refreshToken      String?   @map("refresh_token") @db.Text
@@ -59,7 +58,7 @@ model ExternalAccount {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@unique([userId, type, provider])
+  @@unique([userId, provider])
   @@map("external_account")
 }
 

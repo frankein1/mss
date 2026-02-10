@@ -48,7 +48,7 @@ export default async function getAppointment({
       },
       where: {
         externalAccounts: {
-          some: { type: 'rdvsp', providerAccountId: String(created_by_id) }
+          some: { provider: 'rdvsp', providerAccountId: String(created_by_id) }
         }
       }
     })

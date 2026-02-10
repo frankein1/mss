@@ -109,13 +109,10 @@ async function createOrUpdateToken(
     )
   }
 
-  const getProvider = (agent: any) =>
-    agent.inclusion_connect_open_id_sub ? 'ProConnect' : 'Email'
-
   const account = await prismaClient.externalAccount.findUnique({
     where: {
       provider_providerAccountId: {
-        provider: getProvider(agent),
+        provider: 'rdvsp',
         providerAccountId: agent.id.toString()
       }
     },
@@ -141,8 +138,7 @@ async function createOrUpdateToken(
       prismaClient.externalAccount.create({
         data: {
           user: { connect: { id: userId } },
-          type: 'rdvsp',
-          provider: getProvider(agent),
+          provider: 'rdvsp',
           providerAccountId: agent.id.toString(),
           accessToken: token.access_token,
           refreshToken: token.refresh_token,
