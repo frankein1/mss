@@ -2,6 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import type { Prisma } from './generated/client'
 import { PrismaClient } from './generated/client'
 import picocolors from 'picocolors'
+import { formatPrismaQueryLog, shouldLog } from '~/server/utils/logging'
 
 const shouldLogPrisma = shouldLog('prisma')
 
