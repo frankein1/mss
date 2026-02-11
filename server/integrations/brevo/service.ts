@@ -8,9 +8,12 @@ import {
   getCompanyByStructureId,
   getContact,
   linkContactToCompany,
+  sendEvent,
   updateCompany
 } from './apiClient'
 import { structureTypeKeys, userRoleKeys } from '~/client/options'
+import { prismaClient } from '~/server/prisma'
+import { UserRole, UserStatus } from '@prisma/client'
 
 export async function createOrUpdateUser(userId: string) {
   if (process.env.NODE_ENV === 'test') {
@@ -134,6 +137,35 @@ export async function createOrUpdateStructure(structureId: string) {
     const { id } = await createCompany(structure)
     await updateCompany(id, company)
   }
+}
+
+export async function sendStructureEvent({
+  name,
+  id
+}: {
+  name: string
+  id: string
+}) {
+  const manager = await prismaClient.user.findFirstOrThrow({
+    where: {
+      role: UserRole.StructureManager,
+      status: UserStatus.Active,
+      structureId: id
+    }
+  })
+  const company = await getCompanyByStructureId(id)
+  await sendEvent({
+    event_name: name,
+    identifiers: {
+      ext_id: manager.id
+    },
+    object: {
+      type: 'company',
+      identifiers: {
+        id: company.id
+      }
+    }
+  })
 }
 
 export async function createContactAttributes() {

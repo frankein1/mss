@@ -185,6 +185,39 @@ export async function getCompanies() {
   })
 }
 
+interface SendEventOptions {
+  event_name: string
+  identifiers: {
+    contact_id?: string
+    email_id?: string
+    ext_id?: string
+  }
+  contact_properties?: Record<string, string | number>
+  event_date?: string
+  event_properties?: Record<string, string | number>
+  object?: {
+    identifiers?: {
+      id?: string
+      ext_id?: string
+    }
+    type?: string
+  }
+}
+
+export async function sendEvent(options: SendEventOptions) {
+  if (!BREVO_API_KEY) {
+    return
+  }
+  await fetch(`${API_HOST}/events`, {
+    method: 'POST',
+    headers: {
+      'api-key': BREVO_API_KEY,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(options)
+  })
+}
+
 export async function getCompanyByStructureId(structure_id: string) {
   if (!BREVO_API_KEY) {
     return
