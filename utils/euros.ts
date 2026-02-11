@@ -1,8 +1,6 @@
-import type { Prisma } from '~/prisma/generated/browser'
+import type { Decimal } from './prisma'
 
-export function euros(
-  price: Prisma.DecimalJsLike | number | string | undefined | null
-) {
+export function euros(price: Decimal | number | string | undefined | null) {
   if (price !== 0 && !price) {
     return ''
   }
