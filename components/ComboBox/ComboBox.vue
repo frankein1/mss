@@ -10,6 +10,11 @@
       :class="{ 'fr-sr-only': !labelVisible }"
     >
       {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
     </label>
     <div>
       <input
@@ -40,7 +45,6 @@
       >
         <div
           v-if="$slots.header"
-          ref="header"
           class="listbox-header"
           tabindex="-1"
           @focus.prevent
@@ -90,16 +94,18 @@
 
   const {
     placeholder = '',
+    required = false,
     labelVisible = true,
-    formatDisplayValue = String,
     options,
+    formatDisplayValue = String,
     onFocusHeader = () => {}
   } = defineProps<{
     label: string
+    required?: boolean
     placeholder?: string
     labelVisible?: boolean
-    formatDisplayValue?: (option: Option) => string
     options: Option[]
+    formatDisplayValue?: (option: Option) => string
     onFocusHeader?: () => void
   }>()
 
@@ -120,7 +126,6 @@
 
   const loading = ref<boolean>(false)
   const error = ref<string>('')
-  const headerRef = useTemplateRef('header')
 
   const LABEL_ID = computed(() => `combobox-label-${useId()}`)
   const INPUT_ID = computed(() => `combobox-input-${useId()}`)

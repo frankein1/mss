@@ -79,6 +79,7 @@
             <ComboBox
               ref="comboboxRef"
               v-model="selectedMinister"
+              :required="true"
               :label="followupFieldLabels.ministre"
               :options="ministers"
               :format-display-value="displayName"
@@ -396,7 +397,6 @@
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
   import type { MinisterOutput } from './types'
-  import { onKeyDown } from '@vueuse/core'
 
   const props = withDefaults(
     defineProps<{
@@ -676,6 +676,12 @@
         justify-content: center;
         width: 100%;
       }
+    }
+  }
+
+  :deep(.combobox-wrapper) {
+    input.fr-select {
+      box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
     }
   }
 </style>
