@@ -13,7 +13,13 @@ if (shouldLogPrisma) {
 }
 
 export function buildPrismaClient() {
-  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+  const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+    max: process.env.PG_CONNECTION_POOL_SIZE
+      ? parseInt(process.env.PG_CONNECTION_POOL_SIZE)
+      : undefined,
+    connectionTimeoutMillis: 10 * 1000
+  })
   const prisma = new PrismaClient({ adapter, log: prismaLogLevels })
 
   if (shouldLogPrisma) {
