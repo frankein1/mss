@@ -253,6 +253,18 @@
     }
   })
 
+  watch(
+    () => model.value,
+    newVal => {
+      if (newVal) {
+        displayedValue.value = formatDisplayValue(newVal)
+      } else {
+        displayedValue.value = ''
+      }
+    },
+    { immediate: true }
+  )
+
   defineExpose({ reset, selectActiveRow })
 </script>
 

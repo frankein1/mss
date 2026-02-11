@@ -521,6 +521,10 @@
     null
   )
 
+  const { setValue: setMinisterId, value: initialMinisterId } = useField<
+    string | undefined
+  >('ministerId')
+
   const ministers = ref<(MinisterOutput & { disabled: boolean })[]>([])
   const former = ref(false)
   const inputQuery = ref<string | null>()
@@ -535,6 +539,19 @@
           ...minister,
           disabled: false
         })) || []
+    const initialMinister = data.value?.find(
+      m => m.id === initialMinisterId.value
+    )
+    selectedMinister.value = {
+      firstName: initialMinister?.firstName || '',
+      lastName: initialMinister?.lastName || '',
+      id: initialMinister?.id || '',
+      disabled: false,
+      function: initialMinister?.function || '',
+      government: initialMinister?.government || '',
+      ministry: initialMinister?.ministry || '',
+      former: initialMinister?.former || false
+    }
   }
 
   const initialMinisterList = computed(() => {
@@ -568,11 +585,6 @@
     )
   }
 
-  const {
-    setValue: setMinisterId,
-    value: initialMinisterId,
-    errors: ministerErrors
-  } = useField<string | undefined>('ministerId')
   const onSelect = (minister: MinisterOutput) => {
     ministers.value = []
     setMinisterId(minister.id, true)
