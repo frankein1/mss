@@ -1,9 +1,6 @@
 import { adminProcedure, router } from '~/server/trpc'
 
 import { adminRoutes } from '~/server/route'
-import { update } from '~/server/services/helpRequest/update.service'
-import { updateMinister } from '~/server/route/admin/updateMinister.mutation'
-import { ad } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js'
 
 export const adminRouter = router({
   createStructure: adminProcedure
