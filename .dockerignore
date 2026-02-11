@@ -1,3 +1,15 @@
 .nuxt
 .output
 node_modules
+.git
+.gitignore
+.gitlab-ci.yml
+.github
+.env*
+e2e/
+test/
+*.md
+.claude/
+.scannerwork/
+*.spec.ts
+*.test.ts

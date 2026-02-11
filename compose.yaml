@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16.11-alpine
+    container_name: mss-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-mss}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_DATABASE:-mss}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-mss}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  app:
+    container_name: mss-app
+    build:
+      context: .
+      args:
+        - ENVIRONMENT=${ENVIRONMENT}
+        - DATABASE_URL=${DATABASE_URL}
+        - APP_URL=${APP_URL:-http://localhost:3000}
+        - LANDING_PAGE_URL=${LANDING_PAGE_URL}
+        - DISCONNECT_THRESHOLD=${DISCONNECT_THRESHOLD}
+        - DISCONNECT_ALERT_THRESHOLD=${DISCONNECT_ALERT_THRESHOLD}
+        - TOKEN_VALIDATION_IN_MINUTES=${TOKEN_VALIDATION_IN_MINUTES}
+        - AUTH_JWT_KEY=${AUTH_JWT_KEY}
+        - AUTH_SESSION_SECRET=${AUTH_SESSION_SECRET}
+        - AUTH_PROCONNECT_ISSUER_URL=${AUTH_PROCONNECT_ISSUER_URL}
+        - AUTH_PROCONNECT_CLIENT_ID=${AUTH_PROCONNECT_CLIENT_ID}
+        - AUTH_PROCONNECT_CLIENT_SECRET=${AUTH_PROCONNECT_CLIENT_SECRET}
+        - AUTH_PROCONNECT_SIGNING_ALGORITHM=${AUTH_PROCONNECT_SIGNING_ALGORITHM}
+        - EMAIL_FROM=${EMAIL_FROM}
+        - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST}
+        - EMAIL_SMTP_USER=${EMAIL_SMTP_USER}
+        - EMAIL_SMTP_PASSWORD=${EMAIL_SMTP_PASSWORD}
+        - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
+        - EMAIL_SMTP_SECURE=${EMAIL_SMTP_SECURE}
+        - MATOMO_HOST=${MATOMO_HOST}
+        - MATOMO_SITE_ID=${MATOMO_SITE_ID}
+        - SENTRY_DSN=${SENTRY_DSN}
+        - SENTRY_DEBUG=${SENTRY_DEBUG}
+        - SENTRY_TRACE_SAMPLE_RATE=${SENTRY_TRACE_SAMPLE_RATE}
+        - METABASE_PUBLIC_URL=${METABASE_PUBLIC_URL}
+        - BREVO_API_KEY=${BREVO_API_KEY}
+        - RDVSP_ISSUER=${RDVSP_ISSUER}
+        - RDVSP_CLIENT_ID=${RDVSP_CLIENT_ID}
+        - RDVSP_CLIENT_SECRET=${RDVSP_CLIENT_SECRET}
+    ports:
+      - '3000:3000'
+    mem_limit: 512m
+    env_file:
+      - .env.docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
