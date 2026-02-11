@@ -74,6 +74,62 @@
               required
             />
           </div>
+
+          <div class="fr-col-12">
+            <ComboBox
+              ref="comboboxRef"
+              v-model="selectedMinister"
+              :required="true"
+              :label="followupFieldLabels.ministre"
+              :options="ministers"
+              :format-display-value="displayName"
+              :on-focus-header="onFocusHeader"
+              @input="onSearchMinister"
+              @select="onSelect"
+            >
+              <!-- HEADER -->
+              <template #header>
+                <ul
+                  ref="header"
+                  class="fr-tabs__list"
+                  :class="{
+                    focused: activeRow === -1
+                  }"
+                  @keydown="onHeaderKeydown"
+                >
+                  <li role="presentation">
+                    <button
+                      id="header-button-01"
+                      type="button"
+                      tabindex="-1"
+                      class="fr-tabs__tab"
+                      :aria-selected="!former"
+                      @click="former = false"
+                    >
+                      Ministres actuels
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      id="header-button-02"
+                      type="button"
+                      tabindex="-1"
+                      class="fr-tabs__tab"
+                      :class="{ 'fr-tabs__tab--secondary': !former }"
+                      :aria-selected="former"
+                      @click="former = true"
+                    >
+                      Ministres anciens
+                    </button>
+                  </li>
+                </ul>
+              </template>
+
+              <template #default="{ option }">
+                {{ displayName(option) }}
+              </template>
+            </ComboBox>
+          </div>
         </template>
 
         <!-- ROW -->
@@ -340,6 +396,7 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
+  import type { MinisterOutput } from './types'
 
   const props = withDefaults(
     defineProps<{
@@ -472,3 +529,33 @@
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 </script>
+
+<style scoped lang="scss">
+  .fr-tabs__list {
+    list-style-type: none;
+    gap: 0.5rem;
+    margin: 0.25rem 0;
+    padding: 0;
+    border-bottom: 1px solid var(--border-default-grey);
+
+    &.focused {
+      outline: dashed 1px rgb(0 0 0 / 100%);
+    }
+
+    li {
+      flex: 1 1 0;
+      padding: 0;
+
+      button {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  }
+
+  :deep(.combobox-wrapper) {
+    input.fr-select {
+      box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
+    }
+  }
+</style>

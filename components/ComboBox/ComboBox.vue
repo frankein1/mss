@@ -10,6 +10,11 @@
       :class="{ 'fr-sr-only': !labelVisible }"
     >
       {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
     </label>
     <div>
       <input
@@ -38,6 +43,21 @@
         role="listbox"
         :aria-labelledby="LABEL_ID"
       >
+        <div
+          v-if="$slots.header"
+          class="listbox-header"
+          tabindex="-1"
+          @focus.prevent
+          @focusin.prevent
+          @mousedown.prevent
+        >
+          <slot
+            name="header"
+            :input="displayedValue"
+            :options="options"
+            @focus="onFocus"
+          ></slot>
+        </div>
         <AtomLoader
           v-if="loading"
           class="fr-mx-auto fr-my-5v"
@@ -74,15 +94,19 @@
 
   const {
     placeholder = '',
+    required = false,
     labelVisible = true,
+    options,
     formatDisplayValue = String,
-    options
+    onFocusHeader = () => {}
   } = defineProps<{
     label: string
+    required?: boolean
     placeholder?: string
     labelVisible?: boolean
-    formatDisplayValue?: (option: Option) => string
     options: Option[]
+    formatDisplayValue?: (option: Option) => string
+    onFocusHeader?: () => void
   }>()
 
   defineSlots<{ default(props: { option: Option; input: string }): unknown }>()
