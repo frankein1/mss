@@ -137,7 +137,6 @@
 
   const onSelect = (minister: MinisterOutput) => {
     ministers.value = []
-    console.log('ministre modifié', initialMinisterId, minister.id)
     emit('onSetMinisterId', minister.id)
   }
 

@@ -27,7 +27,6 @@ export async function create({ input, ctx }: CreateParams) {
     beneficiaryId,
     numeroPegase,
     ministerId,
-    isMinistry,
     subjectId,
     documents,
     externalStructure,
@@ -105,8 +104,7 @@ export async function create({ input, ctx }: CreateParams) {
               synthesisRichText,
               privateSynthesis,
               privateSynthesisRichText,
-              minister:
-                ministerId && isMinistry ? connect(ministerId) : undefined,
+              ministerId,
               numeroPegase,
               subjects: connect(subjectId),
               dueDate,

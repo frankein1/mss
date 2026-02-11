@@ -470,7 +470,6 @@
   >('ministerId')
 
   const onSetMinisterId = (id: string) => {
-    console.log('nouveau ministre reçus', id)
     setMinisterId(id, true)
   }
 </script>

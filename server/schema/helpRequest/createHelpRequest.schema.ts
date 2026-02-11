@@ -1,7 +1,6 @@
 import {
   FileInstructionRefusalReason,
   SocialSupportStatus,
-  Minister,
   PaymentMethod
 } from '@prisma/client'
 import { z } from 'zod'
