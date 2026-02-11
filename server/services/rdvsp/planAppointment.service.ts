@@ -1,11 +1,12 @@
 import { BeneficiaryRepo, StructureRepo } from '~/server/database'
 import type { PlanAppointmentInput } from '~/server/schema'
-import * as client from '~/server/lib/rdvsp-oauth.client'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { invalidError, unauthorizedError } from '~/server/trpc'
-import { getAgentAuthInfo, throwIfStructureIsNotSetup } from './helper'
+import { invalidError } from '~/server/trpc'
+import { getAgentClient, throwIfStructureIsNotSetup } from './helper'
 import { routes } from '~/utils/routes'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import { formatAddress } from '~/utils'
+import { formatDate } from '~/utils/formatDate'
 
 /** This function needs the rdvsp integration setup and active
  * otherwise throws a forbidden error.
@@ -51,8 +52,6 @@ export async function planAppointment({
 
   throwIfStructureIsNotSetup(structure)
 
-  const { accessToken } = await getAgentAuthInfo(ctx.user.id)
-
   const beneficiaryHistoryUrl = `${appUrl}${routes.file.AppFile.path(
     ben.familyFileId,
     {
@@ -62,47 +61,84 @@ export async function planAppointment({
     }
   )}`
 
-  const rdvPlan = await createRdvspPlan(
-    accessToken,
-    ben,
-    beneficiaryHistoryUrl,
-    beneficiaryHistoryUrl
-  )
-  if (!ben.externalRdvspId) {
-    await BeneficiaryRepo.update(ctx.user, {
-      where: { id: ben.id },
-      data: { externalRdvspId: rdvPlan.user_id.toString() }
-    })
-  }
+  try {
+    const rdvPlan = await createRdvspPlan(
+      ctx.user.id,
+      ben,
+      beneficiaryHistoryUrl,
+      beneficiaryHistoryUrl
+    )
+    if (!ben.externalRdvspId) {
+      await BeneficiaryRepo.update(ctx.user, {
+        where: { id: ben.id },
+        data: { externalRdvspId: rdvPlan.user_id.toString() }
+      })
+    }
 
-  return rdvPlan.url
+    return rdvPlan.url
+  } catch (error) {
+    console.error('handleAppointmentPlanningFailure', error)
+    throw invalidError('could not create rdv plan')
+  }
 }
 
 async function createRdvspPlan(
-  accessToken: string,
+  userId: string,
   beneficiary: any,
   returnUrl: string,
   beneficiaryHistoryUrl: string
 ) {
-  const cfg = client.getConfig()
+  const address = formatAddress(beneficiary)
 
-  const rdvPlan = await client.createRdvPlan(
-    cfg,
-    accessToken,
-    beneficiary,
-    returnUrl,
-    beneficiaryHistoryUrl
-  )
+  const agentClient = getAgentClient({ user_id: userId })
 
-  if ('status' in rdvPlan) {
-    if (rdvPlan.status !== 401) {
-      throw invalidError('could not create rdv plan')
+  if (beneficiary.externalRdvspId) {
+    try {
+      const userUpdateBody = {
+        id: beneficiary.externalRdvspId,
+        first_name: beneficiary.firstName || 'Non renseigné',
+        last_name:
+          beneficiary.usualName || beneficiary.birthName || 'Non renseigné',
+        ...(beneficiary.email && { email: beneficiary.email }),
+        ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
+        ...(address && { address }),
+        ...(beneficiary.birthDate && {
+          birth_date: formatDate(beneficiary.birthDate, 'YYYY-MM-DD')
+        })
+      }
+      await agentClient(`/users/${beneficiary.externalRdvspId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(userUpdateBody)
+      })
+    } catch (error) {
+      console.error('rdvsp user update error', error)
     }
-    throw unauthorizedError('not authenticated')
   }
-  if ('success' in rdvPlan) {
-    throw invalidError('could not create rdv plan')
+  const body = {
+    user: {
+      ...(beneficiary.externalRdvspId && { id: beneficiary.externalRdvspId }),
+      first_name: beneficiary.firstName || 'Non renseigné',
+      last_name:
+        beneficiary.usualName || beneficiary.birthName || 'Non renseigné',
+      ...(beneficiary.email && { email: beneficiary.email }),
+      ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
+      ...(address && { address }),
+      ...(beneficiary.birthDate && {
+        birth_date: formatDate(beneficiary.birthDate, 'YYYY-MM-DD')
+      })
+    },
+    return_url: returnUrl,
+    dossier_url: beneficiaryHistoryUrl
   }
 
-  return rdvPlan
+  const { rdv_plan: rdvPlan } = await agentClient('/rdv_plans', {
+    method: 'POST',
+    body: JSON.stringify(body)
+  })
+
+  return {
+    id: rdvPlan.id as number,
+    url: rdvPlan.url as string,
+    user_id: rdvPlan.user_id as number
+  }
 }

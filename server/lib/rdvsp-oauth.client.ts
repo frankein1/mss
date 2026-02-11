@@ -1,7 +1,4 @@
-import type { Beneficiary } from '@prisma/client'
-import { formatAddress } from '~/utils'
 import { apiRoutes } from '~/utils/routes'
-import { formatDate } from '~/utils/formatDate'
 import { ofetch, FetchError } from 'ofetch'
 import { invalidError, unauthorizedError } from '~/server/trpc'
 import type { RdvspStatus } from '~/types/rdvsp'
@@ -25,16 +22,6 @@ interface RdvspAuthToken {
 interface RdvspAuthError {
   error: string
   error_description: string
-}
-
-interface RdvspMutationError {
-  success: boolean
-  errors: string[]
-}
-
-interface GenericFetchError {
-  status: number
-  statusText: string
 }
 
 interface RdvspAgentInfo {
@@ -198,102 +185,4 @@ export async function getOrganisation(cfg: RdvspConfig, accessToken: string) {
     accessToken,
     (t: any) => t.organisations[0]
   )
-}
-
-export async function createRdvPlan(
-  cfg: RdvspConfig,
-  accessToken: string,
-  beneficiary: Pick<
-    Beneficiary,
-    | 'id'
-    | 'externalRdvspId'
-    | 'firstName'
-    | 'usualName'
-    | 'birthName'
-    | 'birthDate'
-    | 'email'
-    | 'phone1'
-    | 'street'
-    | 'zipcode'
-    | 'city'
-    | 'region'
-  >,
-  returnUrl: string,
-  dossierUrl: string
-): Promise<
-  | { id: number; url: string; user_id: number }
-  | RdvspMutationError
-  | GenericFetchError
-> {
-  const address = formatAddress(beneficiary)
-
-  if (beneficiary.externalRdvspId) {
-    try {
-      const userUpdateBody = {
-        id: beneficiary.externalRdvspId,
-        first_name: beneficiary.firstName || 'Non renseigné',
-        last_name:
-          beneficiary.usualName || beneficiary.birthName || 'Non renseigné',
-        ...(beneficiary.email && { email: beneficiary.email }),
-        ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
-        ...(address && { address }),
-        ...(beneficiary.birthDate && {
-          birth_date: formatDate(beneficiary.birthDate, 'YYYY-MM-DD')
-        })
-      }
-      await fetch(`${cfg.issuer}/api/v1/users/${beneficiary.externalRdvspId}`, {
-        method: 'PATCH',
-        body: JSON.stringify(userUpdateBody),
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-    } catch (error) {
-      console.error('rdvsp user update error', error)
-    }
-  }
-  const body = {
-    user: {
-      ...(beneficiary.externalRdvspId && { id: beneficiary.externalRdvspId }),
-      first_name: beneficiary.firstName || 'Non renseigné',
-      last_name:
-        beneficiary.usualName || beneficiary.birthName || 'Non renseigné',
-      ...(beneficiary.email && { email: beneficiary.email }),
-      ...(beneficiary.phone1 && { phone_number: beneficiary.phone1 }),
-      ...(address && { address }),
-      ...(beneficiary.birthDate && {
-        birth_date: formatDate(beneficiary.birthDate, 'YYYY-MM-DD')
-      })
-    },
-    return_url: returnUrl,
-    dossier_url: dossierUrl
-  }
-
-  const response = await fetch(`${cfg.issuer}/api/v1/rdv_plans`, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    }
-  })
-
-  let res: any
-  try {
-    res = await response.json()
-  } catch {
-    console.log('rdvsp: other error', response.statusText)
-    return { status: response.status, statusText: response.statusText }
-  }
-
-  if (response.ok) {
-    return {
-      id: res.rdv_plan.id as number,
-      url: res.rdv_plan.url as string,
-      user_id: res.rdv_plan.user_id as number
-    }
-  }
-  console.log('rdvsp: draft rdv creation failed', res)
-  return res as RdvspMutationError
 }
