@@ -29,7 +29,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
     thirdPersonName,
     prescribingOrganizationId,
     prescribingOrganizationContactId,
-    ministre,
+    ministerId,
+    isMinistry,
     date,
     synthesis,
     synthesisRichText,
@@ -83,7 +84,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
             }))
         }
       },
-      ministre,
+      minister: isMinistry && ministerId ? connect(ministerId) : undefined,
       numeroPegase,
       synthesis,
       synthesisRichText,

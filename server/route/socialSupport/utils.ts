@@ -36,7 +36,7 @@ export function formatSocialSupportDetail(
 
   const appPermissions = getAppContextPermissions(ctx)
 
-  const { followup, fileInstruction, appointment } = socialSupport
+  const { followup, fileInstruction, appointment, minister } = socialSupport
 
   const conditions = {
     minister: appPermissions.module.ministere,
@@ -110,6 +110,7 @@ export function formatSocialSupportDetail(
   return {
     data: {
       ...otherData,
+      minister: minister,
       comments: commentItems,
       documents: documentItems,
       hasUnreadNotifications: !!_count.notifications,

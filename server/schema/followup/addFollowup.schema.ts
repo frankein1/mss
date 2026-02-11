@@ -34,7 +34,6 @@ export const addFollowupSchemaBase = z.object({
     .min(1, requiredErrorMessage),
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
   ministerId: z.string().uuid().nullish(),
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
@@ -62,10 +61,10 @@ export const addFollowupSchemaBase = z.object({
 })
 
 export const addFollowupSchema = addFollowupSchemaBase.refine(
-  val => !val.isMinistry || val.ministre,
+  val => !val.isMinistry || val.ministerId,
   {
     message: requiredErrorMessage,
-    path: ['ministre']
+    path: ['ministerId']
   }
 )
 

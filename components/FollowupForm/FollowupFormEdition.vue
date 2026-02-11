@@ -59,7 +59,6 @@
       beneficiaryId: followup.value.beneficiaryId,
       familyFileId: followup.value.familyFileId,
       medium: followup.value.medium,
-      ministre: followup.value.ministre,
       numeroPegase: followup.value.numeroPegase,
       date: followup.value.date,
       synthesis: followup.value.synthesis,
@@ -100,12 +99,4 @@
       emit('saveFollowup', values)
     }
   )
-
-  watch(caughtErrors, () => {
-    console.log(caughtErrors.value)
-  })
-
-  watch(errors, () => {
-    console.log(errors.value)
-  })
 </script>

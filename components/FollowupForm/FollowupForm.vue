@@ -66,15 +66,6 @@
             />
           </div>
 
-          <div class="fr-col-6">
-            <VeeSelect
-              name="ministre"
-              :label="followupFieldLabels.ministre"
-              :options="withEmptyValue(ministerKeys.options)"
-              required
-            />
-          </div>
-
           <div class="fr-col-12">
             <ComboBox
               ref="comboboxRef"
@@ -381,7 +372,6 @@
   import type { FormErrors } from 'vee-validate'
   import type { JSONContent } from '@tiptap/vue-3'
   import {
-    ministerKeys,
     followupStatusKeys,
     followupMediumKeys,
     followupDurationKeys
