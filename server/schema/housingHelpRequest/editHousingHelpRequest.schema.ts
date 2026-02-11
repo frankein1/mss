@@ -7,9 +7,9 @@ export const editHousingHelpRequestSchema = createHousingHelpRequestSchemaBase
     id: z.string().uuid(),
     socialSupportId: z.string().uuid()
   })
-  .refine(val => !val.isMinistry || val.ministre, {
+  .refine(val => !val.isMinistry || val.ministerId, {
     message: requiredErrorMessage,
-    path: ['ministre']
+    path: ['ministerId']
   })
 
 export type EditHousingHelpRequestInput = z.infer<

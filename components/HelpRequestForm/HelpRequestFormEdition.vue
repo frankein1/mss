@@ -60,7 +60,6 @@
       beneficiaryId: socialSupport.value.beneficiary.id,
       familyFileId: socialSupport.value.familyFileId,
       numeroPegase: socialSupport.value.numeroPegase,
-      ministre: socialSupport.value.ministre,
       subjectId: helpRequest.value.subjectId,
       status: socialSupport.value.status,
       examinationDate: fileInstruction.value.examinationDate,
@@ -90,7 +89,8 @@
         : 'false',
       askedAmount: prismaDecimalToNumber(helpRequest.value.askedAmount),
       allocatedAmount: prismaDecimalToNumber(helpRequest.value.allocatedAmount),
-      fullFile: fileInstruction.value.fullFile || false
+      fullFile: fileInstruction.value.fullFile || false,
+      ministerId: socialSupport.value.ministerId
     }
   })
 

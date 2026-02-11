@@ -26,7 +26,7 @@
         <ul
           v-if="
             housingHelpRequest.fileInstruction.socialSupport.numeroPegase ||
-            ministre ||
+            housingHelpRequest.fileInstruction.socialSupport.minister ||
             housingHelpRequest.isFirst ||
             housingHelpRequest.firstOpeningDate ||
             askedHousing ||
@@ -48,7 +48,7 @@
           />
           <PrintDetailItem
             :title="helpRequestFieldLabels.ministre"
-            :content="ministre"
+            :content="ministerName"
           />
           <PrintDetailItem
             title="1ère demande ou renouvellement"
@@ -255,8 +255,7 @@
     lowIncomeHousingKeys,
     housingTypeKeys,
     roomCountKeys,
-    baseRefusalReasonKeys,
-    ministerKeys
+    baseRefusalReasonKeys
   } from '~/client/options'
   import {
     housingHelpRequestFieldLabels,
@@ -327,12 +326,11 @@
       props.housingHelpRequest.fileInstruction.refusalReason
     )
   })
-  const ministre = computed(() => {
-    if (!props.housingHelpRequest.fileInstruction.socialSupport.ministre) {
+
+  const ministerName = computed(() => {
+    if (!props.housingHelpRequest.fileInstruction.socialSupport.minister) {
       return null
     }
-    return ministerKeys.value(
-      props.housingHelpRequest.fileInstruction.socialSupport.ministre
-    )
+    return `${props.housingHelpRequest.fileInstruction.socialSupport.minister.firstName} ${props.housingHelpRequest.fileInstruction.socialSupport.minister.lastName} (${props.housingHelpRequest.fileInstruction.socialSupport.minister.function})`
   })
 </script>

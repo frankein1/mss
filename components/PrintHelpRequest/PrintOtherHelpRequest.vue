@@ -23,7 +23,7 @@
         <ul
           v-if="
             helpRequest.fileInstruction.socialSupport.numeroPegase ||
-            ministre ||
+            helpRequest.fileInstruction.socialSupport.minister ||
             helpRequest.subject?.name ||
             helpRequest.prescribingOrganization?.name ||
             helpRequest.prescribingOrganizationContact?.name ||
@@ -41,7 +41,7 @@
           />
           <PrintDetailItem
             :title="helpRequestFieldLabels.ministre"
-            :content="ministre"
+            :content="ministerName"
           />
           <PrintDetailItem
             :title="helpRequestFieldLabels.subjectId"
@@ -161,7 +161,7 @@
   import type { HelpRequestOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
-  import { baseRefusalReasonKeys, ministerKeys } from '~/client/options'
+  import { baseRefusalReasonKeys } from '~/client/options'
 
   const props = defineProps<{
     helpRequest: HelpRequestOutput
@@ -181,12 +181,11 @@
       props.helpRequest.fileInstruction.refusalReason
     )
   })
-  const ministre = computed(() => {
-    if (!props.helpRequest.fileInstruction.socialSupport.ministre) {
+
+  const ministerName = computed(() => {
+    if (!props.helpRequest.fileInstruction.socialSupport.minister) {
       return null
     }
-    return ministerKeys.value(
-      props.helpRequest.fileInstruction.socialSupport.ministre
-    )
+    return `${props.helpRequest.fileInstruction.socialSupport.minister.firstName} ${props.helpRequest.fileInstruction.socialSupport.minister.lastName} (${props.helpRequest.fileInstruction.socialSupport.minister.function})`
   })
 </script>

@@ -20,6 +20,7 @@ const include = {
       lastUpdatedBy: true,
       documents: true,
       subjects: true,
+      minister: true,
       beneficiary: {
         select: {
           id: true,

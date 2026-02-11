@@ -27,7 +27,7 @@
           />
           <PrintDetailItem
             :title="followupFieldLabels.ministre"
-            :content="followup.ministre"
+            :content="ministerName"
           />
           <PrintDetailItem
             :title="followupFieldLabels.medium"
@@ -101,12 +101,20 @@
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
 
-  defineProps<{
+  const props = defineProps<{
     followup: FollowupOutput
   }>()
   const emit = defineEmits<{
     onUpdated: []
   }>()
+
+  const ministerName = computed(() => {
+    if (!props.followup.minister) {
+      return null
+    }
+    return `${props.followup.minister.firstName} ${props.followup.minister.lastName} (${props.followup.minister.function})`
+  })
+
   const onUpdated = () => {
     emit('onUpdated')
   }
