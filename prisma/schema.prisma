@@ -378,7 +378,7 @@ model SocialSupport {
   privateSynthesisRichText String? @map("private_synthesis_rich_text")
 
   ministre   Minister?
-  minister   MinisterEntity? @relation(fields: [ministerId], references: [id], onDelete: Cascade)
+  minister   MinisterEntity? @relation(fields: [ministerId], references: [id])
   ministerId String?         @map("minister_id") @db.Uuid
 
   numeroPegase String? @map("numero_pegase")
