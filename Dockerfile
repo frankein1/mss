@@ -2,14 +2,32 @@
 FROM node:24-alpine AS builder
 WORKDIR /app
 
-# Build arguments from environment
-ARG ENVIRONMENT=local
+# Enable corepack and install pnpm
+RUN corepack enable && corepack prepare pnpm@10.29.2 --activate
+
+# Copy dependency files first for better layer caching
+COPY package.json pnpm-lock.yaml ./
+COPY prisma/ ./prisma/
+
+# Install dependencies (cached independently of env var changes)
+# postinstall hook automatically runs: DISABLE_ERD=true prisma generate && nuxt prepare
+RUN pnpm install --frozen-lockfile
+
+# Copy remaining source code
+COPY . .
+
+# Build arguments — declared AFTER dependency install so that
+# changing an env var does not invalidate the pnpm install layer.
+# Public runtimeConfig values are baked into the client bundle at build time,
+# so they must be available here. Private runtimeConfig values are set as
+# defaults; they can be overridden at container runtime via env_file.
+ARG MSS_ENVIRONMENT=local
 ARG DATABASE_URL
 ARG APP_URL
 ARG LANDING_PAGE_URL
-ARG DISCONNECT_THRESHOLD=30
+ARG DISCONNECT_THRESHOLD=60
 ARG DISCONNECT_ALERT_THRESHOLD=5
-ARG TOKEN_VALIDATION_IN_MINUTES=30
+ARG TOKEN_VALIDATION_IN_MINUTES=60
 ARG AUTH_JWT_KEY
 ARG AUTH_SESSION_SECRET
 ARG AUTH_PROCONNECT_ISSUER_URL
@@ -33,8 +51,7 @@ ARG RDVSP_ISSUER
 ARG RDVSP_CLIENT_ID
 ARG RDVSP_CLIENT_SECRET
 
-# Set environment variables for build
-ENV ENVIRONMENT=${ENVIRONMENT}
+ENV MSS_ENVIRONMENT=${MSS_ENVIRONMENT}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV APP_URL=${APP_URL}
 ENV LANDING_PAGE_URL=${LANDING_PAGE_URL}
@@ -64,20 +81,6 @@ ENV RDVSP_ISSUER=${RDVSP_ISSUER}
 ENV RDVSP_CLIENT_ID=${RDVSP_CLIENT_ID}
 ENV RDVSP_CLIENT_SECRET=${RDVSP_CLIENT_SECRET}
 
-# Enable corepack and install pnpm
-RUN corepack enable && corepack prepare pnpm@10.29.2 --activate
-
-# Copy dependency files first for better layer caching
-COPY package.json pnpm-lock.yaml ./
-COPY prisma/ ./prisma/
-
-# Install dependencies
-# postinstall hook automatically runs: DISABLE_ERD=true prisma generate && nuxt prepare
-RUN pnpm install --frozen-lockfile
-
-# Copy remaining source code
-COPY . .
-
 # Build only Nuxt (no scheduler)
 RUN pnpm build:nuxt
 
@@ -92,7 +95,7 @@ ENV PORT=3000
 
 # Copy Nuxt build output from builder
 COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/node_modules ./node_modules   
+COPY --from=builder /app/node_modules ./node_modules
 
 # Expose the port
 EXPOSE 3000

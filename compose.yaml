@@ -20,7 +20,7 @@ services:
     build:
       context: .
       args:
-        - ENVIRONMENT=${ENVIRONMENT}
+        - MSS_ENVIRONMENT=${MSS_ENVIRONMENT}
         - DATABASE_URL=${DATABASE_URL}
         - APP_URL=${APP_URL:-http://localhost:3000}
         - LANDING_PAGE_URL=${LANDING_PAGE_URL}
@@ -45,10 +45,9 @@ services:
         - SENTRY_DEBUG=${SENTRY_DEBUG}
         - SENTRY_TRACE_SAMPLE_RATE=${SENTRY_TRACE_SAMPLE_RATE}
         - METABASE_PUBLIC_URL=${METABASE_PUBLIC_URL}
-        - BREVO_API_KEY=${BREVO_API_KEY}
+        - BREVO_API_KEY=
         - RDVSP_ISSUER=${RDVSP_ISSUER}
         - RDVSP_CLIENT_ID=${RDVSP_CLIENT_ID}
-        - RDVSP_CLIENT_SECRET=${RDVSP_CLIENT_SECRET}
     ports:
       - '3000:3000'
     mem_limit: 512m
