@@ -9,10 +9,7 @@
     <span class="information-label"
       >{{ helpRequestFieldLabels.ministre }} :</span
     >
-    {{ socialSupport.minister.firstName }}
-    {{ socialSupport.minister.lastName }} ({{
-      socialSupport.minister.function
-    }})
+    {{ formatMinisterName(socialSupport.minister) }}
   </li>
   <li v-if="socialSupport.dueDate">
     <span class="information-label"
@@ -26,6 +23,7 @@
   import type { SocialSupportDetailData } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels'
+  import { formatMinisterName } from '~/utils/minister'
 
   defineProps<{
     socialSupport: SocialSupportDetailData

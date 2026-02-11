@@ -261,6 +261,7 @@
     housingHelpRequestFieldLabels,
     helpRequestFieldLabels
   } from '~/client/labels'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
     housingHelpRequest: HousingHelpRequestOutput
@@ -331,6 +332,8 @@
     if (!props.housingHelpRequest.fileInstruction.socialSupport.minister) {
       return null
     }
-    return `${props.housingHelpRequest.fileInstruction.socialSupport.minister.firstName} ${props.housingHelpRequest.fileInstruction.socialSupport.minister.lastName} (${props.housingHelpRequest.fileInstruction.socialSupport.minister.function})`
+    return formatMinisterName(
+      props.housingHelpRequest.fileInstruction.socialSupport.minister
+    )
   })
 </script>

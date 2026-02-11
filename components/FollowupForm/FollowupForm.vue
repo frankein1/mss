@@ -387,6 +387,7 @@
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
   import type { MinisterOutput } from './types'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = withDefaults(
     defineProps<{
@@ -578,7 +579,7 @@
   }
 
   const displayName = (minister: MinisterOutput): string => {
-    return `${minister.firstName} ${minister.lastName} (${minister.function})`
+    return formatMinisterName(minister)
   }
 
   watch(former, v => {

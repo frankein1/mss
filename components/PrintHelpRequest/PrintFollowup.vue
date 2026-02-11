@@ -100,6 +100,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
     followup: FollowupOutput
@@ -112,7 +113,7 @@
     if (!props.followup.minister) {
       return null
     }
-    return `${props.followup.minister.firstName} ${props.followup.minister.lastName} (${props.followup.minister.function})`
+    return formatMinisterName(props.followup.minister)
   })
 
   const onUpdated = () => {

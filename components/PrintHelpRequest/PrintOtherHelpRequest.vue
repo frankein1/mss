@@ -162,6 +162,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { baseRefusalReasonKeys } from '~/client/options'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
     helpRequest: HelpRequestOutput
@@ -186,6 +187,8 @@
     if (!props.helpRequest.fileInstruction.socialSupport.minister) {
       return null
     }
-    return `${props.helpRequest.fileInstruction.socialSupport.minister.firstName} ${props.helpRequest.fileInstruction.socialSupport.minister.lastName} (${props.helpRequest.fileInstruction.socialSupport.minister.function})`
+    return formatMinisterName(
+      props.helpRequest.fileInstruction.socialSupport.minister
+    )
   })
 </script>

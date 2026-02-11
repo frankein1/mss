@@ -23,6 +23,7 @@ import {
   lowIncomeHousingKeys
 } from '~/client/options'
 import { formatBeneficiaryDisplayName } from '~/utils'
+import { formatMinisterName } from '~/utils/minister'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
@@ -153,8 +154,8 @@ export async function exportFileInstructions({
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
-          ministre: socialSupport.ministre
-            ? ministerKeys.byKey[socialSupport.ministre]
+          ministre: socialSupport.minister
+            ? formatMinisterName(socialSupport.minister)
             : '',
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy

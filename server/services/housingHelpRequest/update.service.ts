@@ -41,7 +41,8 @@ export async function update({ input, ctx }: UpdateParams) {
 
   const {
     numeroPegase,
-    ministre,
+    ministerId,
+    isMinistry,
     documents,
     externalStructure,
     status,
@@ -93,7 +94,7 @@ export async function update({ input, ctx }: UpdateParams) {
           ctx.user.id === target.fileInstruction.socialSupport.createdById
             ? privateSynthesisRichText
             : target.fileInstruction.socialSupport.privateSynthesisRichText,
-        ministre,
+        minister: isMinistry && ministerId ? connect(ministerId) : undefined,
         numeroPegase,
         dueDate,
         date,
