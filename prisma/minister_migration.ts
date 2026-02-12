@@ -197,12 +197,14 @@ const main = async () => {
       try {
         const res = await prismaClient.ministerEntity.create({
           data: ministerMap[minister],
-          select: { id: true }
+          select: { id: true, firstName: true, lastName: true }
         })
 
         return {
           id: res.id,
-          oldMinisterName: minister
+          oldMinisterName: minister,
+          firstName: res.firstName,
+          lastName: res.lastName
         }
       } catch (error) {
         console.error(`❌ Failed to create minister: ${minister}`, error)
@@ -212,6 +214,7 @@ const main = async () => {
   console.log(
     `✅ ${mappingMinisters.length} ministers created on ${Object.values(Minister).length} ministers in Enum`
   )
+  console.log(mappingMinisters)
 
   // 2. Update minister in Social Supports
   console.log('⏱️ Updating minister in Social Supports...')
@@ -232,6 +235,10 @@ const main = async () => {
       const minister = mappingMinisters.find(
         m => m?.oldMinisterName === socialSupport.ministre
       )
+      console.log(
+        `updating ${socialSupport.ministre} with ${minister?.firstName} ${minister?.lastName}`
+      )
+
       if (minister) {
         await prismaClient.socialSupport.update({
           where: { id: socialSupport.id },
