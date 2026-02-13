@@ -56,7 +56,7 @@ export function createCanonicalAuthenticatedData({
       createHash('sha256').update(encryptedDataKey).digest(),
       Buffer.from(documentKeyInDB, 'utf-8'),
       Buffer.from(contentType, 'utf-8'),
-      Buffer.from([contentLength])
+      Buffer.from(contentLength.toString(), 'utf-8')
     ])
   }
 
