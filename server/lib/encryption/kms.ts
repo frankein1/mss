@@ -1,13 +1,12 @@
 import { createClient, KeyManagerv1alpha1 } from '@scaleway/sdk'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 let instance: any = null
 
-function getScalewayClient() {
+function getScalewayClient(config: Pick<RuntimeConfig, 'kms'>) {
   if (instance) {
     return instance
   }
-
-  const config = useRuntimeConfig()
 
   instance = createClient({
     accessKey: config.kms.accessKeyId,
@@ -21,12 +20,12 @@ function getScalewayClient() {
 
 let kms: KeyManagerv1alpha1.API | null = null
 
-export function getKeyManagerClient() {
+export function getKeyManagerClient(config: Pick<RuntimeConfig, 'kms'>) {
   if (kms) {
     return kms
   }
 
-  const client = getScalewayClient()
+  const client = getScalewayClient(config)
   kms = new KeyManagerv1alpha1.API(client)
 
   return kms
