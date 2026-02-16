@@ -7,13 +7,14 @@ import {
   throwIfEncryptionConfigurationIsNotSetup,
   type DataForEncryptionContext
 } from './helper'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 export async function encrypt(
+  config: Pick<RuntimeConfig, 'kms' | 'document'>,
   fileContent: Buffer,
   dataForEncryptionContext: DataForEncryptionContext
 ) {
-  const kms = getKeyManagerClient()
-  const config = useRuntimeConfig()
+  const kms = getKeyManagerClient(config)
 
   throwIfEncryptionConfigurationIsNotSetup(config)
 

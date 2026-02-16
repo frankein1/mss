@@ -10,15 +10,14 @@
  * Les erreurs d'exécution sont logguées dans la console (si one-off attached), dans les logs d'application (si one-off detached)
  * et dans Sentry
  */
-import { S3Client } from '@aws-sdk/client-s3'
 import { PrismaClient } from '@prisma/client'
 import {
   generateFileRootForDocument,
   generateFilenameForDocument
 } from '~/server/services/document/helper'
 import { performance } from 'node:perf_hooks'
-import { Upload } from '@aws-sdk/lib-storage'
 import * as Sentry from '@sentry/node'
+import { uploadWithEncryption } from '~/server/lib/s3/file'
 
 const prismaClient = new PrismaClient()
 
@@ -26,33 +25,39 @@ const BATCH_SIZE_DOCUMENTS_TO_MIGRATE = parseInt(
   process.env.BATCH_SIZE_DOCUMENTS_TO_MIGRATE || '1000'
 )
 
-const BUCKET_NAME = process.env.NUXT_S3_BUCKET || process.env.S3_BUCKET || ''
-const ACCESS_KEY =
-  process.env.NUXT_S3_ACCESS_KEY_ID || process.env.S3_ACCESS_KEY_ID || ''
-const SECRET_KEY =
-  process.env.NUXT_S3_SECRET_ACCESS_KEY ||
-  process.env.S3_SECRET_ACCESS_KEY ||
-  ''
-const REGION = process.env.NUXT_S3_REGION || process.env.S3_REGION || ''
-const ENDPOINT = process.env.NUXT_S3_ENDPOINT || process.env.S3_ENDPOINT || ''
 const SENTRY_DSN = process.env.SENTRY_DSN
 
-function getS3Client() {
-  return new S3Client({
-    credentials: {
-      accessKeyId: ACCESS_KEY,
-      secretAccessKey: SECRET_KEY
-    },
-    region: REGION,
-    endpoint: ENDPOINT
-  })
+const config = {
+  s3: {
+    accessKeyId:
+      process.env.NUXT_S3_ACCESS_KEY_ID || process.env.S3_ACCESS_KEY_ID || '',
+    secretAccessKey:
+      process.env.NUXT_S3_SECRET_ACCESS_KEY ||
+      process.env.S3_SECRET_ACCESS_KEY ||
+      '',
+    region: process.env.NUXT_S3_REGION || process.env.S3_REGION || '',
+    bucket: process.env.NUXT_S3_BUCKET || process.env.S3_BUCKET || '',
+    endpoint: process.env.NUXT_S3_ENDPOINT || process.env.S3_ENDPOINT || ''
+  },
+  kms: {
+    accessKeyId: process.env.KMS_ACCESS_KEY_ID || '',
+    secretKey: process.env.KMS_SECRET_KEY || '',
+    organizationId: process.env.KMS_ORGANIZATION_ID || '',
+    projectId: process.env.KMS_PROJECT_ID || '',
+    region: process.env.KMS_REGION || '',
+    apiUrl: process.env.KMS_API_URL || '',
+    keyId: process.env.KMS_KEY_ID || ''
+  },
+  document: {
+    encryptionVersion: '1',
+    encryptionAlgorithm: 'aes_256_gcm'
+  }
 }
 
 export async function migrateDocumentsToS3() {
   console.log(
     `migrate-documents-to-s3-bucket: [${new Date().toISOString()}]: starting with ${BATCH_SIZE_DOCUMENTS_TO_MIGRATE} documents to migrate`
   )
-  const client = getS3Client()
 
   if (SENTRY_DSN) {
     console.log(
@@ -70,7 +75,14 @@ export async function migrateDocumentsToS3() {
 
   let i = 0
   start = performance.now()
-  for (const { key, name, mimeType, beneficiary, documentContent } of docs) {
+  for (const {
+    key,
+    name,
+    mimeType,
+    size,
+    beneficiary,
+    documentContent
+  } of docs) {
     if (!documentContent) {
       i++
       continue
@@ -79,8 +91,19 @@ export async function migrateDocumentsToS3() {
     const filename = generateFilenameForDocument(name)
     const filepath = `${generateFileRootForDocument(beneficiary.structureId, beneficiary.id)}/${filename}`
     try {
-      await migrateDocument(client, filepath, mimeType, documentContent.content)
-      await setDocumentAsMigrated(key)
+      if (!size) {
+        throw new Error(
+          `migrate-documents-to-s3-bucket: [${new Date().toISOString()}]: no size for document ${key}`
+        )
+      }
+      await migrateDocument({
+        documentKey: key,
+        bucketKey: filepath,
+        data: Buffer.from(documentContent.content),
+        contentType: mimeType,
+        contentLength: size
+      })
+      await setDocumentAsMigrated(key, filepath)
     } catch (e: unknown) {
       console.error(
         `migrate-documents-to-s3-bucket: [${new Date().toISOString()}]: error for document `,
@@ -95,7 +118,7 @@ export async function migrateDocumentsToS3() {
     }
     i++
 
-    if (i % 100 === 0) {
+    if (i % 10 === 0) {
       console.log(
         `migrate-documents-to-s3-bucket: [${new Date().toISOString()}]: ${i}/${BATCH_SIZE_DOCUMENTS_TO_MIGRATE} documents migrated`
       )
@@ -126,6 +149,7 @@ async function getDocumentBatch(
       key: true,
       name: true,
       mimeType: true,
+      size: true,
       filenameDisk: true,
       beneficiary: {
         select: {
@@ -143,43 +167,38 @@ async function getDocumentBatch(
   })
 }
 
-async function setDocumentAsMigrated(key: string) {
+async function setDocumentAsMigrated(documentKey: string, bucketKey: string) {
   return await prismaClient.document.update({
     select: { key: true },
-    where: { key },
+    where: {
+      key: documentKey,
+      filenameDisk: bucketKey,
+      filenameDownload: bucketKey
+    },
     data: { migrated: true }
   })
 }
 
 /** Upload the document on S3 bucket with the key filepath */
-async function migrateDocument(
-  client: S3Client,
-  filepath: string,
-  mimeType: string,
-  content: Uint8Array
-) {
-  await migrateToS3(client, filepath, Buffer.from(content), mimeType)
-}
-
-export async function migrateToS3(
-  client: S3Client,
-  key: string,
-  data: Buffer,
+async function migrateDocument(document: {
+  documentKey: string
+  bucketKey: string
+  data: Buffer
   contentType: string
-) {
-  const upload = new Upload({
-    client,
-    params: {
-      Bucket: BUCKET_NAME,
-      Body: data,
-      Key: key,
-      ContentType: contentType
+  contentLength: number
+}) {
+  const res = await uploadWithEncryption({
+    config,
+    bucketKey: document.bucketKey,
+    plainData: document.data,
+    dataForEncryptionContext: {
+      documentKey: document.documentKey,
+      contentType: document.contentType,
+      contentLength: document.contentLength
     }
   })
 
-  const res = await upload.done()
-
-  return res.Key
+  return res.key
 }
 
 migrateDocumentsToS3()

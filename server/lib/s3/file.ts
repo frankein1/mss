@@ -10,7 +10,7 @@ export async function deleteFile(
   config: Pick<RuntimeConfig, 'document' | 's3'>,
   key: string
 ) {
-  const client = getS3Client()
+  const client = getS3Client(config)
 
   await client.send(
     new DeleteObjectCommand({
@@ -31,7 +31,7 @@ interface S3Metadata {
   'x-amz-meta-iv': string
 }
 interface UploadWithEncryptionInput {
-  config: Pick<RuntimeConfig, 'document' | 's3'>
+  config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>
   bucketKey: string
   plainData: Buffer
   dataForEncryptionContext: DataForEncryptionContext
@@ -42,10 +42,10 @@ export async function uploadWithEncryption({
   plainData,
   dataForEncryptionContext
 }: UploadWithEncryptionInput) {
-  const client = getS3Client()
+  const client = getS3Client(config)
 
   const { encryptedContent, encryptedDataKey, ivBase64, kmsKeyId } =
-    await encrypt(plainData, dataForEncryptionContext)
+    await encrypt(config, plainData, dataForEncryptionContext)
 
   // Encrypted DEK and iv are stored in S3 metadata
   // The other metadata variables are used to regenerate the Associated Authenticated Data
@@ -84,7 +84,7 @@ export async function downloadWithEncryption({
   bucketKey,
   dataForEncryptionContext
 }: DownloadWithEncryptionInput) {
-  const client = getS3Client()
+  const client = getS3Client(config)
 
   const download = await client.send(
     new GetObjectCommand({
