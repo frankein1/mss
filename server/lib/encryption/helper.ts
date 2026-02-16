@@ -11,8 +11,9 @@ export interface DataForEncryptionContext {
   contentLength: number
 }
 
+// TODO move to server plugin env validator
 export function throwIfEncryptionConfigurationIsNotSetup(
-  config: RuntimeConfig
+  config: Pick<RuntimeConfig, 'kms' | 'document'>
 ) {
   if (!config.document.encryptionAlgorithm) {
     throw internal('encrypt: no algorithm defined')

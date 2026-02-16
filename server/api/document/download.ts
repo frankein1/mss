@@ -51,7 +51,7 @@ export default defineEventHandler(async event => {
       name: true,
       size: true,
       migrated: true,
-      filenameDownload: true
+      filenameDisk: true
     }
   })
 
@@ -71,7 +71,7 @@ export default defineEventHandler(async event => {
     // Retrieve document from S3 bucket
     const config = useRuntimeConfig()
 
-    if (!document.filenameDownload) {
+    if (!document.filenameDisk) {
       throw internal('download: missing bucket key')
     }
 
@@ -81,7 +81,7 @@ export default defineEventHandler(async event => {
 
     const res = await downloadWithEncryption({
       config,
-      bucketKey: document.filenameDownload,
+      bucketKey: document.filenameDisk,
       dataForEncryptionContext: {
         documentKey: key,
         contentType: document.mimeType,

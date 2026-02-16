@@ -1,13 +1,12 @@
 import { S3Client } from '@aws-sdk/client-s3'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 let instance: S3Client | null = null
 
-export function getS3Client() {
+export function getS3Client(config: Pick<RuntimeConfig, 's3'>) {
   if (instance) {
     return instance
   }
-
-  const config = useRuntimeConfig()
 
   instance = new S3Client({
     credentials: {
