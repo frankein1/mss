@@ -39,7 +39,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeInput
             name="date"
             :label="followupFieldLabels.date"
@@ -48,7 +48,7 @@
           />
         </div>
 
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="duration"
             :label="followupFieldLabels.duration"
@@ -58,7 +58,7 @@
 
         <!-- ROW -->
         <template v-if="application.module.ministere">
-          <div class="fr-col-6">
+          <div class="fr-col-12">
             <VeeInput
               name="numeroPegase"
               :label="followupFieldLabels.numeroPegase"
@@ -75,7 +75,7 @@
         </template>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="medium"
             :label="followupFieldLabels.medium"
@@ -86,7 +86,7 @@
 
         <div
           v-if="medium === FollowupMedium.ExternalAppointment"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <VeeInput
             name="place"
@@ -95,7 +95,7 @@
         </div>
         <div
           v-else-if="medium === FollowupMedium.ThirdParty"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <VeeInput
             name="thirdPersonName"
@@ -104,7 +104,7 @@
         </div>
         <div
           v-else
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         ></div>
 
         <!-- ROW -->
@@ -139,7 +139,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="status"
             :label="followupFieldLabels.status"
@@ -148,7 +148,7 @@
           />
         </div>
 
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeInput
             name="dueDate"
             :label="followupFieldLabels.dueDate"
@@ -156,7 +156,7 @@
           />
         </div>
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeCombobox
             :label="followupFieldLabels.prescribingOrganizationId"
             placeholder="Saisir le nom de l'organisme"
@@ -165,7 +165,7 @@
             @change-value="onPrescribingOrganization"
           />
         </div>
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="prescribingOrganizationContactId"
             :disabled="organizationContactIsDisabled"
@@ -175,7 +175,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6 fr-mt-0 fr-pt-0">
+        <div class="fr-col-12 fr-col-md-6 fr-mt-0 fr-pt-0">
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
             class="fr-link fr-icon-info-fill fr-link--icon-left"

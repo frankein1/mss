@@ -1,57 +1,59 @@
 <template>
-  <ComboBox
-    ref="comboboxRef"
-    v-model="selectedMinister"
-    :required="true"
-    :label="followupFieldLabels.ministre"
-    :options="ministers"
-    :format-display-value="displayName"
-    :on-focus-header="onFocusHeader"
-    @input="onSearchMinister"
-    @select="onSelect"
-  >
-    <!-- HEADER -->
-    <template #header>
-      <ul
-        ref="header"
-        class="fr-tabs__list"
-        :class="{
-          focused: activeRow === -1
-        }"
-        @keydown="onHeaderKeydown"
-      >
-        <li role="presentation">
-          <button
-            id="header-button-01"
-            type="button"
-            tabindex="-1"
-            class="fr-tabs__tab"
-            :aria-selected="!former"
-            @click="former = false"
-          >
-            Ministres actuels
-          </button>
-        </li>
-        <li>
-          <button
-            id="header-button-02"
-            type="button"
-            tabindex="-1"
-            class="fr-tabs__tab"
-            :class="{ 'fr-tabs__tab--secondary': !former }"
-            :aria-selected="former"
-            @click="former = true"
-          >
-            Ministres anciens
-          </button>
-        </li>
-      </ul>
-    </template>
+  <div class="minister-combobox">
+    <ComboBox
+      ref="comboboxRef"
+      v-model="selectedMinister"
+      :required="true"
+      :label="followupFieldLabels.ministre"
+      :options="ministers"
+      :format-display-value="displayName"
+      :on-focus-header="onFocusHeader"
+      @input="onSearchMinister"
+      @select="onSelect"
+    >
+      <!-- HEADER -->
+      <template #header>
+        <ul
+          ref="header"
+          class="fr-tabs__list"
+          :class="{
+            focused: activeRow === -1
+          }"
+          @keydown="onHeaderKeydown"
+        >
+          <li role="presentation">
+            <button
+              id="header-button-01"
+              type="button"
+              tabindex="-1"
+              class="fr-tabs__tab"
+              :aria-selected="!former"
+              @click="former = false"
+            >
+              Ministres actuels
+            </button>
+          </li>
+          <li>
+            <button
+              id="header-button-02"
+              type="button"
+              tabindex="-1"
+              class="fr-tabs__tab"
+              :class="{ 'fr-tabs__tab--secondary': !former }"
+              :aria-selected="former"
+              @click="former = true"
+            >
+              Ministres anciens
+            </button>
+          </li>
+        </ul>
+      </template>
 
-    <template #default="{ option }">
-      {{ displayName(option) }}
-    </template>
-  </ComboBox>
+      <template #default="{ option }">
+        {{ displayName(option) }}
+      </template>
+    </ComboBox>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -232,9 +234,12 @@
     }
   }
 
-  :deep(.combobox-wrapper) {
-    input.fr-select {
-      box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
+  .minister-combobox {
+    :deep(.combobox-wrapper) {
+      input.fr-select {
+        box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
+        filter: saturate(0);
+      }
     }
   }
 </style>
