@@ -7,8 +7,10 @@ import {
 import { internal } from '~/utils/api/errors'
 import { createCanonicalAuthenticatedData } from './generate-encryption-context'
 import { webcrypto } from 'node:crypto'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 export async function decrypt(
+  config: Pick<RuntimeConfig, 'kms' | 'document'>,
   encryptedContent: Buffer,
   encryptedDataKey: string,
   ivBase64: string,
@@ -19,8 +21,7 @@ export async function decrypt(
   },
   dataForEncryptionContext: DataForEncryptionContext
 ) {
-  const kms = getKeyManagerClient()
-  const config = useRuntimeConfig()
+  const kms = getKeyManagerClient(config)
 
   throwIfEncryptionConfigurationIsNotSetup(config)
 
