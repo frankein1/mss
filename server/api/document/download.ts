@@ -90,7 +90,8 @@ export default defineEventHandler(async event => {
     })
 
     if (!res.success) {
-      throw badrequest(`download: ${res.reason}`)
+      console.error(`download: ${res.reason}`)
+      throw badrequest(`download: failure to download document`)
     }
 
     documentContent = Buffer.from(res.fileContent)
