@@ -23,6 +23,14 @@
         :name="beneficiary.fileNumber"
         :input="search"
       />
+      <template v-if="beneficiary.numeroPegase">
+        <span class="fr-sr-only">Numéro Pégase : </span>
+        <span> - </span>
+        <AtomTextEmphasis
+          :name="beneficiary.numeroPegase"
+          :input="search"
+        />
+      </template>
       <span v-if="beneficiary.birthDate && !showAge">
         - {{ formatDate(beneficiary.birthDate) }}
       </span>

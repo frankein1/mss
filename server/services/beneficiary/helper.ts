@@ -7,9 +7,17 @@ import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import dayjs from 'dayjs'
 import { generatorRegExp } from '~/utils/generateFileNumber'
 
-export function prepareBeneficiarySearchConditions(query: string): {
+interface PrepareBeneficiarySearchConditionsOptions {
+  isMinistry?: boolean
+}
+
+export function prepareBeneficiarySearchConditions(
+  query: string,
+  options: PrepareBeneficiarySearchConditionsOptions = {}
+): {
   AND: Prisma.BeneficiaryWhereInput[]
 } {
+  const { isMinistry } = options
   const trimmedQuery = query.trim()
 
   const nameFields = [
@@ -22,6 +30,12 @@ export function prepareBeneficiarySearchConditions(query: string): {
   const normalizedQuery = RemoveAccents.remove(
     trimmedQuery.replace(/%/g, '').toLowerCase()
   )
+
+  if (isMinistry && normalizedQuery.startsWith('a-')) {
+    return {
+      AND: [{ numeroPegase: { startsWith: normalizedQuery.toUpperCase() } }]
+    }
+  }
   const tokens = normalizedQuery.split(/\s+/g).filter(Boolean)
 
   // Name search: each token must match at least one name field

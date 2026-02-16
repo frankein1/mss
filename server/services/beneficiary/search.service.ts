@@ -2,6 +2,7 @@ import { prepareBeneficiarySearchConditions } from './helper'
 import type { SearchBeneficiaryInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
+import { StructureType } from '@prisma/client'
 
 export async function search({
   ctx,
@@ -10,7 +11,10 @@ export async function search({
   ctx: SecurityRuleContext
   input: SearchBeneficiaryInput
 }) {
-  const searchConditions = prepareBeneficiarySearchConditions(input.query)
+  const isMinistry = ctx.structure.type === StructureType.Ministere
+  const searchConditions = prepareBeneficiarySearchConditions(input.query, {
+    isMinistry
+  })
 
   const where = {
     ...searchConditions,
@@ -31,7 +35,8 @@ export async function search({
       birthName: true,
       status: true,
       phone1: true,
-      birthDate: true
+      birthDate: true,
+      numeroPegase: isMinistry
     },
     take: 10
   })

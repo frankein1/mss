@@ -201,6 +201,7 @@
       birthDate: beneficiary.birthDate,
       familyFileId: beneficiary.familyFileId,
       birthName: beneficiary.birthName,
+      numeroPegase: beneficiary.numeroPegase,
       phone1: null,
       disabled: false
     }))
