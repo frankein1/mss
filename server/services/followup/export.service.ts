@@ -3,7 +3,6 @@ import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumKeys,
   socialSupportStatusKeys,
-  ministerKeys,
   followupDurationKeys
 } from '~/client/options'
 import type { ExportFollowupsInput } from '~/server/schema'
@@ -21,7 +20,7 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'date',
   'beneficiaryId',
   'numeroPegase',
-  'ministre',
+  'minister',
   'subjects',
   'medium',
   'prescribingOrganizationId',
@@ -75,7 +74,7 @@ export async function exportFollowups({
           dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
-          ministre: followup.minister
+          minister: followup.minister
             ? formatMinisterName(followup.minister)
             : '',
           numeroPegase: followup.numeroPegase || '',

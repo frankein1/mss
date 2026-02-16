@@ -26,7 +26,7 @@
             :content="followup.numeroPegase"
           />
           <PrintDetailItem
-            :title="followupFieldLabels.ministre"
+            :title="followupFieldLabels.minister"
             :content="ministerName"
           />
           <PrintDetailItem

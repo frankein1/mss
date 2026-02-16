@@ -7,7 +7,7 @@
   </li>
   <li v-if="socialSupport.minister">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.ministre }} :</span
+      >{{ helpRequestFieldLabels.minister }} :</span
     >
     {{ formatMinisterName(socialSupport.minister) }}
   </li>

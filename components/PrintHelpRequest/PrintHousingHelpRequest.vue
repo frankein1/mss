@@ -47,7 +47,7 @@
             "
           />
           <PrintDetailItem
-            :title="helpRequestFieldLabels.ministre"
+            :title="helpRequestFieldLabels.minister"
             :content="ministerName"
           />
           <PrintDetailItem

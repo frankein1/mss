@@ -38,7 +38,7 @@
             :content="helpRequest.fileInstruction.socialSupport.numeroPegase"
           />
           <PrintDetailItem
-            :title="helpRequestFieldLabels.ministre"
+            :title="helpRequestFieldLabels.minister"
             :content="ministerName"
           />
           <PrintDetailItem

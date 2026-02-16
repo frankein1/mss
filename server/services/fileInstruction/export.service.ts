@@ -50,7 +50,7 @@ export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'dueDate',
   'fullFile',
   'updated',
-  'ministre',
+  'minister',
   'numeroPegase',
   'createdById'
 ]
@@ -154,7 +154,7 @@ export async function exportFileInstructions({
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
-          ministre: socialSupport.minister
+          minister: socialSupport.minister
             ? formatMinisterName(socialSupport.minister)
             : '',
           numeroPegase: socialSupport.numeroPegase || '',

@@ -4,7 +4,7 @@
       ref="comboboxRef"
       v-model="selectedMinister"
       :required="true"
-      :label="followupFieldLabels.ministre"
+      :label="followupFieldLabels.minister"
       :options="ministers"
       :format-display-value="displayName"
       :on-focus-header="onFocusHeader"

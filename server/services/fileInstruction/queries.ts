@@ -46,6 +46,7 @@ function findMany(
               birthPlace: true
             }
           },
+          minister: true,
           createdBy: true
         }
       },
