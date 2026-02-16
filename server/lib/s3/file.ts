@@ -75,7 +75,7 @@ export async function uploadWithEncryption({
 }
 
 interface DownloadWithEncryptionInput {
-  config: Pick<RuntimeConfig, 'document' | 's3'>
+  config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>
   bucketKey: string
   dataForEncryptionContext: DataForEncryptionContext
 }
@@ -122,6 +122,7 @@ export async function downloadWithEncryption({
   const encryptedContent = await download.Body.transformToByteArray()
 
   const { fileContent } = await decrypt(
+    config,
     Buffer.from(encryptedContent),
     encryptedDataKey,
     iv,
