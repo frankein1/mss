@@ -41,7 +41,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     thirdPersonName,
     prescribingOrganizationId,
     prescribingOrganizationContactId,
-    ministre,
+    isMinistry,
+    ministerId,
     date,
     synthesis,
     synthesisRichText,
@@ -68,7 +69,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
           subjects,
           target.subjects
         ),
-        ministre,
+        minister: isMinistry && ministerId ? connect(ministerId) : undefined,
         date,
         synthesis,
         synthesisRichText,

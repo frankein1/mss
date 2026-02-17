@@ -7,9 +7,9 @@ export const editFollowupSchema = addFollowupSchemaBase
     id: z.string().uuid(),
     socialSupportId: z.string().uuid()
   })
-  .refine(val => !val.isMinistry || val.ministre, {
+  .refine(val => !val.isMinistry || val.ministerId, {
     message: requiredErrorMessage,
-    path: ['ministre']
+    path: ['ministerId']
   })
 
 export type EditFollowupInput = z.infer<typeof editFollowupSchema>

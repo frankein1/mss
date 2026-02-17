@@ -20,6 +20,7 @@ const include = {
       lastUpdatedBy: true,
       documents: true,
       subjects: true,
+      minister: true,
       beneficiary: {
         select: {
           id: true,
@@ -99,6 +100,7 @@ export function filter(
     details: permissions.get.details,
     dueDate: permissions.get.dueDate,
     minister: appPermissions.module.ministere,
+    ministerId: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }
   const filteredSocialSupport = filterSocialSupport({

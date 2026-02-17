@@ -24,7 +24,7 @@ export const createHelpRequestSchemaBase = z.object({
   beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   subjectId: z
     .string({
       required_error: requiredErrorMessage,
@@ -58,10 +58,10 @@ export const createHelpRequestSchemaBase = z.object({
 })
 
 export const createHelpRequestSchema = createHelpRequestSchemaBase.refine(
-  val => !val.isMinistry || val.ministre,
+  val => !val.isMinistry || val.ministerId,
   {
     message: requiredErrorMessage,
-    path: ['ministre']
+    path: ['ministerId']
   }
 )
 

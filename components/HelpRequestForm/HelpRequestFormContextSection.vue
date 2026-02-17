@@ -23,11 +23,9 @@
       </div>
 
       <div class="fr-col-12">
-        <VeeSelect
-          name="ministre"
-          :label="helpRequestFieldLabels.ministre"
-          :options="withEmptyValue(ministerKeys.options)"
-          required
+        <MinisterCombobox
+          :initial-minister-id="initialMinisterId"
+          @on-set-minister-id="onSetMinisterId"
         />
       </div>
     </template>
@@ -217,7 +215,6 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import {
-    ministerKeys,
     isFirstKeys,
     externalOrganisationKeys,
     askedHousingKeys
@@ -263,6 +260,14 @@
     if (!id) {
       setInstructorOrganizationContactId(null)
     }
+  }
+
+  // update minister form value
+  const { setValue: setMinisterId, value: initialMinisterId } = useField<
+    string | undefined
+  >('ministerId')
+  const onSetMinisterId = (id: string) => {
+    setMinisterId(id, true)
   }
 
   const socialSupportSubjectOptions = computed(() =>

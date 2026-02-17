@@ -28,6 +28,7 @@ export const include = {
           lastUpdatedBy: true,
           subjects: true,
           documents: true,
+          minister: true,
           beneficiary: {
             select: {
               id: true,

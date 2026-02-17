@@ -37,7 +37,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   privateSynthesis: openText(6000).nullish(),
   privateSynthesisRichText: openRichText().nullish(),
   isMinistry: z.boolean(),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   status: requiredNativeEnum(SocialSupportStatus),
   dueDate: dateOrEmpty,
@@ -70,10 +70,10 @@ export const createHousingHelpRequestSchemaBase = z.object({
 
 export const createHousingHelpRequestSchema =
   createHousingHelpRequestSchemaBase.refine(
-    val => !val.isMinistry || val.ministre,
+    val => !val.isMinistry || val.ministerId,
     {
       message: requiredErrorMessage,
-      path: ['ministre']
+      path: ['ministerId']
     }
   )
 

@@ -159,7 +159,7 @@
     if (application.value.module.ministere) {
       statsFilters.push({
         name: 'ministre',
-        label: helpRequestFieldLabels.ministre,
+        label: helpRequestFieldLabels.minister,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb

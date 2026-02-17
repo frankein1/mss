@@ -5,11 +5,11 @@
     >
     {{ socialSupport.numeroPegase }}
   </li>
-  <li v-if="socialSupport.ministre">
+  <li v-if="socialSupport.minister">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.ministre }} :</span
+      >{{ helpRequestFieldLabels.minister }} :</span
     >
-    {{ ministerKeys.byKey[socialSupport.ministre] }}
+    {{ formatMinisterName(socialSupport.minister) }}
   </li>
   <li v-if="socialSupport.dueDate">
     <span class="information-label"
@@ -22,7 +22,7 @@
 <script setup lang="ts">
   import type { SocialSupportDetailData } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { ministerKeys } from '~/client/options'
+  import { formatMinisterName } from '~/utils/minister'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   defineProps<{

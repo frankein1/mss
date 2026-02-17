@@ -60,7 +60,7 @@
       beneficiaryId: socialSupport.value.beneficiary.id,
       familyFileId: socialSupport.value.familyFileId,
       numeroPegase: socialSupport.value.numeroPegase,
-      ministre: socialSupport.value.ministre,
+      ministerId: socialSupport.value.ministerId,
       subjectId: helpRequest.value.subjectId,
       status: socialSupport.value.status,
       examinationDate: fileInstruction.value.examinationDate,

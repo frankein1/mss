@@ -18,7 +18,7 @@ export const followupFieldLabels = {
   classified: 'Classé',
   firstFollowup: '1er entretien',
   forwardedToJustice: 'Transmis à la justice',
-  ministre: 'Ministre',
+  minister: 'Ministre',
   numeroPegase: 'Numéro Pégase',
   prescribingOrganizationId: 'Organisme prescripteur',
   prescribingOrganizationContactId: "Contact de l'organisme prescripteur",

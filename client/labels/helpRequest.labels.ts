@@ -13,7 +13,7 @@ export const helpRequestFieldLabels = {
   handlingDate: 'Date de fin de prise en charge',
   date: "Date d'ouverture du dossier",
   numeroPegase: 'Numéro Pégase',
-  ministre: 'Ministre',
+  minister: 'Ministre',
   subjectId: "Objet de l'accompagnement",
   prescribingOrganizationId: 'Organisme prescripteur',
   prescribingOrganizationContactId: "Contact de l'organisme prescripteur",

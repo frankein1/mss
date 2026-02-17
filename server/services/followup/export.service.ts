@@ -14,13 +14,14 @@ import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { followupFieldLabels } from '~/client/labels'
 import { formatBeneficiaryDisplayName } from '~/utils'
+import { formatMinisterName } from '~/utils/minister'
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
   'date',
   'beneficiaryId',
   'numeroPegase',
-  'ministre',
+  'minister',
   'subjects',
   'medium',
   'prescribingOrganizationId',
@@ -74,8 +75,8 @@ export async function exportFollowups({
           dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
-          ministre: followup.ministre
-            ? ministerKeys.byKey[followup.ministre]
+          minister: followup.minister
+            ? formatMinisterName(followup.minister)
             : '',
           numeroPegase: followup.numeroPegase || '',
           place: followup.place || '',

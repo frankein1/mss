@@ -57,6 +57,7 @@ import {
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
+import { formatMinisterName } from '~/utils/minister'
 
 type FieldLabels<T> = Record<keyof T, any>
 
@@ -297,7 +298,7 @@ type SocialSupportForFollowupData = FieldLabels<
     | 'createdBy'
     | 'lastUpdatedBy'
     | 'date'
-    | 'ministre'
+    | 'minister'
     | 'numeroPegase'
     | 'status'
     | 'dueDate'
@@ -334,8 +335,8 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
     firstFollowup: socialSupport.followup?.firstFollowup || null,
     date: socialSupport.date.toLocaleDateString('fr-FR'),
-    ministre: socialSupport.ministre
-      ? ministerKeys.value(socialSupport.ministre)
+    minister: socialSupport.minister
+      ? formatMinisterName(socialSupport.minister)
       : null,
     numeroPegase: socialSupport.numeroPegase,
     duration: socialSupport.followup?.duration
@@ -376,7 +377,7 @@ type SocialSupportForFileInstructionData = FieldLabels<
     | 'createdBy'
     | 'lastUpdatedBy'
     | 'date'
-    | 'ministre'
+    | 'minister'
     | 'numeroPegase'
     | 'synthesis'
   >
@@ -476,8 +477,8 @@ const getHelpRequestData = (
     createdBy: getPrettyUserName(socialSupport.createdBy),
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
     date: socialSupport.date.toLocaleDateString('fr-FR'), // commun
-    ministre: socialSupport.ministre
-      ? ministerKeys.value(socialSupport.ministre)
+    minister: socialSupport.minister
+      ? formatMinisterName(socialSupport.minister)
       : null,
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
@@ -856,6 +857,7 @@ const getSocialSupports = async (
           }
         }
       },
+      minister: true,
       documents: {
         select: { name: true, type: true }
       },

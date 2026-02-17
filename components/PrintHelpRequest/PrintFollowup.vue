@@ -26,8 +26,8 @@
             :content="followup.numeroPegase"
           />
           <PrintDetailItem
-            :title="followupFieldLabels.ministre"
-            :content="followup.ministre"
+            :title="followupFieldLabels.minister"
+            :content="ministerName"
           />
           <PrintDetailItem
             :title="followupFieldLabels.medium"
@@ -100,13 +100,22 @@
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
+  import { formatMinisterName } from '~/utils/minister'
 
-  defineProps<{
+  const props = defineProps<{
     followup: FollowupOutput
   }>()
   const emit = defineEmits<{
     onUpdated: []
   }>()
+
+  const ministerName = computed(() => {
+    if (!props.followup.minister) {
+      return null
+    }
+    return formatMinisterName(props.followup.minister)
+  })
+
   const onUpdated = () => {
     emit('onUpdated')
   }

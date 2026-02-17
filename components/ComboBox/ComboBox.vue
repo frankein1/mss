@@ -109,7 +109,10 @@
     onFocusHeader?: () => void
   }>()
 
-  defineSlots<{ default(props: { option: Option; input: string }): unknown }>()
+  const slots = defineSlots<{
+    default(props: { option: Option; input: string }): unknown
+    header?(props: { input: string; options: Option[] }): unknown
+  }>()
 
   const emit = defineEmits<{
     select: [option: Option]
@@ -120,7 +123,7 @@
     model.value = null
     displayedValue.value = ''
   }
-  defineExpose({ reset })
+
   const loading = ref<boolean>(false)
   const error = ref<string>('')
 
@@ -173,18 +176,38 @@
     }
   }
 
+  const selectActiveRow = (e: KeyboardEvent): number => {
+    if (activeRow.value === -1 && e.key === 'ArrowDown') {
+      activeRow.value = 0
+    }
+    handleKeydown(e)
+    return activeRow.value
+  }
+
   function handleKeydown(e: KeyboardEvent) {
     openList.value = true
+    const hasHeader = !!slots.header
     switch (e.key) {
       case 'ArrowDown':
-        e.preventDefault()
-        activeRow.value = (activeRow.value + 1) % options.length
+        if (slots.header && activeRow.value === -1) {
+          onFocusHeader()
+          openList.value = true
+        } else {
+          e.preventDefault()
+          if (activeRow.value < options.length - 1) {
+            activeRow.value++
+          } else {
+            activeRow.value = hasHeader ? -1 : 0
+          }
+        }
         break
-      case 'ArrowUp':
+      case 'ArrowUp': {
         e.preventDefault()
+        const limit = hasHeader ? -1 : 0
         activeRow.value =
-          activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
+          activeRow.value <= limit ? options.length - 1 : activeRow.value - 1
         break
+      }
       case 'Enter': {
         e.preventDefault()
         const ar = activeRow.value
@@ -229,6 +252,20 @@
       reset()
     }
   })
+
+  watch(
+    () => model.value,
+    newVal => {
+      if (newVal) {
+        displayedValue.value = formatDisplayValue(newVal)
+      } else {
+        displayedValue.value = ''
+      }
+    },
+    { immediate: true }
+  )
+
+  defineExpose({ reset, selectActiveRow })
 </script>
 
 <style lang="scss" scoped>
@@ -284,6 +321,11 @@
     min-height: 1.5rem;
     padding: 4px;
     margin: 0;
+
+    &:focus {
+      outline: #0a76f6 solid 29px;
+      outline-offset: 2px;
+    }
   }
 
   .option {

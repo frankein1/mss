@@ -28,6 +28,7 @@ export const include = {
           subjects: true,
           lastUpdatedBy: true,
           documents: true,
+          minister: true,
           familyFile: {
             include: {
               referents: true

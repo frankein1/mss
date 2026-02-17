@@ -155,7 +155,7 @@
     if (application.value.module.ministere) {
       filters.push({
         name: 'ministre',
-        label: followupFieldLabels.ministre,
+        label: followupFieldLabels.minister,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,

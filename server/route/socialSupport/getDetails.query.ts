@@ -69,6 +69,7 @@ async function getSocialSupportDetail({
         }
       },
       appointment: true,
+      minister: true,
       subjects: true,
       _count: {
         select: {

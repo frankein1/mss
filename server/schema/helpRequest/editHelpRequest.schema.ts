@@ -10,9 +10,9 @@ export const editHelpRequestSchema = createHelpRequestSchemaBase
   .omit({
     financialSupport: true
   })
-  .refine(val => !val.isMinistry || val.ministre, {
+  .refine(val => !val.isMinistry || val.ministerId, {
     message: requiredErrorMessage,
-    path: ['ministre']
+    path: ['ministerId']
   })
 
 export type EditHelpRequestInput = z.infer<typeof editHelpRequestSchema>
