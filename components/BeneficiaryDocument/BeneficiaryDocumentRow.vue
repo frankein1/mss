@@ -2,6 +2,7 @@
   <tr>
     <td class="name">
       <p>
+        {{ storage[document.key] }}
         <span
           class="name-link"
           :title="document.name"
@@ -211,7 +212,16 @@
     return formatBeneficiaryShortenedName(selected[0])
   }
 
+  const storage = reactive(sessionStorage)
+
+  watch(
+    () => storage,
+    () => {
+      console.log(storage)
+    }
+  )
   async function onView() {
+    sessionStorage.setItem(props.document.key, 'VU')
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
     const data = await $fetch<Blob>(
       `/api/document/download?key=${props.document.key}`
