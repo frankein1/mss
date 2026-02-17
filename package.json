@@ -51,6 +51,7 @@
     "html-to-image": "1.11.11",
     "jsonwebtoken": "^9.0.2",
     "jszip": "^3.10.1",
+    "jwks-rsa": "^3.2.2",
     "lodash.merge": "^4.6.2",
     "magic-bytes.js": "^1.12.1",
     "mitt": "^3.0.1",

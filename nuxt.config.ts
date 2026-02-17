@@ -186,7 +186,7 @@ export default defineNuxtConfig({
       proconnectClientId: process.env.AUTH_PROCONNECT_CLIENT_ID,
       proconnectClientSecret: process.env.AUTH_PROCONNECT_CLIENT_SECRET,
       proconnectSigningAlgorithm:
-        process.env.AUTH_PROCONNECT_SIGNING_ALGORITHM || 'HS256',
+        process.env.AUTH_PROCONNECT_SIGNING_ALGORITHM || 'RS256',
       proconnectProvider: 'ProConnect',
       proconnectLabel: 'proconnect'
     },

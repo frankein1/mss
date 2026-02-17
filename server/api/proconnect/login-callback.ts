@@ -19,8 +19,9 @@ import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'
 import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
+import jwksClient from 'jwks-rsa'
 
-const { verify } = pkg
+const { verify, decode } = pkg
 
 const {
   auth: {
@@ -29,7 +30,6 @@ const {
     proconnectLabel,
     proconnectIssuer,
     proconnectClientId,
-    proconnectClientSecret,
     proconnectSigningAlgorithm,
     jwtKey
   },
@@ -39,6 +39,10 @@ const {
     appUrl
   }
 } = useRuntimeConfig()
+
+const proConnectJwksClient = jwksClient({
+  jwksUri: `${proconnectIssuer}/jwks`
+})
 
 // TODO: throw all errors at the same time
 // add server messages & client messages
@@ -80,7 +84,19 @@ export default defineEventHandler(async event => {
   let validatedIdToken: { nonce: string; amr: string[] } | null = null
 
   try {
-    validatedIdToken = verify(idToken, proconnectClientSecret, {
+    const decoded = decode(idToken, { complete: true })
+    if (!decoded) {
+      throw unauthorized('[ProConnect] Unable to decode id token')
+    }
+    const { header } = decoded
+
+    const proConnectKey = await proConnectJwksClient.getSigningKey(header.kid)
+    const proConnectSigningKey = proConnectKey.getPublicKey()
+    if (!proConnectSigningKey) {
+      throw unauthorized('[ProConnect] Unable to get signing key')
+    }
+
+    validatedIdToken = verify(idToken, proConnectSigningKey, {
       algorithms: [proconnectSigningAlgorithm as pkg.Algorithm],
       audience: proconnectClientId,
       issuer: proconnectIssuer,
@@ -98,7 +114,16 @@ export default defineEventHandler(async event => {
   // Validate jwt user info signature
   let validatedUserInfo: ProConnectUserInfo | null = null
   try {
-    validatedUserInfo = verify(userinfo, proconnectClientSecret, {
+    const decoded = decode(userinfo, { complete: true })
+    if (!decoded) {
+      throw unauthorized('[ProConnect] Unable to decode userinfo')
+    }
+    const { header } = decoded
+
+    const proConnectKey = await proConnectJwksClient.getSigningKey(header.kid)
+    const proConnectSigningKey = proConnectKey.getPublicKey()
+
+    validatedUserInfo = verify(userinfo, proConnectSigningKey, {
       algorithms: [proconnectSigningAlgorithm as pkg.Algorithm],
       audience: proconnectClientId,
       issuer: proconnectIssuer
