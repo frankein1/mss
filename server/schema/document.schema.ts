@@ -1,7 +1,11 @@
 import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
 import { File } from 'node-fetch-native'
-import { stringConstraint, requiredNativeEnum } from './helpers.schema'
+import {
+  stringConstraint,
+  requiredNativeEnum,
+  limitedStringConstraint
+} from './helpers.schema'
 import { documentFileMaxSize, documentFileAllowedTypes } from '~/client/options'
 import {
   errorMessages,
@@ -10,7 +14,6 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
-import { MAX_UPLOAD_SIZE_BYTES } from '~/utils/constants'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
   documentFileMaxSize
@@ -31,12 +34,12 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
-  file: z
-    .instanceof(File, { message: requiredErrorMessage })
-    .refine(
-      file => file.size <= MAX_UPLOAD_SIZE_BYTES,
-      `Le taille du fichier ne doit pas dépasser 20MB.`
-    )
+  file: z.instanceof(File, { message: requiredErrorMessage }).refine(
+    // ajout taille minimale
+    file => file.size <= documentFileMaxSize,
+    documentSizeValidationErrorMessage
+    // ajout validation du mime type dans le frontend
+  )
 })
 
 export const addDocumentSchema = z.object({
@@ -50,6 +53,10 @@ export const addDocumentSchema = z.object({
     mimeType: documentMimeTypeValidation,
     size: documentSizeValidation
   })
+})
+
+export const validateUploadSchema = z.object({
+  key: z.string().uuid()
 })
 
 export const deleteDocumentSchema = z.object({
@@ -74,6 +81,7 @@ export const createUploadUrlSchema = z.object({
 })
 
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
+type ValidateUploadInput = z.infer<typeof validateUploadSchema>
 type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
 type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
@@ -81,6 +89,7 @@ type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
 
 export type {
   AddDocumentInput,
+  ValidateUploadInput,
   EditDocumentInput,
   DeleteDocumentInput,
   CreateUploadUrlInput,

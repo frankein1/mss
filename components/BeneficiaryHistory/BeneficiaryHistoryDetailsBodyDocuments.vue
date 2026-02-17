@@ -9,7 +9,7 @@
         v-if="permissions.view"
         class="fr-link"
         :title="`Voir ${document.name} - nouvelle fenêtre`"
-        @click="onView(document.key)"
+        @click="onView(document.key, document.migrated)"
       >
         {{ document.name }}</button
       ><template v-else>{{ document.name }} (confidentiel)</template
@@ -25,10 +25,12 @@
     documents: DocumentItems
   }>()
 
-  const { open } = useDownload()
+  const snackbar = useSnackbar()
+  const trpcClient = useTrpcClient()
+  const { legacyBlob } = useDownload()
 
-  const onView = async (key: string) => {
+  const onView = async (key: string, migrated: boolean) => {
     const data = await $fetch<Blob>(`/api/document/download?key=${key}`)
-    open(data)
+    legacyBlob.open(data)
   }
 </script>

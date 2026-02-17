@@ -1,6 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { DocumentConstraints } from '../constraints'
-import { appendConstraints } from './helper/appendConstraints'
+import {
+  appendConstraints,
+  appendCreateConstraints
+} from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'
 
@@ -25,12 +28,20 @@ function count(user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
   return prismaClient.document.count(params)
 }
 
+function create<T extends Prisma.DocumentCreateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.DocumentCreateArgs>
+) {
+  appendCreateConstraints(user, params, DocumentConstraints.create)
+  return prismaClient.document.create(params)
+}
+
 export const DocumentRepo = {
   findMany,
   findUniqueOrThrow,
   count,
+  create,
   prisma: {
-    create: prismaClient.document.create,
     delete: prismaClient.document.delete,
     deleteMany: prismaClient.document.deleteMany,
     update: prismaClient.document.update

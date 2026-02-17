@@ -7,7 +7,7 @@
         <span
           class="name-container"
           :title="document.name"
-          >{{ document.name }}</span
+          >{{ document.name }} {{ document.migrated ? '[S3]' : '[DB]' }}</span
         >
         <template v-if="familyFileIdentification.length > 1">
           <br />
@@ -136,7 +136,7 @@
     () => !!props.document._count.notifications
   )
 
-  const { download, open } = useDownload()
+  const { legacyBlob, open, download } = useDownload()
 
   function formatBeneficiary(beneficiaryId: string) {
     const selected = props.familyFileIdentification.filter(
@@ -150,18 +150,20 @@
 
   async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
+
     const data = await $fetch<Blob>(
       `/api/document/download?key=${props.document.key}`
     )
-    open(data)
+    legacyBlob.open(data)
   }
 
   async function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
+
     const data = await $fetch<Blob>(
       `/api/document/download?key=${props.document.key}`
     )
-    download(data, props.document.name)
+    legacyBlob.download(data, props.document.name)
   }
 
   function onEdit() {

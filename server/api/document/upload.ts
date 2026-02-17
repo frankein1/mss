@@ -1,20 +1,24 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
 import type { Document } from '@prisma/client'
 import { NotificationType, UserActivityType } from '@prisma/client'
-import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import type { FamilyFileSecurityTarget } from '~/server/services'
-import { FamilyFileService } from '~/server/services'
+import { DocumentService, FamilyFileService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
-import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
+import {
+  generateFilenameForDocument,
+  generateFileRootForDocument
+} from '~/server/services/document/helper'
+import { uploadWithEncryption } from '~/server/lib/s3/file'
+import { randomUUID } from 'node:crypto'
 
 export interface MultiPartData {
   data: Buffer
@@ -24,6 +28,7 @@ export interface MultiPartData {
 }
 
 export default defineEventHandler(async event => {
+  const config = useRuntimeConfig()
   const user = event.context.auth?.user
   if (
     !user ||
@@ -51,7 +56,8 @@ export default defineEventHandler(async event => {
   let input
   try {
     input = addDocumentSchema.parse(data)
-  } catch {
+  } catch (e: unknown) {
+    console.log('error in parsing', e)
     throw createError({
       statusCode: 400,
       message: 'Les données entrantes ne sont pas valides'
@@ -85,20 +91,20 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await FamilyFileService.getEditionPermissions(
+  const canCreateDocument = await DocumentService.getCreationPermissions(
     ctx,
     input.familyFileId
   )
 
-  if (!permissions.create) {
-    throw forbiddenError()
+  if (!canCreateDocument) {
+    throw forbiddenError('User is not allowed to create document')
   }
 
   if (!multipartFormData?.length) {
     throw invalidError('No multipart form data')
   }
 
-  const file = multipartFormData[0]
+  const file = multipartFormData.find(el => el.name === 'file')
 
   if (!file || !validateDocumentType(file.data)) {
     throw createError({
@@ -107,7 +113,28 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const document = await addDocument(input, user, file)
+  const filename = generateFilenameForDocument(input.file.name)
+  const bucketKey = `${generateFileRootForDocument(user.structureId, input.beneficiaryId)}/${filename}`
+  const documentKey = randomUUID()
+
+  await uploadWithEncryption({
+    config,
+    bucketKey,
+    plainData: file.data,
+    dataForEncryptionContext: {
+      documentKey,
+      contentType: input.file.mimeType,
+      contentLength: input.file.size
+    }
+  })
+
+  const document = await addDocument(
+    documentKey,
+    input,
+    user,
+    filename,
+    bucketKey
+  )
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
   addUserActivity({
@@ -124,7 +151,10 @@ export default defineEventHandler(async event => {
 
 async function addNotification(
   ctx: SecurityRuleContext,
-  document: Document,
+  document: Pick<
+    Document,
+    'key' | 'confidential' | 'createdById' | 'confidential'
+  >,
   familyFile: NonNullable<FamilyFileSecurityTarget>,
   beneficiaryId: string
 ) {
@@ -158,32 +188,39 @@ async function addNotification(
 }
 
 async function addDocument(
+  documentKey: string,
   input: AddDocumentInput,
   user: JwtUser,
-  multipartFormData: MultiPartData
+  filename: string,
+  filepath: string
 ) {
-  const key = v4()
-  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
-  const document = await DocumentRepo.prisma.create({
+  const document = await DocumentRepo.create(user, {
+    select: {
+      key: true,
+      confidential: true,
+      beneficiaryId: true,
+      createdById: true
+    },
     data: {
-      key,
-      name: sanitizeFilename(file.name),
-      familyFileId,
-      beneficiaryId,
-      filenameDisk: key,
-      mimeType: file.mimeType,
-      confidential,
-      tags,
-      createdById: user.id,
-      type,
-      size: file.size,
-      filenameDownload: sanitizeFilename(file.name),
-      migrated: true,
-      documentContent: {
-        create: {
-          content: multipartFormData.data
-        }
-      }
+      key: documentKey,
+      createdBy: {
+        connect: { id: user.id }
+      },
+      familyFile: {
+        connect: { id: input.familyFileId }
+      },
+      beneficiary: {
+        connect: { id: input.beneficiaryId }
+      },
+      name: filename,
+      filenameDisk: filepath,
+      filenameDownload: filepath,
+      type: input.type,
+      confidential: input.confidential,
+      tags: input.tags,
+      size: input.file.size,
+      mimeType: input.file.mimeType,
+      migrated: true // migrated to S3
     }
   })
 
