@@ -64,7 +64,7 @@ export async function uploadWithEncryption({
       Bucket: config.s3.bucket,
       Body: Buffer.from(encryptedContent),
       Key: bucketKey,
-      ContentType: dataForEncryptionContext.contentType,
+      ContentType: 'application/octet-stream', // default content-type
       Metadata: s3Metadata
     }
   })
