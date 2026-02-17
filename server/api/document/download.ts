@@ -112,7 +112,7 @@ export default defineEventHandler(async event => {
 
   // TODO: add headers for more security cache ? csp ?hsts ?
   event.node.res.setHeader('Content-Type', document.mimeType)
-  event.node.res.setHeader('Content-Length', '' + document.size)
+  event.node.res.setHeader('Content-Length', '' + documentContent.length)
   event.node.res.setHeader(
     'Content-Disposition',
     `attachment; filename="${encodeURIComponent(document.name)}"`
