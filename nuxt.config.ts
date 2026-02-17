@@ -14,6 +14,7 @@ const connectSrcCsp = [
   'https://matomo.dev.incubateur.anct.gouv.fr',
   'https://matomo.incubateur.anct.gouv.fr',
   'https://sentry.incubateur.net',
+  'https://sentry.incubateur.anct.gouv.fr',
   'https://conversations-widget.brevo.com/'
 ]
 
@@ -99,7 +100,8 @@ export default defineNuxtConfig({
     'nuxt-security',
     'vue-dsfr-nuxt-module',
     '@nuxt/eslint',
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    '@sentry/nuxt/module'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -109,10 +111,6 @@ export default defineNuxtConfig({
         // Fix websocket errors cf. https://github.com/nuxt/nuxt/discussions/27779
         clientPort: 3000
       }
-    },
-    // Adds sourcemaps for Sentry (may not work)
-    build: {
-      sourcemap: true
     },
     // https://github.com/nuxt/nuxt/issues/24196
     optimizeDeps: {
@@ -205,6 +203,9 @@ export default defineNuxtConfig({
       smtpSecure: (process.env.EMAIL_SMTP_SECURE || 'false') === 'true',
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
+    sentry: {
+      sourceMapAuthToken: process.env.SENTRY_SOURCE_MAP_AUTH_TOKEN || ''
+    },
     public: {
       version: {
         commitSha: process.env.COMMIT_SHA || '',
@@ -234,10 +235,19 @@ export default defineNuxtConfig({
         from: process.env.EMAIL_FROM || ''
       },
       sentry: {
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+        url: process.env.SENTRY_HOST,
         dsn: process.env.SENTRY_DSN,
         debug: (process.env.SENTRY_DEBUG || 'false') === 'true',
         tracesSampleRate: parseFloat(
           process.env.SENTRY_TRACE_SAMPLE_RATE || '0.1'
+        ),
+        replaySampleRate: parseFloat(
+          process.env.SENTRY_REPLAY_SAMPLE_RATE || '0.1'
+        ),
+        profileSessionSampleRate: parseFloat(
+          process.env.SENTRY_PROFILE_SESSION_SAMPLE_RATE || '0.01'
         )
       },
       metabase: {
@@ -255,10 +265,22 @@ export default defineNuxtConfig({
     }
   ],
 
-  // Adds sourcemaps for Sentry (may not been working until releases and auth token are used)
   sourcemap: {
-    client: true,
-    server: true
+    client: 'hidden'
+  },
+  sentry: {
+    // For source maps upload in CI
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_SOURCE_MAP_AUTH_TOKEN,
+    sentryUrl: process.env.SENTRY_HOST,
+    sourcemaps: {
+      filesToDeleteAfterUpload: [
+        './**/*.map',
+        '.*/**/public/**/*.map',
+        '.output/**/public/**/*.map'
+      ]
+    }
   },
 
   security: {
