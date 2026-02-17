@@ -36,12 +36,12 @@ export async function decrypt(
    * WARNING! The plaintext DEK MUST NEVER be transmitted or stored outside of the server.
    */
   const dataKey = await kms.decrypt({
-    keyId: config.kms.keyId,
+    keyId: metadata.kmsKeyId,
     ciphertext: encryptedDataKey
   })
 
   /** The webcrypto API needs to import the DEK in a specific format */
-  const algorithm = ALGORITHMS[metadata.encryptionAlgorithm] || ''
+  const algorithm = ALGORITHMS[metadata.encryptionAlgorithm]
   const extractable = false
   const encryptionKey = await webcrypto.subtle.importKey(
     'raw',
