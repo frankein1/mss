@@ -207,6 +207,11 @@
         label: 'Integrations',
         icon: 'fr-icon-discuss-line'
       })
+      items.push({
+        to: routes.admin.AdminMinisters.path(),
+        label: 'Ministres',
+        icon: 'fr-icon-shield-user-line'
+      })
     } else {
       items.push({
         to: routes.user.AppOverview.path(),

@@ -56,5 +56,20 @@ export const routes = {
     name: 'AdminIntegrations',
     title: 'Intégrations',
     path: () => `${AdminRoute}/integrations`
+  },
+  AdminMinisters: {
+    name: 'AdminMinisters',
+    title: 'Ministres',
+    path: () => `${AdminRoute}/ministers`
+  },
+  AdminMinisterAdd: {
+    name: 'AdminMinisterAdd',
+    title: 'Ajouter un ministre',
+    path: () => `${AdminRoute}/ministers/add`
+  },
+  AdminMinisterEdit: {
+    name: 'AdminMinisterEdit',
+    title: 'Modifier un ministre',
+    path: (ministerId: string) => `${AdminRoute}/ministers/${ministerId}/edit`
   }
 } as const

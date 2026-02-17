@@ -2,9 +2,16 @@ import {
   Minister,
   BeneficiaryMinistereStructure,
   BeneficiaryMinistereCategorie,
-  BeneficiaryMinistereDepartementServiceAc
+  BeneficiaryMinistereDepartementServiceAc,
+  MinisterStatus
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
+
+export const ministerStatusKeys = buildKeys({
+  [MinisterStatus.Current]: 'Ministre actuel',
+  [MinisterStatus.Former]: 'Ministre ancien',
+  [MinisterStatus.Deleted]: 'Ministre supprimé'
+})
 
 export const ministerKeys = buildKeys({
   [Minister.JeanPierreFarandou]:

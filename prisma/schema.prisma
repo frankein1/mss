@@ -377,8 +377,11 @@ model SocialSupport {
   synthesisRichText        String? @map("synthesis_rich_text")
   privateSynthesisRichText String? @map("private_synthesis_rich_text")
 
-  ministre     Minister?
-  numeroPegase String?   @map("numero_pegase")
+  ministre   Minister?
+  minister   MinisterEntity? @relation(fields: [ministerId], references: [id])
+  ministerId String?         @map("minister_id") @db.Uuid
+
+  numeroPegase String? @map("numero_pegase")
 
   status  SocialSupportStatus
   dueDate DateTime?           @map("due_date") @db.Date
@@ -1029,6 +1032,34 @@ enum BeneficiaryOrientationType {
   SuiviCabinet
   //Autre
   Autre
+}
+
+model MinisterEntity {
+  id String @id @default(uuid()) @db.Uuid
+
+  firstName String @map("first_name")
+  lastName  String @map("last_name")
+
+  function   String
+  government String
+  status     MinisterStatus
+
+  // Relations
+  socialSupports SocialSupport[]
+  // oldMinister used for migration from Minister enum to MinisterEntity table
+  oldMinister    Minister?       @map("old_minister")
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  @@unique([firstName, lastName, government, status])
+  @@map("minister")
+}
+
+enum MinisterStatus {
+  Current
+  Former
+  Deleted
 }
 
 enum Minister {
@@ -2043,6 +2074,7 @@ enum UserActivityObject {
   SocialSupportSubject
   Workshop
   WorkshopName
+  Minister
 }
 
 model UserActivity {

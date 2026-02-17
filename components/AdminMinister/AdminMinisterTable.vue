@@ -1,0 +1,69 @@
+<template>
+  <div
+    v-if="ministers?.length"
+    class="table-container fr-mt-3w fr-mb-3w"
+    tabindex="0"
+  >
+    <div
+      class="fr-table fr-table--bordered fr-table--no-caption fr-mb-0 fr-pt-0"
+    >
+      <table>
+        <caption>
+          Liste des Ministres
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Fonction</th>
+            <th scope="col">Gouvernement</th>
+            <th scope="col">Gouvernement passé</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="minister in ministers"
+            :key="minister.id"
+            class="clickable-row"
+          >
+            <td>
+              <NuxtLink
+                class="table-row-link"
+                :to="routes.admin.AdminMinisterEdit.path(minister.id)"
+              >
+                {{ minister.firstName }}
+              </NuxtLink>
+            </td>
+            <td>{{ minister.lastName }}</td>
+            <td>{{ minister.function }}</td>
+            <td>{{ minister.government }}</td>
+            <td>
+              {{ minister.status === MinisterStatus.Former ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { routes } from '~/utils/routes'
+  import type { AdminMinistersOutput } from './types'
+  import { MinisterStatus } from '@prisma/client'
+
+  defineProps<{ ministers: AdminMinistersOutput[] }>()
+</script>
+
+<style scoped lang="scss">
+  .table-container {
+    width: 100%;
+    max-width: 100%;
+
+    .fr-table {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+  }
+</style>
