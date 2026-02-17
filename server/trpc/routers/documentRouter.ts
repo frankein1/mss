@@ -1,8 +1,7 @@
 import { protectedProcedure, router } from '..'
 import {
   deleteDocumentMutation,
-  editDocumentMutation,
-  getSignedUrlQuery
+  editDocumentMutation
 } from '~/server/route/document'
 
 export const documentRouter = router({
@@ -11,8 +10,5 @@ export const documentRouter = router({
     .mutation(editDocumentMutation.execute),
   delete: protectedProcedure
     .input(deleteDocumentMutation.inputValidation)
-    .mutation(deleteDocumentMutation.execute),
-  getSignedUrl: protectedProcedure
-    .input(getSignedUrlQuery.inputValidation)
-    .query(getSignedUrlQuery.execute)
+    .mutation(deleteDocumentMutation.execute)
 })

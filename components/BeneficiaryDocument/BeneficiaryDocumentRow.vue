@@ -150,52 +150,20 @@
 
   async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
-    // If document has not been migrated, fetch document from DB
-    if (!props.document.migrated) {
-      const data = await $fetch<Blob>(
-        `/api/document/download?key=${props.document.key}`
-      )
-      legacyBlob.open(data)
 
-      return
-    }
-
-    // Else, fetch document from S3
-    const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
-      key: props.document.key
-    })
-
-    if (!data.value || status.value === 'error') {
-      snackbar.error('Le chargement du document a échoué.')
-      return
-    }
-
-    open(data.value)
+    const data = await $fetch<Blob>(
+      `/api/document/download?key=${props.document.key}`
+    )
+    legacyBlob.open(data)
   }
 
   async function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
-    // If document has not been migrated, fetch document from DB
-    if (!props.document.migrated) {
-      const data = await $fetch<Blob>(
-        `/api/document/download?key=${props.document.key}`
-      )
-      legacyBlob.download(data, props.document.name)
 
-      return
-    }
-
-    // Else, fetch document from S3
-    const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
-      key: props.document.key
-    })
-
-    if (!data.value || status.value === 'error') {
-      snackbar.error('Le chargement du document a échoué.')
-      return
-    }
-
-    download(data.value, props.document.name, props.document.type)
+    const data = await $fetch<Blob>(
+      `/api/document/download?key=${props.document.key}`
+    )
+    legacyBlob.download(data, props.document.name)
   }
 
   function onEdit() {

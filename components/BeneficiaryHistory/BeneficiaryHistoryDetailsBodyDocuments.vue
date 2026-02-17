@@ -27,27 +27,10 @@
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
-  const { legacyBlob, open } = useDownload()
+  const { legacyBlob } = useDownload()
 
   const onView = async (key: string, migrated: boolean) => {
-    // If document has not been migrated, fetch document from DB
-    if (!migrated) {
-      const data = await $fetch<Blob>(`/api/document/download?key=${key}`)
-      legacyBlob.open(data)
-
-      return
-    }
-
-    // Else, fetch document from S3
-    const { data, status } = await trpcClient.documents.getSignedUrl.useQuery({
-      key
-    })
-
-    if (!data.value || status.value === 'error') {
-      snackbar.error('Le chargement du document a échoué.')
-      return
-    }
-
-    open(data.value)
+    const data = await $fetch<Blob>(`/api/document/download?key=${key}`)
+    legacyBlob.open(data)
   }
 </script>
