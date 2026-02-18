@@ -12,8 +12,14 @@
       >
         Retour
       </NuxtLink>
-      <PageTitle :title="title" />
+      <PageTitle :title="title">
+        <RequiredFields />
+      </PageTitle>
 
+      <FormErrors
+        v-if="errors.length > 1"
+        :errors="errors"
+      />
       <UserFormProfil />
       <UserFormAccessAndRole class="fr-mt-8v" />
     </PageContainer>
@@ -28,10 +34,13 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { createUserSchema, type CreateUserInput } from '~/server/schema'
+  import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const title = routes.structure.AppStructureUserAdd.title
+  const form = ref<HTMLFormElement | null>(null)
+
   useHead({ title })
 
   // Form
@@ -39,9 +48,13 @@
     validationSchema: toTypedSchema(createUserSchema)
   })
 
-  const { onSubmit } = useCatchFormErrors(handleSubmit, values => {
-    onUpdateUser(values)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      onUpdateUser(values)
+    }
+  )
+  const { errors } = useDisplayFormErrors(form, caughtErrors, userFieldLabels)
 
   const { mutate, error, status } = trpcClient.user.add.useMutation()
   const onUpdateUser = async (input: CreateUserInput) => {
@@ -53,7 +66,6 @@
       return
     }
     snackbar.success("L'utilisateur a été créé avec succès.")
-    // TODO add matomo ??
     navigateTo(routes.structure.AppStructure.path())
   }
 

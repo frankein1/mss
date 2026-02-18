@@ -18,7 +18,14 @@
         >
           Retour
         </NuxtLink>
-        <PageTitle :title="title" />
+        <PageTitle :title="title">
+          <RequiredFields />
+        </PageTitle>
+
+        <FormErrors
+          v-if="errors.length > 1"
+          :errors="errors"
+        />
         <UserFormProfil update />
         <UserFormAccessAndRole
           update
@@ -39,11 +46,13 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { editUserSchema, type UpdateUserInput } from '~/server/schema'
+  import { userFieldLabels } from '~/client/labels'
 
   const route = useRoute()
   const userId = route.params.id as string
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+  const form = ref<HTMLFormElement | null>(null)
 
   const {
     data: user,
@@ -78,9 +87,13 @@
     }
   })
 
-  const { onSubmit } = useCatchFormErrors(handleSubmit, values => {
-    onUpdateUser(values)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      onUpdateUser(values)
+    }
+  )
+  const { errors } = useDisplayFormErrors(form, caughtErrors, userFieldLabels)
 
   const { mutate, error, status } = trpcClient.user.update.useMutation()
   const onUpdateUser = async (input: UpdateUserInput) => {
@@ -92,7 +105,6 @@
       return
     }
     snackbar.success("L'utilisateur a été modifié avec succès.")
-    // TODO add matomo ??
     await navigateTo(routes.structure.AppStructure.path())
   }
 
