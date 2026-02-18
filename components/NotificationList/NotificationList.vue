@@ -73,7 +73,8 @@
         return [
           NotificationType.DueDateOneMonth,
           NotificationType.DueDateToday,
-          NotificationType.EndOfSupport
+          NotificationType.EndOfSupport,
+          NotificationType.EndOfSupportOneMonth
         ]
       case NotificationTypeFilterValue.NewComment:
         return [NotificationType.NewComment]
@@ -98,6 +99,7 @@
           NotificationType.DueDateToday,
           NotificationType.DueDateOneMonth,
           NotificationType.EndOfSupport,
+          NotificationType.EndOfSupportOneMonth,
           NotificationType.NewFileInstructionElement,
           NotificationType.UpdateFileInstructionElement,
           NotificationType.NewFollowupElement,

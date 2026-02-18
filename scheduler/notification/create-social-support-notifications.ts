@@ -73,7 +73,12 @@ async function createDueTodaySocialSupportNotifications() {
   )
 }
 
-async function createEndOfSupportHelpRequestNotifications() {
+async function createEndOfSupportHelpRequestNotifications(
+  type: 'EndOfSupport' | 'EndOfSupportOneMonth'
+) {
+  const handlingDate =
+    type === 'EndOfSupport' ? new Date() : dayjs().add(1, 'month').toDate()
+
   const endOfSupportHelpRequests = await HelpRequestRepo.prisma.findMany({
     include: {
       fileInstruction: {
@@ -83,7 +88,7 @@ async function createEndOfSupportHelpRequestNotifications() {
       }
     },
     where: {
-      handlingDate: new Date()
+      handlingDate
     }
   })
 
@@ -97,7 +102,7 @@ async function createEndOfSupportHelpRequestNotifications() {
         }
       },
       where: {
-        handlingDate: new Date()
+        handlingDate
       }
     })
 
@@ -110,7 +115,10 @@ async function createEndOfSupportHelpRequestNotifications() {
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
-      type: NotificationType.EndOfSupport
+      type:
+        type === 'EndOfSupport'
+          ? NotificationType.EndOfSupport
+          : NotificationType.EndOfSupportOneMonth
     }))
 
   const res = await NotificationRepo.prisma.createMany({
@@ -118,7 +126,7 @@ async function createEndOfSupportHelpRequestNotifications() {
   })
 
   console.log(
-    `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for help request end of support`
+    `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for help request end of support ${type === 'EndOfSupport' ? 'today' : 'in a month'}`
   )
 }
 
@@ -127,6 +135,12 @@ export default {
     await withErrorCapture(createDueInAMonthSocialSupportNotifications),
   createDueTodaySocialSupportNotifications: async () =>
     await withErrorCapture(createDueTodaySocialSupportNotifications),
-  createEndOfSupportHelpRequestNotifications: async () =>
-    withErrorCapture(createEndOfSupportHelpRequestNotifications)
+  createEndOfSupportTodayHelpRequestNotifications: async () =>
+    withErrorCapture(() =>
+      createEndOfSupportHelpRequestNotifications('EndOfSupport')
+    ),
+  createEndOfSupportInAMonthHelpRequestNotifications: async () =>
+    withErrorCapture(() =>
+      createEndOfSupportHelpRequestNotifications('EndOfSupportOneMonth')
+    )
 }

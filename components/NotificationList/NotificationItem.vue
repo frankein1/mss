@@ -117,6 +117,7 @@
       case NotificationType.DueDateToday:
       case NotificationType.DueDateOneMonth:
       case NotificationType.EndOfSupport:
+      case NotificationType.EndOfSupportOneMonth:
       case NotificationType.NewComment:
       case NotificationType.NewFollowupElement:
       case NotificationType.UpdateFollowupElement:

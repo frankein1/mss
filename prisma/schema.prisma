@@ -1981,6 +1981,7 @@ enum NotificationType {
   DueDateToday                 @map("DueDate")
   DueDateOneMonth
   EndOfSupport
+  EndOfSupportOneMonth
   NewFileInstructionElement
   UpdateFileInstructionElement
   NewFollowupElement

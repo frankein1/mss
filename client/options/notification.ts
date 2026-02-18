@@ -5,6 +5,7 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.DueDateToday]: 'Échéance',
   [NotificationType.DueDateOneMonth]: 'Échéance',
   [NotificationType.EndOfSupport]: 'Échéance',
+  [NotificationType.EndOfSupportOneMonth]: 'Échéance',
   [NotificationType.NewComment]: 'Commentaire',
   [NotificationType.NewDocument]: 'Document',
   [NotificationType.NewFileInstructionElement]: 'Instruction',

@@ -49,7 +49,8 @@ function startScheduler() {
     async () => {
       await socialSupportNotifications.createDueInAMonthSocialSupportNotifications()
       await socialSupportNotifications.createDueTodaySocialSupportNotifications()
-      await socialSupportNotifications.createEndOfSupportHelpRequestNotifications()
+      await socialSupportNotifications.createEndOfSupportTodayHelpRequestNotifications()
+      await socialSupportNotifications.createEndOfSupportInAMonthHelpRequestNotifications()
 
       // TO BE UNCOMMENTED WHEN RuntimeConfig issue is solved and when lastActivity has been migrated
       // await beneficiaryToBeArchivedNotifications.createArchiveDueRemindersNotifications()

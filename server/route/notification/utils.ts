@@ -51,6 +51,11 @@ export function getDescription(notification: Notification) {
       return getDateNotificationDescription(created, 'Échéance')
     case 'EndOfSupport':
       return getDateNotificationDescription(created, 'Fin de prise en charge')
+    case 'EndOfSupportOneMonth':
+      return getDateNotificationDescription(
+        dateInAMonth,
+        'Fin de prise en charge'
+      )
     case 'NewComment':
       return 'Nouveau commentaire'
     case 'NewDocument':
@@ -117,7 +122,11 @@ export function getDescriptionHint(
     case 'EndOfSupport':
       return isFu
         ? "sur la synthèse d'entretien"
-        : "sur le dossier d'instruction"
+        : "sur le dossier d'instruction."
+    case 'EndOfSupportOneMonth':
+      return isFu
+        ? "sur la synthèse d'entretien"
+        : "sur le dossier d'instruction."
     case 'NewComment':
     case 'NewDocument':
     case 'NewFileInstructionElement':
