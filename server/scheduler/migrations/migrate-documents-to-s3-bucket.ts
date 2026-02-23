@@ -171,11 +171,13 @@ async function setDocumentAsMigrated(documentKey: string, bucketKey: string) {
   return await prismaClient.document.update({
     select: { key: true },
     where: {
-      key: documentKey,
+      key: documentKey
+    },
+    data: {
+      migrated: true,
       filenameDisk: bucketKey,
       filenameDownload: bucketKey
-    },
-    data: { migrated: true }
+    }
   })
 }
 

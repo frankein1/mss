@@ -23,12 +23,12 @@ export async function deleteFile(
 }
 
 interface S3Metadata {
-  'x-amz-meta-encrypted': string
-  'x-amz-meta-encryption-version': string
-  'x-amz-meta-encryption-algorithm': string
-  'x-amz-meta-kms-key-id': string
-  'x-amz-meta-encrypted-data-key': string
-  'x-amz-meta-iv': string
+  'encrypted': string
+  'encryption-version': string
+  'encryption-algorithm': string
+  'kms-key-id': string
+  'encrypted-data-key': string
+  'iv': string
 }
 interface UploadWithEncryptionInput {
   config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>
@@ -50,12 +50,12 @@ export async function uploadWithEncryption({
   // Encrypted DEK and iv are stored in S3 metadata
   // The other metadata variables are used to regenerate the Associated Authenticated Data
   const s3Metadata = {
-    'x-amz-meta-encrypted': 'true',
-    'x-amz-meta-encryption-version': config.document.encryptionVersion,
-    'x-amz-meta-encryption-algorithm': config.document.encryptionAlgorithm,
-    'x-amz-meta-kms-key-id': kmsKeyId,
-    'x-amz-meta-encrypted-data-key': encryptedDataKey,
-    'x-amz-meta-iv': ivBase64
+    'encrypted': 'true',
+    'encryption-version': config.document.encryptionVersion,
+    'encryption-algorithm': config.document.encryptionAlgorithm,
+    'kms-key-id': kmsKeyId,
+    'encrypted-data-key': encryptedDataKey,
+    'iv': ivBase64
   } satisfies S3Metadata
 
   const upload = new Upload({
@@ -101,20 +101,20 @@ export async function downloadWithEncryption({
     return { success: false, reason: 'missing file metadata' } as const
   }
 
-  const encryptedDataKey = download.Metadata['x-amz-meta-encrypted-data-key']
+  const encryptedDataKey = download.Metadata['encrypted-data-key']
   if (!encryptedDataKey) {
     return { success: false, reason: 'missing DEK' } as const
   }
 
-  const iv = download.Metadata['x-amz-meta-iv']
+  const iv = download.Metadata['iv']
   if (!iv) {
     return { success: false, reason: 'missing iv' } as const
   }
 
   if (
-    !download.Metadata['x-amz-meta-encryption-version'] ||
-    !download.Metadata['x-amz-meta-encryption-algorithm'] ||
-    !download.Metadata['x-amz-meta-kms-key-id']
+    !download.Metadata['encryption-version'] ||
+    !download.Metadata['encryption-algorithm'] ||
+    !download.Metadata['kms-key-id']
   ) {
     return { success: false, reason: 'missing metadata content' } as const
   }
@@ -127,9 +127,9 @@ export async function downloadWithEncryption({
     encryptedDataKey,
     iv,
     {
-      encryptionVersion: download.Metadata['x-amz-meta-encryption-version'],
-      encryptionAlgorithm: download.Metadata['x-amz-meta-encryption-algorithm'],
-      kmsKeyId: download.Metadata['x-amz-meta-kms-key-id']
+      encryptionVersion: download.Metadata['encryption-version'],
+      encryptionAlgorithm: download.Metadata['encryption-algorithm'],
+      kmsKeyId: download.Metadata['kms-key-id']
     },
     dataForEncryptionContext
   )
