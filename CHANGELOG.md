@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.55.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.54.2...v1.55.0) (2026-02-23)
+
+
+### Features
+
+* **brevo:** envoyer un événement lors de l'activation de RDVSP ([ea94458](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ea94458bee0c09aa79b7429f53ae55a423fff503))
+* **ministres:** création d'une table ministres et opération CRUD depuis admin ([d989508](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d989508cd502f9c82336c00964d996fcc65e8a6b)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+* **notification:** ajout notifications pour date de fin de prise en charge à M-1 ([d71c6de](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d71c6de62f02d806c9162c54c51b55b8fb395d61)), closes [#1030](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1030)
+* **search:** ajout de la recherche par numéro Pégase ([6e80b68](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6e80b6808844a36321339e4f4d20ea6e612cb1a8))
+
+
+### Bug Fixes
+
+* **notifications:** règle pour les dossiers conserver 1 an supplémentaire ([60f2760](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/60f2760bcbd1ee7a27c1685ce694d613e00d8f31)), closes [#755](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/755)
+* **structure:** fix focus sur les erreurs dans formulaire utilisateur ([287107b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/287107bfb2636d92e15f2b260f327cd23950e105))
+
 ## [1.54.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.54.1...v1.54.2) (2026-02-09)
 
 
