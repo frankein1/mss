@@ -85,9 +85,9 @@ const configStructure: Record<
   external_rdvsp_id: true,
   deactivation_alert_email: true,
   deactivation_alert_email_date: true,
+  phone: true,
   // -- BEGIN ANONYMIZED
   email: false,
-  phone: false,
   dpo_email: false,
   dpo_first_name: false,
   dpo_last_name: false
