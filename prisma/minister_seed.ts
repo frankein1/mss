@@ -1,4 +1,9 @@
-import { PrismaClient, Minister, MinisterStatus } from '@prisma/client'
+import {
+  PrismaClient,
+  Minister,
+  MinisterStatus,
+  type Prisma
+} from '@prisma/client'
 
 const prismaClient = new PrismaClient()
 
@@ -7,178 +12,198 @@ const ministerMap = {
     firstName: 'François',
     lastName: 'Braun',
     function: 'Santé et Prévention',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'FrancoisBraun'
   },
   AgnesFirminLeBodo: {
     firstName: 'Agnès',
     lastName: 'Firmin-Le Bodo',
     function: 'Santé et Prévention',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'AgnesFirminLeBodo'
   },
   JeanChristopheCombe: {
     firstName: 'Jean-Christophe',
     lastName: 'Combe',
     function: 'Solidarités, Autonomie et Personnes handicapées',
-    ministry: 'Solidarités, Autonomie et Personnes handicapées',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'JeanChristopheCombe'
   },
   GenevieveDarrieussecq: {
     firstName: 'Geneviève',
     lastName: 'Darrieussecq',
     function: 'Personnes handicapées',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'GenevieveDarrieussecq'
   },
   GenevieveDarrieussecqBarnier1: {
     firstName: 'Geneviève',
     lastName: 'Darrieussecq',
     function: 'Ministre de la Santé et de l’Accès aux soins',
-    government: 'Barnier 1',
-    former: true
+    government: 'Barnier1',
+    status: MinisterStatus.Former,
+    oldMinister: 'GenevieveDarrieussecqBarnier1'
   },
   OlivierDussopt: {
     firstName: 'Olivier',
     lastName: 'Dussopt',
     function: 'Travail, Plein emploi et Insertion',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'OlivierDussopt'
   },
   CaroleGrandjean: {
     firstName: 'Carole',
     lastName: 'Grandjean',
     function: 'Enseignement, Formation professionnels',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'CaroleGrandjean'
   },
   AurelienRousseau: {
     firstName: 'Aurélien',
     lastName: 'Rousseau',
     function: 'Santé et Prévention',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'AurelienRousseau'
   },
   AuroreBerge: {
     firstName: 'Aurore',
     lastName: 'Bergé',
     function: 'Solidarités et Familles',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'AuroreBerge'
   },
   FadilaKhattabi: {
     firstName: 'Fadila',
     lastName: 'Khattabi',
     function: 'Personnes handicapées',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'FadilaKhattabi'
   },
   CatherineVautrin: {
     firstName: 'Catherine',
     lastName: 'Vautrin',
     function: 'Travail, Santé et Solidarités',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'CatherineVautrin'
   },
   FredericValletoux: {
     firstName: 'Frédéric',
     lastName: 'Valletoux',
     function: 'Délégué Santé et Prévention',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'FredericValletoux'
   },
   SarahElHairy: {
     firstName: 'Sarah',
     lastName: 'El Haïry',
     function: 'Déléguée Enfance, Jeunesse et Familles',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'SarahElHairy'
   },
   AstridPanosyanBouvet: {
     firstName: 'Astrid',
     lastName: 'Panosyan-Bouvet',
     function: 'Ministre du Travail et de l’Emploi',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'AstridPanosyanBouvet'
   },
   PaulChristophe: {
     firstName: 'Paul',
     lastName: 'Christophe',
     function:
       'Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes',
-    ministry:
-      'Ministère des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'PaulChristophe'
   },
   AgnesCanayer: {
     firstName: 'Agnès',
     lastName: 'Canayer',
     function:
       'Ministre déléguée, chargée de la Famille et de la Petite Enfance',
-    ministry: 'Ministère de la Famille et de la Petite Enfance',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'AgnesCanayer'
   },
   SalimaSaa: {
     firstName: 'Salima',
     lastName: 'Saa',
     function:
       "Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes",
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'SalimaSaa'
   },
   CharlotteParmentierLecocq: {
     firstName: 'Charlotte',
     lastName: 'Parmentier-Lecocq',
     function:
       'Ministre déléguée, chargée des Personnes en situation de handicap',
-    former: true,
-    government: 'non renseigné'
+    status: MinisterStatus.Former,
+    government: 'non renseigné',
+    oldMinister: 'CharlotteParmentierLecocq'
   },
   CatherineVautrinBayrou1: {
     firstName: 'Catherine',
     lastName: 'Vautrin',
     function:
       'Ministre du Travail, de la Santé, des Solidarités et des Familles',
-    government: 'Bayrou',
-    former: true
+    government: 'Bayrou1',
+    status: MinisterStatus.Former,
+    oldMinister: 'CatherineVautrinBayrou1'
   },
   AstridPanosyanBouvetBayrou1: {
     firstName: 'Astrid',
     lastName: 'Panosyan-Bouvet',
     function: "Ministre chargée du Travail et de l'Emploi",
-    government: 'Bayrou',
-    former: true
+    government: 'Bayrou1',
+    status: MinisterStatus.Former,
+    oldMinister: 'AstridPanosyanBouvetBayrou1'
   },
   YannickNeuder: {
     firstName: 'Yannick',
     lastName: 'Neuder',
     function: "Ministre chargé de la Santé et de l'Accès aux soins",
-    government: 'Bayrou',
-    former: true
+    government: 'Bayrou1',
+    status: MinisterStatus.Former,
+    oldMinister: 'YannickNeuder'
   },
   CharlotteParmentierLecocqBayrou1: {
     firstName: 'Charlotte',
     lastName: 'Parmentier-Lecocq',
     function: 'Ministre chargée de l’Autonomie et du Handicap',
-    government: 'Bayrou',
-    former: true
+    government: 'Bayrou1',
+    status: MinisterStatus.Former,
+    oldMinister: 'CharlotteParmentierLecocqBayrou1'
   },
   SarahElHairyBayrou1: {
     firstName: 'Sarah',
     lastName: 'El Haïry',
     function: 'Haut-commissaire à l’enfance',
-    government: 'Bayrou',
-    former: true
+    government: 'Bayrou1',
+    status: MinisterStatus.Former,
+    oldMinister: 'SarahElHairyBayrou1'
   },
   JeanPierreFarandou: {
     firstName: 'Jean-Pierre',
     lastName: 'Farandou',
     function: 'Ministre du Travail et des Solidarités',
     government: 'Lecornu',
-    former: false
+    status: MinisterStatus.Former,
+    oldMinister: 'JeanPierreFarandou'
   },
   StephanieRist: {
     firstName: 'Stephanie',
@@ -186,7 +211,8 @@ const ministerMap = {
     function:
       'Ministre de la Santé, des Familles, de l’Autonomie et des Personnes handicapées',
     government: 'Lecornu',
-    former: false
+    status: MinisterStatus.Current,
+    oldMinister: 'StephanieRist'
   },
   CharlotteParmentierLecornu2: {
     firstName: 'Charlotte',
@@ -194,16 +220,18 @@ const ministerMap = {
     function:
       'Ministre déléguée, chargée de l’Autonomie et des Personnes handicapées',
     government: 'Lecornu',
-    former: false
+    status: MinisterStatus.Current,
+    oldMinister: 'CharlotteParmentierLecornu2'
   },
   SarahElHairyLecornu2: {
     firstName: 'Sarah',
     lastName: 'El Haïry',
     function: 'Haut-commissaire à l’enfance',
     government: 'Lecornu',
-    former: false
+    status: MinisterStatus.Current,
+    oldMinister: 'SarahElHairyLecornu2'
   }
-}
+} satisfies Record<string, Prisma.MinisterEntityCreateInput>
 
 const main = async () => {
   console.log('⏱️ Creating ministers...')
@@ -218,9 +246,7 @@ const main = async () => {
             lastName: ministerMap[minister].lastName,
             function: ministerMap[minister].function,
             government: ministerMap[minister].government,
-            status: ministerMap[minister].former
-              ? MinisterStatus.Former
-              : MinisterStatus.Current
+            status: ministerMap[minister].status
           },
           select: { id: true }
         })

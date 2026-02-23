@@ -144,7 +144,6 @@
   }
 
   const onSelect = (minister: MinisterOutput) => {
-    ministers.value = []
     emit('onSetMinisterId', minister.id)
   }
 

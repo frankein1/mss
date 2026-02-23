@@ -82,7 +82,9 @@
           <slot
             :option="option"
             :input="displayedValue"
-          ></slot>
+          >
+            {{ option }}
+          </slot>
         </li>
       </ul>
     </div>
@@ -97,7 +99,7 @@
     required = false,
     labelVisible = true,
     options,
-    formatDisplayValue = String,
+    formatDisplayValue = JSON.stringify,
     onFocusHeader = () => {}
   } = defineProps<{
     label: string
@@ -253,17 +255,17 @@
     }
   })
 
-  watch(
-    () => model.value,
-    newVal => {
-      if (newVal) {
-        displayedValue.value = formatDisplayValue(newVal)
-      } else {
-        displayedValue.value = ''
-      }
-    },
-    { immediate: true }
-  )
+  // watch(
+  //   () => model.value,
+  //   newVal => {
+  //     if (newVal) {
+  //       displayedValue.value = formatDisplayValue(newVal)
+  //     } else {
+  //       displayedValue.value = ''
+  //     }
+  //   },
+  //   { immediate: true }
+  // )
 
   defineExpose({ reset, selectActiveRow })
 </script>
