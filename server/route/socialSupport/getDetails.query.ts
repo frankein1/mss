@@ -4,20 +4,9 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
-import { SocialSupportRepo, StructureRepo } from '~/server/database'
+import { SocialSupportRepo } from '~/server/database'
 import { SocialSupportService } from '~/server/services'
 import { formatSocialSupportDetail } from './utils'
-
-async function getRdvspOrganisationId(ctx: ProtectedAppContext) {
-  if (!ctx.structure.externalRdvspActive) {
-    return ''
-  }
-  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: ctx.structure.id },
-    select: { externalRdvspId: true }
-  })
-  return structure.externalRdvspId || ''
-}
 
 async function getSocialSupportDetail({
   ctx,
@@ -68,7 +57,6 @@ async function getSocialSupportDetail({
           prescribingOrganizationContact: true
         }
       },
-      appointment: true,
       subjects: true,
       _count: {
         select: {
@@ -88,17 +76,9 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const [socialSupport, rdvspOrganisationId] = await Promise.all([
-    getSocialSupportDetail({ ctx, input }),
-    getRdvspOrganisationId(ctx)
-  ])
+  const socialSupport = await getSocialSupportDetail({ ctx, input })
 
-  return formatSocialSupportDetail(
-    socialSupport,
-    ctx,
-    socialSupport.familyFile,
-    rdvspOrganisationId
-  )
+  return formatSocialSupportDetail(socialSupport, ctx, socialSupport.familyFile)
 }
 
 export type SocialSupportDetail = Prisma.PromiseReturnType<

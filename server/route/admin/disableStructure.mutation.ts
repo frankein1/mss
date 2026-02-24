@@ -2,7 +2,6 @@ import type { Prisma } from '@prisma/client'
 import { UserStatus, UserActivityType } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import {
-  AppointmentRepo,
   BeneficiaryRelativeRepo,
   BeneficiaryRepo,
   BudgetRepo,
@@ -103,7 +102,6 @@ const adminHandler = async ({
   await updateHelpRequests(id)
   await updateHousingHelpRequests(id)
   await updateFollowups(id)
-  await updateAppointments(id)
 
   const socialSupportUpdate: Required<
     Omit<
@@ -457,34 +455,6 @@ async function updateFollowups(structureId: string) {
       socialSupport: { structureId }
     },
     data: followupUpdate
-  })
-}
-
-async function updateAppointments(structureId: string) {
-  const appointmentUpdate: Required<
-    Omit<
-      Prisma.AppointmentUncheckedUpdateManyInput,
-      | 'id'
-      | 'created'
-      | 'updated'
-      | 'subject'
-      | 'externalSubjectId'
-      | 'agentId'
-      | 'socialSupportId'
-    >
-  > = {
-    draft: false,
-    externalDraftId: null,
-    time: null,
-    durationInMin: null,
-    place: null,
-    externalRdvspId: null
-  }
-  await AppointmentRepo.prisma.updateMany({
-    where: {
-      socialSupport: { structureId }
-    },
-    data: appointmentUpdate
   })
 }
 

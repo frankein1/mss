@@ -18,10 +18,6 @@ export type HousingHelpRequestData = NonNullable<
   FileInstructionData['housingHelpRequest']
 >
 
-export type AppointmentData = NonNullable<
-  SocialSupportDetailData['appointment']
->
-
 export type CommentItems = Exclude<
   SocialSupportDetailData['comments'],
   undefined

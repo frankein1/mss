@@ -147,7 +147,6 @@ test('Structure - Disable - Administrator should be able to deactivate structure
     where: { familyFileId },
     include: {
       followup: true,
-      appointment: true,
       fileInstruction: {
         include: {
           helpRequest: true,

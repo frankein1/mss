@@ -117,8 +117,6 @@ model User {
   splitFromFileBeneficiaries Beneficiary[]         @relation(name: "split_from_file_beneficiaries")
   archivedBeneficiaries2     ArchivedBeneficiary[] @relation(name: "archived_beneficiaries_2")
 
-  appointments Appointment[] @relation(name: "appointments")
-
   createdPartnerOrganizations PartnerOrganization[]
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
@@ -396,7 +394,6 @@ model SocialSupport {
 
   followup        Followup?
   fileInstruction FileInstruction?
-  appointment     Appointment?
 
   @@index(fields: [structureId, familyFileId], map: "social_support_structure_id_family_file_id_idx")
   @@index(fields: [beneficiaryId], map: "social_support_beneficiary_id_idx")
@@ -637,32 +634,6 @@ model HousingHelpRequest {
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
 
   @@map("housing_help_request")
-}
-
-model Appointment {
-  id String @id @default(uuid()) @db.Uuid
-
-  draft           Boolean
-  externalDraftId String? @map("external_draft_id")
-
-  created DateTime @default(now())
-  updated DateTime @updatedAt
-
-  time          DateTime? @db.Time(0)
-  durationInMin Decimal?  @map("duration_in_min")
-  place         String?
-
-  subject           String?
-  externalSubjectId String? @map("external_subject_id")
-  externalRdvspId   String? @map("external_rdvsp_id")
-
-  agentId String? @map("agent_id") @db.Uuid
-  agent   User?   @relation(name: "appointments", fields: [agentId], references: [id])
-
-  socialSupportId String        @unique @map("social_support_id") @db.Uuid
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
-
-  @@map("appointment")
 }
 
 enum BeneficiaryStatus {

@@ -12,15 +12,13 @@ import {
   filterHousingHelpRequest,
   filterSocialSupport
 } from '~/server/services/helper'
-import { getAppointmentRdvspUrl } from '~/server/services/rdvsp/helper'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SocialSupportDetail } from './getDetails.query'
 
 export function formatSocialSupportDetail(
   socialSupport: SocialSupportDetail,
   ctx: ProtectedAppContext,
-  familyFile: FamilyFileSecurityTarget,
-  rdvspOrganisationId: string
+  familyFile: FamilyFileSecurityTarget
 ) {
   const {
     rdvsp: { issuer }
@@ -36,7 +34,7 @@ export function formatSocialSupportDetail(
 
   const appPermissions = getAppContextPermissions(ctx)
 
-  const { followup, fileInstruction, appointment } = socialSupport
+  const { followup, fileInstruction } = socialSupport
 
   const conditions = {
     minister: appPermissions.module.ministere,
@@ -96,17 +94,6 @@ export function formatSocialSupportDetail(
     })
   }))
 
-  const appointmentData = appointment
-    ? {
-        ...appointment,
-        url: getAppointmentRdvspUrl(
-          issuer,
-          rdvspOrganisationId,
-          appointment.externalRdvspId || ''
-        )
-      }
-    : null
-
   return {
     data: {
       ...otherData,
@@ -118,8 +105,7 @@ export function formatSocialSupportDetail(
         ...filteredFileInstruction,
         helpRequest: filteredHelpRequest,
         housingHelpRequest: filteredHousingHelpRequest
-      },
-      appointment: appointmentData
+      }
     },
     permissions: socialSupportPermissions
   }
