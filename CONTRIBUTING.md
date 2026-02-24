@@ -1,123 +1,147 @@
-# Comment Contribuer
+# Contribuer à Mon Suivi Social
 
-Merci de prendre le temps de contribuer ! 🎉
+Merci de prendre le temps de contribuer à **Mon Suivi Social** 💜 ! Ce guide décrit comment mettre en place votre environnement et soumettre vos contributions.
 
-## Signaler un problème
+Le projet est hébergé sur [GitLab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2). Toutes les contributions (merge requests, issues) se font sur GitLab.
 
-Afin de signaler un problème ou proposer des évolutions à notre plateforme, merci de [nous contacter par email](mailto:support@monsuivisocial.incubateur.anct.gouv.fr).
+## Table des matières
 
-## Soumettre une modification
+1. [Mise en place de l'environnement](#mise-en-place-de-lenvironnement)
+2. [Outils de développement](#outils-de-développement)
+3. [Vérifier avant de pousser](#vérifier-avant-de-pousser)
+4. [Workflow Git](#workflow-git)
+5. [Merge Requests et revue de code](#merge-requests-et-revue-de-code)
+6. [Signaler un bug](#signaler-un-bug)
+7. [Documentation et ressources](#documentation-et-ressources)
 
-Les merge requests sont bienvenues ! N’hésitez pas à [nous en parler à l’avance](mailto:monsuivisocial@anct.gouv.fr).
+---
 
-La démarche est habituelle : faites un fork, créez une branche, faites une PR.
+## Mise en place de l'environnement
 
-Pour les petites corrections de fautes d’orthographe, n’hésitez pas à proposer une modification directement depuis github.com.
+### Prérequis
 
-## Mettre en place le dépôt local
+- **Node.js** : voir le champ `engines` du `package.json`
+- **pnpm** : voir le champ `packageManager` du `package.json`
+- **Docker Compose** (pour la base de données PostgreSQL)
 
-Mon Suivi Social dépend de deux services externes :
+### Installation
 
-- le service d'authentification Inclusion Connect
-- un serveur SMTP d'envoi de mails transactionnels à choisir
+Les étapes d'installation sont décrites dans le [README.md](./README.md).
 
-Afin d'être autonome en local, il est possible d'installer ces deux services
+### Services externes
 
-### Installation locale d'Inclusion Connect
+Pour être autonome en local, vous aurez besoin de :
 
-https://github.com/gip-inclusion/inclusion-connect
+- **ProConnect** (authentification) : créez un compte d'intégration sur [partenaires.proconnect.gouv.fr](https://partenaires.proconnect.gouv.fr/)
+- **Serveur SMTP** (emails) : voir la configuration Mailtrap décrite dans le [README.md](./README.md)
 
-Installation avec https://github.com/gip-inclusion/inclusion-connect/blob/main/docs/development.md
+## Outils de développement
 
-Modifications nécessaires de la configuration :
+**Prisma Studio** : interface web pour explorer/modifier la base de données
 
-[...]
+```
+pnpm prisma studio
+```
 
-Connexion à l'interface administrateur
+**Mode debug** : affiche les logs de Prisma, tRPC et RDVSP
 
-- permet de valider les comptes
+```
+pnpm dev:log
+```
 
-### Interception des mails de connexion en local
+## Vérifier avant de pousser
 
-- table Email dans prisma studio
+Avant de pousser votre branche, exécutez les vérifications suivantes :
 
-Permet de récupérer les mails de connexion pour avoir accès à la plateforme d'administration qui permet de créer le premier utilisateur
+```bash
+pnpm lint:typecheck    # vérification des types TypeScript
+pnpm test              # tests unitaires et d'intégration (Vitest)
+```
 
-Alternativement, https://github.com/maildev/maildev
+Des hooks de pre-commit (Husky) exécutent automatiquement ESLint, Prettier et stylelint à chaque commit. [Talisman](https://github.com/thoughtworks/talisman) doit également être installé pour détecter les secrets et fichiers sensibles avant chaque commit.
 
-### Setup du .env
+## Workflow Git
 
-voir README.md
+### Branche principale
 
-- Mettre la config du serveur mail local si nécessaire
-- Mettre la config de la DB locale postgres & MAJ DATABASE_URL
-- Mettre la config de Inclusion Connect
+- **`main`** est la branche de déploiement de la version de développement, elle est protégée et accessible uniquement par Merge Request
+- Les versions suivent le [Semantic Versioning](https://semver.org/) et sont générées automatiquement via `commit-and-tag-version`, qui produit les tags de version et le CHANGELOG à partir des commits conventionnels
 
+### Nommage des branches
 
-### Création du premier utilisateur
+Format : `<numéro-issue>-description-courte`
 
-## Style de code
+Utilisez le numéro de l'issue GitLab associée. Si aucune issue n'existe, créez-en une avant de commencer.
 
+```
+42-ajout-champ-email
+153-correction-export-csv
+```
 
-### Frontend
+### Conventional Commits
 
-- Architecture de Nuxt
-- Rendu serveur donc peu de données stockées dans le store on privilégie une seule source de vérité, la BDD
-- Nommage en anglais et traduction des notions métiers
-- Au maximum des requêtes prisma
+Le projet utilise [**Conventional Commits**](https://www.conventionalcommits.org/en/v1.0.0/#summary) (obligatoire). Les commits sont rédigés en **français** et servent à générer automatiquement le CHANGELOG via `commit-and-tag-version`.
 
-A investiguer : traduction des notions métiers en français
+Pour le scope, utilisez le domaine métier ou technique concerné : beneficiaire, accompagnement, document, auth, archivage, atelier.
 
-### Backend
+Exemple :
 
-voir doc d'archi technique
-- wrapper trpc pour les points d'entrée API :
-  - sécurité par design
-  - permissions et roles
-  - organisation routeur - route - handler - service - repo
+```
+feat(beneficiaire): ajout d'un champ au formulaire complet
 
+- Mise à jour des exports
+- Adaptation de l'archivage
+```
 
-### Linter
+Les titres des merge requests suivent le même format pour permettre le "squash and merge".
 
-Lint manuel avec `pnpm lint`. Validé par la CI
-Compilation typescript
-Lint vue, js/ts,css et formattage avec prettier
+## Merge Requests et revue de code
 
-Fix avec `pnpm lintfix`
+### Ouvrir une Merge Request
 
-## Tests
+1. Forkez le projet sur GitLab
+2. Poussez votre branche sur votre fork : `git push origin <votre-branche>`
+3. Sur GitLab, créez une merge request depuis votre fork vers le projet principal
+4. Remplissez le titre (format Conventional Commits) et la description :
+   - **Contexte** : pourquoi ce changement ?
+   - **Changements** : quoi exactement ?
+   - **Comment tester** : étapes de vérification
+   - **Captures d'écran** (si UI)
+   - **Issue liée** : `cf. #123`
 
-### Priorisation des tests
+### CI automatique
 
-- e2e
-- tests API
-- test métiers avec base de données
-- tests UI de composants custom complexes
-- tests e2e d'accessibilité (lancement manuel)
+Les pipelines CI ne sont pas accessibles pour les contributeurs externes. Un mainteneur déclenchera la pipeline sur votre MR après une première revue. Tous les checks doivent passer avant le merge.
 
-A investiguer : 
-- base de données in-memory https://github.com/morintd/prismock/
+### Revue de code
 
-## Workflow de merge des pull requests
+Au moins **1 approbation** est requise. Les reviewers vérifient en particulier :
 
-Afin de garder un historique git lisible et navigable par `git blame`, nous recommandons l'une de ces deux façons de merger une PR :
+- **Type-safety** : le code doit passer `nuxt typecheck`
+- **Sécurité** : contrôle d'accès, validation des inputs
+- **Accessibilité** : conformité DSFR/RGAA
+- **Tests** : chemins critiques couverts
 
-- Utiliser _"Squash and merge"_ si les commits de la PR n'apportent pas individuellement de valeur explicative sur le contexte.
-- Utiliser _"Create a merge commit"_ si la PR contient des commits qui permettent de mieux comprendre les différents changements indépendants introduits dans la PR.
+Pour les conventions de code détaillées, consultez [CLAUDE.md](./CLAUDE.md) et les fichiers [.claude/rules/](./.claude/rules/). **Lecture recommandée pour tout nouveau contributeur.**
 
-Au sein de notre projet, il est assumé que la majorité du contexte autour du changement est trouvable dans la PR et non dans les commits. Cependant, il est tout à fait possible de conserver ses commits si on les a bien créés pour qu'ils permettent d'obtenir rapidement une synthèse du contexte via `git blame`.
+## Signaler un bug ou proposer un changement
 
-Par exemple, si au sein d'une même PR on effectue un (petit 🤞) refactor puis une évolution fonctionnelle, il est apprécié que le refactor fasse l'objet d'un commit séparé.
+Utilisez le système d'issues GitLab avec les templates disponibles :
 
-Note : il est possible de réécrire son historique de commits juste avant de merger, si des commits correctifs ont été ajoutés durant la revue.
+- **`bogue.md`** : pour signaler un bug
+- **`ajout-champ.md`** : pour proposer l'ajout d'un champ de formulaire, avec le cadrage des impacts associés
 
-Un point d'attention : si vous avez mergé la branche `production` dans votre branche de feature pendant la vie de votre PR, veillez à ce que ces commits de merge ne finissent pas dans `production`. Pour ce faire :
-- si vous utilisez un squash merge, ces commits vont disparaître
-- si vous mergez dans `production` le plus pratique est de rebase votre branche sur `production` avant de merger.
+Les issues sont triées par l'équipe. Une issue prête à être développée recevra le label `READY TO DEV` et sera associée à un milestone indiquant dans quelle version elle sera planifiée.
 
-Note : lorsque votre feature branch n'est plus à jour par rapport à `production`, GitHub affiche un avertissement "This branch is out-of-date with the base branch" et vous propose de remédier à la situation. Ce faisant, on déclenche une CI qui teste le code tel qu'il serait s'il était mergé. Si cette CI passe, on peut alors merger.
+## Documentation et ressources
 
-## Inspiré de
+- [README.md](./README.md) — installation et commandes principales
+- [CLAUDE.md](./CLAUDE.md) — architecture, conventions de code, patterns
+- [.claude/rules/](./.claude/rules/) — description de l'architecture et des conventions du projet par domaine (sécurité, data model, tests, accessibilité, etc.)
 
-- https://github.com/betagouv/mon-entreprise/blob/master/CONTRIBUTING.md
-- https://github.com/betagouv/rdv-service-public/blob/production/docs/2-contributions.md
+---
+
+## Questions ?
+
+- Ouvrez une issue sur GitLab
+- Contactez l'équipe via [Tchap](https://tchap.gouv.fr) ou via le [formulaire de contact](https://monsuivisocial.incubateur.anct.gouv.fr/contactez-nous/)
