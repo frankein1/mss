@@ -10,7 +10,8 @@ export const getDocumentsSchema = z
     orderBy: z
       .object({
         name: z.nativeEnum(Prisma.SortOrder).optional(),
-        created: z.nativeEnum(Prisma.SortOrder).optional()
+        created: z.nativeEnum(Prisma.SortOrder).optional(),
+        expirationDate: z.nativeEnum(Prisma.SortOrder).optional()
       })
       .optional()
   })

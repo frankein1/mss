@@ -206,6 +206,7 @@ model Document {
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   created        DateTime?       @default(now())
+  expirationDate DateTime?       @map("expiration_date") @db.Date
   createdBy      User            @relation(fields: [createdById], references: [id])
   createdById    String          @map("created_by_id") @db.Uuid
   socialSupports SocialSupport[] @relation("document_to_social_support")
@@ -1948,6 +1949,8 @@ model PartnerOrganizationContact {
 
 enum NotificationType {
   NewDocument
+  DocumentExpirationToday      @map("DocumentExpired")
+  DocumentExpirationOneMonth
   NewComment
   DueDateToday                 @map("DueDate")
   DueDateOneMonth

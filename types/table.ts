@@ -12,6 +12,7 @@ export type BeneficiarySort = {
 export type BeneficiaryDocumentSort = {
   name?: SortOrder
   created?: SortOrder
+  expirationDate?: SortOrder
 }
 
 export type FollowupSort = {

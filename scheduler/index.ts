@@ -8,6 +8,7 @@ import sendMailsForInactiveStructures from './email/create-emails-for-inactive-s
 import sendEmailsForAccountReminder from './email/create-emails-for-account-reminder'
 import anonymizeArchivedBeneficiaries from './archived-beneficiary/anonymize-archived-beneficiary'
 import socialSupportNotifications from './notification/create-social-support-notifications'
+import documentNotifications from './notification/create-document-notifications'
 
 const timezone = 'Europe/Paris'
 
@@ -51,6 +52,8 @@ function startScheduler() {
       await socialSupportNotifications.createDueTodaySocialSupportNotifications()
       await socialSupportNotifications.createEndOfSupportTodayHelpRequestNotifications()
       await socialSupportNotifications.createEndOfSupportInAMonthHelpRequestNotifications()
+      await documentNotifications.createDueInAMonthDocumentNotifications()
+      await documentNotifications.createDueTodayDocumentNotifications()
 
       // TO BE UNCOMMENTED WHEN RuntimeConfig issue is solved and when lastActivity has been migrated
       // await beneficiaryToBeArchivedNotifications.createArchiveDueRemindersNotifications()

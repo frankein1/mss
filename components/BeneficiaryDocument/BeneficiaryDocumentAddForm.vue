@@ -39,6 +39,12 @@
       :label="documentFieldLabels.confidential"
       name="confidential"
     />
+    <VeeInput
+      class="fr-mb-3w"
+      :label="documentFieldLabels.expirationDate"
+      name="expirationDate"
+      type="date"
+    />
 
     <VeeInputFile
       label="Selectionner un fichier"

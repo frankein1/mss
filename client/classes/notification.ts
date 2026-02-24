@@ -7,6 +7,8 @@ export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.EndOfSupportOneMonth]: 'fr-icon-calendar-event-line',
   [NotificationType.NewComment]: 'fr-icon-message-2-line',
   [NotificationType.NewDocument]: 'fr-icon-file-text-line',
+  [NotificationType.DocumentExpirationToday]: 'fr-icon-file-text-line',
+  [NotificationType.DocumentExpirationOneMonth]: 'fr-icon-file-text-line',
   [NotificationType.NewFollowupElement]: 'fr-icon-draft-line',
   [NotificationType.UpdateFollowupElement]: 'fr-icon-draft-line',
   [NotificationType.NewFileInstructionElement]: 'fr-icon-questionnaire-line',

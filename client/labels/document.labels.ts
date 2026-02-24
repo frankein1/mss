@@ -3,7 +3,7 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type DocumentFieldLabels = Pick<
   Document,
-  'type' | 'confidential' | 'tags' | 'name'
+  'type' | 'confidential' | 'tags' | 'name' | 'expirationDate'
 > & { file: string }
 
 export const documentFieldLabels: FieldLabels<DocumentFieldLabels> = {
@@ -11,5 +11,6 @@ export const documentFieldLabels: FieldLabels<DocumentFieldLabels> = {
   confidential: 'Confidentiel',
   tags: 'Thèmes',
   name: 'Nom du fichier',
-  file: 'Fichier'
+  file: 'Fichier',
+  expirationDate: "Date d'expiration"
 }

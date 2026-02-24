@@ -1,7 +1,7 @@
 import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
 import { File } from 'node-fetch-native'
-import { stringConstraint, requiredNativeEnum } from './helpers.schema'
+import { stringConstraint, requiredNativeEnum, dateOrEmpty } from './helpers.schema'
 import { documentFileMaxSize, documentFileAllowedTypes } from '~/client/options'
 import {
   errorMessages,
@@ -31,6 +31,7 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
+  expirationDate: dateOrEmpty,
   file: z
     .instanceof(File, { message: requiredErrorMessage })
     .refine(
@@ -45,6 +46,7 @@ export const addDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
+  expirationDate: dateOrEmpty,
   file: z.object({
     name: z.string(),
     mimeType: documentMimeTypeValidation,
@@ -64,7 +66,8 @@ export const editDocumentSchema = z.object({
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
-  confidential: z.boolean().default(false)
+  confidential: z.boolean().default(false),
+  expirationDate: dateOrEmpty
 })
 
 export const createUploadUrlSchema = z.object({

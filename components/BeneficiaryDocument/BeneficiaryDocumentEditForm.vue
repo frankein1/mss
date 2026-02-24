@@ -31,6 +31,12 @@
       :label="documentFieldLabels.confidential"
       name="confidential"
     />
+    <VeeInput
+      class="fr-mb-3w"
+      :label="documentFieldLabels.expirationDate"
+      name="expirationDate"
+      type="date"
+    />
     <button
       class="fr-btn fr-mt-3w"
       title="Modifier"
@@ -68,7 +74,8 @@
       name: props.document.name,
       type: props.document.type,
       tags: props.document.tags,
-      confidential: props.document.confidential
+      confidential: props.document.confidential,
+      expirationDate: props.document.expirationDate ?? undefined
     }
   })
 

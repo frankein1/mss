@@ -29,6 +29,12 @@
         NOUVEAU
       </span>
     </td>
+    <td>
+      <template v-if="document.expirationDate">
+        {{ formatDate(document.expirationDate) }}
+      </template>
+      <template v-else>—</template>
+    </td>
     <td>{{ formatDateToLocalTimezone(document.created) }}</td>
     <td class="tags-data">
       <span

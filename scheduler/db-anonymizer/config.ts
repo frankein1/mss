@@ -228,6 +228,7 @@ const configDocument: Record<
   beneficiary_id: true,
   tags: true,
   confidential: true,
+  expiration_date: true,
   // -- BEGIN ANONYMIZED
   name: false,
   filename_disk: false,

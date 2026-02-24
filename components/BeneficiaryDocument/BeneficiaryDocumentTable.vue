@@ -20,6 +20,12 @@
               @update:sort="emit('update:sort', { name: $event })"
             />
             <TableSortableHeader
+              label="Date expiration"
+              :sort="sort.expirationDate"
+              numeric
+              @update:sort="emit('update:sort', { expirationDate: $event })"
+            />
+            <TableSortableHeader
               label="Date ajout"
               :sort="sort.created"
               numeric
