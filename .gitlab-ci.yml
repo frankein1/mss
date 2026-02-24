@@ -132,7 +132,8 @@ sonarcloud-check:
     - job: pnpm:test
       artifacts: true
   rules:
-    # Runs on branches that are not empty
+    # Runs on default branch and on branches that are not empty
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH
       changes:
         compare_to: 'refs/heads/main'

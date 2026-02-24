@@ -19,6 +19,7 @@ export default defineVitestConfig({
       reporter: 'lcov',
       exclude: [
         ...coverageConfigDefaults.exclude,
+        'e2e/**',
         '**/*{.,-}{story}.?(c|m)[jt]s?(x)',
         'pages/stories.vue'
       ]
