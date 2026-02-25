@@ -1,19 +1,22 @@
 <template>
   <tr>
-    <td class="type-data">{{ documentTypeKeys.value(document.type) }}</td>
-
     <td class="name">
       <p>
         <span
-          class="name-container"
+          class="name-link"
           :title="document.name"
-          >{{ document.name }}</span
         >
+          {{ document.name }}
+        </span>
+      </p>
+      <p class="name-subtitle">
+        <span
+          :class="documentTypeIcon"
+          aria-hidden="true"
+        ></span>
+        {{ documentTypeKeys.value(document.type) }}
         <template v-if="familyFileIdentification.length > 1">
-          <br />
-          <span class="name-container">
-            {{ formatBeneficiary(document.beneficiaryId) }}</span
-          >
+          · {{ formatBeneficiary(document.beneficiaryId) }}
         </template>
       </p>
       <span
@@ -32,10 +35,16 @@
     <td>
       <template v-if="document.expirationDate">
         {{ formatDate(document.expirationDate) }}
+        <br />
+        <span
+          v-if="isExpired"
+          class="fr-badge fr-badge--sm fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-time-line"
+        >
+          EXPIRÉ
+        </span>
       </template>
       <template v-else>—</template>
     </td>
-    <td>{{ formatDateToLocalTimezone(document.created) }}</td>
     <td class="tags-data">
       <span
         v-if="document.tags.length"
@@ -55,35 +64,54 @@
       >
     </td>
     <td>
+      {{ formatDateToLocalTimezone(document.created) }}
+      <span
+        v-if="createdByName"
+        class="created-by"
+      >
+        <br />
+        {{ createdByName }}
+      </span>
+    </td>
+    <td>
       <ul class="fr-btns-group fr-btns-group--inline">
-        <template v-if="permissions.view">
-          <li>
+        <li v-if="permissions.view">
+          <button
+            v-if="isViewable"
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
+            title="Voir dans une nouvelle fenêtre"
+            :aria-label="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
+            :aria-describedby="!isViewable ? 'tooltip-not-viewable' : ''"
+            @click="onView"
+          >
+            Voir
+          </button>
+          <template v-else>
             <button
-              class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
+              class="fr-btn fr-btn--tertiary-no-outline fr-btn--tooltip fr-icon-eye-line"
               title="Voir dans une nouvelle fenêtre"
-              :aria-label="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
-              @click="onView"
+              aria-describedby="tooltip-not-viewable"
             >
               Voir
             </button>
-          </li>
-          <li>
-            <NuxtLink
-              target="_blank"
-              external
-              hidden
-              @click="onDownload"
-            />
-            <button
-              class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
-              title="Télécharger"
-              :aria-label="`Télécharger ${document.name}`"
-              @click="onDownload"
-            >
-              Télécharger
-            </button>
-          </li>
-        </template>
+            <span
+              id="tooltip-not-viewable"
+              class="fr-tooltip fr-placement"
+              role="tooltip"
+              >Ce fichier ne peut pas être visualisé dans le navigateur
+            </span>
+          </template>
+        </li>
+        <li v-if="permissions.view">
+          <button
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
+            title="Télécharger"
+            :aria-label="`Télécharger ${document.name}`"
+            @click="onDownload"
+          >
+            Télécharger
+          </button>
+        </li>
         <li v-if="permissions.edit">
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
@@ -112,15 +140,22 @@
 </template>
 
 <script lang="ts" setup>
+  import dayjs from 'dayjs'
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
   import type { GetDocument } from './types'
   import type { EditDocumentInput } from '~/server/schema'
   import type { DocumentTag } from '~/types/document'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
-  import { documentTypeKeys, documentTagKeys } from '~/client/options'
+  import {
+    documentTypeKeys,
+    documentTypeIcons,
+    documentTagKeys,
+    viewableInBrowserTypes
+  } from '~/client/options'
   import type { DocumentPermissions } from '~/server/security'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { formatUserDisplayName } from '~/utils/user/formatUserDisplayName'
 
   const modal = useModal()
   const matomo = useMatomo()
@@ -140,6 +175,28 @@
 
   const hasUnreadNotifications = computed(
     () => !!props.document._count.notifications
+  )
+
+  const isExpired = computed(
+    () =>
+      props.document.expirationDate &&
+      dayjs(props.document.expirationDate).isBefore(dayjs(), 'day')
+  )
+
+  const documentTypeIcon = computed(
+    () => documentTypeIcons[props.document.type]
+  )
+
+  const createdByName = computed(() => {
+    const createdBy = props.document.createdBy
+    if (!createdBy) {
+      return null
+    }
+    return formatUserDisplayName(createdBy)
+  })
+
+  const isViewable = computed(() =>
+    viewableInBrowserTypes.includes(props.document.mimeType)
   )
 
   const { download, open } = useDownload()
@@ -222,19 +279,26 @@
     }
   }
 
-  .name-container {
+  .name-link {
     word-break: normal; // Allows to split dashed or underscored document names
     overflow-wrap: anywhere;
     overflow: hidden;
     display: -webkit-box;
-    height: 1rem;
     -webkit-line-clamp: 1;
     line-clamp: 1;
     -webkit-box-orient: vertical;
   }
 
-  .type-data,
-  .family-member-data,
+  .name-subtitle {
+    color: var(--text-mention-grey);
+    font-size: 0.75rem;
+  }
+
+  .created-by {
+    color: var(--text-mention-grey);
+    font-size: 0.75rem;
+  }
+
   .tags-data {
     white-space: nowrap;
   }

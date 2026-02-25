@@ -40,6 +40,12 @@ const handler = ({
     where: { key },
     data,
     include: {
+      createdBy: {
+        select: {
+          firstName: true,
+          lastName: true
+        }
+      },
       _count: {
         select: {
           notifications: {

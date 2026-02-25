@@ -12,19 +12,25 @@
             @filter="documentsFilters = $event"
           />
         </div>
-        <div class="fr-col-12">
-          <BeneficiaryDocumentAddButton
-            :family-file-id="familyFileId"
-            :family-file-identification="familyFileIdentification || []"
-            @new-document="() => refresh()"
-          />
-        </div>
       </div>
     </div>
   </section>
   <section class="feature-section fr-mt-2w">
     <h3 class="fr-sr-only">Liste des documents</h3>
-    <p v-if="documentsCount">{{ documentsCount }} document(s)</p>
+    <div class="document-list-header">
+      <p
+        v-if="documentsCount"
+        class="fr-mb-0"
+      >
+        {{ documentsCount }} document(s)
+      </p>
+      <BeneficiaryDocumentAddButton
+        :family-file-id="familyFileId"
+        :family-file-identification="familyFileIdentification || []"
+        @new-document="() => refresh()"
+      />
+    </div>
+
     <AtomAlert
       v-if="error"
       class="fr-mx-5v"
@@ -134,5 +140,12 @@
     > :deep(*:last-child) {
       flex-shrink: 0;
     }
+  }
+
+  .document-list-header {
+    display: flex;
+    flex-wrap: wrap; // button goes below on small screens
+    align-items: center;
+    justify-content: space-between;
   }
 </style>

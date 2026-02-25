@@ -13,7 +13,6 @@
         </caption>
         <thead>
           <tr>
-            <th scope="col">Type</th>
             <TableSortableHeader
               label="Nom"
               :sort="sort.name"
@@ -25,13 +24,13 @@
               numeric
               @update:sort="emit('update:sort', { expirationDate: $event })"
             />
+            <th scope="col">Thèmes</th>
             <TableSortableHeader
-              label="Date ajout"
+              label="Ajout"
               :sort="sort.created"
               numeric
               @update:sort="emit('update:sort', { created: $event })"
             />
-            <th scope="col">Thèmes</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>

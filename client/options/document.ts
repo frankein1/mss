@@ -16,6 +16,13 @@ export const documentFileAllowedTypes = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.oasis.opendocument.text'
 ]
+export const viewableInBrowserTypes = [
+  'application/pdf',
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/webp'
+]
 
 export const documentTypeKeys = buildKeys({
   [DocumentType.Cerfa]: 'CERFA',
@@ -23,6 +30,13 @@ export const documentTypeKeys = buildKeys({
   [DocumentType.Justificatifs]: 'Justificatifs',
   [DocumentType.Rapports]: 'Rapports'
 })
+
+export const documentTypeIcons: Record<DocumentType, string> = {
+  [DocumentType.Cerfa]: 'fr-icon-survey-line',
+  [DocumentType.HistoriqueCourrier]: 'fr-icon-mail-line',
+  [DocumentType.Justificatifs]: 'fr-icon-file-text-line',
+  [DocumentType.Rapports]: 'fr-icon-article-line'
+}
 
 export const documentTagKeys = buildKeys({
   BudgetRessources: 'Budget-Ressources',
