@@ -1,30 +1,35 @@
 import type { JobResult } from '~/server/schema'
 import { dataInclusionStructureServerSchema } from '~/server/schema'
-import { downloadStructures } from '~/server/lib/data-inclusion'
+import { fetchStructuresPages } from '~/server/lib/data-inclusion'
 import { DataInclusionService, JobResultService } from '~/server/services'
+import { prismaClient } from '~/server/prisma'
 
-async function importStructures(job: JobResult) {
-  const res = await downloadStructures()
+// This will be merged with scheduler env when the code will be migrated
+function getenvString(varname: string, defaultValue = '', isPublic = false) {
+  const pb = isPublic ? 'PUBLIC_' : ''
 
-  if (res.error !== null) {
-    job.errors.push({
-      category: 'structure-import-download',
-      status: res.error.status,
-      error: res.error.msg
-    })
+  return (
+    process.env[`NUXT_${pb}${varname}`] || process.env[varname] || defaultValue
+  )
+}
 
-    return job
+const SCHEDULER_ENV = {
+  dataInclusion: {
+    apiUrl: getenvString('DATA_INCLUSION_API_URL'),
+    apiToken: getenvString('DATA_INCLUSION_API_TOKEN')
   }
+}
 
-  if (Array.isArray(res.data)) {
-    job.result.nTotal = res.data.length
-  } else {
+async function importStructures(job: JobResult, all = false) {
+  const { apiUrl, apiToken } = SCHEDULER_ENV.dataInclusion
+
+  if (!apiUrl || !apiToken) {
     job.errors.push({
       category: 'structure-import-download',
       status: null,
-      error: `Data inclusion structure data is badly formatted: should be an array`
+      error:
+        'Missing DATA_INCLUSION_API_URL or DATA_INCLUSION_API_TOKEN environment variable'
     })
-
     return job
   }
 
@@ -32,80 +37,121 @@ async function importStructures(job: JobResult) {
   job.result.nUpdated = 0
   job.result.nImported = 0
 
-  for (let i = 0; i < res.data.length; i++) {
-    const input = res.data[i]
+  let currentPage = 1
+  let totalPages = 1
 
-    const validated = dataInclusionStructureServerSchema.safeParse(input)
+  while (currentPage <= totalPages) {
+    const page = await fetchStructuresPages(apiUrl, apiToken, currentPage)
+    totalPages = page.pages
+    currentPage++
 
-    if (validated.success === false) {
-      job.errors.push({
-        category: 'structure-import-format',
-        status: null,
-        error: `structure ${input.id}: ${validated.error.toString()}`
-      })
+    job.result.nTotal = page.total
 
-      continue
-    }
+    for (const item of page.items) {
+      const validated = dataInclusionStructureServerSchema.safeParse(item)
 
-    const structure = validated.data
-
-    let exists: boolean
-    let shouldBeUpdated: boolean
-
-    try {
-      const status = await DataInclusionService.getStatus(
-        structure.id,
-        structure.updated
-      )
-      exists = status.exists
-      shouldBeUpdated = status.shouldBeUpdated || false
-    } catch (err: unknown) {
-      job.errors.push({
-        category: 'structure-import-other',
-        status: null,
-        error: `could not check update status for id ${structure.id}, name ${structure.name}: ${err}`
-      })
-      continue
-    }
-
-    const version = res.headers.get('location') || 'unknown'
-
-    if (!exists) {
-      try {
-        await DataInclusionService.create(structure, version)
-        job.result.nCreated++
-        job.result.nImported++
-      } catch (err: unknown) {
+      if (validated.success === false) {
+        const inputId = (item as any)?.id ?? 'unknown'
         job.errors.push({
-          category: 'structure-import-create',
+          category: 'structure-import-format',
           status: null,
-          error: `in create ${structure.id}: ${err}`
+          error: `structure ${inputId}: ${validated.error.toString()}`
         })
+        continue
       }
-    } else if (shouldBeUpdated) {
-      try {
-        await DataInclusionService.update(structure, version)
-        job.result.nUpdated++
-        job.result.nImported++
-      } catch (err: unknown) {
-        job.errors.push({
-          category: 'structure-import-update',
-          status: null,
-          error: `in update ${structure.id}: ${err}`
-        })
+
+      const structure = validated.data
+
+      if (all) {
+        // Update all structures. Useful when a field is added of the import algo has changed
+        try {
+          await prismaClient.dataInclusionStructure.upsert({
+            where: { id: structure.id },
+            create: structure,
+            update: structure
+          })
+          job.result.nUpdated++
+          job.result.nImported++
+        } catch (err: unknown) {
+          job.errors.push({
+            category: 'structure-import-update',
+            status: null,
+            error: `in update all - upsert ${structure.id}: ${err}`
+          })
+        }
+        continue
+      } else {
+        // Only update structures that have been updated since the latest import
+        let exists: boolean
+        let shouldBeUpdated: boolean
+
+        try {
+          const status = await DataInclusionService.getStatus(
+            structure.id,
+            structure.updated
+          )
+          exists = status.exists
+          shouldBeUpdated = status.shouldBeUpdated || false
+        } catch (err: unknown) {
+          job.errors.push({
+            category: 'structure-import-other',
+            status: null,
+            error: `could not check update status for id ${structure.id}, name ${structure.name}: ${err}`
+          })
+          continue
+        }
+
+        if (!exists) {
+          try {
+            await prismaClient.dataInclusionStructure.create({
+              data: structure
+            })
+            job.result.nCreated++
+            job.result.nImported++
+          } catch (err: unknown) {
+            job.errors.push({
+              category: 'structure-import-create',
+              status: null,
+              error: `in create ${structure.id}: ${err}`
+            })
+          }
+          continue
+        } else if (shouldBeUpdated) {
+          try {
+            await prismaClient.dataInclusionStructure.update({
+              where: { id: structure.id },
+              data: structure
+            })
+            job.result.nUpdated++
+            job.result.nImported++
+          } catch (err: unknown) {
+            job.errors.push({
+              category: 'structure-import-update',
+              status: null,
+              error: `in update ${structure.id}: ${err}`
+            })
+          }
+          continue
+        }
       }
     }
 
-    if (i % 1000 === 0) {
-      job.status = 'Ongoing'
+    console.log(
+      'nImported',
+      new Date().toISOString(),
+      job.result.nImported,
+      'nErrors',
+      job.errors.length
+    )
 
-      await JobResultService.update({
-        id: job.id,
-        status: job.status,
-        errors: job.errors,
-        result: job.result
-      })
-    }
+    // Update status
+    job.status = 'Ongoing'
+    await JobResultService.update({
+      id: job.id,
+      status: job.status,
+      errors: job.errors,
+      result: job.result
+    })
   }
 
   const count = await DataInclusionService.count()
@@ -114,11 +160,9 @@ async function importStructures(job: JobResult) {
   return job
 }
 
-async function handleStructuresImport(iscron = false) {
+export async function handleStructuresImport(all = false) {
   const job = await JobResultService.create({
-    name: iscron
-      ? 'data-inclusion-structure-import-cron'
-      : 'data-inclusion-structure-import',
+    name: `data-inclusion-structure-import-cron${all ? '-all' : ''}`,
     errors: [],
     result: {
       nTotal: 0,
@@ -130,7 +174,7 @@ async function handleStructuresImport(iscron = false) {
   })
 
   try {
-    await DataInclusionIntegrationService.importStructures(job)
+    await DataInclusionIntegrationService.importStructures(job, all)
   } catch (err: unknown) {
     job.errors.push({
       category: 'structure-import-other',
@@ -141,6 +185,7 @@ async function handleStructuresImport(iscron = false) {
 
   const endDate = new Date()
   const durationInSeconds = (endDate.getTime() - job.startDate.getTime()) / 1000
+  console.log('duration in seconds', durationInSeconds)
 
   job.endDate = endDate
   job.durationInSeconds = durationInSeconds

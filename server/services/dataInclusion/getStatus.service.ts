@@ -2,6 +2,7 @@ import { DataInclusionStructureRepo } from '~/server/database'
 
 export async function getStructureStatusInDB(id: string, updateDate: Date) {
   const structure = await DataInclusionStructureRepo.prisma.findFirst({
+    select: { updated: true },
     where: { id }
   })
 

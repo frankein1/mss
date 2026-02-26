@@ -1,7 +1,6 @@
 import { vi, test, expect, beforeEach } from 'vitest'
-import { DataInclusionIntegrationHandler } from './structure-import.service'
+import { handleStructuresImport } from './structure-import.service'
 import { prismaClient } from '~/server/prisma'
-import { DataInclusionService } from '~/server/services'
 
 vi.mock('~/server/lib/data-inclusion')
 
@@ -13,7 +12,7 @@ beforeEach(async () => {
 })
 
 test.skip('Structure import job should create structures when they do not exist', async () => {
-  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
+  const job = await handleStructuresImport(false)
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
@@ -21,9 +20,9 @@ test.skip('Structure import job should create structures when they do not exist'
   expect(job.status).toBe('Success')
 })
 
-test.skip('Structure import job should update structure when it exists already but is obsolete', async () => {
-  await DataInclusionService.create(
-    {
+test('Structure import job should update structure when it exists already but is obsolete', async () => {
+  await prismaClient.dataInclusionStructure.create({
+    data: {
       id: '1',
       siret: '1234567890',
       rna: null,
@@ -36,15 +35,14 @@ test.skip('Structure import job should update structure when it exists already b
       phone: null,
       email: null,
       website: null,
-      updated: new Date(),
+      updated: new Date('2015-01-01'),
       isBranch: false,
       workingHours: null,
       topics: []
-    },
-    'unknown'
-  )
+    }
+  })
 
-  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
+  const job = await handleStructuresImport(false)
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)

@@ -1,9 +1,11 @@
 import { dataInclusionStructures } from './mocked-structures'
 
-export function downloadStructures() {
+export async function fetchStructuresPages() {
   return {
-    data: dataInclusionStructures,
-    headers: new Headers({ location: 'https://' }),
-    error: null
+    items: dataInclusionStructures,
+    total: dataInclusionStructures.length,
+    page: 1,
+    size: dataInclusionStructures.length,
+    pages: 1
   }
 }

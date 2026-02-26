@@ -32,6 +32,10 @@ export const SCHEDULER_ENV = {
     readonlyDatabaseUrl: process.env.NUXT_READONLY_DATABASE_URL,
     anonymizedDatabaseUrl: process.env.NUXT_ANONYMIZED_DATABASE_URL
   },
+  dataInclusion: {
+    apiUrl: getenvString('DATA_INCLUSION_API_URL'),
+    apiToken: getenvString('DATA_INCLUSION_API_TOKEN')
+  },
   public: {
     mssEnvironment: process.env.NUXT_PUBLIC_MSS_ENVIRONMENT || 'local',
     email: {
