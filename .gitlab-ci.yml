@@ -5,28 +5,15 @@ stages:
 
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
-  - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
 
 variables:
-  NODE_VERSION: 24
+  NODE_VERSION: 24.14.0
   # A synchroniser avec la version présente dans package.json
   PLAYWRIGHT_VERSION: 1.58.0
   #A synchroniser avec la version présente en production
   POSTGRES_VERSION: 16.11
-
-container_scanning:
-  environment:
-    name: development
-  stage: .post
-  variables:
-    CS_IMAGE: $CONTAINER_SCANNING_IMAGE:$CI_COMMIT_SHA
-    CS_REGISTRY_USER: $SCALINGO_USER_NAME
-    CS_REGISTRY_PASSWORD: $SCALINGO_API_TOKEN
-    SECURE_LOG_LEVEL: debug
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
 
 secret_detection:
   variables:
@@ -41,7 +28,7 @@ pnpm:install:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
   before_script:
     - corepack enable
-    - corepack prepare pnpm@latest --activate
+    - corepack prepare pnpm@10.29.2 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile --prefer-offline
   script:
@@ -56,7 +43,7 @@ pnpm:install:
 
 # prepare git env to push new code to scalingo
 .scalingo:
-  image: ubuntu:latest
+  image: ubuntu:noble
   before_script:
     - apt-get update
     - apt-get -y install bash curl git openssh-client
@@ -116,11 +103,8 @@ pnpm:test:
 
 sonarcloud-check:
   stage: test
-  variables:
-    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
-    GIT_DEPTH: '0'
   image:
-    name: sonarsource/sonar-scanner-cli:latest
+    name: sonarsource/sonar-scanner-cli:12.0
     entrypoint: ['']
   cache:
     key: '${CI_JOB_NAME}'
