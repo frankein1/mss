@@ -6,10 +6,10 @@ import {
 import { MinisterStatus } from '@prisma/client'
 
 export const createMinisterSchema = z.object({
-  firstName: requiredLimitedStringConstraint(),
-  lastName: requiredLimitedStringConstraint(),
-  function: requiredLimitedStringConstraint(),
-  government: requiredLimitedStringConstraint(),
+  firstName: requiredLimitedStringConstraint(50),
+  lastName: requiredLimitedStringConstraint(50),
+  function: requiredLimitedStringConstraint(200),
+  government: requiredLimitedStringConstraint(200),
   status: requiredNativeEnum(MinisterStatus)
 })
 

@@ -233,7 +233,7 @@
     padding: 0;
     border-bottom: 1px solid var(--border-default-grey);
 
-    &.focused {
+    &.focused-visible {
       outline: dashed 1px rgb(0 0 0 / 100%);
     }
 

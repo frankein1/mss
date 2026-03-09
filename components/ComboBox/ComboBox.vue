@@ -333,7 +333,7 @@
     padding: 4px;
     margin: 0;
 
-    &:focus {
+    &:focus-visible {
       outline: #0a76f6 solid 29px;
       outline-offset: 2px;
     }
@@ -350,6 +350,7 @@
 
       &:hover {
         background-color: var(--background-default-grey-hover);
+        font-weight: 500;
       }
     }
 
