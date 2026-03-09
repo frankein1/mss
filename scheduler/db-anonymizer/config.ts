@@ -581,6 +581,26 @@ const configUserActivity: Record<
   diff: false
 }
 
+const configNotification: Record<
+  SnakeCase<keyof typeof Prisma.NotificationScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  recipient_id: true,
+  structure_id: true,
+  beneficiary_id: true,
+  social_support_id: true,
+  item_created_by_id: true,
+  document_id: true,
+  comment_id: true,
+  archive_date: true,
+  read: true,
+  type: true,
+  // -- BEGIN ANONYMIZED
+  detail: false
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -606,7 +626,8 @@ export const CONFIG = {
   workshop_name: configWorkshopName,
   workshop_attendee: configWorkshopAttendee,
   workshop_external_attendee: configWorkshopExternalAttendee,
-  user_activity: configUserActivity
+  user_activity: configUserActivity,
+  notification: configNotification
 }
 
 export type TableName = keyof typeof CONFIG
