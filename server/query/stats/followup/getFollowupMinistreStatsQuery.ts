@@ -1,8 +1,13 @@
 import { prepareFollowupStatFilters } from '../helpers'
-import { SocialSupportRepo, SocialSupportConstraints } from '~/server/database'
+import {
+  SocialSupportRepo,
+  SocialSupportConstraints,
+  MinisterRepo
+} from '~/server/database'
 import type { StatFilterInput } from '~/server/schema'
 import type { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
+import { formatMinisterName } from '~/utils/minister'
 
 export async function getFollowupMinistreStatsQuery(
   user: SecurityRuleGrantee,
@@ -11,10 +16,32 @@ export async function getFollowupMinistreStatsQuery(
   const where = { where: { ...prepareFollowupStatFilters(input) } }
   appendConstraints(user, where, SocialSupportConstraints.get)
 
-  return await SocialSupportRepo.prisma.groupBy({
-    by: ['ministre'],
+  const res = await SocialSupportRepo.prisma.groupBy({
+    by: ['ministerId'],
     ...where,
     _count: true,
-    orderBy: { _count: { ministre: 'desc' } }
+    orderBy: { _count: { ministerId: 'desc' } }
+  })
+
+  const ministers = await MinisterRepo.findMany(user, {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      function: true,
+      government: true,
+      status: true
+    }
+  })
+
+  return res.map(r => {
+    const minister = ministers.find(m => m.id === r.ministerId)
+    if (minister) {
+      return {
+        _count: r._count,
+        minister: formatMinisterName(minister)
+      }
+    }
+    return {}
   })
 }

@@ -17,7 +17,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     socialSupportSubjects,
     examinationDate,
     createdById,
-    ministre,
+    ministerId,
     period,
     fromDate,
     toDate,
@@ -40,7 +40,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     status ||
     socialSupportSubjects?.length ||
     createdById ||
-    ministre?.length ||
+    ministerId?.length ||
     period ||
     ministereDepartementServiceAc ||
     ministereStructure
@@ -61,8 +61,10 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
       formattedFilters.socialSupport.createdById = { in: createdById }
     }
 
-    if (ministre?.length) {
-      formattedFilters.socialSupport.ministre = { in: ministre }
+    if (ministerId?.length) {
+      formattedFilters.socialSupport.ministerId = {
+        in: filters.ministerId
+      }
     }
 
     if (

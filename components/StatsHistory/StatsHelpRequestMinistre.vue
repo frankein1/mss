@@ -26,10 +26,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ministerKeys, getStatLabel } from '~/client/options'
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
+  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 
   const props = defineProps<{
     totalCount: number
@@ -44,11 +44,11 @@
 
   const ministreStats = computed(
     () =>
-      data.value?.map(({ _count, ministre }) => ({
-        key: ministre || 'null',
-        label: getStatLabel(ministerKeys.byKey, ministre),
+      data.value?.map(({ _count, minister }) => ({
+        key: minister || 'null',
+        label: minister || STATS_NULL_LABEL,
         color: SupportColor.helpRequests,
-        count: _count
+        count: _count || 0
       })) || []
   )
 </script>

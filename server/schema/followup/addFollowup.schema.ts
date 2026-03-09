@@ -34,7 +34,7 @@ export const addFollowupSchemaBase = z.object({
     .min(1, requiredErrorMessage),
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
   synthesisRichText: openRichText().nullish(),
@@ -60,12 +60,21 @@ export const addFollowupSchemaBase = z.object({
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
 })
 
-export const addFollowupSchema = addFollowupSchemaBase.refine(
-  val => !val.isMinistry || val.ministre,
-  {
-    message: requiredErrorMessage,
-    path: ['ministre']
-  }
-)
+export const addFollowupSchema = z.discriminatedUnion('isMinistry', [
+  addFollowupSchemaBase.extend({
+    isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
+    ministerId: z
+      .string({
+        required_error: 'Veuillez renseigner ce champ.',
+        invalid_type_error: 'Veuillez renseigner ce champ.'
+      })
+      .min(1, 'Veuillez renseigner ce champ.')
+      .uuid('Veuillez renseigner ce champ.')
+  }),
+  addFollowupSchemaBase.extend({
+    isMinistry: z.literal(false) as z.ZodLiteral<boolean>,
+    ministerId: z.string().uuid().nullish()
+  })
+])
 
 export type AddFollowupInput = z.infer<typeof addFollowupSchema>

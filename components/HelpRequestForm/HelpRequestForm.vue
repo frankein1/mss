@@ -32,6 +32,7 @@
         :is-external-support="isExternalSupport"
         :has-set-external-structure="hasSetExternalStructure"
         :is-housing-support="isHousingSupport"
+        :minister-id-error="ministerIdError"
       />
 
       <hr class="fr-col-12 helprequestform__divider" />
@@ -140,6 +141,14 @@
     toRef(() => props.caughtErrors),
     { ...helpRequestFieldLabels, ...housingHelpRequestFieldLabels }
   )
+
+  const ministerIdError = computed(() => {
+    const res = errors.value?.find(e => e.name === 'ministerId')
+    if (!res) {
+      return undefined
+    }
+    return res
+  })
 
   const emit = defineEmits<{
     submit: [payload: Event]

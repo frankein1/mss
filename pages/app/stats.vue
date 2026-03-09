@@ -15,6 +15,7 @@
               v-if="fetchError"
               :alert-type="AlertType.Error"
               :message="fetchError"
+              class="fr-mb-4v"
             />
             <StatsBeneficiaries
               v-if="

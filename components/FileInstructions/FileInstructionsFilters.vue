@@ -37,7 +37,6 @@
     beneficiaryFieldLabels
   } from '~/client/labels'
   import {
-    ministerKeys,
     fileInstructionTypeFilterKeys,
     roomCountKeys,
     lowIncomeHousingKeys,
@@ -49,6 +48,7 @@
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
   import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
     filters: FileInstructionFilterInput
@@ -57,6 +57,7 @@
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { fileInstructionStatusOptions } = useSocialSupportStatus()
+  const isMinistry = computed(() => application.value.module.ministere)
 
   const emit = defineEmits<{
     'update:filters': [filters: FileInstructionFilterInput]
@@ -99,6 +100,21 @@
       examinationDateOptionsPending.value
   )
 
+  // get Minister list from DB
+  const { data: ministers, error: ministersError } = isMinistry.value
+    ? await trpcClient.minister.getMinisters.useQuery()
+    : { data: null, error: null }
+
+  const ministerOptions = computed(() => {
+    if (!ministers?.value) {
+      return null
+    }
+    return ministers.value.map(minister => ({
+      label: formatMinisterName(minister),
+      value: minister.id
+    }))
+  })
+
   const fetchError = computed(() => {
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
@@ -108,6 +124,9 @@
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."
+    }
+    if (isMinistry.value && ministersError?.value) {
+      return "La liste des ministres n'a pas pu être chargée."
     }
     return ''
   })
@@ -237,14 +256,16 @@
     }
 
     if (application.value.module.ministere) {
-      fileInstructionsFilters.push({
-        name: 'ministre',
-        label: helpRequestFieldLabels.ministre,
-        options: ministerKeys.options,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Ministre
-      })
+      if (ministerOptions.value != null) {
+        fileInstructionsFilters.push({
+          name: 'ministerId',
+          label: helpRequestFieldLabels.minister,
+          options: ministerOptions.value,
+          type: FilterType.SelectMultiple,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.Ministre
+        })
+      }
       fileInstructionsFilters.push({
         name: 'ministereDepartementServiceAc',
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,

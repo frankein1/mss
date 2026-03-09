@@ -93,8 +93,8 @@
         <StatsCard
           v-if="displayed.ministere"
           class="fr-col-12 fr-col-md-6"
-          :card-id="ministereConfig.ministres.id"
-          :card-name="ministereConfig.ministres.name"
+          :card-id="ministereConfig.minister.id"
+          :card-name="ministereConfig.minister.name"
         >
           <StatsHelpRequestMinistre
             :total-count="helpRequestCount"
@@ -264,8 +264,8 @@
   }
 
   const ministereConfig = {
-    ministres: {
-      id: 'stats-helprequest-ministres',
+    minister: {
+      id: 'stats-helprequest-minister',
       name: 'Ministres'
     }
   }

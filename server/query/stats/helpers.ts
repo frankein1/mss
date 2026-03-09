@@ -70,8 +70,10 @@ export function prepareWorkshopStatFilters(filters: WorkshopStatFilterInput) {
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   const socialSupport: Prisma.SocialSupportWhereInput = {}
 
-  if (filters.ministre) {
-    socialSupport.ministre = { in: filters.ministre }
+  if (filters.ministerId?.length) {
+    socialSupport.ministerId = {
+      in: filters.ministerId
+    }
   }
 
   if (filters.ministereStructure) {
@@ -104,12 +106,6 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
       (filters.fromDate || filters.toDate))
   ) {
     socialSupport.date = prepareDateFilters(filters)
-  }
-
-  if (filters.socialSupportSubjects?.length) {
-    socialSupport.subjects = {
-      some: { id: { in: filters.socialSupportSubjects } }
-    }
   }
 
   if (filters.cities?.length) {
@@ -229,8 +225,18 @@ export function prepareBeneficiaryStatFilters(
     socialSupportFilters.subjects = { some: typesListFilter }
   }
 
-  if (filters.ministre) {
-    socialSupportFilters.ministre = { in: filters.ministre }
+  if (filters.socialSupportSubjects?.length) {
+    socialSupportFilters.subjects = {
+      some: {
+        id: { in: filters.socialSupportSubjects }
+      }
+    }
+  }
+
+  if (filters.ministerId?.length) {
+    socialSupportFilters.ministerId = {
+      in: filters.ministerId
+    }
   }
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
@@ -238,7 +244,7 @@ export function prepareBeneficiaryStatFilters(
   if (
     filterOnSocialSupportCreated ||
     filters.socialSupportSubjects?.length ||
-    filters.ministre
+    filters.ministerId
   ) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }

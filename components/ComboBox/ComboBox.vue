@@ -3,6 +3,7 @@
     class="combobox-wrapper fr-input-group"
     :class="{ 'fr-select-group--error': error }"
   >
+    {{ error }}
     <label
       :id="LABEL_ID"
       :for="INPUT_ID"
@@ -10,6 +11,11 @@
       :class="{ 'fr-sr-only': !labelVisible }"
     >
       {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
     </label>
     <div>
       <input
@@ -19,8 +25,10 @@
         :placeholder="placeholder"
         autocomplete="off"
         class="fr-select"
+        :class="{ 'fr-select--error': error }"
         type="search"
         role="combobox"
+        :aria-describedby="ariaDescribedby"
         aria-autocomplete="list"
         :aria-expanded="options.length > 0"
         :aria-controls="LISTBOX_ID"
@@ -38,14 +46,24 @@
         role="listbox"
         :aria-labelledby="LABEL_ID"
       >
+        <div
+          v-if="$slots.header"
+          class="listbox-header"
+          tabindex="-1"
+          @focus.prevent
+          @focusin.prevent
+          @mousedown.prevent
+        >
+          <slot
+            name="header"
+            :input="displayedValue"
+            :options="options"
+            @focus="onFocus"
+          ></slot>
+        </div>
         <AtomLoader
           v-if="loading"
           class="fr-mx-auto fr-my-5v"
-        />
-        <AtomAlert
-          v-if="error"
-          :alert-type="AlertType.Error"
-          :message="error"
         />
         <li
           v-for="(option, rowIndex) in options"
@@ -67,25 +85,44 @@
       </ul>
     </div>
   </div>
+  <div
+    :id="errorId"
+    class="fr-messages-group"
+    aria-live="polite"
+  >
+    <p
+      v-if="error"
+      class="fr-message fr-message--error"
+    >
+      {{ error }}
+    </p>
+  </div>
 </template>
 
 <script lang="ts" setup generic="Option extends { disabled?: boolean }">
-  import { AlertType } from '~/utils/constants/alert'
-
   const {
     placeholder = '',
+    required = false,
     labelVisible = true,
+    options,
+    error,
     formatDisplayValue = String,
-    options
+    onFocusHeader = () => {}
   } = defineProps<{
     label: string
+    required?: boolean
     placeholder?: string
     labelVisible?: boolean
-    formatDisplayValue?: (option: Option) => string
     options: Option[]
+    error?: string
+    formatDisplayValue?: (option: Option) => string
+    onFocusHeader?: () => void
   }>()
 
-  defineSlots<{ default(props: { option: Option; input: string }): unknown }>()
+  const slots = defineSlots<{
+    default(props: { option: Option; input: string }): unknown
+    header?(props: { input: string; options: Option[] }): unknown
+  }>()
 
   const emit = defineEmits<{
     select: [option: Option]
@@ -96,16 +133,18 @@
     model.value = null
     displayedValue.value = ''
   }
-  defineExpose({ reset })
+
   const loading = ref<boolean>(false)
-  const error = ref<string>('')
+  const input = ref<HTMLFormElement | null>(null)
+  const errorId = computed(() => `${useId()}-error`)
+  const ariaDescribedby = computed(() => (error ? errorId.value : undefined))
 
   const LABEL_ID = computed(() => `combobox-label-${useId()}`)
   const INPUT_ID = computed(() => `combobox-input-${useId()}`)
   const LISTBOX_ID = computed(() => `combobox-listbox-${useId()}`)
 
   const openList = ref(false)
-  const displayedValue = ref('')
+  const displayedValue = ref(model.value ? formatDisplayValue(model.value) : '')
   const activeRow = ref(-1)
   const activeDescendant = computed(() => {
     if (activeRow.value >= 0) {
@@ -149,18 +188,38 @@
     }
   }
 
+  const selectActiveRow = (e: KeyboardEvent): number => {
+    if (activeRow.value === -1 && e.key === 'ArrowDown') {
+      activeRow.value = 0
+    }
+    handleKeydown(e)
+    return activeRow.value
+  }
+
   function handleKeydown(e: KeyboardEvent) {
     openList.value = true
+    const hasHeader = !!slots.header
     switch (e.key) {
       case 'ArrowDown':
-        e.preventDefault()
-        activeRow.value = (activeRow.value + 1) % options.length
+        if (slots.header && activeRow.value === -1) {
+          onFocusHeader()
+          openList.value = true
+        } else {
+          e.preventDefault()
+          if (activeRow.value < options.length - 1) {
+            activeRow.value++
+          } else {
+            activeRow.value = hasHeader ? -1 : 0
+          }
+        }
         break
-      case 'ArrowUp':
+      case 'ArrowUp': {
         e.preventDefault()
+        const limit = hasHeader ? -1 : 0
         activeRow.value =
-          activeRow.value <= 0 ? options.length - 1 : activeRow.value - 1
+          activeRow.value <= limit ? options.length - 1 : activeRow.value - 1
         break
+      }
       case 'Enter': {
         e.preventDefault()
         const ar = activeRow.value
@@ -205,6 +264,19 @@
       reset()
     }
   })
+
+  watch(
+    () => error,
+    newError => {
+      if (newError) {
+        nextTick(() => {
+          input.value?.focus()
+        })
+      }
+    }
+  )
+
+  defineExpose({ reset, selectActiveRow })
 </script>
 
 <style lang="scss" scoped>
@@ -260,6 +332,11 @@
     min-height: 1.5rem;
     padding: 4px;
     margin: 0;
+
+    &:focus {
+      outline: #0a76f6 solid 29px;
+      outline-offset: 2px;
+    }
   }
 
   .option {

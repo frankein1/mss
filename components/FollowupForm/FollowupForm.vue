@@ -39,7 +39,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeInput
             name="date"
             :label="followupFieldLabels.date"
@@ -48,7 +48,7 @@
           />
         </div>
 
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="duration"
             :label="followupFieldLabels.duration"
@@ -58,26 +58,24 @@
 
         <!-- ROW -->
         <template v-if="application.module.ministere">
-          <div class="fr-col-6">
+          <div class="fr-col-12">
             <VeeInput
               name="numeroPegase"
               :label="followupFieldLabels.numeroPegase"
               hint="Format attendu : A-00-000000"
             />
           </div>
-
-          <div class="fr-col-6">
-            <VeeSelect
-              name="ministre"
-              :label="followupFieldLabels.ministre"
-              :options="withEmptyValue(ministerKeys.options)"
-              required
+          <div class="fr-col-12">
+            <MinisterCombobox
+              :error="ministerIdError"
+              :initial-minister-id="initialMinisterId"
+              @on-set-minister-id="onSetMinisterId"
             />
           </div>
         </template>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="medium"
             :label="followupFieldLabels.medium"
@@ -88,7 +86,7 @@
 
         <div
           v-if="medium === FollowupMedium.ExternalAppointment"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <VeeInput
             name="place"
@@ -97,7 +95,7 @@
         </div>
         <div
           v-else-if="medium === FollowupMedium.ThirdParty"
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         >
           <VeeInput
             name="thirdPersonName"
@@ -106,7 +104,7 @@
         </div>
         <div
           v-else
-          class="fr-col-6"
+          class="fr-col-12 fr-col-md-6"
         ></div>
 
         <!-- ROW -->
@@ -141,7 +139,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="status"
             :label="followupFieldLabels.status"
@@ -150,7 +148,7 @@
           />
         </div>
 
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeInput
             name="dueDate"
             :label="followupFieldLabels.dueDate"
@@ -158,7 +156,7 @@
           />
         </div>
         <!-- ROW -->
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeCombobox
             :label="followupFieldLabels.prescribingOrganizationId"
             placeholder="Saisir le nom de l'organisme"
@@ -167,7 +165,7 @@
             @change-value="onPrescribingOrganization"
           />
         </div>
-        <div class="fr-col-6">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="prescribingOrganizationContactId"
             :disabled="organizationContactIsDisabled"
@@ -177,7 +175,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-6 fr-mt-0 fr-pt-0">
+        <div class="fr-col-12 fr-col-md-6 fr-mt-0 fr-pt-0">
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
             class="fr-link fr-icon-info-fill fr-link--icon-left"
@@ -325,7 +323,6 @@
   import type { FormErrors } from 'vee-validate'
   import type { JSONContent } from '@tiptap/vue-3'
   import {
-    ministerKeys,
     followupStatusKeys,
     followupMediumKeys,
     followupDurationKeys
@@ -366,23 +363,18 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
-
   const { value: familyFileId } = useField<string | null>('familyFileId')
-
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'
   )
-
   const { setValue: setPrescribingOrganizationContactId } = useField<
     string | null
   >('prescribingOrganizationContactId')
-
   const onPrescribingOrganization = (id: string[] | string) => {
     if (!id) {
       setPrescribingOrganizationContactId(null)
     }
   }
-
   const { setValue: setSynthesis, value: synthesis } = useField<
     string | undefined
   >('synthesis')
@@ -418,6 +410,13 @@
     toRef(() => props.caughtErrors),
     followupFieldLabels
   )
+  const ministerIdError = computed(() => {
+    const res = errors.value?.find(e => e.name === 'ministerId')
+    if (!res) {
+      return undefined
+    }
+    return res
+  })
 
   const beneficiaryOptions = computed(() =>
     props.familyFileIdentification.map(m => ({
@@ -471,4 +470,13 @@
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
+
+  // Minister combobox
+  const { setValue: setMinisterId, value: initialMinisterId } = useField<
+    string | undefined
+  >('ministerId')
+
+  const onSetMinisterId = (id: string) => {
+    setMinisterId(id, true)
+  }
 </script>

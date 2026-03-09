@@ -57,6 +57,7 @@ async function getSocialSupportDetail({
           prescribingOrganizationContact: true
         }
       },
+      minister: true,
       subjects: true,
       _count: {
         select: {

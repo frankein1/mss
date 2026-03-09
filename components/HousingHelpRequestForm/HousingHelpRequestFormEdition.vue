@@ -59,7 +59,7 @@
       synthesisRichText: socialSupport.value.synthesisRichText,
       privateSynthesis: socialSupport.value.privateSynthesis,
       privateSynthesisRichText: socialSupport.value.privateSynthesisRichText,
-      ministre: socialSupport.value.ministre,
+      ministerId: socialSupport.value.ministerId,
       numeroPegase: socialSupport.value.numeroPegase,
       status: socialSupport.value.status,
       dueDate: socialSupport.value.dueDate,

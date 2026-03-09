@@ -1,7 +1,6 @@
 import {
   FileInstructionRefusalReason,
   SocialSupportStatus,
-  Minister,
   AskedHousing,
   HousingReason,
   HousingType,
@@ -21,11 +20,7 @@ import {
   stringConstraint,
   openRichText
 } from '../helpers.schema'
-import {
-  errorMessages,
-  requiredErrorMessage,
-  maxStringLengthMessage
-} from '~/utils/zod'
+import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 
 export const createHousingHelpRequestSchemaBase = z.object({
   familyFileId: z.string().uuid(),
@@ -37,7 +32,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   privateSynthesis: openText(6000).nullish(),
   privateSynthesisRichText: openRichText().nullish(),
   isMinistry: z.boolean(),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   status: requiredNativeEnum(SocialSupportStatus),
   dueDate: dateOrEmpty,
@@ -68,14 +63,25 @@ export const createHousingHelpRequestSchemaBase = z.object({
   lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish()
 })
 
-export const createHousingHelpRequestSchema =
-  createHousingHelpRequestSchemaBase.refine(
-    val => !val.isMinistry || val.ministre,
-    {
-      message: requiredErrorMessage,
-      path: ['ministre']
-    }
-  )
+export const createHousingHelpRequestSchema = z.discriminatedUnion(
+  'isMinistry',
+  [
+    createHousingHelpRequestSchemaBase.extend({
+      isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
+      ministerId: z
+        .string({
+          required_error: 'Veuillez renseigner ce champ.',
+          invalid_type_error: 'Veuillez renseigner ce champ.'
+        })
+        .min(1, 'Veuillez renseigner ce champ.')
+        .uuid('Veuillez renseigner ce champ.')
+    }),
+    createHousingHelpRequestSchemaBase.extend({
+      isMinistry: z.literal(false) as z.ZodLiteral<boolean>,
+      ministerId: z.string().uuid().nullish()
+    })
+  ]
+)
 
 export type CreateHousingHelpRequestInput = z.infer<
   typeof createHousingHelpRequestSchema

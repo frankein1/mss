@@ -104,9 +104,11 @@ const handler = async ({
     )
     const followupMinistreRows = followupMinistreData.map(item => {
       return {
-        label: item.ministre || STATS_NULL_LABEL,
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, followupCount)}%`
+        label: item.minister || STATS_NULL_LABEL,
+        number: item._count?.toString() || '',
+        percent: item._count
+          ? `${getPercentage(item._count, followupCount)}%`
+          : ''
       }
     })
     followupMinistreRows.push({

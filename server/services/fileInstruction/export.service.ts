@@ -15,7 +15,6 @@ import {
   socialSupportStatusKeys,
   fileInstructionRefusalReasonKeys,
   paymentMethodKeys,
-  ministerKeys,
   askedHousingKeys,
   housingReasonKeys,
   housingTypeKeys,
@@ -23,6 +22,7 @@ import {
   lowIncomeHousingKeys
 } from '~/client/options'
 import { formatBeneficiaryDisplayName } from '~/utils'
+import { formatMinisterName } from '~/utils/minister'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
@@ -49,7 +49,7 @@ export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'dueDate',
   'fullFile',
   'updated',
-  'ministre',
+  'minister',
   'numeroPegase',
   'createdById'
 ]
@@ -153,8 +153,8 @@ export async function exportFileInstructions({
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
-          ministre: socialSupport.ministre
-            ? ministerKeys.byKey[socialSupport.ministre]
+          minister: socialSupport.minister
+            ? formatMinisterName(socialSupport.minister)
             : '',
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy

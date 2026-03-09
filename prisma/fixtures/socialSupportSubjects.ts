@@ -77,8 +77,14 @@ export const fixturesSocialSupportSubjects = [
     id: '8e6141ee-62fa-47c5-a503-fa6b33f0e8fe',
     name: 'Aide au relogement',
     ownedByStructureId: fixtureStructures[0].id
+  },
+  {
+    id: '78314e9f-5dc2-4731-a2af-2e524b262ccd',
+    name: 'RSA jeunes parents',
+    ownedByStructureId: fixtureStructures[2].id
   }
 ] satisfies [
+  Prisma.SocialSupportSubjectCreateManyInput,
   Prisma.SocialSupportSubjectCreateManyInput,
   Prisma.SocialSupportSubjectCreateManyInput,
   Prisma.SocialSupportSubjectCreateManyInput,

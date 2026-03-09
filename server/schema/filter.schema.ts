@@ -48,7 +48,7 @@ const statFilterSchema = z
       .array(stringConstraint.max(50, maxStringLengthMessage(50)))
       .nullish(),
     referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-    ministre: z.array(z.nativeEnum(Minister)).nullish(),
+    ministerId: z.array(z.string().uuid()).nullish(),
     ministereDepartementServiceAc: z
       .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
       .nullish(),
@@ -221,7 +221,7 @@ const followupFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministerId: z.array(z.string().uuid()).nullish(),
   ministereDepartementServiceAc: z
     .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),

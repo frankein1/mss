@@ -26,6 +26,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
 import type { WorksheetType } from '~/types/export'
+import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 
 const NOT_FILLED = 'Non renseigné'
 const securityCheck = (ctx: SecurityRuleContext) =>
@@ -124,9 +125,11 @@ const handler = async ({
     )
     const helpRequestMinistreRows = helpRequestMinistreData.map(item => {
       return {
-        label: item.ministre ? item.ministre : NOT_FILLED,
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, helpRequestCount.total)}%`
+        label: item.minister || STATS_NULL_LABEL,
+        number: item._count?.toString() || '',
+        percent: item._count
+          ? `${getPercentage(item._count, helpRequestCount.total)}%`
+          : ''
       }
     })
     helpRequestMinistreRows.push({

@@ -9,6 +9,15 @@
         <VeeComboboxStory />
       </div>
 
+      <hr />
+      <div class="fr-col-12">
+        <ComboboxStory />
+      </div>
+
+      <div class="fr-col-12">
+        <MinisterComboboxStory />
+      </div>
+
       <h2 class="fr-col-12">Multiselect (legacy)</h2>
       <div class="fr-col-12">
         <VeeMultiselectStory />
@@ -79,6 +88,8 @@
   import MultiSelectStory from '~/components/MultiSelect/MultiSelect.story.vue'
   import VeeMultiselectStory from '~/components/VeeForm/VeeMultiSelect.story.vue'
   import VeeComboboxStory from '~/components/VeeForm/VeeCombobox.story.vue'
+  import ComboboxStory from '~/components/ComboBox/Combobox.story.vue'
+  import MinisterComboboxStory from '~/components/Minister/MinisterCombobox.story.vue'
 
   definePageMeta({
     layout: 'landing'

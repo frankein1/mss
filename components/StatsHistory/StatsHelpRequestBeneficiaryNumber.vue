@@ -1,12 +1,8 @@
 <template>
   <div class="feature-section fr-p-2w">
     <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
-    <AtomLoader
-      v-if="status === 'pending'"
-      class="fr-mx-auto"
-    />
     <AtomAlert
-      v-else-if="error"
+      v-if="error"
       :alert-type="AlertType.Error"
       message="Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées."
     />
@@ -36,13 +32,10 @@
 
   const trpcClient = useTrpcClient()
 
-  const {
-    data: beneficiaryCounts,
-    error,
-    status
-  } = await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
-    toRef(() => props.filters)
-  )
+  const { data: beneficiaryCounts, error } =
+    await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
+      toRef(() => props.filters)
+    )
 </script>
 
 <style lang="scss" scoped>

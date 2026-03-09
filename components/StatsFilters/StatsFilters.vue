@@ -5,6 +5,11 @@
       v-if="!socialSupportSubjectOptions || !beneficiariesCitiesOptions"
       class="fr-mx-auto"
     />
+    <AtomAlert
+      v-if="isMinistry && ministersError"
+      :alert-type="AlertType.Error"
+      message="La liste des ministres n'a pas pu être chargée."
+    />
     <AtomFilters
       v-else
       :filters="statsFilters"
@@ -22,7 +27,6 @@
     fileInstructionTypePictos,
     beneficiaryStatusKeys,
     periodKeys,
-    ministerKeys,
     ageGroupKeys,
     ministereDepartmentServiceAcKeys,
     ministereStructureKeys,
@@ -38,8 +42,12 @@
     beneficiaryFieldLabels,
     helpRequestFieldLabels
   } from '~/client/labels'
+  import { formatMinisterName } from '~/utils/minister'
+  import { AlertType } from '~/utils/constants/alert'
 
   const { application } = usePermissions()
+  const trpcClient = useTrpcClient()
+  const isMinistry = computed(() => application.value.module.ministere)
 
   const props = withDefaults(
     defineProps<{
@@ -71,6 +79,21 @@
     { value: '', label: '' },
     ...props.agentOptions
   ])
+
+  // get Minister list from DB
+  const { data: ministers, error: ministersError } = isMinistry.value
+    ? await trpcClient.minister.getMinisters.useQuery()
+    : { data: null, error: null }
+
+  const ministerOptions = computed(() => {
+    if (!ministers?.value) {
+      return null
+    }
+    return ministers.value.map(minister => ({
+      label: formatMinisterName(minister),
+      value: minister.id
+    }))
+  })
 
   const statsFilters = computed(() => {
     const statsFilters: FilterProp[] = [
@@ -156,14 +179,16 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
-    if (application.value.module.ministere) {
-      statsFilters.push({
-        name: 'ministre',
-        label: helpRequestFieldLabels.ministre,
-        options: ministerKeys.options,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
-      })
+    if (application.value.module.ministere && ministerOptions.value != null) {
+      if (ministerOptions.value != null) {
+        statsFilters.push({
+          name: 'ministerId',
+          label: helpRequestFieldLabels.minister,
+          options: ministerOptions.value,
+          type: FilterType.SelectMultiple,
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        })
+      }
       statsFilters.push({
         name: 'ministereDepartementServiceAc',
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,

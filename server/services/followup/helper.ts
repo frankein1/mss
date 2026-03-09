@@ -23,7 +23,7 @@ export function prepareFilters(filters: FollowupFilterInput) {
     medium,
     socialSupportSubjects,
     createdById,
-    ministre,
+    ministerId,
     period,
     fromDate,
     toDate,
@@ -42,7 +42,7 @@ export function prepareFilters(filters: FollowupFilterInput) {
     status ||
     socialSupportSubjects?.length ||
     createdById ||
-    ministre ||
+    ministerId ||
     ministereDepartementServiceAc ||
     ministereStructure ||
     period
@@ -63,8 +63,10 @@ export function prepareFilters(filters: FollowupFilterInput) {
       formattedFilters.socialSupport.createdById = { in: createdById }
     }
 
-    if (ministre) {
-      formattedFilters.socialSupport.ministre = { in: ministre }
+    if (ministerId) {
+      formattedFilters.socialSupport.ministerId = {
+        in: filters.ministerId
+      }
     }
 
     if (ministereStructure) {

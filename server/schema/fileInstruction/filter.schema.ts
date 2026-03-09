@@ -19,7 +19,7 @@ export const fileInstructionFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  ministerId: z.array(z.string().uuid()).nullish(),
   ministereDepartementServiceAc: z
     .nativeEnum(BeneficiaryMinistereDepartementServiceAc)
     .nullish(),

@@ -1,7 +1,6 @@
 import {
   FileInstructionRefusalReason,
   SocialSupportStatus,
-  Minister,
   PaymentMethod
 } from '@prisma/client'
 import { z } from 'zod'
@@ -24,7 +23,7 @@ export const createHelpRequestSchemaBase = z.object({
   beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
-  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  ministerId: z.string().uuid().nullish(),
   subjectId: z
     .string({
       required_error: requiredErrorMessage,
@@ -57,12 +56,21 @@ export const createHelpRequestSchemaBase = z.object({
   isRefundable: kindOfBooleanSchema()
 })
 
-export const createHelpRequestSchema = createHelpRequestSchemaBase.refine(
-  val => !val.isMinistry || val.ministre,
-  {
-    message: requiredErrorMessage,
-    path: ['ministre']
-  }
-)
+export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [
+  createHelpRequestSchemaBase.extend({
+    isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
+    ministerId: z
+      .string({
+        required_error: 'Veuillez renseigner ce champ.',
+        invalid_type_error: 'Veuillez renseigner ce champ.'
+      })
+      .min(1, 'Veuillez renseigner ce champ.')
+      .uuid('Veuillez renseigner ce champ.')
+  }),
+  createHelpRequestSchemaBase.extend({
+    isMinistry: z.literal(false) as z.ZodLiteral<boolean>,
+    ministerId: z.string().uuid().nullish()
+  })
+])
 
 export type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>

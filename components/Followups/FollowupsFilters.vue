@@ -23,7 +23,6 @@
   import {
     followupStatusKeys,
     followupMediumKeys,
-    ministerKeys,
     periodKeys,
     followupNotFilledKeys,
     ministereDepartmentServiceAcKeys,
@@ -37,6 +36,7 @@
   import { followupFieldLabels, beneficiaryFieldLabels } from '~/client/labels'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
   import { FollowupPeriodFilter } from '~/types/followup'
+  import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
     filters: FollowupFilterInput
@@ -45,6 +45,7 @@
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { application } = usePermissions()
+  const isMinistry = computed(() => application.value.module.ministere)
 
   const emit = defineEmits<{
     'update:filters': [filters: FollowupFilterInput]
@@ -75,6 +76,20 @@
   const pending = computed(
     () => agentOptionsPending.value || socialSupportSubjectOptionsPending.value
   )
+  // get Minister list from DB
+  const { data: ministers, error: ministersError } = isMinistry.value
+    ? await trpcClient.minister.getMinisters.useQuery()
+    : { data: null, error: null }
+
+  const ministerOptions = computed(() => {
+    if (!ministers?.value) {
+      return null
+    }
+    return ministers.value.map(minister => ({
+      label: formatMinisterName(minister),
+      value: minister.id
+    }))
+  })
 
   const fetchError = computed(() => {
     if (agentOptionsError.value) {
@@ -82,6 +97,12 @@
     }
     if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
+    }
+    if (socialSupportSubjectOptionsError.value) {
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
+    }
+    if (isMinistry.value && ministersError?.value) {
+      return "La liste des ministres n'a pas pu être chargée."
     }
     return ''
   })
@@ -153,14 +174,16 @@
     }
 
     if (application.value.module.ministere) {
-      filters.push({
-        name: 'ministre',
-        label: followupFieldLabels.ministre,
-        options: ministerKeys.options,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.FollowupFilter,
-        matomoEventAction: FollowupFilterEventAction.Ministre
-      })
+      if (ministerOptions.value != null) {
+        filters.push({
+          name: 'ministerId',
+          label: followupFieldLabels.minister,
+          options: ministerOptions.value,
+          type: FilterType.SelectMultiple,
+          matomoEventCategory: EventCategory.FollowupFilter,
+          matomoEventAction: FollowupFilterEventAction.Ministre
+        })
+      }
       filters.push({
         name: 'ministereDepartementServiceAc',
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,

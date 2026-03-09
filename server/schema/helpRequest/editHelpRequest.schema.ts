@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { createHelpRequestSchemaBase } from './createHelpRequest.schema'
-import { requiredErrorMessage } from '~/utils/zod'
 
 export const editHelpRequestSchema = createHelpRequestSchemaBase
   .extend({
@@ -10,9 +9,14 @@ export const editHelpRequestSchema = createHelpRequestSchemaBase
   .omit({
     financialSupport: true
   })
-  .refine(val => !val.isMinistry || val.ministre, {
-    message: requiredErrorMessage,
-    path: ['ministre']
+  .superRefine((data, ctx) => {
+    if (data.isMinistry && !data.ministerId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Veuillez renseigner ce champ.',
+        path: ['ministerId']
+      })
+    }
   })
 
 export type EditHelpRequestInput = z.infer<typeof editHelpRequestSchema>

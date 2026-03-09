@@ -88,8 +88,8 @@
         <StatsCard
           v-if="application.module.ministere"
           class="fr-col-12 fr-col-md-6"
-          :card-id="ministereConfig.ministre.id"
-          :card-name="ministereConfig.ministre.name"
+          :card-id="ministereConfig.minister.id"
+          :card-name="ministereConfig.minister.name"
         >
           <StatsFollowupMinistre
             :total-count="followupCount"
@@ -239,8 +239,8 @@
   }
 
   const ministereConfig = {
-    ministre: {
-      id: 'stats-followup-ministre',
+    minister: {
+      id: 'stats-followup-minister',
       name: 'Ministres'
     }
   }

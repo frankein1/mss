@@ -10,7 +10,8 @@ import type {
   PartnerOrganization,
   User,
   PartnerOrganizationContact,
-  FamilyFile
+  FamilyFile,
+  MinisterEntity
 } from '@prisma/client'
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
@@ -26,6 +27,7 @@ export function filterSocialSupport({
     familyFile: FamilyFile & {
       referents: User[]
     }
+    minister?: MinisterEntity | null
     beneficiary: BeneficiaryIdentification
     createdBy: User
     lastUpdatedBy: User | null
@@ -79,7 +81,8 @@ export function filterSocialSupport({
 
     documents: show(socialSupport.documents, conditions.details),
 
-    ministre: show(socialSupport.ministre, conditions.minister),
+    ministerId: show(socialSupport.ministerId, conditions.minister),
+    minister: show(socialSupport.minister, conditions.minister),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
   }
 }
