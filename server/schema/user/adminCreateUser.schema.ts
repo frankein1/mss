@@ -8,6 +8,7 @@ import {
   validEmailMessage,
   requiredErrorMessage
 } from '~/utils/zod'
+import { cleanEmail } from '~/utils/user'
 
 const adminCreateUserSchema = z.object({
   firstName: stringConstraint
@@ -16,7 +17,10 @@ const adminCreateUserSchema = z.object({
   lastName: stringConstraint
     .max(30, maxStringLengthMessage(30))
     .min(2, minStringLengthMessage(2)),
-  email: z.string(errorMessages).email(validEmailMessage),
+  email: z
+    .string(errorMessages)
+    .email(validEmailMessage)
+    .transform(e => cleanEmail(e)), // transform to lowercase and trim emails
   role: requiredNativeEnum(UserRole).refine(role => role !== 'Administrator', {
     message:
       "Un administrateur ne peut pas être créé via l'interface d'administration"

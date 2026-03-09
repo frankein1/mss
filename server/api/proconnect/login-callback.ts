@@ -136,7 +136,10 @@ export default defineEventHandler(async event => {
     throw forbidden('[ProConnect] missing email or sub')
   }
 
-  const { email, sub } = validatedUserInfo
+  const { email: em, sub } = validatedUserInfo
+
+  // Some Proconnect FI allow uppercase emails
+  const email = cleanEmail(em)
 
   const account = await getAccount({ sub })
 
@@ -202,7 +205,7 @@ export default defineEventHandler(async event => {
 
   // Update email information with current proconnect info. This allows to update the email
   // of the user when she changes her proconnect account (when proconnect allow email change)
-  if (user.email !== email) {
+  if (cleanEmail(user.email) !== email) {
     //console.log('updating email', JSON.stringify(user, undefined, 2))
     updateEmail(user.id, email)
   }
@@ -321,7 +324,7 @@ async function updateEmail(userId: string, email: string) {
   return await prismaClient.user.update({
     where: { id: userId },
     data: {
-      email
+      email: cleanEmail(email)
     }
   })
 }

@@ -7,6 +7,7 @@ import {
   maxStringLengthMessage,
   validEmailMessage
 } from '~/utils/zod'
+import { cleanEmail } from '~/utils/user'
 
 const createUserSchema = z.object({
   firstName: stringConstraint
@@ -15,7 +16,10 @@ const createUserSchema = z.object({
   lastName: stringConstraint
     .max(30, maxStringLengthMessage(30))
     .min(2, minStringLengthMessage(2)),
-  email: z.string(errorMessages).email(validEmailMessage),
+  email: z
+    .string(errorMessages)
+    .email(validEmailMessage)
+    .transform(e => cleanEmail(e)), // transform to lowercase and trim emails
   // User cannot create an Administrator or update to an Administrator
   role: requiredNativeEnum(NonAdminUserRole),
   aidantConnectAuthorisation: z.coerce.boolean().nullish()

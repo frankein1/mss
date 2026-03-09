@@ -5,6 +5,7 @@ import { createMutation } from '~/server/route'
 import type { AdminEditUserInput } from '~/server/schema'
 import { adminEditUserSchema } from '~/server/schema'
 import type { AdminContext } from '~/server/trpc'
+import { cleanEmail } from '~/utils/user'
 
 const adminHandler = async ({
   ctx: _ctx,
@@ -13,11 +14,14 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminEditUserInput
 }) => {
-  const { id, ...user } = input
+  const { id, email, ...user } = input
 
   const updatedUser = await UserRepo.prisma.update({
     where: { id },
-    data: user
+    data: {
+      email: cleanEmail(email),
+      ...user
+    }
   })
   createOrUpdateUser(updatedUser.id).catch(error => {
     console.error(error)
