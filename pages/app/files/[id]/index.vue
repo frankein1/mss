@@ -20,7 +20,9 @@
         :family-file-id="familyFileId"
         :permissions="familyFile?.permissions"
         :family-file="familyFileIdentification.length > 1"
-        :is-submitting-appointment-plan
+        :is-submitting-appointment-plan="
+          statusAppointment === 'pending' || isSubmittingAppointmentPlan
+        "
         class="fr-pb-3w"
         @plan-appointment="handleAppointmentPlan"
       />
@@ -368,26 +370,28 @@
     })
   }
 
+  const {
+    mutate: mutateAppointment,
+    status: statusAppointment,
+    error
+  } = trpcClient.rdvsp.planAppointment.useMutation()
   async function planAppointment(beneficiaryId: string, fromModal = false) {
     matomo.trackEvent(
       EventCategory.Beneficiary,
       BeneficiaryHistoryAction.PlanAppointment
     )
 
-    await useTrpcMutation({
-      mutation: () =>
-        trpcClient.rdvsp.planAppointment.mutate({ beneficiaryId }),
-      isSubmitting: isSubmittingAppointmentPlan,
-      onSuccess: url => {
-        window.location.href = url
-      },
-      onFailure: (e: unknown) =>
-        handleAppointmentPlanningFailure(e, beneficiaryId, fromModal)
-    })
+    const url = await mutateAppointment({ beneficiaryId })
+
+    if (!url || error.value) {
+      handleAppointmentPlanningFailure(error.value, beneficiaryId, fromModal)
+      return
+    }
+    navigateTo(url, { external: true, open: { target: '_blank' } })
   }
 
   function handleAppointmentPlanningFailure(
-    e: unknown,
+    e: any,
     id: string,
     fromModal: boolean
   ) {
@@ -395,7 +399,7 @@
       modal.close()
       setFocusAfterClose('#action-rdv', 'button')
     }
-    if (e instanceof TRPCClientError) {
+    if (e.data.code) {
       switch (e.data.code) {
         case 'UNAUTHORIZED': {
           snackbar.info(

@@ -102,6 +102,8 @@
   import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
+  const { application } = usePermissions()
+
   const { familyFileId, familyFilePermissions, familyFileIdentification } =
     defineProps<{
       familyFileId: string
@@ -118,8 +120,9 @@
     await trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
       queryKey: 'getFamilyFile.history'
     })
-  const { data: rdvspAuthStatus } =
-    await trpcClient.rdvsp.getAuthStatus.useQuery()
+  const { data: rdvspAuthStatus } = application.value.module.rdv
+    ? await trpcClient.rdvsp.getAuthStatus.useQuery()
+    : { data: ref(null) }
   const isRdvspAlertHidden = ref(false)
 
   const emit = defineEmits<{ refresh: [] }>()
