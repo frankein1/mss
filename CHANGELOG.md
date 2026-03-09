@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.56.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.55.1...v1.56.0) (2026-03-09)
+
+
+### Features
+
+* **document:** ajout date d'expiration des documents ([5d0ac1e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5d0ac1e942bb42aa77189a4af020634e17f6c11a)), closes [#1022](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1022)
+* **document:** meilleure ui table des documents ([3afe95a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3afe95ab375cf606277a982a63b20e25a2a011f9))
+* **ministères:** composant recherche de ministre ([6944320](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6944320258e679ff82648478c7d01eed977b2dea)), closes [#905](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/905)
+
+
+### Bug Fixes
+
+* **document:** ajout d'un message informatif sur le champ expiration ([4087df3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4087df3a473fe1609c936b570bdfbee00451fab0))
+* **document:** alignement bouton ajout documents ([d5e6f71](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d5e6f71e0723cccf02d3e585092a5cb00396964a))
+* **ministre:** améliorations du composant Ministre ([c5dfaf2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c5dfaf2d2b8b40e5ab515dfedf152c1bb5d30c0d))
+* **utilisateur:** corrige formattage des emails lors de l'update et venant de Proconnect ([893e65e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/893e65e85ba8b124a0fb9b9f9a6ac46229645c4a)), closes [#1037](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1037)
+
 ## [1.55.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.55.0...v1.55.1) (2026-02-23)
 
 ## [1.55.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.54.2...v1.55.0) (2026-02-23)
