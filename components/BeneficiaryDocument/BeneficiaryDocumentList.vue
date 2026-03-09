@@ -18,11 +18,10 @@
   <section class="feature-section fr-mt-2w">
     <h3 class="fr-sr-only">Liste des documents</h3>
     <div class="document-list-header">
-      <p
-        v-if="documentsCount"
-        class="fr-mb-0"
-      >
-        {{ documentsCount }} document(s)
+      <p class="fr-mb-0">
+        {{
+          documentsCount ? `${documentsCount} document(s)` : 'Aucun document'
+        }}
       </p>
       <BeneficiaryDocumentAddButton
         :family-file-id="familyFileId"
