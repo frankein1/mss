@@ -6,11 +6,26 @@
   <p class="fr-mb-2w">
     <RequiredFields />
   </p>
+  <AtomNotice class="fr-mb-6v">
+    <template #default>Date d'expiration</template>
+    <template #content>
+      Afin de maintenir à jour vos dossiers et d'être informé lors de
+      l'expiration d'un document, nous vous invitons à renseigner une date de
+      validité.
+    </template>
+  </AtomNotice>
   <form
     ref="form"
     novalidate
     @submit.prevent="onSubmit"
   >
+    <VeeInputFile
+      label="Selectionner un fichier"
+      hint="Taille maximum: 20Mo"
+      name="file"
+      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
+      required
+    />
     <template v-if="familyFileIdentification.length > 1">
       <VeeRadioButtons
         v-if="beneficiaryOptions.length > 0"
@@ -21,6 +36,18 @@
         required
       />
     </template>
+
+    <VeeInput
+      class="fr-mb-3w"
+      :label="documentFieldLabels.expirationDate"
+      name="expirationDate"
+      type="date"
+    />
+    <VeeCheckbox
+      class="fr-mb-3w"
+      :label="documentFieldLabels.confidential"
+      name="confidential"
+    />
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
@@ -33,25 +60,6 @@
       :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
       :dropdown-over="false"
-    />
-    <VeeCheckbox
-      class="fr-mb-3w"
-      :label="documentFieldLabels.confidential"
-      name="confidential"
-    />
-    <VeeInput
-      class="fr-mb-3w"
-      :label="documentFieldLabels.expirationDate"
-      name="expirationDate"
-      type="date"
-    />
-
-    <VeeInputFile
-      label="Selectionner un fichier"
-      hint="Taille maximum: 20Mo"
-      name="file"
-      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
-      required
     />
     <button
       class="fr-btn fr-mt-3w"
