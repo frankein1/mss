@@ -3,6 +3,14 @@
     v-if="errors.length > 1"
     :errors="errors"
   />
+  <AtomNotice class="fr-mb-6v">
+    <template #default>Date d'expiration</template>
+    <template #content>
+      Afin de maintenir à jour vos dossiers et d'être informé lors de
+      l'expiration d'un document, nous vous invitons à renseigner une date de
+      validité.
+    </template>
+  </AtomNotice>
   <form
     ref="form"
     novalidate
@@ -13,6 +21,18 @@
       name="name"
       required
     />
+    <VeeInput
+      class="fr-mb-3w"
+      :label="documentFieldLabels.expirationDate"
+      name="expirationDate"
+      type="date"
+    />
+    <VeeCheckbox
+      v-if="permissions.set.confidential"
+      class="fr-mb-3w"
+      :label="documentFieldLabels.confidential"
+      name="confidential"
+    />
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
@@ -20,22 +40,10 @@
       required
     />
     <MultiSelect
-      class="fr-mb-2w"
+      class="fr-mb-3w"
       name="tags"
       :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
-    />
-    <VeeCheckbox
-      v-if="permissions.set.confidential"
-      class="fr-mb-2w"
-      :label="documentFieldLabels.confidential"
-      name="confidential"
-    />
-    <VeeInput
-      class="fr-mb-3w"
-      :label="documentFieldLabels.expirationDate"
-      name="expirationDate"
-      type="date"
     />
     <button
       class="fr-btn fr-mt-3w"
