@@ -113,6 +113,8 @@
   function getItemTab() {
     switch (props.notification.type) {
       case NotificationType.NewDocument:
+      case NotificationType.DocumentExpirationOneMonth:
+      case NotificationType.DocumentExpirationToday:
         return BeneficiaryTab.Documents
       case NotificationType.DueDateToday:
       case NotificationType.DueDateOneMonth:

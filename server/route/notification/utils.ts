@@ -75,12 +75,12 @@ export function getDescription(notification: Notification) {
     case 'ArchiveDueSevenDays':
       return 'Gérer le dossier'
     case 'DocumentExpirationToday':
-      return getDateNotificationDescription(created, 'Expiration du document')
+      return getDateNotificationDescription(created, 'Expiration')
     case 'DocumentExpirationOneMonth':
       return getDateNotificationDescription(
         dateInAMonth,
-        'Expiration du document dans un mois',
-        'Expiration du document'
+        'Expiration dans un mois',
+        'Expiration'
       )
 
     default:
@@ -160,7 +160,7 @@ export function getDescriptionHint(
       return 'Dossier sans activité depuis 2 ans\u00A0: suppression prévue dans une semaine.'
     case 'DocumentExpirationToday':
     case 'DocumentExpirationOneMonth':
-      return `Document\u00A0: ${notification.detail || 'inconnu'}`
+      return 'sur le document'
     default:
       return ''
   }
