@@ -32,9 +32,13 @@ Prisma.WorkshopAttendeeScalarFieldEnum
 Prisma.WorkshopExternalAttendeeScalarFieldEnum
 Prisma.UserActivityScalarFieldEnum
 
+// PRIO 4
+Prisma.NotificationScalarFieldEnum
+Prisma.Budget*ScalarFieldEnum
+Prisma.ExternalAccountScalarFieldEnum
+
 // NO
 Prisma.CommentScalarFieldEnum
-Prisma.NotificationScalarFieldEnum
 Prisma.DataInclusionStructureScalarFieldEnum
 Prisma.EmailScalarFieldEnum
 Prisma.ApiTokenScalarFieldEnum
@@ -601,6 +605,162 @@ const configNotification: Record<
   detail: false
 }
 
+const configBudgetIncome: Record<
+  SnakeCase<keyof typeof Prisma.BudgetIncomeScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  salary: true,
+  prime_activite: true,
+  retirement: true,
+  alimony: true,
+  disability: true,
+  unemployment: true,
+  ass: true,
+  rsa: true,
+  apl: true,
+  family: true,
+  aah: true,
+  aspa: true,
+  daily_allowance: true,
+  annuity: true,
+  other: true,
+  type: true,
+  beneficiary_id: true,
+  relationship: true,
+  budget_id: true,
+  // -- BEGIN ANONYMIZED
+  first_name: false,
+  last_name: false
+}
+
+const configBudgetIncomeCustom: Record<
+  SnakeCase<keyof typeof Prisma.BudgetIncomeCustomScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  type: true,
+  amount: true,
+  income_id: true
+}
+
+const configBudgetExpenses: Record<
+  SnakeCase<keyof typeof Prisma.BudgetExpensesScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  rent: true,
+  expenses: true,
+  water: true,
+  electricity: true,
+  gas: true,
+  fuel_or_other: true,
+  housing_tax: true,
+  property_tax: true,
+  income_tax: true,
+  car_insurance: true,
+  home_insurance: true,
+  death_insurance: true,
+  retirement_insurance: true,
+  other_insurance: true,
+  remitted_alimony: true,
+  health_insurance: true,
+  phone_internet: true,
+  school_fees: true,
+  school_canteen: true,
+  other: true,
+  budget_id: true
+}
+
+const configBudgetExpensesLoan: Record<
+  SnakeCase<keyof typeof Prisma.BudgetExpensesLoanScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  type: true,
+  amount_total: true,
+  amount_per_month: true,
+  due_date: true,
+  expenses_id: true
+}
+
+const configBudgetExpensesDebt: Record<
+  SnakeCase<keyof typeof Prisma.BudgetExpensesDebtScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  type: true,
+  amount_total: true,
+  amount_per_month: true,
+  due_date: true,
+  expenses_id: true
+}
+
+const configBudgetExpensesCustom: Record<
+  SnakeCase<keyof typeof Prisma.BudgetExpensesCustomScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  type: true,
+  amount: true,
+  expenses_id: true
+}
+
+const configBudget: Record<
+  SnakeCase<keyof typeof Prisma.BudgetScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  legacy_main_income_source: true,
+  legacy_main_income_amount: true,
+  legacy_partner_main_income_source: true,
+  legacy_partner_main_income_amount: true,
+  legacy_major_children_main_income_source: true,
+  legacy_major_children_main_income_amount: true,
+  legacy_other_members_main_income_source: true,
+  legacy_other_members_main_income_amount: true,
+  legacy_remaining_after_expenses: true,
+  number_household_members: true,
+  savings: true,
+  overdraft: true,
+  family_quotient: true,
+  banque_de_france: true,
+  family_file_id: true
+}
+
+const configExternalAccount: Record<
+  SnakeCase<keyof typeof Prisma.ExternalAccountScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  created: true,
+  updated: true,
+  user_id: true,
+  provider: true,
+  // -- BEGIN ANONYMIZED
+  provider_account_id: false,
+  refresh_token: false,
+  access_token: false,
+  expires_at: false,
+  scope: false,
+  id_token: false,
+  session_state: false
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -627,7 +787,15 @@ export const CONFIG = {
   workshop_attendee: configWorkshopAttendee,
   workshop_external_attendee: configWorkshopExternalAttendee,
   user_activity: configUserActivity,
-  notification: configNotification
+  notification: configNotification,
+  budget: configBudget,
+  budget_income: configBudgetIncome,
+  budget_income_custom: configBudgetIncomeCustom,
+  budget_expenses: configBudgetExpenses,
+  budget_expenses_loan: configBudgetExpensesLoan,
+  budget_expenses_debt: configBudgetExpensesDebt,
+  budget_expenses_custom: configBudgetExpensesCustom,
+  external_account: configExternalAccount
 }
 
 export type TableName = keyof typeof CONFIG
