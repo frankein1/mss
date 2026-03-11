@@ -101,7 +101,9 @@ export function getAgentClient({ user_id }: { user_id: string }) {
       ) {
         const refreshedAgentAuthInfo = await refreshAgentToken(user_id)
         if (!refreshedAgentAuthInfo.accessToken) {
-          throw new Error('rdsvp: Failed to retrieve agent token after refresh')
+          throw unauthorizedError(
+            'rdsvp: Failed to retrieve agent token after refresh'
+          )
         }
         accessToken = refreshedAgentAuthInfo.accessToken
       }

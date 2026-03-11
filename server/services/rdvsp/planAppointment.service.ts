@@ -7,6 +7,7 @@ import { routes } from '~/utils/routes'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { formatAddress } from '~/utils'
 import { formatDate } from '~/utils/formatDate'
+import { TRPCError } from '@trpc/server'
 
 /** This function needs the rdvsp integration setup and active
  * otherwise throws a forbidden error.
@@ -77,7 +78,10 @@ export async function planAppointment({
 
     return rdvPlan.url
   } catch (error) {
-    console.error('handleAppointmentPlanningFailure', error)
+    if (error instanceof TRPCError) {
+      throw error
+    }
+    console.error('rdvsp: failed to create rdv plan', error)
     throw invalidError('could not create rdv plan')
   }
 }
@@ -111,7 +115,7 @@ async function createRdvspPlan(
         body: JSON.stringify(userUpdateBody)
       })
     } catch (error) {
-      console.error('rdvsp user update error', error)
+      console.error('rdvsp: user update error', error)
     }
   }
   const body = {

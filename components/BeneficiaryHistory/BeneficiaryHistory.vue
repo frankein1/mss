@@ -27,7 +27,21 @@
           <ul>
             <li>
               Soit votre compte RDV Service Public n’est pas encore actif :
-              prenez un nouveau rdv !
+              connectez-vous ici
+              <div class="fr-pt-2v">
+                <NuxtLink
+                  class="fr-btn fr-btn--secondary"
+                  :to="
+                    apiRoutes.rdvsp.ApiSignIn.path({
+                      action: 'goToFamilyFileHistory',
+                      id: familyFileId
+                    })
+                  "
+                  external
+                  @click="trackRdvspReconnection"
+                  >Se connecter à RDV SP</NuxtLink
+                >
+              </div>
             </li>
             <li>
               Soit votre compte n’existe pas, votre responsable de structure
