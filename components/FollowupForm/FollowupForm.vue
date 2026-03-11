@@ -288,6 +288,17 @@
         </div>
       </div>
 
+      <div>
+        <!-- Pour une hauteur adapté au contenu, le widget doit renvoyer sa hauteur via postMessage -->
+        <iframe
+          id="data-inclusion-frame"
+          ref="iframe"
+          :src="doraWidgetUrl"
+          height="900px"
+          width="100%"
+        ></iframe>
+      </div>
+
       <div class="fr-mb-4w">
         <h2 class="fr-h5 fr-mt-3w">Documents</h2>
 
@@ -424,6 +435,62 @@
       value: m.id
     }))
   )
+
+  const structureInfo = useStructureInfo()
+
+  const getCodeCommune = async () => {
+    const response = await fetch(
+      `https://geo.api.gouv.fr/communes?codePostal=${structureInfo.value?.zipcode}`
+    )
+    const data = (await response.json()) as {
+      code: string
+      population: number
+    }[]
+    if (data.length === 1) {
+      return data[0]?.code
+    }
+    // municipality with the highest population
+    return data.reduce((a, b) => (b.population > a.population ? b : a)).code
+  }
+
+  const { data: codeCommune } = await useAsyncData(getCodeCommune)
+
+  const doraWidgetUrl = computed(() => {
+    const code_commune = codeCommune.value || '71014'
+    const config = useRuntimeConfig()
+    const token = config.public.dataInclusion.token
+    const score_qualite_minimum = '0.8'
+    const rows = '4'
+    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols.value}&y=${rows}`
+  })
+
+  // Colonnes responsive TODO composable ?
+  const cols = ref<'1' | '2' | '3'>('1')
+  const updateCols = () => {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      cols.value = '1'
+      return
+    }
+
+    if (window.matchMedia('(max-width: 1247px)').matches) {
+      cols.value = '2'
+      return
+    }
+    cols.value = '3'
+  }
+  onMounted(() => {
+    updateCols()
+    const mqSmall = window.matchMedia('(max-width: 767px)')
+    const mqMedium = window.matchMedia('(max-width: 1247px)')
+
+    mqSmall.addEventListener('change', updateCols)
+    mqMedium.addEventListener('change', updateCols)
+
+    onBeforeUnmount(() => {
+      mqSmall.removeEventListener('change', updateCols)
+      mqMedium.removeEventListener('change', updateCols)
+    })
+  })
 
   const socialSupportSubjectOptions = computed(() =>
     toOptions(props.socialSupportSubjects, 'id', 'name')
