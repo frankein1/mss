@@ -13,10 +13,56 @@ services:
     networks:
       - monsuivisocial_network
     restart: always
+  s3:
+    image: rustfs/rustfs:latest
+    container_name: monsuivisocial_s3
+    environment:
+      - RUSTFS_ACCESS_KEY=$S3_ACCESS_KEY_ID
+      - RUSTFS_SECRET_KEY=$S3_SECRET_ACCESS_KEY
+      - RUSTFS_CONSOLE_ENABLE=true
+    ports:
+      - '$S3_PORT:9000' # S3 API port
+      - '$S3_CONSOLE_PORT:9001' # Console port
+    volumes:
+      - monsuivisocial_s3data:/data
+    networks:
+      - monsuivisocial_network
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'sh',
+          '-c',
+          'curl -f http://127.0.0.1:9000/health && curl -f http://127.0.0.1:9001/rustfs/console/health'
+        ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+      start_period: 0s
+    restart: unless-stopped
+  rustfs-seed:
+    # Creates a local bucket if not exists when the S3 container is up and running
+    image: rustfs/rc:latest
+    container_name: monsuivisocial_s3_bucket_creation
+    depends_on:
+      s3:
+        condition: service_healthy
+    env_file:
+      - .env
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/rc alias set local http://s3:9000 $S3_ACCESS_KEY_ID $S3_SECRET_ACCESS_KEY) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/rc mb --ignore-existing local/$S3_BUCKET;
+      echo 'RustFS bucket creation complete';
+      "
+    networks:
+      - monsuivisocial_network
 
 volumes:
   monsuivisocial_pgdata:
     name: monsuivisocial_pgdata
+  monsuivisocial_s3data:
+    name: monsuivisocial_s3data
 
 networks:
   monsuivisocial_network:

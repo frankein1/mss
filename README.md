@@ -35,13 +35,13 @@ Le projet utilise les technologies Node.js suivantes :
 
   Puis remplissez le fichier `.env` avec les valeurs manquantes.
 
-  Pour utiliser l'espace documents en local, ajoutez la configuration du stockage S3 de l'environnement de développement à votre fichier `.env`. Ces valeurs sont disponibles dans les variables d'environnement des paramètres _CI/CD_ du [dépôt GitLab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2).
-
-- Démarrez la base de données Postgres (utilise Docker)
+- Démarrez la base de données Postgres et le stockage S3 via rustfs (utilise Docker)
 
   ```sh
   pnpm dev:db:start
   ```
+
+  Un bucket S3 est automatiquement créé s'il n'existe pas.
 
 - Générez le client Prisma
 
