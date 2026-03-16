@@ -250,45 +250,49 @@
             :partner-organizations
           />
         </div>
-
         <div class="fr-col-12">
-          <!-- TODO: very messy fieldset. Please clean that up! -->
-          <div class="fr-fieldset__element fr-mb-0">
-            <fieldset
-              class="fr-fieldset fr-mb-0"
-              aria-labelledby="followup-reoriente-apres-entretien-legend"
+          <fieldset
+            id="followup-actions"
+            class="fr-fieldset"
+            aria-labelledby="followup-actions-legend"
+          >
+            <legend
+              id="followup-actions-legend"
+              class="fr-fieldset__legend--regular fr-fieldset__legend"
             >
-              <legend
-                id="followup-reoriente-apres-entretien-legend"
-                :hidden="false"
-              >
-                Actions entreprises
-              </legend>
-            </fieldset>
-          </div>
-
-          <div class="fr-fieldset__element fr-fieldset__element--inline">
-            <VeeCheckbox
-              name="helpRequested"
-              :label="followupFieldLabels.helpRequested"
-            />
-          </div>
-
-          <template v-if="application.module.ministere">
+              Actions entreprises
+            </legend>
             <div class="fr-fieldset__element fr-fieldset__element--inline">
-              <VeeCheckbox
-                name="classified"
-                :label="followupFieldLabels.classified"
-              />
+              <div class="fr-checkbox-group">
+                <VeeCheckbox
+                  name="helpRequested"
+                  :label="followupFieldLabels.helpRequested"
+                />
+              </div>
             </div>
-
-            <div class="fr-fieldset__element fr-fieldset__element--inline">
-              <VeeCheckbox
-                name="forwardedToJustice"
-                :label="followupFieldLabels.forwardedToJustice"
-              />
+            <div
+              v-if="application.module.ministere"
+              class="fr-fieldset__element fr-fieldset__element--inline"
+            >
+              <div class="fr-checkbox-group">
+                <VeeCheckbox
+                  name="classified"
+                  :label="followupFieldLabels.classified"
+                />
+              </div>
             </div>
-          </template>
+            <div
+              v-if="application.module.ministere"
+              class="fr-fieldset__element fr-fieldset__element--inline"
+            >
+              <div class="fr-checkbox-group">
+                <VeeCheckbox
+                  name="forwardedToJustice"
+                  :label="followupFieldLabels.forwardedToJustice"
+                />
+              </div>
+            </div>
+          </fieldset>
         </div>
       </div>
     </section>
@@ -299,12 +303,19 @@
       >
         <li>
           <!-- TODO: back button -->
-          <button
-            type="button"
+          <NuxtLink
             class="fr-btn fr-btn--secondary"
+            :to="
+              familyFileId && beneficiaryId
+                ? routes.file.AppFile.path(familyFileId, {
+                    beneficiaryId,
+                    tab: BeneficiaryTab.History
+                  })
+                : '/'
+            "
           >
             Annuler
-          </button>
+          </NuxtLink>
         </li>
         <li>
           <button
@@ -341,6 +352,7 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const props = withDefaults(
     defineProps<{
