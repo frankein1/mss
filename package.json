@@ -28,10 +28,13 @@
     "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1000.0",
+    "@aws-sdk/lib-storage": "^3.1000.0",
     "@getbrevo/brevo": "^3.0.1",
     "@gouvfr/dsfr": "~1.14.1",
     "@gouvminint/vue-dsfr": "^8.8.0",
     "@prisma/client": "^6.14.0",
+    "@scaleway/sdk": "^3.2.1",
     "@sentry/node": "^10.5.0",
     "@sentry/vue": "^10.5.0",
     "@tiptap/core": "^3.2.0",

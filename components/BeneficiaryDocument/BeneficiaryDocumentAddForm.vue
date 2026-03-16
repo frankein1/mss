@@ -21,9 +21,9 @@
   >
     <VeeInputFile
       label="Selectionner un fichier"
-      hint="Taille maximum: 20Mo"
+      hint="Taille maximum: 20Mo. Type de fichiers accepté: pdf, image, Excel (.xls, .xlsx), Word (.doc, .docx), OpenDocument (.ods, .odt)"
       name="file"
-      accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
+      :accept="documentFileAllowedTypes.join(', ')"
       required
     />
     <template v-if="familyFileIdentification.length > 1">
@@ -76,7 +76,11 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import type { UploadBrowserDocumentInput } from '~/server/schema'
   import { uploadBrowserDocumentSchema } from '~/server/schema'
-  import { documentTypeKeys, documentTagKeys } from '~/client/options'
+  import {
+    documentTypeKeys,
+    documentTagKeys,
+    documentFileAllowedTypes
+  } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'

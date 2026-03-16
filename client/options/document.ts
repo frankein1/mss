@@ -1,8 +1,9 @@
 import { DocumentType } from '@prisma/client'
+import { MAX_UPLOAD_SIZE_BYTES } from '~/utils/constants'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
 // Max size in bytes
-export const documentFileMaxSize = 15_000_000
+export const documentFileMaxSize = MAX_UPLOAD_SIZE_BYTES
 export const documentFileAllowedTypes = [
   'application/pdf',
   'image/gif',
