@@ -16,6 +16,7 @@ import {
   openRichText
 } from '../helpers.schema'
 import { errorMessages, requiredErrorMessage } from '~/utils/zod'
+import { SocialSupportRedirectionSchema } from '../redirection'
 
 export const createHelpRequestSchemaBase = z.object({
   isMinistry: z.boolean(),
@@ -53,7 +54,8 @@ export const createHelpRequestSchemaBase = z.object({
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
   financialSupport: z.boolean(),
-  isRefundable: kindOfBooleanSchema()
+  isRefundable: kindOfBooleanSchema(),
+  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()
 })
 
 export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [

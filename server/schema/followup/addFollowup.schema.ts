@@ -20,6 +20,7 @@ import {
   maxStringLengthMessage,
   requiredErrorMessage
 } from '~/utils/zod'
+import { SocialSupportRedirectionSchema } from '../redirection'
 
 // TODO: etre plus restrictif sur synthesisRichText et privateSynthesisRichText
 export const addFollowupSchemaBase = z.object({
@@ -43,10 +44,6 @@ export const addFollowupSchemaBase = z.object({
   status: requiredNativeEnum(SocialSupportStatus),
   helpRequested: z.boolean().default(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  redirected: z.boolean().default(false),
-  structureName: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
   dueDate: dateOrEmpty,
   thirdPersonName: stringConstraint
     .max(100, maxStringLengthMessage(100))
@@ -57,7 +54,8 @@ export const addFollowupSchemaBase = z.object({
   prescribingOrganizationContactId: z.string().nullish(),
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false),
-  duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
+  duration: withEmptyValueOptionalNativeEnum(FollowupDuration),
+  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()
 })
 
 export const addFollowupSchema = z.discriminatedUnion('isMinistry', [

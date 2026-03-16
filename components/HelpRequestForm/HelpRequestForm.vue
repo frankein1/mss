@@ -54,6 +54,13 @@
       <HelpRequestFormSynthesisSection
         :can-edit-private-synthesis="canEditPrivateSynthesis"
       />
+      <hr class="helprequestform__divider" />
+
+      <RedirectionForm
+        :partner-organization-options
+        :partner-organizations="partnerOrganizations"
+        :edition-mode
+      />
 
       <hr class="helprequestform__divider" />
 
@@ -174,6 +181,16 @@
       value: m.id
     }))
   )
+
+  const partnerOrganizationOptions = computed(() => {
+    const partnerOrganizationsWithStringId = props.partnerOrganizations.map(
+      ({ id, ...rest }) => ({
+        id: String(id),
+        ...rest
+      })
+    )
+    return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
 </script>
 
 <style scoped lang="scss">

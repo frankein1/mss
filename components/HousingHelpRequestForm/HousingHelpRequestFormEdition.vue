@@ -64,6 +64,7 @@
       status: socialSupport.value.status,
       dueDate: socialSupport.value.dueDate,
       documents: initialDocumentIds.value,
+      socialSupportRedirections: socialSupport.value.socialSupportRedirections,
       externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',

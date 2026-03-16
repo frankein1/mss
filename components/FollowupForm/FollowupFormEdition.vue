@@ -5,7 +5,6 @@
     :partner-organizations="partnerOrganizations"
     :family-file-identification="familyFileIdentification || []"
     :medium="values.medium"
-    :is-redirected="values.redirected"
     :can-set-private-synthesis="canSetPrivateSynthesis"
     :caught-errors="caughtErrors"
     edition-mode
@@ -67,7 +66,6 @@
       privateSynthesisRichText: followup.value.privateSynthesisRichText,
       status: followup.value.status,
       helpRequested: followup.value.helpRequested || false,
-      structureName: followup.value.structureName,
       dueDate: followup.value.dueDate,
       thirdPersonName: followup.value.thirdPersonName,
       place: followup.value.place,
@@ -76,13 +74,13 @@
         followup.value.prescribingOrganizationContact?.id,
       subjects: initialSocialSupportSubjectIds.value,
       documents: initialDocumentIds.value,
-      redirected: followup.value.redirected || false,
       firstFollowup: followup.value.firstFollowup || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
       isMinistry: application.value.module.ministere,
       duration: followup.value.duration,
-      ministerId: followup.value.ministerId
+      ministerId: followup.value.ministerId,
+      socialSupportRedirections: followup.value.socialSupportRedirections
     }
   })
 

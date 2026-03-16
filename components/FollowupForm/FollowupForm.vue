@@ -11,26 +11,23 @@
   >
     <section
       v-if="!editionMode && familyFileIdentification.length > 1"
-      class="feature-section fr-p-5w fr-mb-2w"
+      class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v"
     >
-      <div class="fr-grid-row">
-        <VeeRadioButtons
-          class="fr-col-12 fr-mb-0"
-          name="beneficiaryId"
-          label="Bénéficiaire concerné par le suivi :"
-          :options="beneficiaryOptions"
-          :inline="true"
-          required
-        />
-      </div>
+      <VeeRadioButtons
+        class="fr-col-12 fr-mb-0"
+        name="beneficiaryId"
+        label="Bénéficiaire concerné par le suivi :"
+        :options="beneficiaryOptions"
+        :inline="true"
+        required
+      />
     </section>
 
-    <section class="feature-section fr-p-5w">
-      <h2 class="fr-h5">Informations générales</h2>
+    <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
+      <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
       <div
         class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
       >
-        <!-- ROW -->
         <div class="fr-col-12">
           <VeeCheckbox
             :label="followupFieldLabels.firstFollowup"
@@ -39,7 +36,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
           <VeeInput
             name="date"
             :label="followupFieldLabels.date"
@@ -48,15 +45,22 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
           <VeeSelect
             name="duration"
             :label="followupFieldLabels.duration"
             :options="withEmptyValue(followupDurationKeys.options)"
           />
         </div>
+        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+          <VeeSelect
+            name="medium"
+            :label="followupFieldLabels.medium"
+            :options="withEmptyValue(followupMediumKeys.options)"
+            required
+          />
+        </div>
 
-        <!-- ROW -->
         <template v-if="application.module.ministere">
           <div class="fr-col-12">
             <VeeInput
@@ -73,16 +77,6 @@
             />
           </div>
         </template>
-
-        <!-- ROW -->
-        <div class="fr-col-12 fr-col-md-6">
-          <VeeSelect
-            name="medium"
-            :label="followupFieldLabels.medium"
-            :options="withEmptyValue(followupMediumKeys.options)"
-            required
-          />
-        </div>
 
         <div
           v-if="medium === FollowupMedium.ExternalAppointment"
@@ -107,7 +101,6 @@
           class="fr-col-12 fr-col-md-6"
         ></div>
 
-        <!-- ROW -->
         <div class="fr-col-12">
           <MultiSelect
             name="subjects"
@@ -117,7 +110,6 @@
           />
         </div>
 
-        <!-- ROW -->
         <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
@@ -138,7 +130,6 @@
           </template>
         </div>
 
-        <!-- ROW -->
         <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
             name="status"
@@ -155,7 +146,7 @@
             type="date"
           />
         </div>
-        <!-- ROW -->
+
         <div class="fr-col-12 fr-col-md-6">
           <VeeCombobox
             :label="followupFieldLabels.prescribingOrganizationId"
@@ -174,7 +165,6 @@
           />
         </div>
 
-        <!-- ROW -->
         <div class="fr-col-12 fr-col-md-6 fr-mt-0 fr-pt-0">
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
@@ -189,18 +179,28 @@
             Données issues de l'annuaire de partenaires
           </NuxtLink>
         </div>
-        <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
+      </div>
+    </section>
 
-        <!-- ROW -->
+    <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
+      <h2 class="fr-h4">Notes</h2>
+      <div
+        class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
+      >
         <div class="fr-col-12">
-          <h2 class="fr-h5 fr-mt-3w fr-mb-2w">Compte rendu</h2>
           <AtomTextEditor
             name="synthesis"
             :initial-value="synthesisRichTextValue || null"
             :initial-raw-value="synthesis"
             :label="followupFieldLabels.synthesis"
             @update="onUpdateSynthesis"
-          />
+          >
+            <template #hint>
+              Il est fortement recommandé de ne stocker que les informations
+              utiles au suivi du bénéficiaire et d'éviter le recueil
+              d'informations sensibles (données de santé, mots de passe, etc).
+            </template>
+          </AtomTextEditor>
         </div>
 
         <!-- ROW -->
@@ -225,83 +225,87 @@
             </template>
           </AtomTextEditor>
         </div>
+      </div>
+    </section>
 
-        <!-- ROW -->
+    <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
+      <h2 class="fr-h4">Documents</h2>
+
+      <BeneficiaryDocumentsSelect
+        :family-file-id="familyFileId || ''"
+        :beneficiary-id="beneficiaryId || ''"
+        name="documents"
+        snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
+      />
+    </section>
+
+    <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
+      <h2 class="fr-h4">Réorientations</h2>
+      <div
+        class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
+      >
         <div class="fr-col-12">
-          <fieldset
-            class="fr-fieldset fr-col-12"
-            aria-labelledby="followup-actions-entreprises-legend"
-          >
-            <h2 class="fr-h5 fr-mt-3w">Actions entreprises</h2>
+          <RedirectionForm
+            :partner-organization-options
+            :partner-organizations
+          />
+        </div>
 
-            <div class="fr-fieldset__element fr-mb-0">
-              <fieldset
-                class="fr-fieldset fr-mb-0"
-                aria-labelledby="followup-reoriente-apres-entretien-legend"
+        <div class="fr-col-12">
+          <!-- TODO: very messy fieldset. Please clean that up! -->
+          <div class="fr-fieldset__element fr-mb-0">
+            <fieldset
+              class="fr-fieldset fr-mb-0"
+              aria-labelledby="followup-reoriente-apres-entretien-legend"
+            >
+              <legend
+                id="followup-reoriente-apres-entretien-legend"
+                :hidden="false"
               >
-                <legend
-                  id="followup-reoriente-apres-entretien-legend"
-                  hidden
-                >
-                  {{ followupFieldLabels.redirected }}
-                </legend>
+                Actions entreprises
+              </legend>
+            </fieldset>
+          </div>
 
-                <div class="fr-fieldset__element fr-fieldset__element--inline">
-                  <VeeCheckbox
-                    name="redirected"
-                    :label="followupFieldLabels.redirected"
-                  />
-                </div>
-                <div class="fr-fieldset__element fr-fieldset__element--inline">
-                  <VeeInput
-                    v-if="isRedirected"
-                    name="structureName"
-                    :label="followupFieldLabels.structureName"
-                  />
-                </div>
-              </fieldset>
+          <div class="fr-fieldset__element fr-fieldset__element--inline">
+            <VeeCheckbox
+              name="helpRequested"
+              :label="followupFieldLabels.helpRequested"
+            />
+          </div>
+
+          <template v-if="application.module.ministere">
+            <div class="fr-fieldset__element fr-fieldset__element--inline">
+              <VeeCheckbox
+                name="classified"
+                :label="followupFieldLabels.classified"
+              />
             </div>
 
             <div class="fr-fieldset__element fr-fieldset__element--inline">
               <VeeCheckbox
-                name="helpRequested"
-                :label="followupFieldLabels.helpRequested"
+                name="forwardedToJustice"
+                :label="followupFieldLabels.forwardedToJustice"
               />
             </div>
-
-            <template v-if="application.module.ministere">
-              <div class="fr-fieldset__element fr-fieldset__element--inline">
-                <VeeCheckbox
-                  name="classified"
-                  :label="followupFieldLabels.classified"
-                />
-              </div>
-
-              <div class="fr-fieldset__element fr-fieldset__element--inline">
-                <VeeCheckbox
-                  name="forwardedToJustice"
-                  :label="followupFieldLabels.forwardedToJustice"
-                />
-              </div>
-            </template>
-          </fieldset>
+          </template>
         </div>
       </div>
+    </section>
 
-      <div class="fr-mb-4w">
-        <h2 class="fr-h5 fr-mt-3w">Documents</h2>
-
-        <BeneficiaryDocumentsSelect
-          :family-file-id="familyFileId || ''"
-          :beneficiary-id="beneficiaryId || ''"
-          name="documents"
-          snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
-        />
-      </div>
-
+    <section class="fr-mt-4v fr-mb-4v">
       <ul
         class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
       >
+        <li>
+          <!-- TODO: back button -->
+          <button
+            type="button"
+            class="fr-btn fr-btn--secondary"
+          >
+            Annuler
+          </button>
+        </li>
         <li>
           <button
             class="fr-btn submit-btn"
@@ -345,7 +349,6 @@
       partnerOrganizations: Array<PartnerOrganizationIdName>
       familyFileIdentification: BeneficiaryFileIdentification[]
       medium: FollowupMedium
-      isRedirected: boolean
       canSetPrivateSynthesis?: boolean
       caughtErrors: FormErrors<AddFollowupInput | EditFollowupInput>
       editionMode?: boolean
@@ -480,3 +483,15 @@
     setMinisterId(id, true)
   }
 </script>
+
+<style lang="scss" scoped>
+  h2 {
+    color: var(--primary);
+  }
+
+  .feature-section {
+    *:last-child {
+      margin-bottom: 0;
+    }
+  }
+</style>

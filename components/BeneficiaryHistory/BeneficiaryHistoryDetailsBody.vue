@@ -6,13 +6,15 @@
     <template v-if="expanded">
       <BeneficiaryHistoryDetailsAppointment
         v-if="type === 'Appointment'"
-        :id="Number(socialSupportId)" />
+        :id="Number(socialSupportId)"
+      />
       <BeneficiaryHistoryDetailsBodyContentProvider
         v-else
         :social-support-id="socialSupportId"
         :family-file-permissions="familyFilePermissions"
         @deleted="emit('deleted')"
-    /></template>
+      />
+    </template>
   </div>
 </template>
 

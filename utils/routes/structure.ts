@@ -35,5 +35,10 @@ export const routes = {
     name: 'AppStructureUserAdd',
     title: `Ajouter un nouvel utilisateur`,
     path: () => `${AppRoute}/structure/users/add`
+  },
+  AppStructureDora: {
+    name: 'AppStructureDora',
+    title: `Rechercher un acteur du territoire sur DORA`,
+    path: () => `${AppRoute}/structure/dora`
   }
 } as const

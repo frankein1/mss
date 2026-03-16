@@ -29,6 +29,7 @@ export const include = {
           subjects: true,
           documents: true,
           minister: true,
+          socialSupportRedirections: true,
           beneficiary: {
             select: {
               id: true,

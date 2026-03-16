@@ -2,7 +2,8 @@ import {
   getAppContextPermissions,
   getCommentPermissions,
   getDocumentPermissions,
-  getSocialSupportPermissions
+  getSocialSupportPermissions,
+  type SecurityRuleContext
 } from '~/server/security'
 import type { FamilyFileSecurityTarget } from '~/server/services'
 import {
@@ -14,6 +15,15 @@ import {
 } from '~/server/services/helper'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SocialSupportDetail } from './getDetails.query'
+import { StructureRepo } from '~/server/database'
+import type {
+  AddFollowupInput,
+  CreateHelpRequestInput,
+  CreateHousingHelpRequestInput,
+  EditFollowupInput,
+  EditHelpRequestInput,
+  EditHousingHelpRequestInput
+} from '~/server/schema'
 
 export function formatSocialSupportDetail(
   socialSupport: SocialSupportDetail,
@@ -110,4 +120,61 @@ export function formatSocialSupportDetail(
     },
     permissions: socialSupportPermissions
   }
+}
+
+export const checkRedirectionPermissions = async (
+  redirections:
+    | AddFollowupInput['socialSupportRedirections']
+    | EditFollowupInput['socialSupportRedirections']
+    | CreateHelpRequestInput['socialSupportRedirections']
+    | EditHelpRequestInput['socialSupportRedirections']
+    | EditHousingHelpRequestInput['socialSupportRedirections']
+    | CreateHousingHelpRequestInput['socialSupportRedirections'],
+  ctx: SecurityRuleContext
+) => {
+  if (!redirections?.length) {
+    return true
+  }
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: {
+      id: ctx.structure.id
+    },
+    select: {
+      partnerOrganizations: {
+        select: {
+          id: true,
+          contacts: {
+            select: {
+              id: true
+            }
+          }
+        }
+      }
+    }
+  })
+  const partnerIdsFromStructure = structure.partnerOrganizations.map(p => p.id)
+  const contactIdsFromStructure = structure.partnerOrganizations.flatMap(p =>
+    p.contacts.map(c => c.id)
+  )
+
+  const partnerOrganizationsIds = redirections
+    .map(r => r.partnerOrganizationId)
+    .filter(id => id != '')
+    .filter(id => id != null)
+  const partnerOrganizationsContactIds = redirections
+    .map(r => r.partnerOrganizationContactId)
+    .filter(id => id != '')
+    .filter(id => id != null)
+
+  const allPartnersValid = partnerOrganizationsIds.every(id =>
+    partnerIdsFromStructure.includes(id)
+  )
+  const allContactsValid = partnerOrganizationsContactIds.every(id =>
+    contactIdsFromStructure.includes(id)
+  )
+
+  if (!allPartnersValid || !allContactsValid) {
+    return false
+  }
+  return true
 }

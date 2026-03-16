@@ -19,6 +19,7 @@ const include = {
     include: {
       lastUpdatedBy: true,
       documents: true,
+      socialSupportRedirections: true,
       subjects: true,
       minister: true,
       beneficiary: {

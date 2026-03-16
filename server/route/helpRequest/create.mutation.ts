@@ -5,6 +5,7 @@ import type { CreateHelpRequestInput } from '~/server/schema'
 import { createHelpRequestSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { HelpRequestService, FamilyFileService } from '~/server/services'
+import { checkRedirectionPermissions } from '../socialSupport/utils'
 
 const handler = ({
   input,
@@ -24,7 +25,21 @@ const securityCheck = async (
     ctx,
     input.familyFileId
   )
-  return permissions.create.helpRequest
+
+  // Check permissions
+  if (!permissions.create.helpRequest) {
+    return false
+  }
+
+  // check if partnerOrganization and partnerOrganizationContact are part of the structure
+  if (input.socialSupportRedirections?.length) {
+    return await checkRedirectionPermissions(
+      input.socialSupportRedirections,
+      ctx
+    )
+  }
+
+  return true
 }
 
 export const create = createMutation({

@@ -393,12 +393,39 @@ model SocialSupport {
   // depending on the type of SocialSupport
   subtype           String?
 
-  followup        Followup?
-  fileInstruction FileInstruction?
+  followup                  Followup?
+  fileInstruction           FileInstruction?
+  socialSupportRedirections SocialSupportRedirection[]
 
   @@index(fields: [structureId, familyFileId], map: "social_support_structure_id_family_file_id_idx")
   @@index(fields: [beneficiaryId], map: "social_support_beneficiary_id_idx")
   @@map("social_support")
+}
+
+model SocialSupportRedirection {
+  id                    String                       @id @default(uuid()) @db.Uuid
+  type                  SocialSupportRedirectionType
+  motif                 String?
+  externalStructureName String?                      @map("external_structure_name")
+
+  partnerOrganizationId String?              @map("partner_organization_id") @db.Uuid
+  partnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
+
+  partnerOrganizationContactId String?                     @map("partner_organization_contact_id") @db.Uuid
+  partnerOrganizationContact   PartnerOrganizationContact? @relation(fields: [partnerOrganizationContactId], references: [id])
+
+  socialSupportId String        @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") // for UI purpose only: sort by date
+
+  @@map("social_support_redirection")
+}
+
+enum SocialSupportRedirectionType {
+  PartnerOrganization
+  Intern
+  Other
 }
 
 enum FollowupMedium {
@@ -1924,6 +1951,7 @@ model PartnerOrganization {
   helpRequestsPrescribed        HelpRequest[]                @relation("help_request_prescribing_organization")
   housingHelpRequestsPrescribed HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
   workshops                     Workshop[]
+  socialSupportRedirections     SocialSupportRedirection[]
 
   @@unique([structureId, siret])
   @@map("partner_organization")
@@ -1939,10 +1967,11 @@ model PartnerOrganizationContact {
   partner   PartnerOrganization @relation(fields: [partnerId], references: [id], onDelete: Cascade)
   partnerId String              @map("partner_id") @db.Uuid
 
-  followupsPrescribed           Followup[]           @relation("followup_prescribing_organization_contact")
-  fileInstructionsInstructed    FileInstruction[]    @relation("file_instruction_instructor_organization_contact")
-  helpRequestsPrescribed        HelpRequest[]        @relation("help_request_prescribing_organization_contact")
-  housingHelpRequestsPrescribed HousingHelpRequest[] @relation("housing_help_request_prescribing_organization_contact")
+  followupsPrescribed           Followup[]                 @relation("followup_prescribing_organization_contact")
+  fileInstructionsInstructed    FileInstruction[]          @relation("file_instruction_instructor_organization_contact")
+  helpRequestsPrescribed        HelpRequest[]              @relation("help_request_prescribing_organization_contact")
+  housingHelpRequestsPrescribed HousingHelpRequest[]       @relation("housing_help_request_prescribing_organization_contact")
+  socialSupportRedirections     SocialSupportRedirection[]
 
   @@map("partner_organization_contact")
 }

@@ -5,7 +5,6 @@
     :partner-organizations="partnerOrganizations"
     :family-file-identification="familyFileIdentification || []"
     :medium="values.medium"
-    :is-redirected="values.redirected"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -35,15 +34,14 @@
     saveFollowup: [followup: AddFollowupInput]
   }>()
 
-  const { handleSubmit, values, meta } = useForm<AddFollowupInput>({
+  const { handleSubmit, values, meta, errors } = useForm<AddFollowupInput>({
     validationSchema: toTypedSchema(addFollowupSchema),
     initialValues: {
       isMinistry: application.value.module.ministere,
       beneficiaryId: props.beneficiaryId,
       familyFileId: props.familyFileId,
       date: new Date(),
-      status: SocialSupportStatus.Done,
-      redirected: false
+      status: SocialSupportStatus.Done
     }
   })
 

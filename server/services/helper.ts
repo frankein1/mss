@@ -11,7 +11,8 @@ import type {
   User,
   PartnerOrganizationContact,
   FamilyFile,
-  MinisterEntity
+  MinisterEntity,
+  SocialSupportRedirection
 } from '@prisma/client'
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
 
@@ -34,6 +35,7 @@ export function filterSocialSupport({
     subjects: SocialSupportSubject[]
     documents?: Document[]
     comments?: (Comment & { createdBy: User })[]
+    socialSupportRedirections?: SocialSupportRedirection[]
   }
   conditions: {
     details: boolean
@@ -80,9 +82,12 @@ export function filterSocialSupport({
     ),
 
     documents: show(socialSupport.documents, conditions.details),
-
     ministerId: show(socialSupport.ministerId, conditions.minister),
     minister: show(socialSupport.minister, conditions.minister),
+    socialSupportRedirections: show(
+      socialSupport.socialSupportRedirections,
+      conditions.details
+    ),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
   }
 }

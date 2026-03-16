@@ -9,8 +9,15 @@ import {
 } from '~/server/database'
 import type { EditHousingHelpRequestInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareRelationUpdates
+} from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
+import { getSocialSupportWithRedirections } from '../socialSupport/helper'
+import { filterOutEmptyElements } from '../helper'
+import { v4 } from 'uuid'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -30,6 +37,7 @@ export async function update({ input, ctx }: UpdateParams) {
               beneficiaryId: true,
               createdById: true,
               documents: true,
+              socialSupportRedirections: true,
               privateSynthesis: true,
               privateSynthesisRichText: true
             }
@@ -44,6 +52,7 @@ export async function update({ input, ctx }: UpdateParams) {
     ministerId,
     isMinistry,
     documents,
+    socialSupportRedirections,
     externalStructure,
     status,
     examinationDate,
@@ -76,6 +85,26 @@ export async function update({ input, ctx }: UpdateParams) {
     isPmr
   } = cleanUpdateInput(input)
 
+  const { socialSupportRedirections: previousRedirectionIds } =
+    await getSocialSupportWithRedirections(ctx.user, input.socialSupportId)
+
+  const prepareRedirections = socialSupportRedirections
+    ?.map(r => {
+      if (r.type) {
+        return {
+          id: r.id || v4(),
+          type: r.type,
+          motif: r.motif,
+          externalStructureName: r.externalStructureName,
+          partnerOrganizationId: r.partnerOrganizationId,
+          partnerOrganizationContactId: r.partnerOrganizationContactId,
+          createdAt: new Date()
+        }
+      }
+    })
+    .filter(r => r != null)
+    .filter(filterOutEmptyElements)
+
   const updateSocialSupport = () =>
     SocialSupportRepo.update(ctx.user, {
       where: { id: input.socialSupportId },
@@ -101,7 +130,10 @@ export async function update({ input, ctx }: UpdateParams) {
         documents: prepareDocumentsMutations(
           documents,
           target.fileInstruction.socialSupport.documents
-        )
+        ),
+        socialSupportRedirections: prepareRedirections
+          ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
+          : undefined
       },
       include: {
         familyFile: {

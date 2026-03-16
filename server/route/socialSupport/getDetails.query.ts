@@ -27,6 +27,13 @@ async function getSocialSupportDetail({
       },
       beneficiary: true,
       documents: true,
+      socialSupportRedirections: {
+        orderBy: { createdAt: 'asc' },
+        include: {
+          partnerOrganization: true,
+          partnerOrganizationContact: true
+        }
+      },
       comments: {
         orderBy: { created: 'asc' },
         include: {

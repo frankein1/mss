@@ -16,11 +16,6 @@
       </div>
       <div class="spacer"></div>
       <ul class="fr-badges-group">
-        <li v-if="redirectedLabel">
-          <p class="fr-badge fr-badge--purple-glycine">
-            {{ redirectedLabel }}
-          </p>
-        </li>
         <li v-if="socialSupport.followup?.firstFollowup">
           <p class="fr-badge fr-badge--info fr-badge--no-icon">
             {{ followupFieldLabels.firstFollowup }}
@@ -49,7 +44,12 @@
         :status="socialSupport.status"
       />
     </ul>
-
+    <BeneficiaryRedirectionsDetailsBodyMetas
+      v-if="socialSupport.socialSupportRedirections?.length"
+      :redirections="
+        socialSupport.socialSupportRedirections as SocialSupportRedirectionsDetails
+      "
+    />
     <BeneficiaryHistoryDetailsBodyDocuments
       v-if="socialSupport.documents?.length"
       :documents="socialSupport.documents"
@@ -125,6 +125,7 @@
   import type {
     CommentData,
     CommentItem,
+    SocialSupportRedirectionsDetails,
     SocialSupportDetailItem
   } from './types'
   import type { FamilyFilePermissions } from '~/server/security'
@@ -151,19 +152,6 @@
   )
 
   const commentItems = ref(socialSupport.value?.comments || [])
-
-  const redirectedLabel = computed(() => {
-    const followup = socialSupport.value?.followup
-    if (!followup) {
-      return ''
-    }
-    if (followup.redirected) {
-      const label = 'Réorienté'
-      return followup.structureName
-        ? `${label} : ${followup.structureName}`
-        : label
-    }
-  })
 
   const printLink = computed(() => {
     if (socialSupport.value?.followup) {

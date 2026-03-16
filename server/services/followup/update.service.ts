@@ -9,8 +9,15 @@ import {
 } from '~/server/database'
 import type { EditFollowupInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareRelationUpdates
+} from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
+import { filterOutEmptyElements } from '../helper'
+import { getSocialSupportWithRedirections } from '../socialSupport/helper'
+import { v4 } from 'uuid'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -36,8 +43,6 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     documents,
     medium,
     place,
-    redirected,
-    structureName,
     thirdPersonName,
     prescribingOrganizationId,
     prescribingOrganizationContactId,
@@ -56,8 +61,29 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     classified,
     forwardedToJustice,
     socialSupportId,
-    duration
+    duration,
+    socialSupportRedirections
   } = input
+
+  const { socialSupportRedirections: previousRedirectionIds } =
+    await getSocialSupportWithRedirections(ctx.user, input.socialSupportId)
+
+  const prepareRedirections = socialSupportRedirections
+    ?.map(r => {
+      if (r.type) {
+        return {
+          id: r.id || v4(),
+          type: r.type,
+          motif: r.motif,
+          externalStructureName: r.externalStructureName,
+          partnerOrganizationId: r.partnerOrganizationId,
+          partnerOrganizationContactId: r.partnerOrganizationContactId,
+          createdAt: new Date()
+        }
+      }
+    })
+    .filter(r => r != null)
+    .filter(filterOutEmptyElements)
 
   const updateSocialSupport = () =>
     SocialSupportRepo.update(ctx.user, {
@@ -85,7 +111,10 @@ export const update = async ({ ctx, input }: UpdateParams) => {
             : target.privateSynthesisRichText,
         status,
         numeroPegase,
-        dueDate
+        dueDate,
+        socialSupportRedirections: prepareRedirections
+          ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
+          : undefined
       },
       include: {
         familyFile: {
@@ -103,8 +132,6 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         prescribingOrganizationId: prescribingOrganizationId || null,
         prescribingOrganizationContactId:
           prescribingOrganizationContactId || null,
-        redirected,
-        structureName: redirected ? structureName : null,
         medium,
         place: medium === FollowupMedium.ExternalAppointment ? place : null,
         thirdPersonName:

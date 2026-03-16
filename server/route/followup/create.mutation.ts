@@ -8,6 +8,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import { FamilyFileService, FollowupService } from '~/server/services'
 import { TRPCError } from '@trpc/server'
 import { validateRichTextSchema } from '../helpers'
+import { checkRedirectionPermissions } from '../socialSupport/utils'
 
 const handler = ({
   input,
@@ -41,14 +42,23 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddFollowupInput
 ) => {
+  // Check permissions
   const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
     input.familyFileId
   )
-
   if (!permissions.create) {
     return false
   }
+
+  // check if partnerOrganization and partnerOrganizationContact are part of the structure
+  if (input.socialSupportRedirections?.length) {
+    return await checkRedirectionPermissions(
+      input.socialSupportRedirections,
+      ctx
+    )
+  }
+
   return true
 }
 

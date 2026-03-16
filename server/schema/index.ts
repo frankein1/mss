@@ -26,6 +26,7 @@ export * from './job.schema'
 export * from './rdvsp.schema'
 export * from './workshop'
 export * from './minister'
+export * from './redirection'
 
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
   switch (issue.code) {

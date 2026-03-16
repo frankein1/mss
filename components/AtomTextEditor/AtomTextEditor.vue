@@ -25,7 +25,7 @@
       ></span>
     </label>
     <client-only>
-      <div class="tiptap-editor-menubar">
+      <div class="tiptap-editor-menubar fr-mt-2v">
         <AtomTextEditorMenubar :editor="editor" />
       </div>
       <EditorContent

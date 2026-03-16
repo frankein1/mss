@@ -9,6 +9,7 @@ import { FamilyFileRepo, SocialSupportRepo } from '~/server/database'
 import type { AddFollowupInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { v4 } from 'uuid'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -24,8 +25,6 @@ export const create = async ({ ctx, input }: CreateParams) => {
     documents,
     medium,
     place,
-    redirected,
-    structureName,
     thirdPersonName,
     prescribingOrganizationId,
     prescribingOrganizationContactId,
@@ -43,7 +42,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
     numeroPegase,
     classified,
     forwardedToJustice,
-    duration
+    duration,
+    socialSupportRedirections
   } = input
 
   let prescribingOrganization
@@ -59,6 +59,22 @@ export const create = async ({ ctx, input }: CreateParams) => {
     where: { id: familyFileId },
     include: { referents: true }
   })
+
+  const redirectionData =
+    socialSupportRedirections
+      ?.map(r => {
+        if (r.type) {
+          return {
+            id: r.id || v4(),
+            type: r.type,
+            motif: r.motif || null,
+            externalStructureName: r.externalStructureName || null,
+            partnerOrganizationId: r.partnerOrganizationId || null,
+            partnerOrganizationContactId: r.partnerOrganizationContactId || null
+          }
+        }
+      })
+      .filter(r => r != null) || []
 
   const fu = await SocialSupportRepo.prisma.create({
     data: {
@@ -95,8 +111,6 @@ export const create = async ({ ctx, input }: CreateParams) => {
         create: {
           prescribingOrganization,
           prescribingOrganizationContact,
-          redirected,
-          structureName: redirected ? structureName : null,
           medium,
           place: medium === FollowupMedium.ExternalAppointment ? place : null,
           thirdPersonName:
@@ -106,6 +120,11 @@ export const create = async ({ ctx, input }: CreateParams) => {
           classified,
           forwardedToJustice,
           duration
+        }
+      },
+      socialSupportRedirections: {
+        createMany: {
+          data: redirectionData
         }
       }
     },

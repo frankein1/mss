@@ -21,12 +21,14 @@ import {
   openRichText
 } from '../helpers.schema'
 import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
+import { SocialSupportRedirectionSchema } from '../redirection'
 
 export const createHousingHelpRequestSchemaBase = z.object({
   familyFileId: z.string().uuid(),
   beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   documents: z.array(z.string(), errorMessages).default([]),
+  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish(),
   synthesis: openText(6000).nullish(),
   synthesisRichText: openRichText().nullish(),
   privateSynthesis: openText(6000).nullish(),

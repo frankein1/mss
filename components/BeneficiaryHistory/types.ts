@@ -1,3 +1,4 @@
+import type { SocialSupportDetail } from '~/server/route/socialSupport/getDetails.query'
 import type { RouterOutput } from '~/server/trpc/routers'
 
 type SocialSupportsOutput = RouterOutput['file']['getSocialSupports']
@@ -29,3 +30,6 @@ export type DocumentItems = Exclude<
   SocialSupportDetailData['documents'],
   undefined
 >
+
+export type SocialSupportRedirectionsDetails =
+  SocialSupportDetail['socialSupportRedirections']

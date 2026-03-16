@@ -10,8 +10,15 @@ import {
 } from '~/server/database'
 import type { EditHelpRequestInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { prepareDocumentsMutations, connect } from '~/utils/prisma'
+import {
+  prepareDocumentsMutations,
+  connect,
+  prepareRelationUpdates
+} from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
+import { filterOutEmptyElements } from '../helper'
+import { getSocialSupportWithRedirections } from '../socialSupport/helper'
+import { v4 } from 'uuid'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -33,6 +40,7 @@ export async function update({ input, ctx }: UpdateParams) {
               createdById: true,
               subjects: true,
               documents: true,
+              socialSupportRedirections: true,
               privateSynthesis: true,
               privateSynthesisRichText: true
             }
@@ -48,6 +56,7 @@ export async function update({ input, ctx }: UpdateParams) {
     isMinistry,
     subjectId,
     documents,
+    socialSupportRedirections,
     externalStructure,
     status,
     askedAmount,
@@ -72,10 +81,28 @@ export async function update({ input, ctx }: UpdateParams) {
     date,
     isRefundable
   } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
-
   const disconnectSubject = target.fileInstruction.socialSupport.subjects
     .filter(s => s.id !== subjectId)
     .map(({ id }) => ({ id }))
+
+  const { socialSupportRedirections: previousRedirectionIds } =
+    await getSocialSupportWithRedirections(ctx.user, input.socialSupportId)
+
+  const prepareRedirections = socialSupportRedirections
+    ?.map(r => {
+      if (r.type) {
+        return {
+          id: r.id || v4(),
+          type: r.type,
+          motif: r.motif,
+          externalStructureName: r.externalStructureName,
+          partnerOrganizationId: r.partnerOrganizationId,
+          partnerOrganizationContactId: r.partnerOrganizationContactId
+        }
+      }
+    })
+    .filter(r => r != null)
+    .filter(filterOutEmptyElements)
 
   const updateSocialSupport = () =>
     SocialSupportRepo.update(ctx.user, {
@@ -106,7 +133,10 @@ export async function update({ input, ctx }: UpdateParams) {
         documents: prepareDocumentsMutations(
           documents,
           target.fileInstruction.socialSupport.documents
-        )
+        ),
+        socialSupportRedirections: prepareRedirections
+          ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
+          : undefined
       },
       include: {
         familyFile: {

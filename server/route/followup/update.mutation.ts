@@ -9,6 +9,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { FollowupService } from '~/server/services'
 import { validateRichTextSchema } from '../helpers'
 import { TRPCError } from '@trpc/server'
+import { checkRedirectionPermissions } from '../socialSupport/utils'
 
 const handler = ({
   input,
@@ -60,6 +61,14 @@ const securityCheck = async (
     !appPermissions.module.ministere
   ) {
     return false
+  }
+
+  // check if partnerOrganization and partnerOrganizationContact are part of the structure
+  if (input.socialSupportRedirections?.length) {
+    return await checkRedirectionPermissions(
+      input.socialSupportRedirections,
+      ctx
+    )
   }
 
   return true

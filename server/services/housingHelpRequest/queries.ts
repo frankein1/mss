@@ -29,6 +29,7 @@ export const include = {
           lastUpdatedBy: true,
           documents: true,
           minister: true,
+          socialSupportRedirections: true,
           familyFile: {
             include: {
               referents: true

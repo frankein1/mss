@@ -9,6 +9,7 @@ import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
+import { v4 } from 'uuid'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -54,6 +55,22 @@ export async function create({ input, ctx }: CreateParams) {
     isRefundable,
     date
   } = cleanCreateInput(input)
+
+  const redirectionData =
+    input.socialSupportRedirections
+      ?.map(r => {
+        if (r.type) {
+          return {
+            id: r.id || v4(),
+            type: r.type,
+            motif: r.motif || null,
+            externalStructureName: r.externalStructureName || null,
+            partnerOrganizationId: r.partnerOrganizationId || null,
+            partnerOrganizationContactId: r.partnerOrganizationContactId || null
+          }
+        }
+      })
+      .filter(r => r != null) || []
 
   const { id, fileInstruction } = await HelpRequestRepo.prisma.create({
     data: {
@@ -109,6 +126,11 @@ export async function create({ input, ctx }: CreateParams) {
               subjects: connect(subjectId),
               dueDate,
               documents: prepareDocumentsMutations(documents),
+              socialSupportRedirections: {
+                createMany: {
+                  data: redirectionData
+                }
+              },
               notifications: {
                 createMany: {
                   data: familyFile.referents
