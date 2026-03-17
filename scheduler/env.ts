@@ -1,29 +1,29 @@
-const { email: emailConfig, public: publicConfig } = useRuntimeConfig()
-
 export const SCHEDULER_ENV = {
   email: {
-    smtpHost: emailConfig.smtpHost,
-    smtpPort: emailConfig.smtpPort,
-    smtpSecure: emailConfig.smtpSecure,
-    smtpUser: emailConfig.smtpUser,
-    smtpPassword: emailConfig.smtpPassword
+    smtpHost: process.env.NUXT_EMAIL_SMTP_HOST || '',
+    smtpPort: parseInt(process.env.NUXT_EMAIL_SMTP_PORT || '587'),
+    smtpSecure: (process.env.NUXT_EMAIL_SMTP_SECURE || 'false') === 'true',
+    smtpUser: process.env.NUXT_EMAIL_SMTP_USER || '',
+    smtpPassword: process.env.NUXT_EMAIL_SMTP_PASSWORD || ''
   },
   anonymizer: {
-    readonlyDatabaseUrl: process.env['NUXT_READONLY_DATABASE_URL'],
-    anonymizedDatabaseUrl: process.env['NUXT_ANONYMIZED_DATABASE_URL']
+    readonlyDatabaseUrl: process.env.NUXT_READONLY_DATABASE_URL,
+    anonymizedDatabaseUrl: process.env.NUXT_ANONYMIZED_DATABASE_URL
   },
   public: {
-    mssEnvironment: publicConfig.mssEnvironment,
+    mssEnvironment: process.env.NUXT_PUBLIC_MSS_ENVIRONMENT || 'local',
     email: {
-      from: publicConfig.email.from
+      from: process.env.NUXT_PUBLIC_EMAIL_FROM || ''
     },
     sentry: {
-      dsn: publicConfig.sentry.dsn,
-      debug: publicConfig.sentry.debug,
-      tracesSampleRate: publicConfig.sentry.tracesSampleRate
+      dsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
+      debug: (process.env.SENTRY_DEBUG || 'false') === 'true',
+      tracesSampleRate: parseFloat(
+        process.env.NUXT_PUBLIC_SENTRY_TRACE_SAMPLE_RATE || '0.1'
+      )
     },
     landingPageUrl:
-      publicConfig.landingPageUrl ||
+      process.env.NUXT_PUBLIC_LANDING_PAGE_URL ||
       'https://monsuivisocial.incubateur.anct.gouv.fr'
   }
 }
