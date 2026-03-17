@@ -138,12 +138,8 @@ export async function update({ input, ctx }: UpdateParams) {
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
           : undefined
       },
-      include: {
-        familyFile: {
-          select: {
-            id: true
-          }
-        }
+      select: {
+        id: true
       }
     })
 
@@ -161,6 +157,9 @@ export async function update({ input, ctx }: UpdateParams) {
         externalStructure,
         instructorOrganizationId: instructorOrganizationId || null,
         instructorOrganizationContactId: instructorOrganizationContactId || null
+      },
+      select: {
+        id: true
       }
     })
 
@@ -178,6 +177,9 @@ export async function update({ input, ctx }: UpdateParams) {
         prescribingOrganizationId: prescribingOrganizationId || null,
         prescribingOrganizationContactId:
           prescribingOrganizationContactId || null
+      },
+      select: {
+        id: true
       }
     })
 
@@ -199,6 +201,9 @@ export async function update({ input, ctx }: UpdateParams) {
           beneficiaryId: target.fileInstruction.socialSupport.beneficiaryId,
           socialSupportId: target.fileInstruction.socialSupport.id,
           type: NotificationType.UpdateFileInstructionElement
+        },
+        select: {
+          id: true
         }
       })
     transactions.push(createNotification)
@@ -208,5 +213,5 @@ export async function update({ input, ctx }: UpdateParams) {
     transactions.map(transaction => transaction())
   )
 
-  return { helpRequest: socialSupportResult }
+  return { id: socialSupportResult.id }
 }

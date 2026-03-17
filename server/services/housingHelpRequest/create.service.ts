@@ -152,8 +152,13 @@ export async function create({ input, ctx }: CreateParams) {
       uniqueId,
       askedHousing
     },
-    include: {
-      fileInstruction: { select: { socialSupportId: true } }
+    select: {
+      id: true,
+      fileInstruction: {
+        select: {
+          socialSupportId: true
+        }
+      }
     }
   })
 

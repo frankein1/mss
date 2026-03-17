@@ -116,12 +116,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
           : undefined
       },
-      include: {
-        familyFile: {
-          select: {
-            id: true
-          }
-        }
+      select: {
+        id: true
       }
     })
 
@@ -141,6 +137,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         classified,
         forwardedToJustice,
         duration
+      },
+      select: {
+        id: true
       }
     })
 
@@ -162,6 +161,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
           beneficiaryId: target.beneficiaryId,
           socialSupportId: target.id,
           type: NotificationType.UpdateFollowupElement
+        },
+        select: {
+          id: true
         }
       })
     transactions.push(createNotification)
@@ -171,5 +173,5 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     transactions.map(transaction => transaction())
   )
 
-  return socialSupportResult
+  return { id: socialSupportResult.id }
 }
