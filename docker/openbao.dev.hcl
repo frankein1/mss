@@ -3,6 +3,10 @@
 #####
 
 api_addr = "http://0.0.0.0:8200"
+log_level      = "debug"
+
+# UI available at http://localhost:9110/ui/
+ui = true
 
 # Persistent storage data
 storage "file" {
@@ -11,7 +15,7 @@ storage "file" {
 
 listener "tcp" {
   address       = "0.0.0.0:8200"
-  tls_disable   = true
+  tls_disable   = 1
 }
 
 seal "static" {
@@ -20,60 +24,98 @@ seal "static" {
 }
 
 initialize "setup" {
-  # Activate Authentication by role_id,secret_id
-  request "sys/auth/approle" {
+  request "enable-auth-by-userpassword" {
     operation = "update"
-    payload = {
+    path      = "sys/auth/userpass"
+    data = {
+      type = "userpass"
+    }
+  }
+
+  request "enable-auth-by-approle" {
+    operation = "update"
+    path = "sys/auth/approle"
+    data = {
       type = "approle"
     }
   }
 
-  # Activate key manager
-  request "sys/mounts/transit" {
+  request "activate-key-manager" {
     operation = "update"
-    payload = {
+    path = "sys/mounts/transit"
+    data = {
       type = "transit"
     }
   }
 
   # Create local KEK with id $KMS_KEY_ID
-  request "transit/keys/mockkms-kek-id" {
+  request "create-local-kek" {
     operation = "update"
-    payload = {
+    path = "transit/keys/mockkms-kek-id"
+    data = {
       derived = false
       exportable = false
       type = "aes256-gcm96"
     }
   }
 
-  # Setup policy
-  request "sys/policies/acl/mss-transit" {
+  request "setup-policy-key-manager" {
     operation = "update"
-    payload = {
-      policy = "path \"transit/*\" {\n  capabilities = [\"create\", \"read\", \"update\", \"delete\", \"list\"]\n}"
+    path = "sys/policies/acl/mss-transit"
+    data = {
+      policy = <<EOT
+path "transit/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+EOT
     }
   }
 
-  # Setup Authentication
-  request "auth/approle/role/mss-app" {
+  request "setup-policy-super-admin" {
     operation = "update"
-    payload = {
+    path = "sys/policies/acl/super-admin"
+    data = {
+      policy = <<EOT
+path "*" {
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+EOT
+    }
+  }
+
+  request "create-super-admin" {
+    operation = "update"
+    path      = "auth/userpass/users/admin"
+    data = {
+      password = "admin"
+      policies = ["super-admin"]
+    }
+  }
+
+  request "create-mss-app-role" {
+    operation = "update"
+    path = "auth/approle/role/mss-app"
+    data = {
       token_policies = "mss-transit"
     }
   }
 
-  request "auth/approle/role/mss-app/role-id" {
+  # Create access key with $KMS_ACCESS_KEY_ID
+  request "create-access-key" {
     operation = "update"
-    payload = {
-      role_id = "env://KMS_ACCESS_KEY_ID"
+    path = "auth/approle/role/mss-app/role-id"
+    data = {
+      role_id = "mockkms-mss"
     }
+    
   }
 
-  # Set $KMS_SECRET_KEY
-  request "auth/approle/role/mss-app/secret-id" {
+  # Create secret key with $KMS_SECRET_KEY
+  request "create-secret-key" {
     operation = "update"
-    payload = {
-      secret_id = "env://KMS_SECRET_KEY"
+    path = "auth/approle/role/mss-app/custom-secret-id"
+    data = {
+      secret_id = "mockkms-local-secret-key"
     }
   }
 }

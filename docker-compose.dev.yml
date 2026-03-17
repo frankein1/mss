@@ -75,7 +75,7 @@ services:
       test: ['CMD', 'bao', 'status', '-address=http://127.0.0.1:8200']
       interval: 1s
       timeout: 5s
-      retries: 1
+      retries: 10
       start_period: 0s
     restart: unless-stopped
     networks:

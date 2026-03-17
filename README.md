@@ -35,13 +35,15 @@ Le projet utilise les technologies Node.js suivantes :
 
   Puis remplissez le fichier `.env` avec les valeurs manquantes.
 
-- Démarrez la base de données Postgres et le stockage S3 via rustfs (utilise Docker)
+- Démarrez la base de données Postgres, le stockage S3 via rustfs et le gestionnaire de clés de chiffrement OpenBao (utilise Docker)
 
   ```sh
   pnpm dev:db:start
   ```
 
   Un bucket S3 est automatiquement créé s'il n'existe pas.
+
+  Une clé de chiffrement par défaut est créée avec des identifiants d'accès au KMS s'ils n'existent pas.
 
 - Générez le client Prisma
 
@@ -77,6 +79,14 @@ L'envoi de mail peut être configuré via l'outil [Mailtrap](https://mailtrap.io
 
 Une fois le compte créé, compléter les variables d'environnement `EMAIL_SMTP_USER`et `EMAIL_SMTP_PASSWORD` avec les
 identifiants utilisateurs fournis par mailtrap.
+
+### Interfaces d'administration locales
+
+**Base de données** : l'ui Prisma Studio permet d'interagir avec la base de données via `pnpm prisma studio`
+
+**Stockage S3** : rustfs met à disposition une console d'administration à `http://localhost:9011` (login: $S3_ACCESS_KEY_ID - mot de passe: S3_SECRET_ACCESS_KEY)
+
+**Gestionnaire de clés de chiffrements** : OpenBao met à disposition une console d'administration à `http://localhost:9110/ui` (login: admin - mot de passe: admin)
 
 ## Tests
 
