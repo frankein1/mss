@@ -1,6 +1,6 @@
 import { createClient, KeyManagerv1alpha1 } from '@scaleway/sdk'
 import type { RuntimeConfig } from 'nuxt/schema'
-import type { KmsClient } from './interface'
+import type { KmsClient } from './kms-client'
 
 let instance: any = null
 let kms: KmsClient | null = null

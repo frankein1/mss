@@ -1,6 +1,6 @@
 import type { RuntimeConfig } from 'nuxt/schema'
 import { ofetch } from 'ofetch'
-import type { KmsClient } from './interface'
+import type { KmsClient } from './kms-client'
 
 let instance: {
   client: ReturnType<typeof ofetch.create>

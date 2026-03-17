@@ -1,5 +1,5 @@
 import type { RuntimeConfig } from 'nuxt/schema'
-import type { KmsClient } from './adapters/interface'
+import type { KmsClient } from './adapters/kms-client'
 import { getScalewayKeyManagerClient } from './adapters/scaleway-km'
 import { getOpenBaoKeyManagerClient } from './adapters/open-bao'
 
