@@ -179,47 +179,48 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     auth: {
-      jwtKey: process.env.AUTH_JWT_KEY || 'secretJWT',
+      jwtKey: process.env.NUXT_AUTH_JWT_KEY || 'secretJWT',
       sessionSecret:
-        process.env.AUTH_SESSION_SECRET || 'sessionSecretsessionSecretsession',
-      proconnectIssuer: process.env.AUTH_PROCONNECT_ISSUER_URL,
-      proconnectClientId: process.env.AUTH_PROCONNECT_CLIENT_ID,
-      proconnectClientSecret: process.env.AUTH_PROCONNECT_CLIENT_SECRET,
+        process.env.NUXT_AUTH_SESSION_SECRET ||
+        'sessionSecretsessionSecretsession',
+      proconnectIssuer: process.env.NUXT_AUTH_PROCONNECT_ISSUER_URL,
+      proconnectClientId: process.env.NUXT_AUTH_PROCONNECT_CLIENT_ID,
+      proconnectClientSecret: process.env.NUXT_AUTH_PROCONNECT_CLIENT_SECRET,
       proconnectSigningAlgorithm:
-        process.env.AUTH_PROCONNECT_SIGNING_ALGORITHM || 'RS256',
+        process.env.NUXT_AUTH_PROCONNECT_SIGNING_ALGORITHM || 'RS256',
       proconnectProvider: 'ProConnect',
       proconnectLabel: 'proconnect'
     },
     rdvsp: {
-      issuer: process.env.RDVSP_ISSUER || '',
-      clientId: process.env.RDVSP_CLIENT_ID || '',
-      clientSecret: process.env.RDVSP_CLIENT_SECRET || ''
+      issuer: process.env.NUXT_RDVSP_ISSUER || '',
+      clientId: process.env.NUXT_RDVSP_CLIENT_ID || '',
+      clientSecret: process.env.NUXT_RDVSP_CLIENT_SECRET || ''
     },
     brevo: {
-      apiKey: process.env.BREVO_API_KEY || ''
+      apiKey: process.env.NUXT_BREVO_API_KEY || ''
     },
     email: {
-      smtpHost: process.env.EMAIL_SMTP_HOST || '',
-      smtpPassword: process.env.EMAIL_SMTP_PASSWORD || '',
-      smtpPort: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
-      smtpSecure: (process.env.EMAIL_SMTP_SECURE || 'false') === 'true',
-      smtpUser: process.env.EMAIL_SMTP_USER || ''
+      smtpHost: process.env.NUXT_EMAIL_SMTP_HOST || '',
+      smtpPassword: process.env.NUXT_EMAIL_SMTP_PASSWORD || '',
+      smtpPort: parseInt(process.env.NUXT_EMAIL_SMTP_PORT || '587'),
+      smtpSecure: (process.env.NUXT_EMAIL_SMTP_SECURE || 'false') === 'true',
+      smtpUser: process.env.NUXT_EMAIL_SMTP_USER || ''
     },
     s3: {
-      accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-      region: process.env.S3_REGION || '',
-      bucket: process.env.S3_BUCKET || '',
-      endpoint: process.env.S3_ENDPOINT || ''
+      accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID || '',
+      secretAccessKey: process.env.NUXT_S3_SECRET_ACCESS_KEY || '',
+      region: process.env.NUXT_S3_REGION || '',
+      bucket: process.env.NUXT_S3_BUCKET || '',
+      endpoint: process.env.NUXT_S3_ENDPOINT || ''
     },
     kms: {
-      accessKeyId: process.env.KMS_ACCESS_KEY_ID || '',
-      secretKey: process.env.KMS_SECRET_KEY || '',
-      organizationId: process.env.KMS_ORGANIZATION_ID || '',
-      projectId: process.env.KMS_PROJECT_ID || '',
-      region: process.env.KMS_REGION || '',
-      apiUrl: process.env.KMS_API_URL || '',
-      keyId: process.env.KMS_KEY_ID || ''
+      accessKeyId: process.env.NUXT_KMS_ACCESS_KEY_ID || '',
+      secretKey: process.env.NUXT_KMS_SECRET_KEY || '',
+      organizationId: process.env.NUXT_KMS_ORGANIZATION_ID || '',
+      projectId: process.env.NUXT_KMS_PROJECT_ID || '',
+      region: process.env.NUXT_KMS_REGION || '',
+      apiUrl: process.env.NUXT_KMS_API_URL || '',
+      keyId: process.env.NUXT_KMS_KEY_ID || ''
     },
     document: {
       useEncryption:
@@ -234,8 +235,8 @@ export default defineNuxtConfig({
         commitTag: process.env.COMMIT_TAG || ''
       },
       cguVersion: '1.2',
-      appUrl: process.env.APP_URL,
-      landingPageUrl: process.env.LANDING_PAGE_URL,
+      appUrl: process.env.NUXT_PUBLIC_APP_URL,
+      landingPageUrl: process.env.NUXT_PUBLIC_LANDING_PAGE_URL,
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',
         tokenValidationInMinutes: parseInt(
@@ -246,24 +247,23 @@ export default defineNuxtConfig({
         threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '60'),
         alertThreshold: parseInt(process.env.DISCONNECT_ALERT_THRESHOLD || '5')
       },
-
       matomo: {
-        host: process.env.MATOMO_HOST,
-        siteId: parseInt(process.env.MATOMO_SITE_ID || '1')
+        host: process.env.NUXT_PUBLIC_MATOMO_HOST,
+        siteId: parseInt(process.env.NUXT_PUBLIC_MATOMO_SITE_ID || '1')
       },
-      mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
+      mssEnvironment: process.env.NUXT_PUBLIC_MSS_ENVIRONMENT || 'local',
       email: {
-        from: process.env.EMAIL_FROM || ''
+        from: process.env.NUXT_PUBLIC_EMAIL_FROM || ''
       },
       sentry: {
-        dsn: process.env.SENTRY_DSN,
+        dsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
         debug: (process.env.SENTRY_DEBUG || 'false') === 'true',
         tracesSampleRate: parseFloat(
-          process.env.SENTRY_TRACE_SAMPLE_RATE || '0.1'
+          process.env.NUXT_PUBLIC_SENTRY_TRACE_SAMPLE_RATE || '0.1'
         )
       },
       metabase: {
-        publicUrl: process.env.METABASE_PUBLIC_URL
+        publicUrl: process.env.NUXT_PUBLIC_METABASE_PUBLIC_URL
       },
       dataInclusion: {
         token: process.env.NUXT_PUBLIC_DATA_INCLUSION_TOKEN
