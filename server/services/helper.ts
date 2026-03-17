@@ -98,11 +98,7 @@ function commentWithCreatorDto<
     created: c.created,
     updated: c.updated,
     content: c.content,
-    createdBy: {
-      id: c.createdBy.id,
-      firstName: c.createdBy.firstName,
-      lastName: c.createdBy.lastName
-    }
+    createdBy: userDto(c.createdBy)
   }
 }
 function documentDto<T extends Document>(d: T) {

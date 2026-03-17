@@ -17,41 +17,131 @@ async function getSocialSupportDetail({
 }) {
   return SocialSupportRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    include: {
+    select: {
+      id: true,
+      structureId: true,
+      familyFileId: true,
+      beneficiaryId: true,
+      createdById: true,
+      lastUpdatedById: true,
+      date: true,
+      synthesis: true,
+      privateSynthesis: true,
+      synthesisRichText: true,
+      privateSynthesisRichText: true,
+      ministerId: true,
+      numeroPegase: true,
+      status: true,
+      dueDate: true,
+      created: true,
+      updated: true,
+      socialSupportType: true,
+      subtype: true,
       createdBy: true,
       lastUpdatedBy: true,
+      ministre: true,
       familyFile: {
-        include: {
-          referents: true
+        select: {
+          id: true,
+          structureId: true,
+          referents: {
+            select: { id: true, role: true, status: true, structureId: true }
+          }
         }
       },
-      beneficiary: true,
+      beneficiary: {
+        select: {
+          id: true,
+          firstName: true,
+          usualName: true,
+          birthName: true,
+          birthDate: true
+        }
+      },
       documents: true,
+      subjects: true,
+      minister: true,
       socialSupportRedirections: {
         orderBy: { createdAt: 'asc' },
-        include: {
+        select: {
+          id: true,
+          type: true,
+          motif: true,
+          externalStructureName: true,
+          partnerOrganizationId: true,
+          partnerOrganizationContactId: true,
+          socialSupportId: true,
+          createdAt: true,
           partnerOrganization: true,
           partnerOrganizationContact: true
         }
       },
       comments: {
         orderBy: { created: 'asc' },
-        include: {
+        select: {
+          id: true,
+          created: true,
+          createdById: true,
+          updated: true,
+          content: true,
+          socialSupportId: true,
           createdBy: true
         }
       },
       fileInstruction: {
-        include: {
+        select: {
+          id: true,
+          updated: true,
+          type: true,
+          instructorOrganizationId: true,
+          instructorOrganizationContactId: true,
+          externalStructure: true,
+          examinationDate: true,
+          decisionDate: true,
+          refusalReason: true,
+          refusalReasonOther: true,
+          dispatchDate: true,
+          fullFile: true,
+          socialSupportId: true,
           instructorOrganization: true,
           instructorOrganizationContact: true,
           helpRequest: {
-            include: {
+            select: {
+              id: true,
+              subjectId: true,
+              prescribingOrganizationId: true,
+              prescribingOrganizationContactId: true,
+              financialSupport: true,
+              isRefundable: true,
+              askedAmount: true,
+              allocatedAmount: true,
+              paymentMethod: true,
+              paymentDate: true,
+              handlingDate: true,
+              fileInstructionId: true,
               prescribingOrganization: true,
               prescribingOrganizationContact: true
             }
           },
           housingHelpRequest: {
-            include: {
+            select: {
+              id: true,
+              prescribingOrganizationId: true,
+              prescribingOrganizationContactId: true,
+              isFirst: true,
+              firstOpeningDate: true,
+              askedHousing: true,
+              uniqueId: true,
+              taxHouseholdAdditionalInformation: true,
+              maxRent: true,
+              maxCharges: true,
+              housingType: true,
+              roomCount: true,
+              isPmr: true,
+              reason: true,
+              lowIncomeHousingType: true,
+              handlingDate: true,
+              fileInstructionId: true,
               prescribingOrganization: true,
               prescribingOrganizationContact: true
             }
@@ -59,13 +149,26 @@ async function getSocialSupportDetail({
         }
       },
       followup: {
-        include: {
+        select: {
+          id: true,
+          updated: true,
+          prescribingOrganizationId: true,
+          prescribingOrganizationContactId: true,
+          medium: true,
+          helpRequested: true,
+          place: true,
+          structureName: true,
+          thirdPersonName: true,
+          classified: true,
+          firstFollowup: true,
+          forwardedToJustice: true,
+          redirected: true,
+          duration: true,
+          socialSupportId: true,
           prescribingOrganization: true,
           prescribingOrganizationContact: true
         }
       },
-      minister: true,
-      subjects: true,
       _count: {
         select: {
           notifications: {
