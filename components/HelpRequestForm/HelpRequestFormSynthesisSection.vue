@@ -1,9 +1,6 @@
 <template>
-  <section
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
-  >
-    <h3 class="fr-col-12 fr-h5 fr-mb-0">Compte rendu</h3>
-
+  <h3 class="fr-h4">Notes</h3>
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
     <div class="fr-col-12">
       <AtomTextEditor
         name="synthesis"
@@ -37,7 +34,7 @@
         </template>
       </AtomTextEditor>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">

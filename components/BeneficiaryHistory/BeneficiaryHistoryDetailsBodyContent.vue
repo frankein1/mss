@@ -56,7 +56,7 @@
     />
 
     <template v-if="socialSupport.synthesis">
-      <h3 class="synthesis-title">Compte rendu</h3>
+      <p class="fr-text--bold fr-text--lg fr-mb-0 fr-mt-4v">Compte rendu</p>
       <AtomTextEditorReader
         :value="socialSupport.synthesisRichText"
         :raw-text="socialSupport.synthesis"
@@ -64,7 +64,9 @@
     </template>
 
     <template v-if="socialSupport.privateSynthesis">
-      <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
+      <p class="fr-text--bold fr-text--lg fr-mb-0 fr-mt-4v">
+        Compte rendu privé
+      </p>
       <AtomTextEditorReader
         :value="socialSupport.privateSynthesisRichText"
         :raw-text="socialSupport.privateSynthesis"

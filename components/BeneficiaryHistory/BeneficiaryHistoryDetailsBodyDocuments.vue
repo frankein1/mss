@@ -1,5 +1,5 @@
 <template>
-  <p class="fr-h6 fr-mb-0 fr-mt-4v">Documents</p>
+  <p class="fr-text--bold fr-text--lg fr-mb-0 fr-mt-4v">Documents</p>
   <p
     v-for="({ document, permissions }, index) in documents"
     :key="document.key"

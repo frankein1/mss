@@ -302,7 +302,6 @@
         class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
       >
         <li>
-          <!-- TODO: back button -->
           <NuxtLink
             class="fr-btn fr-btn--secondary"
             :to="
