@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <AtomLoader
     v-if="status === 'pending'"
     class="fr-mx-auto"
@@ -51,4 +51,4 @@
         count: _count
       })) || []
   )
-</script>
+</script> -->

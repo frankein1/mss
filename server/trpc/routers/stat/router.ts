@@ -26,9 +26,12 @@ export const statRouter = router({
   getHousingHelpRequestsStats: protectedProcedure
     .input(routes.getHousingHelpRequestsStatsQ.inputValidation)
     .query(routes.getHousingHelpRequestsStatsQ.execute),
-  getFollowupActionsEntreprisesStats: protectedProcedure
-    .input(routes.getFollowupActionsEntreprisesStatsQ.inputValidation)
-    .query(routes.getFollowupActionsEntreprisesStatsQ.execute),
+  // getFollowupActionsEntreprisesStats: protectedProcedure
+  //   .input(routes.getFollowupActionsEntreprisesStatsQ.inputValidation)
+  //   .query(routes.getFollowupActionsEntreprisesStatsQ.execute),
+  getFollowupRedirectionsStats: protectedProcedure
+    .input(routes.getRedirectionsStatsQ.inputValidation)
+    .query(routes.getRedirectionsStatsQ.execute),
   getFollowupMediumStats: protectedProcedure
     .input(routes.getFollowupMediumStatsQ.inputValidation)
     .query(routes.getFollowupMediumStatsQ.execute),
