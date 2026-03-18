@@ -37,8 +37,20 @@ async function getSocialSupportDetail({
       updated: true,
       socialSupportType: true,
       subtype: true,
-      createdBy: true,
-      lastUpdatedBy: true,
+      createdBy: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true
+        }
+      },
+      lastUpdatedBy: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true
+        }
+      },
       ministre: true,
       familyFile: {
         select: {

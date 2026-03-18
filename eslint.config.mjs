@@ -27,12 +27,29 @@ export default withNuxt(
     }
   },
   {
-    files: ['server/**/*.ts'],
+    files: ['server/**/*.ts', 'scheduler/**/*.ts'],
     rules: {
+      /** Prisma writing rules */
       'no-restricted-syntax': [
         'warn',
         {
-          selector: 'Property[key.name="include"]',
+          // Disallow include selector for use in queries like prismaClient.user.findMany({...})
+          selector:
+            'CallExpression[callee.object.object.name="prismaClient"] Property[key.name="include"]',
+          message:
+            'Avoid `include` on Prisma queries. Please use `select` instead to avoid overfetching and performance issues.'
+        },
+        {
+          // Disallow include selector for use in queries like UserRepo.findMany({...})
+          selector:
+            'CallExpression[callee.object.name=/Repo$/] Property[key.name="include"]',
+          message:
+            'Avoid `include` on Prisma queries. Please use `select` instead to avoid overfetching and performance issues.'
+        },
+        {
+          // Disallow include selector for use in queries like UserRepo.prisma.findMany({...})
+          selector:
+            'CallExpression[callee.object.object.name=/Repo$/][callee.object.property.name="prisma"] Property[key.name="include"]',
           message:
             'Avoid `include` on Prisma queries. Please use `select` instead to avoid overfetching and performance issues.'
         }
