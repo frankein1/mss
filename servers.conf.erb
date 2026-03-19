@@ -1,6 +1,6 @@
 # Node application redirection
 upstream node_upstream {
-  server 127.0.0.1:3000;
+  server unix:/tmp/nginx.sock;
 }
 
 server {
