@@ -124,7 +124,7 @@
   },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache --fix",
-    "*.{css,scss,sass,html,vue}": "stylelint",
+    "*.{css,scss,sass,html,vue}": "stylelint  --allow-empty-input",
     "*.**": "prettier --ignore-unknown --check {.,**/*.prisma}"
   },
   "packageManager": "pnpm@10.29.2"
