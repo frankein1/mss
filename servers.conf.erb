@@ -20,6 +20,9 @@ server {
   allow all;
   <% end %>
 
+  # Deactivate request logs since the scalingo router already prints them
+  access_log off;
+
   # Override max payload size to match limit for document upload
   client_max_body_size 20m;
 
@@ -31,6 +34,16 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     # Scalingo forces https
     proxy_set_header X-Forwarded-Proto https;
+  }
 
+  # Custom error page for IP filtering
+  # Upstream 403s from node should pass through untouched
+  error_page 403 /403.html;
+
+  location = /403.html {
+    # Path of the compiled public assets in scalingo container
+    root /app/.output/public;
+    # Not accessible from http request
+    internal;
   }
 }
