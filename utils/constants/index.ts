@@ -24,6 +24,7 @@ export const INPUT_DEFER_DURATION = 400
 
 export const EMPTY_TABLE_CELL = '-'
 
+// Upon updating this value, nginx client_max_body_size must also be updated
 export const MAX_UPLOAD_SIZE_BYTES = 20971520
 
 export const SEARCH_NUMBER_CHARACTERS = 2
