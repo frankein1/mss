@@ -4,3 +4,4 @@ coverage
 .output
 playwright-report
 test/server/references
+public/403.html
