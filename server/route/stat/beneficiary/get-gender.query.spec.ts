@@ -32,4 +32,44 @@ describe('Statistics - Beneficiary - Gender', () => {
       'Other': 1
     })
   })
+
+  test('should not allow stats computation as a reception agent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    await expect(() =>
+      trpc.receptionAgent.stat.getGenderStats(input)
+    ).rejects.toThrowError(/not allowed to access route/)
+  })
+
+  test('should compute stats including only beneficiaries followed as a referent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    const stats = await trpc.referent.stat.getGenderStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Male': 3,
+      'Female': 2,
+      'Other': 1,
+      'Non renseigné': 1
+    })
+  })
+
+  test('should compute stats with beneficiaryStatus filter', async ({
+    trpc
+  }) => {
+    const input: Input = { beneficiaryStatus: 'Active' }
+
+    const stats = await trpc.structureManager.stat.getGenderStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Female': 3,
+      'Male': 3,
+      'Non renseigné': 2,
+      'Other': 1
+    })
+  })
 })

@@ -31,4 +31,40 @@ describe('Statistics - Beneficiary - Family Situation', () => {
       'Non renseigné': 10
     })
   })
+
+  test('should not allow stats computation as a reception agent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    await expect(() =>
+      trpc.receptionAgent.stat.getFamilyStats(input)
+    ).rejects.toThrowError(/not allowed to access route/)
+  })
+
+  test('should compute stats including only beneficiaries followed as a referent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    const stats = await trpc.referent.stat.getFamilyStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Divorced': 1,
+      'Non renseigné': 6
+    })
+  })
+
+  test('should compute stats with beneficiaryStatus filter', async ({
+    trpc
+  }) => {
+    const input: Input = { beneficiaryStatus: 'Active' }
+
+    const stats = await trpc.structureManager.stat.getFamilyStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Divorced': 2,
+      'Non renseigné': 7
+    })
+  })
 })

@@ -26,7 +26,42 @@ describe('Statistics - Beneficiary - Department', () => {
     const stats = await trpc.structureManager.stat.getDepartmentStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 12,
+      'Non renseigné': 11,
+      "Côte-d'Or": 2
+    })
+  })
+
+  test('should not allow stats computation as a reception agent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    await expect(() =>
+      trpc.receptionAgent.stat.getDepartmentStats(input)
+    ).rejects.toThrowError(/not allowed to access route/)
+  })
+
+  test('should compute stats including only beneficiaries followed as a referent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    const stats = await trpc.referent.stat.getDepartmentStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 7
+    })
+  })
+
+  test('should compute stats with beneficiaryStatus filter', async ({
+    trpc
+  }) => {
+    const input: Input = { beneficiaryStatus: 'Active' }
+
+    const stats = await trpc.structureManager.stat.getDepartmentStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 8,
       "Côte-d'Or": 1
     })
   })
