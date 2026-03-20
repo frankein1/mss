@@ -28,7 +28,8 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     expect(parseStats(stats)).toEqual({
       'CoupleWithChildren': 1,
       'Divorced': 2,
-      'Non renseigné': 10
+      'Single': 1,
+      'Non renseigné': 9
     })
   })
 
@@ -51,7 +52,8 @@ describe('Statistics - Beneficiary - Family Situation', () => {
 
     expect(parseStats(stats)).toEqual({
       'Divorced': 1,
-      'Non renseigné': 6
+      'Single': 1,
+      'Non renseigné': 5
     })
   })
 
@@ -65,6 +67,27 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     expect(parseStats(stats)).toEqual({
       'Divorced': 2,
       'Non renseigné': 7
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getFamilyStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 1,
+      'Single': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getFamilyStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 2
     })
   })
 })

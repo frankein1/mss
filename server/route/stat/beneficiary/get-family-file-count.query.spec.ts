@@ -46,4 +46,20 @@ describe('Statistics - Beneficiary - Family File Count', () => {
 
     expect(stats).toEqual({ family: 1, beneficiary: 7 })
   })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
+
+    expect(stats).toEqual({ family: 0, beneficiary: 2 })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
+
+    expect(stats).toEqual({ family: 0, beneficiary: 2 })
+  })
 })

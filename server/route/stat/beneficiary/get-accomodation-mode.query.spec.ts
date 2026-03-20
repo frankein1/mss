@@ -57,4 +57,42 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
       'ThirdPerson': 1
     })
   })
+
+  test('should compute stats with beneficiaryStatus filter', async ({
+    trpc
+  }) => {
+    const input: Input = { beneficiaryStatus: 'Active' }
+
+    const stats =
+      await trpc.structureManager.stat.getAccommodationModeStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 8,
+      'ThirdPerson': 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats =
+      await trpc.structureManager.stat.getAccommodationModeStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'ThirdPerson': 1,
+      'Non renseigné': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats =
+      await trpc.structureManager.stat.getAccommodationModeStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'PrivateRenting': 1,
+      'Non renseigné': 1
+    })
+  })
 })

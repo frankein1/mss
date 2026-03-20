@@ -26,8 +26,9 @@ describe('Statistics - Beneficiary - Region', () => {
     const stats = await trpc.structureManager.stat.getRegionStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
-      'Bourgogne-Franche-Comté': 2
+      'Non renseigné': 10,
+      'Bourgogne-Franche-Comté': 2,
+      'Île-de-France': 1
     })
   })
 
@@ -49,7 +50,8 @@ describe('Statistics - Beneficiary - Region', () => {
     const stats = await trpc.referent.stat.getRegionStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 7
+      'Non renseigné': 6,
+      'Île-de-France': 1
     })
   })
 
@@ -63,6 +65,27 @@ describe('Statistics - Beneficiary - Region', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
       'Bourgogne-Franche-Comté': 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getRegionStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 1,
+      'Île-de-France': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getRegionStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Bourgogne-Franche-Comté': 2
     })
   })
 })

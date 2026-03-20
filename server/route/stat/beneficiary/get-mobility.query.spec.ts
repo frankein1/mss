@@ -26,8 +26,9 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 10,
+      'Non renseigné': 9,
       'BikeOrEquivalent': 1,
+      'PermitWithVehicle': 1,
       'PublicTransport': 1,
       'VehicleWithoutPermit': 1
     })
@@ -51,7 +52,8 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.referent.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 7
+      'Non renseigné': 6,
+      'PermitWithVehicle': 1
     })
   })
 
@@ -65,6 +67,28 @@ describe('Statistics - Beneficiary - Mobility', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
       'VehicleWithoutPermit': 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getMobilityStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 1,
+      'PermitWithVehicle': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getMobilityStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'BikeOrEquivalent': 1,
+      'Non renseigné': 1
     })
   })
 })

@@ -47,6 +47,14 @@ describe('Statistics - Beneficiary - Beneficiary Count', () => {
     expect(stats.count).toBe(9)
   })
 
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getBeneficiaryCount(input)
+
+    expect(stats.count).toBe(2)
+  })
+
   test('should compute stats with cities filter', async ({ trpc }) => {
     const input: Input = { cities: ['Dijon'] }
 

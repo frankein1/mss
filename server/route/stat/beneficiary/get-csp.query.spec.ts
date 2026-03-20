@@ -26,8 +26,9 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 12,
-      'Employed': 1
+      'Non renseigné': 11,
+      'Employed': 1,
+      'JobSeeker': 1
     })
   })
 
@@ -49,7 +50,8 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.referent.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 7
+      'Non renseigné': 6,
+      'JobSeeker': 1
     })
   })
 
@@ -61,7 +63,30 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 9
+      'Non renseigné': 8,
+      'JobSeeker': 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'JobSeeker': 1,
+      'Non renseigné': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Employed': 1,
+      'Non renseigné': 1
     })
   })
 })

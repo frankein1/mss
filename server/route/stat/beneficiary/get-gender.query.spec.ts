@@ -72,4 +72,26 @@ describe('Statistics - Beneficiary - Gender', () => {
       'Other': 1
     })
   })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getGenderStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Female': 1,
+      'Non renseigné': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getGenderStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Female': 1,
+      'Non renseigné': 1
+    })
+  })
 })

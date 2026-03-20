@@ -26,8 +26,9 @@ describe('Statistics - Beneficiary - Department', () => {
     const stats = await trpc.structureManager.stat.getDepartmentStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
-      "Côte-d'Or": 2
+      'Non renseigné': 10,
+      "Côte-d'Or": 2,
+      'Val-de-Marne': 1
     })
   })
 
@@ -49,7 +50,8 @@ describe('Statistics - Beneficiary - Department', () => {
     const stats = await trpc.referent.stat.getDepartmentStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 7
+      'Non renseigné': 6,
+      'Val-de-Marne': 1
     })
   })
 
@@ -63,6 +65,27 @@ describe('Statistics - Beneficiary - Department', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
       "Côte-d'Or": 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: '35-44' }
+
+    const stats = await trpc.structureManager.stat.getDepartmentStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 1,
+      'Val-de-Marne': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getDepartmentStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      "Côte-d'Or": 2
     })
   })
 })

@@ -68,7 +68,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Gisèle',
     birthDate: new Date('1987-08-21'),
     email: 'cblankett8@histats.com',
-    accommodationMode: 'ThirdPerson'
+    accommodationMode: 'ThirdPerson',
+    socioProfessionalCategory: 'JobSeeker'
   },
   {
     id: 'e7b0dbe9-9173-47fb-b953-0468b0e50788',
@@ -145,7 +146,11 @@ export const fixturesBeneficiaries = [
     firstName: 'Mélia',
     birthDate: new Date('1990-01-15'),
     gender: 'Female',
-    city: 'Paris'
+    city: 'Paris',
+    mobility: 'PermitWithVehicle',
+    familySituation: 'Single',
+    department: 'Val-de-Marne',
+    region: 'Île-de-France'
   },
   {
     id: '960fccab-bf9f-419d-a411-a2b2472c1b64',
