@@ -16,7 +16,10 @@ export enum FixtureBeneficiary {
   DOWNER = 10,
   MARTIN = 11,
   INACTIVE = 12,
-  TESSON = 13
+  TESSON = 13,
+  DUPONT = 14,
+  LEROY = 15,
+  MOREAU = 16
 }
 
 export const fixturesBeneficiaries = [
@@ -47,9 +50,11 @@ export const fixturesBeneficiaries = [
     title: 'Mister',
     usualName: 'PENSON',
     firstName: 'Táng',
+    birthDate: new Date('2000-06-10'),
     deathDate: new Date('2017-08-29'),
     gender: 'Female',
     email: 'jwedderburn7@businesswire.com',
+    city: 'Lyon',
     mobility: 'PublicTransport'
   },
   {
@@ -63,14 +68,18 @@ export const fixturesBeneficiaries = [
     firstName: 'Gisèle',
     birthDate: new Date('1987-08-21'),
     email: 'cblankett8@histats.com',
-    accommodationMode: 'ThirdPerson'
+    accommodationMode: 'ThirdPerson',
+    socioProfessionalCategory: 'JobSeeker'
   },
   {
     id: 'e7b0dbe9-9173-47fb-b953-0468b0e50788',
     familyFileId: 'e7b0dbe9-9173-47fb-b953-0468b0e50788',
     fileNumber: 'KESQGELCX8',
     structureId: fixtureStructures[0].id,
-    status: 'Active'
+    status: 'Active',
+    birthDate: new Date('1978-11-22'),
+    city: 'Lyon',
+    mobility: 'VehicleWithoutPermit'
   },
   {
     id: '6e3922b5-f8c9-47c4-8522-5b4cba529a13',
@@ -82,8 +91,12 @@ export const fixturesBeneficiaries = [
     usualName: 'WONFAR',
     birthName: 'RIDEWOOD',
     firstName: 'Lóng',
+    birthDate: new Date('1995-04-01'),
     gender: 'Female',
-    email: 'lridewood0@de.vu'
+    email: 'lridewood0@de.vu',
+    city: 'Dijon',
+    department: "Côte-d'Or",
+    region: 'Bourgogne-Franche-Comté'
   },
   {
     id: '732c1aa4-70ed-47d5-85d1-941738ea8d3c',
@@ -94,6 +107,7 @@ export const fixturesBeneficiaries = [
     title: 'Mister',
     usualName: 'PISCOPO',
     firstName: 'Valérie',
+    birthDate: new Date('2005-09-30'),
     gender: 'Male'
   },
   {
@@ -130,7 +144,13 @@ export const fixturesBeneficiaries = [
     usualName: 'HEINIG',
     birthName: 'HUNTON',
     firstName: 'Mélia',
-    gender: 'Female'
+    birthDate: new Date('1990-01-15'),
+    gender: 'Female',
+    city: 'Paris',
+    mobility: 'PermitWithVehicle',
+    familySituation: 'Single',
+    department: 'Val-de-Marne',
+    region: 'Île-de-France'
   },
   {
     id: '960fccab-bf9f-419d-a411-a2b2472c1b64',
@@ -190,8 +210,49 @@ export const fixturesBeneficiaries = [
     created: new Date('2021-01-01'),
     updated: dayjs().subtract(2, 'years').add(3, 'days').toDate(),
     lastActivity: dayjs().subtract(2, 'years').add(3, 'days').toDate()
+  },
+  {
+    id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    familyFileId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    fileNumber: 'DUPONT01AB',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    status: 'Active',
+    usualName: 'DUPONT',
+    firstName: 'Jean',
+    birthDate: new Date('1988-05-20'),
+    gender: 'Male',
+    city: 'Paris',
+    accommodationZone: 'France'
+  },
+  {
+    id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+    familyFileId: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+    fileNumber: 'LEROY002CD',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    status: 'Active',
+    usualName: 'LEROY',
+    firstName: 'Marie',
+    birthDate: new Date('1975-12-03'),
+    gender: 'Female',
+    city: 'Lyon',
+    accommodationZone: 'Europe'
+  },
+  {
+    id: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
+    familyFileId: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
+    fileNumber: 'MOREAU03EF',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    status: 'Archived',
+    usualName: 'MOREAU',
+    firstName: 'Sophie',
+    birthDate: new Date('1992-08-14'),
+    gender: 'Female',
+    accommodationZone: 'OutsideEurope'
   }
 ] satisfies [
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
