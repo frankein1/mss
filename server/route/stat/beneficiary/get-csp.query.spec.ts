@@ -1,7 +1,7 @@
 import { describe, expect } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
 import { test } from '~/test/server/test-utils'
-
+import { AgeGroup } from '~/client/options'
 import type { AppRouter } from '~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['stat']['getCSPStats']>
@@ -26,8 +26,67 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 12,
-      'Employed': 1
+      'Non renseigné': 11,
+      'Employed': 1,
+      'JobSeeker': 1
+    })
+  })
+
+  test('should not allow stats computation as a reception agent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    await expect(() =>
+      trpc.receptionAgent.stat.getCSPStats(input)
+    ).rejects.toThrowError(/not allowed to access route/)
+  })
+
+  test('should compute stats including only beneficiaries followed as a referent', async ({
+    trpc
+  }) => {
+    const input: Input = {}
+
+    const stats = await trpc.referent.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 6,
+      'JobSeeker': 1
+    })
+  })
+
+  test('should compute stats with beneficiaryStatus filter', async ({
+    trpc
+  }) => {
+    const input: Input = { beneficiaryStatus: 'Active' }
+
+    const stats = await trpc.structureManager.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 8,
+      'JobSeeker': 1
+    })
+  })
+
+  test('should compute stats with ageGroup filter', async ({ trpc }) => {
+    const input: Input = { ageGroup: AgeGroup.Group35_44 }
+
+    const stats = await trpc.structureManager.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'JobSeeker': 1,
+      'Non renseigné': 1
+    })
+  })
+
+  test('should compute stats with cities filter', async ({ trpc }) => {
+    const input: Input = { cities: ['Dijon'] }
+
+    const stats = await trpc.structureManager.stat.getCSPStats(input)
+
+    expect(parseStats(stats)).toEqual({
+      'Employed': 1,
+      'Non renseigné': 1
     })
   })
 })

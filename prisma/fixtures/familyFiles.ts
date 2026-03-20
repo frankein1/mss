@@ -133,8 +133,38 @@ export const fixturesFamilyFiles = [
         updated: new Date('2021-01-01')
       }
     }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.DUPONT].id,
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    referents: {
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id }
+      ]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.LEROY].id,
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    referents: {
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id }
+      ]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.MOREAU].id,
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    referents: {
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id }
+      ]
+    }
   }
 ] satisfies [
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,
