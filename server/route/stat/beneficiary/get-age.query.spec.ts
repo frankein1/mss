@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import isBetween from 'dayjs/plugin/isBetween.js'
-
+import { AgeGroup } from '~/client/options'
 import type { AppRouter } from '~/server/trpc/routers'
 
 beforeAll(() => {
@@ -88,7 +88,7 @@ describe('Statistics - Beneficiary - Age', () => {
   })
 
   test('should compute stats with ageGroup filter', async ({ trpc }) => {
-    const input: Input = { ageGroup: '35-44' }
+    const input: Input = { ageGroup: AgeGroup.Group35_44 }
 
     const stats = await trpc.structureManager.stat.getAgeStats(input)
 

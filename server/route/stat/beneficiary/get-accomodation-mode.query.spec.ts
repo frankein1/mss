@@ -1,7 +1,7 @@
 import { describe, expect } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
 import { test } from '~/test/server/test-utils'
-
+import { AgeGroup } from '~/client/options'
 import type { AppRouter } from '~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['stat']['getAccommodationModeStats']>
@@ -73,7 +73,7 @@ describe('Statistics - Beneficiary - Accomodation Mode', () => {
   })
 
   test('should compute stats with ageGroup filter', async ({ trpc }) => {
-    const input: Input = { ageGroup: '35-44' }
+    const input: Input = { ageGroup: AgeGroup.Group35_44 }
 
     const stats =
       await trpc.structureManager.stat.getAccommodationModeStats(input)
