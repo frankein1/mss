@@ -26,9 +26,10 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
+      'Non renseigné': 10,
       'BikeOrEquivalent': 1,
-      'PublicTransport': 1
+      'PublicTransport': 1,
+      'VehicleWithoutPermit': 1
     })
   })
 
@@ -62,7 +63,8 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 9
+      'Non renseigné': 8,
+      'VehicleWithoutPermit': 1
     })
   })
 })

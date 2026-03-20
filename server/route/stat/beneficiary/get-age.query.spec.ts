@@ -1,8 +1,18 @@
-import { describe, expect } from 'vitest'
+import { describe, expect, beforeAll } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
 import { test } from '~/test/server/test-utils'
+import dayjs from 'dayjs'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
+import isBetween from 'dayjs/plugin/isBetween.js'
 
 import type { AppRouter } from '~/server/trpc/routers'
+
+beforeAll(() => {
+  dayjs.extend(isBetween)
+  dayjs.extend(isSameOrBefore)
+  dayjs.extend(isSameOrAfter)
+})
 
 type Input = inferProcedureInput<AppRouter['stat']['getAgeStats']>
 
@@ -25,13 +35,14 @@ describe('Statistics - Beneficiary - Age', () => {
 
     const stats = await trpc.structureManager.stat.getAgeStats(input)
 
-    const parsed = parseStats(stats)
-
-    expect(parsed['Non renseigné']).toBe(6)
-
-    const withAge = stats.filter(s => s.ageGroup !== null)
-    const totalWithAge = withAge.reduce((sum, s) => sum + s._count, 0)
-    expect(totalWithAge).toBe(7)
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 6,
+      '18-24': 1,
+      '25-34': 2,
+      '35-44': 2,
+      '45-54': 1,
+      '55-64': 1
+    })
   })
 
   test('should not allow stats computation as a reception agent', async ({
@@ -51,13 +62,12 @@ describe('Statistics - Beneficiary - Age', () => {
 
     const stats = await trpc.referent.stat.getAgeStats(input)
 
-    const parsed = parseStats(stats)
-
-    expect(parsed['Non renseigné']).toBe(3)
-
-    const withAge = stats.filter(s => s.ageGroup !== null)
-    const totalWithAge = withAge.reduce((sum, s) => sum + s._count, 0)
-    expect(totalWithAge).toBe(4)
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 3,
+      '18-24': 1,
+      '35-44': 2,
+      '55-64': 1
+    })
   })
 
   test('should compute stats with beneficiaryStatus filter', async ({
@@ -67,13 +77,14 @@ describe('Statistics - Beneficiary - Age', () => {
 
     const stats = await trpc.structureManager.stat.getAgeStats(input)
 
-    const parsed = parseStats(stats)
-
-    expect(parsed['Non renseigné']).toBe(5)
-
-    const withAge = stats.filter(s => s.ageGroup !== null)
-    const totalWithAge = withAge.reduce((sum, s) => sum + s._count, 0)
-    expect(totalWithAge).toBe(4)
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 4,
+      '18-24': 1,
+      '25-34': 1,
+      '35-44': 1,
+      '45-54': 1,
+      '55-64': 1
+    })
   })
 
   test('should compute stats with cities filter', async ({ trpc }) => {
@@ -81,8 +92,9 @@ describe('Statistics - Beneficiary - Age', () => {
 
     const stats = await trpc.structureManager.stat.getAgeStats(input)
 
-    const total = stats.reduce((sum, s) => sum + s._count, 0)
-    expect(total).toBe(2)
-    expect(stats.every(s => s.ageGroup !== null)).toBe(true)
+    expect(parseStats(stats)).toEqual({
+      'Non renseigné': 1,
+      '25-34': 1
+    })
   })
 })

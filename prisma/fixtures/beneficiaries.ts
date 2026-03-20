@@ -77,7 +77,8 @@ export const fixturesBeneficiaries = [
     structureId: fixtureStructures[0].id,
     status: 'Active',
     birthDate: new Date('1978-11-22'),
-    city: 'Lyon'
+    city: 'Lyon',
+    mobility: 'VehicleWithoutPermit'
   },
   {
     id: '6e3922b5-f8c9-47c4-8522-5b4cba529a13',
