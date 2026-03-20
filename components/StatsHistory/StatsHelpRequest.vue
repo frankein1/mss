@@ -124,6 +124,17 @@
           />
         </StatsCard>
 
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="baseConfig.redirections.id"
+          :card-name="baseConfig.redirections.name"
+        >
+          <StatsHelpRequestRedirections
+            :total-count="helpRequestCount"
+            :filters="filters"
+          />
+        </StatsCard>
+
         <template v-if="displayed.financial">
           <StatsCard
             class="fr-col-12 fr-col-md-6"
@@ -239,6 +250,10 @@
     instructions: {
       id: 'stats-helprequest-instructions',
       name: 'Instructions'
+    },
+    redirections: {
+      id: 'stats-helprequest-redirections',
+      name: 'Réorientation'
     }
   }
 
