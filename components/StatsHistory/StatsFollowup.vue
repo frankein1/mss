@@ -115,7 +115,19 @@
           <StatsFollowupActionsEntreprises
             :total-count="followupCount"
             :filters="filters"
-        /></StatsCard>
+          />
+        </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="followupCardsConfig.redirections.id"
+          :card-name="followupCardsConfig.redirections.name"
+        >
+          <StatsFollowupRedirections
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
 
         <StatsCard
           class="fr-col-12 fr-col-md-6"
@@ -219,6 +231,10 @@
     status: {
       id: 'stats-followup-status',
       name: 'Statuts'
+    },
+    redirections: {
+      id: 'stats-followup-redirections',
+      name: 'Réorientations'
     },
     actions: {
       id: 'stats-followup-actions',

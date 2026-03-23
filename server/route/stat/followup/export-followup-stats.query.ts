@@ -7,7 +7,7 @@ import {
 } from '~/client/options'
 import type { WorksheetType } from '~/types/export'
 import {
-  getFollowupActionsEntreprisesStatsQuery,
+  // getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
   getFollowupSubjectsStatsQuery,
   getFollowupMediumStatsQuery,
@@ -15,7 +15,8 @@ import {
   getFollowupPrescribingOrganizationStatsQuery,
   getFollowupStatusStatsQuery,
   getFollowupDurationStatsQuery,
-  getFollowupMeanTimeStatsQuery
+  getFollowupMeanTimeStatsQuery,
+  getFollowupRedirectionsStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -145,29 +146,49 @@ const handler = async ({
     rows: followupStatusRows
   })
 
-  // Actions
-  const followupActionsEntreprisesData =
-    await getFollowupActionsEntreprisesStatsQuery(user, input)
+  // Redirection
+  const followupRedirectionsData = await getFollowupRedirectionsStatsQuery(
+    user,
+    input
+  )
 
-  const followupActionsEntreprisesRows = followupActionsEntreprisesData.map(
-    item => {
-      return {
-        label: item.actionEntreprise || STATS_NULL_LABEL,
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, followupCount)}%`
-      }
+  const followupsRedirectionsRows = [
+    {
+      label: 'Entretiens avec au moins une réorientation',
+      number:
+        followupRedirectionsData.followupsWithRedirections._count.toString(),
+      percent: `${getPercentage(followupRedirectionsData.followupsWithRedirections._count, followupRedirectionsData.followups._count)}%`
+    }
+  ]
+  followupsRedirectionsRows.push({
+    label: 'Redirections avec partenaire renseigné',
+    number: followupRedirectionsData.withTypeIsPartners._count.toString(),
+    percent: `${getPercentage(followupRedirectionsData.withTypeIsPartners._count, followupRedirectionsData.followupsWithRedirections._count)}%`
+  })
+  followupRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
+    followupsRedirectionsRows.push({
+      label: partner.prescribingOrganization,
+      number: partner._count.toString(),
+      percent: `${getPercentage(partner._count, followupRedirectionsData.followupsWithRedirections._count)}%`
+    })
+  })
+  followupsRedirectionsRows.push(
+    {
+      label: 'Redirections internes',
+      number: followupRedirectionsData.withTypeIsIntern._count.toString(),
+      percent: `${getPercentage(followupRedirectionsData.withTypeIsIntern._count, followupRedirectionsData.followupsWithRedirections._count)}%`
+    },
+    {
+      label: 'Autres redirections',
+      number: followupRedirectionsData.withTypeIsOther._count.toString(),
+      percent: `${getPercentage(followupRedirectionsData.withTypeIsOther._count, followupRedirectionsData.followupsWithRedirections._count)}%`
     }
   )
-  followupActionsEntreprisesRows.push({
-    label: 'Total',
-    number: followupCount.toString(),
-    percent: '100%'
-  })
 
   exportData.push({
-    name: 'Actions entreprises',
-    columns: getColumns('Actions entreprises'),
-    rows: followupActionsEntreprisesRows
+    name: 'Réorientations',
+    columns: getColumns('Réorientations'),
+    rows: followupsRedirectionsRows
   })
 
   // Prescribing Organizations

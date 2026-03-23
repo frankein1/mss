@@ -14,7 +14,8 @@ import {
   getHelpRequestAmountsAllocatedQuery,
   getHelpRequestAmountsByInstructorOrganizationQuery,
   getHelpRequestAmountsBySubjectQuery,
-  getHelpRequestHousingStatsQuery
+  getHelpRequestHousingStatsQuery,
+  getHelpRequestRedirectionsStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -353,6 +354,49 @@ const handler = async ({
     name: "Montants objet d'accompagnement",
     columns: amountsBySubjectColumns,
     rows: amountsBySubjectRows
+  })
+
+  // Redirections
+  const helpRequestRedirectionsData =
+    await getHelpRequestRedirectionsStatsQuery(user, input)
+
+  const helpRequestRedirectionsRows = [
+    {
+      label: 'Instructions de dossiers avec au moins une réorientation',
+      number:
+        helpRequestRedirectionsData.helpRequestsWithRedirections._count.toString(),
+      percent: `${getPercentage(helpRequestRedirectionsData.helpRequestsWithRedirections._count, helpRequestRedirectionsData.helpRequests._count)}%`
+    },
+    {
+      label: 'Redirections avec partenaire renseigné',
+      number: helpRequestRedirectionsData.withTypeIsPartners._count.toString(),
+      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsPartners._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+    }
+  ]
+  helpRequestRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
+    helpRequestRedirectionsRows.push({
+      label: partner.prescribingOrganization,
+      number: partner._count.toString(),
+      percent: `${getPercentage(partner._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+    })
+  })
+  helpRequestRedirectionsRows.push(
+    {
+      label: 'Redirections internes',
+      number: helpRequestRedirectionsData.withTypeIsIntern._count.toString(),
+      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsIntern._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+    },
+    {
+      label: 'Autres redirections',
+      number: helpRequestRedirectionsData.withTypeIsOther._count.toString(),
+      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsOther._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+    }
+  )
+
+  exportData.push({
+    name: 'Réorientations',
+    columns: getColumns('Réorientations'),
+    rows: helpRequestRedirectionsRows
   })
 
   // Housing request
