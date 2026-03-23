@@ -28,7 +28,7 @@ secret_detection:
 
 pnpm:install:
   image:
-    name: node:${NODE_SHA}
+    name: node@${NODE_SHA}
   stage: .pre
   interruptible: true
   variables:
@@ -50,7 +50,7 @@ pnpm:install:
 
 # prepare git env to push new code to scalingo
 .scalingo:
-  image: ubuntu:${UBUNTU_SHA}
+  image: ubuntu@${UBUNTU_SHA}
   before_script:
     - apt-get update
     - apt-get -y install bash curl git openssh-client
@@ -86,7 +86,7 @@ pnpm:test:
   needs: ['pnpm:install']
   stage: test
   services:
-    - name: postgres:${POSTGRES_SHA}
+    - name: postgres@${POSTGRES_SHA}
       alias: database
       variables:
         POSTGRES_DB: mss
@@ -113,7 +113,7 @@ sonarcloud-check:
   variables:
     GIT_DEPTH: '0'
   image:
-    name: sonarsource/sonar-scanner-cli:${SONAR_SHA}
+    name: sonarsource/sonar-scanner-cli@${SONAR_SHA}
     entrypoint: ['']
   cache:
     key: '${CI_JOB_NAME}'
@@ -135,10 +135,10 @@ sonarcloud-check:
 
 .test:e2e:
   image:
-    name: mcr.microsoft.com/playwright:${PLAYWRIGHT_SHA}
+    name: mcr.microsoft.com/playwright@${PLAYWRIGHT_SHA}
   interruptible: true
   services:
-    - name: postgres:${POSTGRES_SHA}
+    - name: postgres@${POSTGRES_SHA}
       alias: database
       variables:
         POSTGRES_DB: mss
