@@ -4,6 +4,7 @@ import type {
   FollowupMedium,
   Gender,
   Prisma,
+  SocialSupportRedirectionType,
   SocialSupportStatus
 } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
@@ -95,10 +96,15 @@ function randomFollowupStatus(): SocialSupportStatus {
   return equiRandomEnum(['Todo', 'InProgress', 'Done'])
 }
 
+function randomRedirection(): SocialSupportRedirectionType {
+  return equiRandomEnum(['PartnerOrganization', 'Intern', 'Other'])
+}
+
 async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
     console.log('starting seed', `${i}/${STRUCTURE_COUNT}`)
     const structure = await prismaClient.structure.create({
+      select: { id: true },
       data: {
         type: 'Ccas',
         name: faker.company.name(),
@@ -110,6 +116,11 @@ async function main() {
         email: faker.internet.email(),
         socialSupportSubjects: { createMany: { data: socialSupportSubjects } }
       }
+    })
+
+    const partner = await prismaClient.partnerOrganization.create({
+      select: { id: true },
+      data: { structureId: structure.id, name: faker.company.name() }
     })
 
     let users: { id: string }[] = []
@@ -226,6 +237,19 @@ async function main() {
             }
           },
           data: { socialSupports: { connect: supports } }
+        }),
+        prismaClient.socialSupportRedirection.createMany({
+          data: supports.map(({ id }) => {
+            const type = randomRedirection()
+            return {
+              socialSupportId: id,
+              type,
+              motif: faker.word.words(3),
+              ...(type === 'PartnerOrganization' && {
+                partnerOrganizationId: partner.id
+              })
+            }
+          })
         })
       ])
     }
