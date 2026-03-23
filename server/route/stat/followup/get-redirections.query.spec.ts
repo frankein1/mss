@@ -18,7 +18,7 @@ describe('Statistics - Followups - Redirections', () => {
       await trpc.structureManager.stat.getFollowupRedirectionsStats(input)
 
     expect(stats.followups._count).toBe(6)
-    expect(stats.followupsWithRedirections._count).toBe(4)
+    expect(stats.followupsWithRedirections._count).toBe(5)
     expect(stats.withTypeIsPartners._count).toBe(3)
     expect(stats.withTypeIsPartners.partners).toHaveLength(3)
     expect(stats.withTypeIsIntern._count).toBe(2)
