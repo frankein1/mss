@@ -1,5 +1,9 @@
 import type { Prisma } from '@prisma/client'
-import { FileInstructionType, SocialSupportType } from '@prisma/client'
+import {
+  FileInstructionType,
+  SocialSupportRedirectionType,
+  SocialSupportType
+} from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'
@@ -333,5 +337,44 @@ export function prepareDateFilters(
       }
     default:
       return undefined
+  }
+}
+
+export const computeRedirectionsStats = (
+  redirections: {
+    type: SocialSupportRedirectionType
+    partnerOrganization: { id: string; name: string } | null
+  }[]
+) => {
+  const partnerRedirections = redirections.filter(
+    r => r.type === SocialSupportRedirectionType.PartnerOrganization
+  )
+  const internCount = redirections.filter(
+    r => r.type === SocialSupportRedirectionType.Intern
+  ).length
+  const otherCount = redirections.filter(
+    r => r.type === SocialSupportRedirectionType.Other
+  ).length
+
+  const partners = partnerRedirections
+    .filter(p => p.partnerOrganization != null)
+    .map(r => ({
+      prescribingOrganization: {
+        id: r.partnerOrganization?.id || '',
+        name: r.partnerOrganization?.name || ''
+      }
+    }))
+
+  return {
+    withTypeIsPartners: {
+      _count: partnerRedirections.length,
+      partners: preparePrescribingOrganizationStats(partners)
+    },
+    withTypeIsIntern: {
+      _count: internCount
+    },
+    withTypeIsOther: {
+      _count: otherCount
+    }
   }
 }

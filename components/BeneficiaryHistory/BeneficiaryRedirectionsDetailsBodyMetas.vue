@@ -1,5 +1,5 @@
 <template>
-  <p class="fr-h6 fr-mb-0 fr-mt-4v">Réorientations</p>
+  <p class="fr-text--bold fr-text--lg fr-mb-0 fr-mt-4v">Réorientations</p>
   <ul class="information-list">
     <li
       v-for="redirection in redirections"

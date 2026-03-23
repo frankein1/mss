@@ -11,12 +11,12 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getFollowupActionsEntreprisesStatsQuery(user, input)
+  return await getFollowupActionsEntreprisesStatsQuery(ctx, input)
 }
 
 export const getFollowupActionsEntreprisesStatsQ = createQuery({

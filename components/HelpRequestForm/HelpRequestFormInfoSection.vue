@@ -1,11 +1,8 @@
 <template>
-  <section
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
-  >
-    <h3 class="fr-col-12 fr-h5 fr-mb-0">
-      {{ headline }}
-    </h3>
-
+  <h3 class="fr-h4">
+    {{ headline }}
+  </h3>
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
     <div class="fr-col-12">
       <VeeSelect
         name="status"
@@ -130,7 +127,7 @@
         hint="Notification le jour de l'échéance et à J-30."
       />
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
