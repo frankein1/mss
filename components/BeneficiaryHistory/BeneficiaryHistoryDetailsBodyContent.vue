@@ -278,23 +278,6 @@
     flex: 1;
   }
 
-  .synthesis-title {
-    @include dsfr.text-style(md);
-
-    margin-bottom: 0.5rem;
-    color: var(--text-mention-grey);
-    font-weight: 400;
-
-    &::before {
-      margin-right: 0.25rem;
-    }
-  }
-
-  .synthesis-content {
-    white-space: pre-line;
-    font-weight: 500;
-  }
-
   .btn-delete {
     box-shadow: inset 0 0 0 1px var(--red-marianne-main-472);
     color: var(--red-marianne-main-472);

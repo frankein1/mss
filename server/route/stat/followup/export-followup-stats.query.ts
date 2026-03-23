@@ -155,7 +155,8 @@ const handler = async ({
   const followupsRedirectionsRows = [
     {
       label: 'Entretiens avec au moins une réorientation',
-      number: followupRedirectionsData.followupsWithRedirections.toString(),
+      number:
+        followupRedirectionsData.followupsWithRedirections._count.toString(),
       percent: `${getPercentage(followupRedirectionsData.followupsWithRedirections._count, followupRedirectionsData.followups._count)}%`
     }
   ]

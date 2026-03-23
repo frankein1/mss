@@ -10,15 +10,15 @@
   />
   <template
     v-if="
-      followupWitRedirections &&
-      followupWitRedirections.length &&
+      followupWithRedirections &&
+      followupWithRedirections.length &&
       prescribingOrganizationStats &&
       prescribingOrganizationStats.length
     "
   >
     <StatsList
       :total-count="totalCount"
-      :stats="followupWitRedirections"
+      :stats="followupWithRedirections"
       :display-total="false"
       stats-bar
     />
@@ -63,12 +63,12 @@
     () => data.value?.followupsWithRedirections._count || 0
   )
 
-  const followupWitRedirections = computed(() => {
+  const followupWithRedirections = computed(() => {
     const followupsWithRedirections =
       data.value?.followupsWithRedirections._count || 0
     return [
       {
-        key: 'followupWitRedirections',
+        key: 'followupWithRedirections',
         label: 'Entretiens avec au moins une réorientation',
         color: SupportColor.followups,
         emphasis: true,
