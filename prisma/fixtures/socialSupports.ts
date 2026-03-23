@@ -40,6 +40,20 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PlannedInPerson'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.MairieValence
+            ].id
+        },
+        {
+          type: 'Intern'
+        }
+      ]
     }
   },
   {
@@ -59,6 +73,13 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PhoneCall'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
@@ -81,6 +102,17 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'Videoconference'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.FranceTravail
+            ].id
+        }
+      ]
     }
   },
   {
@@ -100,6 +132,15 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'UnplannedInPerson'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
+        }
+      ]
     }
   },
   {
@@ -145,7 +186,7 @@ const fixturesFollowupSocialSupports = [
           create: {
             id: '3a39f0ae-17c0-4616-9e76-523faad59cfc',
             recipientId: fixturesUsers[FixtureUserRole.Referent].id,
-            beneficiaryId: fixturesBeneficiaries[3].id,
+            beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
             socialSupportId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
             type: 'NewComment',
             itemCreatedById: fixturesUsers[FixtureUserRole.StructureManager].id
@@ -164,14 +205,14 @@ const fixturesFollowupSocialSupports = [
         size: 887560,
         tags: ['BudgetRessources'],
         confidential: false,
-        beneficiaryId: fixturesBeneficiaries[3].id,
-        familyFileId: fixturesBeneficiaries[3].id,
+        beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+        familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
         createdById: fixturesUsers[FixtureUserRole.StructureManager].id,
         notifications: {
           create: {
             id: '907300c8-105d-421a-9ee5-a0599f0822e6',
             recipientId: fixturesUsers[FixtureUserRole.Instructor].id,
-            beneficiaryId: fixturesBeneficiaries[3].id,
+            beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
             type: 'NewDocument',
             itemCreatedById: fixturesUsers[FixtureUserRole.StructureManager].id
           }
@@ -184,6 +225,13 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PhoneCall'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Intern'
+        }
+      ]
     }
   }
 ] satisfies Prisma.SocialSupportUncheckedCreateInput[]
@@ -214,6 +262,17 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.FranceTravail
+            ].id
+        }
+      ]
     }
   },
   {
@@ -238,6 +297,16 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Intern'
+        },
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
@@ -266,6 +335,17 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.MairieValence
+            ].id
+        }
+      ]
     }
   },
   {
@@ -390,6 +470,13 @@ const fixturesHousingHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
