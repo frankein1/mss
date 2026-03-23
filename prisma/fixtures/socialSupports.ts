@@ -40,6 +40,20 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PlannedInPerson'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.MairieValence
+            ].id
+        },
+        {
+          type: 'Intern'
+        }
+      ]
     }
   },
   {
@@ -59,6 +73,13 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PhoneCall'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
@@ -100,6 +121,15 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'UnplannedInPerson'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
+        }
+      ]
     }
   },
   {
@@ -184,6 +214,13 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'PhoneCall'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Intern'
+        }
+      ]
     }
   }
 ] satisfies Prisma.SocialSupportUncheckedCreateInput[]
@@ -214,6 +251,17 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.FranceTravail
+            ].id
+        }
+      ]
     }
   },
   {
@@ -238,6 +286,16 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Intern'
+        },
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
@@ -266,6 +324,17 @@ const fixturesHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.MairieValence
+            ].id
+        }
+      ]
     }
   },
   {
@@ -390,6 +459,13 @@ const fixturesHousingHelpRequestSocialSupports = [
           }
         }
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'Other'
+        }
+      ]
     }
   },
   {
