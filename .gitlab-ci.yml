@@ -9,11 +9,18 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 
 variables:
-  NODE_VERSION: 24.14.0
+  NODE_VERSION: 24.14.0-alpine
+  NODE_SHA: sha256:7fddd9ddeae8196abf4a3ef2de34e11f7b1a722119f91f28ddf1e99dcafdf114
   # A synchroniser avec la version présente dans package.json
-  PLAYWRIGHT_VERSION: 1.58.0
+  PLAYWRIGHT_VERSION: v1.58.0-jammy
+  PLAYWRIGHT_SHA: sha256:16d2851dba57d144f2ee4829b59ecc9fb7475231f435675b007005d0d644bcd7
   #A synchroniser avec la version présente en production
-  POSTGRES_VERSION: 16.11
+  POSTGRES_VERSION: 16.11-alpine
+  POSTGRES_SHA: sha256:4327b9fd295502f326f44153a1045a7170ddbfffed1c3829798328556cfd09e
+  UBUNTU_VERSION: ubuntu:noble # 24.04.4 LTS (Noble Numbat)
+  UBUNTU_SHA: sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c
+  SONAR_VERSION: 12.0
+  SONAR_SHA: sha256:97c145e4f8fe1786906c604272d17901e745051bc6c8173582f31aac8d0eb7fe
 
 secret_detection:
   variables:
@@ -21,14 +28,14 @@ secret_detection:
 
 pnpm:install:
   image:
-    name: node:${NODE_VERSION}-alpine
+    name: node@${NODE_SHA}
   stage: .pre
   interruptible: true
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
   before_script:
     - corepack enable
-    - corepack prepare pnpm@10.29.2 --activate
+    - corepack prepare pnpm --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile --prefer-offline
   script:
@@ -43,7 +50,7 @@ pnpm:install:
 
 # prepare git env to push new code to scalingo
 .scalingo:
-  image: ubuntu:noble
+  image: ubuntu@${UBUNTU_SHA}
   before_script:
     - apt-get update
     - apt-get -y install bash curl git openssh-client
@@ -79,7 +86,7 @@ pnpm:test:
   needs: ['pnpm:install']
   stage: test
   services:
-    - name: postgres:${POSTGRES_VERSION}-alpine
+    - name: postgres@${POSTGRES_SHA}
       alias: database
       variables:
         POSTGRES_DB: mss
@@ -106,7 +113,7 @@ sonarcloud-check:
   variables:
     GIT_DEPTH: '0'
   image:
-    name: sonarsource/sonar-scanner-cli:12.0
+    name: sonarsource/sonar-scanner-cli@${SONAR_SHA}
     entrypoint: ['']
   cache:
     key: '${CI_JOB_NAME}'
@@ -128,10 +135,10 @@ sonarcloud-check:
 
 .test:e2e:
   image:
-    name: mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-jammy
+    name: mcr.microsoft.com/playwright@${PLAYWRIGHT_SHA}
   interruptible: true
   services:
-    - name: postgres:${POSTGRES_VERSION}-alpine
+    - name: postgres@${POSTGRES_SHA}
       alias: database
       variables:
         POSTGRES_DB: mss
