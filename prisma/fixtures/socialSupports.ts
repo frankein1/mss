@@ -102,6 +102,17 @@ const fixturesFollowupSocialSupports = [
       create: {
         medium: 'Videoconference'
       }
+    },
+    socialSupportRedirections: {
+      create: [
+        {
+          type: 'PartnerOrganization',
+          partnerOrganizationId:
+            fixturesPartnerOrganizations[
+              FixturePartnerOrganization.FranceTravail
+            ].id
+        }
+      ]
     }
   },
   {
