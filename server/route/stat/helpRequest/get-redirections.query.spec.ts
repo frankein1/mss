@@ -17,7 +17,6 @@ describe('Statistics - Help Requests - Redirections', () => {
     const stats =
       await trpc.structureManager.stat.getHelpRequestRedirectionsStats(input)
 
-    expect(stats.helpRequests._count).toBe(12)
     expect(stats.helpRequestsWithRedirections._count).toBe(4)
     expect(stats.withTypeIsPartners._count).toBe(2)
     expect(stats.withTypeIsPartners.partners).toHaveLength(2)
@@ -43,7 +42,6 @@ describe('Statistics - Help Requests - Redirections', () => {
     const stats =
       await trpc.referent.stat.getHelpRequestRedirectionsStats(input)
 
-    expect(stats.helpRequests._count).toBe(4)
     expect(stats.helpRequestsWithRedirections._count).toBe(1)
     expect(stats.withTypeIsPartners._count).toBe(0)
     expect(stats.withTypeIsPartners.partners).toHaveLength(0)

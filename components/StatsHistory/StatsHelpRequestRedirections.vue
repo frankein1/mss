@@ -81,8 +81,8 @@
   const prescribingOrganizationStats = computed(() => {
     const partners = data.value?.withTypeIsPartners.partners.map(partner => {
       return {
-        key: partner.prescribingOrganizationId,
-        label: partner.prescribingOrganization,
+        key: partner.id,
+        label: partner.name,
         color: SupportColor.helpRequests,
         emphasis: false,
         count: partner._count

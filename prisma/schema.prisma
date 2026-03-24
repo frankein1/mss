@@ -419,6 +419,7 @@ model SocialSupportRedirection {
 
   createdAt DateTime @default(now()) @map("created_at") // for UI purpose only: sort by date
 
+  @@index(fields: [socialSupportId], map: "social_support_redirection_social_support_id_idx")
   @@map("social_support_redirection")
 }
 

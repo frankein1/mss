@@ -157,7 +157,7 @@ const handler = async ({
       label: 'Entretiens avec au moins une réorientation',
       number:
         followupRedirectionsData.followupsWithRedirections._count.toString(),
-      percent: `${getPercentage(followupRedirectionsData.followupsWithRedirections._count, followupRedirectionsData.followups._count)}%`
+      percent: `${getPercentage(followupRedirectionsData.followupsWithRedirections._count, followupCount)}%`
     }
   ]
   followupsRedirectionsRows.push({
@@ -167,7 +167,7 @@ const handler = async ({
   })
   followupRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
     followupsRedirectionsRows.push({
-      label: partner.prescribingOrganization,
+      label: partner.name,
       number: partner._count.toString(),
       percent: `${getPercentage(partner._count, followupRedirectionsData.followupsWithRedirections._count)}%`
     })
