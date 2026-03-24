@@ -30,10 +30,6 @@ export function formatSocialSupportDetail(
   ctx: ProtectedAppContext,
   familyFile: FamilyFileSecurityTarget
 ) {
-  const {
-    rdvsp: { issuer }
-  } = useRuntimeConfig()
-
   const { _count } = socialSupport
 
   const socialSupportPermissions = getSocialSupportPermissions({
@@ -56,6 +52,7 @@ export function formatSocialSupportDetail(
     socialSupport,
     conditions
   })
+
   const filteredFileInstruction = fileInstruction
     ? filterFileInstruction({
         fileInstruction,

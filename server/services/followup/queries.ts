@@ -19,7 +19,18 @@ const include = {
     include: {
       lastUpdatedBy: true,
       documents: true,
-      socialSupportRedirections: true,
+      socialSupportRedirections: {
+        select: {
+          id: true,
+          type: true,
+          motif: true,
+          externalStructureName: true,
+          partnerOrganizationId: true,
+          partnerOrganizationContactId: true,
+          partnerOrganization: { select: { name: true } },
+          partnerOrganizationContact: { select: { name: true } }
+        }
+      },
       subjects: true,
       minister: true,
       beneficiary: {

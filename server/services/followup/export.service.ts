@@ -3,7 +3,6 @@ import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumKeys,
   socialSupportStatusKeys,
-  ministerKeys,
   followupDurationKeys
 } from '~/client/options'
 import type { ExportFollowupsInput } from '~/server/schema'
@@ -15,6 +14,8 @@ import { formatDate } from '~/utils/formatDate'
 import { followupFieldLabels } from '~/client/labels'
 import { formatBeneficiaryDisplayName } from '~/utils'
 import { formatMinisterName } from '~/utils/minister'
+import { redirectionExportLabels } from '~/client/labels/redirection.labels'
+import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
@@ -27,7 +28,6 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'prescribingOrganizationId',
   'firstFollowup',
   'synthesis',
-  'redirected',
   'structureName',
   'classified',
   'documents',
@@ -40,6 +40,14 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'createdById',
   'duration'
 ]
+export const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] =
+  [
+    'type',
+    'motif',
+    'partnerOrganizationId',
+    'partnerOrganizationContactId',
+    'externalStructureName'
+  ]
 
 export async function exportFollowups({
   ctx,
@@ -48,10 +56,16 @@ export async function exportFollowups({
   ctx: SecurityRuleContext
   input: ExportFollowupsInput
 }) {
-  const columns = FOLLOWUP_EXPORTED_FIELDS.map(key => ({
-    key,
-    header: followupFieldLabels[key]
-  }))
+  const columns = [
+    ...FOLLOWUP_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: followupFieldLabels[key]
+    })),
+    ...REDIRECTION_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: redirectionExportLabels[key]
+    }))
+  ]
 
   const where = prepareFilters(input.filters)
   const orderBy = prepareSort(input.orderBy)
@@ -61,11 +75,11 @@ export async function exportFollowups({
   const rows = dataRequest.reduce(
     (followups: RowType[], { permissions, followup }) => {
       if (permissions.view) {
+        const redirections = followup.socialSupportRedirections || []
         followups.push({
           date: formatDate(followup.date, 'DD-MM-YYYY'),
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
-          redirected: getBooleanOrEmpty(followup.redirected),
           subjects: followup.subjects.map(({ name }) => name).join(', '),
           beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
           medium: followupMediumKeys.value(followup.medium) || '',
@@ -90,7 +104,20 @@ export async function exportFollowups({
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
-          duration: followupDurationKeys.value(followup.duration) || ''
+          duration: followupDurationKeys.value(followup.duration) || '',
+          type: redirections
+            .map(r => socialSupportRedirectionTypeKeys.value(r.type))
+            .join(', '),
+          motif: redirections.map(r => r.motif).join(', '),
+          partnerOrganizationId: redirections
+            .map(r => r.partnerOrganization.name)
+            .join(', '),
+          partnerOrganizationContactId: redirections
+            .map(r => r.partnerOrganizationContactId)
+            .join(', '),
+          externalStructureName: redirections
+            .map(r => r.externalStructureName)
+            .join(', ')
         })
       }
       return followups

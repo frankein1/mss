@@ -46,9 +46,7 @@
     </ul>
     <BeneficiaryRedirectionsDetailsBodyMetas
       v-if="socialSupport.socialSupportRedirections?.length"
-      :redirections="
-        socialSupport.socialSupportRedirections as SocialSupportRedirectionsDetails
-      "
+      :redirections="socialSupport.socialSupportRedirections"
     />
     <BeneficiaryHistoryDetailsBodyDocuments
       v-if="socialSupport.documents?.length"

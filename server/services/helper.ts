@@ -14,34 +14,66 @@ import type {
   MinisterEntity,
   SocialSupportRedirection
 } from '@prisma/client'
+
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
+
+interface Conditions {
+  details: boolean
+  minister: boolean
+  privateSynthesis: boolean
+}
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null
 }
 
-export function filterSocialSupport({
+function redirectionsDto<T extends SS['socialSupportRedirections']>(
+  redirections: T
+) {
+  return redirections.map(r => ({
+    id: r.id,
+    type: r.type,
+    motif: r.motif,
+    partnerOrganizationId: r.partnerOrganizationId,
+    partnerOrganizationContactId: r.partnerOrganizationContactId,
+    partnerOrganization: {
+      name: r.partnerOrganization?.name
+    },
+    partnerOrganizationContact: {
+      name: r.partnerOrganizationContact?.name
+    },
+    externalStructureName: r.externalStructureName
+  }))
+}
+
+// This is a temporary fix. The query must be reviewed with select and exact type
+// matching
+type SS = SocialSupport & {
+  familyFile: FamilyFile & {
+    referents: User[]
+  }
+  minister?: MinisterEntity | null
+  beneficiary: BeneficiaryIdentification
+  createdBy: User
+  lastUpdatedBy: User | null
+  subjects: SocialSupportSubject[]
+  documents?: Document[]
+  comments?: (Comment & { createdBy: User })[]
+  socialSupportRedirections: (Omit<
+    SocialSupportRedirection,
+    'createdAt' | 'socialSupportId'
+  > & {
+    partnerOrganization: { name: string } | null
+    partnerOrganizationContact: { name: string } | null
+  })[]
+}
+
+export function filterSocialSupport<T extends SS>({
   socialSupport,
   conditions
 }: {
-  socialSupport: SocialSupport & {
-    familyFile: FamilyFile & {
-      referents: User[]
-    }
-    minister?: MinisterEntity | null
-    beneficiary: BeneficiaryIdentification
-    createdBy: User
-    lastUpdatedBy: User | null
-    subjects: SocialSupportSubject[]
-    documents?: Document[]
-    comments?: (Comment & { createdBy: User })[]
-    socialSupportRedirections?: SocialSupportRedirection[]
-  }
-  conditions: {
-    details: boolean
-    minister: boolean
-    privateSynthesis: boolean
-  }
+  socialSupport: T
+  conditions: Conditions
 }) {
   return {
     id: socialSupport.id,
@@ -85,7 +117,7 @@ export function filterSocialSupport({
     ministerId: show(socialSupport.ministerId, conditions.minister),
     minister: show(socialSupport.minister, conditions.minister),
     socialSupportRedirections: show(
-      socialSupport.socialSupportRedirections,
+      redirectionsDto(socialSupport.socialSupportRedirections || []),
       conditions.details
     ),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
