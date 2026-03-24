@@ -25,23 +25,23 @@ export async function getHelpRequestRedirectionsStatsQuery(
     PartnerOrganizationRepo.findMany(user, { select: { id: true, name: true } })
   ])
 
-  const countbytypes = getCountByTypes(redirections)
+  const countByTypes = getCountByTypes(redirections)
 
-  const countbypartners = getCountByPartners(redirections, orgs)
+  const countByPartners = getCountByPartners(redirections, orgs)
 
   return {
     helpRequestsWithRedirections: {
       _count: new Set(redirections.map(r => r.socialSupportId)).size
     },
     withTypeIsPartners: {
-      _count: countbytypes['PartnerOrganization'],
-      partners: countbypartners
+      _count: countByTypes['PartnerOrganization'],
+      partners: countByPartners
     },
     withTypeIsIntern: {
-      _count: countbytypes['Intern']
+      _count: countByTypes['Intern']
     },
     withTypeIsOther: {
-      _count: countbytypes['Other']
+      _count: countByTypes['Other']
     }
   }
 }

@@ -8,7 +8,7 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     throw new TRPCError({
       code: 'NOT_IMPLEMENTED',
-      message: 'social-support-constraints: create not implemented for admin'
+      message: 'social-support-constraints: get not implemented for admin'
     })
   }
 

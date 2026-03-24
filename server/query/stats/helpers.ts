@@ -341,24 +341,25 @@ export const getCountByPartners = (
   redirections: { partnerOrganizationId: string | null }[],
   orgs: { id: string; name: string }[]
 ) => {
-  const organizationNames = orgs.reduce<Record<string, string>>(
-    (acc, cur) => ({ ...acc, [cur.id]: cur.name }),
-    {}
-  )
+  const organizationNames = orgs.reduce<Record<string, string>>((acc, cur) => {
+    acc[cur.id] = cur.name
+    return acc
+  }, {})
 
   const groupbypartners = redirections.reduce(
     (acc, { partnerOrganizationId }) => {
       if (!partnerOrganizationId) {
         return acc
       }
-      return {
-        ...acc,
-        [partnerOrganizationId]: {
+      if (!acc[partnerOrganizationId]) {
+        acc[partnerOrganizationId] = {
           id: partnerOrganizationId,
           name: organizationNames[partnerOrganizationId] || STATS_NULL_LABEL,
-          _count: (acc[partnerOrganizationId] || { _count: 0 })._count + 1
+          _count: 0
         }
       }
+      acc[partnerOrganizationId]._count++
+      return acc
     },
     {} as Record<string, { id: string; name: string; _count: number }>
   )
@@ -370,10 +371,13 @@ export const getCountByTypes = (
   redirections: { type: SocialSupportRedirectionType }[]
 ) => {
   return redirections.reduce<Record<SocialSupportRedirectionType, number>>(
-    (acc, { type }) => ({
-      ...acc,
-      [type]: (acc[type] || 0) + 1
-    }),
+    (acc, { type }) => {
+      if (!acc[type]) {
+        acc[type] = 0
+      }
+      acc[type]++
+      return acc
+    },
     { PartnerOrganization: 0, Intern: 0, Other: 0 }
   )
 }
