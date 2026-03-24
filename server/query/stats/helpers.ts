@@ -1,9 +1,5 @@
-import type { Prisma } from '@prisma/client'
-import {
-  FileInstructionType,
-  SocialSupportRedirectionType,
-  SocialSupportType
-} from '@prisma/client'
+import type { Prisma, SocialSupportRedirectionType } from '@prisma/client'
+import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'
@@ -340,41 +336,48 @@ export function prepareDateFilters(
   }
 }
 
-export const computeRedirectionsStats = (
-  redirections: {
-    type: SocialSupportRedirectionType
-    partnerOrganization: { id: string; name: string } | null
-  }[]
+// For SocialSupportRedirection
+export const getCountByPartners = (
+  redirections: { partnerOrganizationId: string | null }[],
+  orgs: { id: string; name: string }[]
 ) => {
-  const partnerRedirections = redirections.filter(
-    r => r.type === SocialSupportRedirectionType.PartnerOrganization
-  )
-  const internCount = redirections.filter(
-    r => r.type === SocialSupportRedirectionType.Intern
-  ).length
-  const otherCount = redirections.filter(
-    r => r.type === SocialSupportRedirectionType.Other
-  ).length
+  const organizationNames = orgs.reduce<Record<string, string>>((acc, cur) => {
+    acc[cur.id] = cur.name
+    return acc
+  }, {})
 
-  const partners = partnerRedirections
-    .filter(p => p.partnerOrganization != null)
-    .map(r => ({
-      prescribingOrganization: {
-        id: r.partnerOrganization?.id || '',
-        name: r.partnerOrganization?.name || ''
+  const groupbypartners = redirections.reduce(
+    (acc, { partnerOrganizationId }) => {
+      if (!partnerOrganizationId) {
+        return acc
       }
-    }))
+      if (!acc[partnerOrganizationId]) {
+        acc[partnerOrganizationId] = {
+          id: partnerOrganizationId,
+          name: organizationNames[partnerOrganizationId] || STATS_NULL_LABEL,
+          _count: 0
+        }
+      }
+      acc[partnerOrganizationId]._count++
+      return acc
+    },
+    {} as Record<string, { id: string; name: string; _count: number }>
+  )
 
-  return {
-    withTypeIsPartners: {
-      _count: partnerRedirections.length,
-      partners: preparePrescribingOrganizationStats(partners)
+  return Object.values(groupbypartners).toSorted((a, b) => b._count - a._count)
+}
+
+export const getCountByTypes = (
+  redirections: { type: SocialSupportRedirectionType }[]
+) => {
+  return redirections.reduce<Record<SocialSupportRedirectionType, number>>(
+    (acc, { type }) => {
+      if (!acc[type]) {
+        acc[type] = 0
+      }
+      acc[type]++
+      return acc
     },
-    withTypeIsIntern: {
-      _count: internCount
-    },
-    withTypeIsOther: {
-      _count: otherCount
-    }
-  }
+    { PartnerOrganization: 0, Intern: 0, Other: 0 }
+  )
 }

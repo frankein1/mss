@@ -365,7 +365,7 @@ const handler = async ({
       label: 'Instructions de dossiers avec au moins une réorientation',
       number:
         helpRequestRedirectionsData.helpRequestsWithRedirections._count.toString(),
-      percent: `${getPercentage(helpRequestRedirectionsData.helpRequestsWithRedirections._count, helpRequestRedirectionsData.helpRequests._count)}%`
+      percent: `${getPercentage(helpRequestRedirectionsData.helpRequestsWithRedirections._count, helpRequestCount.total)}%`
     },
     {
       label: 'Redirections avec partenaire renseigné',
@@ -375,7 +375,7 @@ const handler = async ({
   ]
   helpRequestRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
     helpRequestRedirectionsRows.push({
-      label: partner.prescribingOrganization,
+      label: partner.name,
       number: partner._count.toString(),
       percent: `${getPercentage(partner._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
     })
