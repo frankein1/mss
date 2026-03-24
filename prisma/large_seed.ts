@@ -1,18 +1,19 @@
 import type {
   BeneficiaryMobility,
   BeneficiaryStatus,
+  FileInstructionType,
   FollowupMedium,
   Gender,
   Prisma,
   SocialSupportRedirectionType,
-  SocialSupportStatus
+  SocialSupportStatus,
+  SocialSupportType
 } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import type { ArrayElement } from '~/types/utils'
 import { equiRandomEnum } from './fixtures/utils'
+import { prismaClient } from '~/server/prisma'
 
-const prismaClient = new PrismaClient()
 const STRUCTURE_COUNT = 200
 // if USERS_PER_STRUCTURE is null use Jeanne Responsable
 const USERS_PER_STRUCTURE: number | null = null
@@ -79,6 +80,9 @@ function randomMobility(): BeneficiaryMobility {
     'None'
   ])
 }
+function randomSocialSupportType(): SocialSupportType {
+  return equiRandomEnum(['Followup', 'HelpRequestHousing', 'HelpRequest'])
+}
 function randomMedium(): FollowupMedium {
   return equiRandomEnum([
     'PlannedInPerson',
@@ -95,7 +99,21 @@ function randomMedium(): FollowupMedium {
 function randomFollowupStatus(): SocialSupportStatus {
   return equiRandomEnum(['Todo', 'InProgress', 'Done'])
 }
-
+function randomHelpRequestStatus(): SocialSupportStatus {
+  return equiRandomEnum([
+    'WaitingAdditionalInformation',
+    'InvestigationOngoing',
+    'Accepted',
+    'Refused',
+    'Adjourned',
+    'ClosedByBeneficiary',
+    'ClosedByAgent',
+    'Dismissed'
+  ])
+}
+function randomFileInstructionType(): FileInstructionType {
+  return equiRandomEnum(['Financial', 'Housing', 'Other'])
+}
 function randomRedirection(): SocialSupportRedirectionType {
   return equiRandomEnum(['PartnerOrganization', 'Intern', 'Other'])
 }
@@ -104,7 +122,10 @@ async function main() {
   for (let i = 0; i < STRUCTURE_COUNT; i++) {
     console.log('starting seed', `${i}/${STRUCTURE_COUNT}`)
     const structure = await prismaClient.structure.create({
-      select: { id: true },
+      select: {
+        id: true,
+        socialSupportSubjects: { select: { id: true, name: true } }
+      },
       data: {
         type: 'Ccas',
         name: faker.company.name(),
@@ -204,39 +225,46 @@ async function main() {
       // data contains FAMILY_FILE_PER_STRUCTURE_COUNT * SOCIAL_SUPPORTS_PER_BENEFICIARY items
       const data: Prisma.SocialSupportCreateManyInput[] = beneficiaries.flatMap(
         beneficiary =>
-          new Array(SOCIAL_SUPPORTS_PER_BENEFICIARY).fill(null).map(() => ({
-            createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
-            lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,
-            beneficiaryId: beneficiary.id,
-            familyFileId: beneficiary.familyFileId,
-            socialSupportType: 'Followup' as const,
-            structureId: structure.id,
-            status: randomFollowupStatus(),
-            subtype: randomMedium(),
-            date: faker.date.between({ from: '2022-01-01', to: new Date() })
-          }))
+          new Array(SOCIAL_SUPPORTS_PER_BENEFICIARY).fill(null).map(() => {
+            const socialSupportType = randomSocialSupportType()
+            const [status, subtype] =
+              socialSupportType === 'Followup'
+                ? [randomFollowupStatus(), randomMedium()]
+                : [randomHelpRequestStatus(), undefined]
+            return {
+              createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+              lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,
+              beneficiaryId: beneficiary.id,
+              familyFileId: beneficiary.familyFileId,
+              socialSupportType,
+              structureId: structure.id,
+              status,
+              subtype,
+              date: faker.date.between({ from: '2022-01-01', to: new Date() })
+            }
+          })
       )
 
       const supports = await prismaClient.socialSupport.createManyAndReturn({
-        select: { id: true },
+        select: { id: true, socialSupportType: true },
         data
       })
 
-      await Promise.all([
+      const [_, fi, __, ___] = await Promise.all([
         prismaClient.followup.createMany({
-          data: supports.map(({ id }) => ({
-            socialSupportId: id,
-            medium: randomMedium()
-          }))
+          data: supports
+            .filter(s => s.socialSupportType === 'Followup')
+            .map(({ id }) => ({ socialSupportId: id, medium: randomMedium() }))
         }),
-        prismaClient.socialSupportSubject.update({
-          where: {
-            ownedByStructureId_name: {
-              name: socialSupportSubjects[0]?.name as string,
-              ownedByStructureId: structure.id
-            }
-          },
-          data: { socialSupports: { connect: supports } }
+        prismaClient.fileInstruction.createManyAndReturn({
+          select: { id: true, type: true },
+          data: supports
+            .filter(s => s.socialSupportType !== 'Followup')
+            .map(({ id }) => ({
+              socialSupportId: id,
+              externalStructure: false,
+              type: randomFileInstructionType()
+            }))
         }),
         prismaClient.socialSupportRedirection.createMany({
           data: supports.map(({ id }) => {
@@ -250,6 +278,32 @@ async function main() {
               })
             }
           })
+        }),
+        prismaClient.socialSupportSubject.update({
+          select: { id: true },
+          where: {
+            id: structure.socialSupportSubjects[0]?.id as string
+          },
+          data: {
+            socialSupports: { connect: supports.map(s => ({ id: s.id })) }
+          }
+        })
+      ])
+
+      await Promise.all([
+        prismaClient.helpRequest.createMany({
+          data: fi
+            .filter(f => f.type !== 'Housing')
+            .map(({ id, type }) => ({
+              subjectId: structure.socialSupportSubjects[0]?.id as string,
+              financialSupport: type === 'Financial',
+              fileInstructionId: id
+            }))
+        }),
+        prismaClient.housingHelpRequest.createMany({
+          data: fi
+            .filter(f => f.type === 'Housing')
+            .map(({ id }) => ({ fileInstructionId: id }))
         })
       ])
     }
@@ -257,3 +311,9 @@ async function main() {
 }
 
 main()
+;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
+  process.on(signal, async () => {
+    await prismaClient.$disconnect()
+    process.exit(1)
+  })
+)
