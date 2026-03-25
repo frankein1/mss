@@ -19,7 +19,18 @@ const include = {
     include: {
       lastUpdatedBy: true,
       documents: true,
-      socialSupportRedirections: true,
+      socialSupportRedirections: {
+        select: {
+          id: true,
+          type: true,
+          motif: true,
+          externalStructureName: true,
+          partnerOrganizationId: true,
+          partnerOrganizationContactId: true,
+          partnerOrganization: { select: { name: true } },
+          partnerOrganizationContact: { select: { name: true } }
+        }
+      },
       subjects: true,
       minister: true,
       beneficiary: {
@@ -113,9 +124,16 @@ export function filter(
     conditions
   })
 
+  // Attached document names are visible for all roles that can access the followup
+  const documentNames = socialSupport.documents.map(d => ({
+    key: d.key,
+    name: d.name
+  }))
+
   return {
     ...filteredSocialSupport,
     ...filteredFollowup,
+    documents: documentNames,
     id: followup.id,
     socialSupportId: socialSupport.id
   }
