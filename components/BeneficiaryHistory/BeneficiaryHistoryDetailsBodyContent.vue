@@ -125,7 +125,6 @@
   import type {
     CommentData,
     CommentItem,
-    SocialSupportRedirectionsDetails,
     SocialSupportDetailItem
   } from './types'
   import type { FamilyFilePermissions } from '~/server/security'

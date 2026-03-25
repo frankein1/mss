@@ -47,7 +47,18 @@ function findMany(
             }
           },
           minister: true,
-          createdBy: true
+          socialSupportRedirections: {
+            select: {
+              id: true,
+              type: true,
+              motif: true,
+              externalStructureName: true,
+              partnerOrganizationId: true,
+              partnerOrganizationContactId: true,
+              partnerOrganization: { select: { name: true } },
+              partnerOrganizationContact: { select: { name: true } }
+            }
+          }
         }
       },
       helpRequest: {
@@ -127,9 +138,18 @@ export function filter(
     conditions
   })
 
+  // Attached document names are visible for all roles that can access the followup
+  const documentNames = socialSupport.documents.map(d => ({
+    key: d.key,
+    name: d.name
+  }))
+
   return {
     ...filteredFileInstruction,
-    socialSupport: filteredSocialSupport,
+    socialSupport: {
+      ...filteredSocialSupport,
+      documents: documentNames
+    },
     helpRequest: filteredHelpRequest,
     housingHelpRequest: filteredHousingHelpRequest
   }

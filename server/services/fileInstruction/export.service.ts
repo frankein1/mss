@@ -23,8 +23,10 @@ import {
 } from '~/client/options'
 import { formatBeneficiaryDisplayName } from '~/utils'
 import { formatMinisterName } from '~/utils/minister'
+import { redirectionExportLabels } from '~/client/labels/redirection.labels'
+import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
-export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
+const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
   'date',
   'isFirst',
@@ -54,7 +56,7 @@ export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'createdById'
 ]
 
-export const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
+const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
   'askedHousing',
   'reason',
   'taxHouseholdAdditionalInformation',
@@ -64,6 +66,14 @@ export const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
   'roomCount',
   'lowIncomeHousingType',
   'isPmr'
+]
+
+const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
+  'type',
+  'motif',
+  'partnerOrganizationId',
+  'partnerOrganizationContactId',
+  'externalStructureName'
 ]
 
 export async function exportFileInstructions({
@@ -81,6 +91,10 @@ export async function exportFileInstructions({
     ...HOUSING_FIELDS.map(key => ({
       key,
       header: housingHelpRequestFieldLabels[key]
+    })),
+    ...REDIRECTION_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: redirectionExportLabels[key]
     }))
   ]
 
@@ -107,7 +121,7 @@ export async function exportFileInstructions({
       // File instructions have 1 sss but in the model a social support
       // can be linked to several sss.
       const subjectId = socialSupport.subjects?.[0]?.name || ''
-
+      const redirections = socialSupport.socialSupportRedirections || []
       return [
         ...fileInstructions,
         {
@@ -181,7 +195,20 @@ export async function exportFileInstructions({
             (housingHelpRequest?.lowIncomeHousingType || [])
               .map(li => lowIncomeHousingKeys.value(li))
               .join(', ') || '',
-          isPmr: getBooleanOrEmpty(housingHelpRequest?.isPmr)
+          isPmr: getBooleanOrEmpty(housingHelpRequest?.isPmr),
+          type: redirections
+            .map(r => socialSupportRedirectionTypeKeys.value(r.type))
+            .join(', '),
+          motif: redirections.map(r => r.motif).join(', '),
+          partnerOrganizationId: redirections
+            .map(r => r.partnerOrganization.name)
+            .join(', '),
+          partnerOrganizationContactId: redirections
+            .map(r => r.partnerOrganizationContact.name)
+            .join(', '),
+          externalStructureName: redirections
+            .map(r => r.externalStructureName)
+            .join(', ')
         }
       ]
     },

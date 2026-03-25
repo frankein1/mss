@@ -17,7 +17,7 @@ import { formatMinisterName } from '~/utils/minister'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
-export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
+const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
   'date',
   'beneficiaryId',
@@ -40,14 +40,13 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'createdById',
   'duration'
 ]
-export const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] =
-  [
-    'type',
-    'motif',
-    'partnerOrganizationId',
-    'partnerOrganizationContactId',
-    'externalStructureName'
-  ]
+const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
+  'type',
+  'motif',
+  'partnerOrganizationId',
+  'partnerOrganizationContactId',
+  'externalStructureName'
+]
 
 export async function exportFollowups({
   ctx,
@@ -113,7 +112,7 @@ export async function exportFollowups({
             .map(r => r.partnerOrganization.name)
             .join(', '),
           partnerOrganizationContactId: redirections
-            .map(r => r.partnerOrganizationContactId)
+            .map(r => r.partnerOrganizationContact.name)
             .join(', '),
           externalStructureName: redirections
             .map(r => r.externalStructureName)

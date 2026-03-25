@@ -124,9 +124,16 @@ export function filter(
     conditions
   })
 
+  // Attached document names are visible for all roles that can access the followup
+  const documentNames = socialSupport.documents.map(d => ({
+    key: d.key,
+    name: d.name
+  }))
+
   return {
     ...filteredSocialSupport,
     ...filteredFollowup,
+    documents: documentNames,
     id: followup.id,
     socialSupportId: socialSupport.id
   }
