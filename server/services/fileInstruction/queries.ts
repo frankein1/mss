@@ -47,6 +47,7 @@ function findMany(
             }
           },
           minister: true,
+          createdBy: true,
           socialSupportRedirections: {
             select: {
               id: true,
