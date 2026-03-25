@@ -42,13 +42,17 @@ function userDto<T extends Pick<User, 'id' | 'firstName' | 'lastName'>>(u: T) {
   }
 }
 function beneficiaryDto<
-  T extends Pick<Beneficiary, 'id' | 'firstName' | 'usualName' | 'birthName'>
+  T extends Pick<
+    Beneficiary,
+    'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+  >
 >(u: T) {
   return {
     id: u.id,
     firstName: u.firstName,
     usualName: u.usualName,
-    birthName: u.birthName
+    birthName: u.birthName,
+    birthDate: u.birthDate
   }
 }
 function redirectionsDto<T extends SS['socialSupportRedirections']>(
@@ -164,8 +168,7 @@ export function filterSocialSupport<T extends SS>({
     },
     familyFileId: socialSupport.familyFileId,
 
-    beneficiary:
-      !!socialSupport.beneficiary && beneficiaryDto(socialSupport.beneficiary),
+    beneficiary: beneficiaryDto(socialSupport.beneficiary),
     beneficiaryId: socialSupport.beneficiaryId,
 
     dueDate: show(socialSupport.dueDate, conditions.details),
