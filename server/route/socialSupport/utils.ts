@@ -1,12 +1,12 @@
 import {
   getAppContextPermissions,
-  getCommentPermissions,
-  getDocumentPermissions,
   getSocialSupportPermissions,
   type SecurityRuleContext
 } from '~/server/security'
 import type { FamilyFileSecurityTarget } from '~/server/services'
 import {
+  filterComments,
+  filterDocuments,
   filterFileInstruction,
   filterFollowup,
   filterHelpRequest,
@@ -30,10 +30,6 @@ export function formatSocialSupportDetail(
   ctx: ProtectedAppContext,
   familyFile: FamilyFileSecurityTarget
 ) {
-  const {
-    rdvsp: { issuer }
-  } = useRuntimeConfig()
-
   const { _count } = socialSupport
 
   const socialSupportPermissions = getSocialSupportPermissions({
@@ -44,7 +40,8 @@ export function formatSocialSupportDetail(
 
   const appPermissions = getAppContextPermissions(ctx)
 
-  const { followup, fileInstruction, minister } = socialSupport
+  const { followup, fileInstruction, minister, documents, comments } =
+    socialSupport
 
   const conditions = {
     minister: appPermissions.module.ministere,
@@ -56,6 +53,7 @@ export function formatSocialSupportDetail(
     socialSupport,
     conditions
   })
+
   const filteredFileInstruction = fileInstruction
     ? filterFileInstruction({
         fileInstruction,
@@ -86,27 +84,18 @@ export function formatSocialSupportDetail(
       })
     : null
 
-  const { documents, comments, ...otherData } = filteredSocialSupport
+  const documentItems = filterDocuments({
+    documents,
+    conditions,
+    ctx,
+    familyFile
+  })
 
-  const documentItems = documents?.map(document => ({
-    document,
-    permissions: getDocumentPermissions({
-      ctx,
-      familyFile,
-      document
-    })
-  }))
-  const commentItems = comments?.map(comment => ({
-    comment,
-    permissions: getCommentPermissions({
-      ctx,
-      comment
-    })
-  }))
+  const commentItems = filterComments({ comments, ctx })
 
   return {
     data: {
-      ...otherData,
+      ...filteredSocialSupport,
       minister: minister,
       comments: commentItems,
       documents: documentItems,

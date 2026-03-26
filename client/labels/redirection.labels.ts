@@ -18,3 +18,12 @@ export const socialSupportRedirectionLabels: FieldLabels<SocialSupportRedirectio
     partnerOrganizationContactId: "Contact de l'organisme partenaire",
     externalStructureName: 'Nom structure/personne'
   }
+
+export const redirectionExportLabels: FieldLabels<SocialSupportRedirectionLabels> =
+  {
+    type: 'Types de redirection',
+    motif: 'Motifs de redirection',
+    partnerOrganizationId: 'Redirection vers organisme partenaire',
+    partnerOrganizationContactId: 'Contact des partenaires de redirection',
+    externalStructureName: 'Structures/Personnes associée aux redirections'
+  }

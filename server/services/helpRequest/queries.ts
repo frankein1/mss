@@ -29,7 +29,18 @@ export const include = {
           subjects: true,
           documents: true,
           minister: true,
-          socialSupportRedirections: true,
+          socialSupportRedirections: {
+            select: {
+              id: true,
+              type: true,
+              motif: true,
+              externalStructureName: true,
+              partnerOrganizationId: true,
+              partnerOrganizationContactId: true,
+              partnerOrganization: { select: { name: true } },
+              partnerOrganizationContact: { select: { name: true } }
+            }
+          },
           beneficiary: {
             select: {
               id: true,
@@ -107,13 +118,22 @@ export function filter(
     conditions
   })
 
+  // Attached document names are visible for all roles that can access the followup
+  const documentNames = socialSupport.documents.map(d => ({
+    key: d.key,
+    name: d.name
+  }))
+
   return {
     ...filteredHelpRequest,
     subject: socialSupportSubject,
     subjectId: socialSupportSubject?.id,
     fileInstruction: {
       ...filteredFileInstruction,
-      socialSupport: filteredSocialSupport
+      socialSupport: {
+        ...filteredSocialSupport,
+        documents: documentNames
+      }
     }
   }
 }

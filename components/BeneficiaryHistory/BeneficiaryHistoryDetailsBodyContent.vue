@@ -46,9 +46,7 @@
     </ul>
     <BeneficiaryRedirectionsDetailsBodyMetas
       v-if="socialSupport.socialSupportRedirections?.length"
-      :redirections="
-        socialSupport.socialSupportRedirections as SocialSupportRedirectionsDetails
-      "
+      :redirections="socialSupport.socialSupportRedirections"
     />
     <BeneficiaryHistoryDetailsBodyDocuments
       v-if="socialSupport.documents?.length"
@@ -127,7 +125,6 @@
   import type {
     CommentData,
     CommentItem,
-    SocialSupportRedirectionsDetails,
     SocialSupportDetailItem
   } from './types'
   import type { FamilyFilePermissions } from '~/server/security'

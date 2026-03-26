@@ -12,57 +12,164 @@ import type {
   PartnerOrganizationContact,
   FamilyFile,
   MinisterEntity,
-  SocialSupportRedirection
+  SocialSupportRedirection,
+  Beneficiary
 } from '@prisma/client'
+
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
+import type { ProtectedAppContext } from '~/server/trpc'
+import type { FamilyFileSecurityTarget } from '~/server/services'
+import {
+  getCommentPermissions,
+  getDocumentPermissions
+} from '~/server/security'
+
+interface Conditions {
+  details: boolean
+  minister: boolean
+  privateSynthesis: boolean
+}
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null
 }
 
-export function filterSocialSupport({
+function userDto<T extends Pick<User, 'id' | 'firstName' | 'lastName'>>(u: T) {
+  return {
+    id: u.id,
+    firstName: u.firstName,
+    lastName: u.lastName
+  }
+}
+function beneficiaryDto<
+  T extends Pick<
+    Beneficiary,
+    'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+  >
+>(u: T) {
+  return {
+    id: u.id,
+    firstName: u.firstName,
+    usualName: u.usualName,
+    birthName: u.birthName,
+    birthDate: u.birthDate
+  }
+}
+function redirectionsDto<T extends SS['socialSupportRedirections']>(
+  redirections: T
+) {
+  return redirections.map(r => ({
+    id: r.id,
+    type: r.type,
+    motif: r.motif,
+    partnerOrganizationId: r.partnerOrganizationId,
+    partnerOrganizationContactId: r.partnerOrganizationContactId,
+    partnerOrganization: {
+      name: r.partnerOrganization?.name
+    },
+    partnerOrganizationContact: {
+      name: r.partnerOrganizationContact?.name
+    },
+    externalStructureName: r.externalStructureName
+  }))
+}
+
+// The partial is due to filterFileInstruction & filterHousingHelpRequest
+// When those dto are refined, so should this one
+function partnerOrganizationDto<T extends Partial<PartnerOrganization>>(p: T) {
+  return {
+    id: p.id,
+    name: p.name
+  }
+}
+function partnerOrganizationContactDto<
+  T extends Partial<PartnerOrganizationContact>
+>(p: T) {
+  return {
+    id: p.id,
+    name: p.name
+  }
+}
+function commentWithCreatorDto<
+  T extends Comment & { createdBy: Pick<User, 'id' | 'firstName' | 'lastName'> }
+>(c: T) {
+  return {
+    id: c.id,
+    created: c.created,
+    updated: c.updated,
+    content: c.content,
+    createdBy: {
+      id: c.createdBy.id,
+      firstName: c.createdBy.firstName,
+      lastName: c.createdBy.lastName
+    }
+  }
+}
+function documentDto<T extends Document>(d: T) {
+  return {
+    key: d.key,
+    name: d.name,
+    size: d.size,
+    type: d.type,
+    mimeType: d.mimeType,
+    beneficiaryId: d.beneficiaryId,
+    createdById: d.createdById,
+    confidential: d.confidential
+  }
+}
+// This is a temporary fix. The query must be reviewed with select and exact type
+// matching
+type SS = SocialSupport & {
+  familyFile: FamilyFile & {
+    referents: User[]
+  }
+  minister?: MinisterEntity | null
+  beneficiary: BeneficiaryIdentification
+  createdBy?: User
+  lastUpdatedBy: User | null
+  subjects: SocialSupportSubject[]
+  documents?: Document[]
+  comments?: (Comment & { createdBy: User })[]
+  socialSupportRedirections: (Omit<
+    SocialSupportRedirection,
+    'createdAt' | 'socialSupportId'
+  > & {
+    partnerOrganization: { name: string } | null
+    partnerOrganizationContact: { name: string } | null
+  })[]
+}
+
+export function filterSocialSupport<T extends SS>({
   socialSupport,
   conditions
 }: {
-  socialSupport: SocialSupport & {
-    familyFile: FamilyFile & {
-      referents: User[]
-    }
-    minister?: MinisterEntity | null
-    beneficiary: BeneficiaryIdentification
-    createdBy: User
-    lastUpdatedBy: User | null
-    subjects: SocialSupportSubject[]
-    documents?: Document[]
-    comments?: (Comment & { createdBy: User })[]
-    socialSupportRedirections?: SocialSupportRedirection[]
-  }
-  conditions: {
-    details: boolean
-    minister: boolean
-    privateSynthesis: boolean
-  }
+  socialSupport: T
+  conditions: Conditions
 }) {
   return {
     id: socialSupport.id,
     socialSupportType: socialSupport.socialSupportType,
+    subtype: socialSupport.subtype,
     date: socialSupport.date,
     structureId: socialSupport.structureId,
     created: socialSupport.created,
-    createdBy: socialSupport.createdBy,
-    lastUpdatedBy: socialSupport.lastUpdatedBy,
+    createdBy: socialSupport.createdBy && userDto(socialSupport.createdBy),
+    lastUpdatedBy:
+      socialSupport.lastUpdatedBy && userDto(socialSupport.lastUpdatedBy),
     createdById: socialSupport.createdById,
     updated: socialSupport.updated,
     status: socialSupport.status,
     subjects: socialSupport.subjects,
 
-    familyFile: socialSupport.familyFile,
+    familyFile: {
+      id: socialSupport.familyFile.id,
+      structureId: socialSupport.familyFile.structureId,
+      referents: socialSupport.familyFile.referents.map(r => userDto(r))
+    },
     familyFileId: socialSupport.familyFileId,
 
-    beneficiary: socialSupport.beneficiary,
+    beneficiary: beneficiaryDto(socialSupport.beneficiary),
     beneficiaryId: socialSupport.beneficiaryId,
-
-    comments: socialSupport.comments,
 
     dueDate: show(socialSupport.dueDate, conditions.details),
 
@@ -81,11 +188,10 @@ export function filterSocialSupport({
       conditions.details
     ),
 
-    documents: show(socialSupport.documents, conditions.details),
     ministerId: show(socialSupport.ministerId, conditions.minister),
     minister: show(socialSupport.minister, conditions.minister),
     socialSupportRedirections: show(
-      socialSupport.socialSupportRedirections,
+      redirectionsDto(socialSupport.socialSupportRedirections || []),
       conditions.details
     ),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
@@ -169,11 +275,15 @@ export function filterFileInstruction({
     refusalReasonOther: show(fileInstruction.refusalReasonOther, details),
 
     instructorOrganization: show(
-      fileInstruction.instructorOrganization,
+      fileInstruction.instructorOrganization &&
+        partnerOrganizationDto(fileInstruction.instructorOrganization),
       details
     ),
     instructorOrganizationContact: show(
-      fileInstruction.instructorOrganizationContact,
+      fileInstruction.instructorOrganizationContact &&
+        partnerOrganizationContactDto(
+          fileInstruction.instructorOrganizationContact
+        ),
       details
     )
   }
@@ -225,11 +335,15 @@ export function filterHousingHelpRequest({
     ),
 
     prescribingOrganization: show(
-      housingHelpRequest.prescribingOrganization,
+      housingHelpRequest.prescribingOrganization &&
+        partnerOrganizationDto(housingHelpRequest.prescribingOrganization),
       details
     ),
     prescribingOrganizationContact: show(
-      housingHelpRequest.prescribingOrganizationContact,
+      housingHelpRequest.prescribingOrganizationContact &&
+        partnerOrganizationContactDto(
+          housingHelpRequest.prescribingOrganizationContact
+        ),
       details
     )
   }
@@ -271,12 +385,64 @@ export function filterHelpRequest({
       details
     ),
 
-    prescribingOrganization: show(helpRequest.prescribingOrganization, details),
+    prescribingOrganization: show(
+      helpRequest.prescribingOrganization &&
+        partnerOrganizationDto(helpRequest.prescribingOrganization),
+      details
+    ),
     prescribingOrganizationContact: show(
-      helpRequest.prescribingOrganizationContact,
+      helpRequest.prescribingOrganizationContact &&
+        partnerOrganizationContactDto(
+          helpRequest.prescribingOrganizationContact
+        ),
       details
     )
   }
+}
+
+export function filterDocuments({
+  documents,
+  conditions,
+  ctx,
+  familyFile
+}: {
+  documents: Document[]
+  conditions: {
+    details: boolean
+  }
+  ctx: ProtectedAppContext
+  familyFile: FamilyFileSecurityTarget
+}) {
+  return (
+    show(
+      documents?.map(document => {
+        return {
+          document: documentDto(document),
+          permissions: getDocumentPermissions({ ctx, familyFile, document })
+        }
+      }),
+      conditions.details
+    ) || []
+  )
+}
+
+export function filterComments({
+  comments,
+  ctx
+}: {
+  comments: (Comment & {
+    createdBy: Pick<User, 'id' | 'firstName' | 'lastName'>
+  })[]
+  ctx: ProtectedAppContext
+}) {
+  return (
+    comments?.map(comment => {
+      return {
+        comment: commentWithCreatorDto(comment),
+        permissions: getCommentPermissions({ ctx, comment })
+      }
+    }) || []
+  )
 }
 
 /** Check that at least one entry in element is defined */

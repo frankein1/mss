@@ -9,7 +9,7 @@
       @comment-deleted="emit('commentDeleted', $event)"
     />
     <BeneficiaryHistoryCommentAdd
-      v-if="familyFilePermissions.create.document"
+      v-if="familyFilePermissions.create.comment"
       :class="{ 'fr-mt-1w': items.length }"
       :social-support="socialSupport"
       @comment-added="emit('commentAdded', $event)"
