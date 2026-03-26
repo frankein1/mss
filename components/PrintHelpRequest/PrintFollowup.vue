@@ -71,7 +71,7 @@
             <AtomTextEditorReader
               :value="followup.synthesisRichText"
               :raw-text="followup.synthesis"
-              @on-updated="onUpdated"
+              @on-create="$emit('onCreate')"
             />
           </template>
 
@@ -105,9 +105,7 @@
   const props = defineProps<{
     followup: FollowupOutput
   }>()
-  const emit = defineEmits<{
-    onUpdated: []
-  }>()
+  defineEmits<{ onCreate: [] }>()
 
   const ministerName = computed(() => {
     if (!props.followup.minister) {
@@ -115,8 +113,4 @@
     }
     return formatMinisterName(props.followup.minister)
   })
-
-  const onUpdated = () => {
-    emit('onUpdated')
-  }
 </script>

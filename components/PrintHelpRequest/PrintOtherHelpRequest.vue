@@ -149,7 +149,7 @@
           <AtomTextEditorReader
             :value="helpRequest.fileInstruction.socialSupport.synthesisRichText"
             :raw-text="helpRequest.fileInstruction.socialSupport.synthesis"
-            @on-updated="onUpdated"
+            @on-create="$emit('onCreate')"
           />
         </template>
       </div>
@@ -167,12 +167,7 @@
   const props = defineProps<{
     helpRequest: HelpRequestOutput
   }>()
-  const emit = defineEmits<{
-    onUpdated: []
-  }>()
-  const onUpdated = () => {
-    emit('onUpdated')
-  }
+  defineEmits<{ onCreate: [] }>()
 
   const refusalReason = computed(() => {
     if (!props.helpRequest.fileInstruction.refusalReason) {
