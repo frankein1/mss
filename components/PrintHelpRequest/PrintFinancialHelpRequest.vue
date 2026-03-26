@@ -167,6 +167,56 @@
         </template>
         <template
           v-if="
+            helpRequest.fileInstruction.socialSupport.socialSupportRedirections
+              ?.length
+          "
+        >
+          <hr class="fr-mt-4w" />
+          <ul>
+            <li
+              v-for="redirection in helpRequest.fileInstruction.socialSupport
+                .socialSupportRedirections"
+              :key="redirection.id"
+            >
+              <span class="fr-text--bold">Réorientation&nbsp;:</span>
+              {{ socialSupportRedirectionTypeKeys.value(redirection.type) }}
+              <ul>
+                <li v-if="redirection.partnerOrganization?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganization.name }}
+                </li>
+                <li v-if="redirection.partnerOrganizationContact?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationContactId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganizationContact.name }}
+                </li>
+                <li v-if="redirection.externalStructureName">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.externalStructureName
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.externalStructureName }}
+                </li>
+                <li v-if="redirection.motif">
+                  <span class="fr-text--bold"
+                    >{{ socialSupportRedirectionLabels.motif }}&nbsp;:</span
+                  >
+                  {{ redirection.motif }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </template>
+        <template
+          v-if="
             helpRequest.fileInstruction.socialSupport.synthesisRichText ||
             helpRequest.fileInstruction.socialSupport.synthesis
           "
@@ -188,7 +238,9 @@
   import type { HelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { baseRefusalReasonKeys, paymentMethodKeys } from '~/client/options'
+  import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
   import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
