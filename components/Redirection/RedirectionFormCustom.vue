@@ -32,6 +32,7 @@
       </div>
       <VeeInput
         v-if="selectedType != null"
+        disabled
         :name="`socialSupportRedirections[${index}].motif`"
         label="Motif"
       />
