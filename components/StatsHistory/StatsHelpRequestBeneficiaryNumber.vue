@@ -1,18 +1,11 @@
 <template>
   <div class="feature-section fr-p-2w">
     <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
-    <AtomAlert
-      v-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées."
+    <StatsBeneficiaryNumber
+      v-if="beneficiaryTotalCount"
+      :beneficiary-counts="beneficiaryTotalCount"
+      history-type="helprequest"
     />
-    <template v-else-if="beneficiaryCounts && beneficiaryCounts > 0">
-      <StatsBeneficiaryNumber
-        v-if="beneficiaryCounts"
-        :beneficiary-counts
-        :history-type
-      />
-    </template>
     <p v-else>
       Commencez à créer des instructions de dossier dans les fiches de
       bénéficiaires pour voir apparaître les statistiques du nombre de
@@ -22,20 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
-  import type { StatFilterInput } from '~/server/schema'
-
-  const props = defineProps<{
-    filters: StatFilterInput
-    historyType?: 'helprequest'
-  }>()
-
-  const trpcClient = useTrpcClient()
-
-  const { data: beneficiaryCounts, error } =
-    await trpcClient.stat.getHelpRequestBeneficiaryNumber.useQuery(
-      toRef(() => props.filters)
-    )
+  defineProps<{ beneficiaryTotalCount: number }>()
 </script>
 
 <style lang="scss" scoped>

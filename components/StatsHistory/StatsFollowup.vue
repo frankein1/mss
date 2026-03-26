@@ -59,8 +59,7 @@
         <!-- ROW -->
         <div class="fr-col-12">
           <StatsFollowupBeneficiaryNumber
-            history-type="followup"
-            :filters="filters"
+            :beneficiary-total-count="followupBeneficiaryCount"
           />
         </div>
 
@@ -125,6 +124,7 @@
         >
           <StatsFollowupRedirections
             :total-count="followupCount"
+            :beneficiary-total-count="followupBeneficiaryCount"
             :filters="filters"
           />
         </StatsCard>
@@ -202,6 +202,10 @@
   } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
 
   const followupCount = computed(() => historyCounts.value?.followups || 0)
+
+  const followupBeneficiaryCount = computed(
+    () => historyCounts.value?.followupBeneficiaries || 0
+  )
 
   const followupCountLabel = computed(
     () =>
