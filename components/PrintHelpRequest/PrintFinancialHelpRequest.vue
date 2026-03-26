@@ -167,6 +167,45 @@
         </template>
         <template
           v-if="
+            helpRequest.fileInstruction.socialSupport.socialSupportRedirections
+              ?.length
+          "
+        >
+          <hr class="fr-mt-4w" />
+          <h3>Réorientations</h3>
+          <ul
+            v-for="redirection in helpRequest.fileInstruction.socialSupport
+              .socialSupportRedirections"
+            :key="redirection.id"
+          >
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.type"
+              :content="
+                socialSupportRedirectionTypeKeys.value(redirection.type)
+              "
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.partnerOrganizationId"
+              :content="redirection.partnerOrganization?.name"
+            />
+            <PrintDetailItem
+              :title="
+                socialSupportRedirectionLabels.partnerOrganizationContactId
+              "
+              :content="redirection.partnerOrganizationContact?.name"
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.externalStructureName"
+              :content="redirection.externalStructureName"
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.motif"
+              :content="redirection.motif"
+            />
+          </ul>
+        </template>
+        <template
+          v-if="
             helpRequest.fileInstruction.socialSupport.synthesisRichText ||
             helpRequest.fileInstruction.socialSupport.synthesis
           "
@@ -188,7 +227,9 @@
   import type { HelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { baseRefusalReasonKeys, paymentMethodKeys } from '~/client/options'
+  import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
   import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{

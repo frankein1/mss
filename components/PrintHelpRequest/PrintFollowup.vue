@@ -75,20 +75,48 @@
             />
           </template>
 
-          <li v-if="followup.redirected || followup.helpRequested">
+          <li v-if="followup.helpRequested">
             <span class="fr-text--bold">Actions entreprises&nbsp;:</span>
             <ul>
-              <li v-if="followup.redirected">
-                Réorienté après l'entretien<span v-if="followup.structureName"
-                  >&nbsp;: {{ followup.structureName }}</span
-                >
-              </li>
-              <li v-if="followup.helpRequested">
+              <li>
                 {{ followupFieldLabels.helpRequested }}
               </li>
             </ul>
           </li>
         </ul>
+        <template v-if="followup.socialSupportRedirections?.length">
+          <hr class="fr-mt-4w" />
+          <h3>Réorientations</h3>
+          <ul
+            v-for="redirection in followup.socialSupportRedirections"
+            :key="redirection.id"
+          >
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.type"
+              :content="
+                socialSupportRedirectionTypeKeys.value(redirection.type)
+              "
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.partnerOrganizationId"
+              :content="redirection.partnerOrganization?.name"
+            />
+            <PrintDetailItem
+              :title="
+                socialSupportRedirectionLabels.partnerOrganizationContactId
+              "
+              :content="redirection.partnerOrganizationContact?.name"
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.externalStructureName"
+              :content="redirection.externalStructureName"
+            />
+            <PrintDetailItem
+              :title="socialSupportRedirectionLabels.motif"
+              :content="redirection.motif"
+            />
+          </ul>
+        </template>
       </div>
     </div>
   </div>
@@ -99,7 +127,9 @@
   import type { FollowupOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
+  import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
+  import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
   import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
