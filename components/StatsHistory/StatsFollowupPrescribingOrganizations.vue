@@ -35,9 +35,8 @@
       :total-count="totalCount"
       :stats="prescribingOrganizationStats"
       :not-filled-route="
-        routes.file.AppHistory.path({
-          notFilled: FilterFollowupNotFilled.PrescribingOrganization,
-          tab: HistoryTab.Followups
+        routes.file.AppHistoryFollowups.path({
+          notFilled: FilterFollowupNotFilled.PrescribingOrganization
         })
       "
     />
@@ -54,7 +53,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
-  import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{

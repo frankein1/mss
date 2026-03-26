@@ -1,6 +1,5 @@
 import { FilesRoute, BeneficiariesRoute } from './utils'
 import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import type { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 import type { FilterBeneficiaryNotFilled } from '../constants/filters'
@@ -25,7 +24,7 @@ function createSuffixUrl(options?: {
   tab?: BeneficiaryTab
   item?: string
   originPage?: OriginPage
-  originTab?: HistoryTab
+  originTab?: string
 }) {
   const hasDefinedOptions = options && Object.values(options).every(o => !!o)
 
@@ -50,7 +49,7 @@ function getBeneficiaryRoute(
     tab?: BeneficiaryTab
     item?: string
     originPage?: OriginPage
-    originTab?: HistoryTab
+    originTab?: string
   }
 ) {
   if (!beneficiaryId) {
