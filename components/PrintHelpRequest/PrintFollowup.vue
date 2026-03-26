@@ -75,20 +75,59 @@
             />
           </template>
 
-          <li v-if="followup.redirected || followup.helpRequested">
+          <li v-if="followup.helpRequested">
             <span class="fr-text--bold">Actions entreprises&nbsp;:</span>
             <ul>
-              <li v-if="followup.redirected">
-                Réorienté après l'entretien<span v-if="followup.structureName"
-                  >&nbsp;: {{ followup.structureName }}</span
-                >
-              </li>
-              <li v-if="followup.helpRequested">
+              <li>
                 {{ followupFieldLabels.helpRequested }}
               </li>
             </ul>
           </li>
         </ul>
+        <template v-if="followup.socialSupportRedirections?.length">
+          <hr class="fr-mt-4w" />
+          <ul>
+            <li
+              v-for="redirection in followup.socialSupportRedirections"
+              :key="redirection.id"
+            >
+              <span class="fr-text--bold">Réorientation&nbsp;:</span>
+              {{ socialSupportRedirectionTypeKeys.value(redirection.type) }}
+              <ul>
+                <li v-if="redirection.partnerOrganization?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganization.name }}
+                </li>
+                <li v-if="redirection.partnerOrganizationContact?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationContactId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganizationContact.name }}
+                </li>
+                <li v-if="redirection.externalStructureName">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.externalStructureName
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.externalStructureName }}
+                </li>
+                <li v-if="redirection.motif">
+                  <span class="fr-text--bold"
+                    >{{ socialSupportRedirectionLabels.motif }}&nbsp;:</span
+                  >
+                  {{ redirection.motif }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </template>
       </div>
     </div>
   </div>
@@ -99,7 +138,9 @@
   import type { FollowupOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
+  import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
+  import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
   import { formatMinisterName } from '~/utils/minister'
 
   const props = defineProps<{
