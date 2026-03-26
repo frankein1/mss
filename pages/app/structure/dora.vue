@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
   import type { RouterOutput } from '~/server/trpc/routers'
+  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
@@ -28,6 +29,10 @@
   let mqMedium: MediaQueryList | null = null
 
   onMounted(() => {
+    useMatomo().trackEvent(
+      EventCategory.History,
+      BeneficiaryHistoryAction.SearchDoraStructure
+    )
     mqSmall = window.matchMedia('(max-width: 767px)')
     mqMedium = window.matchMedia('(max-width: 1247px)')
     updateCols()
