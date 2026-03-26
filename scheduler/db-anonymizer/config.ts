@@ -1,47 +1,11 @@
 import type { Prisma } from '@prisma/client'
 import type { SnakeCase } from './utils'
-/**
-// PRIO 1 OK
-Prisma.UserScalarFieldEnum
-Prisma.StructureScalarFieldEnum
-Prisma.SocialSupportSubjectScalarFieldEnum
-Prisma.FamilyFileScalarFieldEnum
-Prisma.BeneficiaryScalarFieldEnum
-Prisma.DocumentScalarFieldEnum
- public | _family_file_referents           | table | mss
 
-// PRIO 2 OK
-Prisma.SocialSupportScalarFieldEnum
- public | _document_to_social_support      | table | mss
- public | _social_support_to_followup_type | table | mss
-Prisma.PartnerOrganizationContactScalarFieldEnum
-Prisma.PartnerOrganizationScalarFieldEnum
-Prisma.FollowupScalarFieldEnum
-Prisma.FileInstructionScalarFieldEnum
-Prisma.HelpRequestScalarFieldEnum
-Prisma.HousingHelpRequestScalarFieldEnum
-
-// PRIO 3
-Prisma.AccountScalarFieldEnum
-Prisma.BeneficiaryRelativeScalarFieldEnum
-Prisma.ArchivedBeneficiaryScalarFieldEnum
-Prisma.CGUHistoryScalarFieldEnum
-Prisma.WorkshopScalarFieldEnum
-Prisma.WorkshopNameScalarFieldEnum
-Prisma.WorkshopAttendeeScalarFieldEnum
-Prisma.WorkshopExternalAttendeeScalarFieldEnum
-Prisma.UserActivityScalarFieldEnum
-
-// PRIO 4
-Prisma.NotificationScalarFieldEnum
-Prisma.Budget*ScalarFieldEnum
-Prisma.ExternalAccountScalarFieldEnum
-
-// NO
-Prisma.CommentScalarFieldEnum
-Prisma.DataInclusionStructureScalarFieldEnum
-Prisma.EmailScalarFieldEnum
-Prisma.ApiTokenScalarFieldEnum
+/** The following tables are excluded from the export
+- Comment
+- DataInclusionStructure (will be added for API v1)
+- Email
+- ApiToken
  */
 
 const configUser: Record<
@@ -761,6 +725,20 @@ const configExternalAccount: Record<
   session_state: false
 }
 
+const configRedirection: Record<
+  SnakeCase<keyof typeof Prisma.SocialSupportRedirectionScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  type: true,
+  motif: true,
+  created_at: true,
+  social_support_id: true,
+  external_structure_name: true,
+  partner_organization_id: true,
+  partner_organization_contact_id: true
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -795,7 +773,8 @@ export const CONFIG = {
   budget_expenses_loan: configBudgetExpensesLoan,
   budget_expenses_debt: configBudgetExpensesDebt,
   budget_expenses_custom: configBudgetExpensesCustom,
-  external_account: configExternalAccount
+  external_account: configExternalAccount,
+  social_support_redirection: configRedirection
 }
 
 export type TableName = keyof typeof CONFIG
