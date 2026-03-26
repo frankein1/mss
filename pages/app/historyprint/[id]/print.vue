@@ -84,9 +84,9 @@
   function formatName(ben?: BeneficiaryNames) {
     return ben
       ? formatBeneficiaryDisplayName({
-          firstName: nameOrEmpty(ben.firstName),
-          usualName: nameOrEmpty(ben.usualName),
-          birthName: nameOrEmpty(ben.birthName)
+          firstName: ben.firstName,
+          usualName: ben.usualName,
+          birthName: ben.birthName
         })
       : undefined
   }
@@ -182,6 +182,7 @@
   })
 
   const onSynthesisRendered = () => {
+    window.addEventListener('afterprint', onAfterPrint)
     window.print()
   }
 
