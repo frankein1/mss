@@ -9,23 +9,15 @@
 <script setup lang="ts">
   import { EditorContent, useEditor } from '@tiptap/vue-3'
 
-  const props = withDefaults(
-    defineProps<{
-      value?: string | null
-      rawText?: string | null
-    }>(),
-    {
-      value: null,
-      rawText: ''
-    }
-  )
-
-  const emit = defineEmits<{
-    onUpdated: []
+  const { value = null, rawText = '' } = defineProps<{
+    value?: string | null
+    rawText?: string | null
   }>()
 
+  const emit = defineEmits<{ onCreate: [] }>()
+
   const editor = useEditor({
-    content: props.value ? JSON.parse(props.value) : props.rawText,
+    content: value ? JSON.parse(value) : rawText,
     editable: false,
     enableContentCheck: true,
     onContentError({ error }) {
@@ -38,7 +30,7 @@
       }
     },
     onCreate() {
-      emit('onUpdated')
+      emit('onCreate')
     }
   })
 </script>

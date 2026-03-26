@@ -237,7 +237,7 @@
             :raw-text="
               housingHelpRequest.fileInstruction.socialSupport.synthesis
             "
-            @on-updated="onUpdated"
+            @on-create="$emit('onCreate')"
           />
         </template>
       </div>
@@ -267,12 +267,8 @@
     housingHelpRequest: HousingHelpRequestOutput
   }>()
 
-  const emit = defineEmits<{
-    onUpdated: []
-  }>()
-  const onUpdated = () => {
-    emit('onUpdated')
-  }
+  defineEmits<{ onCreate: [] }>()
+
   const askedHousing = computed(() => {
     if (!props.housingHelpRequest.askedHousing?.length) {
       return undefined
