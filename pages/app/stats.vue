@@ -4,83 +4,31 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs
+        <AtomAlert
+          v-if="fetchError"
+          :alert-type="AlertType.Error"
+          :message="fetchError"
+          class="fr-mb-4v"
+        />
+        <AtomRouteTabs
+          :model-value="activeTab"
           class="stats-tabs"
           tab-list-name="Statistiques de la structure"
           :tab-titles="tabTitles"
           :heading-level="2"
+          @update:model-value="onTabChange"
         >
-          <template #[tabTitles.at(0)?.panelId]>
-            <AtomAlert
-              v-if="fetchError"
-              :alert-type="AlertType.Error"
-              :message="fetchError"
-              class="fr-mb-4v"
-            />
-            <StatsBeneficiaries
-              v-if="
-                socialSupportSubjectOptions &&
-                beneficiariesCitiesOptions &&
-                agentsOptions
-              "
-              class="stats-filters"
-              :social-support-subject-options="socialSupportSubjectOptions"
-              :beneficiaries-cities-options="beneficiariesCitiesOptions"
-              :agent-options="agentsOptions"
-            />
-          </template>
-          <template #[tabTitles.at(1)?.panelId]>
-            <AtomAlert
-              v-if="fetchError"
-              :alert-type="AlertType.Error"
-              :message="fetchError"
-            />
-            <StatsFollowup
-              v-if="
-                socialSupportSubjectOptions &&
-                beneficiariesCitiesOptions &&
-                agentsOptions
-              "
-              :social-support-subject-options="socialSupportSubjectOptions"
-              :beneficiaries-cities-options="beneficiariesCitiesOptions"
-              :agent-options="agentsOptions"
-            />
-          </template>
-          <template #[tabTitles.at(2)?.panelId]>
-            <AtomAlert
-              v-if="fetchError"
-              :alert-type="AlertType.Error"
-              :message="fetchError"
-            />
-            <StatsHelpRequest
-              v-if="
-                socialSupportSubjectOptions &&
-                beneficiariesCitiesOptions &&
-                agentsOptions
-              "
-              :social-support-subject-options="socialSupportSubjectOptions"
-              :beneficiaries-cities-options="beneficiariesCitiesOptions"
-              :agent-options="agentsOptions"
-            />
-          </template>
-          <template #[tabTitles.at(3)?.panelId]>
-            <AtomAlert
-              v-if="fetchError"
-              :alert-type="AlertType.Error"
-              :message="fetchError"
-            />
-            <StatsWorkshops
-              v-if="
-                socialSupportSubjectOptions &&
-                beneficiariesCitiesOptions &&
-                agentsOptions
-              "
-              :social-support-subject-options="socialSupportSubjectOptions"
-              :beneficiaries-cities-options="beneficiariesCitiesOptions"
-              :agent-options="agentsOptions"
-            />
-          </template>
-        </AtomTabs>
+          <NuxtPage
+            v-if="
+              socialSupportSubjectOptions &&
+              beneficiariesCitiesOptions &&
+              agentsOptions
+            "
+            :social-support-subject-options="socialSupportSubjectOptions"
+            :beneficiaries-cities-options="beneficiariesCitiesOptions"
+            :agent-options="agentsOptions"
+          />
+        </AtomRouteTabs>
       </div>
     </div>
   </PageContainer>
@@ -97,32 +45,60 @@
 
   useHead({ title })
 
+  const route = useRoute()
+
   const tabTitles = [
     {
       tabId: 'Beneficiaires',
       panelId: panelId('Beneficiaires'),
       title: 'Bénéficiaires',
-      icon: 'fr-icon-user-line'
+      icon: 'fr-icon-user-line',
+      to: routes.stats.AppStatsBeneficiaries.path()
     },
     {
       tabId: 'Entretiens',
-      panelId: panelId('Entretients'),
+      panelId: panelId('Entretiens'),
       title: "Synthèses d'entretiens",
-      icon: 'fr-icon-draft-line'
+      icon: 'fr-icon-draft-line',
+      to: routes.stats.AppStatsFollowups.path()
     },
     {
       tabId: 'Instructions',
       panelId: panelId('Instructions'),
       title: 'Instructions de dossiers',
-      icon: 'fr-icon-questionnaire-line'
+      icon: 'fr-icon-questionnaire-line',
+      to: routes.stats.AppStatsFileInstructions.path()
     },
     {
       tabId: 'Ateliers',
       panelId: panelId('Ateliers'),
       title: 'Ateliers',
-      icon: 'fr-icon-calendar-line'
+      icon: 'fr-icon-calendar-line',
+      to: routes.stats.AppStatsWorkshops.path()
     }
   ]
+
+  const activeTab = computed(() =>
+    Math.max(
+      0,
+      tabTitles.findIndex(tab => route.path === tab.to)
+    )
+  )
+
+  async function onTabChange(index: number) {
+    if (!tabTitles[index]) {
+      return
+    }
+    await navigateTo(tabTitles[index].to ?? tabTitles?.[0]?.to)
+    await nextTick()
+    document.getElementById(tabTitles[index].tabId)?.focus()
+  }
+
+  onMounted(() => {
+    if (route.path === routes.stats.AppStats.path()) {
+      navigateTo(routes.stats.AppStatsBeneficiaries.path(), { replace: true })
+    }
+  })
 
   const trpcClient = useTrpcClient()
 
@@ -184,26 +160,4 @@
   .stats-tabs {
     height: calc(var(--tabs-height) + 30px);
   }
-
-  /* stylelint-disable selector-class-pattern */
-  .stats-filters {
-    :deep(.fromAge),
-    :deep(.toAge) {
-      .fr-input-wrap::before {
-        bottom: 0.75rem;
-        margin: auto;
-        pointer-events: none;
-        position: absolute;
-        right: 1.75rem;
-        top: 0.75rem;
-        content: 'an(s)';
-        line-height: 1rem;
-      }
-
-      .fr-input {
-        padding-right: 4rem;
-      }
-    }
-  }
-  /* stylelint-enable selector-class-pattern */
 </style>
