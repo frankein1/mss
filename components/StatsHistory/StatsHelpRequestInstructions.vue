@@ -35,9 +35,8 @@
         :display-total="true"
         :big-text="true"
         :not-filled-route="
-          routes.file.AppHistory.path({
-            notFilled: FilterFileInstructionNotFilled.InstructorOrganization,
-            tab: HistoryTab.FileInstructions
+          routes.file.AppHistoryFileInstructions.path({
+            notFilled: FilterFileInstructionNotFilled.InstructorOrganization
           })
         "
       />
@@ -55,7 +54,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { SupportColor } from '~/client/colors/support'
   import { routes } from '~/utils/routes'
-  import { HistoryTab } from '~/utils/constants/history'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 
   const props = defineProps<{

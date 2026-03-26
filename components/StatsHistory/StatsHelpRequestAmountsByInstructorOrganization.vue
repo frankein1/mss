@@ -34,15 +34,13 @@
   import type { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
-  import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const props = defineProps<{ filters: StatFilterInput }>()
 
-  const notFilledRoute = routes.file.AppHistory.path({
-    notFilled: FilterFileInstructionNotFilled.InstructorOrganization,
-    tab: HistoryTab.FileInstructions
+  const notFilledRoute = routes.file.AppHistoryFileInstructions.path({
+    notFilled: FilterFileInstructionNotFilled.InstructorOrganization
   })
 
   const trpcClient = useTrpcClient()

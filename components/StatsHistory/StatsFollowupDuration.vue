@@ -14,9 +14,8 @@
       :stats="durationStats"
       :total-count="totalCount"
       :not-filled-route="
-        routes.file.AppHistory.path({
-          notFilled: FilterFollowupNotFilled.Duration,
-          tab: HistoryTab.Followups
+        routes.file.AppHistoryFollowups.path({
+          notFilled: FilterFollowupNotFilled.Duration
         })
       "
     />
@@ -35,7 +34,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterFollowupNotFilled } from '~/utils/constants/filters'
-  import { HistoryTab } from '~/utils/constants/history'
   import { ChartColor } from '~/utils/color/chartColors'
   import type { StatsPiePropType } from '~/types/stat'
 
