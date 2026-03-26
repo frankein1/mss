@@ -18,6 +18,7 @@ describe('Statistics - Followups - Redirections', () => {
       await trpc.structureManager.stat.getFollowupRedirectionsStats(input)
 
     expect(stats.followupsWithRedirections._count).toBe(5)
+    expect(stats.beneficiariesWithRedirections._count).toBe(4)
     expect(stats.withTypeIsPartners._count).toBe(3)
     expect(stats.withTypeIsPartners.partners).toHaveLength(3)
     expect(stats.withTypeIsIntern._count).toBe(2)
@@ -42,6 +43,7 @@ describe('Statistics - Followups - Redirections', () => {
     const stats = await trpc.referent.stat.getFollowupRedirectionsStats(input)
 
     expect(stats.followupsWithRedirections._count).toBe(1)
+    expect(stats.beneficiariesWithRedirections._count).toBe(1)
     expect(stats.withTypeIsPartners._count).toBe(1)
     expect(stats.withTypeIsPartners.partners).toHaveLength(1)
     expect(stats.withTypeIsIntern._count).toBe(0)

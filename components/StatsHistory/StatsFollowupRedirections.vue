@@ -66,6 +66,8 @@
   const followupWithRedirections = computed(() => {
     const followupsWithRedirections =
       data.value?.followupsWithRedirections._count || 0
+    const beneficiariesWithRedirections =
+      data.value?.beneficiariesWithRedirections._count || 0
     return [
       {
         key: 'followupWithRedirections',
@@ -73,6 +75,13 @@
         color: SupportColor.followups,
         emphasis: true,
         count: followupsWithRedirections
+      },
+      {
+        key: 'beneficiariesWithRedirections',
+        label: 'Bénéficiaires avec au moins une réorientation',
+        color: SupportColor.followups,
+        emphasis: true,
+        count: beneficiariesWithRedirections
       }
     ]
   })

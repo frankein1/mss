@@ -67,6 +67,8 @@
   const helpRequestsWithRedirections = computed(() => {
     const helpRequestsWithRedirections =
       data.value?.helpRequestsWithRedirections._count || 0
+    const beneficiariesWithRedirections =
+      data.value?.beneficiariesWithRedirections._count || 0
     return [
       {
         key: 'helpRequestsWithRedirections',
@@ -74,6 +76,13 @@
         color: SupportColor.helpRequests,
         emphasis: true,
         count: helpRequestsWithRedirections
+      },
+      {
+        key: 'beneficiariesWithRedirections',
+        label: 'Bénéficiaires avec au moins une réorientation',
+        color: SupportColor.helpRequests,
+        emphasis: true,
+        count: beneficiariesWithRedirections
       }
     ]
   })
