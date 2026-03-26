@@ -60,12 +60,6 @@
     await nextTick()
     document.getElementById(tabTitles[index].tabId)?.focus()
   }
-
-  onMounted(() => {
-    if (route.path === routes.file.AppHistory.path()) {
-      navigateTo(routes.file.AppHistoryFollowups.path(), { replace: true })
-    }
-  })
 </script>
 
 <style scoped>
