@@ -26,7 +26,6 @@ import type {
 } from '@prisma/client'
 import {
   documentTypeKeys,
-  ministerKeys,
   followupDurationKeys,
   followupMediumKeys,
   followupStatusKeys,
@@ -52,7 +51,8 @@ import {
   helpRequestRefusalReasonKeys,
   fileInstructionTypeFilterKeys,
   nationalityKeys,
-  workshopAttendeeAttendanceKeys
+  workshopAttendeeAttendanceKeys,
+  socialSupportRedirectionTypeKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
@@ -306,6 +306,14 @@ type SocialSupportForFollowupData = FieldLabels<
   >
 >
 
+type RedirectionData = {
+  type: string | null
+  motif: string | null
+  partnerOrganizationName: string | null
+  partnerOrganizationContactName: string | null
+  externalStructureName: string | null
+}
+
 type FollowupData = FieldLabels<
   Omit<
     Followup,
@@ -322,6 +330,7 @@ type FollowupData = FieldLabels<
     actions: boolean
     documents: DocumentData[] | null
     subjectsNames: string
+    redirections: RedirectionData[] | null
   }
 
 const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
@@ -330,6 +339,15 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     name: document.name,
     type: documentTypeKeys.value(document.type) || null
   }))
+  const redirections =
+    socialSupport.socialSupportRedirections?.map(r => ({
+      type: socialSupportRedirectionTypeKeys.value(r.type) || null,
+      motif: r.motif || null,
+      partnerOrganizationName: r.partnerOrganization?.name || null,
+      partnerOrganizationContactName:
+        r.partnerOrganizationContact?.name || null,
+      externalStructureName: r.externalStructureName || null
+    })) || null
   return {
     createdBy: getPrettyUserName(socialSupport.createdBy),
     lastUpdatedBy: getPrettyUserName(socialSupport.lastUpdatedBy),
@@ -361,12 +379,14 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
       Boolean(socialSupport.followup?.forwardedToJustice) ||
       Boolean(socialSupport.followup?.redirected) ||
       Boolean(socialSupport.followup?.helpRequested) ||
-      Boolean(socialSupport.followup?.classified),
+      Boolean(socialSupport.followup?.classified) ||
+      Boolean(redirections && redirections.length > 0),
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
     redirected: socialSupport.followup?.redirected,
     structureName: socialSupport.followup?.structureName,
     helpRequested: socialSupport.followup?.helpRequested,
     classified: socialSupport.followup?.classified,
+    redirections,
     documents: documents || null
   }
 }
@@ -863,7 +883,16 @@ const getSocialSupports = async (
       },
       createdBy: true,
       lastUpdatedBy: true,
-      subjects: true
+      subjects: true,
+      socialSupportRedirections: {
+        select: {
+          type: true,
+          motif: true,
+          externalStructureName: true,
+          partnerOrganization: { select: { name: true } },
+          partnerOrganizationContact: { select: { name: true } }
+        }
+      }
     },
     orderBy: [{ date: 'desc' }, { created: 'desc' }]
   })
