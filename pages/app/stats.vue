@@ -94,12 +94,6 @@
     document.getElementById(tabTitles[index].tabId)?.focus()
   }
 
-  onMounted(() => {
-    if (route.path === routes.stats.AppStats.path()) {
-      navigateTo(routes.stats.AppStatsBeneficiaries.path(), { replace: true })
-    }
-  })
-
   const trpcClient = useTrpcClient()
 
   const {

@@ -4,25 +4,21 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs
+        <AtomRouteTabs
+          :model-value="activeTab"
           tab-list-name="Accompagnements"
           :tab-titles="tabTitles"
           :heading-level="2"
+          @update:model-value="onTabChange"
         >
-          <template #[tabTitles.at(0)?.panelId]>
-            <Followups />
-          </template>
-          <template #[tabTitles.at(1)?.panelId]>
-            <FileInstructions />
-          </template>
-        </AtomTabs>
+          <NuxtPage />
+        </AtomRouteTabs>
       </div>
     </div>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
@@ -30,20 +26,40 @@
 
   useHead({ title })
 
+  const route = useRoute()
+
   const tabTitles = [
     {
-      tabId: HistoryTab.Followups,
-      panelId: panelId(HistoryTab.Followups),
+      tabId: 'Followups',
+      panelId: panelId('Followups'),
       title: 'Entretiens',
-      icon: 'fr-icon-draft-line'
+      icon: 'fr-icon-draft-line',
+      to: routes.file.AppHistoryFollowups.path()
     },
     {
-      tabId: HistoryTab.FileInstructions,
-      panelId: panelId(HistoryTab.FileInstructions),
+      tabId: 'FileInstructions',
+      panelId: panelId('FileInstructions'),
       title: "Dossiers d'instruction",
-      icon: 'fr-icon-questionnaire-line'
+      icon: 'fr-icon-questionnaire-line',
+      to: routes.file.AppHistoryFileInstructions.path()
     }
   ]
+
+  const activeTab = computed(() =>
+    Math.max(
+      0,
+      tabTitles.findIndex(tab => route.path === tab.to)
+    )
+  )
+
+  async function onTabChange(index: number) {
+    if (!tabTitles[index]) {
+      return
+    }
+    await navigateTo(tabTitles[index].to ?? tabTitles?.[0]?.to)
+    await nextTick()
+    document.getElementById(tabTitles[index].tabId)?.focus()
+  }
 </script>
 
 <style scoped>

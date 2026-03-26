@@ -1,6 +1,5 @@
 import { AppRoute, FilesRoute, getRouteOptions } from './utils'
 import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import type { HistoryTab } from '~/utils/constants/history'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 import { formatFamilyFileName } from '~/utils/familyFile/formatFamilyFileName'
 import type { TypeSuivi } from '~/client/options'
@@ -25,7 +24,7 @@ export interface FamilyFileUrlOptions {
 
   item?: string
   originPage?: OriginPage
-  originTab?: HistoryTab
+  originTab?: string
 }
 
 function getFamilyFileRoute(
@@ -57,20 +56,26 @@ export const routes = {
   AppHistory: {
     name: 'AppHistory',
     title: 'Accompagnements',
-    path: (
-      options?:
-        | {
-            notFilled?: FilterFileInstructionNotFilled
-            tab?: HistoryTab.FileInstructions
-          }
-        | { notFilled?: FilterFollowupNotFilled; tab?: HistoryTab.Followups }
-    ) => {
+    path: () => `${AppRoute}/history`
+  },
+  AppHistoryFollowups: {
+    name: 'AppHistoryFollowups',
+    title: 'Entretiens',
+    path: (options?: { notFilled?: FilterFollowupNotFilled }) => {
       const notFilled = options?.notFilled
         ? `?not-filled=${options.notFilled}`
         : ''
-      const tabHash = options?.tab ? `#${options.tab}` : ''
-
-      return `${AppRoute}/history${notFilled}${tabHash}`
+      return `${AppRoute}/history/followups${notFilled}`
+    }
+  },
+  AppHistoryFileInstructions: {
+    name: 'AppHistoryFileInstructions',
+    title: "Dossiers d'instruction",
+    path: (options?: { notFilled?: FilterFileInstructionNotFilled }) => {
+      const notFilled = options?.notFilled
+        ? `?not-filled=${options.notFilled}`
+        : ''
+      return `${AppRoute}/history/file-instructions${notFilled}`
     }
   },
   AppHistoryPrint: {

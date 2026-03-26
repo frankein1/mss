@@ -25,9 +25,8 @@
       :total-count="housingHelpRequestCount"
       :stats="housingHelpRequestContextStats"
       :not-filled-route="
-        routes.file.AppHistory.path({
-          notFilled: FilterFileInstructionNotFilled.HousingIsFirst,
-          tab: HistoryTab.FileInstructions
+        routes.file.AppHistoryFileInstructions.path({
+          notFilled: FilterFileInstructionNotFilled.HousingIsFirst
         })
       "
     />
@@ -36,9 +35,8 @@
       :total-count="housingHelpRequestCount"
       :stats="housingHelpRequestReasonStats"
       :not-filled-route="
-        routes.file.AppHistory.path({
-          notFilled: FilterFileInstructionNotFilled.HousingReason,
-          tab: HistoryTab.FileInstructions
+        routes.file.AppHistoryFileInstructions.path({
+          notFilled: FilterFileInstructionNotFilled.HousingReason
         })
       "
     />
@@ -60,7 +58,6 @@
   import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
-  import { HistoryTab } from '~/utils/constants/history'
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{

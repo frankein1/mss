@@ -37,7 +37,7 @@
         :key="status"
       >
         <NuxtLink
-          :to="routes.file.AppHistory.path({ tab })"
+          :to="historyPath"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
           @click="onNavigate(status)"
         >
@@ -58,7 +58,6 @@
   import type { SocialSupportStatus } from '@prisma/client'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
-  import { HistoryTab } from '~/utils/constants/history'
   import { EventCategory, OverviewToHistoryEventAction } from '~/types/matomo'
 
   type OngoingSocialSupportStatus = Exclude<
@@ -88,10 +87,10 @@
     errorMessage: string
   }>()
 
-  const tab = computed(() =>
+  const historyPath = computed(() =>
     props.isFileInstructions
-      ? HistoryTab.FileInstructions
-      : HistoryTab.Followups
+      ? routes.file.AppHistoryFileInstructions.path()
+      : routes.file.AppHistoryFollowups.path()
   )
 
   function onNavigate(status: OngoingSocialSupportStatus) {
