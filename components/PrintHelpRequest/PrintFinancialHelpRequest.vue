@@ -172,36 +172,47 @@
           "
         >
           <hr class="fr-mt-4w" />
-          <h3>Réorientations</h3>
-          <ul
-            v-for="redirection in helpRequest.fileInstruction.socialSupport
-              .socialSupportRedirections"
-            :key="redirection.id"
-          >
-            <PrintDetailItem
-              :title="socialSupportRedirectionLabels.type"
-              :content="
-                socialSupportRedirectionTypeKeys.value(redirection.type)
-              "
-            />
-            <PrintDetailItem
-              :title="socialSupportRedirectionLabels.partnerOrganizationId"
-              :content="redirection.partnerOrganization?.name"
-            />
-            <PrintDetailItem
-              :title="
-                socialSupportRedirectionLabels.partnerOrganizationContactId
-              "
-              :content="redirection.partnerOrganizationContact?.name"
-            />
-            <PrintDetailItem
-              :title="socialSupportRedirectionLabels.externalStructureName"
-              :content="redirection.externalStructureName"
-            />
-            <PrintDetailItem
-              :title="socialSupportRedirectionLabels.motif"
-              :content="redirection.motif"
-            />
+          <ul>
+            <li
+              v-for="redirection in helpRequest.fileInstruction.socialSupport
+                .socialSupportRedirections"
+              :key="redirection.id"
+            >
+              <span class="fr-text--bold">Réorientation&nbsp;:</span>
+              {{ socialSupportRedirectionTypeKeys.value(redirection.type) }}
+              <ul>
+                <li v-if="redirection.partnerOrganization?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganization.name }}
+                </li>
+                <li v-if="redirection.partnerOrganizationContact?.name">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.partnerOrganizationContactId
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.partnerOrganizationContact.name }}
+                </li>
+                <li v-if="redirection.externalStructureName">
+                  <span class="fr-text--bold"
+                    >{{
+                      socialSupportRedirectionLabels.externalStructureName
+                    }}&nbsp;:</span
+                  >
+                  {{ redirection.externalStructureName }}
+                </li>
+                <li v-if="redirection.motif">
+                  <span class="fr-text--bold"
+                    >{{ socialSupportRedirectionLabels.motif }}&nbsp;:</span
+                  >
+                  {{ redirection.motif }}
+                </li>
+              </ul>
+            </li>
           </ul>
         </template>
         <template
