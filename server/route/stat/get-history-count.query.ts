@@ -4,7 +4,9 @@ import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import { prepareSocialSupportStatFilters } from '~/server/query/stats/helpers'
 import {
+  getFollowupBeneficiaryNumberQuery,
   getFollowupCountQuery,
+  getHelpRequestBeneficiaryNumberQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
 import type { SecurityRuleContext } from '~/server/security'
@@ -14,6 +16,7 @@ import { FollowupRepo } from '~/server/database'
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.stats
 
+/* This could be splitted into two routes to avoid overfetching */
 const handler = async ({
   input,
   ctx: { user }
@@ -21,17 +24,32 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const helpRequests = await getHelpRequestCountQuery(user, input)
-  const followups = await getFollowupCountQuery(user, input)
+  const [
+    helpRequests,
+    followups,
+    firstFollowups,
+    followupBeneficiaries,
+    helpRequestBeneficiaries
+  ] = await Promise.all([
+    getHelpRequestCountQuery(user, input),
+    getFollowupCountQuery(user, input),
+    FollowupRepo.count(user, {
+      where: {
+        firstFollowup: true,
+        socialSupport: prepareSocialSupportStatFilters(input)
+      }
+    }),
+    getFollowupBeneficiaryNumberQuery(user, input),
+    getHelpRequestBeneficiaryNumberQuery(user, input)
+  ])
 
-  const firstFollowups = await FollowupRepo.count(user, {
-    where: {
-      firstFollowup: true,
-      socialSupport: prepareSocialSupportStatFilters(input)
-    }
-  })
-
-  return { helpRequests, followups, firstFollowups }
+  return {
+    helpRequests,
+    followups,
+    firstFollowups,
+    followupBeneficiaries,
+    helpRequestBeneficiaries
+  }
 }
 
 export const getHistoryCountsQuery = createQuery({

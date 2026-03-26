@@ -49,8 +49,7 @@
         <!-- ROW -->
         <div class="fr-col-12">
           <StatsHelpRequestBeneficiaryNumber
-            history-type="helprequest"
-            :filters="filters"
+            :beneficiary-total-count="helpRequestBeneficiaryCount"
           />
         </div>
 
@@ -131,6 +130,7 @@
         >
           <StatsHelpRequestRedirections
             :total-count="helpRequestCount"
+            :beneficiary-total-count="helpRequestBeneficiaryCount"
             :filters="filters"
           />
         </StatsCard>
@@ -213,6 +213,10 @@
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests.total || 0
+  )
+
+  const helpRequestBeneficiaryCount = computed(
+    () => historyCounts.value?.helpRequestBeneficiaries || 0
   )
 
   const helpRequestCountLabel = computed(

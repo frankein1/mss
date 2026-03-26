@@ -8,23 +8,26 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartition des réorientations n'ont pas pu être chargées."
   />
-  <template
-    v-if="
-      followupWithRedirections &&
-      followupWithRedirections.length &&
-      prescribingOrganizationStats &&
-      prescribingOrganizationStats.length
-    "
-  >
+  <template v-if="followupsWithRedirections?.length">
     <StatsList
       :total-count="totalCount"
-      :stats="followupWithRedirections"
+      :stats="followupsWithRedirections"
       :display-total="false"
       stats-bar
     />
-
     <hr />
-    <p class="fr-text--xs text--muted">
+    <StatsList
+      v-if="beneficiariesWithRedirections?.length"
+      :total-count="beneficiaryTotalCount"
+      :stats="beneficiariesWithRedirections"
+      :display-total="false"
+      stats-bar
+    />
+    <hr />
+    <p
+      v-if="redirectionTypes.length"
+      class="fr-text--xs text--muted"
+    >
       <span class="fr-text--bold">RÉPARTITION DES RÉORIENTATIONS</span>
       <br />
       Pourcentage calculé sur le total de synthèses d’entretiens. Une synthèse
@@ -32,8 +35,8 @@
       pourcentages peut être supérieure à 100&nbsp;%.
     </p>
     <StatsList
-      :total-count="followupsWithRedirectionscount"
-      :stats="prescribingOrganizationStats"
+      :total-count="totalCount"
+      :stats="redirectionTypes"
       :with-sum="false"
     />
   </template>
@@ -50,6 +53,7 @@
 
   const props = defineProps<{
     totalCount: number
+    beneficiaryTotalCount: number
     filters: StatFilterInput
   }>()
 
@@ -59,25 +63,31 @@
       toRef(() => props.filters)
     )
 
-  const followupsWithRedirectionscount = computed(
-    () => data.value?.followupsWithRedirections._count || 0
-  )
-
-  const followupWithRedirections = computed(() => {
-    const followupsWithRedirections =
-      data.value?.followupsWithRedirections._count || 0
+  const followupsWithRedirections = computed(() => {
     return [
       {
         key: 'followupWithRedirections',
         label: 'Entretiens avec au moins une réorientation',
         color: SupportColor.followups,
         emphasis: true,
-        count: followupsWithRedirections
+        count: data.value?.followupsWithRedirections._count || 0
       }
     ]
   })
 
-  const prescribingOrganizationStats =
+  const beneficiariesWithRedirections = computed(() => {
+    return [
+      {
+        key: 'beneficiariesWithRedirections',
+        label: 'Bénéficiaires avec au moins une réorientation',
+        color: SupportColor.followups,
+        emphasis: true,
+        count: data.value?.beneficiariesWithRedirections._count || 0
+      }
+    ]
+  })
+
+  const redirectionTypes =
     computed(() => {
       const parters = data.value?.withTypeIsPartners.partners.map(partner => {
         return {

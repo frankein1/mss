@@ -1,5 +1,3 @@
-import type { RouterOutput } from '~/server/trpc/routers'
-
 export enum FileInstructionPeriodFilter {
   ThisYear = 'ThisYear',
   LastYear = 'LastYear',
@@ -7,5 +5,3 @@ export enum FileInstructionPeriodFilter {
   LastMonth = 'LastMonth',
   Custom = 'Custom'
 }
-
-export type HistoryCounts = RouterOutput['stat']['getHistoryCounts']

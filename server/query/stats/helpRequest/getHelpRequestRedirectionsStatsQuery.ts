@@ -19,7 +19,8 @@ export async function getHelpRequestRedirectionsStatsQuery(
       select: {
         socialSupportId: true,
         type: true,
-        partnerOrganizationId: true
+        partnerOrganizationId: true,
+        socialSupport: { select: { beneficiaryId: true } }
       }
     }),
     PartnerOrganizationRepo.findMany(user, { select: { id: true, name: true } })
@@ -32,6 +33,9 @@ export async function getHelpRequestRedirectionsStatsQuery(
   return {
     helpRequestsWithRedirections: {
       _count: new Set(redirections.map(r => r.socialSupportId)).size
+    },
+    beneficiariesWithRedirections: {
+      _count: new Set(redirections.map(r => r.socialSupport.beneficiaryId)).size
     },
     withTypeIsPartners: {
       _count: countByTypes['PartnerOrganization'],
