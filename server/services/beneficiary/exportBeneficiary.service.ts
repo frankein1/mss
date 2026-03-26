@@ -26,7 +26,6 @@ import type {
 } from '@prisma/client'
 import {
   documentTypeKeys,
-  ministerKeys,
   followupDurationKeys,
   followupMediumKeys,
   followupStatusKeys,
@@ -308,7 +307,7 @@ type SocialSupportForFollowupData = FieldLabels<
 >
 
 type RedirectionData = {
-  type: string
+  type: string | null
   motif: string | null
   partnerOrganizationName: string | null
   partnerOrganizationContactName: string | null
@@ -342,7 +341,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
   }))
   const redirections =
     socialSupport.socialSupportRedirections?.map(r => ({
-      type: socialSupportRedirectionTypeKeys.value(r.type),
+      type: socialSupportRedirectionTypeKeys.value(r.type) || null,
       motif: r.motif || null,
       partnerOrganizationName: r.partnerOrganization?.name || null,
       partnerOrganizationContactName:
