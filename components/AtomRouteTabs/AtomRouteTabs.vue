@@ -8,6 +8,7 @@
       <DsfrTabItem
         v-for="(tab, index) of tabTitles"
         :key="index"
+        class="force-focus-visible"
         :tab-id="tab.tabId"
         :panel-id="tab.panelId"
         @click="model = index"

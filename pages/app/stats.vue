@@ -76,7 +76,7 @@
       icon: 'fr-icon-calendar-line',
       to: routes.stats.AppStatsWorkshops.path()
     }
-  ] as const
+  ]
 
   const activeTab = computed(() =>
     Math.max(
@@ -85,8 +85,13 @@
     )
   )
 
-  function onTabChange(index: number) {
-    navigateTo(tabTitles[index]?.to ?? tabTitles[0].to)
+  async function onTabChange(index: number) {
+    if (!tabTitles[index]) {
+      return
+    }
+    await navigateTo(tabTitles[index].to ?? tabTitles?.[0]?.to)
+    await nextTick()
+    document.getElementById(tabTitles[index].tabId)?.focus()
   }
 
   onMounted(() => {
