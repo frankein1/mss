@@ -127,9 +127,6 @@ export const statRouter = router({
   getHelpRequestBeneficiaryNumber: protectedProcedure
     .input(routes.getHelpRequestBeneficiaryNumberQ.inputValidation)
     .query(routes.getHelpRequestBeneficiaryNumberQ.execute),
-  getFollowupBeneficiaryNumber: protectedProcedure
-    .input(routes.getFollowupBeneficiaryNumberQ.inputValidation)
-    .query(routes.getFollowupBeneficiaryNumberQ.execute),
   getWorkshopNameStats: protectedProcedure
     .input(routes.getWorkshopNameStatsQuery.inputValidation)
     .query(routes.getWorkshopNameStatsQuery.execute),

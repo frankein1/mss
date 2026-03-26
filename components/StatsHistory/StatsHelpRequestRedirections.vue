@@ -8,23 +8,26 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartition des réorientations n'ont pas pu être chargées."
   />
-  <template
-    v-if="
-      helpRequestsWithRedirections &&
-      helpRequestsWithRedirections.length &&
-      prescribingOrganizationStats &&
-      prescribingOrganizationStats.length
-    "
-  >
+  <template v-if="helpRequestsWithRedirections?.length">
     <StatsList
       :total-count="totalCount"
       :stats="helpRequestsWithRedirections"
       :display-total="false"
       stats-bar
     />
-
     <hr />
-    <p class="fr-text--xs text--muted">
+    <StatsList
+      v-if="beneficiariesWithRedirections?.length"
+      :total-count="beneficiaryTotalCount"
+      :stats="beneficiariesWithRedirections"
+      :display-total="false"
+      stats-bar
+    />
+    <hr />
+    <p
+      v-if="redirectionTypes.length"
+      class="fr-text--xs text--muted"
+    >
       <span class="fr-text--bold">RÉPARTITION DES RÉORIENTATIONS</span>
       <br />
       Pourcentage calculé sur le total d'instructions de dossiers. Une demande
@@ -32,8 +35,8 @@
       pourcentages peut être supérieure à 100&nbsp;%.
     </p>
     <StatsList
-      :total-count="helpRequestsWithRedirectionsCount"
-      :stats="prescribingOrganizationStats"
+      :total-count="totalCount"
+      :stats="redirectionTypes"
       :with-sum="false"
     />
   </template>
@@ -51,6 +54,7 @@
 
   const props = defineProps<{
     totalCount: number
+    beneficiaryTotalCount: number
     filters: StatFilterInput
   }>()
 
@@ -60,34 +64,31 @@
       toRef(() => props.filters)
     )
 
-  const helpRequestsWithRedirectionsCount = computed(
-    () => data.value?.helpRequestsWithRedirections._count || 0
-  )
-
   const helpRequestsWithRedirections = computed(() => {
-    const helpRequestsWithRedirections =
-      data.value?.helpRequestsWithRedirections._count || 0
-    const beneficiariesWithRedirections =
-      data.value?.beneficiariesWithRedirections._count || 0
     return [
       {
         key: 'helpRequestsWithRedirections',
         label: "Demandes d'aide avec au moins une réorientation",
         color: SupportColor.helpRequests,
         emphasis: true,
-        count: helpRequestsWithRedirections
-      },
+        count: data.value?.helpRequestsWithRedirections._count || 0
+      }
+    ]
+  })
+
+  const beneficiariesWithRedirections = computed(() => {
+    return [
       {
         key: 'beneficiariesWithRedirections',
         label: 'Bénéficiaires avec au moins une réorientation',
         color: SupportColor.helpRequests,
         emphasis: true,
-        count: beneficiariesWithRedirections
+        count: data.value?.beneficiariesWithRedirections._count || 0
       }
     ]
   })
 
-  const prescribingOrganizationStats = computed(() => {
+  const redirectionTypes = computed(() => {
     const partners = data.value?.withTypeIsPartners.partners.map(partner => {
       return {
         key: partner.id,
