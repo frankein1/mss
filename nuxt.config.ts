@@ -223,8 +223,8 @@ export default defineNuxtConfig({
       keyId: process.env.NUXT_KMS_KEY_ID || ''
     },
     document: {
-      useEncryption:
-        (process.env.DOCUMENT_USE_ENCRYPTION || 'false') === 'true',
+      useS3Storage:
+        (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
       encryptionVersion: '1',
       encryptionAlgorithm: 'aes_256_gcm'
     },
