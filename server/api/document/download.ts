@@ -139,7 +139,7 @@ async function downloadAndDecryptFromS3(
 
   if (!res.success) {
     console.error(`download: ${res.reason}`)
-    throw badrequest(`download: failure to download document`)
+    throw internal(`download: failure to download document`)
   }
 
   return Buffer.from(res.fileContent)

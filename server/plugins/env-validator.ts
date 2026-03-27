@@ -23,11 +23,7 @@ export default defineNitroPlugin(() => {
       throw internal('env-validator: missing kms configuration')
     }
 
-    if (!config.document.encryptionAlgorithm) {
-      /** Check encryption setup is s3 storage is activated */
-      throw internal('env-validator: no encryption algorithm defined')
-    }
-
+    /** Check encryption setup is s3 storage is activated */
     if (
       !config.document.encryptionVersion ||
       !config.document.encryptionAlgorithm

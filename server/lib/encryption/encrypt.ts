@@ -40,7 +40,7 @@ export async function encrypt(
   }
 
   /** The webcrypto API needs to import the DEK in a specific format */
-  const algorithm = ALGORITHMS[config.document.encryptionAlgorithm] || ''
+  const algorithm = ALGORITHMS[config.document.encryptionAlgorithm]
   const extractable = false
   const encryptionKey = await webcrypto.subtle.importKey(
     'raw',

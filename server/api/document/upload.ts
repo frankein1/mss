@@ -20,7 +20,7 @@ import {
   generateFilenameForDocument,
   generateFileRootForDocument
 } from '~/server/lib/s3/helper'
-import { uploadWithEncryption } from '~/server/lib/s3/file'
+import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
 
 export interface MultiPartData {
   data: Buffer
@@ -258,30 +258,36 @@ async function uploadEncryptedToS3({
     }
   })
 
-  const document = await DocumentRepo.create(user, {
-    select: {
-      key: true,
-      confidential: true,
-      createdById: true
-    },
-    data: {
-      key: documentKey,
-      createdById: user.id,
-      familyFileId,
-      beneficiaryId,
-      name: filename,
-      filenameDisk: bucketKey,
-      filenameDownload: bucketKey,
-      type: input.type,
-      confidential: input.confidential,
-      tags: input.tags,
-      size: input.file.size,
-      mimeType: input.file.mimeType,
-      migrated: true // migrated to S3
-    }
-  })
+  try {
+    const document = await DocumentRepo.create(user, {
+      select: {
+        key: true,
+        confidential: true,
+        createdById: true
+      },
+      data: {
+        key: documentKey,
+        createdById: user.id,
+        familyFileId,
+        beneficiaryId,
+        name: filename,
+        filenameDisk: bucketKey,
+        filenameDownload: filename,
+        type: input.type,
+        confidential: input.confidential,
+        tags: input.tags,
+        size: input.file.size,
+        mimeType: input.file.mimeType,
+        migrated: true // migrated to S3
+      }
+    })
 
-  return document
+    return document
+  } catch (e) {
+    const config = useRuntimeConfig()
+    await deleteFile(config, bucketKey)
+    throw e
+  }
 }
 
 function getFormData(multipartFormData: MultiPartData[]) {
