@@ -12,3 +12,6 @@ export const forbidden = (message: string, statusMessage?: string) =>
 
 export const badrequest = (message: string) =>
   createError({ statusCode: 400, message })
+
+export const internal = (message: string) =>
+  createError({ statusCode: 500, message })
