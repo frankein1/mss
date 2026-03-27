@@ -4,6 +4,9 @@ import { DocumentRepo } from '~/server/database'
 import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
 import { badrequest, forbidden } from '~/utils/api/errors'
+import { prismaClient } from '~/server/prisma'
+import type { JwtUser } from '~/server/lib/jwt'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 export default defineEventHandler(async event => {
   const user = event.context.auth?.user
@@ -42,22 +45,8 @@ export default defineEventHandler(async event => {
     throw forbidden('download: user is not allowed to view document')
   }
 
-  const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: { key },
-    select: {
-      mimeType: true,
-      name: true,
-      size: true,
-      documentContent: {
-        select: {
-          id: true,
-          content: true
-        }
-      }
-    }
-  })
-
-  const documentContent = document.documentContent
+  const document = await getDocumentMetadata(key, user)
+  const documentContent = await getDocumentContent(key, document)
 
   if (!documentContent) {
     throw createError('No document found')
@@ -79,5 +68,55 @@ export default defineEventHandler(async event => {
     `attachment; filename="${encodeURIComponent(document.name)}"`
   )
 
-  return documentContent.content
+  return documentContent
 })
+
+async function getDocumentMetadata(key: string, user: JwtUser) {
+  return await DocumentRepo.findUniqueOrThrow(user, {
+    where: { key },
+    select: {
+      mimeType: true,
+      name: true,
+      size: true,
+      migrated: true,
+      filenameDisk: true
+    }
+  })
+}
+
+type DocumentMetadata = Awaited<ReturnType<typeof getDocumentMetadata>>
+
+async function getDocumentContent(key: string, document: DocumentMetadata) {
+  const config = useRuntimeConfig()
+  if (config.document.useS3Storage) {
+    if (!document.migrated) {
+      // Retrieve document content from local database
+      return await downloadFromDb(key)
+    }
+    return await downloadAndDecryptFromS3(config, key, document)
+  }
+
+  return await downloadFromDb(key)
+}
+
+/** This function should only be used when key has been validated previously
+ *
+ * Why: It uses prismaClient directly. It is possible here because the document key has already
+ * been validated for access with `DocumentService.getEditionPermissions`
+ */
+async function downloadFromDb(key: string) {
+  const d = await prismaClient.documentContent.findUniqueOrThrow({
+    where: { documentKey: key },
+    select: { content: true }
+  })
+
+  return d.content
+}
+
+async function downloadAndDecryptFromS3(
+  _config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>,
+  _key: string,
+  _document: DocumentMetadata
+): Promise<never> {
+  throw badrequest('download: not implemented')
+}

@@ -4,7 +4,6 @@ import { NotificationType, UserActivityType } from '@prisma/client'
 import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
-import { forbiddenError, invalidError } from '~/server/trpc'
 import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import type { FamilyFileSecurityTarget } from '~/server/services'
@@ -15,6 +14,8 @@ import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 import { validateDocumentType } from '~/server/security/document/validate-document-type'
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
+import type { RuntimeConfig } from 'nuxt/schema'
+import { forbidden, badrequest } from '~/utils/api/errors'
 
 export interface MultiPartData {
   data: Buffer
@@ -31,31 +32,24 @@ export default defineEventHandler(async event => {
     user.role === 'Administrator' ||
     !user.structureId
   ) {
-    throw forbiddenError()
+    throw forbidden('upload: not authorized')
   }
   const multipartFormData = await readMultipartFormData(event)
   if (!multipartFormData) {
-    throw createError({
-      statusCode: 400,
-      message: 'multipart form data non présent'
-    })
+    throw badrequest('multipart form data non présent')
   }
   const data = getFormData(multipartFormData)
   if (!data) {
-    throw createError({
-      statusCode: 400,
-      message: 'Aucune donnée présente dans le multipart form data'
-    })
+    throw badrequest(
+      'upload: Aucune donnée présente dans le multipart form data'
+    )
   }
 
   let input
   try {
     input = addDocumentSchema.parse(data)
   } catch {
-    throw createError({
-      statusCode: 400,
-      message: 'Les données entrantes ne sont pas valides'
-    })
+    throw badrequest('upload: Les données entrantes ne sont pas valides')
   }
 
   const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
@@ -64,16 +58,13 @@ export default defineEventHandler(async event => {
   )
 
   if (!familyFile) {
-    throw createError({
-      statusCode: 400,
-      message: `Aucun foyer avec l'id ${input.familyFileId}`
-    })
+    throw badrequest(`upload: Aucun foyer avec l'id ${input.familyFileId}`)
   }
 
   const structureType = user.structureType
 
   if (!structureType) {
-    throw invalidError('No structure type')
+    throw badrequest('upload: No structure type')
   }
 
   const ctx = {
@@ -91,23 +82,21 @@ export default defineEventHandler(async event => {
   )
 
   if (!permissions.create) {
-    throw forbiddenError()
+    throw forbidden('upload: not authorized')
   }
 
   if (!multipartFormData?.length) {
-    throw invalidError('No multipart form data')
+    throw badrequest('upload: No multipart form data')
   }
 
   const file = multipartFormData[0]
 
   if (!file || !validateDocumentType(file.data)) {
-    throw createError({
-      statusCode: 400,
-      message: 'Format de fichier invalide'
-    })
+    throw badrequest('upload: Format de fichier invalide')
   }
 
-  const document = await addDocument(input, user, file)
+  const document = await createDocument(input, user, file)
+
   await addNotification(ctx, document, familyFile, input.beneficiaryId)
   await updateBeneficiariesLastActivity([document.beneficiaryId])
   addUserActivity({
@@ -121,6 +110,19 @@ export default defineEventHandler(async event => {
 
   return send(event, document.key)
 })
+
+async function createDocument(
+  input: AddDocumentInput,
+  user: JwtUser,
+  file: MultiPartData
+) {
+  const config = useRuntimeConfig()
+  if (config.document.useS3Storage) {
+    return await uploadEncryptedToS3(config, input, user, file)
+  }
+
+  return await uploadToDb(input, user, file)
+}
 
 async function addNotification(
   ctx: SecurityRuleContext,
@@ -157,7 +159,7 @@ async function addNotification(
   await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
-async function addDocument(
+async function uploadToDb(
   input: AddDocumentInput,
   user: JwtUser,
   multipartFormData: MultiPartData
@@ -186,7 +188,7 @@ async function addDocument(
       type,
       size: file.size,
       filenameDownload: sanitizeFilename(file.name),
-      migrated: true,
+      migrated: false,
       expirationDate: expirationDate ?? null,
       documentContent: {
         create: {
@@ -197,6 +199,15 @@ async function addDocument(
   })
 
   return document
+}
+
+async function uploadEncryptedToS3(
+  _config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>,
+  _input: AddDocumentInput,
+  _user: JwtUser,
+  _file: MultiPartData
+): Promise<never> {
+  throw badrequest('upload: not implemented')
 }
 
 function getFormData(multipartFormData: MultiPartData[]) {
