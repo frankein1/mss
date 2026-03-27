@@ -128,7 +128,7 @@
   }
 
   const getBudgetLastActivity = (
-    budget: BudgetWithExpensesAndIncomes | null
+    budget: BudgetWithExpensesAndIncomes | undefined
   ) => {
     if (!budget) {
       return null

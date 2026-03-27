@@ -59,7 +59,7 @@
   const { mutate, error, status } = trpcClient.user.add.useMutation()
   const onUpdateUser = async (input: CreateUserInput) => {
     const user = await mutate(input)
-    if (error.value || user === null) {
+    if (error.value || !user) {
       snackbar.error("La création de l'utilisateur a échoué.", () =>
         snackbar.focus('form', 'select')
       )

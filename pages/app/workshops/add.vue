@@ -48,7 +48,7 @@
   const onCreateWorkshop = async (input: CreateWorkshopInput) => {
     const workshopCreated = await mutate(input)
 
-    if (error.value || workshopCreated === null) {
+    if (error.value || !workshopCreated) {
       snackbar.error(
         "La création de l'atelier a échoué.",
         snackbar.focus('form', 'select')
