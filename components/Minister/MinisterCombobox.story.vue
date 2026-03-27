@@ -28,7 +28,7 @@
 <script setup lang="ts">
   import MinisterCombobox from './MinisterCombobox.vue'
 
-  const list = ref<any[] | null>(null)
+  const list = ref<any[] | undefined>(undefined)
 
   useTrpcClient()
     .minister.getMinisters.useQuery()

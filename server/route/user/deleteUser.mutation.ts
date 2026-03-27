@@ -18,6 +18,7 @@ const handler = async ({
   await throwIfUserIsNotAuthorized(ctx, input.id)
 
   return await UserRepo.delete(ctx.user, {
+    select: { id: true },
     where: {
       id: input.id
     }

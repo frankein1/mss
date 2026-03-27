@@ -54,7 +54,7 @@
   const { mutate, error: updateError } = router.updateMinister.useMutation()
   const onUpdateMinister = async (input: UpdateMinisterInput) => {
     const ministerUpdated = await mutate(input)
-    if (updateError.value || ministerUpdated === null) {
+    if (updateError.value || !ministerUpdated) {
       snackbar.error('La modification du ministre a échoué.')
       return
     }

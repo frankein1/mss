@@ -32,7 +32,7 @@
 
   const onCreateMinister = async (input: CreateMinisterInput) => {
     const minister = await mutate(input)
-    if (updateError.value || minister === null) {
+    if (updateError.value || !minister) {
       snackbar.error('La création du ministre a échoué.')
       return
     }

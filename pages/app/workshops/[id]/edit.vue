@@ -90,7 +90,7 @@
   const { mutate, error, status } = router.updateWorkshop.useMutation()
   const onUpdateWorkshop = async (input: UpdateWorkShopInput) => {
     const workshopUpdated = await mutate(input)
-    if (error.value || workshopUpdated === null) {
+    if (error.value || !workshopUpdated) {
       if (
         error?.value?.data?.MSS_CODE ===
         MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
@@ -129,7 +129,7 @@
   const deleteWorkshop = async () => {
     const { mutate, error } = trpcClient.workshop.delete.useMutation()
     const workshopCreated = await mutate({ id: workshopId })
-    if (error.value || workshopCreated === null) {
+    if (error.value || !workshopCreated) {
       snackbar.error("La suppression de l'atelier a échoué.")
       return
     }

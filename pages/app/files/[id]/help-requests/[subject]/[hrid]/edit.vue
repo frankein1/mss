@@ -126,8 +126,8 @@
 
   const allSocialSupportSubjects = computed(() =>
     getSocialSupportSubjects(
-      socialSupportSubjects.value,
-      activeAndInactivSocialSupportSubjects.value,
+      socialSupportSubjects.value || null,
+      activeAndInactivSocialSupportSubjects.value || null,
       helpRequestData.value?.helpRequest.subjectId
     )
   )

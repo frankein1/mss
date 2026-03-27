@@ -201,7 +201,7 @@
     handleSubmit,
     async values => {
       const attendeesRegistered = await mutate(values)
-      if (error.value || attendeesRegistered === null) {
+      if (error.value || !attendeesRegistered) {
         snackbar.error(
           "L'inscription a échoué.",
           snackbar.focus('form', 'select')

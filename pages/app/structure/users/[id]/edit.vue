@@ -98,7 +98,7 @@
   const { mutate, error, status } = trpcClient.user.update.useMutation()
   const onUpdateUser = async (input: UpdateUserInput) => {
     const userUpdated = await mutate(input)
-    if (error.value || userUpdated === null) {
+    if (error.value || !userUpdated) {
       snackbar.error("La modification de l'utilisateur a échoué.", () =>
         snackbar.focus('form', 'select')
       )
