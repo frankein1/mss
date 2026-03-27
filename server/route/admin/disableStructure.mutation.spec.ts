@@ -19,6 +19,9 @@ mockNuxtImport('useRuntimeConfig', () => {
     return {
       public: {
         email: { from: 'mss@example.com' }
+      },
+      document: {
+        useS3Storage: true
       }
     }
   }
