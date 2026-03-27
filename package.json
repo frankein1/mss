@@ -101,7 +101,7 @@
     "prettier-plugin-prisma": "^5.0.0",
     "prisma-erd-generator": "^2.0.4",
     "sass": "^1.90.0",
-    "stylelint": "^16.23.1",
+    "stylelint": "^17.4.0",
     "stylelint-config-recommended-vue": "^1.6.1",
     "stylelint-config-standard-scss": "^15.0.1",
     "ts-node": "^10.9.2",
