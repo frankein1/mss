@@ -7,6 +7,7 @@ import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
+import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
@@ -44,9 +45,19 @@ const handler = async ({
   // do not delete familyFile if there are other beneficiaries
   if (beneficiary.familyFile.beneficiaries.length > 1) {
     await deleteBeneficiary()
-    return
+  } else {
+    await prismaClient.$transaction([deleteBeneficiary(), deleteFamilyFile()])
   }
-  await prismaClient.$transaction([deleteBeneficiary(), deleteFamilyFile()])
+
+  const config = useRuntimeConfig()
+  if (config.document.useS3Storage) {
+    deleteAllFilesWithPrefix(config, `${ctx.structure.id}/${id}/`).catch(e =>
+      console.error(
+        `delete-beneficiary: failure to delete from S3 for beneficiary ${id} and structure id ${ctx.structure.id}`,
+        e
+      )
+    )
+  }
 }
 
 export const deleteBeneficiaryMutation = createMutation({

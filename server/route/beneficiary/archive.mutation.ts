@@ -14,6 +14,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { BeneficiaryService } from '~/server/services'
+import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -119,6 +120,19 @@ const handler = async ({
   await prismaClient.$transaction(
     transactions.map(transactions => transactions())
   )
+
+  const config = useRuntimeConfig()
+  if (config.document.useS3Storage) {
+    deleteAllFilesWithPrefix(
+      config,
+      `${beneficiary.structure.id}/${input.beneficiaryId}/`
+    ).catch(err =>
+      console.error(
+        `archive: failure to delete from S3 for beneficiary ${input.beneficiaryId} and structure id ${beneficiary.structure.id}`,
+        err
+      )
+    )
+  }
 }
 
 export const archiveBeneficiaryMutation = createMutation({

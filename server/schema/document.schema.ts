@@ -30,7 +30,6 @@ export const documentSizeValidation = z
   .max(documentFileMaxSize, documentSizeValidationErrorMessage)
 
 export const uploadBrowserDocumentSchema = z.object({
-  familyFileId: z.string(errorMessages).uuid(),
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
@@ -45,7 +44,6 @@ export const uploadBrowserDocumentSchema = z.object({
 })
 
 export const addDocumentSchema = z.object({
-  familyFileId: z.string(errorMessages).uuid(),
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),

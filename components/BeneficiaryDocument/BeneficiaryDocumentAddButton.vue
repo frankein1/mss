@@ -19,7 +19,6 @@
 
   const props = withDefaults(
     defineProps<{
-      familyFileId: string
       familyFileIdentification?: BeneficiaryFileIdentification[]
       beneficiaryId?: string
       label?: string
@@ -44,7 +43,6 @@
   function onAdd() {
     modal.open(BeneficiaryDocumentAddForm, {
       title: 'Ajouter un document',
-      familyFileId: props.familyFileId,
       ...(props.beneficiaryId && { beneficiaryId: props.beneficiaryId }),
       familyFileIdentification: props.familyFileIdentification,
       newDocument: onNewDocument
