@@ -16,6 +16,7 @@ import {
   StructureRepo,
   UserRepo
 } from '~/server/database'
+import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
 import { createMutation } from '~/server/route'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
@@ -275,6 +276,16 @@ const adminHandler = async ({
     updateBeneficiaries(),
     updateStructure()
   ])
+
+  const config = useRuntimeConfig()
+  if (config.document.useS3Storage) {
+    deleteAllFilesWithPrefix(config, `${id}/`).catch(e =>
+      console.error(
+        `disable-structure: failure to delete from S3 for structure ${id}`,
+        e
+      )
+    )
+  }
 
   // Deactivate and anonymize all users of the structure while keeping the uniqueness of the email
   const nanoid = customAlphabet('123456789abcdefghijk', 5)

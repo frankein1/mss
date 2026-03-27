@@ -1,4 +1,9 @@
-import { DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  DeleteObjectsCommand,
+  ListObjectsV2Command
+} from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { getS3Client } from './config'
 import type { RuntimeConfig } from 'nuxt/schema'
@@ -20,6 +25,42 @@ export async function deleteFile(
   )
 
   return key
+}
+
+/** Delete all S3 objects under a given prefix (simulates folder deletion).
+ *  Handles pagination for prefixes with >1000 objects.
+ */
+export async function deleteAllFilesWithPrefix(
+  config: Pick<RuntimeConfig, 'document' | 's3' | 'public'>,
+  prefix: string
+) {
+  const client = getS3Client(config)
+  let continuationToken: string | undefined
+
+  do {
+    const listed = await client.send(
+      new ListObjectsV2Command({
+        Bucket: config.s3.bucket,
+        Prefix: prefix,
+        ContinuationToken: continuationToken
+      })
+    )
+
+    if (listed.Contents?.length) {
+      await client.send(
+        new DeleteObjectsCommand({
+          Bucket: config.s3.bucket,
+          Delete: {
+            Objects: listed.Contents.map(obj => ({ Key: obj.Key }))
+          }
+        })
+      )
+    }
+
+    continuationToken = listed.IsTruncated
+      ? listed.NextContinuationToken
+      : undefined
+  } while (continuationToken)
 }
 
 interface S3Metadata {

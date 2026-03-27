@@ -284,8 +284,9 @@ async function uploadEncryptedToS3({
 
     return document
   } catch (e) {
-    const config = useRuntimeConfig()
-    await deleteFile(config, bucketKey)
+    await deleteFile(config, bucketKey).catch(s3e =>
+      console.error(`upload: cleanup failed for ${bucketKey}`, s3e)
+    )
     throw e
   }
 }
