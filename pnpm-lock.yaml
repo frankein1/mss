@@ -51,11 +51,11 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(@floating-ui/dom@1.6.13)(@tiptap/core@3.2.0(@tiptap/pm@3.2.0))(@tiptap/pm@3.2.0)(vue@3.5.18(typescript@5.9.2))
       '@trpc/client':
-        specifier: ^11.6.0
-        version: 11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2)
+        specifier: ^11.12.0
+        version: 11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)
       '@trpc/server':
-        specifier: ^11.6.0
-        version: 11.6.0(typescript@5.9.2)
+        specifier: ^11.12.0
+        version: 11.12.0(typescript@5.9.2)
       '@vee-validate/nuxt':
         specifier: ^4.15.0
         version: 4.15.0(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2))
@@ -129,8 +129,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       trpc-nuxt:
-        specifier: ^1.2.0
-        version: 1.2.0(@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.6.0(typescript@5.9.2))
+        specifier: ^2.0.1
+        version: 2.0.1(@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.12.0(typescript@5.9.2))
       tsdown:
         specifier: ^0.20.1
         version: 0.20.1(typescript@5.9.2)(vue-tsc@3.1.2(typescript@5.9.2))
@@ -164,7 +164,7 @@ importers:
         version: 1.9.0(@typescript-eslint/utils@8.40.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2))(@vue/compiler-sfc@3.5.18)(eslint-import-resolver-node@0.3.9)(eslint@9.33.0(jiti@2.5.1))(magicast@0.3.5)(typescript@5.9.2)(vite@6.2.2(@types/node@22.17.2)(jiti@2.5.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
       '@nuxt/test-utils':
         specifier: ^3.19.2
-        version: 3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@18.0.1)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
+        version: 3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
       '@playwright/test':
         specifier: ^1.58.0
         version: 1.58.0
@@ -185,7 +185,7 @@ importers:
         version: 10.0.0
       '@vitest/coverage-v8':
         specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
+        version: 3.2.4(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
@@ -199,8 +199,8 @@ importers:
         specifier: ^9.33.0
         version: 9.33.0(jiti@2.5.1)
       happy-dom:
-        specifier: ^18.0.1
-        version: 18.0.1
+        specifier: ^20.8.3
+        version: 20.8.3
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -242,7 +242,7 @@ importers:
         version: 5.9.2
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
+        version: 3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
       vue-dsfr-nuxt-module:
         specifier: ^2.0.0
         version: 2.0.0(@gouvfr/dsfr@1.14.1)(@gouvminint/vue-dsfr@8.8.0(@iconify/vue@4.3.0(vue@3.5.18(typescript@5.9.2)))(vue-router@4.5.0(vue@3.5.18(typescript@5.9.2)))(vue@3.5.18(typescript@5.9.2)))(magicast@0.3.5)
@@ -3042,14 +3042,14 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
-  '@trpc/client@11.6.0':
-    resolution: {integrity: sha512-DyWbYk2hd50BaVrXWVkaUnaSwgAF5g/lfBkXtkF1Aqlk6BtSzGUo3owPkgqQO2I5LwWy1+ra9TsSfBBvIZpTwg==}
+  '@trpc/client@11.12.0':
+    resolution: {integrity: sha512-zTwFKQdE99pvNm7kXFdHo5xIQpGqpQJHtqVkT9o+i8h/0fbDOUBEEbFVICiMsNA+GiXskoaDRX2l+z6ir+Ug3w==}
     peerDependencies:
-      '@trpc/server': 11.6.0
+      '@trpc/server': 11.12.0
       typescript: '>=5.7.2'
 
-  '@trpc/server@11.6.0':
-    resolution: {integrity: sha512-skTso0AWbOZck40jwNeYv++AMZXNWLUWdyk+pB5iVaYmEKTuEeMoPrEudR12VafbEU6tZa8HK3QhBfTYYHDCdg==}
+  '@trpc/server@11.12.0':
+    resolution: {integrity: sha512-rpZnf5FUjNndE/AjGIy+FvEHR52iBd0u0wySqWCwXj67wraj3qCuBr5Opcf0Te/g67C/YztqceFkLoG0r4mp4Q==}
     peerDependencies:
       typescript: '>=5.7.2'
 
@@ -3225,9 +3225,6 @@ packages:
   '@types/node@14.18.63':
     resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
 
-  '@types/node@20.19.8':
-    resolution: {integrity: sha512-HzbgCY53T6bfu4tT7Aq3TvViJyHjLjPNaAS3HOuMc9pw97KHsUtXNX4L+wu59g1WnjsZSko35MbEqnO58rihhw==}
-
   '@types/node@22.17.2':
     resolution: {integrity: sha512-gL6z5N9Jm9mhY+U2KXZpteb+09zyffliRkZyZOHODGATyC5B1Jt/7TzuuiLkFsSUMLbS1OLmlj/E+/3KF4Q/4w==}
 
@@ -3275,6 +3272,9 @@ packages:
 
   '@types/whatwg-mimetype@3.0.2':
     resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
+
+  '@types/ws@8.18.1':
+    resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
@@ -4377,6 +4377,9 @@ packages:
   crossws@0.3.4:
     resolution: {integrity: sha512-uj0O1ETYX1Bh6uSgktfPvwDiPYGQ3aI4qVsaC/LWpkIzGj1nUYm5FK3K+t11oOlpN01lGbprFCH4wBlKdJjVgw==}
 
+  crossws@0.3.5:
+    resolution: {integrity: sha512-ojKiDvcmByhwa8YYqbQI/hg7MEU0NC03+pSdEq4ZUnZR9xXpwk7E43SMNGkn+JxJGPFtNvQ48+vV2p+P1ml5PA==}
+
   css-declaration-sorter@7.2.0:
     resolution: {integrity: sha512-h70rUM+3PNFuaBDTLe8wF/cdWu+dOZmb7pJt8Z2sedYbAcQVQV/tEchueg3GWxwqS0cxtbxmaHEdkNACqcvsow==}
     engines: {node: ^14 || ^16 || >=18}
@@ -4894,6 +4897,10 @@ packages:
 
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
+    engines: {node: '>=0.12'}
+
+  entities@7.0.1:
+    resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
     engines: {node: '>=0.12'}
 
   env-paths@2.2.1:
@@ -5521,6 +5528,9 @@ packages:
   h3@1.15.3:
     resolution: {integrity: sha512-z6GknHqyX0h9aQaTx22VZDf6QyZn+0Nh+Ym8O/u0SGSkyF5cuTJYKlc8MkzW3Nzf9LE1ivcpmYC3FUGpywhuUQ==}
 
+  h3@1.15.6:
+    resolution: {integrity: sha512-oi15ESLW5LRthZ+qPCi5GNasY/gvynSKUQxgiovrY63bPAtG59wtM+LSrlcwvOHAXzGrXVLnI97brbkdPF9WoQ==}
+
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
 
@@ -5529,8 +5539,8 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  happy-dom@18.0.1:
-    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+  happy-dom@20.8.3:
+    resolution: {integrity: sha512-lMHQRRwIPyJ70HV0kkFT7jH/gXzSI7yDkQFe07E2flwmNDFoWUTRMKpW2sglsnpeA7b6S2TJPp98EbQxai8eaQ==}
     engines: {node: '>=20.0.0'}
 
   hard-rejection@2.1.0:
@@ -6500,6 +6510,9 @@ packages:
   node-mock-http@1.0.2:
     resolution: {integrity: sha512-zWaamgDUdo9SSLw47we78+zYw/bDr5gH8pH7oRRs8V3KmBtu8GLgGIbV2p/gRPd3LWpEOpjQj7X1FOU3VFMJ8g==}
 
+  node-mock-http@1.0.4:
+    resolution: {integrity: sha512-8DY+kFsDkNXy1sJglUfuODx1/opAGJGyrTuFqEoN90oRc2Vk0ZbD4K2qmKXBBEhZQzdKHIVfEJpDU8Ak2NJEvQ==}
+
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
@@ -6587,6 +6600,9 @@ packages:
 
   ofetch@1.4.1:
     resolution: {integrity: sha512-QZj2DfGplQAr2oj9KzceK9Hwz6Whxazmn85yYeVuS3u9XTMOGMRx0kO95MQ+vLsj/S/NwBDMMLU5hpxvI6Tklw==}
+
+  ofetch@1.5.1:
+    resolution: {integrity: sha512-2W4oUZlVaqAPAil6FUg/difl6YhqhUR7x2eZY4bQCko22UXg3hptq9KLQdqFClV+Wu85UX7hNtdGTngi/1BxcA==}
 
   ohash@2.0.11:
     resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
@@ -8110,9 +8126,9 @@ packages:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
     engines: {node: '>=8'}
 
-  trpc-nuxt@1.2.0:
-    resolution: {integrity: sha512-UasLY53UL8nIzGo5DJfRmj1MCLiLuMixg4y4wUCaPyaEc6rvBkM1GRmk53biCA/M9ygXgguQk60EtUQLU5AJeg==}
-    engines: {node: '>=20'}
+  trpc-nuxt@2.0.1:
+    resolution: {integrity: sha512-tqxLkT8m4ehtcPbupCDSdgTJ8VEckye6snIxX16mno+mH2zB05zgHMmp6SgbUha6m7+oFhEXaijoHUkDbKPABg==}
+    engines: {node: '>=22'}
     peerDependencies:
       '@trpc/client': ^11.0.0
       '@trpc/server': ^11.0.0
@@ -8220,6 +8236,9 @@ packages:
 
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
+
+  ufo@1.6.3:
+    resolution: {integrity: sha512-yDJTmhydvl5lJzBmy/hyOAA0d+aqCBuwl818haVdYCRrWV84o7YyeVm4QlVHStqNrrJSTb6jKuFAVqAFsr+K3Q==}
 
   uglify-js@3.19.3:
     resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
@@ -10762,7 +10781,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/test-utils@3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@18.0.1)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))':
+  '@nuxt/test-utils@3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))':
     dependencies:
       '@nuxt/kit': 3.17.6(magicast@0.3.5)
       c12: 3.2.0(magicast@0.3.5)
@@ -10786,15 +10805,15 @@ snapshots:
       tinyexec: 1.0.1
       ufo: 1.6.1
       unplugin: 2.3.5
-      vitest-environment-nuxt: 1.0.1(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@18.0.1)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
+      vitest-environment-nuxt: 1.0.1(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
       vue: 3.5.18(typescript@5.9.2)
     optionalDependencies:
       '@playwright/test': 1.58.0
       '@vue/test-utils': 2.4.6
-      happy-dom: 18.0.1
+      happy-dom: 20.8.3
       jsdom: 25.0.1
       playwright-core: 1.58.0
-      vitest: 3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
+      vitest: 3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
     transitivePeerDependencies:
       - magicast
       - typescript
@@ -12762,12 +12781,12 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2)':
+  '@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
-      '@trpc/server': 11.6.0(typescript@5.9.2)
+      '@trpc/server': 11.12.0(typescript@5.9.2)
       typescript: 5.9.2
 
-  '@trpc/server@11.6.0(typescript@5.9.2)':
+  '@trpc/server@11.12.0(typescript@5.9.2)':
     dependencies:
       typescript: 5.9.2
 
@@ -12960,10 +12979,6 @@ snapshots:
 
   '@types/node@14.18.63': {}
 
-  '@types/node@20.19.8':
-    dependencies:
-      undici-types: 6.21.0
-
   '@types/node@22.17.2':
     dependencies:
       undici-types: 6.21.0
@@ -13016,6 +13031,10 @@ snapshots:
   '@types/web-bluetooth@0.0.21': {}
 
   '@types/whatwg-mimetype@3.0.2': {}
+
+  '@types/ws@8.18.1':
+    dependencies:
+      '@types/node': 22.17.2
 
   '@types/yauzl@2.10.3':
     dependencies:
@@ -13233,7 +13252,7 @@ snapshots:
       vite: 6.2.2(@types/node@22.17.2)(jiti@2.5.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
       vue: 3.5.18(typescript@5.9.2)
 
-  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))':
+  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13248,7 +13267,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
+      vitest: 3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -14301,6 +14320,10 @@ snapshots:
     dependencies:
       uncrypto: 0.1.3
 
+  crossws@0.3.5:
+    dependencies:
+      uncrypto: 0.1.3
+
   css-declaration-sorter@7.2.0(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -14782,6 +14805,8 @@ snapshots:
       tapable: 2.2.1
 
   entities@4.5.0: {}
+
+  entities@7.0.1: {}
 
   env-paths@2.2.1: {}
 
@@ -15571,6 +15596,18 @@ snapshots:
       ufo: 1.6.1
       uncrypto: 0.1.3
 
+  h3@1.15.6:
+    dependencies:
+      cookie-es: 1.2.2
+      crossws: 0.3.5
+      defu: 6.1.4
+      destr: 2.0.5
+      iron-webcrypto: 1.2.1
+      node-mock-http: 1.0.4
+      radix3: 1.1.2
+      ufo: 1.6.3
+      uncrypto: 0.1.3
+
   hachure-fill@0.5.2: {}
 
   handlebars@4.7.8:
@@ -15582,11 +15619,17 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.19.3
 
-  happy-dom@18.0.1:
+  happy-dom@20.8.3:
     dependencies:
-      '@types/node': 20.19.8
+      '@types/node': 22.17.2
       '@types/whatwg-mimetype': 3.0.2
+      '@types/ws': 8.18.1
+      entities: 7.0.1
       whatwg-mimetype: 3.0.0
+      ws: 8.19.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   hard-rejection@2.1.0: {}
 
@@ -16108,7 +16151,7 @@ snapshots:
       citty: 0.1.6
       clipboardy: 4.0.0
       consola: 3.4.2
-      crossws: 0.3.4
+      crossws: 0.3.5
       defu: 6.1.4
       get-port-please: 3.2.0
       h3: 1.15.3
@@ -16481,7 +16524,7 @@ snapshots:
       consola: 3.4.2
       cookie-es: 2.0.0
       croner: 9.0.0
-      crossws: 0.3.4
+      crossws: 0.3.5
       db0: 0.3.1
       defu: 6.1.4
       destr: 2.0.5
@@ -16505,7 +16548,7 @@ snapshots:
       mime: 4.0.6
       mlly: 1.7.4
       node-fetch-native: 1.6.7
-      node-mock-http: 1.0.2
+      node-mock-http: 1.0.4
       ofetch: 1.4.1
       ohash: 2.0.11
       openapi-typescript: 7.6.1(typescript@5.9.2)
@@ -16579,6 +16622,8 @@ snapshots:
   node-gyp-build@4.8.4: {}
 
   node-mock-http@1.0.2: {}
+
+  node-mock-http@1.0.4: {}
 
   node-releases@2.0.19: {}
 
@@ -16795,6 +16840,12 @@ snapshots:
       destr: 2.0.5
       node-fetch-native: 1.6.7
       ufo: 1.6.1
+
+  ofetch@1.5.1:
+    dependencies:
+      destr: 2.0.5
+      node-fetch-native: 1.6.7
+      ufo: 1.6.3
 
   ohash@2.0.11: {}
 
@@ -18484,12 +18535,12 @@ snapshots:
 
   trim-newlines@3.0.1: {}
 
-  trpc-nuxt@1.2.0(@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.6.0(typescript@5.9.2)):
+  trpc-nuxt@2.0.1(@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.12.0(typescript@5.9.2)):
     dependencies:
-      '@trpc/client': 11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2)
-      '@trpc/server': 11.6.0(typescript@5.9.2)
-      h3: 1.15.3
-      ofetch: 1.4.1
+      '@trpc/client': 11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)
+      '@trpc/server': 11.12.0(typescript@5.9.2)
+      h3: 1.15.6
+      ofetch: 1.5.1
       ohash: 2.0.11
 
   ts-api-utils@2.1.0(typescript@5.9.2):
@@ -18579,6 +18630,8 @@ snapshots:
   uc.micro@2.1.0: {}
 
   ufo@1.6.1: {}
+
+  ufo@1.6.3: {}
 
   uglify-js@3.19.3:
     optional: true
@@ -18921,9 +18974,9 @@ snapshots:
       tsx: 4.20.4
       yaml: 2.8.1
 
-  vitest-environment-nuxt@1.0.1(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@18.0.1)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)):
+  vitest-environment-nuxt@1.0.1(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1)):
     dependencies:
-      '@nuxt/test-utils': 3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@18.0.1)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
+      '@nuxt/test-utils': 3.19.2(@playwright/test@1.58.0)(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@25.0.1)(magicast@0.3.5)(playwright-core@1.58.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1))
     transitivePeerDependencies:
       - '@cucumber/cucumber'
       - '@jest/globals'
@@ -18938,7 +18991,7 @@ snapshots:
       - typescript
       - vitest
 
-  vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1):
+  vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.8.3)(jiti@2.5.1)(jsdom@25.0.1)(sass@1.90.0)(terser@5.39.0)(tsx@4.20.4)(yaml@2.8.1):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -18965,7 +19018,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.17.2
-      happy-dom: 18.0.1
+      happy-dom: 20.8.3
       jsdom: 25.0.1
     transitivePeerDependencies:
       - jiti
