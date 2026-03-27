@@ -172,7 +172,7 @@
   const { mutate, error: deleteError } = trpcClient.user.delete.useMutation()
   const deleteUser = async (id: string) => {
     const userDeleted = await mutate({ id })
-    if (deleteError.value || userDeleted === null) {
+    if (deleteError.value || !userDeleted) {
       snackbar.error(
         deleteError.value?.message ||
           "La suppression de l'utilisateur a échoué.",

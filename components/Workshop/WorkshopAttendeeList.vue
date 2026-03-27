@@ -223,7 +223,7 @@
 
     const result = await mutate({ id, attendance })
 
-    if (error.value || result === null) {
+    if (error.value || !result) {
       snackbar.error('La modification du participant a échoué.')
       return
     }

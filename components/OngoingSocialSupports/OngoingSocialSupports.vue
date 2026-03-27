@@ -78,10 +78,12 @@
   const props = defineProps<{
     isFileInstructions: boolean
     title: string
-    ongoingSocialSupports: Array<{
-      status: OngoingSocialSupportStatus
-      _count: number
-    }> | null
+    ongoingSocialSupports:
+      | Array<{
+          status: OngoingSocialSupportStatus
+          _count: number
+        }>
+      | undefined
     emptyMessage: string
     pending: boolean
     errorMessage: string
