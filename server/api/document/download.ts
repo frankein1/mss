@@ -7,6 +7,7 @@ import { badrequest, forbidden, internal } from '~/utils/api/errors'
 import { prismaClient } from '~/server/prisma'
 import type { JwtUser } from '~/server/lib/jwt'
 import type { RuntimeConfig } from 'nuxt/schema'
+import { downloadWithEncryption } from '~/server/lib/s3/file'
 
 export default defineEventHandler(async event => {
   const user = event.context.auth?.user
@@ -114,9 +115,32 @@ async function downloadFromDb(key: string) {
 }
 
 async function downloadAndDecryptFromS3(
-  _config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>,
-  _key: string,
-  _document: DocumentMetadata
-): Promise<never> {
-  throw internal('download: not implemented')
+  config: Pick<RuntimeConfig, 'document' | 's3' | 'kms' | 'public'>,
+  key: string,
+  document: DocumentMetadata
+) {
+  if (!document.filenameDisk) {
+    throw internal('download: missing bucket key')
+  }
+
+  if (!document.mimeType || !document.size) {
+    throw internal('download: missing document metadata')
+  }
+
+  const res = await downloadWithEncryption({
+    config,
+    bucketKey: document.filenameDisk,
+    dataForEncryptionContext: {
+      documentKey: key,
+      contentType: document.mimeType,
+      contentLength: document.size
+    }
+  })
+
+  if (!res.success) {
+    console.error(`download: ${res.reason}`)
+    throw badrequest(`download: failure to download document`)
+  }
+
+  return Buffer.from(res.fileContent)
 }

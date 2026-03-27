@@ -24,7 +24,6 @@
         }}
       </p>
       <BeneficiaryDocumentAddButton
-        :family-file-id="familyFileId"
         :family-file-identification="familyFileIdentification || []"
         @new-document="() => refresh()"
       />

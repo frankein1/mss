@@ -87,7 +87,6 @@
 
   const props = withDefaults(
     defineProps<{
-      familyFileId: string
       familyFileIdentification?: BeneficiaryFileIdentification[]
       beneficiaryId?: string
       newDocument: (key: string, name: string) => void
@@ -121,7 +120,6 @@
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
     initialValues: {
-      familyFileId: props.familyFileId,
       beneficiaryId: initialBeneficiaryId,
       tags: [],
       confidential: false
