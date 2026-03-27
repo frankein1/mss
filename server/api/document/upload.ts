@@ -1,13 +1,12 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
 import type { Document } from '@prisma/client'
 import { NotificationType, UserActivityType } from '@prisma/client'
-import { v4 } from 'uuid'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
 import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import type { FamilyFileSecurityTarget } from '~/server/services'
-import { FamilyFileService } from '~/server/services'
+import { BeneficiaryService, FamilyFileService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security'
 import { getDocumentPermissions } from '~/server/security'
 import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
@@ -15,7 +14,13 @@ import { validateDocumentType } from '~/server/security/document/validate-docume
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
 import type { RuntimeConfig } from 'nuxt/schema'
-import { forbidden, badrequest, internal } from '~/utils/api/errors'
+import { forbidden, badrequest } from '~/utils/api/errors'
+import { randomUUID } from 'node:crypto'
+import {
+  generateFilenameForDocument,
+  generateFileRootForDocument
+} from '~/server/lib/s3/helper'
+import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
 
 export interface MultiPartData {
   data: Buffer
@@ -52,14 +57,11 @@ export default defineEventHandler(async event => {
     throw badrequest('upload: Les données entrantes ne sont pas valides')
   }
 
-  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
-    user,
-    input.familyFileId
-  )
-
-  if (!familyFile) {
-    throw badrequest(`upload: Aucun foyer avec l'id ${input.familyFileId}`)
-  }
+  const { familyFile, ...beneficiary } =
+    await BeneficiaryService.getBeneficiarySecurityTarget(
+      user,
+      input.beneficiaryId
+    )
 
   const structureType = user.structureType
 
@@ -78,10 +80,10 @@ export default defineEventHandler(async event => {
 
   const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.familyFileId
+    familyFile.id
   )
 
-  if (!permissions.create) {
+  if (!permissions.create.document) {
     throw forbidden('upload: not authorized')
   }
 
@@ -95,10 +97,16 @@ export default defineEventHandler(async event => {
     throw badrequest('upload: Format de fichier invalide')
   }
 
-  const document = await createDocument(input, user, file)
+  const document = await createDocument(
+    beneficiary.id,
+    familyFile.id,
+    input,
+    user,
+    file
+  )
 
-  await addNotification(ctx, document, familyFile, input.beneficiaryId)
-  await updateBeneficiariesLastActivity([document.beneficiaryId])
+  await addNotification(ctx, document, familyFile, beneficiary.id)
+  await updateBeneficiariesLastActivity([beneficiary.id])
   addUserActivity({
     key: 'document.upload',
     user,
@@ -112,21 +120,33 @@ export default defineEventHandler(async event => {
 })
 
 async function createDocument(
-  input: AddDocumentInput,
+  beneficiaryId: string,
+  familyFileId: string,
+  input: Omit<AddDocumentInput, 'beneficiaryId'>,
   user: JwtUser,
   file: MultiPartData
 ) {
   const config = useRuntimeConfig()
   if (config.document.useS3Storage) {
-    return await uploadEncryptedToS3(config, input, user, file)
+    return await uploadEncryptedToS3({
+      beneficiaryId,
+      familyFileId,
+      config,
+      input,
+      user,
+      file
+    })
   }
 
-  return await uploadToDb(input, user, file)
+  return await uploadToDb({ beneficiaryId, familyFileId, input, user, file })
 }
 
 async function addNotification(
   ctx: SecurityRuleContext,
-  document: Document,
+  document: Pick<
+    Document,
+    'key' | 'confidential' | 'createdById' | 'confidential'
+  >,
   familyFile: NonNullable<FamilyFileSecurityTarget>,
   beneficiaryId: string
 ) {
@@ -159,40 +179,46 @@ async function addNotification(
   await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
-async function uploadToDb(
-  input: AddDocumentInput,
-  user: JwtUser,
-  multipartFormData: MultiPartData
-) {
-  const key = v4()
-  const {
-    type,
-    familyFileId,
-    beneficiaryId,
-    confidential,
-    tags,
-    file,
-    expirationDate
-  } = input
-  const document = await DocumentRepo.prisma.create({
+interface UploadDbArgs {
+  beneficiaryId: string
+  familyFileId: string
+  input: Omit<AddDocumentInput, 'beneficiaryId'>
+  user: JwtUser
+  file: MultiPartData
+}
+async function uploadToDb({
+  beneficiaryId,
+  familyFileId,
+  input,
+  user,
+  file
+}: UploadDbArgs) {
+  const key = randomUUID()
+  const { type, confidential, tags, expirationDate } = input
+  const document = await DocumentRepo.create(user, {
+    select: {
+      key: true,
+      confidential: true,
+      createdById: true
+    },
     data: {
       key,
-      name: sanitizeFilename(file.name),
-      familyFileId,
-      beneficiaryId,
+      name: sanitizeFilename(input.file.name),
+      familyFile: { connect: { id: familyFileId } },
+      beneficiary: { connect: { id: beneficiaryId } },
       filenameDisk: key,
-      mimeType: file.mimeType,
+      mimeType: input.file.mimeType,
       confidential,
       tags,
-      createdById: user.id,
+      createdBy: { connect: { id: user.id } },
       type,
-      size: file.size,
-      filenameDownload: sanitizeFilename(file.name),
-      migrated: false,
+      size: input.file.size,
+      filenameDownload: sanitizeFilename(input.file.name),
+      migrated: false, // stored in db
       expirationDate: expirationDate ?? null,
       documentContent: {
         create: {
-          content: multipartFormData.data
+          content: file.data
         }
       }
     }
@@ -201,13 +227,68 @@ async function uploadToDb(
   return document
 }
 
-async function uploadEncryptedToS3(
-  _config: Pick<RuntimeConfig, 'document' | 's3' | 'kms'>,
-  _input: AddDocumentInput,
-  _user: JwtUser,
-  _file: MultiPartData
-): Promise<never> {
-  throw internal('upload: not implemented')
+interface UploadEncryptedS3Args {
+  beneficiaryId: string
+  familyFileId: string
+  config: Pick<RuntimeConfig, 'document' | 's3' | 'kms' | 'public'>
+  input: Omit<AddDocumentInput, 'beneficiaryId'>
+  user: JwtUser
+  file: MultiPartData
+}
+async function uploadEncryptedToS3({
+  beneficiaryId,
+  familyFileId,
+  config,
+  input,
+  user,
+  file
+}: UploadEncryptedS3Args) {
+  const filename = generateFilenameForDocument(input.file.name)
+  const bucketKey = `${generateFileRootForDocument(user.structureId as string, beneficiaryId)}/${filename}`
+  const documentKey = randomUUID()
+
+  await uploadWithEncryption({
+    config,
+    bucketKey,
+    plainData: file.data,
+    dataForEncryptionContext: {
+      documentKey,
+      contentType: input.file.mimeType,
+      contentLength: input.file.size
+    }
+  })
+
+  try {
+    const document = await DocumentRepo.create(user, {
+      select: {
+        key: true,
+        confidential: true,
+        createdById: true
+      },
+      data: {
+        key: documentKey,
+        createdBy: { connect: { id: user.id } },
+        familyFile: { connect: { id: familyFileId } },
+        beneficiary: { connect: { id: beneficiaryId } },
+        name: filename,
+        filenameDisk: bucketKey,
+        filenameDownload: filename,
+        type: input.type,
+        confidential: input.confidential,
+        tags: input.tags,
+        size: input.file.size,
+        mimeType: input.file.mimeType,
+        migrated: true // migrated to S3
+      }
+    })
+
+    return document
+  } catch (e) {
+    await deleteFile(config, bucketKey).catch(s3e =>
+      console.error(`upload: cleanup failed for ${bucketKey}`, s3e)
+    )
+    throw e
+  }
 }
 
 function getFormData(multipartFormData: MultiPartData[]) {

@@ -1,7 +1,6 @@
 <template>
   <BeneficiaryDocumentAddButton
     class="fr-mb-3w force-focus-visible"
-    :family-file-id="familyFileId"
     :beneficiary-id="beneficiaryId"
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"

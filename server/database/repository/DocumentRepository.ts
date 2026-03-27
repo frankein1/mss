@@ -37,14 +37,21 @@ function create<T extends Prisma.DocumentCreateArgs>(
   return prismaClient.document.create(params)
 }
 
+function deleteDocument<T extends Prisma.DocumentDeleteArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.DocumentDeleteArgs>
+) {
+  appendConstraints(user, params, DocumentConstraints.get)
+  return prismaClient.document.delete(params)
+}
+
 export const DocumentRepo = {
   findMany,
   findUniqueOrThrow,
   count,
   create,
+  delete: deleteDocument,
   prisma: {
-    create: prismaClient.document.create, // FIXME: delete when document API endpoints have been updated
-    delete: prismaClient.document.delete,
     deleteMany: prismaClient.document.deleteMany,
     update: prismaClient.document.update
   }
