@@ -15,7 +15,7 @@ import { validateDocumentType } from '~/server/security/document/validate-docume
 import { updateBeneficiariesLastActivity } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 import { addUserActivity } from '~/server/query'
 import type { RuntimeConfig } from 'nuxt/schema'
-import { forbidden, badrequest } from '~/utils/api/errors'
+import { forbidden, badrequest, internal } from '~/utils/api/errors'
 
 export interface MultiPartData {
   data: Buffer
@@ -207,7 +207,7 @@ async function uploadEncryptedToS3(
   _user: JwtUser,
   _file: MultiPartData
 ): Promise<never> {
-  throw badrequest('upload: not implemented')
+  throw internal('upload: not implemented')
 }
 
 function getFormData(multipartFormData: MultiPartData[]) {

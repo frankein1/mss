@@ -3,7 +3,7 @@ import { defineEventHandler } from 'h3'
 import { DocumentRepo } from '~/server/database'
 import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
-import { badrequest, forbidden } from '~/utils/api/errors'
+import { badrequest, forbidden, internal } from '~/utils/api/errors'
 import { prismaClient } from '~/server/prisma'
 import type { JwtUser } from '~/server/lib/jwt'
 import type { RuntimeConfig } from 'nuxt/schema'
@@ -47,10 +47,6 @@ export default defineEventHandler(async event => {
 
   const document = await getDocumentMetadata(key, user)
   const documentContent = await getDocumentContent(key, document)
-
-  if (!documentContent) {
-    throw createError('No document found')
-  }
 
   addUserActivity({
     key: 'document.download',
@@ -105,10 +101,14 @@ async function getDocumentContent(key: string, document: DocumentMetadata) {
  * been validated for access with `DocumentService.getEditionPermissions`
  */
 async function downloadFromDb(key: string) {
-  const d = await prismaClient.documentContent.findUniqueOrThrow({
+  const d = await prismaClient.documentContent.findUnique({
     where: { documentKey: key },
     select: { content: true }
   })
+
+  if (!d) {
+    throw internal('download: could not retrieve content')
+  }
 
   return d.content
 }
@@ -118,5 +118,5 @@ async function downloadAndDecryptFromS3(
   _key: string,
   _document: DocumentMetadata
 ): Promise<never> {
-  throw badrequest('download: not implemented')
+  throw internal('download: not implemented')
 }
