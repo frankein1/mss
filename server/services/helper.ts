@@ -117,12 +117,12 @@ function documentDto<T extends Document>(d: T) {
 // matching
 type SS = SocialSupport & {
   familyFile: FamilyFile & {
-    referents: User[]
+    referents?: User[]
   }
   minister?: MinisterEntity | null
   beneficiary: BeneficiaryIdentification
-  createdBy?: User
-  lastUpdatedBy: User | null
+  createdBy?: Pick<User, 'id' | 'firstName' | 'lastName'>
+  lastUpdatedBy: Pick<User, 'id' | 'firstName' | 'lastName'> | null
   subjects: SocialSupportSubject[]
   documents?: Document[]
   comments?: (Comment & { createdBy: User })[]
@@ -160,7 +160,7 @@ export function filterSocialSupport<T extends SS>({
     familyFile: {
       id: socialSupport.familyFile.id,
       structureId: socialSupport.familyFile.structureId,
-      referents: socialSupport.familyFile.referents.map(r => userDto(r))
+      referents: socialSupport.familyFile.referents?.map(r => userDto(r)) || []
     },
     familyFileId: socialSupport.familyFileId,
 
