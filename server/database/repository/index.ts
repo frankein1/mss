@@ -1,3 +1,4 @@
+// If the *Repo variables are renamed, the Prisma eslint rule `no-restricted-syntax` in eslint.config must be adapted accordingly.
 export * from './ArchivedBeneficiaryRepository'
 export * from './BeneficiaryRepository'
 export * from './BudgetRepository'

@@ -49,8 +49,13 @@ export function formatSocialSupportDetail(
     privateSynthesis: socialSupportPermissions.get.privateSynthesis
   }
 
+  const { familyFile: ff, ...ss } = socialSupport
+
   const filteredSocialSupport = filterSocialSupport({
-    socialSupport,
+    socialSupport: {
+      familyFile: { id: ff.id, structureId: ff.structureId },
+      ...ss
+    },
     conditions
   })
 

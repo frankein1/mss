@@ -148,7 +148,8 @@ export async function create({ input, ctx }: CreateParams) {
         }
       }
     },
-    include: {
+    select: {
+      id: true,
       fileInstruction: { select: { socialSupportId: true } }
     }
   })

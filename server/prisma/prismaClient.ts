@@ -18,6 +18,7 @@ if (shouldLogPrisma) {
   prismaLogLevels.push({ emit: 'event', level: 'query' })
 }
 
+// If prismaClient variable is renamed, the Prisma eslint rule `no-restricted-syntax` in eslint.config must be adapted accordingly.
 export const prismaClient: PrismaClient<
   Prisma.PrismaClientOptions,
   Prisma.LogLevel,
