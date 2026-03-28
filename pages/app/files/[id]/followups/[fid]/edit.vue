@@ -88,8 +88,8 @@
 
   const allSocialSupportSubjects = computed(() =>
     getSocialSupportSubjectsFromArray(
-      socialSupportSubjects.value || null,
-      activeAndInactivSocialSupportSubjects.value || null,
+      socialSupportSubjects.value,
+      activeAndInactivSocialSupportSubjects.value,
       followupData.value?.followup.subjects
     )
   )

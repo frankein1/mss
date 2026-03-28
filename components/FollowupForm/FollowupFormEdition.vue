@@ -25,7 +25,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    socialSupportSubjects: Array<SocialSupportSubject>
+    socialSupportSubjects: Array<Pick<SocialSupportSubject, 'id' | 'name'>>
     partnerOrganizations: Array<PartnerOrganizationIdName>
     data: FollowupPageItem
     familyFileIdentification: BeneficiaryFileIdentification[]

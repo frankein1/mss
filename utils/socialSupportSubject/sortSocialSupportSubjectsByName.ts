@@ -1,8 +1,8 @@
 import type { SocialSupportSubject } from '@prisma/client'
 
-export const sortSocialSupportSubjectsByName = (
-  socialSupportSujects: SocialSupportSubject[]
-): SocialSupportSubject[] => {
+export function sortSocialSupportSubjectsByName<
+  T extends Pick<SocialSupportSubject, 'name'>
+>(socialSupportSujects: T[]) {
   return socialSupportSujects.sort((a, b) =>
     a.name.toLowerCase().localeCompare(b.name.toLowerCase())
   )
