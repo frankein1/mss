@@ -128,16 +128,12 @@ export const create = async ({ ctx, input }: CreateParams) => {
         }
       }
     },
-    include: {
-      familyFile: {
-        select: {
-          id: true
-        }
-      }
+    select: {
+      id: true
     }
   })
 
   await SocialSupportSubjectService.markUsed({ structure, user }, subjects)
 
-  return fu
+  return { id: fu.id }
 }
