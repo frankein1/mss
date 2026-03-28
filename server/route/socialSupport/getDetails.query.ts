@@ -33,7 +33,6 @@ async function getSocialSupportDetail({
       numeroPegase: true,
       status: true,
       dueDate: true,
-      created: true,
       updated: true,
       socialSupportType: true,
       subtype: true,
@@ -51,7 +50,7 @@ async function getSocialSupportDetail({
           lastName: true
         }
       },
-      ministre: true,
+      // For permissions handling
       familyFile: {
         select: {
           id: true,
@@ -70,9 +69,26 @@ async function getSocialSupportDetail({
           birthDate: true
         }
       },
-      documents: true,
-      subjects: true,
-      minister: true,
+      documents: {
+        select: {
+          key: true,
+          name: true,
+          createdById: true,
+          confidential: true
+        }
+      },
+      subjects: {
+        select: { id: true, name: true }
+      },
+      minister: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          function: true,
+          government: true
+        }
+      },
       socialSupportRedirections: {
         orderBy: { createdAt: 'asc' },
         select: {
@@ -82,10 +98,8 @@ async function getSocialSupportDetail({
           externalStructureName: true,
           partnerOrganizationId: true,
           partnerOrganizationContactId: true,
-          socialSupportId: true,
-          createdAt: true,
-          partnerOrganization: true,
-          partnerOrganizationContact: true
+          partnerOrganization: { select: { name: true } },
+          partnerOrganizationContact: { select: { name: true } }
         }
       },
       comments: {
@@ -96,14 +110,14 @@ async function getSocialSupportDetail({
           createdById: true,
           updated: true,
           content: true,
-          socialSupportId: true,
-          createdBy: true
+          createdBy: {
+            select: { id: true, firstName: true, lastName: true }
+          }
         }
       },
       fileInstruction: {
         select: {
           id: true,
-          updated: true,
           type: true,
           instructorOrganizationId: true,
           instructorOrganizationContactId: true,
@@ -114,13 +128,11 @@ async function getSocialSupportDetail({
           refusalReasonOther: true,
           dispatchDate: true,
           fullFile: true,
-          socialSupportId: true,
-          instructorOrganization: true,
-          instructorOrganizationContact: true,
+          instructorOrganization: { select: { id: true, name: true } },
+          instructorOrganizationContact: { select: { id: true, name: true } },
           helpRequest: {
             select: {
               id: true,
-              subjectId: true,
               prescribingOrganizationId: true,
               prescribingOrganizationContactId: true,
               financialSupport: true,
@@ -130,9 +142,10 @@ async function getSocialSupportDetail({
               paymentMethod: true,
               paymentDate: true,
               handlingDate: true,
-              fileInstructionId: true,
-              prescribingOrganization: true,
-              prescribingOrganizationContact: true
+              prescribingOrganization: { select: { id: true, name: true } },
+              prescribingOrganizationContact: {
+                select: { id: true, name: true }
+              }
             }
           },
           housingHelpRequest: {
@@ -153,9 +166,10 @@ async function getSocialSupportDetail({
               reason: true,
               lowIncomeHousingType: true,
               handlingDate: true,
-              fileInstructionId: true,
-              prescribingOrganization: true,
-              prescribingOrganizationContact: true
+              prescribingOrganization: { select: { id: true, name: true } },
+              prescribingOrganizationContact: {
+                select: { id: true, name: true }
+              }
             }
           }
         }
@@ -163,22 +177,18 @@ async function getSocialSupportDetail({
       followup: {
         select: {
           id: true,
-          updated: true,
-          prescribingOrganizationId: true,
-          prescribingOrganizationContactId: true,
           medium: true,
           helpRequested: true,
           place: true,
-          structureName: true,
           thirdPersonName: true,
           classified: true,
           firstFollowup: true,
           forwardedToJustice: true,
-          redirected: true,
           duration: true,
-          socialSupportId: true,
-          prescribingOrganization: true,
-          prescribingOrganizationContact: true
+          prescribingOrganization: { select: { name: true } },
+          prescribingOrganizationContact: {
+            select: { name: true }
+          }
         }
       },
       _count: {

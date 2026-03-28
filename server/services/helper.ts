@@ -10,7 +10,6 @@ import type {
   PartnerOrganization,
   User,
   PartnerOrganizationContact,
-  FamilyFile,
   MinisterEntity,
   SocialSupportRedirection,
   Beneficiary
@@ -91,7 +90,9 @@ function partnerOrganizationContactDto<
   }
 }
 function commentWithCreatorDto<
-  T extends Comment & { createdBy: Pick<User, 'id' | 'firstName' | 'lastName'> }
+  T extends Pick<Comment, 'id' | 'created' | 'updated' | 'content'> & {
+    createdBy: Pick<User, 'id' | 'firstName' | 'lastName'>
+  }
 >(c: T) {
   return {
     id: c.id,
@@ -101,34 +102,51 @@ function commentWithCreatorDto<
     createdBy: userDto(c.createdBy)
   }
 }
-function documentDto<T extends Document>(d: T) {
+type DocumentFields = Pick<
+  Document,
+  'key' | 'name' | 'createdById' | 'confidential'
+>
+function documentDto<T extends DocumentFields>(d: T) {
   return {
     key: d.key,
-    name: d.name,
-    size: d.size,
-    type: d.type,
-    mimeType: d.mimeType,
-    beneficiaryId: d.beneficiaryId,
-    createdById: d.createdById,
-    confidential: d.confidential
+    name: d.name
   }
 }
-// This is a temporary fix. The query must be reviewed with select and exact type
-// matching
-type SS = SocialSupport & {
-  familyFile: FamilyFile & {
-    referents?: User[]
-  }
-  minister?: MinisterEntity | null
+type SS = Pick<
+  SocialSupport,
+  | 'id'
+  | 'socialSupportType'
+  | 'subtype'
+  | 'date'
+  | 'updated'
+  | 'status'
+  | 'familyFileId'
+  | 'beneficiaryId'
+  | 'dueDate'
+  | 'privateSynthesis'
+  | 'privateSynthesisRichText'
+  | 'synthesis'
+  | 'synthesisRichText'
+  | 'ministerId'
+  | 'numeroPegase'
+> & {
+  familyFile: { id: string }
+  minister?: Pick<
+    MinisterEntity,
+    'id' | 'firstName' | 'lastName' | 'function' | 'government'
+  > | null
   beneficiary: BeneficiaryIdentification
   createdBy?: Pick<User, 'id' | 'firstName' | 'lastName'>
   lastUpdatedBy: Pick<User, 'id' | 'firstName' | 'lastName'> | null
-  subjects: SocialSupportSubject[]
-  documents?: Document[]
-  comments?: (Comment & { createdBy: User })[]
-  socialSupportRedirections: (Omit<
+  subjects: Pick<SocialSupportSubject, 'id' | 'name'>[]
+  socialSupportRedirections: (Pick<
     SocialSupportRedirection,
-    'createdAt' | 'socialSupportId'
+    | 'id'
+    | 'type'
+    | 'motif'
+    | 'externalStructureName'
+    | 'partnerOrganizationId'
+    | 'partnerOrganizationContactId'
   > & {
     partnerOrganization: { name: string } | null
     partnerOrganizationContact: { name: string } | null
@@ -147,50 +165,45 @@ export function filterSocialSupport<T extends SS>({
     socialSupportType: socialSupport.socialSupportType,
     subtype: socialSupport.subtype,
     date: socialSupport.date,
-    structureId: socialSupport.structureId,
-    created: socialSupport.created,
     createdBy: socialSupport.createdBy && userDto(socialSupport.createdBy),
     lastUpdatedBy:
       socialSupport.lastUpdatedBy && userDto(socialSupport.lastUpdatedBy),
-    createdById: socialSupport.createdById,
     updated: socialSupport.updated,
     status: socialSupport.status,
     subjects: socialSupport.subjects,
-
-    familyFile: {
-      id: socialSupport.familyFile.id,
-      structureId: socialSupport.familyFile.structureId,
-      referents: socialSupport.familyFile.referents?.map(r => userDto(r)) || []
-    },
     familyFileId: socialSupport.familyFileId,
-
     beneficiary: beneficiaryDto(socialSupport.beneficiary),
     beneficiaryId: socialSupport.beneficiaryId,
 
-    dueDate: show(socialSupport.dueDate, conditions.details),
-
-    privateSynthesis: show(
-      socialSupport.privateSynthesis,
-      conditions.privateSynthesis
-    ),
-    privateSynthesisRichText: show(
-      socialSupport.privateSynthesisRichText,
-      conditions.privateSynthesis
-    ),
-
-    synthesis: show(socialSupport.synthesis, conditions.details),
-    synthesisRichText: show(
-      socialSupport.synthesisRichText,
+    ...show(
+      {
+        dueDate: socialSupport.dueDate,
+        synthesis: socialSupport.synthesis,
+        synthesisRichText: socialSupport.synthesisRichText
+      },
       conditions.details
     ),
-
-    ministerId: show(socialSupport.ministerId, conditions.minister),
-    minister: show(socialSupport.minister, conditions.minister),
     socialSupportRedirections: show(
       redirectionsDto(socialSupport.socialSupportRedirections || []),
       conditions.details
     ),
-    numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
+
+    ...show(
+      {
+        privateSynthesis: socialSupport.privateSynthesis,
+        privateSynthesisRichText: socialSupport.privateSynthesisRichText
+      },
+      conditions.privateSynthesis
+    ),
+
+    ...show(
+      {
+        ministerId: socialSupport.ministerId,
+        minister: socialSupport.minister,
+        numeroPegase: socialSupport.numeroPegase
+      },
+      conditions.minister
+    )
   }
 }
 
@@ -198,7 +211,18 @@ export function filterFollowup({
   followup,
   conditions
 }: {
-  followup: Followup & {
+  followup: Pick<
+    Followup,
+    | 'id'
+    | 'medium'
+    | 'classified'
+    | 'forwardedToJustice'
+    | 'firstFollowup'
+    | 'helpRequested'
+    | 'thirdPersonName'
+    | 'place'
+    | 'duration'
+  > & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
@@ -209,15 +233,25 @@ export function filterFollowup({
   }
 }) {
   return {
-    // HEADER
     id: followup.id,
-    structureName: followup.structureName,
-    redirected: followup.redirected,
     medium: followup.medium,
-    // MINISTERE
-    classified: show(followup.classified, conditions.minister),
-    forwardedToJustice: show(followup.forwardedToJustice, conditions.minister),
-    // DETAILS
+    ...show(
+      {
+        classified: followup.classified,
+        forwardedToJustice: followup.forwardedToJustice
+      },
+      conditions.minister
+    ),
+    ...show(
+      {
+        firstFollowup: followup.firstFollowup,
+        helpRequested: followup.helpRequested,
+        thirdPersonName: followup.thirdPersonName,
+        place: followup.place,
+        duration: followup.duration
+      },
+      conditions.details
+    ),
     prescribingOrganization: show(
       followup.prescribingOrganization,
       conditions.details
@@ -225,19 +259,27 @@ export function filterFollowup({
     prescribingOrganizationContact: show(
       followup.prescribingOrganizationContact,
       conditions.details
-    ),
-    firstFollowup: show(followup.firstFollowup, conditions.details),
-    helpRequested: show(followup.helpRequested, conditions.details),
-    thirdPersonName: show(followup.thirdPersonName, conditions.details),
-    place: show(followup.place, conditions.details),
-    duration: show(followup.duration, conditions.details)
+    )
   }
 }
 export function filterFileInstruction({
   fileInstruction,
   conditions
 }: {
-  fileInstruction: FileInstruction & {
+  fileInstruction: Pick<
+    FileInstruction,
+    | 'id'
+    | 'type'
+    | 'fullFile'
+    | 'decisionDate'
+    | 'dispatchDate'
+    | 'examinationDate'
+    | 'externalStructure'
+    | 'instructorOrganizationId'
+    | 'instructorOrganizationContactId'
+    | 'refusalReason'
+    | 'refusalReasonOther'
+  > & {
     instructorOrganization: Partial<PartnerOrganization> | null
     instructorOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
@@ -253,23 +295,20 @@ export function filterFileInstruction({
     id: fileInstruction.id,
     type: fileInstruction.type,
     fullFile: fileInstruction.fullFile,
-    decisionDate: show(fileInstruction.decisionDate, details),
-    dispatchDate: show(fileInstruction.dispatchDate, details),
-
-    examinationDate: show(fileInstruction.examinationDate, details),
-    externalStructure: show(fileInstruction.externalStructure, details),
-    instructorOrganizationId: show(
-      fileInstruction.instructorOrganizationId,
+    ...show(
+      {
+        decisionDate: fileInstruction.decisionDate,
+        dispatchDate: fileInstruction.dispatchDate,
+        examinationDate: fileInstruction.examinationDate,
+        externalStructure: fileInstruction.externalStructure,
+        instructorOrganizationId: fileInstruction.instructorOrganizationId,
+        instructorOrganizationContactId:
+          fileInstruction.instructorOrganizationContactId,
+        refusalReason: fileInstruction.refusalReason,
+        refusalReasonOther: fileInstruction.refusalReasonOther
+      },
       details
     ),
-    instructorOrganizationContactId: show(
-      fileInstruction.instructorOrganizationContactId,
-      details
-    ),
-
-    refusalReason: show(fileInstruction.refusalReason, details),
-    refusalReasonOther: show(fileInstruction.refusalReasonOther, details),
-
     instructorOrganization: show(
       fileInstruction.instructorOrganization &&
         partnerOrganizationDto(fileInstruction.instructorOrganization),
@@ -289,7 +328,25 @@ export function filterHousingHelpRequest({
   housingHelpRequest,
   conditions
 }: {
-  housingHelpRequest: HousingHelpRequest & {
+  housingHelpRequest: Pick<
+    HousingHelpRequest,
+    | 'id'
+    | 'reason'
+    | 'isFirst'
+    | 'firstOpeningDate'
+    | 'askedHousing'
+    | 'uniqueId'
+    | 'taxHouseholdAdditionalInformation'
+    | 'maxRent'
+    | 'maxCharges'
+    | 'handlingDate'
+    | 'housingType'
+    | 'roomCount'
+    | 'isPmr'
+    | 'lowIncomeHousingType'
+    | 'prescribingOrganizationId'
+    | 'prescribingOrganizationContactId'
+  > & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
@@ -302,34 +359,28 @@ export function filterHousingHelpRequest({
   const { details } = conditions
   return {
     id: housingHelpRequest.id,
-    reason: show(housingHelpRequest.reason, details),
-    isFirst: show(housingHelpRequest.isFirst, details),
-    firstOpeningDate: show(housingHelpRequest.firstOpeningDate, details),
-    askedHousing: show(housingHelpRequest.askedHousing, details),
-    uniqueId: show(housingHelpRequest.uniqueId, details),
-    taxHouseholdAdditionalInformation: show(
-      housingHelpRequest.taxHouseholdAdditionalInformation,
+    ...show(
+      {
+        reason: housingHelpRequest.reason,
+        isFirst: housingHelpRequest.isFirst,
+        firstOpeningDate: housingHelpRequest.firstOpeningDate,
+        askedHousing: housingHelpRequest.askedHousing,
+        uniqueId: housingHelpRequest.uniqueId,
+        taxHouseholdAdditionalInformation:
+          housingHelpRequest.taxHouseholdAdditionalInformation,
+        maxRent: housingHelpRequest.maxRent,
+        maxCharges: housingHelpRequest.maxCharges,
+        handlingDate: housingHelpRequest.handlingDate,
+        housingType: housingHelpRequest.housingType,
+        roomCount: housingHelpRequest.roomCount,
+        isPmr: housingHelpRequest.isPmr,
+        lowIncomeHousingType: housingHelpRequest.lowIncomeHousingType,
+        prescribingOrganizationId: housingHelpRequest.prescribingOrganizationId,
+        prescribingOrganizationContactId:
+          housingHelpRequest.prescribingOrganizationContactId
+      },
       details
     ),
-    maxRent: show(housingHelpRequest.maxRent, details),
-    maxCharges: show(housingHelpRequest.maxCharges, details),
-    handlingDate: show(housingHelpRequest.handlingDate, details),
-    housingType: show(housingHelpRequest.housingType, details),
-    roomCount: show(housingHelpRequest.roomCount, details),
-    isPmr: show(housingHelpRequest.isPmr, details),
-    lowIncomeHousingType: show(
-      housingHelpRequest.lowIncomeHousingType,
-      details
-    ),
-    prescribingOrganizationId: show(
-      housingHelpRequest.prescribingOrganizationId,
-      details
-    ),
-    prescribingOrganizationContactId: show(
-      housingHelpRequest.prescribingOrganizationContactId,
-      details
-    ),
-
     prescribingOrganization: show(
       housingHelpRequest.prescribingOrganization &&
         partnerOrganizationDto(housingHelpRequest.prescribingOrganization),
@@ -349,7 +400,19 @@ export function filterHelpRequest({
   helpRequest,
   conditions
 }: {
-  helpRequest: HelpRequest & {
+  helpRequest: Pick<
+    HelpRequest,
+    | 'id'
+    | 'financialSupport'
+    | 'allocatedAmount'
+    | 'askedAmount'
+    | 'isRefundable'
+    | 'handlingDate'
+    | 'paymentDate'
+    | 'paymentMethod'
+    | 'prescribingOrganizationId'
+    | 'prescribingOrganizationContactId'
+  > & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
@@ -363,24 +426,20 @@ export function filterHelpRequest({
   return {
     id: helpRequest?.id,
     financialSupport: helpRequest.financialSupport,
-
-    allocatedAmount: show(helpRequest.allocatedAmount, details),
-    askedAmount: show(helpRequest.askedAmount, details),
-    isRefundable: show(helpRequest.isRefundable, details),
-
-    handlingDate: show(helpRequest.handlingDate, details),
-
-    paymentDate: show(helpRequest.paymentDate, details),
-    paymentMethod: show(helpRequest.paymentMethod, details),
-    prescribingOrganizationId: show(
-      helpRequest.prescribingOrganizationId,
+    ...show(
+      {
+        allocatedAmount: helpRequest.allocatedAmount,
+        askedAmount: helpRequest.askedAmount,
+        isRefundable: helpRequest.isRefundable,
+        handlingDate: helpRequest.handlingDate,
+        paymentDate: helpRequest.paymentDate,
+        paymentMethod: helpRequest.paymentMethod,
+        prescribingOrganizationId: helpRequest.prescribingOrganizationId,
+        prescribingOrganizationContactId:
+          helpRequest.prescribingOrganizationContactId
+      },
       details
     ),
-    prescribingOrganizationContactId: show(
-      helpRequest.prescribingOrganizationContactId,
-      details
-    ),
-
     prescribingOrganization: show(
       helpRequest.prescribingOrganization &&
         partnerOrganizationDto(helpRequest.prescribingOrganization),
@@ -402,7 +461,7 @@ export function filterDocuments({
   ctx,
   familyFile
 }: {
-  documents: Document[]
+  documents: DocumentFields[]
   conditions: {
     details: boolean
   }
@@ -426,7 +485,10 @@ export function filterComments({
   comments,
   ctx
 }: {
-  comments: (Comment & {
+  comments: (Pick<
+    Comment,
+    'id' | 'created' | 'updated' | 'content' | 'createdById'
+  > & {
     createdBy: Pick<User, 'id' | 'firstName' | 'lastName'>
   })[]
   ctx: ProtectedAppContext
