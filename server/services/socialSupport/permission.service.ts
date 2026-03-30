@@ -5,16 +5,18 @@ import type {
 } from '~/server/security'
 import { getSocialSupportPermissions } from '~/server/security/permissions'
 
-export function getSocialSupportSecurityTarget(
-  user: SecurityRuleGrantee,
-  id: string
-) {
+function getSocialSupportSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return SocialSupportRepo.findUniqueOrThrow(user, {
     where: { id },
-    include: {
+    select: {
+      id: true,
+      createdById: true,
+      structureId: true,
+      socialSupportType: true,
       familyFile: {
-        include: {
-          referents: true
+        select: {
+          structureId: true,
+          referents: { select: { id: true } }
         }
       }
     }

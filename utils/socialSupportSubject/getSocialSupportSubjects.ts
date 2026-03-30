@@ -1,15 +1,17 @@
 import type { SocialSupportSubject } from '@prisma/client'
 import { sortSocialSupportSubjectsByName } from '.'
 
-export const getSocialSupportSubjects = (
-  activeSocialSupportSubjects: SocialSupportSubject[] | null,
-  activeAndInactivSocialSupportSubjects: SocialSupportSubject[] | null,
+export function getSocialSupportSubjects<
+  T extends Pick<SocialSupportSubject, 'id' | 'name'>
+>(
+  activeSocialSupportSubjects: T[] | undefined,
+  activeAndInactivSocialSupportSubjects: T[] | undefined,
   userSubjectId: string | undefined
-): SocialSupportSubject[] | null => {
+) {
   if (
-    userSubjectId == null ||
-    activeAndInactivSocialSupportSubjects == null ||
-    activeSocialSupportSubjects == null
+    !userSubjectId ||
+    !activeAndInactivSocialSupportSubjects ||
+    !activeSocialSupportSubjects
   ) {
     return null
   }
@@ -32,15 +34,17 @@ export const getSocialSupportSubjects = (
   return sortSocialSupportSubjectsByName(allSocialSupportSubjects)
 }
 
-export const getSocialSupportSubjectsFromArray = (
-  activeSocialSupportSubjects: SocialSupportSubject[] | null,
-  activeAndInactivSocialSupportSubjects: SocialSupportSubject[] | null,
-  userSocialSupportSubjects: SocialSupportSubject[] | undefined
-): SocialSupportSubject[] | null => {
+export function getSocialSupportSubjectsFromArray<
+  T extends Pick<SocialSupportSubject, 'id' | 'name'>
+>(
+  activeSocialSupportSubjects: T[] | undefined,
+  activeAndInactivSocialSupportSubjects: T[] | undefined,
+  userSocialSupportSubjects: T[] | undefined
+): T[] | null {
   if (
-    userSocialSupportSubjects == null ||
-    activeAndInactivSocialSupportSubjects == null ||
-    activeSocialSupportSubjects == null
+    !userSocialSupportSubjects ||
+    !activeAndInactivSocialSupportSubjects ||
+    !activeSocialSupportSubjects
   ) {
     return null
   }

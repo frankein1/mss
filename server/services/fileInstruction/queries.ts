@@ -99,7 +99,10 @@ export async function getPage(
       socialSupport
     })
     const appPermissions = getAppContextPermissions(ctx)
-    return filter(appPermissions, permissions, fileInstruction)
+    return {
+      data: filter(appPermissions, permissions, fileInstruction),
+      permissions
+    }
   })
 }
 

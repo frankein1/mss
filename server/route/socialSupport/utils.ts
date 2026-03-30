@@ -30,8 +30,6 @@ export function formatSocialSupportDetail(
   ctx: ProtectedAppContext,
   familyFile: FamilyFileSecurityTarget
 ) {
-  const { _count } = socialSupport
-
   const socialSupportPermissions = getSocialSupportPermissions({
     ctx,
     familyFile,
@@ -40,77 +38,72 @@ export function formatSocialSupportDetail(
 
   const appPermissions = getAppContextPermissions(ctx)
 
-  const { followup, fileInstruction, minister, documents, comments } =
-    socialSupport
-
   const conditions = {
     minister: appPermissions.module.ministere,
     details: socialSupportPermissions.get.details,
     privateSynthesis: socialSupportPermissions.get.privateSynthesis
   }
 
-  const { familyFile: ff, ...ss } = socialSupport
-
   const filteredSocialSupport = filterSocialSupport({
-    socialSupport: {
-      familyFile: { id: ff.id, structureId: ff.structureId },
-      ...ss
-    },
+    socialSupport,
     conditions
   })
 
-  const filteredFileInstruction = fileInstruction
+  const filteredFileInstruction = socialSupport.fileInstruction
     ? filterFileInstruction({
-        fileInstruction,
+        fileInstruction: socialSupport.fileInstruction,
         conditions
       })
     : null
 
-  const helpRequest = fileInstruction?.helpRequest
-  const housingHelpRequest = fileInstruction?.housingHelpRequest
-
-  const filteredHousingHelpRequest = housingHelpRequest
-    ? filterHousingHelpRequest({
-        housingHelpRequest,
-        conditions
-      })
-    : null
-  const filteredHelpRequest = helpRequest
+  const filteredHelpRequest = socialSupport.fileInstruction?.helpRequest
     ? filterHelpRequest({
-        helpRequest,
+        helpRequest: socialSupport.fileInstruction.helpRequest,
         conditions
       })
     : null
 
-  const filteredFollowup = followup
+  const filteredHousingHelpRequest = socialSupport.fileInstruction
+    ?.housingHelpRequest
+    ? filterHousingHelpRequest({
+        housingHelpRequest: socialSupport.fileInstruction.housingHelpRequest,
+        conditions
+      })
+    : null
+
+  const filteredFollowup = socialSupport.followup
     ? filterFollowup({
-        followup,
+        followup: socialSupport.followup,
         conditions
       })
     : null
 
   const documentItems = filterDocuments({
-    documents,
+    documents: socialSupport.documents,
     conditions,
     ctx,
     familyFile
   })
 
-  const commentItems = filterComments({ comments, ctx })
+  const commentItems = filterComments({
+    comments: socialSupport.comments,
+    ctx
+  })
 
   return {
     data: {
       ...filteredSocialSupport,
-      minister: minister,
       comments: commentItems,
       documents: documentItems,
-      hasUnreadNotifications: !!_count.notifications,
+      hasUnreadNotifications: !!socialSupport._count.notifications,
       followup: filteredFollowup,
-      fileInstruction: {
-        ...filteredFileInstruction,
-        helpRequest: filteredHelpRequest,
-        housingHelpRequest: filteredHousingHelpRequest
-      }
+      fileInstruction: filteredFileInstruction
+        ? {
+            ...filteredFileInstruction,
+            helpRequest: filteredHelpRequest,
+            housingHelpRequest: filteredHousingHelpRequest
+          }
+        : null
     },
     permissions: socialSupportPermissions
   }

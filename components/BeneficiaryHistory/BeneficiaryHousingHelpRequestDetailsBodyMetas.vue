@@ -41,6 +41,12 @@
     >
     {{ fileInstruction.instructorOrganizationContact.name }}
   </li>
+  <li v-if="housingHelpRequest.firstOpeningDate">
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.firstOpeningDate }}&nbsp;:</span
+    >
+    {{ formatDate(housingHelpRequest.firstOpeningDate) }}
+  </li>
   <li v-if="housingHelpRequest.reason">
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.reason }}&nbsp;:</span
@@ -86,6 +92,12 @@
     class="fr-icon-success-line"
   >
     {{ housingHelpRequestFieldLabels.isPmr }}
+  </li>
+  <li v-if="lowIncomeHousingType">
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.lowIncomeHousingType }}&nbsp;:</span
+    >
+    {{ lowIncomeHousingType }}
   </li>
   <li v-if="housingHelpRequest.taxHouseholdAdditionalInformation">
     <span class="information-label"
@@ -144,6 +156,7 @@
     housingReasonKeys,
     housingTypeKeys,
     roomCountKeys,
+    lowIncomeHousingKeys,
     isFirstKeys
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
@@ -186,6 +199,16 @@
 
     return props.housingHelpRequest.roomCount
       .map(rC => roomCountKeys.value(rC))
+      .join(', ')
+  })
+
+  const lowIncomeHousingType = computed(() => {
+    if (!props.housingHelpRequest.lowIncomeHousingType?.length) {
+      return undefined
+    }
+
+    return props.housingHelpRequest.lowIncomeHousingType
+      .map(l => lowIncomeHousingKeys.value(l))
       .join(', ')
   })
 
