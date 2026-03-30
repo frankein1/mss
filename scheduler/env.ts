@@ -53,5 +53,15 @@ export const SCHEDULER_ENV = {
     landingPageUrl:
       process.env.NUXT_PUBLIC_LANDING_PAGE_URL ||
       'https://monsuivisocial.incubateur.anct.gouv.fr'
+  },
+  scalingo: {
+    apiToken: process.env.SCALINGO_API_TOKEN || '',
+    appName: process.env.SCALINGO_APP_NAME || '',
+    region: process.env.SCALINGO_REGION || 'osc-fr1'
+  },
+  document: {
+    migration: {
+      maxDurationHours: parseFloat(process.env.MAX_DURATION_HOURS || '3')
+    }
   }
 }

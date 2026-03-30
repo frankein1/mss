@@ -1,6 +1,6 @@
 import { Cron } from 'croner'
-import { initSentry } from './utils'
 import { jobs } from './jobs'
+import { initSentry } from './utils'
 
 /**
  * WARNING!
@@ -21,6 +21,12 @@ function startScheduler() {
   new Cron(every30seconds, jobs.queuedEmailSender, {
     timezone,
     name: 'queuedEmailSender'
+  })
+
+  const at8pm = '0 20 * * *'
+  new Cron(at8pm, jobs.documentS3Migration, {
+    timezone,
+    name: 'documentS3Migration'
   })
 
   const at23pm = '0 23 * * *'
