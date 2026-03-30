@@ -1,13 +1,28 @@
 import { SCHEDULER_ENV } from '../env'
 import { performance } from 'node:perf_hooks'
 import { initSentry, terminateSentry } from '../utils'
+import { prismaClient } from '~/server/prisma'
+import * as Sentry from '@sentry/node'
+import { uploadWithEncryption } from '~/server/lib/s3/file'
+import {
+  generateFilenameForDocument,
+  generateFileRootForDocument
+} from '~/server/lib/s3/helper'
 
-/** This migration must be launched in a detached one-off container using
+/** WARNING!
+ * This migration must be launched in a detached one-off container using
  * the Scalingo CLI or the Scalingo API.
  * As a result importing this function is equivalent to launching the migration.
  */
 async function main() {
-  initSentry()
+  if (!SCHEDULER_ENV.document.migration.activate) {
+    throw new Error('migrate-to-s3-bucket: document migration is not activated')
+  }
+
+  const sentryActivated = initSentry()
+  if (sentryActivated) {
+    Sentry.setTag('scheduler', 'migrate-to-s3-bucket')
+  }
 
   const maxDuration = SCHEDULER_ENV.document.migration.maxDurationHours
   const logEvery = 100
@@ -21,8 +36,24 @@ async function main() {
   const start = performance.now()
 
   while (Date.now() < deadline) {
-    // TODO: implement migration here and stop when no document to migrate remain
-    const stopCondition = true
+    const doc = await getDocumentToMigrate()
+
+    if (!doc[0]) {
+      break
+    }
+    const document = doc[0]
+
+    try {
+      await migrateDocument(document)
+    } catch (e: unknown) {
+      console.error(
+        `migrate-to-s3-bucket: error for document ${document.key} "${document.name}"`,
+        e
+      )
+      if (sentryActivated) {
+        Sentry.captureException(e)
+      }
+    }
 
     iteration++
     if (iteration % logEvery === 0) {
@@ -30,10 +61,6 @@ async function main() {
       console.log(
         `migrate-to-s3-bucket: ${iteration} documents migrated in ${duration} s`
       )
-    }
-
-    if (stopCondition) {
-      break
     }
   }
 
@@ -43,10 +70,87 @@ async function main() {
   )
 }
 
-main()
+async function getDocumentToMigrate() {
+  return await prismaClient.document.findMany({
+    where: {
+      migrated: false
+    },
+    select: {
+      key: true,
+      name: true,
+      mimeType: true,
+      size: true,
+      filenameDisk: true,
+      beneficiary: {
+        select: {
+          id: true,
+          structureId: true
+        }
+      },
+      documentContent: {
+        select: {
+          content: true
+        }
+      }
+    },
+    take: 1
+  })
+}
+
+type DocumentToMigrate = Awaited<ReturnType<typeof getDocumentToMigrate>>[0]
+
+async function migrateDocument(document: DocumentToMigrate) {
+  const filename = generateFilenameForDocument(document.name)
+  const filepath = `${generateFileRootForDocument(document.beneficiary.structureId, document.beneficiary.id)}/${filename}`
+
+  if (!document.documentContent) {
+    throw new Error(
+      `migrate-to-s3-bucket: missing document content for key ${document.key}`
+    )
+  }
+  if (!document.size) {
+    throw new Error(
+      `migrate-to-s3-bucket: missing document size for key ${document.key}`
+    )
+  }
+
+  await uploadWithEncryption({
+    config: SCHEDULER_ENV,
+    bucketKey: filepath,
+    plainData: Buffer.from(document.documentContent.content),
+    dataForEncryptionContext: {
+      documentKey: document.key,
+      contentType: document.mimeType,
+      contentLength: document.size
+    }
+  })
+
+  await prismaClient.document.update({
+    select: { key: true },
+    where: {
+      key: document.key,
+      filenameDisk: filepath,
+      filenameDownload: filename
+    },
+    data: { migrated: true }
+  })
+}
+
+/** Job Execution in one-off container.
+ * The container will be stopped at the end of the job or upon error.
+ * Cleanup allows to close sentry and prisma connections
+ */
+
+async function cleanup() {
+  await terminateSentry()
+  await prismaClient.$disconnect()
+}
+
 ;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
   process.on(signal, async () => {
-    await terminateSentry()
+    await cleanup()
     process.exit(1)
   })
 )
+
+main().then(cleanup)
