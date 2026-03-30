@@ -35,18 +35,10 @@ async function main() {
   )
   const start = performance.now()
 
-  while (Date.now() < deadline) {
-    let doc: DocumentToMigrate[]
+  const failedIds: string[] = []
 
-    try {
-      doc = await getDocumentToMigrate()
-    } catch (e: unknown) {
-      console.error(`migrate-to-s3-bucket: error fetching document`, e)
-      if (sentryActivated) {
-        Sentry.captureException(e)
-      }
-      continue
-    }
+  while (Date.now() < deadline) {
+    const doc = await getDocumentToMigrate(failedIds)
 
     if (!doc[0]) {
       break
@@ -61,6 +53,8 @@ async function main() {
         `migrate-to-s3-bucket: error for document ${document.key} "${document.name}"`,
         e
       )
+      failedIds.push(document.key)
+
       if (sentryActivated) {
         Sentry.captureException(e)
       }
@@ -78,35 +72,43 @@ async function main() {
 
   duration = (performance.now() - start) / 1000
   console.log(
-    `migrate-to-s3-bucket: ${iteration} documents migrated in ${duration} s`
+    `migrate-to-s3-bucket: ${iteration} documents migrated in ${duration} s, ${failedIds.length} failed migrations`
   )
 }
 
-async function getDocumentToMigrate() {
-  return await prismaClient.document.findMany({
-    where: {
-      migrated: false
-    },
-    select: {
-      key: true,
-      name: true,
-      mimeType: true,
-      size: true,
-      filenameDisk: true,
-      beneficiary: {
+async function getDocumentToMigrate(notIn: string[], nRetries = 5) {
+  let retry = 0
+  while (true) {
+    try {
+      return await prismaClient.document.findMany({
+        where: { migrated: false, key: { notIn } },
         select: {
-          id: true,
-          structureId: true
-        }
-      },
-      documentContent: {
-        select: {
-          content: true
-        }
+          key: true,
+          name: true,
+          mimeType: true,
+          size: true,
+          filenameDisk: true,
+          beneficiary: {
+            select: {
+              id: true,
+              structureId: true
+            }
+          },
+          documentContent: {
+            select: {
+              content: true
+            }
+          }
+        },
+        take: 1
+      })
+    } catch (e: unknown) {
+      retry++
+      if (retry >= nRetries) {
+        throw e
       }
-    },
-    take: 1
-  })
+    }
+  }
 }
 
 type DocumentToMigrate = Awaited<ReturnType<typeof getDocumentToMigrate>>[0]
