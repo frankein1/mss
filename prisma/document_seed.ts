@@ -18,7 +18,7 @@ const N_DOCUMENTS = 1000
 const ID_JEANNE_RESPONSABLE = fixturesUsers[FixtureUserRole.StructureManager].id
 const ID_PISCOPO = fixturesBeneficiaries[FixtureBeneficiary.PISCOPO].id
 
-/** Seed N_DOCUMENTS in Database woth format pdf */
+/** Seed N_DOCUMENTS in Database with format pdf */
 async function main() {
   const docData = new Array(N_DOCUMENTS).fill(null).map(() => {
     const name = `${faker.word.sample()}_${nanoid(6)}.pdf`

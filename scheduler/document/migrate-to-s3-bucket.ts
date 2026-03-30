@@ -36,11 +36,22 @@ async function main() {
   const start = performance.now()
 
   while (Date.now() < deadline) {
-    const doc = await getDocumentToMigrate()
+    let doc: DocumentToMigrate[]
+
+    try {
+      doc = await getDocumentToMigrate()
+    } catch (e: unknown) {
+      console.error(`migrate-to-s3-bucket: error fetching document`, e)
+      if (sentryActivated) {
+        Sentry.captureException(e)
+      }
+      continue
+    }
 
     if (!doc[0]) {
       break
     }
+
     const document = doc[0]
 
     try {
@@ -53,6 +64,7 @@ async function main() {
       if (sentryActivated) {
         Sentry.captureException(e)
       }
+      continue
     }
 
     iteration++
@@ -99,6 +111,9 @@ async function getDocumentToMigrate() {
 
 type DocumentToMigrate = Awaited<ReturnType<typeof getDocumentToMigrate>>[0]
 
+/** Document content is migrated to S3 bucket and filepath is updated in table
+ * Document content cleaunup will be performed when the whole migration has been finalized
+ */
 async function migrateDocument(document: DocumentToMigrate) {
   const filename = generateFilenameForDocument(document.name)
   const filepath = `${generateFileRootForDocument(document.beneficiary.structureId, document.beneficiary.id)}/${filename}`
@@ -127,12 +142,12 @@ async function migrateDocument(document: DocumentToMigrate) {
 
   await prismaClient.document.update({
     select: { key: true },
-    where: {
-      key: document.key,
+    where: { key: document.key },
+    data: {
+      migrated: true,
       filenameDisk: filepath,
       filenameDownload: filename
-    },
-    data: { migrated: true }
+    }
   })
 }
 
@@ -153,4 +168,4 @@ async function cleanup() {
   })
 )
 
-main().then(cleanup)
+main().finally(cleanup)
