@@ -154,6 +154,12 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     }
   }
 
+  if (filters.socialSupportSubjects?.length) {
+    socialSupport.subjects = {
+      some: { id: { in: filters.socialSupportSubjects } }
+    }
+  }
+
   return socialSupport
 }
 
@@ -216,13 +222,6 @@ export function prepareBeneficiaryStatFilters(
     hasDateFilter && !filterOnBeneficiaryCreated
   if (filterOnSocialSupportCreated) {
     socialSupportFilters.created = prepareDateFilters(filters)
-  }
-
-  if (filters.socialSupportSubjects?.length) {
-    const typesListFilter = {
-      id: { in: filters.socialSupportSubjects }
-    }
-    socialSupportFilters.subjects = { some: typesListFilter }
   }
 
   if (filters.socialSupportSubjects?.length) {
