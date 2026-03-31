@@ -172,6 +172,7 @@
           "
         >
           <hr class="fr-mt-4w" />
+          <h3>Réorientations</h3>
           <ul>
             <li
               v-for="redirection in helpRequest.fileInstruction.socialSupport

@@ -230,7 +230,12 @@ async function main() {
             const [status, subtype] =
               socialSupportType === 'Followup'
                 ? [randomFollowupStatus(), randomMedium()]
-                : [randomHelpRequestStatus(), undefined]
+                : [
+                    randomHelpRequestStatus(),
+                    socialSupportType === 'HelpRequestHousing'
+                      ? 'Housing'
+                      : undefined
+                  ]
             return {
               createdById: users[0]?.id || ID_JEANNE_RESPONSABLE,
               lastUpdatedById: users[0]?.id || ID_JEANNE_RESPONSABLE,

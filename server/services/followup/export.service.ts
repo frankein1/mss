@@ -106,16 +106,20 @@ export async function exportFollowups({
           duration: followupDurationKeys.value(followup.duration) || '',
           type: redirections
             .map(r => socialSupportRedirectionTypeKeys.value(r.type))
+            .filter((motif): motif is string => motif != null)
             .join(', '),
           motif: redirections.map(r => r.motif).join(', '),
           partnerOrganizationId: redirections
             .map(r => r.partnerOrganization.name)
+            .filter((name): name is string => name != null)
             .join(', '),
           partnerOrganizationContactId: redirections
             .map(r => r.partnerOrganizationContact.name)
+            .filter((name): name is string => name != null)
             .join(', '),
           externalStructureName: redirections
             .map(r => r.externalStructureName)
+            .filter((name): name is string => name != null)
             .join(', ')
         })
       }
