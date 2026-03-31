@@ -10,7 +10,7 @@
 
     <div class="fr-container--fluid">
       <div class="fr-grid-row fr-grid-row--gutters bg-color-grey-light">
-        <div class="fr-col-3">
+        <div class="fr-col-6">
           <div class="main-container fr-p-2w">
             <h4>Distribution des noms d'entité sans pourcentage</h4>
 
@@ -21,7 +21,7 @@
           </div>
         </div>
 
-        <div class="fr-col-3">
+        <div class="fr-col-6">
           <div class="main-container fr-p-2w">
             <h4>
               Distribution des noms d'entité sans pourcentage et avec unité et
@@ -46,6 +46,22 @@
             <StatsList
               :total-count="totalCount"
               :stats="countPercentagePictoColor"
+            />
+          </div>
+        </div>
+
+        <div class="fr-col-6">
+          <div class="main-container fr-p-2w">
+            <h4>
+              Distribution des noms d'entité avec barre colorée, pourcentages et
+              descriptions
+            </h4>
+
+            <StatsList
+              :total-count
+              :stats="countPercentageDescriptionColor"
+              :display-total="false"
+              stats-bar
             />
           </div>
         </div>
@@ -110,6 +126,43 @@
     { key: 'demande-rsa', label: 'Demande de RSA', count: 25 },
     { key: 'domiciliation', label: 'Domiciliation', count: 11 },
     { key: 'famille-accueil', label: "Entrée en famille d'accueil", count: 78 },
+    {
+      key: 'retraite',
+      label: 'Retraite - infos droits et démarches',
+      count: 36
+    },
+    {
+      key: 'visio',
+      label:
+        'Très long label pour faire une test UI de rendu de la carte de statistiques',
+      count: 19
+    }
+  ]
+
+  const countPercentageDescriptionColor: StatsListPropType = [
+    {
+      key: 'aide-logement',
+      label: 'Aide financière - logement',
+      count: 36,
+      description:
+        'test longue description détaillant le mode de calcul de cette entrée dans la liste des statistiques',
+      color: 'var(--background-alt-green-archipel-hover)'
+    },
+    {
+      key: 'aide-transport',
+      label: 'Aide non remboursable - transport',
+      count: 42,
+      color: 'var(--background-contrast-green-bourgeon-active)'
+    },
+    { key: 'demande-rsa', label: 'Demande de RSA', count: 25 },
+    { key: 'domiciliation', label: 'Domiciliation', count: 11, emphasis: true },
+    {
+      key: 'famille-accueil',
+      label: "Entrée en famille d'accueil",
+      count: 78,
+      description: 'test autre description',
+      color: 'var(--yellow-tournesol-950-100-hover)'
+    },
     {
       key: 'retraite',
       label: 'Retraite - infos droits et démarches',
