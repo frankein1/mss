@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.57.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.56.2...v1.57.0) (2026-03-31)
+
+
+### Features
+
+* **accompagnements:** ré-orientation des bénéficiaires ([493721b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/493721bb614f82d726568469681e3e7040e254e9)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **accompagnements:** ré-orientation des bénéficiaires (2) ([a31c97a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a31c97a16f28978197728aae368956ffe2217e71)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **document:** ajout variable d'activation du stockage des documents sur S3 ([e484936](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e48493692c3b0038bd5626aa962cb54e5e3cfa11)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **document:** introduit le chiffrement et le stockage des documents sur stockage objet ([64f1c27](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/64f1c27c2d5b5c35fad96b73ae2c6860cc748604)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **document:** préparation migration S3, initialisation env, dépendances et DB repo ([48f46bf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/48f46bfd88e431501e3f0f02ff79d6ecf57d412c)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **redirection:** ajout redirection à l'archivage des bénéficiaires ([6818f9a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6818f9abe91539bfa76675cb163ba82b21016c22)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **redirection:** impression des redirections dans les accompagnements ([5f6ec79](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5f6ec798641119eceaef3d279b866228388a3505)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **réorientation:** ajouts dans les exports des accompagnements ([e4bf694](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e4bf694f20870c07ace67bc8f91f8bd9fd26fd60)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **statistiques:** ajout de sous titres aux entrées des stats ([75a2bc6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/75a2bc6c2499e8f2ff16ad1d71d9a5e65738478b)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **statistiques:** ajout nombre bénéficiaires concernés par réorientation ([7020aba](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7020abaeeebfcae275d3817d20897c0913355938)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+
+
+### Bug Fixes
+
+* **accompagnement:** impression des accompagnements sans synthese ([c87363d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c87363d3abb4b61c6ee0c7ade6f10b8816c59ad0)), closes [#1049](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1049)
+* **accompagnement:** nettoyage des retours de requète Prisma ([20303c4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/20303c4f2b0089a740dec38e6b3ea5f01757dcf4)), closes [#1048](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1048)
+* **réorientation:** amélioration de l'export ([e70afe4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e70afe4e9a4a32b36521fa3721b48784bc263b0e)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **réorientation:** amélioration des messages d'erreurs formulaire ([bd8b119](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bd8b1195199346a5e3d50dc9a48d65b6dbe39ce1)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **réorientation:** quelques fix mineurs ([a9e2c98](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a9e2c9878d15991f02554069f6870022133e8e6b)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **router:** corrige la redirection dans onLeaveFormComfirmation ([b0d8494](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b0d8494f63d3fb2eded7c6c23c9d92da1ef12429)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **statistiques:** améliore performance requête des redirections entretiens & instructions ([f79b80d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f79b80dc01867d66bf96fe5b6d274b2f27c6b89b)), closes [#480](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/480)
+* **statistiques:** bug. Filtre objet d'accompagnement non appliqué ([302066e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/302066ebd4aa6dd0f5c39e606aa23715281c2eb9)), closes [#1052](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1052)
+
 ## [1.56.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.56.1...v1.56.2) (2026-03-11)
 
 
