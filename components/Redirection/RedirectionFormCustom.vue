@@ -35,6 +35,8 @@
         disabled
         :name="`socialSupportRedirections[${index}].motif`"
         label="Motif"
+        hint="Fonctionnalité à venir"
+        aria-describedby="motif-tooltip"
       />
       <VeeInput
         v-if="selectedType === SocialSupportRedirectionType.Other"
