@@ -198,16 +198,23 @@ export async function exportFileInstructions({
           isPmr: getBooleanOrEmpty(housingHelpRequest?.isPmr),
           type: redirections
             .map(r => socialSupportRedirectionTypeKeys.value(r.type))
+            .filter((type): type is string => type != null)
             .join(', '),
-          motif: redirections.map(r => r.motif).join(', '),
+          motif: redirections
+            .map(r => r.motif)
+            .filter((motif): motif is string => motif != null)
+            .join(', '),
           partnerOrganizationId: redirections
             .map(r => r.partnerOrganization.name)
+            .filter((name): name is string => name != null)
             .join(', '),
           partnerOrganizationContactId: redirections
             .map(r => r.partnerOrganizationContact.name)
+            .filter((name): name is string => name != null)
             .join(', '),
           externalStructureName: redirections
             .map(r => r.externalStructureName)
+            .filter((name): name is string => name != null)
             .join(', ')
         }
       ]
