@@ -83,7 +83,9 @@
         label: 'Bénéficiaires avec au moins une réorientation',
         color: SupportColor.helpRequests,
         emphasis: true,
-        count: data.value?.beneficiariesWithRedirections._count || 0
+        count: data.value?.beneficiariesWithRedirections._count || 0,
+        description:
+          'Pourcentage calculé sur les bénéficiaires ayant au moins une instruction de dossier.'
       }
     ]
   })
