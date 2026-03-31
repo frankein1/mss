@@ -6,7 +6,8 @@
     >
       <li
         v-for="(
-          { key, label, count, subCount, color, picto, emphasis }, index
+          { key, label, count, subCount, color, picto, emphasis, description },
+          index
         ) in displayedStats"
         :key="key"
         class="stats-entry"
@@ -29,11 +30,15 @@
             :to="notFilledRoute"
             >{{ label }}</NuxtLink
           >
-          <span
-            v-else
-            :class="{ 'fr-text--bold': emphasis }"
-            >{{ label }}</span
-          >
+          <div v-else>
+            <span :class="{ 'fr-text--bold': emphasis }">{{ label }}</span>
+            <template v-if="description">
+              <br />
+              <span class="fr-text--xs text--muted fr-m-0">{{
+                description
+              }}</span>
+            </template>
+          </div>
         </div>
         <div
           class="fr-text--bold"

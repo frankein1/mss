@@ -11,6 +11,7 @@ export type StatList = StatBase & {
   count: number
   subCount?: number
   emphasis?: boolean
+  description?: string
 }
 
 type StatPie = StatBase & {
