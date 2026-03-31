@@ -306,8 +306,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/app/history': { redirect: '/app/history/followups' },
-    '/app/stats': { redirect: '/app/stats/beneficiaries' },
     '/api/document/upload': {
       security: {
         xssValidator: false
