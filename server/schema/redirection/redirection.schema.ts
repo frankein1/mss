@@ -11,7 +11,7 @@ export const SocialSupportRedirectionSchema = z
     externalStructureName: stringConstraint
       .max(300, maxStringLengthMessage(300))
       .nullish(),
-    partnerOrganizationId: z.string().uuid().nullish(),
+    partnerOrganizationId: z.string().nullish(),
     partnerOrganizationContactId: z
       .string()
       .nullish()
@@ -29,7 +29,7 @@ export const SocialSupportRedirectionSchema = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Nom de l'organisme est obligatoire",
+        message: 'Veuillez renseigner ce champ',
         path: ['partnerOrganizationId']
       })
     }
@@ -40,7 +40,7 @@ export const SocialSupportRedirectionSchema = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Nom structure / personne est obligatoire',
+        message: 'Veuillez renseigner ce champ',
         path: ['externalStructureName']
       })
     }
