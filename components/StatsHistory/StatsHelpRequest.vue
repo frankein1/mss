@@ -257,7 +257,7 @@
     },
     redirections: {
       id: 'stats-helprequest-redirections',
-      name: 'Réorientation'
+      name: 'Réorientations'
     }
   }
 
