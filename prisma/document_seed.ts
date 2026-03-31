@@ -1,4 +1,4 @@
-import { PrismaClient, type Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { v4 } from 'uuid'
 import {
   FixtureBeneficiary,
@@ -10,8 +10,7 @@ import { fakerFR as faker } from '@faker-js/faker'
 import { nanoid } from 'nanoid'
 import fs from 'node:fs/promises'
 import { performance } from 'node:perf_hooks'
-
-const prismaClient = new PrismaClient()
+import { prismaClient } from '~/server/prisma'
 
 const N_DOCUMENTS = 1000
 
@@ -48,22 +47,33 @@ async function main() {
   let end = performance.now()
   console.log(`creation documents ${(end - start) / 1000}s`)
 
-  const content = await readFile('./fixtures/test_document_for_seed.pdf')
+  const content = await readFile('./prisma/fixtures/test_document_for_seed.pdf')
 
-  const contentData = documents.map(({ key }) => {
-    return {
-      id: v4(),
-      documentKey: key,
-      content
-    } satisfies Prisma.DocumentContentCreateManyInput
-  })
-
-  console.log('Create document content for all documents')
+  // Create in chunks
   start = performance.now()
+  const chunkSize = 10
+  const nChuncks =
+    N_DOCUMENTS / chunkSize + (N_DOCUMENTS % chunkSize === 0 ? 0 : 1)
+  for (let ichunk = 0; ichunk < nChuncks; ichunk++) {
+    console.log(
+      `Create document content for chunk ${ichunk} of ${nChuncks} duration ${(performance.now() - start) / 1000}s`
+    )
+    const istart = ichunk * chunkSize
+    const contentData = documents
+      .slice(istart, istart + chunkSize)
+      .map(({ key }) => {
+        return {
+          id: v4(),
+          documentKey: key,
+          content: Buffer.from(content)
+        } satisfies Prisma.DocumentContentCreateManyInput
+      })
 
-  await prismaClient.documentContent.createMany({
-    data: contentData
-  })
+    await prismaClient.documentContent.createMany({
+      data: contentData
+    })
+  }
+
   end = performance.now()
   console.log(`creation document content ${(end - start) / 1000}s`)
 
@@ -75,4 +85,15 @@ async function readFile(filepath: string) {
   return data
 }
 
-main().then(() => console.log('Done'))
+;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
+  process.on(signal, async () => {
+    await cleanup()
+    process.exit(1)
+  })
+)
+
+async function cleanup() {
+  await prismaClient.$disconnect()
+}
+
+main().finally(cleanup)

@@ -23,7 +23,7 @@ async function scalingoApiLogin() {
 export async function scalingoRun(command: string) {
   if (SCHEDULER_ENV.public.mssEnvironment === 'local') {
     throw new Error(
-      'This command cannot be launched locally, consider using directly the terminal'
+      'This command cannot be launched locally, consider using directly the terminal with `tsx --env-file .env`'
     )
   }
   if (!SCHEDULER_ENV.scalingo.apiToken || !SCHEDULER_ENV.scalingo.appName) {

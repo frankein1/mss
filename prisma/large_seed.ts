@@ -322,7 +322,7 @@ async function main() {
 )
 
 async function cleanup() {
-  main()
+  await prismaClient.$disconnect()
 }
 
 main().finally(cleanup)

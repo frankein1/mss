@@ -81,6 +81,8 @@ async function getDocumentToMigrate(notIn: string[], nRetries = 5) {
   while (true) {
     try {
       return await prismaClient.document.findMany({
+        // a temporary index should be added on migrated
+        // otherwise the request will become slower as the migration progresses
         where: { migrated: false, key: { notIn } },
         select: {
           key: true,
