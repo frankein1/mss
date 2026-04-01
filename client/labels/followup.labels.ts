@@ -1,6 +1,7 @@
 export const followupFieldLabels = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
+  beneficiaryFileNumber: 'N° de dossier',
   beneficiaryLastName: 'Nom',
   beneficiaryFirstName: 'Prénom',
   familyFileId: 'Dossier',

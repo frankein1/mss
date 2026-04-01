@@ -4,6 +4,7 @@ export const helpRequestFieldLabels = {
   status: 'Statut',
   dueDate: "Date d'échéance",
   beneficiaryId: 'Bénéficiaire',
+  beneficiaryFileNumber: 'N° de dossier',
   beneficiaryLastName: 'Nom',
   beneficiaryFirstName: 'Prénom',
   familyFileId: 'Dossier',

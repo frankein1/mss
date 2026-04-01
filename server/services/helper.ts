@@ -44,11 +44,12 @@ function userDto<T extends Pick<User, 'id' | 'firstName' | 'lastName'>>(u: T) {
 function beneficiaryDto<
   T extends Pick<
     Beneficiary,
-    'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+    'id' | 'fileNumber' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
   >
 >(u: T) {
   return {
     id: u.id,
+    fileNumber: u.fileNumber,
     firstName: u.firstName,
     usualName: u.usualName,
     birthName: u.birthName,

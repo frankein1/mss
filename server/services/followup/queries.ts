@@ -66,6 +66,7 @@ const select = {
       beneficiary: {
         select: {
           id: true,
+          fileNumber: true,
           usualName: true,
           firstName: true,
           birthName: true,
