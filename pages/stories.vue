@@ -3,14 +3,12 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <h1 class="fr-col-12">Composants UI</h1>
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
-      {{ isSafari }}
 
       <h2 class="fr-col-12">Combobox</h2>
       <div class="fr-col-12">
         <VeeComboboxStory />
       </div>
 
-      <hr />
       <div class="fr-col-12">
         <ComboboxStory />
       </div>
@@ -73,9 +71,13 @@
       </div>
 
       <h2 class="fr-col-12">Dossier foyer</h2>
-
       <div class="fr-col-12">
         <FamilyFileSegmentedControlStory />
+      </div>
+
+      <h2 class="fr-col-12">Dropdown</h2>
+      <div class="fr-col-12 fr-mb-5w">
+        <AtomDropdownStory />
       </div>
     </div>
   </div>
@@ -96,21 +98,22 @@
   import ComboboxStory from '~/components/ComboBox/Combobox.story.vue'
   import MinisterComboboxStory from '~/components/Minister/MinisterCombobox.story.vue'
   import FollowupsTableStory from '~/components/Followups/FollowupsTable.story.vue'
+  import AtomDropdownStory from '~/components/AtomDropdown/AtomDropdown.story.vue'
 
   definePageMeta({
     layout: 'landing'
-  })
-
-  const isSafari = computed(() => {
-    if (typeof navigator === 'undefined') {
-      return false
-    }
-    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
   })
 </script>
 
 <style scoped>
   :deep(h4) {
     margin-top: 1.5rem;
+  }
+
+  h2 {
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 2rem !important;
+    border-top: 1px solid var(--background-alt-grey-active);
   }
 </style>
