@@ -30,6 +30,7 @@ const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
   'date',
   'isFirst',
+  'beneficiaryFileNumber',
   'beneficiaryLastName',
   'beneficiaryFirstName',
   'financialSupport',
@@ -126,6 +127,7 @@ export async function exportFileInstructions({
       return [
         ...fileInstructions,
         {
+          beneficiaryFileNumber: beneficiary.fileNumber,
           beneficiaryLastName: nameOrEmpty(
             beneficiary.usualName || beneficiary.birthName
           ),

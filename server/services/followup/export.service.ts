@@ -20,6 +20,7 @@ import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
   'date',
+  'beneficiaryFileNumber',
   'beneficiaryLastName',
   'beneficiaryFirstName',
   'numeroPegase',
@@ -81,6 +82,7 @@ export async function exportFollowups({
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
+          beneficiaryFileNumber: followup.beneficiary.fileNumber,
           beneficiaryLastName: nameOrEmpty(
             followup.beneficiary.usualName || followup.beneficiary.birthName
           ),
