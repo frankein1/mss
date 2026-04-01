@@ -21,8 +21,8 @@ import {
   roomCountKeys,
   lowIncomeHousingKeys
 } from '~/client/options'
-import { formatBeneficiaryDisplayName } from '~/utils'
 import { formatMinisterName } from '~/utils/minister'
+import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
@@ -30,7 +30,8 @@ const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
   'date',
   'isFirst',
-  'beneficiaryId',
+  'beneficiaryLastName',
+  'beneficiaryFirstName',
   'financialSupport',
   'subjectId',
   'examinationDate',
@@ -125,7 +126,10 @@ export async function exportFileInstructions({
       return [
         ...fileInstructions,
         {
-          beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
+          beneficiaryLastName: nameOrEmpty(
+            beneficiary.usualName || beneficiary.birthName
+          ),
+          beneficiaryFirstName: nameOrEmpty(beneficiary.firstName),
           financialSupport: getBooleanOrEmpty(helpRequest?.financialSupport),
           prescribingOrganizationId:
             helpRequest?.prescribingOrganization?.name ||

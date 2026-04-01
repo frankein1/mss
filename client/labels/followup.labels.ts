@@ -1,6 +1,8 @@
 export const followupFieldLabels = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
+  beneficiaryLastName: 'Nom',
+  beneficiaryFirstName: 'Prénom',
   familyFileId: 'Dossier',
   subjects: "Objet(s) de l'accompagnement",
   medium: "Type d'entretien",
