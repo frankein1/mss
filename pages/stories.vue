@@ -3,6 +3,7 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <h1 class="fr-col-12">Composants UI</h1>
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
+      {{ isSafari }}
 
       <h2 class="fr-col-12">Combobox</h2>
       <div class="fr-col-12">
@@ -41,6 +42,10 @@
 
       <div class="fr-col-12">
         <AtomFiltersStory />
+      </div>
+
+      <div class="fr-col-12">
+        <FollowupsTableStory />
       </div>
 
       <h2 class="fr-col-12">Formulaires</h2>
@@ -90,9 +95,17 @@
   import VeeComboboxStory from '~/components/VeeForm/VeeCombobox.story.vue'
   import ComboboxStory from '~/components/ComboBox/Combobox.story.vue'
   import MinisterComboboxStory from '~/components/Minister/MinisterCombobox.story.vue'
+  import FollowupsTableStory from '~/components/Followups/FollowupsTable.story.vue'
 
   definePageMeta({
     layout: 'landing'
+  })
+
+  const isSafari = computed(() => {
+    if (typeof navigator === 'undefined') {
+      return false
+    }
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
   })
 </script>
 
