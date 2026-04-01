@@ -148,12 +148,30 @@ test('Structure - Disable - Administrator should be able to deactivate structure
 
   const socialSupports = await prismaClient.socialSupport.findMany({
     where: { familyFileId },
-    include: {
-      followup: true,
+    select: {
+      privateSynthesis: true,
+      status: true,
+      socialSupportType: true,
+      followup: {
+        select: {
+          duration: true,
+          updated: true
+        }
+      },
       fileInstruction: {
-        include: {
-          helpRequest: true,
-          housingHelpRequest: true
+        select: {
+          externalStructure: true,
+          refusalReason: true,
+          type: true,
+          updated: true,
+          helpRequest: {
+            select: {
+              subjectId: true,
+              financialSupport: true,
+              askedAmount: true,
+              allocatedAmount: true
+            }
+          }
         }
       }
     }
