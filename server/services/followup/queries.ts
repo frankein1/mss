@@ -12,13 +12,76 @@ import {
   getFollowupPermissions
 } from '~/server/security'
 
-const include = {
-  prescribingOrganization: true,
-  prescribingOrganizationContact: true,
+const select = {
+  id: true,
+  updated: true,
+  socialSupportId: true,
+  structureName: true,
+  redirected: true,
+  medium: true,
+  classified: true,
+  forwardedToJustice: true,
+  firstFollowup: true,
+  helpRequested: true,
+  thirdPersonName: true,
+  place: true,
+  duration: true,
+  prescribingOrganizationId: true,
+  prescribingOrganization: {
+    select: { id: true, name: true }
+  },
+  prescribingOrganizationContactId: true,
+  prescribingOrganizationContact: {
+    select: { id: true, name: true }
+  },
   socialSupport: {
-    include: {
-      lastUpdatedBy: true,
-      documents: true,
+    select: {
+      id: true,
+      socialSupportType: true,
+      subtype: true,
+      date: true,
+      structureId: true,
+      created: true,
+      updated: true,
+      status: true,
+      familyFileId: true,
+      beneficiaryId: true,
+      createdById: true,
+      lastUpdatedById: true,
+      dueDate: true,
+      privateSynthesis: true,
+      privateSynthesisRichText: true,
+      synthesis: true,
+      synthesisRichText: true,
+      ministerId: true,
+      numeroPegase: true,
+      createdBy: {
+        select: { id: true, firstName: true, lastName: true }
+      },
+      lastUpdatedBy: {
+        select: { id: true, firstName: true, lastName: true }
+      },
+      subjects: true,
+      minister: true,
+      beneficiary: {
+        select: {
+          id: true,
+          usualName: true,
+          firstName: true,
+          birthName: true,
+          birthDate: true
+        }
+      },
+      familyFile: {
+        select: {
+          id: true,
+          structureId: true,
+          referents: true
+        }
+      },
+      documents: {
+        select: { key: true, name: true }
+      },
       socialSupportRedirections: {
         select: {
           id: true,
@@ -30,25 +93,7 @@ const include = {
           partnerOrganization: { select: { name: true } },
           partnerOrganizationContact: { select: { name: true } }
         }
-      },
-      subjects: true,
-      minister: true,
-      beneficiary: {
-        select: {
-          id: true,
-          usualName: true,
-          firstName: true,
-          birthName: true,
-          birthPlace: true,
-          birthDate: true
-        }
-      },
-      familyFile: {
-        include: {
-          referents: true
-        }
-      },
-      createdBy: true
+      }
     }
   }
 }
@@ -56,7 +101,7 @@ const include = {
 function findOne(user: SecurityRuleGrantee, id: string) {
   return FollowupRepo.findUniqueOrThrow(user, {
     where: { id },
-    include
+    select
   })
 }
 
@@ -64,11 +109,11 @@ type FollowupOutput = NonNullable<Prisma.PromiseReturnType<typeof findOne>>
 
 export async function getPage(
   ctx: SecurityRuleContext,
-  args: Omit<Prisma.FollowupFindManyArgs, 'select' | 'include'>
+  args: Omit<Prisma.FollowupFindManyArgs, 'select'>
 ) {
   const followups = await FollowupRepo.findMany(ctx.user, {
     where: args.where,
-    include,
+    select,
     take: args.take,
     skip: args.skip,
     orderBy: args.orderBy

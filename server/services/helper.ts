@@ -115,7 +115,7 @@ function documentDto<T extends Document>(d: T) {
 }
 // This is a temporary fix. The query must be reviewed with select and exact type
 // matching
-type SS = SocialSupport & {
+type SS = Omit<SocialSupport, 'ministre'> & {
   familyFile: FamilyFile & {
     referents?: User[]
   }
@@ -124,7 +124,7 @@ type SS = SocialSupport & {
   createdBy?: Pick<User, 'id' | 'firstName' | 'lastName'>
   lastUpdatedBy: Pick<User, 'id' | 'firstName' | 'lastName'> | null
   subjects: SocialSupportSubject[]
-  documents?: Document[]
+  documents?: Pick<Document, 'key' | 'name'>[]
   comments?: (Comment & { createdBy: User })[]
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
