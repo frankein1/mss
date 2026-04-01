@@ -57,9 +57,14 @@ export const create = async ({ ctx, input }: CreateParams) => {
 
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(user, {
     where: { id: familyFileId },
-    include: { referents: true }
+    select: {
+      referents: {
+        select: {
+          id: true
+        }
+      }
+    }
   })
-
   const redirectionData =
     socialSupportRedirections
       ?.map(r => {
