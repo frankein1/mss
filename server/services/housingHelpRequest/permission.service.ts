@@ -12,14 +12,19 @@ function getHousingHelpRequestSecurityTarget(
 ) {
   return HousingHelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
-    include: {
+    select: {
       fileInstruction: {
-        include: {
+        select: {
           socialSupport: {
-            include: {
+            select: {
+              structureId: true,
+              createdById: true,
               familyFile: {
-                include: {
-                  referents: true
+                select: {
+                  structureId: true,
+                  referents: {
+                    select: { id: true }
+                  }
                 }
               }
             }
