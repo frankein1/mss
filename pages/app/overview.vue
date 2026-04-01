@@ -4,6 +4,17 @@
       :title="title"
       class="fr-mt-2w"
     />
+    <AtomNotice
+      v-if="isSafari"
+      class="fr-mb-6v"
+    >
+      Navigateur non supporté
+      <template #content
+        >Safari n'est pas géré par Mon Suivi Social, votre expérience risque
+        d'être dégradée. Nous vous invitons à utiliser un autre
+        navigateur.</template
+      >
+    </AtomNotice>
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12 fr-col-sm-6 fr-col-lg-8">
@@ -31,4 +42,11 @@
   })
 
   useDPOCheckOnStartup()
+
+  const isSafari = computed(() => {
+    if (typeof navigator === 'undefined') {
+      return false
+    }
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+  })
 </script>
