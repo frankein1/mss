@@ -81,6 +81,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'referents',
     'aidantConnectAuthorized',
     'lastActivity',
+    'created',
     'fileNumber'
   ]
 
@@ -107,7 +108,9 @@ export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryField
     'familySituation',
     'minorChildren',
     'majorChildren',
-    'subjects'
+    'subjects',
+    'created',
+    'fileNumber'
   ]
 
 // NEW
@@ -187,7 +190,9 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
     minorChildren: Number(taxHouseholds?.minorChildren) || '',
-    majorChildren: Number(taxHouseholds?.majorChildren) || ''
+    majorChildren: Number(taxHouseholds?.majorChildren) || '',
+    created: beneficiary.created || '',
+    fileNumber: readableFileNumber(beneficiary.id)
   }
 
   if (userRole !== UserRole.StructureManager) {
@@ -202,7 +207,6 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     aidantConnectAuthorized: getBooleanOrEmpty(
       beneficiary.aidantConnectAuthorized
     ),
-    fileNumber: readableFileNumber(beneficiary.id),
     deathDate: general.deathDate || '',
     nationality: general.nationality
       ? nationalityKeys.byKey[general.nationality]
