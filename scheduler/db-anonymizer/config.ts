@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import type { SnakeCase } from './utils'
+import type { SnakeCase } from '../utils'
 
 /** The following tables are excluded from the export
 - Comment

@@ -62,3 +62,15 @@ export async function terminateSentry() {
     `scheduler: [${new Date().toISOString()}]: sentry client shutdown`
   )
 }
+
+// See https://typescriptpro.com/challenges/medium/kebabcase
+export type SnakeCase<S extends string> =
+  S extends `${infer Letter}${infer Rest}`
+    ? Rest extends Uncapitalize<Rest>
+      ? `${Uncapitalize<Letter>}${SnakeCase<Rest>}`
+      : `${Uncapitalize<Letter>}_${SnakeCase<Rest>}`
+    : S
+
+export type SnakeCaseKeys<T> = {
+  [K in keyof T as K extends string ? SnakeCase<K> : K]: T[K]
+}
