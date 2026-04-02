@@ -18,7 +18,7 @@ export type BeneficiaryNames = Partial<
 
 export type BeneficiaryIdentification = Pick<
   Beneficiary,
-  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+  'id' | 'fileNumber' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
 export type BeneficiaryFileIdentification = Pick<

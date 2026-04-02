@@ -12,15 +12,17 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { followupFieldLabels } from '~/client/labels'
-import { formatBeneficiaryDisplayName } from '~/utils'
 import { formatMinisterName } from '~/utils/minister'
+import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
 const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
   'date',
-  'beneficiaryId',
+  'beneficiaryFileNumber',
+  'beneficiaryLastName',
+  'beneficiaryFirstName',
   'numeroPegase',
   'minister',
   'subjects',
@@ -80,7 +82,11 @@ export async function exportFollowups({
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
-          beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
+          beneficiaryFileNumber: followup.beneficiary.fileNumber,
+          beneficiaryLastName: nameOrEmpty(
+            followup.beneficiary.usualName || followup.beneficiary.birthName
+          ),
+          beneficiaryFirstName: nameOrEmpty(followup.beneficiary.firstName),
           medium: followupMediumKeys.value(followup.medium) || '',
           classified: getBooleanOrEmpty(followup.classified),
           documents:

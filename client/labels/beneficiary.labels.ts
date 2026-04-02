@@ -13,7 +13,6 @@ type BeneficiaryFieldLabels = Omit<
   },
   | 'createdById'
   | 'disabledById'
-  | 'created'
   | 'previousFamilyFileId'
   | 'splitFromFileById'
   | 'externalRdvspId'
@@ -98,6 +97,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   archiveDueDate: "Date d'archivage",
   archiveDueDateHistory: "Historique des dates d'archivage",
   lastActivity: 'Date de dernière activité',
+  created: 'Date de création du dossier',
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',
