@@ -37,7 +37,7 @@ let familyFileId: string
 let documentContentIds: string[]
 
 beforeEach(async () => {
-  const date = new Date()
+  const date = dayjs(dayjs()).subtract(7, 'month').toDate()
   const structure = await createStructure(date)
   const users = await createUsers(date, structure.id)
   const familyFile = await createFamilyFile(
