@@ -20,6 +20,20 @@ export const include = {
           id: true,
           name: true
         }
+      },
+      fileInstruction: {
+        select: {
+          helpRequest: {
+            select: {
+              subject: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -176,14 +190,21 @@ function getHistory(beneficiary: BeneficiaryOutput) {
 function getUniqueSubjects(beneficiary: BeneficiaryOutput) {
   return beneficiary.socialSupports.reduce(
     (subjects, ss) => {
-      if (!ss.subjects.length) {
+      const candidates: Pick<SocialSupportSubject, 'id' | 'name'>[] = [
+        ...ss.subjects,
+        ...(ss.fileInstruction?.helpRequest?.subject
+          ? [ss.fileInstruction.helpRequest.subject]
+          : [])
+      ]
+
+      if (!candidates.length) {
         return subjects
       }
 
       const notCollectedSubjects: Pick<SocialSupportSubject, 'id' | 'name'>[] =
         []
 
-      ss.subjects.forEach(subject => {
+      candidates.forEach(subject => {
         const isNotInSubjects = subjects.every(t => t.id !== subject.id)
         const isNotInNotCollectedSubjects = notCollectedSubjects.every(
           t => t.id !== subject.id
