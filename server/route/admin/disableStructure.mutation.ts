@@ -2,8 +2,8 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
 import { AdminService } from '~/server/services'
+import type { AdminContext } from '~/server/trpc'
 
 const adminHandler = async ({
   ctx,

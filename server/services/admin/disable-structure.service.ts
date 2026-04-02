@@ -21,6 +21,8 @@ import { createEmail } from '~/server/query'
 import { getDisabledStructureAlert } from '~/server/email'
 import { customAlphabet } from 'nanoid'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { canBeDisabled } from '~/utils/structure'
+import { forbiddenError } from '~/server/trpc'
 
 export const disableStructure = async ({
   id,
@@ -47,6 +49,12 @@ export const disableStructure = async ({
       }
     }
   })
+
+  if (!canBeDisabled(structure)) {
+    throw forbiddenError(
+      `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}`
+    )
+  }
 
   const deleteNotifications = () =>
     NotificationRepo.prisma.deleteMany({

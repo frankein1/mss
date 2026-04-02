@@ -1,21 +1,24 @@
 <template>
   <div class="partner-alert">
-    <div class="fr-text--md">
+    <p class="fr-m-0">
       La structure sera désactivée et les bénéficiaires rattachés anonymisés.
-      <strong>Cette action est irréversible.</strong>
-    </div>
-    <div class="fr-text--sm">
-      Note :
-      {{
-        canBeDisabled(structure)
-          ? 'La structure est inactive depuis plus de six mois.'
-          : 'La structure a eu une activité dans les six derniers mois.'
-      }}
-    </div>
+    </p>
+    <p class="fr-m-0"><strong>Cette action est irréversible</strong>.</p>
+    <p class="fr-m-0">
+      Assurez-vous que vous souhaitez-bien désactiver la structure :
+      <strong>{{ structure.name }}</strong
+      >.
+    </p>
+    <AtomAlert
+      v-if="!canBeDisabled(structure)"
+      :alert-type="AlertType.Warning"
+      message="La structure a eu une activité dans les six derniers mois. Vous ne pouvez donc pas la désactiver."
+    ></AtomAlert>
     <div class="button-bar">
       <button
         class="fr-btn fr-btn--icon-left fr-icon-delete-line delete"
         title="Désactiver"
+        :disabled="!canBeDisabled(structure)"
         type="button"
         @click="onFinish"
       >
@@ -36,6 +39,7 @@
 <script lang="ts" setup>
   import { canBeDisabled } from '~/utils/structure'
   import type { StructureInfo } from './types'
+  import { AlertType } from '~/utils/constants/alert'
 
   const props = defineProps<{
     structure: StructureInfo
@@ -55,7 +59,7 @@
   .partner-alert {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .button-bar {
