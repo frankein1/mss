@@ -156,6 +156,7 @@ ON CONFLICT (id) DO NOTHING;
 -- Social supports: restore anonymized fields
 -- Table social_support_redirection is kept
 -- Table social_support_subject is kept
+-- Table _social_support_to_followup_type is kept
 UPDATE social_support ss
 SET 
     synthesis = src.synthesis,
@@ -293,12 +294,15 @@ WHERE hhr.id = src.id;
 UPDATE followup f
 SET prescribing_organization_id = src.prescribing_organization_id,
     prescribing_organization_contact_id = src.prescribing_organization_contact_id,
-    help_requested = src.help_requested, place = src.place,
+    help_requested = src.help_requested,
+    place = src.place,
     structure_name = src.structure_name,
     third_person_name = src.third_person_name,
-    classified = src.classified, first_followup = src.first_followup,
+    classified = src.classified,
+    first_followup = src.first_followup,
     forwarded_to_justice = src.forwarded_to_justice,
-    redirected = src.redirected, duration = src.duration,
+    redirected = src.redirected,
+    duration = src.duration,
     -- no created field
     updated = src.updated
 FROM dblink(:source_db,

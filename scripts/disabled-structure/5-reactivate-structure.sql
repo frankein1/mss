@@ -1,3 +1,1 @@
-
-
-UPDATE structure SET disabled = false WHERE id = quote_literal(:structure_id);
+UPDATE structure SET disabled = false WHERE id = :structure_id::uuid;

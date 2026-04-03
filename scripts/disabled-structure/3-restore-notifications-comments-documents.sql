@@ -86,7 +86,7 @@ WHERE u.structure_id = ' || quote_literal(:structure_id)
 -- because of select n.* order of columns is important, check in db
         id uuid,
         created timestamptz,
-        recipientId uuid,
+        recipient_id uuid,
         beneficiary_id uuid,
         document_id uuid,
         read boolean,
@@ -99,6 +99,215 @@ WHERE u.structure_id = ' || quote_literal(:structure_id)
         archive_date timestamptz
 )
 -- for script idempotency if a record has been created by former execution of script, it is not created again
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget: restore deleted records
+-- Insert order matters: budget → budget_income / budget_expenses → their children
+INSERT INTO budget
+SELECT *
+FROM dblink(:source_db,
+'SELECT b.*
+FROM budget b
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+-- because of select b.* order of columns is important, check in db
+        id uuid,
+        legacy_main_income_source text,
+        legacy_main_income_amount numeric,
+        legacy_partner_main_income_source text,
+        legacy_partner_main_income_amount numeric,
+        legacy_major_children_main_income_source text,
+        legacy_major_children_main_income_amount numeric,
+        legacy_other_members_main_income_source text,
+        legacy_other_members_main_income_amount numeric,
+        legacy_remaining_after_expenses numeric,
+        savings numeric,
+        overdraft numeric,
+        family_quotient numeric,
+        banque_de_france numeric,
+        number_household_members numeric,
+        created timestamptz,
+        updated timestamptz,
+        family_file_id uuid
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget income: restore deleted records
+INSERT INTO budget_income
+SELECT *
+FROM dblink(:source_db,
+'SELECT bi.*
+FROM budget_income bi
+JOIN budget b
+ON bi.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+-- because of select bi.* order of columns is important, check in db
+        id uuid,
+        salary numeric,
+        prime_activite numeric,
+        retirement numeric,
+        alimony numeric,
+        disability numeric,
+        unemployment numeric,
+        ass numeric,
+        rsa numeric,
+        apl numeric,
+        family numeric,
+        aah numeric,
+        aspa numeric,
+        daily_allowance numeric,
+        annuity numeric,
+        other numeric,
+        type "BudgetIncomeType",
+        budget_id uuid,
+        created timestamptz,
+        updated timestamptz,
+        beneficiary_id uuid,
+        last_name text,
+        first_name text,
+        relationship "RelativeRelationship"
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget income custom: restore deleted records
+INSERT INTO budget_income_custom
+SELECT *
+FROM dblink(:source_db,
+'SELECT bic.*
+FROM budget_income_custom bic
+JOIN budget_income bi
+ON bic.income_id = bi.id
+JOIN budget b
+ON bi.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+        id uuid,
+        created timestamptz,
+        updated timestamptz,
+        type text,
+        amount numeric,
+        income_id uuid
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget expenses: restore deleted records
+INSERT INTO budget_expenses
+SELECT *
+FROM dblink(:source_db,
+'SELECT be.*
+FROM budget_expenses be
+JOIN budget b
+ON be.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+-- because of select be.* order of columns is important, check in db
+        id uuid,
+        rent numeric,
+        expenses numeric,
+        water numeric,
+        electricity numeric,
+        gas numeric,
+        fuel_or_other numeric,
+        housing_tax numeric,
+        property_tax numeric,
+        income_tax numeric,
+        remitted_alimony numeric,
+        health_insurance numeric,
+        phone_internet numeric,
+        other_insurance numeric,
+        car_insurance numeric,
+        school_fees numeric,
+        school_canteen numeric,
+        other numeric,
+        budget_id uuid,
+        death_insurance numeric,
+        home_insurance numeric,
+        retirement_insurance numeric,
+        created timestamptz,
+        updated timestamptz
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget expenses loan: restore deleted records
+INSERT INTO budget_expenses_loan
+SELECT *
+FROM dblink(:source_db,
+'SELECT bel.*
+FROM budget_expenses_loan bel
+JOIN budget_expenses be
+ON bel.expenses_id = be.id
+JOIN budget b
+ON be.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+        id uuid,
+        type text,
+        amount_total numeric,
+        amount_per_month numeric,
+        due_date timestamptz,
+        expenses_id uuid,
+        created timestamptz,
+        updated timestamptz
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget expenses debt: restore deleted records
+INSERT INTO budget_expenses_debt
+SELECT *
+FROM dblink(:source_db,
+'SELECT bed.*
+FROM budget_expenses_debt bed
+JOIN budget_expenses be
+ON bed.expenses_id = be.id
+JOIN budget b
+ON be.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+        id uuid,
+        type text,
+        amount_total numeric,
+        amount_per_month numeric,
+        due_date timestamptz,
+        expenses_id uuid,
+        created timestamptz,
+        updated timestamptz
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Budget expenses custom: restore deleted records
+INSERT INTO budget_expenses_custom
+SELECT *
+FROM dblink(:source_db,
+'SELECT bec.*
+FROM budget_expenses_custom bec
+JOIN budget_expenses be
+ON bec.expenses_id = be.id
+JOIN budget b
+ON be.budget_id = b.id
+JOIN family_file ff
+ON b.family_file_id = ff.id
+WHERE ff.structure_id = ' || quote_literal(:structure_id)
+) AS src(
+        id uuid,
+        created timestamptz,
+        updated timestamptz,
+        type text,
+        amount numeric,
+        expenses_id uuid
+)
 ON CONFLICT (id) DO NOTHING;
 
 -- End of transaction
