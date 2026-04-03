@@ -1,0 +1,1 @@
+UPDATE structure SET disabled = false WHERE id = :structure_id::uuid;
