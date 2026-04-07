@@ -241,9 +241,25 @@ export function filterFileInstruction({
   fileInstruction,
   conditions
 }: {
-  fileInstruction: FileInstruction & {
-    instructorOrganization: Partial<PartnerOrganization> | null
-    instructorOrganizationContact: Partial<PartnerOrganizationContact> | null
+  fileInstruction: Pick<
+    FileInstruction,
+    | 'id'
+    | 'type'
+    | 'fullFile'
+    | 'decisionDate'
+    | 'dispatchDate'
+    | 'examinationDate'
+    | 'externalStructure'
+    | 'instructorOrganizationId'
+    | 'instructorOrganizationContactId'
+    | 'refusalReason'
+    | 'refusalReasonOther'
+  > & {
+    instructorOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
+    instructorOrganizationContact: Pick<
+      PartnerOrganizationContact,
+      'id' | 'name'
+    > | null
   }
   conditions: {
     details: boolean
@@ -293,9 +309,30 @@ export function filterHousingHelpRequest({
   housingHelpRequest,
   conditions
 }: {
-  housingHelpRequest: HousingHelpRequest & {
-    prescribingOrganization: Partial<PartnerOrganization> | null
-    prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
+  housingHelpRequest: Pick<
+    HousingHelpRequest,
+    | 'id'
+    | 'reason'
+    | 'isFirst'
+    | 'firstOpeningDate'
+    | 'askedHousing'
+    | 'uniqueId'
+    | 'taxHouseholdAdditionalInformation'
+    | 'maxRent'
+    | 'maxCharges'
+    | 'handlingDate'
+    | 'housingType'
+    | 'roomCount'
+    | 'isPmr'
+    | 'lowIncomeHousingType'
+    | 'prescribingOrganizationId'
+    | 'prescribingOrganizationContactId'
+  > & {
+    prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
+    prescribingOrganizationContact: Pick<
+      PartnerOrganizationContact,
+      'id' | 'name'
+    > | null
   }
   conditions: {
     details: boolean
@@ -353,9 +390,24 @@ export function filterHelpRequest({
   helpRequest,
   conditions
 }: {
-  helpRequest: HelpRequest & {
-    prescribingOrganization: Partial<PartnerOrganization> | null
-    prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
+  helpRequest: Pick<
+    HelpRequest,
+    | 'id'
+    | 'financialSupport'
+    | 'allocatedAmount'
+    | 'askedAmount'
+    | 'isRefundable'
+    | 'handlingDate'
+    | 'paymentDate'
+    | 'paymentMethod'
+    | 'prescribingOrganizationId'
+    | 'prescribingOrganizationContactId'
+  > & {
+    prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
+    prescribingOrganizationContact: Pick<
+      PartnerOrganizationContact,
+      'id' | 'name'
+    > | null
   }
   conditions: {
     details: boolean
