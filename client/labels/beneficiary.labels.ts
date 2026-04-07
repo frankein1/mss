@@ -106,4 +106,10 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   relationship: 'Lien de la relation'
 }
 
+export const beneficiaryExportFieldLabels = {
+  beneficiaryFileNumber: 'N° de dossier bénéficiaire',
+  beneficiaryLastName: 'Nom bénéficiaire',
+  beneficiaryFirstName: 'Prénom bénéficiaire'
+}
+
 export { beneficiaryFieldLabels }

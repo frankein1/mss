@@ -11,13 +11,18 @@ import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
-import { followupFieldLabels } from '~/client/labels'
+import {
+  followupFieldLabels,
+  beneficiaryExportFieldLabels
+} from '~/client/labels'
 import { formatMinisterName } from '~/utils/minister'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
-const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
+const exportLabels = { ...followupFieldLabels, ...beneficiaryExportFieldLabels }
+
+const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'status',
   'date',
   'beneficiaryFileNumber',
@@ -60,7 +65,7 @@ export async function exportFollowups({
   const columns = [
     ...FOLLOWUP_EXPORTED_FIELDS.map(key => ({
       key,
-      header: followupFieldLabels[key]
+      header: exportLabels[key]
     })),
     ...REDIRECTION_EXPORTED_FIELDS.map(key => ({
       key,

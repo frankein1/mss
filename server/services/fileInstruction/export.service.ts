@@ -2,7 +2,8 @@ import { prepareFilters, prepareSort } from './helper'
 import { getPage } from './queries'
 import {
   helpRequestFieldLabels,
-  housingHelpRequestFieldLabels
+  housingHelpRequestFieldLabels,
+  beneficiaryExportFieldLabels
 } from '~/client/labels'
 import type { ExportFileInstructionsInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
@@ -26,7 +27,12 @@ import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 
-const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
+const exportLabels = {
+  ...helpRequestFieldLabels,
+  ...beneficiaryExportFieldLabels
+}
+
+const FIELDS: (keyof typeof exportLabels)[] = [
   'status',
   'date',
   'isFirst',
@@ -88,7 +94,7 @@ export async function exportFileInstructions({
   const columns = [
     ...FIELDS.map(key => ({
       key,
-      header: helpRequestFieldLabels[key]
+      header: exportLabels[key]
     })),
     ...HOUSING_FIELDS.map(key => ({
       key,
