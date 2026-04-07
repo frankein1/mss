@@ -61,12 +61,7 @@ const select = {
       lastUpdatedBy: {
         select: { id: true, firstName: true, lastName: true }
       },
-      subjects: {
-        select: {
-          id: true,
-          name: true
-        }
-      },
+      subjects: true,
       minister: true,
       beneficiary: {
         select: {
