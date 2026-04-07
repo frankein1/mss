@@ -87,7 +87,7 @@ export async function exportFollowups({
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
-          beneficiaryFileNumber: followup.beneficiary.fileNumber,
+          beneficiaryFileNumber: followup.beneficiary.fileNumber || '',
           beneficiaryLastName: nameOrEmpty(
             followup.beneficiary.usualName || followup.beneficiary.birthName
           ),

@@ -44,18 +44,20 @@ function userDto<T extends Pick<User, 'id' | 'firstName' | 'lastName'>>(u: T) {
 function beneficiaryDto<
   T extends Pick<
     Beneficiary,
-    'id' | 'fileNumber' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
-  >
->(u: T) {
+    'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+  > &
+    Partial<Pick<Beneficiary, 'fileNumber'>>
+>(b: T) {
   return {
-    id: u.id,
-    fileNumber: u.fileNumber,
-    firstName: u.firstName,
-    usualName: u.usualName,
-    birthName: u.birthName,
-    birthDate: u.birthDate
+    id: b.id,
+    firstName: b.firstName,
+    usualName: b.usualName,
+    birthName: b.birthName,
+    birthDate: b.birthDate,
+    fileNumber: b.fileNumber
   }
 }
+
 function redirectionsDto<T extends SS['socialSupportRedirections']>(
   redirections: T
 ) {
@@ -121,7 +123,8 @@ type SS = Omit<SocialSupport, 'ministre'> & {
     referents?: User[]
   }
   minister?: MinisterEntity | null
-  beneficiary: BeneficiaryIdentification
+  beneficiary: BeneficiaryIdentification &
+    Partial<Pick<Beneficiary, 'fileNumber'>>
   createdBy?: Pick<User, 'id' | 'firstName' | 'lastName'>
   lastUpdatedBy: Pick<User, 'id' | 'firstName' | 'lastName'> | null
   subjects: SocialSupportSubject[]

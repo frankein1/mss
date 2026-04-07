@@ -93,3 +93,13 @@ export async function createExportFromWorkbook(
 
   return stream
 }
+
+export async function rowsToCsv(
+  columns: Partial<Column>[],
+  rows: RowType[]
+): Promise<string> {
+  const workbook = new WorkbookConstructor()
+  createWorksheet(workbook, { name: 'export', columns, rows })
+  const buffer = await workbook.csv.writeBuffer()
+  return buffer.toString()
+}

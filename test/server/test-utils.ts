@@ -9,6 +9,11 @@ import {
   FixtureUserRole,
   FixtureStructure
 } from '~/prisma/fixtures'
+import type {
+  SecurityRuleContext,
+  SecurityRuleGrantee
+} from '~/server/security'
+import type { SecurityRuleStructure } from '~/server/security/rules/types'
 
 const setupFactory = t.createCallerFactory(appRouter)
 
@@ -96,3 +101,18 @@ interface Fixtures {
  * see https://vitest.dev/guide/test-context#extend-test-context
  */
 export const test = base.extend<Fixtures>({ trpc, users })
+
+export const createSecurityContext = (
+  user: Omit<SecurityRuleGrantee, 'structureId'> & {
+    structure: SecurityRuleStructure
+  }
+) =>
+  ({
+    user: {
+      id: user.id,
+      role: user.role,
+      status: user.status,
+      structureId: user.structure.id
+    },
+    structure: user.structure
+  }) satisfies SecurityRuleContext
