@@ -123,7 +123,7 @@ type SS = Omit<SocialSupport, 'ministre'> & {
   beneficiary: BeneficiaryIdentification
   createdBy?: Pick<User, 'id' | 'firstName' | 'lastName'>
   lastUpdatedBy: Pick<User, 'id' | 'firstName' | 'lastName'> | null
-  subjects: SocialSupportSubject[]
+  subjects: Pick<SocialSupportSubject, 'id' | 'name'>[]
   documents?: Pick<Document, 'key' | 'name'>[]
   comments?: (Comment & { createdBy: User })[]
   socialSupportRedirections: (Omit<
