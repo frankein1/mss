@@ -11,7 +11,9 @@ export async function getMinimalInfo({
 }) {
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    include: {
+    select: {
+      id: true,
+      structureId: true,
       beneficiaries: {
         select: {
           id: true,
