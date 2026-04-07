@@ -88,8 +88,16 @@ export const create = async ({
         }
       }
     },
-    include: {
-      createdBy: true
+    select: {
+      id: true,
+      created: true,
+      createdById: true,
+      updated: true,
+      content: true,
+      socialSupportId: true,
+      createdBy: {
+        select: { id: true, firstName: true, lastName: true }
+      }
     }
   })
 

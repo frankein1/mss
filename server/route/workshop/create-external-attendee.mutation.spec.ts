@@ -58,7 +58,19 @@ test('Workshop - Create External Attendee - An agent can create an external atte
 
   const attendee = await prismaClient.workshopAttendee.findUniqueOrThrow({
     where: { id: created.id },
-    include: { workshopExternalAttendee: true }
+    select: {
+      listType: true,
+      type: true,
+      comment: true,
+      workshopExternalAttendee: {
+        select: {
+          birthDate: true,
+          firstName: true,
+          lastName: true,
+          gender: true
+        }
+      }
+    }
   })
 
   expect(attendee.listType).toBe('Main')
