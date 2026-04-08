@@ -13,7 +13,6 @@ type BeneficiaryFieldLabels = Omit<
   },
   | 'createdById'
   | 'disabledById'
-  | 'created'
   | 'previousFamilyFileId'
   | 'splitFromFileById'
   | 'externalRdvspId'
@@ -98,12 +97,19 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   archiveDueDate: "Date d'archivage",
   archiveDueDateHistory: "Historique des dates d'archivage",
   lastActivity: 'Date de dernière activité',
+  created: 'Date de création du dossier',
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',
   subjects: "Objets d'accompagnement",
   vulnerablePerson: 'Registre des personnes vulnérables',
   relationship: 'Lien de la relation'
+}
+
+export const beneficiaryExportFieldLabels = {
+  beneficiaryFileNumber: 'N° de dossier bénéficiaire',
+  beneficiaryLastName: 'Nom bénéficiaire',
+  beneficiaryFirstName: 'Prénom bénéficiaire'
 }
 
 export { beneficiaryFieldLabels }

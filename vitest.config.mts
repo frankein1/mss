@@ -30,6 +30,7 @@ export default defineVitestConfig({
       threads: {
         singleThread: true
       }
-    }
+    },
+    setupFiles: 'test/server/setup.ts'
   }
 })
