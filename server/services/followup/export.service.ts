@@ -89,7 +89,10 @@ export async function exportFollowups({
           subjects: followup.subjects.map(({ name }) => name).join(', '),
           beneficiaryFileNumber: followup.beneficiary.fileNumber || '',
           beneficiaryLastName: nameOrEmpty(
-            followup.beneficiary.usualName || followup.beneficiary.birthName
+            followup.beneficiary.usualName?.toLocaleUpperCase() ||
+              (followup.beneficiary.birthName
+                ? `(${followup.beneficiary.birthName?.toLocaleUpperCase()})`
+                : '')
           ),
           beneficiaryFirstName: nameOrEmpty(followup.beneficiary.firstName),
           medium: followupMediumKeys.value(followup.medium) || '',

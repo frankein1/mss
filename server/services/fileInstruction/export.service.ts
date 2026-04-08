@@ -135,7 +135,10 @@ export async function exportFileInstructions({
         {
           beneficiaryFileNumber: beneficiary.fileNumber || '',
           beneficiaryLastName: nameOrEmpty(
-            beneficiary.usualName || beneficiary.birthName
+            beneficiary.usualName?.toLocaleUpperCase() ||
+              (beneficiary.birthName
+                ? `(${beneficiary.birthName?.toLocaleUpperCase()})`
+                : '')
           ),
           beneficiaryFirstName: nameOrEmpty(beneficiary.firstName),
           financialSupport: getBooleanOrEmpty(helpRequest?.financialSupport),
