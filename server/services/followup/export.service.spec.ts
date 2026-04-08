@@ -7,22 +7,9 @@ import { createSecurityContext, test } from '~/test/server/test-utils'
 import { exportFollowups } from './export.service'
 import type { ExportFollowupsInput } from '~/server/schema'
 import { rowsToCsv } from '~/utils/export/createExport'
-import { readFile } from 'node:fs/promises'
-import { cwd } from 'node:process'
-import path from 'node:path'
 import { prismaClient } from '~/server/prisma'
 import { FollowupPeriodFilter } from '~/types/followup'
-
-/** CSV reference template
- * Contains placeholder for created date since it depends on the date of the seed
- */
-async function parseCsvReference(date: Date, pathfile: string) {
-  const csvContent = await readFile(path.join(cwd(), pathfile), 'utf-8')
-  return csvContent.replaceAll(
-    'DD-MM-YYYY HH:mm',
-    formatDate(date, 'DD-MM-YYYY HH:mm')
-  )
-}
+import { parseCsvReference } from '~/test/server/helper'
 
 let fixtureDate: Date
 beforeAll(async () => {
