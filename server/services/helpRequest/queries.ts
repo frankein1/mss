@@ -16,19 +16,90 @@ import {
   getFileInstructionPermissions
 } from '~/server/security'
 
-export const include = {
-  prescribingOrganization: true,
-  prescribingOrganizationContact: true,
+export const select = {
+  id: true,
+  financialSupport: true,
+  allocatedAmount: true,
+  askedAmount: true,
+  isRefundable: true,
+  handlingDate: true,
+  paymentDate: true,
+  paymentMethod: true,
+  prescribingOrganizationId: true,
+  prescribingOrganizationContactId: true,
+  prescribingOrganization: {
+    select: { id: true, name: true }
+  },
+  prescribingOrganizationContact: {
+    select: { id: true, name: true }
+  },
   fileInstruction: {
-    include: {
-      instructorOrganization: true,
-      instructorOrganizationContact: true,
+    select: {
+      id: true,
+      type: true,
+      fullFile: true,
+      decisionDate: true,
+      dispatchDate: true,
+      examinationDate: true,
+      externalStructure: true,
+      instructorOrganizationId: true,
+      instructorOrganizationContactId: true,
+      refusalReason: true,
+      refusalReasonOther: true,
+      instructorOrganization: {
+        select: { id: true, name: true }
+      },
+      instructorOrganizationContact: {
+        select: { id: true, name: true }
+      },
       socialSupport: {
-        include: {
-          lastUpdatedBy: true,
+        select: {
+          id: true,
+          socialSupportType: true,
+          subtype: true,
+          date: true,
+          structureId: true,
+          created: true,
+          updated: true,
+          status: true,
+          familyFileId: true,
+          beneficiaryId: true,
+          createdById: true,
+          lastUpdatedById: true,
+          dueDate: true,
+          privateSynthesis: true,
+          privateSynthesisRichText: true,
+          synthesis: true,
+          synthesisRichText: true,
+          ministerId: true,
+          numeroPegase: true,
+          createdBy: {
+            select: { id: true, firstName: true, lastName: true }
+          },
+          lastUpdatedBy: {
+            select: { id: true, firstName: true, lastName: true }
+          },
           subjects: true,
-          documents: true,
           minister: true,
+          beneficiary: {
+            select: {
+              id: true,
+              usualName: true,
+              firstName: true,
+              birthName: true,
+              birthDate: true
+            }
+          },
+          familyFile: {
+            select: {
+              id: true,
+              structureId: true,
+              referents: true
+            }
+          },
+          documents: {
+            select: { key: true, name: true }
+          },
           socialSupportRedirections: {
             select: {
               id: true,
@@ -40,23 +111,7 @@ export const include = {
               partnerOrganization: { select: { name: true } },
               partnerOrganizationContact: { select: { name: true } }
             }
-          },
-          beneficiary: {
-            select: {
-              id: true,
-              usualName: true,
-              firstName: true,
-              birthName: true,
-              birthDate: true,
-              birthPlace: true
-            }
-          },
-          familyFile: {
-            include: {
-              referents: true
-            }
-          },
-          createdBy: true
+          }
         }
       }
     }
@@ -66,7 +121,7 @@ export const include = {
 function findOne(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
-    include
+    select
   })
 }
 
