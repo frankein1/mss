@@ -63,8 +63,8 @@ function startScheduler() {
     { timezone, name: 'notificationCreator' }
   )
 
-  const at2am = '0 2 * * *'
-  new Cron(at2am, async () => {
+  const at30past2am = '30 2 * * *'
+  new Cron(at30past2am, async () => {
     await disableInactiveStructures()
   })
 
