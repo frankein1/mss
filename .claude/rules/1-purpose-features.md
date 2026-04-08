@@ -1,3 +1,9 @@
+---
+paths:
+  - pages/**
+  - server/**
+---
+
 # Purpose & Key Features of Mon Suivi Social
 
 ## Key Features

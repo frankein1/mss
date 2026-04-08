@@ -1,3 +1,9 @@
+---
+paths:
+  - prisma/**
+  - server/database/**
+---
+
 ## Key Data Models
 
 ### Core Entities

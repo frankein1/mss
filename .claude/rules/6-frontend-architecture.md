@@ -1,3 +1,12 @@
+---
+paths:
+  - components/**
+  - pages/**
+  - composables/**
+  - layouts/**
+  - plugins/**
+---
+
 ## Frontend Architecture
 
 **State Management**:

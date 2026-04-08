@@ -1,3 +1,12 @@
+---
+paths:
+  - server/integrations/**
+  - server/plugins/**
+  - server/api/**
+  - server/services/rdvsp/**
+  - plugins/**
+---
+
 ## Key External Integrations
 
 ### ProConnect (French Government SSO)

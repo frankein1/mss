@@ -1,3 +1,14 @@
+---
+paths:
+  - server/api/proconnect/**
+  - server/api/auth/**
+  - server/middleware/**
+  - server/lib/**
+  - server/trpc/createContext.ts
+  - composables/useAuth.ts
+  - composables/useAuthState.ts
+---
+
 ## Authentication & Security
 
 ### ProConnect Integration (Primary)
@@ -8,7 +19,7 @@
 
 ### JWT Token Structure
 
-- Payload includes: user ID, email, first/last name, roles
+- Payload includes: firstName, lastName, id, email, role, status, structureId, CGUHistoryVersion, structureType
 - HS256 signature verified server-side
 - 60-minute default expiration (configurable)
 - Secure HttpOnly cookie prevents XSS token theft

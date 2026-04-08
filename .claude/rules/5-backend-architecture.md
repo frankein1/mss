@@ -1,3 +1,8 @@
+---
+paths:
+  - server/**
+---
+
 ## Backend Architecture
 
 **Layered Request Flow**:
@@ -40,3 +45,9 @@ export const followupRouter = router({
     .mutation(routes.create.execute)
 })
 ```
+
+**ORM conventions**:
+
+- No direct SQL queries except in `scheduler/db-anonymizer`
+- Performance: avoid large joins, large data fetches (rather paginate)
+- Performance: make use of `relationLoadStrategy: "query"` if necessary

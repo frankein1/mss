@@ -2,13 +2,15 @@
 
 **Mon Suivi Social** is a CRM for social work case management designed to help public sector organizations (CCAS, CIAS, communes, associations, ministries) manage beneficiary cases and social support workflows.
 
-1. [Purpose, Features and Target Users](.claude/docs/1-purpose-features.md)
-1. [Tech stack Summary](.claude/docs/2-tech-stack-summary.md)
-1. [Authentication & Security](.claude/docs/3-authentication.md)
-1. [Data Model](.claude/docs/4-data-model.md)
-1. [Backend Architecture](.claude/docs/5-backend-architecture.md)
-1. [Frontend Architecture](.claude/docs/6-frontend-architecture.md)
-1. [External Integrations](.claude/docs/7-external-integrations.md)
+1. [Purpose, Features and Target Users](.claude/rules/1-purpose-features.md)
+1. [Tech stack Summary](.claude/rules/2-tech-stack-summary.md)
+1. [Authentication & Security](.claude/rules/3-authentication.md)
+1. [Data Model](.claude/rules/4-data-model.md)
+1. [Backend Architecture](.claude/rules/5-backend-architecture.md)
+1. [Frontend Architecture](.claude/rules/6-frontend-architecture.md)
+1. [External Integrations](.claude/rules/7-external-integrations.md)
+1. [Accessibility](.claude/rules/8-accessibility.md)
+1. [Testing](.claude/rules/9-testing.md)
 
 ---
 
@@ -59,34 +61,14 @@
 
 ## Development Guidelines
 
-### Testing
+### Local Setup and Development Commands
 
-**Unit/integration Tests** (Vitest):
+[see README.md](./README.md)
 
-- Favor integration testing for API endpoints over mocking (setup by `test/server/test-utils.ts`)
-- Co-locate with source files (.spec.ts)
-- Aim for greater than 80% coverage on critical paths with a focus on roles and permissions
-
-**End-to-End Tests** (Playwright):
-
-- User flow testing in /e2e/
-- Realistic interaction scenarios
-
-**Common Commands**:
-
-- Run all tests via `pnpm test`
-- Run E2E tests via `pnpm test:e2e`
-- Watch mode for development
-- Generate coverage reports
-
-### Development Workflow
-
-**Local Setup and Development Commands**: [see README.md](./README.md)
-
-**Code Review Focus**:
+### Code Review Focus
 
 - Type safety: No any, proper generics
+- Imports: prefer aliases `~/` to relative imports `../../../` except for helpers/utils in the same folder
 - Security: Access control at all layers, input validation
-- Performance: Avoid large joins, large data fetches (rather paginate), make use of `relationLoadStrategy: "query"` if necessary
 - Testing: Critical paths covered
-- Accessibility: semantic HTML, DSFR components used correctly
+- Accessibility

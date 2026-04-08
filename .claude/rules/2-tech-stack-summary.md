@@ -1,14 +1,22 @@
+---
+paths:
+  - nuxt.config.ts
+  - package.json
+  - tsconfig.json
+---
+
 # Tech Stack Summary
 
 ## Frontend
 
 - **Framework**: Nuxt 3 with Vue 3 Composition API
 - **Language**: TypeScript v5 (strict mode, noUncheckedIndexedAccess)
-- **UI Components**: DSFR (French government design system) v1.14.1 via @gouvminint/vue-dsfr v8.8.0
+- **Design System**: DSFR (French government design system) v1.14
+- **UI Components**: @gouvminint/vue-dsfr (based on DSFR) v8
 - **Form Validation**: VeeValidate v4 + Zod v3
 - **Rich Text**: TipTap editor v3
 - **Charts**: Chart.js integration
-- **Styling**: SCSS with PostCSS
+- **Styling**: CSS with SCSS preprocessor
 - **Testing**: Vitest v3 (unit and integration tests), Playwright v1 (E2E tests)
 
 ## Backend
