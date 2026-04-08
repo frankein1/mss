@@ -1,0 +1,55 @@
+# Tech Stack Summary
+
+## Frontend
+
+- **Framework**: Nuxt 3 with Vue 3 Composition API
+- **Language**: TypeScript v5 (strict mode, noUncheckedIndexedAccess)
+- **UI Components**: DSFR (French government design system) v1.14.1 via @gouvminint/vue-dsfr v8.8.0
+- **Form Validation**: VeeValidate v4 + Zod v3
+- **Rich Text**: TipTap editor v3
+- **Charts**: Chart.js integration
+- **Styling**: SCSS with PostCSS
+- **Testing**: Vitest v3 (unit and integration tests), Playwright v1 (E2E tests)
+
+## Backend
+
+- **Runtime**: Node.js v24+
+- **Framework**: Nuxt SSR Rendering with tRPC v11 for type-safe RPC APIs
+- **Type Safety**: Full TypeScript with strict compiler options
+- **Validation**: Zod schemas for input/output validation
+- **Package Manager**: pnpm
+
+## Database
+
+- **DBMS**: PostgreSQL 16
+- **ORM**: Prisma v6 with mode relationship joins
+- **Development**: Docker Compose for local PostgreSQL
+
+## Authentication & Security
+
+- **Primary SSO**: ProConnect (French government OAuth2/OIDC)
+- **Session Management**: JWT tokens (HS256) in HttpOnly cookies
+- **Access Control**: Role-based (6 roles) + structure isolation
+- **API Security**: nuxt-security v2 with rate limiting, CSP, request size limits
+- **Monitoring**: Sentry v10 (error tracking), Matomo (analytics)
+
+## External Integrations
+
+- **Email**: Brevo v3 for template-based email delivery
+- **Appointments**: RDV Service Public OAuth for external appointment booking
+- **Data Directory**: Data Inclusion API for structure/organization metadata (WIP)
+
+## Document Management
+
+- **Storage**: PostgreSQL internal storage OR S3-compatible object storage (@aws-sdk), RustFS for local dev
+- **Encryption**: OpenBao KMS for document encryption/decryption
+- **Upload/Download**: REST endpoints at /api/document/upload and /api/document/download
+- **Configuration**: Storage choice, S3 credentials, region, endpoint via environment variables
+
+## Development Tools
+
+- **Linting**: ESLint + Prettier formatting
+- **Formatting**: stylelint for CSS/SCSS
+- **Pre-commit Hooks**: Husky + lint-staged + talisman
+- **CI/CD**: GitLab CI/CD with automated testing and deployment
+- **Release Management**: commit-and-tag-version automation
