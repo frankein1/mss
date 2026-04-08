@@ -19,7 +19,11 @@ import {
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './fixtures'
+<<<<<<< HEAD
 import { ministers } from './ministers'
+=======
+import { ministers } from './minister_seed'
+>>>>>>> bd264a4d (Supression de l'enum Ministre et de ses références)
 
 const prismaClient = new PrismaClient()
 
