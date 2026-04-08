@@ -64,8 +64,9 @@ function startScheduler() {
   )
 
   const at30past2am = '30 2 * * *'
-  new Cron(at30past2am, async () => {
-    await disableInactiveStructures()
+  new Cron(at30past2am, disableInactiveStructures, {
+    timezone,
+    name: 'disableInactiveStructures'
   })
 
   const at5am = '0 5 * * *'
