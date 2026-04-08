@@ -1,4 +1,7 @@
-export { beneficiaryFieldLabels } from './beneficiary.labels'
+export {
+  beneficiaryFieldLabels,
+  beneficiaryExportFieldLabels
+} from './beneficiary.labels'
 export { userFieldLabels } from './user.labels'
 export { socialSupportSubjectFieldLabels } from './social-support-subject.labels'
 export { followupFieldLabels } from './followup.labels'
