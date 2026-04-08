@@ -9,6 +9,7 @@ import sendEmailsForAccountReminder from './email/create-emails-for-account-remi
 import anonymizeArchivedBeneficiaries from './archived-beneficiary/anonymize-archived-beneficiary'
 import socialSupportNotifications from './notification/create-social-support-notifications'
 import documentNotifications from './notification/create-document-notifications'
+import disableInactiveStructures from './structure/disable-inactive-structures'
 
 const timezone = 'Europe/Paris'
 
@@ -61,6 +62,12 @@ function startScheduler() {
     },
     { timezone, name: 'notificationCreator' }
   )
+
+  const at30past2am = '30 2 * * *'
+  new Cron(at30past2am, disableInactiveStructures, {
+    timezone,
+    name: 'disableInactiveStructures'
+  })
 
   const at5am = '0 5 * * *'
   new Cron(at5am, exportAnonymizedDatabase, {
