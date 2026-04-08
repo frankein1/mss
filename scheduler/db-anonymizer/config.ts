@@ -223,7 +223,6 @@ const configSocialSupport: Record<
   minister_id: true,
   date: true,
   social_support_type: true,
-  ministre: true,
   status: true,
   due_date: true,
   subtype: true,
@@ -747,7 +746,6 @@ const configMinister: Record<
   function: true,
   government: true,
   status: true,
-  old_minister: true, // TODO DELETE ME
   created: true,
   updated: true
 }
