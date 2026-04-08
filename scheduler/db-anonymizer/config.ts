@@ -737,6 +737,21 @@ const configRedirection: Record<
   partner_organization_contact_id: true
 }
 
+const configMinister: Record<
+  SnakeCase<keyof typeof Prisma.MinisterEntityScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  first_name: true,
+  last_name: true,
+  function: true,
+  government: true,
+  status: true,
+  old_minister: true, // TODO DELETE ME
+  created: true,
+  updated: true
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -772,7 +787,8 @@ export const CONFIG = {
   budget_expenses_debt: configBudgetExpensesDebt,
   budget_expenses_custom: configBudgetExpensesCustom,
   external_account: configExternalAccount,
-  social_support_redirection: configRedirection
+  social_support_redirection: configRedirection,
+  minister: configMinister
 }
 
 export type TableName = keyof typeof CONFIG
