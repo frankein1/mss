@@ -264,8 +264,8 @@ const handler = async ({
     const totalCount = interpellations.reduce((acc, cur) => acc + cur._count, 0)
     const ministerInterpellationColumns = getColumns('Ministre')
     const ministerInterpellationRows = interpellations.map(
-      ({ ministre, _count }) => ({
-        label: ministre || STATS_NULL_LABEL,
+      ({ minister, _count }) => ({
+        label: minister || STATS_NULL_LABEL,
         number: _count.toString(),
         percent: `${getPercentage(_count, totalCount)}%`
       })
