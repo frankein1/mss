@@ -1,4 +1,4 @@
-import type { DataInclusionStructureApiInput } from '~/server/schema'
+import type { DataInclusionStructureApiInputV1 } from '~/server/schema'
 
 export const dataInclusionStructures = [
   {
@@ -193,4 +193,4 @@ export const dataInclusionStructures = [
     courriel: null,
     telephone: '0299673907'
   }
-] satisfies DataInclusionStructureApiInput[]
+] satisfies DataInclusionStructureApiInputV1[]

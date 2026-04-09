@@ -4,24 +4,10 @@ import { fetchStructuresPages } from '~/server/lib/data-inclusion'
 import { DataInclusionService, JobResultService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
 
-// This will be merged with scheduler env when the code will be migrated
-function getenvString(varname: string, defaultValue = '', isPublic = false) {
-  const pb = isPublic ? 'PUBLIC_' : ''
-
-  return (
-    process.env[`NUXT_${pb}${varname}`] || process.env[varname] || defaultValue
-  )
-}
-
-const SCHEDULER_ENV = {
-  dataInclusion: {
-    apiUrl: getenvString('DATA_INCLUSION_API_URL'),
-    apiToken: getenvString('DATA_INCLUSION_API_TOKEN')
-  }
-}
-
 async function importStructures(job: JobResult, all = false) {
-  const { apiUrl, apiToken } = SCHEDULER_ENV.dataInclusion
+  // This will be merged with scheduler env when the code will be migrated
+  const apiUrl = process.env.NUXT_DATA_INCLUSION_API_URL || ''
+  const apiToken = process.env.NUXT_DATA_INCLUSION_API_TOKEN || ''
 
   if (!apiUrl || !apiToken) {
     job.errors.push({
@@ -65,7 +51,7 @@ async function importStructures(job: JobResult, all = false) {
       if (all) {
         // Update all structures. Useful when a field is added of the import algo has changed
         try {
-          await prismaClient.dataInclusionStructure.upsert({
+          await prismaClient.dataInclusionStructureV1.upsert({
             where: { id: structure.id },
             create: structure,
             update: structure
@@ -103,7 +89,7 @@ async function importStructures(job: JobResult, all = false) {
 
         if (!exists) {
           try {
-            await prismaClient.dataInclusionStructure.create({
+            await prismaClient.dataInclusionStructureV1.create({
               data: structure
             })
             job.result.nCreated++
@@ -118,7 +104,7 @@ async function importStructures(job: JobResult, all = false) {
           continue
         } else if (shouldBeUpdated) {
           try {
-            await prismaClient.dataInclusionStructure.update({
+            await prismaClient.dataInclusionStructureV1.update({
               where: { id: structure.id },
               data: structure
             })

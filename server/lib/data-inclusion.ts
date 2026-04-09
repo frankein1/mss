@@ -15,7 +15,6 @@ export async function fetchStructuresPages(
   pageSize = 5000
 ): Promise<DataInclusionPage> {
   const url = `${apiUrl}/api/v1/structures?page=${currentPage}&size=${pageSize}&exclure_doublons=true`
-  // const url = `${apiUrl}/api/v1/structures?page=${currentPage}&size=${pageSize}`
 
   const data = await ofetch<DataInclusionPage>(url, {
     headers: {

@@ -2092,6 +2092,28 @@ model DataInclusionStructure {
   @@map("data_inclusion_structure")
 }
 
+model DataInclusionStructureV1 {
+  id   String @id
+  name String
+
+  created DateTime  @default(now())
+  updated DateTime?
+
+  siret String?
+
+  address           String?
+  addressComplement String? @map("address_complement")
+  city              String?
+  zipcode           String?
+
+  phone        String?
+  email        String?
+  website      String?
+  workingHours String? @map("working_hours")
+
+  @@map("data_inclusion_structure_v1")
+}
+
 enum JobStatus {
   Created
   Ongoing

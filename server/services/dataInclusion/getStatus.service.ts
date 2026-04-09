@@ -1,7 +1,7 @@
-import { DataInclusionStructureRepo } from '~/server/database'
+import { prismaClient } from '~/server/prisma'
 
 export async function getStructureStatusInDB(id: string, updateDate: Date) {
-  const structure = await DataInclusionStructureRepo.prisma.findFirst({
+  const structure = await prismaClient.dataInclusionStructureV1.findFirst({
     select: { updated: true },
     where: { id }
   })

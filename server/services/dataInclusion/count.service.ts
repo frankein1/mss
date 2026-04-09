@@ -1,5 +1,5 @@
-import { DataInclusionStructureRepo } from '~/server/database'
+import { prismaClient } from '~/server/prisma'
 
 export async function countStructures() {
-  return await DataInclusionStructureRepo.prisma.count()
+  return await prismaClient.dataInclusionStructureV1.count()
 }

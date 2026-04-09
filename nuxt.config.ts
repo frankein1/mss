@@ -199,8 +199,8 @@ export default defineNuxtConfig({
       apiKey: process.env.NUXT_BREVO_API_KEY || ''
     },
     dataInclusion: {
-      apiUrl: process.env.DATA_INCLUSION_API_URL || '',
-      apiToken: process.env.DATA_INCLUSION_API_TOKEN || ''
+      apiUrl: process.env.NUXT_DATA_INCLUSION_API_URL || '',
+      apiToken: process.env.NUXT_DATA_INCLUSION_API_TOKEN || ''
     },
     email: {
       smtpHost: process.env.NUXT_EMAIL_SMTP_HOST || '',

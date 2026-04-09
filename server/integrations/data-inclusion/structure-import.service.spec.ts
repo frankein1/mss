@@ -5,13 +5,16 @@ import { prismaClient } from '~/server/prisma'
 vi.mock('~/server/lib/data-inclusion')
 
 beforeEach(async () => {
+  vi.stubEnv('NUXT_DATA_INCLUSION_API_URL', 'http://test-api.data-inclusion.fr')
+  vi.stubEnv('NUXT_DATA_INCLUSION_API_TOKEN', 'test-token')
+
   await Promise.all([
     prismaClient.jobResult.deleteMany({}),
-    prismaClient.dataInclusionStructure.deleteMany({})
+    prismaClient.dataInclusionStructureV1.deleteMany({})
   ])
 })
 
-test.skip('Structure import job should create structures when they do not exist', async () => {
+test('Structure import job should create structures when they do not exist', async () => {
   const job = await handleStructuresImport(false)
 
   expect(job.result.nTotal).toBe(10)
@@ -21,24 +24,20 @@ test.skip('Structure import job should create structures when they do not exist'
 })
 
 test('Structure import job should update structure when it exists already but is obsolete', async () => {
-  await prismaClient.dataInclusionStructure.create({
+  await prismaClient.dataInclusionStructureV1.create({
     data: {
       id: '1',
       siret: '1234567890',
-      rna: null,
       name: 'structure to be updated',
       city: 'Paris',
       zipcode: '75014',
       address: '23 rue des Plantes',
       addressComplement: null,
-      type: null,
       phone: null,
       email: null,
       website: null,
       updated: new Date('2015-01-01'),
-      isBranch: false,
-      workingHours: null,
-      topics: []
+      workingHours: null
     }
   })
 
