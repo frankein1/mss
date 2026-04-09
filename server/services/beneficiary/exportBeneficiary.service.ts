@@ -378,8 +378,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     actions:
       Boolean(socialSupport.followup?.forwardedToJustice) ||
       Boolean(socialSupport.followup?.helpRequested) ||
-      Boolean(socialSupport.followup?.classified) ||
-      Boolean(redirections && redirections.length > 0),
+      Boolean(socialSupport.followup?.classified),
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
     helpRequested: socialSupport.followup?.helpRequested,
     classified: socialSupport.followup?.classified,
@@ -458,6 +457,7 @@ type FileInstructionData = SocialSupportForFileInstructionData & {
   helpRequest?: HelpRequestData
   housingHelpRequest?: HousingHelpRequestData
   documents: DocumentData[] | null
+  redirections: RedirectionData[] | null
 }
 
 const getHelpRequestData = (
@@ -467,6 +467,15 @@ const getHelpRequestData = (
     name: document.name,
     type: documentTypeKeys.value(document.type) || null
   }))
+  const redirections =
+    socialSupport.socialSupportRedirections?.map(r => ({
+      type: socialSupportRedirectionTypeKeys.value(r.type) || null,
+      motif: r.motif || null,
+      partnerOrganizationName: r.partnerOrganization?.name || null,
+      partnerOrganizationContactName:
+        r.partnerOrganizationContact?.name || null,
+      externalStructureName: r.externalStructureName || null
+    })) || null
 
   const commonObjects: FieldLabels<BaseFileInstruction> = {
     externalStructure: socialSupport.fileInstruction?.externalStructure
@@ -500,7 +509,7 @@ const getHelpRequestData = (
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
     documents: documents || null,
-
+    redirections: redirections || null,
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
       helpRequest: {
         ...commonObjects,
