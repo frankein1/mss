@@ -377,13 +377,10 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     synthesis: socialSupport.synthesis,
     actions:
       Boolean(socialSupport.followup?.forwardedToJustice) ||
-      Boolean(socialSupport.followup?.redirected) ||
       Boolean(socialSupport.followup?.helpRequested) ||
       Boolean(socialSupport.followup?.classified) ||
       Boolean(redirections && redirections.length > 0),
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
-    redirected: socialSupport.followup?.redirected,
-    structureName: socialSupport.followup?.structureName,
     helpRequested: socialSupport.followup?.helpRequested,
     classified: socialSupport.followup?.classified,
     redirections,

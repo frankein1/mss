@@ -35,7 +35,6 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'prescribingOrganizationId',
   'firstFollowup',
   'synthesis',
-  'structureName',
   'classified',
   'documents',
   'dueDate',
@@ -109,7 +108,6 @@ export async function exportFollowups({
           place: followup.place || '',
           prescribingOrganizationId:
             followup.prescribingOrganization?.name || '',
-          structureName: followup.structureName || '',
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
           // Technically it should be converted into timezone of the user

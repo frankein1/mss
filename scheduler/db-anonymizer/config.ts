@@ -289,11 +289,9 @@ const configFollowup: Record<
   medium: true,
   help_requested: true,
   place: true,
-  structure_name: true,
   classified: true,
   first_followup: true,
   forwarded_to_justice: true,
-  redirected: true,
   duration: true,
   social_support_id: true,
   // -- BEGIN ANONYMIZED
