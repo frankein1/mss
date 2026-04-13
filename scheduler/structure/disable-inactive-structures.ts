@@ -12,6 +12,9 @@ async function disableInactiveStructures() {
   const structures = await StructureRepo.prisma.findMany({
     where: {
       deactivationAlertEmail: 2,
+      deactivationAlertEmailDate: {
+        lte: dayjs().subtract(4, 'week').toDate()
+      },
       disabled: false,
       OR: [
         { lastAccess: { lte: limitDate } },
