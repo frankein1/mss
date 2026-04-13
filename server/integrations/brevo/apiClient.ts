@@ -1,8 +1,14 @@
 import type { Structure } from '@prisma/client'
 import type { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import { URLSearchParams } from 'url'
+import type { RuntimeConfig } from 'nuxt/schema'
 
-const runtimeConfig = useRuntimeConfig()
+let runtimeConfig: Pick<RuntimeConfig, 'brevo'> | undefined
+try {
+  runtimeConfig = useRuntimeConfig()
+} catch {
+  /** */
+}
 
 // Do not use Brevo's official TypeScript SDK under any circumstances.
 // It was obviously poorly auto-generated from another language, is not maintained,

@@ -2,9 +2,15 @@ import type { Structure, User } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
+import type { RuntimeConfig } from 'nuxt/schema'
 
 const BREVO_LIST_ID = 10
-const runtimeConfig = useRuntimeConfig()
+let runtimeConfig: Pick<RuntimeConfig, 'brevo' | 'public'> | undefined
+try {
+  runtimeConfig = useRuntimeConfig()
+} catch {
+  /** */
+}
 
 export function mapUserToBrevoContact(
   user: Pick<
@@ -119,7 +125,7 @@ export function mapStructureToBrevoCompany(
       ext_id: id,
       number_of_employees: structure._count.users,
       phone,
-      domain: `${runtimeConfig.public.appUrl}/admin/structures/${id}`,
+      domain: `${runtimeConfig?.public.appUrl}/admin/structures/${id}`,
       action_30_derniers_jours: dayjs().diff(lastActivity, 'day') <= 30,
       adresse_mail_structure: email,
       creation_compte: formatUTCTimestamp(created, '') || undefined,
