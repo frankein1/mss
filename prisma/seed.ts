@@ -19,7 +19,7 @@ import {
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './fixtures'
-import { ministers } from './minister_seed'
+import { ministers } from './ministers'
 
 const prismaClient = new PrismaClient()
 
