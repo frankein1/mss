@@ -1,5 +1,5 @@
 import { EmailRepo } from '~/server/database'
-import type { EnvironmentConfig } from '~/types/environmentConfig'
+import type { AppConfig } from '~/types/appConfig'
 
 export const createEmail = async ({
   to,
@@ -12,7 +12,7 @@ export const createEmail = async ({
   subject: string
   text: string
   html: string
-  config: EnvironmentConfig
+  config: Pick<AppConfig, 'public'>
 }) => {
   const {
     public: {

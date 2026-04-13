@@ -22,7 +22,7 @@ import { createEmail } from '~/server/query/email'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { canBeDisabled } from '~/utils/structure'
 import { forbiddenError } from '~/server/trpc'
-import type { EnvironmentConfig } from '~/types/environmentConfig'
+import type { AppConfig } from '~/types/appConfig'
 import { getDisabledStructureAlert } from '~/server/email/disabledStructureAlert'
 
 export const disableStructure = async ({
@@ -32,7 +32,7 @@ export const disableStructure = async ({
 }: {
   id: string
   disabledById: string | null
-  config: EnvironmentConfig
+  config: AppConfig
 }) => {
   const structure = await StructureRepo.prisma.findUniqueOrThrow({
     where: {

@@ -1,9 +1,9 @@
 import { S3Client } from '@aws-sdk/client-s3'
-import type { EnvironmentConfig } from '~/types/environmentConfig'
+import type { AppConfig } from '~/types/appConfig'
 
 let instance: S3Client | null = null
 
-export function getS3Client(config: Pick<EnvironmentConfig, 's3' | 'public'>) {
+export function getS3Client(config: Pick<AppConfig, 's3' | 'public'>) {
   if (instance) {
     return instance
   }

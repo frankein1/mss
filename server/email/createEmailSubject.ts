@@ -1,8 +1,8 @@
-import type { EnvironmentConfig } from '~/types/environmentConfig'
+import type { AppConfig } from '~/types/appConfig'
 
 export const createEmailSubject = (
   subject: string,
-  config: EnvironmentConfig
+  config: Pick<AppConfig, 'public'>
 ) => {
   const { public: publicConfig } = config
   const { mssEnvironment } = publicConfig

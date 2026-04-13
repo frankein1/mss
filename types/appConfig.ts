@@ -1,4 +1,4 @@
-export type EnvironmentConfig = {
+export type AppConfig = {
   document: {
     useS3Storage: boolean
     encryptionVersion: string

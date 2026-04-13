@@ -9,10 +9,10 @@ import { getS3Client } from './config'
 import { encrypt } from '~/server/lib/encryption/encrypt'
 import type { DataForEncryptionContext } from '~/server/lib/encryption/helper'
 import { decrypt } from '~/server/lib/encryption/decrypt'
-import type { EnvironmentConfig } from '~/types/environmentConfig'
+import type { AppConfig } from '~/types/appConfig'
 
 export async function deleteFile(
-  config: Pick<EnvironmentConfig, 'document' | 's3' | 'public'>,
+  config: Pick<AppConfig, 'document' | 's3' | 'public'>,
   key: string
 ) {
   const client = getS3Client(config)
@@ -31,7 +31,7 @@ export async function deleteFile(
  *  Handles pagination for prefixes with >1000 objects.
  */
 export async function deleteAllFilesWithPrefix(
-  config: Pick<EnvironmentConfig, 'document' | 's3' | 'public'>,
+  config: Pick<AppConfig, 'document' | 's3' | 'public'>,
   prefix: string
 ) {
   const client = getS3Client(config)
@@ -72,7 +72,7 @@ interface S3Metadata {
   'iv': string
 }
 interface UploadWithEncryptionInput {
-  config: Pick<EnvironmentConfig, 'document' | 's3' | 'kms' | 'public'>
+  config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
   plainData: Buffer
   dataForEncryptionContext: DataForEncryptionContext
@@ -116,7 +116,7 @@ export async function uploadWithEncryption({
 }
 
 interface DownloadWithEncryptionInput {
-  config: Pick<EnvironmentConfig, 'document' | 's3' | 'kms' | 'public'>
+  config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
   dataForEncryptionContext: DataForEncryptionContext
 }
