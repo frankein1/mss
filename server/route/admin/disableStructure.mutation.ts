@@ -12,7 +12,9 @@ const adminHandler = async ({
   ctx: AdminContext
   input: IdInput
 }) => {
+  const config = useRuntimeConfig()
   const structureDisabled = await AdminService.disableStructure({
+    config,
     id: input.id,
     disabledById: ctx.user.id
   })

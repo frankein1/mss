@@ -43,9 +43,14 @@ const adminHandler = async ({
     }
   })
 
+  const config = useRuntimeConfig()
   await createEmail({
+    config,
     to: createdUser.email,
-    subject: createEmailSubject('Mon Suivi Social - Ouverture de votre compte'),
+    subject: createEmailSubject(
+      'Mon Suivi Social - Ouverture de votre compte',
+      config
+    ),
     ...getUserCreationEmailContent(createdUser)
   })
   // Do not await, as this should not make the user creation fail in case of failure

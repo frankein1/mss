@@ -1,9 +1,10 @@
+import type { EnvironmentConfig } from '~/types/environmentConfig'
 import { routes } from '~/utils/routes'
 
-export function getDisabledStructureAlert() {
+export function getDisabledStructureAlert(config: EnvironmentConfig) {
   const {
     public: { landingPageUrl }
-  } = useRuntimeConfig()
+  } = config
 
   const text = `Bonjour,
   
