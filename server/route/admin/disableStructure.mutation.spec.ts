@@ -12,6 +12,7 @@ import {
 } from '~/test/server/fixtures'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { generateFileNumber } from '~/utils/generateFileNumber'
+import dayjs from 'dayjs'
 
 // Mock email sending context
 mockNuxtImport('useRuntimeConfig', () => {
@@ -36,7 +37,7 @@ let familyFileId: string
 let documentContentIds: string[]
 
 beforeEach(async () => {
-  const date = new Date()
+  const date = dayjs(dayjs()).subtract(7, 'month').toDate()
   const structure = await createStructure(date)
   const users = await createUsers(date, structure.id)
   const familyFile = await createFamilyFile(
@@ -242,6 +243,35 @@ test('Structure - Disable - Administrator should be able to deactivate structure
     expect(u.firstAccess).not.toBeNull()
     expect(u.lastAccess).not.toBeNull()
   })
+})
+
+test('Structure - Disable - Administrator cannot deactivate structure with activity in the last 6 months', async ({
+  trpc
+}) => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: { lastAccess: dayjs(dayjs()).subtract(5, 'month').toDate() }
+  })
+
+  await expect(() =>
+    trpc.administrator.admin.disableStructure({ id: structureId })
+  ).rejects.toThrowError(/cannot disable/i)
+})
+
+test('Structure - Disable - Administrator cannot deactivate structure created in the last 6 months', async ({
+  trpc
+}) => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: {
+      created: dayjs(dayjs()).subtract(5, 'month').toDate(),
+      lastAccess: null
+    }
+  })
+
+  await expect(() =>
+    trpc.administrator.admin.disableStructure({ id: structureId })
+  ).rejects.toThrowError(/cannot disable/i)
 })
 
 async function resetDatabase(sid: string) {
