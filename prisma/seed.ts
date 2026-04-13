@@ -19,6 +19,7 @@ import {
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './fixtures'
+import { ministers } from './ministers'
 
 const prismaClient = new PrismaClient()
 
@@ -195,6 +196,16 @@ function loadWorkshopAttendees() {
   })
 }
 
+function createMinister() {
+  console.log('👑 Ministers...')
+
+  return prismaClient.ministerEntity.createManyAndReturn({
+    data: ministers,
+    skipDuplicates: true,
+    select: { id: true }
+  })
+}
+
 function loadFixtures() {
   return [
     loadFixtureStructure(),
@@ -213,7 +224,8 @@ function loadFixtures() {
     loadWorkshopNames(),
     loadWorkshops(),
     loadWorkshopExternalAttendees(),
-    loadWorkshopAttendees()
+    loadWorkshopAttendees(),
+    createMinister()
   ]
 }
 

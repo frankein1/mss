@@ -4,7 +4,6 @@ import {
   BeneficiaryStatus,
   SocialSupportStatus,
   FollowupMedium,
-  Minister,
   UserRole,
   DocumentType,
   EmailStatus,

@@ -62,7 +62,6 @@ export async function createSocialSupports(
       privateSynthesis: 'Private synthesis',
       synthesisRichText: 'Synthesis rich text',
       privateSynthesisRichText: 'Private synthesis rich text',
-      ministre: 'AgnesFirminLeBodo',
       numeroPegase: '12345ABCD',
       comments: {
         create: {
@@ -174,7 +173,6 @@ export async function createSocialSupports(
       privateSynthesis: 'Private synthesis',
       synthesisRichText: 'Synthesis rich text',
       privateSynthesisRichText: 'Private synthesis rich text',
-      ministre: 'GenevieveDarrieussecqBarnier1',
       numeroPegase: '986532ADPE',
       comments: {
         create: {

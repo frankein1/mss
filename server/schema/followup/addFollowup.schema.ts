@@ -1,7 +1,6 @@
 import {
   FollowupMedium,
   SocialSupportStatus,
-  Minister,
   FollowupDuration
 } from '@prisma/client'
 import { z } from 'zod'
