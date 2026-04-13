@@ -472,12 +472,10 @@ model Followup {
 
   helpRequested      Boolean?          @map("help_requested")
   place              String?
-  structureName      String?           @map("structure_name")
   thirdPersonName    String?           @map("third_person_name")
   classified         Boolean?
   firstFollowup      Boolean?          @map("first_followup")
   forwardedToJustice Boolean?          @map("forwarded_to_justice")
-  redirected         Boolean?
   duration           FollowupDuration?
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid

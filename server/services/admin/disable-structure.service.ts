@@ -455,12 +455,10 @@ async function updateFollowups(structureId: string) {
     prescribingOrganizationContactId: null,
     helpRequested: null,
     place: null,
-    structureName: null,
     thirdPersonName: null,
     classified: null,
     firstFollowup: null,
     forwardedToJustice: null,
-    redirected: null,
     duration: null
   }
   await FollowupRepo.prisma.updateMany({

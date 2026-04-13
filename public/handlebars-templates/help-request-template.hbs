@@ -283,12 +283,6 @@
             €</li>
         {{/if}}
 
-        {{#if housingHelpRequest.maxRent}}
-          <li><span class='bold'>Montant maximum du loyer :
-            </span>{{{housingHelpRequest.maxRent}}}
-            €</li>
-        {{/if}}
-
         {{#if housingHelpRequest.maxCharges}}
           <li><span class='bold'>Montant maximum des charges :
             </span>{{{housingHelpRequest.maxCharges}}}
@@ -328,17 +322,35 @@
       <p>{{{synthesis}}}</p>
     {{/if}}
 
+    {{#if redirections}}
+      <hr />
+      <h2>Réorientations</h2>
+      <ul>
+        {{#each redirections}}
+          <li>
+            <span class='bold'>Type : </span>{{{type}}}
+            {{#if motif}} — <span class='bold'>Motif : </span>{{{motif}}}{{/if}}
+            {{#if partnerOrganizationName}}
+              —
+              <span class='bold'>Organisme :
+              </span>{{{partnerOrganizationName}}}{{/if}}
+            {{#if partnerOrganizationContactName}}
+              —
+              <span class='bold'>Contact :
+              </span>{{{partnerOrganizationContactName}}}{{/if}}
+            {{#if externalStructureName}}
+              —
+              <span class='bold'>Structure :
+              </span>{{{externalStructureName}}}{{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
     {{#if actions}}
       <hr />
       <h2>Actions entreprises</h2>
       <ul>
-        {{#if redirected}}
-          <li>Réorienté après l'entretien.
-            {{#if structureName}}
-              ({{{structureName}}})
-            {{/if}}
-          </li>
-        {{/if}}
         {{#if helpRequested}}
           <li>Instruction de dossier</li>
         {{/if}}

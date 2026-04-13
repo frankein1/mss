@@ -215,8 +215,6 @@ export function filterFollowup({
   return {
     // HEADER
     id: followup.id,
-    structureName: followup.structureName,
-    redirected: followup.redirected,
     medium: followup.medium,
     // MINISTERE
     classified: show(followup.classified, conditions.minister),

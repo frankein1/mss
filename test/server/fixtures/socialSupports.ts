@@ -129,7 +129,6 @@ export async function createSocialSupports(
           medium: 'PlannedInPerson',
           helpRequested: true,
           place: 'CCAS de Lyon',
-          structureName: 'CCAS de Lyon',
           thirdPersonName: 'Mme Dubois',
           classified: true,
           firstFollowup: true,

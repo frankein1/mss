@@ -377,13 +377,9 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     synthesis: socialSupport.synthesis,
     actions:
       Boolean(socialSupport.followup?.forwardedToJustice) ||
-      Boolean(socialSupport.followup?.redirected) ||
       Boolean(socialSupport.followup?.helpRequested) ||
-      Boolean(socialSupport.followup?.classified) ||
-      Boolean(redirections && redirections.length > 0),
+      Boolean(socialSupport.followup?.classified),
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
-    redirected: socialSupport.followup?.redirected,
-    structureName: socialSupport.followup?.structureName,
     helpRequested: socialSupport.followup?.helpRequested,
     classified: socialSupport.followup?.classified,
     redirections,
@@ -461,6 +457,7 @@ type FileInstructionData = SocialSupportForFileInstructionData & {
   helpRequest?: HelpRequestData
   housingHelpRequest?: HousingHelpRequestData
   documents: DocumentData[] | null
+  redirections: RedirectionData[] | null
 }
 
 const getHelpRequestData = (
@@ -470,6 +467,15 @@ const getHelpRequestData = (
     name: document.name,
     type: documentTypeKeys.value(document.type) || null
   }))
+  const redirections =
+    socialSupport.socialSupportRedirections?.map(r => ({
+      type: socialSupportRedirectionTypeKeys.value(r.type) || null,
+      motif: r.motif || null,
+      partnerOrganizationName: r.partnerOrganization?.name || null,
+      partnerOrganizationContactName:
+        r.partnerOrganizationContact?.name || null,
+      externalStructureName: r.externalStructureName || null
+    })) || null
 
   const commonObjects: FieldLabels<BaseFileInstruction> = {
     externalStructure: socialSupport.fileInstruction?.externalStructure
@@ -503,7 +509,7 @@ const getHelpRequestData = (
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
     documents: documents || null,
-
+    redirections: redirections || null,
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
       helpRequest: {
         ...commonObjects,
@@ -777,11 +783,111 @@ const getCounts = async (
 const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
   return await BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id: id },
-    include: {
-      relatives: true,
+    select: {
+      id: true,
+      structureId: true,
+      familyFileId: true,
+      previousFamilyFileId: true,
+      createdById: true,
+      disabledById: true,
+      splitFromFileById: true,
+      aidantConnectAuthorized: true,
+      fileNumber: true,
+      status: true,
+      title: true,
+      usualName: true,
+      usualNameNormalized: true,
+      birthName: true,
+      birthNameNormalized: true,
+      firstName: true,
+      firstNameNormalized: true,
+      birthDate: true,
+      birthPlace: true,
+      deathDate: true,
+      gender: true,
+      nationality: true,
+      accommodationMode: true,
+      accommodationName: true,
+      accommodationAdditionalInformation: true,
+      street: true,
+      addressComplement: true,
+      zipcode: true,
+      city: true,
+      department: true,
+      region: true,
+      qpv: true,
+      noPhone: true,
+      phone1: true,
+      phone2: true,
+      email: true,
+      familySituation: true,
+      weddingDate: true,
+      divorceDate: true,
+      caregiver: true,
+      minorChildren: true,
+      majorChildren: true,
+      mobility: true,
+      vulnerablePerson: true,
+      relationship: true,
+      ministereCategorie: true,
+      ministereDepartementServiceAc: true,
+      ministereStructure: true,
+      gir: true,
+      doctor: true,
+      healthAdditionalInformation: true,
+      socialSecurityNumber: true,
+      insurance: true,
+      socioProfessionalCategory: true,
+      schoolName: true,
+      isSchoolInQPV: true,
+      studyLevel: true,
+      occupation: true,
+      employer: true,
+      employerSiret: true,
+      unemploymentNumber: true,
+      pensionOrganisations: true,
+      otherPensionOrganisations: true,
+      cafNumber: true,
+      bank: true,
+      funeralContract: true,
+      protectionMeasure: true,
+      representative: true,
+      prescribingStructure: true,
+      orientationType: true,
+      orientationStructure: true,
+      serviceProviders: true,
+      involvedPartners: true,
+      additionalInformation: true,
+      numeroPegase: true,
+      accommodationZone: true,
+      externalRdvspId: true,
+      created: true,
+      updated: true,
+      archiveDueDate: true,
+      archiveDueDateHistory: true,
+      lastActivity: true,
+      relatives: {
+        select: {
+          firstName: true,
+          lastName: true,
+          relationship: true,
+          city: true,
+          email: true,
+          phone: true,
+          hosted: true,
+          caregiver: true,
+          additionalInformation: true,
+          birthDate: true
+        }
+      },
       familyFile: {
         select: {
-          referents: true,
+          referents: {
+            select: {
+              firstName: true,
+              lastName: true
+            }
+          },
           beneficiaries: {
             where: { NOT: { id: id } },
             select: {
@@ -807,9 +913,24 @@ const getSocialSupports = async (
       beneficiaryId: beneficiaryId,
       socialSupportType: { not: 'Appointment' }
     },
-    include: {
+    select: {
+      id: true,
+      socialSupportType: true,
+      date: true,
+      numeroPegase: true,
+      status: true,
+      dueDate: true,
+      synthesis: true,
       followup: {
-        include: {
+        select: {
+          firstFollowup: true,
+          duration: true,
+          medium: true,
+          thirdPersonName: true,
+          place: true,
+          forwardedToJustice: true,
+          helpRequested: true,
+          classified: true,
           prescribingOrganization: {
             select: {
               name: true
@@ -843,7 +964,7 @@ const getSocialSupports = async (
             }
           },
           helpRequest: {
-            include: {
+            select: {
               subject: {
                 select: {
                   name: true
@@ -858,11 +979,17 @@ const getSocialSupports = async (
                 select: {
                   name: true
                 }
-              }
+              },
+              handlingDate: true,
+              isRefundable: true,
+              askedAmount: true,
+              allocatedAmount: true,
+              paymentDate: true,
+              paymentMethod: true
             }
           },
           housingHelpRequest: {
-            include: {
+            select: {
               prescribingOrganization: {
                 select: {
                   name: true
@@ -872,18 +999,52 @@ const getSocialSupports = async (
                 select: {
                   name: true
                 }
-              }
+              },
+              isFirst: true,
+              firstOpeningDate: true,
+              askedHousing: true,
+              uniqueId: true,
+              taxHouseholdAdditionalInformation: true,
+              maxRent: true,
+              maxCharges: true,
+              housingType: true,
+              roomCount: true,
+              lowIncomeHousingType: true,
+              isPmr: true,
+              reason: true,
+              handlingDate: true
             }
           }
         }
       },
-      minister: true,
+      minister: {
+        select: {
+          firstName: true,
+          lastName: true,
+          function: true,
+          government: true
+        }
+      },
       documents: {
         select: { name: true, type: true }
       },
-      createdBy: true,
-      lastUpdatedBy: true,
-      subjects: true,
+      createdBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true
+        }
+      },
+      lastUpdatedBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true
+        }
+      },
+      subjects: {
+        select: { name: true }
+      },
       socialSupportRedirections: {
         select: {
           type: true,
@@ -909,7 +1070,7 @@ const getWorkshops = async (beneficiaryId: string, user: User) => {
     },
     select: {
       id: true,
-      workshopName: true,
+      workshopName: { select: { name: true } },
       sessionName: true,
       date: true,
       startTime: true,
@@ -944,7 +1105,9 @@ const getWorkshops = async (beneficiaryId: string, user: User) => {
   })
 }
 
-const getPrettyUserName = (user: User | null) => {
+const getPrettyUserName = (
+  user: Pick<User, 'firstName' | 'lastName' | 'email'> | null
+) => {
   if (!user) {
     return null
   }
