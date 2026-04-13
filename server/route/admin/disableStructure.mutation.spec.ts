@@ -263,7 +263,10 @@ test('Structure - Disable - Administrator cannot deactivate structure created in
 }) => {
   await prismaClient.structure.update({
     where: { id: structureId },
-    data: { created: dayjs(dayjs()).subtract(5, 'month').toDate() }
+    data: {
+      created: dayjs(dayjs()).subtract(5, 'month').toDate(),
+      lastAccess: null
+    }
   })
 
   await expect(() =>
