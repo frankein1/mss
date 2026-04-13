@@ -1,5 +1,5 @@
 import type { JobResult } from '~/server/schema'
-import { dataInclusionStructureServerSchema } from '~/server/schema'
+import { dataInclusionStructureServerSchemaV1 } from '~/server/schema'
 import { fetchStructuresPages } from '~/server/lib/data-inclusion'
 import { DataInclusionService, JobResultService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
@@ -34,7 +34,7 @@ async function importStructures(job: JobResult, all = false) {
     job.result.nTotal = page.total
 
     for (const item of page.items) {
-      const validated = dataInclusionStructureServerSchema.safeParse(item)
+      const validated = dataInclusionStructureServerSchemaV1.safeParse(item)
 
       if (validated.success === false) {
         const inputId = (item as any)?.id ?? 'unknown'
