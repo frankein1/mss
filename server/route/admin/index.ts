@@ -15,7 +15,6 @@ import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSub
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
 import { getJobResults } from './getJobResults.query'
 import { launchStructureImport } from './launchStructureImport.mutation'
-import { launchBrevoExport } from './launchBrevoExport.mutation'
 import { disableStructure } from './disableStructure.mutation'
 import { toggleRdvsp } from '././toggleRdvsp.mutation'
 import { getMinisters } from './getMinisters.query'
@@ -41,7 +40,6 @@ export const adminRoutes = {
   updateStructureSubject,
   getJobResults,
   launchStructureImport,
-  launchBrevoExport,
   disableStructure,
   toggleRdvsp,
   getMinisters,

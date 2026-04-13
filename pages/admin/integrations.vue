@@ -25,22 +25,6 @@
           </li>
           <li>
             <DsfrButton
-              label="Brevo > export des contacts"
-              type="button"
-              :disabled="launching"
-              @click="onBrevoExport(false)"
-            />
-          </li>
-          <li>
-            <DsfrButton
-              label="Brevo > mise à jour de tous les contacts"
-              type="button"
-              :disabled="launching"
-              @click="onBrevoExport(true)"
-            />
-          </li>
-          <li>
-            <DsfrButton
               label="Rafraîchir le tableau"
               type="button"
               secondary
@@ -116,23 +100,6 @@
       },
       onFailure: () => {
         snackbar.error("Echec de lancement de l'import de structure")
-      }
-    })
-  }
-
-  function onBrevoExport(all = false) {
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.launchBrevoExport.mutate({ all }),
-      isSubmitting: launching,
-      onSuccess: launched => {
-        if (launched) {
-          snackbar.success("L'export des contacts a démarré avec succès")
-        } else {
-          snackbar.info('Un export des contacts est déjà en cours')
-        }
-      },
-      onFailure: () => {
-        snackbar.error("Echec de lancement de l'export des contacts")
       }
     })
   }
