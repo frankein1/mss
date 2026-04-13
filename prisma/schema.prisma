@@ -376,7 +376,6 @@ model SocialSupport {
   synthesisRichText        String? @map("synthesis_rich_text")
   privateSynthesisRichText String? @map("private_synthesis_rich_text")
 
-  ministre   Minister?
   minister   MinisterEntity? @relation(fields: [ministerId], references: [id])
   ministerId String?         @map("minister_id") @db.Uuid
 
@@ -1044,8 +1043,6 @@ model MinisterEntity {
 
   // Relations
   socialSupports SocialSupport[]
-  // oldMinister used for migration from Minister enum to MinisterEntity table
-  oldMinister    Minister?       @map("old_minister")
 
   created DateTime @default(now())
   updated DateTime @updatedAt
@@ -1058,63 +1055,6 @@ enum MinisterStatus {
   Current
   Former
   Deleted
-}
-
-enum Minister {
-  // François Braun (Santé et Prévention)
-  FrancoisBraun
-  // Agnès Firmin-Le Bodo (Santé et Prévention)
-  AgnesFirminLeBodo
-  // Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)
-  JeanChristopheCombe
-  // Geneviève Darrieussecq (Personnes handicapées)
-  GenevieveDarrieussecq
-  // Geneviève Darrieussecq (Ministre de la Santé et de l’Accès aux soins)
-  GenevieveDarrieussecqBarnier1
-  // Olivier Dussopt (Travail, Plein emploi et Insertion)
-  OlivierDussopt
-  // Carole Grandjean (Enseignement, Formation professionnels)
-  CaroleGrandjean
-  // Aurélien Rousseau (Santé et Prévention)
-  AurelienRousseau
-  // Aurore Berge (Solidarités et Familles)
-  AuroreBerge
-  // Fadila Khattabi (Personnes handicapées)
-  FadilaKhattabi
-  // Catherine Vautrin (Travail, Santé et Solidarités)
-  CatherineVautrin
-  // Frédéric Valletoux (Délégué Santé et Prévention)
-  FredericValletoux
-  // Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)
-  SarahElHairy
-  // Astrid Panosyan-Bouvet (Ministre du Travail et de l’Emploi)
-  AstridPanosyanBouvet
-  // Paul Christophe (Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes)
-  PaulChristophe
-  // Agnès Canayer (Ministre déléguée, chargée de la Famille et de la Petite Enfance)
-  AgnesCanayer
-  // Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)
-  SalimaSaa
-  // Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)
-  CharlotteParmentierLecocq
-  // Catherine Vautrin - 2 (Ministre du Travail, de la Santé, des Solidarités et des Familles)
-  CatherineVautrinBayrou1
-  // Astrid Panosyan-Bouvet - 2 (Ministre chargée du Travail et de l'Emploi)
-  AstridPanosyanBouvetBayrou1
-  // Yannick Neuder (Ministre chargé de la Santé et de l'Accès aux soins)
-  YannickNeuder
-  // Charlotte Parmentier-Lecocq - 2 (Ministre chargée de l’Autonomie et du Handicap)
-  CharlotteParmentierLecocqBayrou1
-  // Sarah El Haïry - 2 (Haut-commissaire à l’enfance)
-  SarahElHairyBayrou1
-  // Jean-Pierre Farandou (Ministre du Travail et des Solidarités)
-  JeanPierreFarandou
-  // Stéphanie Rist (Ministre de la Santé, des Familles, de l’Autonomie et des Personnes handicapées)
-  StephanieRist
-  // Charlotte Parmentier-Lecocq - 3 Gvt Lecornu (Ministre déléguée, chargée de l’Autonomie et des Personnes handicapées)
-  CharlotteParmentierLecornu2
-  // Sarah El Hairy (3) Gvt Lecornu (2) - Haut-Commissaire à l'Enfance
-  SarahElHairyLecornu2
 }
 
 enum BeneficiaryAccommodationZone {

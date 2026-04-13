@@ -66,7 +66,7 @@ export async function getMinistereInterpellationStatsQuery(
 
   return Object.entries(interpellationsCount)
     .map(([key, value]) => ({
-      ministre: key,
+      minister: key,
       _count: value
     }))
     .sort(({ _count: countA }, { _count: countB }) => countB - countA)

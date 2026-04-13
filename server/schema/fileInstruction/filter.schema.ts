@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import {
-  Minister,
   SocialSupportStatus,
   FileInstructionType,
   HousingRoomCount,

@@ -48,9 +48,9 @@
     )
   const ministereInterpellationStats = computed(
     () =>
-      data.value?.map(({ _count, ministre }) => ({
-        key: ministre,
-        label: ministre,
+      data.value?.map(({ _count, minister }) => ({
+        key: minister,
+        label: minister,
         count: _count
       })) || []
   )

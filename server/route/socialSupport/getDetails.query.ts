@@ -51,7 +51,6 @@ async function getSocialSupportDetail({
           lastName: true
         }
       },
-      ministre: true,
       familyFile: {
         select: {
           id: true,

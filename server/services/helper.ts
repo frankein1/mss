@@ -118,7 +118,7 @@ function documentDto<T extends Document>(d: T) {
 }
 // This is a temporary fix. The query must be reviewed with select and exact type
 // matching
-type SS = Omit<SocialSupport, 'ministre'> & {
+type SS = SocialSupport & {
   familyFile: FamilyFile & {
     referents?: User[]
   }

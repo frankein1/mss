@@ -8,13 +8,13 @@
     :alert-type="AlertType.Error"
     message="Les statistiques de la répartion des ministres n'ont pas pu être chargées."
   />
-  <template v-else-if="ministreStats && ministreStats.length">
+  <template v-else-if="ministerStats && ministerStats.length">
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le nombre total d'instructions de dossier
     </p>
     <StatsList
       :total-count="totalCount"
-      :stats="ministreStats"
+      :stats="ministerStats"
     />
   </template>
 
@@ -42,7 +42,7 @@
       toRef(() => props.filters)
     )
 
-  const ministreStats = computed(
+  const ministerStats = computed(
     () =>
       data.value?.map(({ _count, minister }) => ({
         key: minister || 'null',
