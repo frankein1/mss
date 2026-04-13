@@ -16,8 +16,6 @@ const select = {
   id: true,
   updated: true,
   socialSupportId: true,
-  structureName: true,
-  redirected: true,
   medium: true,
   classified: true,
   forwardedToJustice: true,
