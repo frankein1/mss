@@ -160,7 +160,7 @@ export async function exportFileInstructions({
           ),
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
-          date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
+          date: formatDate(socialSupport.date),
           subjectId,
           documents:
             socialSupport.documents
@@ -173,24 +173,24 @@ export async function exportFileInstructions({
             fileInstruction.examinationDate,
             'DD-MM-YYYY'
           ),
-          decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
+          decisionDate: formatDate(fileInstruction.decisionDate),
           allocatedAmount: helpRequest?.allocatedAmount?.toNumber() ?? null,
           paymentMethod:
             paymentMethodKeys.value(helpRequest?.paymentMethod) || '',
-          paymentDate: formatDate(helpRequest?.paymentDate, 'DD-MM-YYYY'),
-          handlingDate: formatDate(helpRequest?.handlingDate, 'DD-MM-YYYY'),
+          paymentDate: formatDate(helpRequest?.paymentDate),
+          handlingDate: formatDate(helpRequest?.handlingDate),
           refusalReason:
             fileInstruction.refusalReasonOther ||
             fileInstructionRefusalReasonKeys.value(
               fileInstruction.refusalReason
             ) ||
             '',
-          dispatchDate: formatDate(fileInstruction.dispatchDate, 'DD-MM-YYYY'),
+          dispatchDate: formatDate(fileInstruction.dispatchDate),
           synthesis: socialSupport.synthesis || '',
-          dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
+          dueDate: formatDate(socialSupport.dueDate),
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
-          updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
+          updated: formatDate(socialSupport.updated, 'DD/MM/YYYY HH:mm'),
           minister: socialSupport.minister
             ? formatMinisterName(socialSupport.minister)
             : '',
@@ -273,14 +273,14 @@ const DATE_COLUMN_FORMATS: Record<
   string,
   { numFmt: string; parseFormat: string }
 > = {
-  date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  examinationDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  decisionDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  paymentDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  handlingDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  dispatchDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-  updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD-MM-YYYY HH:mm' }
+  date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  examinationDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  decisionDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  paymentDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  handlingDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  dispatchDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD/MM/YYYY HH:mm' }
 }
 
 const CURRENCY_COLUMNS = new Set([

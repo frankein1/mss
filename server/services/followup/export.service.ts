@@ -91,7 +91,7 @@ export async function exportFollowups({
       if (permissions.view) {
         const redirections = followup.socialSupportRedirections || []
         followups.push({
-          date: formatDate(followup.date, 'DD-MM-YYYY'),
+          date: formatDate(followup.date),
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
@@ -107,7 +107,7 @@ export async function exportFollowups({
           classified: getBooleanOrEmpty(followup.classified),
           documents:
             followup.documents?.map(document => document.name).join(', ') || '',
-          dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
+          dueDate: formatDate(followup.dueDate),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
           minister: followup.minister
@@ -120,7 +120,7 @@ export async function exportFollowups({
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
           // Technically it should be converted into timezone of the user
-          updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
+          updated: formatDate(followup.updated, 'DD/MM/YYYY HH:mm'),
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
@@ -182,9 +182,9 @@ export async function exportWorkbook({
     string,
     { numFmt: string; parseFormat: string }
   > = {
-    date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-    dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
-    updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD-MM-YYYY HH:mm' }
+    date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+    dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+    updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD/MM/YYYY HH:mm' }
   }
 
   worksheet.columns = fullColumns
