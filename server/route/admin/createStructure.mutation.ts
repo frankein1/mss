@@ -37,9 +37,14 @@ const adminHandler = async ({
     }
   })
 
+  const config = useRuntimeConfig()
   await createEmail({
+    config,
     to: input.email,
-    subject: createEmailSubject('Mon Suivi Social - Votre espace a été créé'),
+    subject: createEmailSubject(
+      'Mon Suivi Social - Votre espace a été créé',
+      config
+    ),
     ...getStructureCreationEmailContent()
   })
   createOrUpdateStructure(createdStructure.id).catch(error => {

@@ -16,20 +16,23 @@ import {
   StructureRepo,
   UserRepo
 } from '~/server/database'
-import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
-import { createEmail } from '~/server/query'
-import { getDisabledStructureAlert } from '~/server/email'
 import { customAlphabet } from 'nanoid'
+import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
+import { createEmail } from '~/server/query/email'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { canBeDisabled } from '~/utils/structure'
 import { forbiddenError } from '~/server/trpc'
+import type { AppConfig } from '~/types/appConfig'
+import { getDisabledStructureAlert } from '~/server/email/disabledStructureAlert'
 
 export const disableStructure = async ({
   id,
-  disabledById
+  disabledById,
+  config
 }: {
   id: string
   disabledById: string | null
+  config: AppConfig
 }) => {
   const structure = await StructureRepo.prisma.findUniqueOrThrow({
     where: {
@@ -278,7 +281,6 @@ export const disableStructure = async ({
     updateStructure()
   ])
 
-  const config = useRuntimeConfig()
   if (config.document.useS3Storage) {
     deleteAllFilesWithPrefix(config, `${id}/`).catch(e =>
       console.error(
@@ -345,11 +347,13 @@ export const disableStructure = async ({
 
     if (user.status === 'Active') {
       await createEmail({
+        config,
         to: user.email,
         subject: createEmailSubject(
-          'Suppression de votre espace de travail sur Mon Suivi Social'
+          'Suppression de votre espace de travail sur Mon Suivi Social',
+          config
         ),
-        ...getDisabledStructureAlert()
+        ...getDisabledStructureAlert(config)
       })
     }
   }

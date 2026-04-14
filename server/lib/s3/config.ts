@@ -1,9 +1,9 @@
 import { S3Client } from '@aws-sdk/client-s3'
-import type { RuntimeConfig } from 'nuxt/schema'
+import type { AppConfig } from '~/types/appConfig'
 
 let instance: S3Client | null = null
 
-export function getS3Client(config: Pick<RuntimeConfig, 's3' | 'public'>) {
+export function getS3Client(config: Pick<AppConfig, 's3' | 'public'>) {
   if (instance) {
     return instance
   }

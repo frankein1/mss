@@ -1,7 +1,8 @@
 import dayjs from 'dayjs'
 import { withErrorCapture } from '../utils'
 import { StructureRepo } from '~/server/database'
-import { AdminService } from '~/server/services'
+import { SCHEDULER_ENV } from '../env'
+import { disableStructure } from '~/server/services/admin/disable-structure.service'
 
 const MAX_BENEFICIARIES = 10
 
@@ -11,6 +12,9 @@ async function disableInactiveStructures() {
   const structures = await StructureRepo.prisma.findMany({
     where: {
       deactivationAlertEmail: 2,
+      deactivationAlertEmailDate: {
+        lte: dayjs().subtract(4, 'week').toDate()
+      },
       disabled: false,
       OR: [
         { lastAccess: { lte: limitDate } },
@@ -35,9 +39,10 @@ async function disableInactiveStructures() {
     )
 
     for (const structure of structuresToDisable) {
-      await AdminService.disableStructure({
+      await disableStructure({
         id: structure.id,
-        disabledById: null
+        disabledById: null,
+        config: SCHEDULER_ENV
       })
       console.log(
         `auto-disable-inactive-structures: disabled structure ${structure.id}`
