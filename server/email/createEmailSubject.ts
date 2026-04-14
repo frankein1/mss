@@ -1,5 +1,10 @@
-export const createEmailSubject = (subject: string) => {
-  const { public: publicConfig } = useRuntimeConfig()
+import type { AppConfig } from '~/types/appConfig'
+
+export const createEmailSubject = (
+  subject: string,
+  config: Pick<AppConfig, 'public'>
+) => {
+  const { public: publicConfig } = config
   const { mssEnvironment } = publicConfig
   if (mssEnvironment === 'development') {
     return `[DEV] ${subject}`

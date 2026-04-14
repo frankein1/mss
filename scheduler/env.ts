@@ -1,4 +1,26 @@
 export const SCHEDULER_ENV = {
+  document: {
+    useS3Storage:
+      (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
+    encryptionVersion: '1',
+    encryptionAlgorithm: 'aes_256_gcm'
+  },
+  s3: {
+    accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.NUXT_S3_SECRET_ACCESS_KEY || '',
+    region: process.env.NUXT_S3_REGION || '',
+    bucket: process.env.NUXT_S3_BUCKET || '',
+    endpoint: process.env.NUXT_S3_ENDPOINT || ''
+  },
+  kms: {
+    accessKeyId: process.env.NUXT_KMS_ACCESS_KEY_ID || '',
+    secretKey: process.env.NUXT_KMS_SECRET_KEY || '',
+    organizationId: process.env.NUXT_KMS_ORGANIZATION_ID || '',
+    projectId: process.env.NUXT_KMS_PROJECT_ID || '',
+    region: process.env.NUXT_KMS_REGION || '',
+    apiUrl: process.env.NUXT_KMS_API_URL || '',
+    keyId: process.env.NUXT_KMS_KEY_ID || ''
+  },
   email: {
     smtpHost: process.env.NUXT_EMAIL_SMTP_HOST || '',
     smtpPort: parseInt(process.env.NUXT_EMAIL_SMTP_PORT || '587'),

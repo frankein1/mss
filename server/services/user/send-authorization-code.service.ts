@@ -21,10 +21,13 @@ export async function sendAuthorizationCode(ctx: ProtectedAppContext) {
     }
   })
 
+  const config = useRuntimeConfig()
   await createEmail({
+    config,
     to: created.email,
     subject: createEmailSubject(
-      'Mon Suivi Social : code de validation pour votre export'
+      'Mon Suivi Social : code de validation pour votre export',
+      config
     ),
     text: `Bonjour,
 

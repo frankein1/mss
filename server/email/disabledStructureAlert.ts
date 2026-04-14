@@ -1,9 +1,10 @@
+import type { AppConfig } from '~/types/appConfig'
 import { routes } from '~/utils/routes'
 
-export function getDisabledStructureAlert() {
+export function getDisabledStructureAlert(config: Pick<AppConfig, 'public'>) {
   const {
     public: { landingPageUrl }
-  } = useRuntimeConfig()
+  } = config
 
   const text = `Bonjour,
   
