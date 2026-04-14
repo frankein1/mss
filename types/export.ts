@@ -1,7 +1,7 @@
 import type { AddWorksheetOptions, Column } from 'exceljs'
 
 export type RowType = {
-  [k: string]: string | boolean | Date | null | undefined
+  [k: string]: string | boolean | number | Date | null | undefined
 }
 
 export type WorksheetType = {
