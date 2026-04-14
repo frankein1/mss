@@ -9,11 +9,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator erd {
-  provider    = "prisma-erd-generator"
-  output      = "../docs/database-model.svg"
-  ignoreEnums = true
-}
+// generator erd {
+//   provider    = "prisma-erd-generator"
+//   output      = "../docs/database-model.svg"
+//   ignoreEnums = true
+// }
 
 model Account {
   id                String  @id @default(uuid()) // FIXME: Cannot set as @db.Uuid as no cast is possible
