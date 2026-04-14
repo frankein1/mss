@@ -1,7 +1,7 @@
+import { randomUUID } from 'node:crypto'
 import type { JobResult } from '~/server/schema'
 import { dataInclusionStructureServerSchemaV1 } from '~/server/schema'
 import { fetchStructuresPages } from '~/server/lib/data-inclusion'
-import { JobResultService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
 
 export async function getStructureStatusInDB(id: string, updateDate: Date) {
@@ -144,15 +144,6 @@ async function importStructures(job: JobResult, all = false) {
       'nErrors',
       job.errors.length
     )
-
-    // Update status
-    job.status = 'Ongoing'
-    await JobResultService.update({
-      id: job.id,
-      status: job.status,
-      errors: job.errors,
-      result: job.result
-    })
   }
 
   const count = await prismaClient.dataInclusionStructureV1.count()
@@ -162,8 +153,13 @@ async function importStructures(job: JobResult, all = false) {
 }
 
 export async function handleStructuresImport(all = false) {
-  const job = await JobResultService.create({
+  const job: JobResult = {
+    id: randomUUID(),
     name: `data-inclusion-structure-import-cron${all ? '-all' : ''}`,
+    status: 'Created',
+    startDate: new Date(),
+    endDate: null,
+    durationInSeconds: null,
     errors: [],
     result: {
       nTotal: 0,
@@ -172,7 +168,7 @@ export async function handleStructuresImport(all = false) {
       nCreated: 0,
       nUpdated: 0
     }
-  })
+  }
 
   try {
     await DataInclusionIntegrationService.importStructures(job, all)
@@ -184,28 +180,29 @@ export async function handleStructuresImport(all = false) {
     })
   }
 
-  const endDate = new Date()
-  const durationInSeconds = (endDate.getTime() - job.startDate.getTime()) / 1000
-  console.log('duration in seconds', durationInSeconds)
-
-  job.endDate = endDate
-  job.durationInSeconds = durationInSeconds
+  job.endDate = new Date()
+  job.durationInSeconds =
+    (job.endDate.getTime() - job.startDate.getTime()) / 1000
   job.status = job.errors.length > 0 ? 'Failure' : 'Success'
 
-  return await JobResultService.update({
-    id: job.id,
-    status: job.status,
-    endDate: job.endDate,
-    durationInSeconds: job.durationInSeconds,
-    errors: job.errors,
-    result: job.result
-  })
+  console.log(
+    `data-inclusion-structure-import: import completed with status: ${job.status}`
+  )
+  console.log(
+    'data-inclusion-structure-import: result and errors (truncated to 200 firsts'
+  )
+  console.log(
+    JSON.stringify({ ...job, errors: job.errors.slice(0, 200) }, undefined, 2)
+  )
+
+  return job
 }
 
 export const DataInclusionIntegrationService = {
   importStructures
 }
 
+// FIXME: this will be deleted when the endpoint in admin panel is deleted
 export const DataInclusionIntegrationHandler = {
   handleStructuresImport
 }

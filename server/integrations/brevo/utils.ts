@@ -2,15 +2,10 @@ import type { Structure, User } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
-import type { RuntimeConfig } from 'nuxt/schema'
 
 const BREVO_LIST_ID = 10
-let runtimeConfig: Pick<RuntimeConfig, 'brevo' | 'public'> | undefined
-try {
-  runtimeConfig = useRuntimeConfig()
-} catch {
-  /** */
-}
+
+const runtimeConfig = useRuntimeConfig()
 
 export function mapUserToBrevoContact(
   user: Pick<
