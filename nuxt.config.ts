@@ -95,7 +95,6 @@ export default defineNuxtConfig({
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
   modules: [
     '@vee-validate/nuxt',
-    'nuxt-scheduler',
     'nuxt-security',
     'vue-dsfr-nuxt-module',
     '@nuxt/eslint',
