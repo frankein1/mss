@@ -97,7 +97,6 @@
     "nuxt": "^3.16.1",
     "prettier": "3.6.2",
     "prettier-plugin-prisma": "^5.0.0",
-    "prisma-erd-generator": "^2.0.4",
     "sass": "^1.90.0",
     "stylelint": "^17.4.0",
     "stylelint-config-recommended-vue": "^1.6.1",
