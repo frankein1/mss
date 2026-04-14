@@ -187,6 +187,12 @@ export async function exportWorkbook({
   })
   worksheet.getRow(1).font = { ...EXPORT_DEFAULT_FONT, bold: true }
 
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
   rows.forEach(row => {
     const newRow = worksheet.addRow(row)
     if ((row as RowType).bold) {
