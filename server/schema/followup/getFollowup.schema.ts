@@ -4,6 +4,6 @@ import { exportFollowupsSchema } from './exportFollowup.schema'
 
 export const getFollowupsSchema = exportFollowupsSchema
   .omit({ code: true })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type GetFollowupsInput = z.infer<typeof getFollowupsSchema>

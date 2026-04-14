@@ -15,6 +15,6 @@ export const getDocumentsSchema = z
       })
       .optional()
   })
-  .merge(optionalPaginatedSchema)
+  .extend(optionalPaginatedSchema.shape)
 
 export type GetDocumentsInput = z.infer<typeof getDocumentsSchema>

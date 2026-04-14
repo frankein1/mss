@@ -11,13 +11,11 @@ export const createFamilyFileMemberSchema =
       firstName: true,
       birthDate: true
     })
-    .merge(
-      z.object({
-        familyFileId: z.string().uuid(),
-        relationship: requiredNativeEnum(RelativeRelationship),
-        usualName: beneficiaryLastNameSchema
-      })
-    )
+    .extend({
+      familyFileId: z.string().uuid(),
+      relationship: requiredNativeEnum(RelativeRelationship),
+      usualName: beneficiaryLastNameSchema
+    })
 
 export type CreateFamilyFileMemberInput = z.infer<
   typeof createFamilyFileMemberSchema

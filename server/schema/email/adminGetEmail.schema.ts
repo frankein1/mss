@@ -12,6 +12,6 @@ export const adminGetEmailsSchema = z
       sentDate: z.nativeEnum(Prisma.SortOrder).optional()
     })
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type AdminGetEmailsInput = z.infer<typeof adminGetEmailsSchema>

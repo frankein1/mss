@@ -4,6 +4,6 @@ import { exportBeneficiariesSchema } from './exportBeneficiaries.schema'
 
 export const getBeneficiariesSchema = exportBeneficiariesSchema
   .omit({ code: true })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type GetBeneficiariesInput = z.infer<typeof getBeneficiariesSchema>

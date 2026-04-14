@@ -86,6 +86,6 @@ export const adminGetJobResultsSchema = z
       startDate: z.nativeEnum(Prisma.SortOrder).optional()
     })
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type AdminGetJobResultsInput = z.infer<typeof adminGetJobResultsSchema>

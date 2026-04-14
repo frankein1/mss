@@ -18,7 +18,7 @@ const getNotificationsSchema = z
     onlyUnread: z.boolean(),
     types: z.array(z.nativeEnum(NotificationType)).nullish()
   })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 type GetNotificationsInput = z.infer<typeof getNotificationsSchema>
 

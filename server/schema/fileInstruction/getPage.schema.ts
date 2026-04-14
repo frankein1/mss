@@ -4,7 +4,7 @@ import { exportFileInstructionsSchema } from './export.schema'
 
 export const getFileInstructionPageSchema = exportFileInstructionsSchema
   .omit({ code: true })
-  .merge(paginatedSchema)
+  .extend(paginatedSchema.shape)
 
 export type FileInstructionPageInput = z.infer<
   typeof getFileInstructionPageSchema
