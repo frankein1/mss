@@ -11,6 +11,10 @@ import { getFileInstructionPermissions } from '~/server/security'
 import type { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
+import { formatDate } from '~/utils/formatDate'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import utc from 'dayjs/plugin/utc'
 import {
   socialSupportStatusKeys,
   fileInstructionRefusalReasonKeys,
@@ -28,6 +32,9 @@ import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 import ExcelPkg from 'exceljs'
 import type { Column } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
+
+dayjs.extend(customParseFormat)
+dayjs.extend(utc)
 
 const exportLabels = {
   ...helpRequestFieldLabels,
@@ -153,7 +160,7 @@ export async function exportFileInstructions({
           ),
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
-          date: socialSupport.date ?? null,
+          date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
           subjectId,
           documents:
             socialSupport.documents
@@ -162,25 +169,28 @@ export async function exportFileInstructions({
           status: socialSupportStatusKeys.value(socialSupport.status) || '',
           isFirst: getIsFirst(housingHelpRequest?.isFirst),
           askedAmount: helpRequest?.askedAmount?.toNumber() ?? null,
-          examinationDate: fileInstruction.examinationDate ?? null,
-          decisionDate: fileInstruction.decisionDate ?? null,
+          examinationDate: formatDate(
+            fileInstruction.examinationDate,
+            'DD-MM-YYYY'
+          ),
+          decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
           allocatedAmount: helpRequest?.allocatedAmount?.toNumber() ?? null,
           paymentMethod:
             paymentMethodKeys.value(helpRequest?.paymentMethod) || '',
-          paymentDate: helpRequest?.paymentDate ?? null,
-          handlingDate: helpRequest?.handlingDate ?? null,
+          paymentDate: formatDate(helpRequest?.paymentDate, 'DD-MM-YYYY'),
+          handlingDate: formatDate(helpRequest?.handlingDate, 'DD-MM-YYYY'),
           refusalReason:
             fileInstruction.refusalReasonOther ||
             fileInstructionRefusalReasonKeys.value(
               fileInstruction.refusalReason
             ) ||
             '',
-          dispatchDate: fileInstruction.dispatchDate ?? null,
+          dispatchDate: formatDate(fileInstruction.dispatchDate, 'DD-MM-YYYY'),
           synthesis: socialSupport.synthesis || '',
-          dueDate: socialSupport.dueDate ?? null,
+          dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
-          updated: socialSupport.updated ?? null,
+          updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
           minister: socialSupport.minister
             ? formatMinisterName(socialSupport.minister)
             : '',
@@ -259,15 +269,18 @@ function getIsFirst(isFirst: boolean | null | undefined) {
   return ''
 }
 
-const DATE_COLUMN_FORMATS: Record<string, string> = {
-  date: 'dd/mm/yyyy',
-  examinationDate: 'dd/mm/yyyy',
-  decisionDate: 'dd/mm/yyyy',
-  paymentDate: 'dd/mm/yyyy',
-  handlingDate: 'dd/mm/yyyy',
-  dispatchDate: 'dd/mm/yyyy',
-  dueDate: 'dd/mm/yyyy',
-  updated: 'dd/mm/yyyy hh:mm'
+const DATE_COLUMN_FORMATS: Record<
+  string,
+  { numFmt: string; parseFormat: string }
+> = {
+  date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  examinationDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  decisionDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  paymentDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  handlingDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  dispatchDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD-MM-YYYY' },
+  updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD-MM-YYYY HH:mm' }
 }
 
 const CURRENCY_COLUMNS = new Set([
@@ -306,7 +319,7 @@ export async function exportWorkbook({
     sheetColumn.font = EXPORT_DEFAULT_FONT
     sheetColumn.width = 30
     if (sheetColumn.key && sheetColumn.key in DATE_COLUMN_FORMATS) {
-      sheetColumn.numFmt = DATE_COLUMN_FORMATS[sheetColumn.key]
+      sheetColumn.numFmt = DATE_COLUMN_FORMATS[sheetColumn.key]?.numFmt
     } else if (sheetColumn.key && CURRENCY_COLUMNS.has(sheetColumn.key)) {
       sheetColumn.numFmt = '#,##0.00" €"'
     }
@@ -320,7 +333,14 @@ export async function exportWorkbook({
   }
 
   rows.forEach(row => {
-    const newRow = worksheet.addRow(row)
+    const excelRow: RowType = { ...row }
+    for (const [key, { parseFormat }] of Object.entries(DATE_COLUMN_FORMATS)) {
+      const value = excelRow[key]
+      if (typeof value === 'string' && value) {
+        excelRow[key] = dayjs.utc(value, parseFormat).toDate()
+      }
+    }
+    const newRow = worksheet.addRow(excelRow)
     if ((row as RowType).bold) {
       newRow.font = { bold: true }
     }
