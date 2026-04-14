@@ -1884,6 +1884,9 @@ model PartnerOrganization {
   dataInclusionStructure DataInclusionStructure? @relation(fields: [dataInclusionId], references: [id])
   dataInclusionId        String?                 @map("data_inclusion_id")
 
+  dataInclusionStructureV1 DataInclusionStructureV1? @relation(fields: [dataInclusionIdV1], references: [id])
+  dataInclusionIdV1        String?                   @map("data_inclusion_id_v1")
+
   contacts                      PartnerOrganizationContact[]
   followupsPrescribed           Followup[]                   @relation("followup_prescribing_organization")
   fileInstructionsInstructed    FileInstruction[]            @relation("file_instruction_instructor_organization")
@@ -2110,6 +2113,8 @@ model DataInclusionStructureV1 {
   email        String?
   website      String?
   workingHours String? @map("working_hours")
+
+  partnerOrganizations PartnerOrganization[]
 
   @@map("data_inclusion_structure_v1")
 }
