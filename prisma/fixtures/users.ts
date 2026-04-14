@@ -68,6 +68,14 @@ export const fixturesUsers = [
     status: 'Active'
   },
   {
+    id: '6c89f7a9-105e-438f-9b56-917fb394a512',
+    firstName: 'Admin',
+    lastName: 'MSS Yop',
+    email: 'admin.mms@yopmail.com',
+    role: 'Administrator',
+    status: 'Active'
+  },
+  {
     id: 'cdeba22a-3ce0-4340-b279-9a2d984da663',
     firstName: 'Anita',
     lastName: 'CI-MSS Nouvelle Responsable',
