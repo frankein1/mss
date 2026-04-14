@@ -1,8 +1,23 @@
 import type { JobResult } from '~/server/schema'
 import { dataInclusionStructureServerSchemaV1 } from '~/server/schema'
 import { fetchStructuresPages } from '~/server/lib/data-inclusion'
-import { DataInclusionService, JobResultService } from '~/server/services'
+import { JobResultService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
+
+export async function getStructureStatusInDB(id: string, updateDate: Date) {
+  const structure = await prismaClient.dataInclusionStructureV1.findFirst({
+    select: { updated: true },
+    where: { id }
+  })
+
+  const exists = structure !== null
+  const shouldBeUpdated =
+    exists &&
+    structure.updated &&
+    structure.updated.getTime() < updateDate.getTime()
+
+  return { exists, shouldBeUpdated }
+}
 
 async function importStructures(job: JobResult, all = false) {
   // This will be merged with scheduler env when the code will be migrated
@@ -72,7 +87,7 @@ async function importStructures(job: JobResult, all = false) {
         let shouldBeUpdated: boolean
 
         try {
-          const status = await DataInclusionService.getStatus(
+          const status = await getStructureStatusInDB(
             structure.id,
             structure.updated
           )
@@ -140,7 +155,7 @@ async function importStructures(job: JobResult, all = false) {
     })
   }
 
-  const count = await DataInclusionService.count()
+  const count = await prismaClient.dataInclusionStructureV1.count()
   job.result.nInDatabase = count
 
   return job
