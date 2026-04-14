@@ -3,7 +3,7 @@ import { create } from './create.service'
 import { remove } from './remove.service'
 import { get } from './get.service'
 import { getPage } from './getPage.service'
-import { exportFollowups } from './export.service'
+import { exportFollowups, exportWorkbook } from './export.service'
 import { getEditionPermissions } from './permission.service'
 import { getOngoing } from './getOngoing.service'
 
@@ -14,6 +14,7 @@ export const FollowupService = {
   get,
   getPage,
   exportFollowups,
+  exportWorkbook,
   getEditionPermissions,
   getOngoing
 }

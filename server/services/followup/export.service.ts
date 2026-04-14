@@ -10,7 +10,6 @@ import type { SecurityRuleContext } from '~/server/security'
 import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
-import { formatDate } from '~/utils/formatDate'
 import {
   followupFieldLabels,
   beneficiaryExportFieldLabels
@@ -19,6 +18,9 @@ import { formatMinisterName } from '~/utils/minister'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
+import ExcelPkg from 'exceljs'
+import type { Column } from 'exceljs'
+import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 
 const exportLabels = { ...followupFieldLabels, ...beneficiaryExportFieldLabels }
 
@@ -82,7 +84,7 @@ export async function exportFollowups({
       if (permissions.view) {
         const redirections = followup.socialSupportRedirections || []
         followups.push({
-          date: formatDate(followup.date, 'DD-MM-YYYY'),
+          date: followup.date ?? null,
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
@@ -98,7 +100,7 @@ export async function exportFollowups({
           classified: getBooleanOrEmpty(followup.classified),
           documents:
             followup.documents?.map(document => document.name).join(', ') || '',
-          dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
+          dueDate: followup.dueDate ?? null,
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
           minister: followup.minister
@@ -111,7 +113,7 @@ export async function exportFollowups({
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
           // Technically it should be converted into timezone of the user
-          updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
+          updated: followup.updated ?? null,
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
@@ -143,4 +145,54 @@ export async function exportFollowups({
     []
   )
   return { rows, columns }
+}
+
+export async function exportWorkbook({
+  ctx,
+  input
+}: {
+  ctx: SecurityRuleContext
+  input: ExportFollowupsInput
+}) {
+  const { rows, columns } = await exportFollowups({ ctx, input })
+
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
+  const worksheet = workbook.addWorksheet('Entretiens')
+
+  const fullColumns = columns.filter(column => {
+    return rows.some(
+      row =>
+        column.key &&
+        !Array.isArray(row) &&
+        row[column.key] !== undefined &&
+        row[column.key] !== null &&
+        row[column.key] !== ''
+    )
+  }) as Partial<Column>[]
+
+  const DATE_COLUMN_FORMATS: Record<string, string> = {
+    date: 'dd/mm/yyyy',
+    dueDate: 'dd/mm/yyyy',
+    updated: 'dd/mm/yyyy hh:mm'
+  }
+
+  worksheet.columns = fullColumns
+  worksheet.columns.forEach(sheetColumn => {
+    sheetColumn.font = EXPORT_DEFAULT_FONT
+    sheetColumn.width = 30
+    if (sheetColumn.key && sheetColumn.key in DATE_COLUMN_FORMATS) {
+      sheetColumn.numFmt = DATE_COLUMN_FORMATS[sheetColumn.key]
+    }
+  })
+  worksheet.getRow(1).font = { ...EXPORT_DEFAULT_FONT, bold: true }
+
+  rows.forEach(row => {
+    const newRow = worksheet.addRow(row)
+    if ((row as RowType).bold) {
+      newRow.font = { bold: true }
+    }
+  })
+
+  return workbook
 }
