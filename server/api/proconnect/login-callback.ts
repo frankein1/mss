@@ -18,6 +18,7 @@ import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'
 import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
+import { isSafeRedirectUrl } from '~/utils/isSafeRedirectUrl'
 import jwksClient from 'jwks-rsa'
 
 const { verify, decode } = pkg
@@ -285,7 +286,7 @@ export default defineEventHandler(async event => {
   // - redirect to admin panel if admin
   // - redirect to user panel otherwise
   // Fetching user information and permissions will be executed on first page loading with auth plugin
-  if (redirectUrl) {
+  if (redirectUrl && isSafeRedirectUrl(redirectUrl)) {
     return sendRedirect(event, `${appUrl}${redirectUrl}`)
   }
 
