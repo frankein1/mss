@@ -52,7 +52,7 @@
     "exceljs": "^4.4.0",
     "handlebars": "^4.7.9",
     "html-to-image": "1.11.11",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "jszip": "^3.10.1",
     "jwks-rsa": "^3.2.2",
     "lodash.merge": "^4.6.2",
