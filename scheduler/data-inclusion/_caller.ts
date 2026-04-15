@@ -1,5 +1,4 @@
 import { handleStructuresImport } from '~/server/integrations/data-inclusion/structure-import.service'
 import { withErrorCapture } from '../utils'
 
-const all = true
-withErrorCapture(() => handleStructuresImport(all))
+withErrorCapture(() => handleStructuresImport())
