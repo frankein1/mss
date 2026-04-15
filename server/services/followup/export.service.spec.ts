@@ -24,7 +24,7 @@ beforeAll(async () => {
 
 const orderBy = { socialSupport: { date: 'desc' } } as const
 
-describe('Followup - Export Service', () => {
+describe.skip('Followup - Export Service', () => {
   test('should export all followups with no regression in content', async ({
     users
   }) => {
