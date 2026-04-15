@@ -11,10 +11,6 @@ import { getFileInstructionPermissions } from '~/server/security'
 import type { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
-import { formatDate } from '~/utils/formatDate'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import utc from 'dayjs/plugin/utc'
 import {
   socialSupportStatusKeys,
   fileInstructionRefusalReasonKeys,
@@ -32,9 +28,6 @@ import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 import ExcelPkg from 'exceljs'
 import type { Column } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
-
-dayjs.extend(customParseFormat)
-dayjs.extend(utc)
 
 const exportLabels = {
   ...helpRequestFieldLabels,
@@ -160,7 +153,7 @@ export async function exportFileInstructions({
           ),
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
-          date: formatDate(socialSupport.date),
+          date: socialSupport.date || '',
           subjectId,
           documents:
             socialSupport.documents
@@ -169,28 +162,25 @@ export async function exportFileInstructions({
           status: socialSupportStatusKeys.value(socialSupport.status) || '',
           isFirst: getIsFirst(housingHelpRequest?.isFirst),
           askedAmount: helpRequest?.askedAmount?.toNumber() ?? null,
-          examinationDate: formatDate(
-            fileInstruction.examinationDate,
-            'DD-MM-YYYY'
-          ),
-          decisionDate: formatDate(fileInstruction.decisionDate),
+          examinationDate: fileInstruction.examinationDate || '',
+          decisionDate: fileInstruction.decisionDate || '',
           allocatedAmount: helpRequest?.allocatedAmount?.toNumber() ?? null,
           paymentMethod:
             paymentMethodKeys.value(helpRequest?.paymentMethod) || '',
-          paymentDate: formatDate(helpRequest?.paymentDate),
-          handlingDate: formatDate(helpRequest?.handlingDate),
+          paymentDate: helpRequest?.paymentDate || '',
+          handlingDate: helpRequest?.handlingDate || '',
           refusalReason:
             fileInstruction.refusalReasonOther ||
             fileInstructionRefusalReasonKeys.value(
               fileInstruction.refusalReason
             ) ||
             '',
-          dispatchDate: formatDate(fileInstruction.dispatchDate),
+          dispatchDate: fileInstruction.dispatchDate || '',
           synthesis: socialSupport.synthesis || '',
-          dueDate: formatDate(socialSupport.dueDate),
+          dueDate: socialSupport.dueDate || '',
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
-          updated: formatDate(socialSupport.updated, 'DD/MM/YYYY HH:mm'),
+          updated: socialSupport.updated || '',
           minister: socialSupport.minister
             ? formatMinisterName(socialSupport.minister)
             : '',
@@ -334,12 +324,6 @@ export async function exportWorkbook({
 
   rows.forEach(row => {
     const excelRow: RowType = { ...row }
-    for (const [key, { parseFormat }] of Object.entries(DATE_COLUMN_FORMATS)) {
-      const value = excelRow[key]
-      if (typeof value === 'string' && value) {
-        excelRow[key] = dayjs.utc(value, parseFormat).toDate()
-      }
-    }
     const newRow = worksheet.addRow(excelRow)
     if ((row as RowType).bold) {
       newRow.font = { bold: true }
