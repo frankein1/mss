@@ -1,8 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import type {
-  FamilyFilePermissions,
-  SecurityRuleContext
+import {
+  getFamilyFilePermissions,
+  type FamilyFilePermissions,
+  type SecurityRuleContext
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
@@ -10,45 +11,33 @@ import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { forbiddenError } from '~/server/trpc/trpcErrors'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
-    ctx,
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
     input.id
   )
-  if (!permissions.changeReferent) {
-    await changeReferentSecurity(ctx, input, permissions)
-  }
-  return permissions.edit.general
-}
+  const permissions = getFamilyFilePermissions({
+    ctx,
+    familyFile: beneficiary.familyFile
+  })
 
-const changeReferentSecurity = async (
-  ctx: SecurityRuleContext,
-  input: UpdateBeneficiaryGeneralInformationInput,
-  permissions: FamilyFilePermissions
-) => {
   if (!permissions.changeReferent) {
-    const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-      ctx.user,
-      input.id
+    const referentsInDb = new Set(
+      beneficiary.familyFile.referents.map(r => r.id)
     )
-    const existingReferentIds = target.familyFile.referents
-      .map(({ id }) => id)
-      .sort()
-    const inputReferentIds = [...input.referents].sort()
-
-    const referentsChanged =
-      existingReferentIds.length !== inputReferentIds.length ||
-      existingReferentIds.some((id, i) => id !== inputReferentIds[i])
-
-    if (referentsChanged) {
-      throw forbiddenError()
+    const newReferents = new Set(input.referents)
+    const referentsAreUnchanged =
+      newReferents.size === referentsInDb.size &&
+      newReferents.isSubsetOf(referentsInDb)
+    if (!referentsAreUnchanged) {
+      return false
     }
   }
+  return permissions.edit.general
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
