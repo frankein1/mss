@@ -134,6 +134,11 @@ export const exportWorkbook = async ({
   const worksheet = workbook.addWorksheet('Bénéficiaires')
   worksheet.columns = getColumns(ctx.user.role)
   worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
 
   formatedBeneficiaries.forEach((beneficiary, index) => {
     const row = worksheet.getRow(index + 2) // header row is 1!
