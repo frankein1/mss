@@ -2,5 +2,5 @@ import { handleStructuresImport } from '~/server/integrations/data-inclusion/str
 import { withErrorCapture } from '../utils'
 
 export default async function handler() {
-  return await withErrorCapture(() => handleStructuresImport(false))
+  return await withErrorCapture(() => handleStructuresImport())
 }

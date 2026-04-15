@@ -15,11 +15,11 @@ beforeEach(async () => {
 })
 
 test('Structure import job should create structures when they do not exist', async () => {
-  const job = await handleStructuresImport(false)
+  const job = await handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
-  expect(job.result.nCreated).toBe(10)
+  expect(job.result.nCreated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
   expect(job.status).toBe('Success')
 })
 
@@ -41,11 +41,11 @@ test('Structure import job should update structure when it exists already but is
     }
   })
 
-  const job = await handleStructuresImport(false)
+  const job = await handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
-  expect(job.result.nCreated).toBe(9)
-  expect(job.result.nUpdated).toBe(1)
+  expect(job.result.nCreated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
+  expect(job.result.nUpdated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
   expect(job.status).toBe('Success')
 })
