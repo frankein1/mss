@@ -380,16 +380,23 @@
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
+  table {
+    max-height: 75vh;
+    display: block !important;
+  }
+
+  thead {
+    background-color: white;
+    position: sticky;
+    z-index: 60;
+    top: 0;
+  }
+
   th:first-child,
   td:first-child {
-    left: 0;
-    position: initial;
     z-index: 50;
     max-width: 14rem;
-
-    @include dsfr-media-query.respond-from('md') {
-      position: sticky;
-    }
+    position: sticky;
   }
 
   th:not(:first-child),

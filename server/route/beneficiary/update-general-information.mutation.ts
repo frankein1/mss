@@ -1,22 +1,42 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import type { SecurityRuleContext } from '~/server/security'
+import {
+  getFamilyFilePermissions,
+  type FamilyFilePermissions,
+  type SecurityRuleContext
+} from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
 import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
-    ctx,
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
     input.id
   )
+  const permissions = getFamilyFilePermissions({
+    ctx,
+    familyFile: beneficiary.familyFile
+  })
+
+  if (!permissions.changeReferent) {
+    const referentsInDb = new Set(
+      beneficiary.familyFile.referents.map(r => r.id)
+    )
+    const newReferents = new Set(input.referents)
+    const referentsAreUnchanged =
+      newReferents.size === referentsInDb.size &&
+      newReferents.isSubsetOf(referentsInDb)
+    if (!referentsAreUnchanged) {
+      return false
+    }
+  }
   return permissions.edit.general
 }
 
