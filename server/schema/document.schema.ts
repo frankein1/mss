@@ -1,5 +1,5 @@
 import { DocumentType } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { File } from 'node-fetch-native'
 import {
   stringConstraint,

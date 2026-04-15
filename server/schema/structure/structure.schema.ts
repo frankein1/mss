@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { stringConstraint, phoneConstraint } from '../helpers.schema'
 import {
   errorMessages,

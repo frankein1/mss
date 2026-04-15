@@ -1,5 +1,4 @@
 import { UserActivityObject } from '@prisma/client'
-import type { z } from 'zod'
 import { prismaClient } from '~/server/prisma'
 
 export const updateBeneficiariesLastActivity = async (
@@ -17,16 +16,14 @@ export const updateBeneficiariesLastActivity = async (
   })
 }
 
-export const handleBeneficiariesLastActivityUpdate = async <
-  T extends z.ZodTypeAny
->({
+export const handleBeneficiariesLastActivityUpdate = async ({
   target,
   input,
   objectId,
   key
 }: {
   target: UserActivityObject
-  input: z.infer<T>
+  input: Record<string, unknown>
   objectId: string
   key: string
 }) => {

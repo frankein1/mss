@@ -17,7 +17,7 @@ import {
   Gender,
   Nationality
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createOrUpdateEntourageSchema } from '../relative.schema'
 import {
   requiredNativeEnum,
@@ -49,7 +49,8 @@ export const updateBeneficiaryGeneralInformationSchema = z.object({
   structureId: z.string().uuid(),
   referents: z
     .array(z.string().uuid(), {
-      required_error: requiredErrorMessage
+      error: issue =>
+        issue.input === undefined ? requiredErrorMessage : undefined
     })
     .min(1, requiredErrorMessage),
   aidantConnectAuthorized: z.boolean().default(false),

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { RdvspStatus } from '~/types/rdvsp'
 
 export const planAppointmentSchema = z.object({

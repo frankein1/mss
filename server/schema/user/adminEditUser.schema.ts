@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { adminCreateUserSchema } from './adminCreateUser.schema'
 
 const adminEditUserSchema = adminCreateUserSchema.extend({

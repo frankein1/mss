@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createWorkshopSchemaBase } from './createWorkshop.schema'
 import { timeGroup } from '~/client/options'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'

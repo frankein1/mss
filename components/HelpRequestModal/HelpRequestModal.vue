@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { z } from 'zod'
+  import { z } from 'zod/v4'
   import { FileInstructionType } from '@prisma/client'
   import {
     fileInstructionTypeKeys,
@@ -60,7 +60,10 @@
     validationSchema: toTypedSchema(
       z.object({
         subject: z.nativeEnum(FileInstructionType, {
-          required_error: "Veuillez sélectionner un type d'accompagnement."
+          error: issue =>
+            issue.input === undefined
+              ? "Veuillez sélectionner un type d'accompagnement."
+              : undefined
         })
       })
     )

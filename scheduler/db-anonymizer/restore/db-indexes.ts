@@ -1,5 +1,5 @@
 import { escapeIdentifier, type Client } from 'pg'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { SOURCE_SCHEMA, TARGET_SCHEMA } from '../db'
 import { includeTable } from '../utils'
 

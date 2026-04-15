@@ -63,8 +63,8 @@
   </form>
 </template>
 
-<script setup lang="ts" generic="T extends ZodSchema">
-  import type { ZodSchema, z } from 'zod'
+<script setup lang="ts" generic="T extends ZodType">
+  import type { ZodType, z } from 'zod/v4'
   import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
   import type { FamilyFilePermissions } from '~/server/security'

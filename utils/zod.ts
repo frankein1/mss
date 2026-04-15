@@ -6,8 +6,10 @@ export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
 export const requiredErrorMessage = 'Veuillez renseigner ce champ.'
 
 export const errorMessages = {
-  required_error: requiredErrorMessage,
-  invalid_type_error: 'Cette valeur est incorrecte.'
+  error: (issue: { input: unknown }) =>
+    issue.input === undefined
+      ? requiredErrorMessage
+      : 'Cette valeur est incorrecte.'
 }
 
 export const minStringLengthMessage = (length: number) =>

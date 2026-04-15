@@ -1,6 +1,6 @@
 import pkg from 'jsonwebtoken'
 import { minutesToSeconds } from '~/utils/time'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { requiredNativeEnum } from '~/server/schema'
 import { StructureType, UserRole, UserStatus } from '@prisma/client'
 

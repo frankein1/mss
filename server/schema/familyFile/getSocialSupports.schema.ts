@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { socialSupportFilterSchema } from '../filter.schema'
 
 export const getSocialSupportsSchema = z.object({

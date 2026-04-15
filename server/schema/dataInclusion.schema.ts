@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { stringConstraint } from '.'
 
 export const dataInclusionStructureApiSchema = z.object({

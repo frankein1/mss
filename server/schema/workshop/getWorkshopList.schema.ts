@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { workshopFilterSchema } from '../filter.schema'
 
 export const getWorkshopListSchema = z.object({

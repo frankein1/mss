@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 import { workshopFilterSchema } from '../filter.schema'
 

@@ -1,5 +1,5 @@
 import { ArchiveReason } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 export const exportBeneficiarySchema = z.object({
   keepName: z.boolean().default(false),

@@ -1,6 +1,6 @@
 import { escapeIdentifier, escapeLiteral } from 'pg'
 import type { Client } from 'pg'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { SOURCE_SCHEMA, TARGET_SCHEMA } from '../db'
 
 const sqlCreateEnum = (name: string, values: string[]) =>

@@ -3,7 +3,7 @@ import {
   SocialSupportStatus,
   FollowupDuration
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
@@ -26,12 +26,7 @@ export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
   familyFileId: z.string().uuid(),
   beneficiaryId: z.string().uuid(),
-  subjects: z
-    .array(z.string().uuid(), {
-      ...errorMessages,
-      required_error: requiredErrorMessage
-    })
-    .min(1, requiredErrorMessage),
+  subjects: z.array(z.string().uuid(), errorMessages).min(1, requiredErrorMessage),
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
   ministerId: z.string().uuid().nullish(),
@@ -61,10 +56,7 @@ export const addFollowupSchema = z.discriminatedUnion('isMinistry', [
   addFollowupSchemaBase.extend({
     isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
     ministerId: z
-      .string({
-        required_error: 'Veuillez renseigner ce champ.',
-        invalid_type_error: 'Veuillez renseigner ce champ.'
-      })
+      .string({ error: 'Veuillez renseigner ce champ.' })
       .min(1, 'Veuillez renseigner ce champ.')
       .uuid('Veuillez renseigner ce champ.')
   }),

@@ -7,7 +7,7 @@ import {
   HousingRoomCount,
   LowIncomeHousingType
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   numeroPegaseContraint,
   withEmptyValueOptionalNativeEnum,
@@ -71,10 +71,7 @@ export const createHousingHelpRequestSchema = z.discriminatedUnion(
     createHousingHelpRequestSchemaBase.extend({
       isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
       ministerId: z
-        .string({
-          required_error: 'Veuillez renseigner ce champ.',
-          invalid_type_error: 'Veuillez renseigner ce champ.'
-        })
+        .string({ error: 'Veuillez renseigner ce champ.' })
         .min(1, 'Veuillez renseigner ce champ.')
         .uuid('Veuillez renseigner ce champ.')
     }),

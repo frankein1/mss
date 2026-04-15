@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { userAdminFilterSchema } from '../filter.schema'
 import { stringConstraint } from '../helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { createHelpRequestSchemaBase } from './createHelpRequest.schema'
 
 export const editHelpRequestSchema = createHelpRequestSchemaBase

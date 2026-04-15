@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { openText } from './helpers.schema'
 
 const addCommentSchema = z.object({

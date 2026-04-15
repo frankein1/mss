@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 export * from './beneficiary'
 export * from './followup'
@@ -27,15 +27,10 @@ export * from './workshop'
 export * from './minister'
 export * from './redirection'
 
-const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
-  switch (issue.code) {
-    case 'invalid_date':
-      return { message: 'Veuillez saisir une date valide : JJ/MM/AAAA.' }
-    case 'invalid_enum_value':
-      return { message: 'Veuillez sélectionner une option proposée.' }
-    default:
-      return { message: ctx.defaultError }
+z.config({
+  customError(issue) {
+    if (issue.code === 'invalid_value') {
+      return 'Veuillez sélectionner une option proposée.'
+    }
   }
-}
-
-z.setErrorMap(customErrorMap)
+})

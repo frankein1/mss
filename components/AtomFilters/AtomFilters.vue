@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { z } from 'zod'
+  import type { z } from 'zod/v4'
   import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
   import type {

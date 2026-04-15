@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-  import { z } from 'zod'
+  import { z } from 'zod/v4'
   import VeeInput from './VeeInput.vue'
   import {
     stringOrEmpty,

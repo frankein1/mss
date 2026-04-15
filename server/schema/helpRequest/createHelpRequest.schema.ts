@@ -3,7 +3,7 @@ import {
   SocialSupportStatus,
   PaymentMethod
 } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   numeroPegaseContraint,
   withEmptyValueOptionalNativeEnum,
@@ -25,12 +25,7 @@ export const createHelpRequestSchemaBase = z.object({
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   ministerId: z.string().uuid().nullish(),
-  subjectId: z
-    .string({
-      required_error: requiredErrorMessage,
-      invalid_type_error: requiredErrorMessage
-    })
-    .uuid(),
+  subjectId: z.string({ error: requiredErrorMessage }).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
   externalStructure: kindOfBooleanSchema(true),
   status: requiredNativeEnum(SocialSupportStatus),
@@ -62,10 +57,7 @@ export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [
   createHelpRequestSchemaBase.extend({
     isMinistry: z.literal(true) as z.ZodLiteral<boolean>,
     ministerId: z
-      .string({
-        required_error: 'Veuillez renseigner ce champ.',
-        invalid_type_error: 'Veuillez renseigner ce champ.'
-      })
+      .string({ error: 'Veuillez renseigner ce champ.' })
       .min(1, 'Veuillez renseigner ce champ.')
       .uuid('Veuillez renseigner ce champ.')
   }),

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import dayjs from 'dayjs'
 import {
   BeneficiaryStatus,
@@ -36,7 +36,7 @@ const statFilterSchema = z
     toDate: z.coerce
       .date()
       .nullish()
-      .transform(v => {
+      .transform((v): Date | null | undefined => {
         if (v === undefined || v === null) {
           return v
         }

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { DefaultSocialSupportSubject } from '@prisma/client'
 import { stringConstraint } from './helpers.schema'
 import { minStringLengthMessage, maxStringLengthMessage } from '~/utils/zod'

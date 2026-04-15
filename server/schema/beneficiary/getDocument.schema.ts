@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { optionalPaginatedSchema } from '../helpers.schema'
 import { beneficiaryDocumentFilterSchema } from '../filter.schema'
 

@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { z } from 'zod'
+  import { z } from 'zod/v4'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'

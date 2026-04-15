@@ -1,4 +1,4 @@
-import type { z } from 'zod'
+import type { z } from 'zod/v4'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 
 export const createBeneficiarySchema =

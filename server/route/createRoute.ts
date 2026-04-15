@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import type { ZodType, z } from 'zod'
+import type { ZodType, z } from 'zod/v4'
 import { isAdmin } from '../security/rules/helpers'
 import { forbiddenError } from '~/server/trpc'
 import { addUserActivity } from '~/server/query'
@@ -104,7 +104,7 @@ export const createRoute = <
     input
   }: {
     ctx: RouteHandlerContext<Grantee>
-    input: Validation
+    input: z.infer<Validation>
   }) => {
     if (!ctx.structure) {
       throw forbiddenError('No structure found is the trpc context')
@@ -169,7 +169,7 @@ export const createRoute = <
     input
   }: {
     ctx: AdminRouteHandlerContext<Grantee>
-    input: Validation
+    input: z.infer<Validation>
   }) => {
     if (!adminHandler) {
       throw forbiddenError('Use adminHandler function to handle the request')

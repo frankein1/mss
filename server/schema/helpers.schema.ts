@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import {
   maxStringLengthMessage,
   minStringLengthMessage,
@@ -93,46 +93,62 @@ export const stringOrEmpty = (schema: z.ZodString) =>
 export const emailOrEmpty = () =>
   stringOrEmpty(z.string().email(validEmailMessage))
 
-export const requiredNativeEnum = <T extends z.EnumLike>(nativeEnum: T) =>
-  z.nativeEnum(nativeEnum, { required_error: requiredErrorMessage })
-
-export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
+export const requiredNativeEnum = <T extends Record<string, string | number>>(
   nativeEnum: T
 ) =>
+  z.nativeEnum(nativeEnum, {
+    error: issue =>
+      issue.input === undefined ? requiredErrorMessage : undefined
+  })
+
+export const withEmptyValueOptionalNativeEnum = <
+  T extends Record<string, string | number>
+>(
+  nativeEnum: T
+): z.ZodType<T[keyof T] | null | undefined> =>
   z.preprocess(
     arg => (arg === '' ? null : arg),
     z.nativeEnum(nativeEnum).nullish()
-  )
+  ) as z.ZodType<T[keyof T] | null | undefined>
 
-export const kindOfBooleanSchema = (required = false) => {
+export const kindOfBooleanSchema = (
+  required = false
+): z.ZodType<'true' | 'false' | null | undefined> => {
   if (required) {
-    return z.enum(['true', 'false'], { required_error: requiredErrorMessage })
+    return z.enum(['true', 'false'], {
+      error: issue =>
+        issue.input === undefined ? requiredErrorMessage : undefined
+    }) as z.ZodType<'true' | 'false' | null | undefined>
   }
 
   return z.preprocess(
     arg => (arg === '' ? null : arg),
     z.enum(['true', 'false']).nullish()
-  )
+  ) as z.ZodType<'true' | 'false' | null | undefined>
 }
 
 export const amountNumberCanBeNegative = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
-  z.coerce.number({ invalid_type_error: validNumber })
+  z.coerce.number({
+    error: issue => (issue.input === undefined ? undefined : validNumber)
+  })
 )
 
 export const amountNumber = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
   z.coerce
-    .number({ invalid_type_error: validNumber })
+    .number({
+      error: issue => (issue.input === undefined ? undefined : validNumber)
+    })
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
-export const dateOrEmpty = z
+export const dateOrEmpty: z.ZodType<Date | null | undefined> = z
   .union(
     [z.date({ coerce: true }).nullish(), z.literal('').transform(() => null)],
-    { errorMap: () => ({ message: validDate }) }
+    { error: validDate }
   )
-  .refine(d => !d || d.getFullYear() <= 9999, { message: validYear })
+  .refine(d => !d || d.getFullYear() <= 9999, { message: validYear }) as z.ZodType<Date | null | undefined>
 
 export const openText = (maxLength: number) =>
   stringConstraint

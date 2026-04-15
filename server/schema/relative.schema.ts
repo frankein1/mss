@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { RelativeRelationship } from '@prisma/client'
 import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiary/beneficiaryFirstName.schema'

@@ -1,5 +1,5 @@
 import { UserRole, UserStatus } from '@prisma/client'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import {
   errorMessages,

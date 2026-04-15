@@ -1,4 +1,4 @@
-import { nativeEnum, z } from 'zod'
+import { z } from 'zod/v4'
 import {
   Gender,
   WorkshopAttendeeAttendance,
@@ -17,7 +17,10 @@ import {
 
 export const createBeneficiaryAttendeeSchema = z.object({
   workshopIds: z.array(z.string().uuid().nonempty(), {
-    required_error: 'Veuillez sélectionner au moins un atelier.'
+    error: issue =>
+      issue.input === undefined
+        ? 'Veuillez sélectionner au moins un atelier.'
+        : undefined
   }),
   beneficiaryId: z
     .string()
@@ -62,7 +65,7 @@ const paymentReceivedSchema = z
 
 export const createExternalAttendeeSchema = z.object({
   workshopId: z.string().uuid(),
-  gender: nativeEnum(Gender).optional(),
+  gender: z.nativeEnum(Gender).optional(),
   lastName: limitedStringConstraint(2, 50).toUpperCase().optional(),
   firstName: limitedStringConstraint(2, 50).optional(),
   birthDate: dateOrEmpty,
@@ -84,7 +87,7 @@ export type CreateExternalAttendeeServerInput = z.infer<
 export const updateAttendeeSchema = z.object({
   attendeeId: z.string().uuid(),
   type: requiredNativeEnum(WorkshopAttendeeType),
-  gender: nativeEnum(Gender).nullable(),
+  gender: z.nativeEnum(Gender).nullable(),
   lastName: limitedStringConstraint().nullable(),
   firstName: limitedStringConstraint().nullable(),
   birthDate: dateOrEmpty,

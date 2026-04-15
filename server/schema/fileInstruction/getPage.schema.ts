@@ -1,4 +1,4 @@
-import type { z } from 'zod'
+import type { z } from 'zod/v4'
 import { paginatedSchema } from '../helpers.schema'
 import { exportFileInstructionsSchema } from './export.schema'
 

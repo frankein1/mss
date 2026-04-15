@@ -1,6 +1,6 @@
 import { escapeIdentifier } from 'pg'
 import type { Client } from 'pg'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { isProductionEnvironment, TARGET_SCHEMA } from '../db'
 
 const sqlDropEnum = (name: string) =>
