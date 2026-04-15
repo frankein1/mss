@@ -9,7 +9,7 @@ import { formatDate } from '~/utils/formatDate'
 export async function parseCsvReference(date: Date, pathfile: string) {
   const csvContent = await readFile(path.join(cwd(), pathfile), 'utf-8')
   return csvContent.replaceAll(
-    'DD-MM-YYYY HH:mm',
-    formatDate(date, 'DD-MM-YYYY HH:mm')
+    'DD/MM/YYYY HH:mm',
+    formatDate(date, 'DD/MM/YYYY HH:mm')
   )
 }
