@@ -254,6 +254,7 @@ const configPartnerOrganization: Record<
   created_by_id: true,
   structure_id: true,
   data_inclusion_id: true,
+  data_inclusion_id_v1: true,
   inactive: true,
   // -- BEGIN ANONYMIZED
   siret: false,

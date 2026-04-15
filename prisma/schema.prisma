@@ -1884,6 +1884,9 @@ model PartnerOrganization {
   dataInclusionStructure DataInclusionStructure? @relation(fields: [dataInclusionId], references: [id])
   dataInclusionId        String?                 @map("data_inclusion_id")
 
+  dataInclusionStructureV1 DataInclusionStructureV1? @relation(fields: [dataInclusionIdV1], references: [id])
+  dataInclusionIdV1        String?                   @map("data_inclusion_id_v1")
+
   contacts                      PartnerOrganizationContact[]
   followupsPrescribed           Followup[]                   @relation("followup_prescribing_organization")
   fileInstructionsInstructed    FileInstruction[]            @relation("file_instruction_instructor_organization")
@@ -2090,6 +2093,30 @@ model DataInclusionStructure {
   PartnerOrganization PartnerOrganization[]
 
   @@map("data_inclusion_structure")
+}
+
+model DataInclusionStructureV1 {
+  id   String @id
+  name String
+
+  created DateTime  @default(now())
+  updated DateTime?
+
+  siret String?
+
+  address           String?
+  addressComplement String? @map("address_complement")
+  city              String?
+  zipcode           String?
+
+  phone        String?
+  email        String?
+  website      String?
+  workingHours String? @map("working_hours")
+
+  partnerOrganizations PartnerOrganization[]
+
+  @@map("data_inclusion_structure_v1")
 }
 
 enum JobStatus {

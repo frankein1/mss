@@ -198,6 +198,10 @@ export default defineNuxtConfig({
     brevo: {
       apiKey: process.env.NUXT_BREVO_API_KEY || ''
     },
+    dataInclusion: {
+      apiUrl: process.env.NUXT_DATA_INCLUSION_API_URL || '',
+      apiToken: process.env.NUXT_DATA_INCLUSION_API_TOKEN || ''
+    },
     email: {
       smtpHost: process.env.NUXT_EMAIL_SMTP_HOST || '',
       smtpPassword: process.env.NUXT_EMAIL_SMTP_PASSWORD || '',

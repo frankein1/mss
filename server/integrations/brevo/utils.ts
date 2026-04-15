@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
 
 const BREVO_LIST_ID = 10
+
 const runtimeConfig = useRuntimeConfig()
 
 export function mapUserToBrevoContact(
@@ -119,7 +120,7 @@ export function mapStructureToBrevoCompany(
       ext_id: id,
       number_of_employees: structure._count.users,
       phone,
-      domain: `${runtimeConfig.public.appUrl}/admin/structures/${id}`,
+      domain: `${runtimeConfig?.public.appUrl}/admin/structures/${id}`,
       action_30_derniers_jours: dayjs().diff(lastActivity, 'day') <= 30,
       adresse_mail_structure: email,
       creation_compte: formatUTCTimestamp(created, '') || undefined,

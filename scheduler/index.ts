@@ -10,6 +10,7 @@ import anonymizeArchivedBeneficiaries from './archived-beneficiary/anonymize-arc
 import socialSupportNotifications from './notification/create-social-support-notifications'
 import documentNotifications from './notification/create-document-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
+import importDataInclusionStructures from './data-inclusion/import-structures'
 
 const timezone = 'Europe/Paris'
 
@@ -73,6 +74,12 @@ function startScheduler() {
   new Cron(at5am, exportAnonymizedDatabase, {
     timezone,
     name: 'metabaseAnonymization'
+  })
+
+  const everySundayAt3am = '0 3 * * 0'
+  new Cron(everySundayAt3am, importDataInclusionStructures, {
+    timezone,
+    name: 'dataInclusionStructureImport'
   })
 }
 

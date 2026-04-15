@@ -41,6 +41,7 @@ type JobError = z.infer<typeof jobErrorSchema>
 const createJobResultSchema = z.object({
   name: z.enum([
     'data-inclusion-structure-import-cron',
+    'data-inclusion-structure-import-cron-all',
     'data-inclusion-structure-import',
     'brevo-export'
   ]),

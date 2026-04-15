@@ -1,20 +1,27 @@
-const STRUCTURE_DOWNLOAD_URL_JSON =
-  'https://www.data.gouv.fr/fr/datasets/r/4fc64287-e869-4550-8fb9-b1e0b7809ffa'
+import { ofetch } from 'ofetch'
 
-export async function downloadStructures() {
-  const res = await fetch(STRUCTURE_DOWNLOAD_URL_JSON, {
-    headers: { 'Content-Type': 'application/json' }
+interface DataInclusionPage {
+  items: unknown[]
+  total: number
+  page: number
+  size: number
+  pages: number
+}
+
+export async function fetchStructuresPages(
+  apiUrl: string,
+  apiToken: string,
+  currentPage: number,
+  pageSize = 5000
+): Promise<DataInclusionPage> {
+  const url = `${apiUrl}/api/v1/structures?page=${currentPage}&size=${pageSize}&exclure_doublons=true`
+
+  const data = await ofetch<DataInclusionPage>(url, {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+      Accept: 'application/json'
+    }
   })
 
-  if (res.ok) {
-    const data = await res.json()
-
-    return { data, headers: res.headers, error: null }
-  }
-
-  return {
-    data: null,
-    headers: res.headers,
-    error: { status: res.status, msg: res.statusText }
-  }
+  return data
 }

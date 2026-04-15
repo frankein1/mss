@@ -1,54 +1,51 @@
 import { vi, test, expect, beforeEach } from 'vitest'
-import { DataInclusionIntegrationHandler } from './structure-import.service'
+import { handleStructuresImport } from './structure-import.service'
 import { prismaClient } from '~/server/prisma'
-import { DataInclusionService } from '~/server/services'
 
 vi.mock('~/server/lib/data-inclusion')
 
 beforeEach(async () => {
+  vi.stubEnv('NUXT_DATA_INCLUSION_API_URL', 'http://test-api.data-inclusion.fr')
+  vi.stubEnv('NUXT_DATA_INCLUSION_API_TOKEN', 'test-token')
+
   await Promise.all([
     prismaClient.jobResult.deleteMany({}),
-    prismaClient.dataInclusionStructure.deleteMany({})
+    prismaClient.dataInclusionStructureV1.deleteMany({})
   ])
 })
 
-test.skip('Structure import job should create structures when they do not exist', async () => {
-  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
+test('Structure import job should create structures when they do not exist', async () => {
+  const job = await handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
-  expect(job.result.nCreated).toBe(10)
+  expect(job.result.nCreated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
   expect(job.status).toBe('Success')
 })
 
-test.skip('Structure import job should update structure when it exists already but is obsolete', async () => {
-  await DataInclusionService.create(
-    {
+test('Structure import job should update structure when it exists already but is obsolete', async () => {
+  await prismaClient.dataInclusionStructureV1.create({
+    data: {
       id: '1',
       siret: '1234567890',
-      rna: null,
       name: 'structure to be updated',
       city: 'Paris',
       zipcode: '75014',
       address: '23 rue des Plantes',
       addressComplement: null,
-      type: null,
       phone: null,
       email: null,
       website: null,
-      updated: new Date(),
-      isBranch: false,
-      workingHours: null,
-      topics: []
-    },
-    'unknown'
-  )
+      updated: new Date('2015-01-01'),
+      workingHours: null
+    }
+  })
 
-  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
+  const job = await handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
-  expect(job.result.nCreated).toBe(9)
-  expect(job.result.nUpdated).toBe(1)
+  expect(job.result.nCreated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
+  expect(job.result.nUpdated).toBe(0) // Obsolete: will be removed when JobResult is removed from DB
   expect(job.status).toBe('Success')
 })
