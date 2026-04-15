@@ -10,7 +10,6 @@ import type { SecurityRuleContext } from '~/server/security'
 import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
-import { formatDate } from '~/utils/formatDate'
 import {
   followupFieldLabels,
   beneficiaryExportFieldLabels
@@ -22,12 +21,6 @@ import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
 import ExcelPkg from 'exceljs'
 import type { Column } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import utc from 'dayjs/plugin/utc'
-
-dayjs.extend(customParseFormat)
-dayjs.extend(utc)
 
 const exportLabels = { ...followupFieldLabels, ...beneficiaryExportFieldLabels }
 
@@ -91,7 +84,7 @@ export async function exportFollowups({
       if (permissions.view) {
         const redirections = followup.socialSupportRedirections || []
         followups.push({
-          date: formatDate(followup.date),
+          date: followup.date || '',
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
@@ -107,7 +100,7 @@ export async function exportFollowups({
           classified: getBooleanOrEmpty(followup.classified),
           documents:
             followup.documents?.map(document => document.name).join(', ') || '',
-          dueDate: formatDate(followup.dueDate),
+          dueDate: followup.dueDate || '',
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
           minister: followup.minister
@@ -120,7 +113,7 @@ export async function exportFollowups({
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
           // Technically it should be converted into timezone of the user
-          updated: formatDate(followup.updated, 'DD/MM/YYYY HH:mm'),
+          updated: followup.updated || '',
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
@@ -205,12 +198,6 @@ export async function exportWorkbook({
 
   rows.forEach(row => {
     const excelRow: RowType = { ...row }
-    for (const [key, { parseFormat }] of Object.entries(DATE_COLUMN_FORMATS)) {
-      const value = excelRow[key]
-      if (typeof value === 'string' && value) {
-        excelRow[key] = dayjs.utc(value, parseFormat).toDate()
-      }
-    }
     const newRow = worksheet.addRow(excelRow)
     if ((row as RowType).bold) {
       newRow.font = { bold: true }
