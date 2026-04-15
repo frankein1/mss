@@ -19,6 +19,15 @@ import { formatMinisterName } from '~/utils/minister'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
+import ExcelPkg from 'exceljs'
+import type { Column } from 'exceljs'
+import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(customParseFormat)
+dayjs.extend(utc)
 
 const exportLabels = { ...followupFieldLabels, ...beneficiaryExportFieldLabels }
 
@@ -82,7 +91,7 @@ export async function exportFollowups({
       if (permissions.view) {
         const redirections = followup.socialSupportRedirections || []
         followups.push({
-          date: formatDate(followup.date, 'DD-MM-YYYY'),
+          date: formatDate(followup.date),
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
@@ -98,7 +107,7 @@ export async function exportFollowups({
           classified: getBooleanOrEmpty(followup.classified),
           documents:
             followup.documents?.map(document => document.name).join(', ') || '',
-          dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
+          dueDate: formatDate(followup.dueDate),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
           minister: followup.minister
@@ -111,7 +120,7 @@ export async function exportFollowups({
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',
           // Technically it should be converted into timezone of the user
-          updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
+          updated: formatDate(followup.updated, 'DD/MM/YYYY HH:mm'),
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
@@ -143,4 +152,70 @@ export async function exportFollowups({
     []
   )
   return { rows, columns }
+}
+
+export async function exportWorkbook({
+  ctx,
+  input
+}: {
+  ctx: SecurityRuleContext
+  input: ExportFollowupsInput
+}) {
+  const { rows, columns } = await exportFollowups({ ctx, input })
+
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
+  const worksheet = workbook.addWorksheet('Entretiens')
+
+  const fullColumns = columns.filter(column => {
+    return rows.some(
+      row =>
+        column.key &&
+        !Array.isArray(row) &&
+        row[column.key] !== undefined &&
+        row[column.key] !== null &&
+        row[column.key] !== ''
+    )
+  }) as Partial<Column>[]
+
+  const DATE_COLUMN_FORMATS: Record<
+    string,
+    { numFmt: string; parseFormat: string }
+  > = {
+    date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+    dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+    updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD/MM/YYYY HH:mm' }
+  }
+
+  worksheet.columns = fullColumns
+  worksheet.columns.forEach(sheetColumn => {
+    sheetColumn.font = EXPORT_DEFAULT_FONT
+    sheetColumn.width = 30
+    if (sheetColumn.key && sheetColumn.key in DATE_COLUMN_FORMATS) {
+      sheetColumn.numFmt = DATE_COLUMN_FORMATS[sheetColumn.key]?.numFmt
+    }
+  })
+  worksheet.getRow(1).font = { ...EXPORT_DEFAULT_FONT, bold: true }
+
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
+  rows.forEach(row => {
+    const excelRow: RowType = { ...row }
+    for (const [key, { parseFormat }] of Object.entries(DATE_COLUMN_FORMATS)) {
+      const value = excelRow[key]
+      if (typeof value === 'string' && value) {
+        excelRow[key] = dayjs.utc(value, parseFormat).toDate()
+      }
+    }
+    const newRow = worksheet.addRow(excelRow)
+    if ((row as RowType).bold) {
+      newRow.font = { bold: true }
+    }
+  })
+
+  return workbook
 }

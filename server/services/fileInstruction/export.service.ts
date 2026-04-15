@@ -12,6 +12,9 @@ import type { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import utc from 'dayjs/plugin/utc'
 import {
   socialSupportStatusKeys,
   fileInstructionRefusalReasonKeys,
@@ -26,6 +29,12 @@ import { formatMinisterName } from '~/utils/minister'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { redirectionExportLabels } from '~/client/labels/redirection.labels'
 import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'
+import ExcelPkg from 'exceljs'
+import type { Column } from 'exceljs'
+import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
+
+dayjs.extend(customParseFormat)
+dayjs.extend(utc)
 
 const exportLabels = {
   ...helpRequestFieldLabels,
@@ -151,7 +160,7 @@ export async function exportFileInstructions({
           ),
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
-          date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
+          date: formatDate(socialSupport.date),
           subjectId,
           documents:
             socialSupport.documents
@@ -159,29 +168,29 @@ export async function exportFileInstructions({
               .join(', ') || '',
           status: socialSupportStatusKeys.value(socialSupport.status) || '',
           isFirst: getIsFirst(housingHelpRequest?.isFirst),
-          askedAmount: helpRequest?.askedAmount?.toString() || '',
+          askedAmount: helpRequest?.askedAmount?.toNumber() ?? null,
           examinationDate: formatDate(
             fileInstruction.examinationDate,
             'DD-MM-YYYY'
           ),
-          decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
-          allocatedAmount: helpRequest?.allocatedAmount?.toString() || '',
+          decisionDate: formatDate(fileInstruction.decisionDate),
+          allocatedAmount: helpRequest?.allocatedAmount?.toNumber() ?? null,
           paymentMethod:
             paymentMethodKeys.value(helpRequest?.paymentMethod) || '',
-          paymentDate: formatDate(helpRequest?.paymentDate, 'DD-MM-YYYY'),
-          handlingDate: formatDate(helpRequest?.handlingDate, 'DD-MM-YYYY'),
+          paymentDate: formatDate(helpRequest?.paymentDate),
+          handlingDate: formatDate(helpRequest?.handlingDate),
           refusalReason:
             fileInstruction.refusalReasonOther ||
             fileInstructionRefusalReasonKeys.value(
               fileInstruction.refusalReason
             ) ||
             '',
-          dispatchDate: formatDate(fileInstruction.dispatchDate, 'DD-MM-YYYY'),
+          dispatchDate: formatDate(fileInstruction.dispatchDate),
           synthesis: socialSupport.synthesis || '',
-          dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
+          dueDate: formatDate(socialSupport.dueDate),
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           // Ideally it should be converted into timezone of the user
-          updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
+          updated: formatDate(socialSupport.updated, 'DD/MM/YYYY HH:mm'),
           minister: socialSupport.minister
             ? formatMinisterName(socialSupport.minister)
             : '',
@@ -196,8 +205,8 @@ export async function exportFileInstructions({
           reason: housingReasonKeys.value(housingHelpRequest?.reason) || '',
           taxHouseholdAdditionalInformation:
             housingHelpRequest?.taxHouseholdAdditionalInformation || '',
-          maxRent: housingHelpRequest?.maxRent?.toString() || '',
-          maxCharges: housingHelpRequest?.maxCharges?.toString() || '',
+          maxRent: housingHelpRequest?.maxRent?.toNumber() ?? null,
+          maxCharges: housingHelpRequest?.maxCharges?.toNumber() ?? null,
           housingType:
             (housingHelpRequest?.housingType || [])
               .map(ht => housingTypeKeys.value(ht))
@@ -258,4 +267,84 @@ function getIsFirst(isFirst: boolean | null | undefined) {
     return 'Renouvellement'
   }
   return ''
+}
+
+const DATE_COLUMN_FORMATS: Record<
+  string,
+  { numFmt: string; parseFormat: string }
+> = {
+  date: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  examinationDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  decisionDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  paymentDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  handlingDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  dispatchDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  dueDate: { numFmt: 'dd/mm/yyyy', parseFormat: 'DD/MM/YYYY' },
+  updated: { numFmt: 'dd/mm/yyyy hh:mm', parseFormat: 'DD/MM/YYYY HH:mm' }
+}
+
+const CURRENCY_COLUMNS = new Set([
+  'askedAmount',
+  'allocatedAmount',
+  'maxRent',
+  'maxCharges'
+])
+
+export async function exportWorkbook({
+  ctx,
+  input
+}: {
+  ctx: SecurityRuleContext
+  input: ExportFileInstructionsInput
+}) {
+  const { rows, columns } = await exportFileInstructions({ ctx, input })
+
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
+  const worksheet = workbook.addWorksheet('Instructions de dossier')
+
+  const fullColumns = columns.filter(column => {
+    return rows.some(
+      row =>
+        column.key &&
+        !Array.isArray(row) &&
+        row[column.key] !== undefined &&
+        row[column.key] !== null &&
+        row[column.key] !== ''
+    )
+  }) as Partial<Column>[]
+
+  worksheet.columns = fullColumns
+  worksheet.columns.forEach(sheetColumn => {
+    sheetColumn.font = EXPORT_DEFAULT_FONT
+    sheetColumn.width = 30
+    if (sheetColumn.key && sheetColumn.key in DATE_COLUMN_FORMATS) {
+      sheetColumn.numFmt = DATE_COLUMN_FORMATS[sheetColumn.key]?.numFmt
+    } else if (sheetColumn.key && CURRENCY_COLUMNS.has(sheetColumn.key)) {
+      sheetColumn.numFmt = '#,##0.00" €"'
+    }
+  })
+  worksheet.getRow(1).font = { ...EXPORT_DEFAULT_FONT, bold: true }
+
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
+  rows.forEach(row => {
+    const excelRow: RowType = { ...row }
+    for (const [key, { parseFormat }] of Object.entries(DATE_COLUMN_FORMATS)) {
+      const value = excelRow[key]
+      if (typeof value === 'string' && value) {
+        excelRow[key] = dayjs.utc(value, parseFormat).toDate()
+      }
+    }
+    const newRow = worksheet.addRow(excelRow)
+    if ((row as RowType).bold) {
+      newRow.font = { bold: true }
+    }
+  })
+
+  return workbook
 }
