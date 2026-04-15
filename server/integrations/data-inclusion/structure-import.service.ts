@@ -1,124 +1,92 @@
+import { randomUUID } from 'node:crypto'
 import type { JobResult } from '~/server/schema'
-import { dataInclusionStructureServerSchema } from '~/server/schema'
-import { downloadStructures } from '~/server/lib/data-inclusion'
-import { DataInclusionService, JobResultService } from '~/server/services'
+import { dataInclusionStructureServerSchemaV1 } from '~/server/schema'
+import { fetchStructuresPages } from '~/server/lib/data-inclusion'
+import { prismaClient } from '~/server/prisma'
 
 async function importStructures(job: JobResult) {
-  const res = await downloadStructures()
+  // This will be merged with scheduler env when the code will be migrated
+  const apiUrl = process.env.NUXT_DATA_INCLUSION_API_URL || ''
+  const apiToken = process.env.NUXT_DATA_INCLUSION_API_TOKEN || ''
 
-  if (res.error !== null) {
-    job.errors.push({
-      category: 'structure-import-download',
-      status: res.error.status,
-      error: res.error.msg
-    })
-
-    return job
-  }
-
-  if (Array.isArray(res.data)) {
-    job.result.nTotal = res.data.length
-  } else {
+  if (!apiUrl || !apiToken) {
     job.errors.push({
       category: 'structure-import-download',
       status: null,
-      error: `Data inclusion structure data is badly formatted: should be an array`
+      error:
+        'Missing DATA_INCLUSION_API_URL or DATA_INCLUSION_API_TOKEN environment variable'
     })
-
     return job
   }
 
-  job.result.nCreated = 0
-  job.result.nUpdated = 0
   job.result.nImported = 0
 
-  for (let i = 0; i < res.data.length; i++) {
-    const input = res.data[i]
+  let currentPage = 1
+  let totalPages = 1
 
-    const validated = dataInclusionStructureServerSchema.safeParse(input)
+  while (currentPage <= totalPages) {
+    const page = await fetchStructuresPages(apiUrl, apiToken, currentPage)
+    totalPages = page.pages
+    currentPage++
 
-    if (validated.success === false) {
-      job.errors.push({
-        category: 'structure-import-format',
-        status: null,
-        error: `structure ${input.id}: ${validated.error.toString()}`
-      })
+    job.status = 'Ongoing'
+    job.result.nTotal = page.total
 
-      continue
-    }
+    for (const item of page.items) {
+      const validated = dataInclusionStructureServerSchemaV1.safeParse(item)
 
-    const structure = validated.data
-
-    let exists: boolean
-    let shouldBeUpdated: boolean
-
-    try {
-      const status = await DataInclusionService.getStatus(
-        structure.id,
-        structure.updated
-      )
-      exists = status.exists
-      shouldBeUpdated = status.shouldBeUpdated || false
-    } catch (err: unknown) {
-      job.errors.push({
-        category: 'structure-import-other',
-        status: null,
-        error: `could not check update status for id ${structure.id}, name ${structure.name}: ${err}`
-      })
-      continue
-    }
-
-    const version = res.headers.get('location') || 'unknown'
-
-    if (!exists) {
-      try {
-        await DataInclusionService.create(structure, version)
-        job.result.nCreated++
-        job.result.nImported++
-      } catch (err: unknown) {
+      if (validated.success === false) {
+        const inputId = (item as any)?.id ?? 'unknown'
         job.errors.push({
-          category: 'structure-import-create',
+          category: 'structure-import-format',
           status: null,
-          error: `in create ${structure.id}: ${err}`
+          error: `structure ${inputId}: ${validated.error.toString()}`
         })
+        continue
       }
-    } else if (shouldBeUpdated) {
+
+      const structure = validated.data
+
+      // All structures are updated.
       try {
-        await DataInclusionService.update(structure, version)
-        job.result.nUpdated++
+        await prismaClient.dataInclusionStructureV1.upsert({
+          where: { id: structure.id },
+          create: structure,
+          update: structure
+        })
         job.result.nImported++
       } catch (err: unknown) {
         job.errors.push({
           category: 'structure-import-update',
           status: null,
-          error: `in update ${structure.id}: ${err}`
+          error: `in update all - upsert ${structure.id}: ${err}`
         })
       }
     }
 
-    if (i % 1000 === 0) {
-      job.status = 'Ongoing'
-
-      await JobResultService.update({
-        id: job.id,
-        status: job.status,
-        errors: job.errors,
-        result: job.result
-      })
-    }
+    console.log(
+      'nImported',
+      new Date().toISOString(),
+      job.result.nImported,
+      'nErrors',
+      job.errors.length
+    )
   }
 
-  const count = await DataInclusionService.count()
+  const count = await prismaClient.dataInclusionStructureV1.count()
   job.result.nInDatabase = count
 
   return job
 }
 
-async function handleStructuresImport(iscron = false) {
-  const job = await JobResultService.create({
-    name: iscron
-      ? 'data-inclusion-structure-import-cron'
-      : 'data-inclusion-structure-import',
+export async function handleStructuresImport() {
+  const job: JobResult = {
+    id: randomUUID(),
+    name: `data-inclusion-structure-import-cron-all`,
+    status: 'Created',
+    startDate: new Date(),
+    endDate: null,
+    durationInSeconds: null,
     errors: [],
     result: {
       nTotal: 0,
@@ -127,7 +95,7 @@ async function handleStructuresImport(iscron = false) {
       nCreated: 0,
       nUpdated: 0
     }
-  })
+  }
 
   try {
     await DataInclusionIntegrationService.importStructures(job)
@@ -139,27 +107,29 @@ async function handleStructuresImport(iscron = false) {
     })
   }
 
-  const endDate = new Date()
-  const durationInSeconds = (endDate.getTime() - job.startDate.getTime()) / 1000
-
-  job.endDate = endDate
-  job.durationInSeconds = durationInSeconds
+  job.endDate = new Date()
+  job.durationInSeconds =
+    (job.endDate.getTime() - job.startDate.getTime()) / 1000
   job.status = job.errors.length > 0 ? 'Failure' : 'Success'
 
-  return await JobResultService.update({
-    id: job.id,
-    status: job.status,
-    endDate: job.endDate,
-    durationInSeconds: job.durationInSeconds,
-    errors: job.errors,
-    result: job.result
-  })
+  console.log(
+    `data-inclusion-structure-import: import completed with status: ${job.status}`
+  )
+  console.log(
+    'data-inclusion-structure-import: result and errors (truncated to 200 first items)'
+  )
+  console.log(
+    JSON.stringify({ ...job, errors: job.errors.slice(0, 200) }, undefined, 2)
+  )
+
+  return job
 }
 
 export const DataInclusionIntegrationService = {
   importStructures
 }
 
+// FIXME: this will be deleted when the endpoint in admin panel is deleted
 export const DataInclusionIntegrationHandler = {
   handleStructuresImport
 }
