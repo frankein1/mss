@@ -18,6 +18,7 @@ import {
   beneficiaryMobilityKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiaryStatusKeys,
+  beneficiaryStudyLevelKeys,
   pensionOrganisationKeys,
   relativeRelationshipKeys,
   ministereCategorieKeys,
@@ -68,6 +69,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'schoolName',
     'isSchoolInQPV',
     'occupation',
+    'studyLevel',
     'employer',
     'employerSiret',
     'unemploymentNumber',
@@ -243,7 +245,9 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     schoolName: occupationIncome?.schoolName ?? '',
     isSchoolInQPV: getBooleanOrEmpty(occupationIncome?.isSchoolInQPV),
     occupation: occupationIncome?.occupation || '',
-    studyLevel: occupationIncome?.studyLevel || '',
+    studyLevel: occupationIncome?.studyLevel
+      ? beneficiaryStudyLevelKeys.byKey[occupationIncome.studyLevel]
+      : '',
     employer: occupationIncome?.employer || '',
     employerSiret: occupationIncome?.employerSiret || '',
     unemploymentNumber: occupationIncome?.unemploymentNumber || '',
