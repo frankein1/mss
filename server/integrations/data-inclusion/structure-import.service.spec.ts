@@ -23,6 +23,20 @@ test('Structure import job should create structures when they do not exist', asy
   expect(job.status).toBe('Success')
 })
 
+test('Structure import job should store doublons ids on imported structures', async () => {
+  await handleStructuresImport()
+
+  const structure =
+    await prismaClient.dataInclusionStructureV1.findUniqueOrThrow({
+      where: { id: '1' }
+    })
+
+  expect(structure.doublons).toEqual([
+    'dora--old-id-abc',
+    'emplois-de-linclusion--old-id-xyz'
+  ])
+})
+
 test('Structure import job should update structure when it exists already but is obsolete', async () => {
   await prismaClient.dataInclusionStructureV1.create({
     data: {
