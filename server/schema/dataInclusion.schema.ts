@@ -77,7 +77,8 @@ export const dataInclusionStructureApiSchemaV1 = z.object({
   description: z.string().nullish(),
   horaires_accueil: z.string().nullish(),
   lien_source: z.string().nullish(),
-  score_qualite: z.number().nullish()
+  score_qualite: z.number().nullish(),
+  doublons: z.array(z.object({ source: z.string(), id: z.string() })).nullish()
 })
 
 export type DataInclusionStructureApiInputV1 = z.infer<
@@ -97,7 +98,8 @@ export const dataInclusionStructureServerSchemaV1 =
     email: v.courriel,
     website: v.site_web,
     updated: new Date(v.date_maj),
-    workingHours: v.horaires_accueil
+    workingHours: v.horaires_accueil,
+    doublons: v.doublons?.map(d => d.id) ?? []
   }))
 
 export type DataInclusionStructureServerInputV1 = z.infer<

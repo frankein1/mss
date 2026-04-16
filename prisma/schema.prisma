@@ -2114,6 +2114,8 @@ model DataInclusionStructureV1 {
   website      String?
   workingHours String? @map("working_hours")
 
+  doublons String[]
+
   partnerOrganizations PartnerOrganization[]
 
   @@map("data_inclusion_structure_v1")
