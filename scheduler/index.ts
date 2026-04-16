@@ -84,9 +84,3 @@ function startScheduler() {
 }
 
 startScheduler()
-;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
-  process.on(signal, async () => {
-    await terminateSentry()
-    process.exit(1)
-  })
-)

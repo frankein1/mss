@@ -7,7 +7,7 @@
     "dev:scheduler": "tsx watch scheduler/index.ts",
     "build": "pnpm build:nuxt && pnpm build:scheduler",
     "build:nuxt": "nuxt build",
-    "build:scheduler": "tsdown --no-config scheduler/index.ts --out-dir .output-scheduler",
+    "build:scheduler": "tsdown --no-config scheduler/index.ts --out-dir .output-scheduler && tsdown --no-config scheduler/_caller.ts --out-dir .output-scheduler_caller",
     "start": "nuxt start",
     "start:scheduler": "node .output-scheduler/index.mjs",
     "generate": "nuxt generate",
@@ -25,8 +25,7 @@
     "release": "commit-and-tag-version",
     "prepare": "husky",
     "scheduler:archive-notifications": "tsx server/scheduler/notifications/archive-notifications.ts",
-    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts",
-    "scheduler:update-all-data-inclusion-structures": "tsx scheduler/data-inclusion/_caller.ts"
+    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1019.0",
