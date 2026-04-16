@@ -1,4 +1,3 @@
-import type { User } from '@prisma/client'
 import { apiRoutes } from '~/utils/routes'
 
 const urlGetStarted =
@@ -46,25 +45,24 @@ Vous pouvez également nous contacter à l’adresse : ${from}.
 L'équipe de Mon Suivi Social`
 })
 
-export function getUserCreationEmailContent(user: {
-  email: string
-  structure: {
-    siret: string | null
-  } | null
-}) {
-  const {
-    public: {
-      appUrl,
-      email: { from }
-    }
-  } = useRuntimeConfig()
-
-  const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}?mtm_campaign=Scalingo`
+export function getUserCreationEmailContent(
+  user: {
+    email: string
+    structure: {
+      siret: string | null
+    } | null
+  },
+  appConfig: {
+    appUrl: string
+    from: string
+  }
+) {
+  const registrationUrl = `${appConfig.appUrl}${apiRoutes.proConnect.ApiSignIn.path()}?mtm_campaign=Scalingo`
 
   return getMailContentFromProConnect(
     user.email,
     user.structure?.siret || 'Siret inconnu',
     registrationUrl,
-    from
+    appConfig.from
   )
 }

@@ -6,6 +6,7 @@ import type { User } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { withErrorCapture } from '../utils'
+import { SCHEDULER_ENV } from '../env'
 
 const createAccountReminderMails = async () => {
   const inactiveUsers = await prismaClient.$transaction(async () => {
@@ -23,9 +24,13 @@ const createAccountReminderMails = async () => {
         accountReminderEmail: 0,
         status: UserStatus.Active
       },
-      include: {
+      select: {
+        id: true,
+        email: true,
         structure: {
-          select: { siret: true }
+          select: {
+            siret: true
+          }
         }
       }
     })
@@ -33,7 +38,7 @@ const createAccountReminderMails = async () => {
     await UserRepo.prisma.updateMany({
       where: {
         id: {
-          in: inactiveUsers.map((user: User) => user.id)
+          in: inactiveUsers.map((user: Pick<User, 'id'>) => user.id)
         }
       },
       data: {
@@ -51,12 +56,16 @@ const createAccountReminderMails = async () => {
         siret: user.structure?.siret || 'Siret inconnu'
       }
     }
+    const appConfig = {
+      appUrl: SCHEDULER_ENV.public.appUrl,
+      from: SCHEDULER_ENV.public.email.from
+    }
     await createEmail({
       to: user.email,
       subject: createEmailSubject(
         'Mon Suivi Social - Ouverture de votre compte'
       ),
-      ...getUserCreationEmailContent(userData)
+      ...getUserCreationEmailContent(userData, appConfig)
     })
   }
 }
