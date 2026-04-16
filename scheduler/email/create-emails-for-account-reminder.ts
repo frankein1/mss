@@ -8,16 +8,12 @@ import { SCHEDULER_ENV } from '../env'
 import { apiRoutes } from '~/utils/routes'
 
 const createAccountReminderMails = async () => {
-  // TODO improve this query by removing user activities
   const inactiveUsers = await UserRepo.prisma.findMany({
     relationLoadStrategy: 'query',
     where: {
       lastAccess: null,
       created: {
         lte: dayjs().subtract(2, 'week').toDate()
-      },
-      userActivities: {
-        none: {}
       },
       accountReminderEmail: 0,
       status: UserStatus.Active
