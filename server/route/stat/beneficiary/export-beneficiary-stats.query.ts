@@ -34,12 +34,39 @@ import {
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { createExport } from '~/utils/export/createExport'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { getCustomAgeGroupLabel, getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumns'
+import { getCustomAgeGroupLabel } from '~/utils/stats'
+import ExcelPkg from 'exceljs'
+import type { Workbook } from 'exceljs'
+
+type StatsRow = { label: string; number: number; percent: number | null }
+
+const toRatio = (count: number, total: number): number | null =>
+  total > 0 ? count / total : null
+
+function addStatsWorksheet(workbook: Workbook, name: string, rows: StatsRow[]) {
+  const worksheet = workbook.addWorksheet(name)
+  worksheet.columns = [
+    { key: 'label', header: name, width: 32 },
+    { key: 'number', header: 'Nombre', width: 14, style: { numFmt: '0' } },
+    {
+      key: 'percent',
+      header: 'Pourcentage',
+      width: 14,
+      style: { numFmt: '0.00%' }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -51,210 +78,187 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const exportData = []
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
 
   const beneficiaryCount = await getBeneficiaryCountQuery(user, input)
 
   // Gender
   const genders = await getGenderStatsQuery(user, input)
-  const genderColumns = getColumns('Genre')
-  const genderRows = genders.map(({ gender, _count }) => ({
-    label: beneficiaryGenderKeys.value(gender) || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({ name: 'Genre', columns: genderColumns, rows: genderRows })
+  addStatsWorksheet(
+    workbook,
+    'Genre',
+    genders.map(({ gender, _count }) => ({
+      label: beneficiaryGenderKeys.value(gender) || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Age
   const ages = await getAgeStatsQuery(user, input)
-  const ageColumns = getColumns("Tranches d'âge")
-  const ageRows = ages.map(({ ageGroup, _count, fromAge, toAge }) => ({
-    label:
-      ageGroup === AgeGroup.Custom
-        ? getCustomAgeGroupLabel(fromAge, toAge)
-        : getStatLabel(ageGroupKeys.byKey, ageGroup),
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: "Tranches d'âge",
-    columns: ageColumns,
-    rows: ageRows
-  })
+  addStatsWorksheet(
+    workbook,
+    "Tranches d'âge",
+    ages.map(({ ageGroup, _count, fromAge, toAge }) => ({
+      label:
+        ageGroup === AgeGroup.Custom
+          ? getCustomAgeGroupLabel(fromAge, toAge)
+          : getStatLabel(ageGroupKeys.byKey, ageGroup),
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Family situation
   const situations = await getFamilyStatsQuery(user, input)
-  const familyColumns = getColumns('Types de situations familiales')
-  const familyRows = situations.map(({ familySituation, _count }) => ({
-    label: familySituationKeys.value(familySituation) || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: 'Types de situations familiales',
-    columns: familyColumns,
-    rows: familyRows
-  })
+  addStatsWorksheet(
+    workbook,
+    'Types de situations familiales',
+    situations.map(({ familySituation, _count }) => ({
+      label: familySituationKeys.value(familySituation) || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Cities
   const cities = await getCityStatsQuery(user, input)
-  const cityColumns = getColumns('Villes')
-  const cityRows = cities.map(({ city, _count }) => ({
-    label: city || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: 'Villes',
-    columns: cityColumns,
-    rows: cityRows
-  })
+  addStatsWorksheet(
+    workbook,
+    'Villes',
+    cities.map(({ city, _count }) => ({
+      label: city || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Departments
   const departments = await getDepartmentStatsQuery(user, input)
-  const departmentColumns = getColumns('Départements')
-  const departmentRows = departments.map(({ department, _count }) => ({
-    label: department || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: 'Départements',
-    columns: departmentColumns,
-    rows: departmentRows
-  })
+  addStatsWorksheet(
+    workbook,
+    'Départements',
+    departments.map(({ department, _count }) => ({
+      label: department || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Regions
   const regions = await getRegionStatsQuery(user, input)
-  const regionColumns = getColumns('Régions')
-  const regionRows = regions.map(({ region, _count }) => ({
-    label: region || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({ name: 'Régions', columns: regionColumns, rows: regionRows })
+  addStatsWorksheet(
+    workbook,
+    'Régions',
+    regions.map(({ region, _count }) => ({
+      label: region || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   if (structure.type === StructureType.Ministere) {
     // Accommodation zone
     const zones = await getAccommodationZoneStatsQuery(user, input)
-    const accommodationZoneColumns = getColumns("Zones d'hébergement")
-    const accommodationZoneRows = zones.map(
-      ({ accommodationZone, _count }) => ({
+    addStatsWorksheet(
+      workbook,
+      "Zones d'hébergement",
+      zones.map(({ accommodationZone, _count }) => ({
         label:
           beneficiaryAccommodationZoneKeys.value(accommodationZone) ||
           STATS_NULL_LABEL,
-        number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-      })
+        number: _count,
+        percent: toRatio(_count, beneficiaryCount.count)
+      }))
     )
-    exportData.push({
-      name: "Zones d'hébergement",
-      columns: accommodationZoneColumns,
-      rows: accommodationZoneRows
-    })
   }
 
-  // Accomodation mode
+  // Accommodation mode
   const modes = await getAccommodationModeStatsQuery(user, input)
-  const accommodationModeColumns = getColumns("Modes d'hébergement")
-  const accommodationModeRows = modes.map(({ accommodationMode, _count }) => ({
-    label:
-      beneficiaryAccommodationModeKeys.value(accommodationMode) ||
-      STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: "Modes d'hébergement",
-    columns: accommodationModeColumns,
-    rows: accommodationModeRows
-  })
+  addStatsWorksheet(
+    workbook,
+    "Modes d'hébergement",
+    modes.map(({ accommodationMode, _count }) => ({
+      label:
+        beneficiaryAccommodationModeKeys.value(accommodationMode) ||
+        STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // Mobility data
   const mobilities = await getMobilityStatsQuery(user, input)
-  const mobilityColumns = getColumns('Données mobilité')
-  const mobilityRows = mobilities.map(({ mobility, _count }) => ({
-    label: beneficiaryMobilityKeys.value(mobility) || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({
-    name: 'Données mobilité',
-    columns: mobilityColumns,
-    rows: mobilityRows
-  })
+  addStatsWorksheet(
+    workbook,
+    'Données mobilité',
+    mobilities.map(({ mobility, _count }) => ({
+      label: beneficiaryMobilityKeys.value(mobility) || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   // CSP
   const csps = await getCSPStatsQuery(user, input)
-  const CSPColumns = getColumns('Catégories socio-professionnelles')
-  const CSPRows = csps.map(({ socioProfessionalCategory, _count }) => ({
-    label:
-      beneficiarySocioProfessionalCategoryKeys.value(
-        socioProfessionalCategory
-      ) || STATS_NULL_LABEL,
-    number: _count.toString(),
-    percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-  }))
-  exportData.push({ name: 'CSP', columns: CSPColumns, rows: CSPRows })
+  addStatsWorksheet(
+    workbook,
+    'CSP',
+    csps.map(({ socioProfessionalCategory, _count }) => ({
+      label:
+        beneficiarySocioProfessionalCategoryKeys.value(
+          socioProfessionalCategory
+        ) || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
 
   if (structure.type === StructureType.Ministere) {
     // Ministere structure
     const structures = await getMinistereStructureStatsQuery(user, input)
-    const ministereStructureColumns = getColumns('Structures de rattachement')
-    const ministereStructureRows = structures.map(
-      ({ ministereStructure, _count }) => ({
+    addStatsWorksheet(
+      workbook,
+      'Structures de rattachement',
+      structures.map(({ ministereStructure, _count }) => ({
         label:
           ministereStructureKeys.value(ministereStructure) || STATS_NULL_LABEL,
-        number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-      })
+        number: _count,
+        percent: toRatio(_count, beneficiaryCount.count)
+      }))
     )
-    exportData.push({
-      name: 'Structures de rattachement',
-      columns: ministereStructureColumns,
-      rows: ministereStructureRows
-    })
 
     // Ministere departement service
     const services = await getMinistereDepartementServiceAcStatsQuery(
       user,
       input
     )
-    const ministereDepartementColumns = getColumns(
-      "Départements ou services de l'administration centrale"
-    )
-    const ministereDepartementRows = services.map(
-      ({ ministereDepartementServiceAc, _count }) => ({
+    addStatsWorksheet(
+      workbook,
+      "Départements de l'AC",
+      services.map(({ ministereDepartementServiceAc, _count }) => ({
         label:
           ministereDepartmentServiceAcKeys.value(
             ministereDepartementServiceAc
           ) || STATS_NULL_LABEL,
-        number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-      })
+        number: _count,
+        percent: toRatio(_count, beneficiaryCount.count)
+      }))
     )
-    exportData.push({
-      name: "Départements de l'AC",
-      columns: ministereDepartementColumns,
-      rows: ministereDepartementRows
-    })
 
     // Ministere category
     const categories = await getMinistereCategorieStatsQuery(user, input)
-    const ministereCategorieColumns = getColumns('Catégories')
-    const ministereCategorieRows = categories.map(
-      ({ ministereCategorie, _count }) => ({
+    addStatsWorksheet(
+      workbook,
+      'Catégories',
+      categories.map(({ ministereCategorie, _count }) => ({
         label:
           ministereCategorieKeys.value(ministereCategorie) || STATS_NULL_LABEL,
-        number: _count.toString(),
-        percent: `${getPercentage(_count, beneficiaryCount.count)}%`
-      })
+        number: _count,
+        percent: toRatio(_count, beneficiaryCount.count)
+      }))
     )
-    exportData.push({
-      name: 'Catégories',
-      columns: ministereCategorieColumns,
-      rows: ministereCategorieRows
-    })
 
     // Minister interpellations
     const interpellations = await getMinistereInterpellationStatsQuery(
@@ -262,23 +266,18 @@ const handler = async ({
       input
     )
     const totalCount = interpellations.reduce((acc, cur) => acc + cur._count, 0)
-    const ministerInterpellationColumns = getColumns('Ministre')
-    const ministerInterpellationRows = interpellations.map(
-      ({ minister, _count }) => ({
+    addStatsWorksheet(
+      workbook,
+      'Interpellations de ministre',
+      interpellations.map(({ minister, _count }) => ({
         label: minister || STATS_NULL_LABEL,
-        number: _count.toString(),
-        percent: `${getPercentage(_count, totalCount)}%`
-      })
+        number: _count,
+        percent: toRatio(_count, totalCount)
+      }))
     )
-
-    exportData.push({
-      name: 'Interpellations de ministre',
-      columns: ministerInterpellationColumns,
-      rows: ministerInterpellationRows
-    })
   }
 
-  const stream = await createExport(user.id, exportData)
+  const stream = await createExportFromWorkbook(user.id, workbook)
 
   return { data: stream.toString('base64') }
 }
