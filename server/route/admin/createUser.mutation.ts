@@ -36,13 +36,9 @@ const adminHandler = async ({
       email: userEmail,
       ...data
     },
-    select: {
-      id: true,
-      email: true,
+    include: {
       structure: {
-        select: {
-          siret: true
-        }
+        select: { siret: true }
       }
     }
   })
@@ -55,10 +51,7 @@ const adminHandler = async ({
       'Mon Suivi Social - Ouverture de votre compte',
       config
     ),
-    ...getUserCreationEmailContent(createdUser, {
-      appUrl: config.public.appUrl,
-      from: config.public.email.from
-    })
+    ...getUserCreationEmailContent(createdUser)
   })
   // Do not await, as this should not make the user creation fail in case of failure
   createOrUpdateUser(createdUser.id).catch(error => console.error(error))

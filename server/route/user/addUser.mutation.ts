@@ -61,10 +61,7 @@ const handler = async ({
       'Mon Suivi Social - Ouverture de votre compte',
       config
     ),
-    ...getUserCreationEmailContent(createdUser, {
-      appUrl: config.public.appUrl,
-      from: config.public.email.from
-    })
+    ...getUserCreationEmailContent(createdUser)
   })
 
   return createdUser

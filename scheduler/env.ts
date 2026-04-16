@@ -38,7 +38,6 @@ export const SCHEDULER_ENV = {
   },
   public: {
     mssEnvironment: process.env.NUXT_PUBLIC_MSS_ENVIRONMENT || 'local',
-    appUrl: process.env.NUXT_PUBLIC_APP_URL || '',
     email: {
       from: process.env.NUXT_PUBLIC_EMAIL_FROM || ''
     },
