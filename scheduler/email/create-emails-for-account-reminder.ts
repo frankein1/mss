@@ -109,22 +109,16 @@ N’hésitez pas à parcourir notre guide d’utilisation ${urlGetStarted} en ca
 Vous pouvez également nous contacter à l’adresse : ${from}.
 
 L'équipe de Mon Suivi Social`,
-  html: `Bonjour,
-<br/><br/><br/>
-Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
-<br/><br/>
-Pour s'authentifier, Mon Suivi Social utilise l'outil ProConnect.
-<br/><br/>
-Afin d'accéder à l'application :
-<br/><br/>
+  html: `<p>Bonjour,</p>
+<p>Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.</p>
+<p>Pour s'authentifier, Mon Suivi Social utilise l'outil ProConnect.</p>
+<p>Afin d'accéder à l'application :</p>
 <ol>
-<li><a href=${registrationUrl} rel="noopener noreferrer">Créer son compte ProConnect</a> en utilisant ${email} comme adresse e-mail ;</li>
+<li><a href="${registrationUrl}" rel="noopener noreferrer">Créer son compte ProConnect</a> en utilisant ${email} comme adresse e-mail ;</li>
 <li>Renseignez votre n° de Siret. Celui transmis par votre responsable est le : ${siret} ;</li>
 <li>Vérifiez votre adresse mail puis connectez-vous à Mon suivi Social !</li>
 </ol>
-<br/><br/>
-N’hésitez pas à parcourir notre <a href=${urlGetStarted} rel="noopener noreferrer">guide d’utilisation</a> en cas de difficulté : tous les détails s’y trouvent pour vous connecter pas à pas !
-Vous pouvez également nous contacter à l’adresse : ${from}.
-<br/><br/><br/>
-L'équipe de Mon Suivi Social`
+<p>N’hésitez pas à parcourir notre <a href="${urlGetStarted}" rel="noopener noreferrer">guide d’utilisation</a> en cas de difficulté : tous les détails s’y trouvent pour vous connecter pas à pas !
+Vous pouvez également nous contacter à l’adresse : ${from}.</p>
+<p>L'équipe de Mon Suivi Social</p>`
 })
