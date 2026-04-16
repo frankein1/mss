@@ -19,7 +19,14 @@ export const dataInclusionStructures = [
     adresse: '3 rue des Fontaines',
     code_postal: '35130',
     courriel: 'availles.mairie@wanadoo.fr',
-    telephone: '0299962292'
+    telephone: '0299962292',
+    doublons: [
+      { source: 'dora', id: 'dora--old-id-abc' },
+      {
+        source: 'emplois-de-linclusion',
+        id: 'emplois-de-linclusion--old-id-xyz'
+      }
+    ]
   },
   {
     horaires_accueil: null,
