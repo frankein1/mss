@@ -1,4 +1,4 @@
-const AdminRoute = '/admin'
+export const AdminRoute = '/admin'
 
 export const routes = {
   Admin: {
