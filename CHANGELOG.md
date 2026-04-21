@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.58.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.57.0...v1.58.0) (2026-04-21)
+
+
+### Features
+
+* **data-inclusion:** ajout doublons à l'import v1 ([9dbb9d3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9dbb9d3dc353de1ae15639ada0389cd781e049c4))
+* **data-inclusion:** migration vers API Data Inclusion V1 (1/2) ([eaa9d8a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eaa9d8acddbdeae885c453096db3bb624bee8ebf)), closes [#975](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/975)
+* **db-anonymizer:** ajout du champ employeur du bénéficiaire ([c33778d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c33778d285032277ab3b883c9a9de82d12469039))
+* **export:** ajout nom/prénom et n° de dossiers dans exports accompagnements ([8770eb3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8770eb30db420b639e8859696052368cfd5997ef)), closes [#800](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/800)
+* **scheduler:** désactivation automatique des structures inactives < 10 dossiers ([6f5cad3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f5cad35024b321040c2f3e9afb8f112a589ee91)), closes [#1072](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1072)
+* **structure:** interdire la désactivation de structures avec activité dans les 6 derniers mois ([91c827f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/91c827f77af805b0880f973c5af463deef8dc4b3)), closes [#1069](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1069)
+* **tableau de bord:** afficher une alerte sur les navigateurs Safari ([d883a41](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d883a41ccb0ec4d12d6c47d9db23d3c09d7c4b05)), closes [#1056](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1056)
+
+
+### Bug Fixes
+
+* **bénéficiaire:** ajout d'une sécurité sur les utilisateurs avec droits de modification partiels ([f1cb6ab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f1cb6abecccfc318894008c3dda5980980726b02)), closes [#1065](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1065)
+* désactivation auto des structures : config ([61ff5a0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/61ff5a0cd562b257c3818d3441e55ffd4ae9e0fc)), closes [#1072](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1072)
+* **export:** supprime dayjs des modules d'export ([702e738](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/702e738ebe111626fae8613fda04920c1744dbf5)), closes [#1605](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1605)
+* **MINISTERES:** nettoyage des anciennes enum ([cb82694](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cb82694059b1c14bee499249ec367c5eb243f532)), closes [#1077](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1077)
+* **scheduler:** optimisation de createAccountReminderMails ([ad74678](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ad74678009c4dc81984cc71d7212c7163a1ec175))
+
 ## [1.57.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.56.2...v1.57.0) (2026-03-31)
 
 
