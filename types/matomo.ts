@@ -50,7 +50,8 @@ export enum BeneficiaryHistoryAction {
   PlanAppointment = 'Prendre rendez-vous pour un bénéficiaire',
   UpdateAppointment = 'Modifier le rendez-vous dans RDV Service Public',
   ReconnectToRdsvp = "Se reconnecter à l'intégration RDVSP",
-  SearchDoraStructure = 'Recherche un acteur du territoire sur Dora'
+  SearchDoraStructure = 'Recherche un acteur du territoire sur Dora',
+  UpdateAppointmentStatus = 'Modifier le statut du rendez-vous'
 }
 
 export enum BeneficiaryAction {

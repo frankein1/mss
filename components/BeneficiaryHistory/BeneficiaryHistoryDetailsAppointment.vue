@@ -168,6 +168,10 @@
       id: Number(appointment.value?.id),
       status: rdvspStatus
     })
+    matomo.trackEvent(
+      EventCategory.History,
+      BeneficiaryHistoryAction.UpdateAppointmentStatus
+    )
     await refreshNuxtData(['getFamilyFile.history'])
   }
 </script>
