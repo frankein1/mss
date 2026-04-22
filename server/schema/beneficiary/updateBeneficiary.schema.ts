@@ -205,6 +205,20 @@ export const updateBeneficiaryArchiveDate = z.object({
   id: z.string().uuid()
 })
 
+const beneficiaryWithFamilyFileSchema = z.object({
+  beneficiaryId: z.string().uuid(),
+  familyFileId: z.string().uuid()
+})
+
+export const addReferentToBeneficiariesSchema = z.object({
+  beneficiaries: z.array(beneficiaryWithFamilyFileSchema),
+  referentId: z.string().uuid()
+})
+
+export type AddReferentToBeneficiariesInput = z.infer<
+  typeof addReferentToBeneficiariesSchema
+>
+
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >
