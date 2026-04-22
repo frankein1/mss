@@ -19,10 +19,10 @@ const handler = async ({
   input: ExportAttendanceInput
   ctx: ProtectedAppContext
 }) => {
-  // await UserService.verifyAuthorizationCode({
-  //   ctx,
-  //   input: { code: input.code }
-  // })
+  await UserService.verifyAuthorizationCode({
+    ctx,
+    input: { code: input.code }
+  })
 
   const workshop = await getWorkshopInfo(ctx, input)
 
