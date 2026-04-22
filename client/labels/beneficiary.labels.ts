@@ -24,7 +24,7 @@ type BeneficiaryFieldLabels = Omit<
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   id: 'Identifiant',
-  fileNumber: 'N° dossier',
+  fileNumber: 'N° dossier bénéficiaire',
   structureId: 'Structure',
   familyFileId: 'Dossier foyer',
   referents: 'Agent(s) référent(s)',
@@ -107,7 +107,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
 }
 
 export const beneficiaryExportFieldLabels = {
-  beneficiaryFileNumber: 'N° de dossier bénéficiaire',
+  beneficiaryFileNumber: beneficiaryFieldLabels.fileNumber,
   beneficiaryLastName: 'Nom bénéficiaire',
   beneficiaryFirstName: 'Prénom bénéficiaire'
 }
