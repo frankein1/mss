@@ -20,16 +20,109 @@ import {
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { createExport } from '~/utils/export/createExport'
-import { getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumns'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
-import type { WorksheetType } from '~/types/export'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
+import ExcelPkg from 'exceljs'
+import type { Workbook } from 'exceljs'
 
-const NOT_FILLED = 'Non renseigné'
+const CURRENCY_FORMAT = '#,##0.00 "€"'
+
+type StatsRow = { label: string; number: number | null; percent: number | null }
+type AmountsRow = {
+  label: string
+  allocated: number | null
+  asked: number | null
+  percent: number | null
+}
+type AmountsBySubjectRow = { label: string; allocated: number | null }
+
+const toRatio = (count: number, total: number): number | null =>
+  total > 0 ? count / total : null
+
+function addStatsWorksheet(workbook: Workbook, name: string, rows: StatsRow[]) {
+  const worksheet = workbook.addWorksheet(name)
+  worksheet.columns = [
+    { key: 'label', header: name, width: 32 },
+    { key: 'number', header: 'Nombre', width: 14, style: { numFmt: '0' } },
+    {
+      key: 'percent',
+      header: 'Pourcentage',
+      width: 14,
+      style: { numFmt: '0.00%' }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
+
+function addAmountsWorksheet(
+  workbook: Workbook,
+  name: string,
+  labelHeader: string,
+  rows: AmountsRow[]
+) {
+  const worksheet = workbook.addWorksheet(name)
+  worksheet.columns = [
+    { key: 'label', header: labelHeader, width: 32 },
+    {
+      key: 'allocated',
+      header: 'Montant délivré',
+      width: 18,
+      style: { numFmt: CURRENCY_FORMAT }
+    },
+    {
+      key: 'asked',
+      header: 'Montant demandé',
+      width: 18,
+      style: { numFmt: CURRENCY_FORMAT }
+    },
+    {
+      key: 'percent',
+      header: 'Pourcentage',
+      width: 14,
+      style: { numFmt: '0.00%' }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
+
+function addAmountsBySubjectWorksheet(
+  workbook: Workbook,
+  rows: AmountsBySubjectRow[]
+) {
+  const worksheet = workbook.addWorksheet("Montants objet d'accompagnement")
+  worksheet.columns = [
+    { key: 'label', header: "Objet d'accompagnement", width: 32 },
+    {
+      key: 'allocated',
+      header: 'Montant délivré',
+      width: 18,
+      style: { numFmt: CURRENCY_FORMAT }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
+
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
 
@@ -40,83 +133,62 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const exportData: WorksheetType[] = []
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
 
   const helpRequestCount = await getHelpRequestCountQuery(user, input)
 
-  // Instruction-type
+  // Instruction type
   const fileInstructionType = await getFileInstructionTypeStatsQuery(
     user,
     input
   )
-  const instructiontypeRows = fileInstructionType.map(item => {
-    return {
-      label: item.subject
-        ? fileInstructionTypeKeys.byKey[item.subject]
-        : NOT_FILLED,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, helpRequestCount.total)}%`
-    }
-  })
-  instructiontypeRows.push({
+  const instructionTypeRows: StatsRow[] = fileInstructionType.map(item => ({
+    label: item.subject
+      ? fileInstructionTypeKeys.byKey[item.subject]
+      : STATS_NULL_LABEL,
+    number: item._count,
+    percent: toRatio(item._count, helpRequestCount.total)
+  }))
+  instructionTypeRows.push({
     label: 'Total',
-    number: helpRequestCount.total.toString(),
-    percent: '100%'
+    number: helpRequestCount.total,
+    percent: 1
   })
-
-  exportData.push({
-    name: "Thématique d'instruction",
-    columns: getColumns("Thématique d'instruction"),
-    rows: instructiontypeRows
-  })
+  addStatsWorksheet(workbook, "Thématique d'instruction", instructionTypeRows)
 
   // Subject
   const subjectsData = await getHelpRequestSubjectsStatsQuery(user, input)
-  const subjectRows = subjectsData
-    .map(item => {
-      if (item._count.socialSupports > 0) {
-        return {
-          label: item.name ? item.name : NOT_FILLED,
-          number: item._count.socialSupports.toString(),
-          percent: `${getPercentage(item._count.socialSupports, helpRequestCount.total)}%`
-        }
-      }
-    })
-    .filter(row => row != null)
+  const subjectRows: StatsRow[] = subjectsData
+    .filter(item => item._count.socialSupports > 0)
+    .map(item => ({
+      label: item.name || STATS_NULL_LABEL,
+      number: item._count.socialSupports,
+      percent: toRatio(item._count.socialSupports, helpRequestCount.total)
+    }))
   subjectRows.push({
     label: 'Total',
-    number: helpRequestCount.total.toString(),
-    percent: '100%'
+    number: helpRequestCount.total,
+    percent: 1
   })
-  exportData.push({
-    name: "Objet d'accompagnement",
-    columns: getColumns("Objet d'accompagnement"),
-    rows: subjectRows
-  })
+  addStatsWorksheet(workbook, "Objet d'accompagnement", subjectRows)
 
   // Status
   const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
     user,
     input
   )
-  const helpRequestStatusRows = helpRequestStatusData.map(item => {
-    return {
-      label: socialSupportStatusKeys.byKey[item.status] || NOT_FILLED,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, helpRequestCount.total)}%`
-    }
-  })
+  const helpRequestStatusRows: StatsRow[] = helpRequestStatusData.map(item => ({
+    label: socialSupportStatusKeys.byKey[item.status] || STATS_NULL_LABEL,
+    number: item._count,
+    percent: toRatio(item._count, helpRequestCount.total)
+  }))
   helpRequestStatusRows.push({
     label: 'Total',
-    number: helpRequestCount.total.toString(),
-    percent: '100%'
+    number: helpRequestCount.total,
+    percent: 1
   })
-
-  exportData.push({
-    name: 'Statuts',
-    columns: getColumns('Statuts'),
-    rows: helpRequestStatusRows
-  })
+  addStatsWorksheet(workbook, 'Statuts', helpRequestStatusRows)
 
   if (structure.type === StructureType.Ministere) {
     // Ministre
@@ -124,280 +196,217 @@ const handler = async ({
       user,
       input
     )
-    const helpRequestMinistreRows = helpRequestMinistreData.map(item => {
-      return {
+    const helpRequestMinistreRows: StatsRow[] = helpRequestMinistreData.map(
+      item => ({
         label: item.minister || STATS_NULL_LABEL,
-        number: item._count?.toString() || '',
+        number: item._count ?? null,
         percent: item._count
-          ? `${getPercentage(item._count, helpRequestCount.total)}%`
-          : ''
-      }
-    })
+          ? toRatio(item._count, helpRequestCount.total)
+          : null
+      })
+    )
     helpRequestMinistreRows.push({
       label: 'Total',
-      number: helpRequestCount.total.toString(),
-      percent: `100%`
+      number: helpRequestCount.total,
+      percent: 1
     })
-
-    exportData.push({
-      name: 'Ministres',
-      columns: getColumns('Ministres'),
-      rows: helpRequestMinistreRows
-    })
+    addStatsWorksheet(workbook, 'Ministres', helpRequestMinistreRows)
   }
 
-  // Help request prescribing organizations
+  // Prescribing organizations
   const helpRequestPrescribingOrganizationData =
     await getHelpRequestPrescribingOrganizationStatsQuery(user, input)
-  const getPrescribingOrganizationTotal = () => {
-    let total = 0
-    let subTotal = 0
-    helpRequestPrescribingOrganizationData.forEach(item => {
-      total = total + item._count
-      if (item.prescribingOrganizationId != 'null') {
-        subTotal = subTotal + item._count
-      }
-    })
-    return { total, subTotal }
-  }
-  const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
-  const generalPrescribingOrganization = [
+  let prescribingTotal = 0
+  let prescribingSubTotal = 0
+  helpRequestPrescribingOrganizationData.forEach(item => {
+    prescribingTotal += item._count
+    if (item.prescribingOrganizationId !== 'null') {
+      prescribingSubTotal += item._count
+    }
+  })
+  const prescribingOrganizationRows: StatsRow[] = [
     {
       label: "Dossiers d'instruction avec prescripteur renseigné",
-      number: prescribingOrganizationTotal.subTotal.toString(),
-      percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
-    }
-  ]
-  const prescribingOrganizationDivider =
-    helpRequestPrescribingOrganizationData.length > 0
+      number: prescribingSubTotal,
+      percent: toRatio(prescribingSubTotal, prescribingTotal)
+    },
+    ...(helpRequestPrescribingOrganizationData.length > 0
       ? [
           {
             label: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           },
           {
             label:
               'Pourcentage calculé sur le nombre total des instructions de dossiers.',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           }
         ]
-      : []
-  const prescribingOrganizationRows =
-    helpRequestPrescribingOrganizationData.map(item => {
-      return {
-        label: item.prescribingOrganization,
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
-      }
-    })
-
-  exportData.push({
-    name: 'Organismes prescripteurs',
-    columns: getColumns('Organismes prescripteurs'),
-    rows: [
-      ...generalPrescribingOrganization,
-      ...prescribingOrganizationDivider,
-      ...prescribingOrganizationRows
-    ]
-  })
+      : []),
+    ...helpRequestPrescribingOrganizationData.map(item => ({
+      label: item.prescribingOrganization,
+      number: item._count,
+      percent: toRatio(item._count, prescribingTotal)
+    }))
+  ]
+  addStatsWorksheet(
+    workbook,
+    'Organismes prescripteurs',
+    prescribingOrganizationRows
+  )
 
   // Instructions
   const instructions = await getHelpRequestInstructionsStats(user, input)
-  const instructionsDistributionRows = [
+  const externalCount = instructions.fileInstructions.externalStructure._count
+  const externalTotalCount =
+    instructions.fileInstructions.instructorOrganization.reduce(
+      (total, item) => total + item._count,
+      0
+    )
+  const instructionRows: StatsRow[] = [
     {
       label: 'Instructions en externe',
-      number: instructions.fileInstructions.externalStructure._count.toString(),
-      percent: `${getPercentage(instructions.fileInstructions.externalStructure._count, instructions.fileInstructions._count)}%`
+      number: externalCount,
+      percent: toRatio(externalCount, instructions.fileInstructions._count)
     },
     {
       label: 'Instructions en interne',
-      number: instructions.fileInstructions.internalStructure._count.toString(),
-      percent: `${getPercentage(instructions.fileInstructions.internalStructure._count, instructions.fileInstructions._count)}%`
-    }
-  ]
-  const separationRows =
-    instructions.fileInstructions.instructorOrganization.length > 0
+      number: instructions.fileInstructions.internalStructure._count,
+      percent: toRatio(
+        instructions.fileInstructions.internalStructure._count,
+        instructions.fileInstructions._count
+      )
+    },
+    ...(instructions.fileInstructions.instructorOrganization.length > 0
       ? [
           {
             label: 'RÉPARTITION DES INSTRUCTIONS EXTERNES',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           },
           {
             label:
               'Pourcentage calculé sur le nombre de dossiers instruits en externe.',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           }
         ]
-      : []
-  const getExternalTotalCount = () => {
-    let total = 0
-    instructions.fileInstructions.instructorOrganization.forEach(item => {
-      total = total + item._count
-    })
-    return total
-  }
-  const externalTotalCount = getExternalTotalCount()
-  const externalInstructionsRow = Object.values(
-    instructions.fileInstructions.instructorOrganization
-  ).map(item => {
-    return {
+      : []),
+    ...instructions.fileInstructions.instructorOrganization.map(item => ({
       label: item.name,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, externalTotalCount)}%`
-    }
-  })
-
-  exportData.push({
-    name: 'Instructions',
-    columns: getColumns('Instructions'),
-    rows: [
-      ...instructionsDistributionRows,
-      ...separationRows,
-      ...externalInstructionsRow
-    ]
-  })
+      number: item._count,
+      percent: toRatio(item._count, externalTotalCount)
+    }))
+  ]
+  addStatsWorksheet(workbook, 'Instructions', instructionRows)
 
   // Amounts allocated
   const amountsAllocated = await getHelpRequestAmountsAllocatedQuery(
     user,
     input
   )
-
-  const amountsAllocatedColumns = [
-    { key: 'label', header: '' },
-    { key: 'allocated', header: 'Montant délivré' },
-    { key: 'asked', header: 'Montant demandé' },
-    { key: 'percent', header: 'Pourcentage' }
-  ]
-
-  const amountsAllocatedRows = amountsAllocated.breakdown.map(breakdown => ({
-    label: breakdown.label,
-    allocated: breakdown.count.toFixed(2) + ' €',
-    asked: breakdown.subCount.toFixed(2) + ' €',
-    percent: `${getPercentage(breakdown.count, breakdown.subCount)}%`
-  }))
-
-  exportData.push({
-    name: 'Montants des aides délivrées',
-    columns: amountsAllocatedColumns,
-    rows: amountsAllocatedRows
-  })
+  addAmountsWorksheet(
+    workbook,
+    'Montants des aides délivrées',
+    '',
+    amountsAllocated.breakdown.map(breakdown => ({
+      label: breakdown.label,
+      allocated: breakdown.count,
+      asked: breakdown.subCount,
+      percent: toRatio(breakdown.count, breakdown.subCount)
+    }))
+  )
 
   // Amounts allocated by instructor organization
   const amountsByInstructorOrganization =
     await getHelpRequestAmountsByInstructorOrganizationQuery(user, input)
-
-  const amountsByInstructorColumns = [
-    { key: 'label', header: 'Organisme instructeur' },
-    { key: 'allocated', header: 'Montant délivré' },
-    { key: 'asked', header: 'Montant demandé' },
-    { key: 'percent', header: 'Pourcentage' }
-  ]
-
-  const amountsByInstructorOrganizationRows =
+  const totalAllocated = amountsByInstructorOrganization.reduce(
+    (acc, cur) => acc + cur.count,
+    0
+  )
+  const totalAsked = amountsByInstructorOrganization.reduce(
+    (acc, cur) => acc + cur.subCount,
+    0
+  )
+  const amountsByInstructorRows: AmountsRow[] =
     amountsByInstructorOrganization.map(amount => ({
       label: amount.label,
-      allocated: amount.count.toFixed(2) + ' €',
-      asked: amount.subCount.toFixed(2) + ' €',
-      percent: `${getPercentage(amount.count, amount.subCount)}%`
+      allocated: amount.count,
+      asked: amount.subCount,
+      percent: toRatio(amount.count, amount.subCount)
     }))
-  amountsByInstructorOrganizationRows.push({
+  amountsByInstructorRows.push({
     label: 'TOTAL',
-    allocated:
-      amountsByInstructorOrganization
-        .map(amount => amount.count)
-        .reduce((acc, cur) => acc + cur, 0)
-        .toFixed(2) + ' €',
-    asked:
-      amountsByInstructorOrganization
-        .map(amount => amount.subCount)
-        .reduce((acc, cur) => acc + cur, 0)
-        .toFixed(2) + ' €',
-    percent: '100%'
+    allocated: totalAllocated,
+    asked: totalAsked,
+    percent: 1
   })
-
-  exportData.push({
-    name: 'Montants organisme instructeur',
-    columns: amountsByInstructorColumns,
-    rows: amountsByInstructorOrganizationRows
-  })
+  addAmountsWorksheet(
+    workbook,
+    'Montants organisme instructeur',
+    'Organisme instructeur',
+    amountsByInstructorRows
+  )
 
   // Amounts allocated by social support subject
   const amountsBySubject = await getHelpRequestAmountsBySubjectQuery(
     user,
     input
   )
-
-  const amountsBySubjectColumns = [
-    { key: 'label', header: "Objet d'accompagnement" },
-    { key: 'allocated', header: 'Montant délivré' }
-  ]
-
-  const amountsBySubjectRows = amountsBySubject.map(amount => ({
-    label: amount.label,
-    allocated: amount.count.toFixed(2) + ' €'
-  }))
-  amountsBySubjectRows.push({
-    label: 'TOTAL',
-    allocated:
-      amountsBySubject
-        .map(amount => amount.count)
-        .reduce((acc, cur) => acc + cur, 0)
-        .toFixed(2) + ' €'
-  })
-
-  exportData.push({
-    name: "Montants objet d'accompagnement",
-    columns: amountsBySubjectColumns,
-    rows: amountsBySubjectRows
-  })
+  const totalBySubject = amountsBySubject.reduce(
+    (acc, cur) => acc + cur.count,
+    0
+  )
+  const amountsBySubjectRows: AmountsBySubjectRow[] = amountsBySubject.map(
+    amount => ({ label: amount.label, allocated: amount.count })
+  )
+  amountsBySubjectRows.push({ label: 'TOTAL', allocated: totalBySubject })
+  addAmountsBySubjectWorksheet(workbook, amountsBySubjectRows)
 
   // Redirections
   const helpRequestRedirectionsData =
     await getHelpRequestRedirectionsStatsQuery(user, input)
-
-  const helpRequestRedirectionsRows = [
+  const redirectionsBase =
+    helpRequestRedirectionsData.helpRequestsWithRedirections._count
+  const helpRequestRedirectionsRows: StatsRow[] = [
     {
       label: 'Instructions de dossiers avec au moins une réorientation',
-      number:
-        helpRequestRedirectionsData.helpRequestsWithRedirections._count.toString(),
-      percent: `${getPercentage(helpRequestRedirectionsData.helpRequestsWithRedirections._count, helpRequestCount.total)}%`
+      number: redirectionsBase,
+      percent: toRatio(redirectionsBase, helpRequestCount.total)
     },
     {
       label: 'Redirections avec partenaire renseigné',
-      number: helpRequestRedirectionsData.withTypeIsPartners._count.toString(),
-      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsPartners._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
-    }
-  ]
-  helpRequestRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
-    helpRequestRedirectionsRows.push({
+      number: helpRequestRedirectionsData.withTypeIsPartners._count,
+      percent: toRatio(
+        helpRequestRedirectionsData.withTypeIsPartners._count,
+        redirectionsBase
+      )
+    },
+    ...helpRequestRedirectionsData.withTypeIsPartners.partners.map(partner => ({
       label: partner.name,
-      number: partner._count.toString(),
-      percent: `${getPercentage(partner._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
-    })
-  })
-  helpRequestRedirectionsRows.push(
+      number: partner._count,
+      percent: toRatio(partner._count, redirectionsBase)
+    })),
     {
       label: 'Redirections internes',
-      number: helpRequestRedirectionsData.withTypeIsIntern._count.toString(),
-      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsIntern._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+      number: helpRequestRedirectionsData.withTypeIsIntern._count,
+      percent: toRatio(
+        helpRequestRedirectionsData.withTypeIsIntern._count,
+        redirectionsBase
+      )
     },
     {
       label: 'Autres redirections',
-      number: helpRequestRedirectionsData.withTypeIsOther._count.toString(),
-      percent: `${getPercentage(helpRequestRedirectionsData.withTypeIsOther._count, helpRequestRedirectionsData.helpRequestsWithRedirections._count)}%`
+      number: helpRequestRedirectionsData.withTypeIsOther._count,
+      percent: toRatio(
+        helpRequestRedirectionsData.withTypeIsOther._count,
+        redirectionsBase
+      )
     }
-  )
-
-  exportData.push({
-    name: 'Réorientations',
-    columns: getColumns('Réorientations'),
-    rows: helpRequestRedirectionsRows
-  })
+  ]
+  addStatsWorksheet(workbook, 'Réorientations', helpRequestRedirectionsRows)
 
   // Housing request
   const housingRequest = await getHelpRequestHousingStatsQuery(user, input)
@@ -408,44 +417,25 @@ const handler = async ({
       case false:
         return 'Renouvellement'
       case null:
-        return 'Non renseigné'
+        return STATS_NULL_LABEL
     }
   }
-  const housingRequestContextRow =
-    housingRequest.housingHelpRequestContextCount.map(item => {
-      return {
-        label: contextValue(item.isFirst),
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
-      }
-    })
-  const housingRequestContextReasonHeader = [
-    {
-      label: 'Motif des demandes de logement',
-      number: '',
-      percent: ''
-    }
+  const housingRows: StatsRow[] = [
+    ...housingRequest.housingHelpRequestContextCount.map(item => ({
+      label: contextValue(item.isFirst),
+      number: item._count,
+      percent: toRatio(item._count, housingRequest.housingHelpRequestCount)
+    })),
+    { label: 'Motif des demandes de logement', number: null, percent: null },
+    ...housingRequest.housingHelpRequestReasonCount.map(item => ({
+      label: item.reason || STATS_NULL_LABEL,
+      number: item._count,
+      percent: toRatio(item._count, housingRequest.housingHelpRequestCount)
+    }))
   ]
-  const housingRequestContextReason =
-    housingRequest.housingHelpRequestReasonCount.map(item => {
-      return {
-        label: item.reason ? item.reason : 'Non renseigné',
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, housingRequest.housingHelpRequestCount)}%`
-      }
-    })
+  addStatsWorksheet(workbook, 'Demandes de logement', housingRows)
 
-  exportData.push({
-    name: 'Demandes de logement',
-    columns: getColumns('Demandes de logement'),
-    rows: [
-      ...housingRequestContextRow,
-      ...housingRequestContextReasonHeader,
-      ...housingRequestContextReason
-    ]
-  })
-
-  const stream = await createExport(user.id, exportData)
+  const stream = await createExportFromWorkbook(user.id, workbook)
 
   return { data: stream.toString('base64') }
 }
