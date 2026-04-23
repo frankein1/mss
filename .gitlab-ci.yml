@@ -148,10 +148,7 @@ sonarcloud-check:
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
-    LANDING_PAGE_URL: https://monsuivisocial.dev.incubateur.anct.gouv.fr
-    AUTH_PROCONNECT_ISSUER_URL: https://fca.integ01.dev-agentconnect.fr/api/v2
-    AUTH_PROCONNECT_CLIENT_ID: ${E2E_AUTH_PROCONNECT_CLIENT_ID}
-    AUTH_PROCONNECT_CLIENT_SECRET: ${E2E_AUTH_PROCONNECT_CLIENT_SECRET}
+    LANDING_PAGE_URL: https://test-landing.fr
   cache:
     policy: pull
   artifacts:

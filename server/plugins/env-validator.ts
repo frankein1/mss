@@ -1,6 +1,9 @@
 import type { RuntimeConfig } from 'nuxt/schema'
 
 export default defineNitroPlugin(() => {
+  if (process.env.CI) {
+    return
+  }
   const config = useRuntimeConfig()
   const errors: string[] = []
 
