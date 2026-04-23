@@ -5,9 +5,7 @@ import {
   followupMediumKeys,
   socialSupportStatusKeys
 } from '~/client/options'
-import type { WorksheetType } from '~/types/export'
 import {
-  // getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
   getFollowupSubjectsStatsQuery,
   getFollowupMediumStatsQuery,
@@ -21,13 +19,62 @@ import {
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { createExport } from '~/utils/export/createExport'
-import { getPercentage } from '~/utils/stats'
-import { getColumns } from '~/utils/export/getColumns'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
+import ExcelPkg from 'exceljs'
+import type { Workbook } from 'exceljs'
+
+type StatsRow = { label: string; number: number | null; percent: number | null }
+type DurationRow = { label: string; number: number | null }
+
+const toRatio = (count: number, total: number): number | null =>
+  total > 0 ? count / total : null
+
+function addStatsWorksheet(workbook: Workbook, name: string, rows: StatsRow[]) {
+  const worksheet = workbook.addWorksheet(name)
+  worksheet.columns = [
+    { key: 'label', header: name, width: 32 },
+    { key: 'number', header: 'Nombre', width: 14, style: { numFmt: '0' } },
+    {
+      key: 'percent',
+      header: 'Pourcentage',
+      width: 14,
+      style: { numFmt: '0.00%' }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
+
+function addDurationWorksheet(workbook: Workbook, rows: DurationRow[]) {
+  const worksheet = workbook.addWorksheet(
+    "Durée moyenne par objet d'accompagnement"
+  )
+  worksheet.columns = [
+    { key: 'label', header: "Objet d'accompagnement", width: 40 },
+    {
+      key: 'number',
+      header: 'Durée en minutes',
+      width: 18,
+      style: { numFmt: '0.00' }
+    }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+  rows.forEach(rowData => worksheet.addRow(rowData))
+}
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -39,63 +86,46 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const exportData: WorksheetType[] = []
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
 
   const followupCount = await getFollowupCountQuery(user, input)
 
   // Subjects
   const subjectsData = await getFollowupSubjectsStatsQuery(user, input)
-
-  const subjectCountTotal = subjectsData
-    .reduce((total, { _count }) => total + _count.socialSupports, 0)
-    .toString()
-  let totalSubjectPercent = 0
-  const subjectRows = subjectsData.map(subject => {
-    if (subject._count.socialSupports > 0) {
-      totalSubjectPercent =
-        totalSubjectPercent +
-        (subject._count.socialSupports / followupCount) * 100
+  const subjectCountTotal = subjectsData.reduce(
+    (total, { _count }) => total + _count.socialSupports,
+    0
+  )
+  let totalSubjectRatio = 0
+  const subjectRows: StatsRow[] = subjectsData
+    .filter(subject => subject._count.socialSupports > 0)
+    .map(subject => {
+      const ratio = toRatio(subject._count.socialSupports, followupCount)
+      totalSubjectRatio += ratio ?? 0
       return {
         label: subject.name || STATS_NULL_LABEL,
-        number: subject._count.socialSupports.toString(),
-        percent: `${getPercentage(subject._count.socialSupports, followupCount)}%`
+        number: subject._count.socialSupports,
+        percent: ratio
       }
-    }
-  })
+    })
   subjectRows.push({
     label: 'Total',
     number: subjectCountTotal,
-    percent: totalSubjectPercent.toFixed(1) + '%'
+    percent: totalSubjectRatio
   })
-
-  exportData.push({
-    name: "Objets d'accompagnement",
-    columns: getColumns("Objets d'accompagnement"),
-    rows: subjectRows.filter(row => row != null)
-  })
+  addStatsWorksheet(workbook, "Objets d'accompagnement", subjectRows)
 
   // Followup medium
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)
-
-  const followupMediumRows = followupMediumData.map(item => {
-    const label = followupMediumKeys.value(item.medium)
-    return {
-      label: (label || STATS_NULL_LABEL) as string,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, followupCount)}%`
-    }
-  })
-  followupMediumRows.push({
-    label: 'Total',
-    number: followupCount.toString(),
-    percent: `100%`
-  })
-
-  exportData.push({
-    name: "Types d'entretien",
-    columns: getColumns("Types d'entretien"),
-    rows: followupMediumRows
-  })
+  const followupMediumRows: StatsRow[] = followupMediumData.map(item => ({
+    label: (followupMediumKeys.value(item.medium) ||
+      STATS_NULL_LABEL) as string,
+    number: item._count,
+    percent: toRatio(item._count, followupCount)
+  }))
+  followupMediumRows.push({ label: 'Total', number: followupCount, percent: 1 })
+  addStatsWorksheet(workbook, "Types d'entretien", followupMediumRows)
 
   if (structure.type === StructureType.Ministere) {
     // Ministre
@@ -103,225 +133,153 @@ const handler = async ({
       user,
       input
     )
-    const followupMinistreRows = followupMinistreData.map(item => {
-      return {
-        label: item.minister || STATS_NULL_LABEL,
-        number: item._count?.toString() || '',
-        percent: item._count
-          ? `${getPercentage(item._count, followupCount)}%`
-          : ''
-      }
-    })
+    const followupMinistreRows: StatsRow[] = followupMinistreData.map(item => ({
+      label: item.minister || STATS_NULL_LABEL,
+      number: item._count ?? null,
+      percent: item._count ? toRatio(item._count, followupCount) : null
+    }))
     followupMinistreRows.push({
       label: 'Total',
-      number: followupCount.toString(),
-      percent: `100%`
+      number: followupCount,
+      percent: 1
     })
-
-    exportData.push({
-      name: 'Ministres',
-      columns: getColumns('Ministres'),
-      rows: followupMinistreRows
-    })
+    addStatsWorksheet(workbook, 'Ministres', followupMinistreRows)
   }
 
   // Status
   const followupStatusData = await getFollowupStatusStatsQuery(user, input)
-  const followupStatusRows = followupStatusData.map(item => {
-    return {
-      label: socialSupportStatusKeys.byKey[item.status] || STATS_NULL_LABEL,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, followupCount)}%`
-    }
-  })
-  followupStatusRows.push({
-    label: 'Total',
-    number: followupCount.toString(),
-    percent: '100%'
-  })
-
-  exportData.push({
-    name: 'Statuts',
-    columns: getColumns('Status'),
-    rows: followupStatusRows
-  })
+  const followupStatusRows: StatsRow[] = followupStatusData.map(item => ({
+    label: socialSupportStatusKeys.byKey[item.status] || STATS_NULL_LABEL,
+    number: item._count,
+    percent: toRatio(item._count, followupCount)
+  }))
+  followupStatusRows.push({ label: 'Total', number: followupCount, percent: 1 })
+  addStatsWorksheet(workbook, 'Statuts', followupStatusRows)
 
   // Redirection
   const followupRedirectionsData = await getFollowupRedirectionsStatsQuery(
     user,
     input
   )
-
-  const followupsRedirectionsRows = [
+  const redirectionsBase =
+    followupRedirectionsData.followupsWithRedirections._count
+  const followupsRedirectionsRows: StatsRow[] = [
     {
       label: 'Entretiens avec au moins une réorientation',
-      number:
-        followupRedirectionsData.followupsWithRedirections._count.toString(),
-      percent: `${getPercentage(followupRedirectionsData.followupsWithRedirections._count, followupCount)}%`
-    }
-  ]
-  followupsRedirectionsRows.push({
-    label: 'Redirections avec partenaire renseigné',
-    number: followupRedirectionsData.withTypeIsPartners._count.toString(),
-    percent: `${getPercentage(followupRedirectionsData.withTypeIsPartners._count, followupRedirectionsData.followupsWithRedirections._count)}%`
-  })
-  followupRedirectionsData.withTypeIsPartners.partners.forEach(partner => {
-    followupsRedirectionsRows.push({
+      number: redirectionsBase,
+      percent: toRatio(redirectionsBase, followupCount)
+    },
+    {
+      label: 'Redirections avec partenaire renseigné',
+      number: followupRedirectionsData.withTypeIsPartners._count,
+      percent: toRatio(
+        followupRedirectionsData.withTypeIsPartners._count,
+        redirectionsBase
+      )
+    },
+    ...followupRedirectionsData.withTypeIsPartners.partners.map(partner => ({
       label: partner.name,
-      number: partner._count.toString(),
-      percent: `${getPercentage(partner._count, followupRedirectionsData.followupsWithRedirections._count)}%`
-    })
-  })
-  followupsRedirectionsRows.push(
+      number: partner._count,
+      percent: toRatio(partner._count, redirectionsBase)
+    })),
     {
       label: 'Redirections internes',
-      number: followupRedirectionsData.withTypeIsIntern._count.toString(),
-      percent: `${getPercentage(followupRedirectionsData.withTypeIsIntern._count, followupRedirectionsData.followupsWithRedirections._count)}%`
+      number: followupRedirectionsData.withTypeIsIntern._count,
+      percent: toRatio(
+        followupRedirectionsData.withTypeIsIntern._count,
+        redirectionsBase
+      )
     },
     {
       label: 'Autres redirections',
-      number: followupRedirectionsData.withTypeIsOther._count.toString(),
-      percent: `${getPercentage(followupRedirectionsData.withTypeIsOther._count, followupRedirectionsData.followupsWithRedirections._count)}%`
+      number: followupRedirectionsData.withTypeIsOther._count,
+      percent: toRatio(
+        followupRedirectionsData.withTypeIsOther._count,
+        redirectionsBase
+      )
     }
-  )
-
-  exportData.push({
-    name: 'Réorientations',
-    columns: getColumns('Réorientations'),
-    rows: followupsRedirectionsRows
-  })
+  ]
+  addStatsWorksheet(workbook, 'Réorientations', followupsRedirectionsRows)
 
   // Prescribing Organizations
   const followupPrescribingOrganizationData =
     await getFollowupPrescribingOrganizationStatsQuery(user, input)
-
-  const getPrescribingOrganizationTotal = () => {
-    let total = 0
-    let subTotal = 0
-    followupPrescribingOrganizationData.forEach(item => {
-      total = total + item._count
-      if (item.prescribingOrganizationId != 'null') {
-        subTotal = subTotal + item._count
-      }
-    })
-    return { total, subTotal }
-  }
-  const prescribingOrganizationTotal = getPrescribingOrganizationTotal()
-  const generalPrescribingOrganization = [
+  let prescribingTotal = 0
+  let prescribingSubTotal = 0
+  followupPrescribingOrganizationData.forEach(item => {
+    prescribingTotal += item._count
+    if (item.prescribingOrganizationId !== 'null') {
+      prescribingSubTotal += item._count
+    }
+  })
+  const prescribingOrganizationRows: StatsRow[] = [
     {
       label: 'Entretiens avec prescripteur renseigné',
-      number: prescribingOrganizationTotal.subTotal.toString(),
-      percent: `${getPercentage(prescribingOrganizationTotal.subTotal, prescribingOrganizationTotal.total)}%`
-    }
-  ]
-  const prescribingOrganizationDivider =
-    followupPrescribingOrganizationData.length > 0
+      number: prescribingSubTotal,
+      percent: toRatio(prescribingSubTotal, prescribingTotal)
+    },
+    ...(followupPrescribingOrganizationData.length > 0
       ? [
           {
             label: 'RÉPARTITION DES ORGANISMES PRESCRIPTEURS',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           },
           {
             label:
               'Pourcentage calculé sur le nombre total des instructions de dossiers.',
-            number: '',
-            percent: ''
+            number: null,
+            percent: null
           }
         ]
-      : []
-  const prescribingOrganizationRows = followupPrescribingOrganizationData.map(
-    item => {
-      return {
-        label: item.prescribingOrganization,
-        number: item._count.toString(),
-        percent: `${getPercentage(item._count, prescribingOrganizationTotal.total)}%`
-      }
-    }
-  )
-
-  const totalPrescribingOrganizationRow = [
-    {
-      label: 'Total',
-      number: followupCount.toString(),
-      percent: '100%'
-    }
+      : []),
+    ...followupPrescribingOrganizationData.map(item => ({
+      label: item.prescribingOrganization,
+      number: item._count,
+      percent: toRatio(item._count, prescribingTotal)
+    })),
+    { label: 'Total', number: followupCount, percent: 1 }
   ]
-
-  exportData.push({
-    name: 'Organismes prescripteurs',
-    columns: getColumns('Organismes prescripteurs'),
-    rows: [
-      ...generalPrescribingOrganization,
-      ...prescribingOrganizationDivider,
-      ...prescribingOrganizationRows,
-      ...totalPrescribingOrganizationRow
-    ]
-  })
+  addStatsWorksheet(
+    workbook,
+    'Organismes prescripteurs',
+    prescribingOrganizationRows
+  )
 
   // Duration
   const followupDuration = await getFollowupDurationStatsQuery(user, input)
-  const followupDurationRows = followupDuration.map(item => {
-    return {
+  addStatsWorksheet(
+    workbook,
+    'Durée des entretiens',
+    followupDuration.map(item => ({
       label: item.duration
         ? followupDurationKeys.byKey[item.duration]
         : STATS_NULL_LABEL,
-      number: item._count.toString(),
-      percent: `${getPercentage(item._count, followupCount)}%`
-    }
-  })
-  exportData.push({
-    name: 'Durée des entretiens',
-    columns: getColumns('Durée des entretiens'),
-    rows: followupDurationRows
-  })
+      number: item._count,
+      percent: toRatio(item._count, followupCount)
+    }))
+  )
 
   // Mean time
   const followupMeanTime = await getFollowupMeanTimeStatsQuery(user, input)
-  const followupMeanTimeCols = [
-    {
-      key: 'label',
-      header: 'Objet d’accompagnement'
-    },
-    {
-      key: 'number',
-      header: 'Durée en minutes'
-    }
-  ]
-  const followupMeanTimeRows = followupMeanTime.map(item => {
-    return {
-      label: item.name,
-      number: getSocialSupportSubjectTotalDuration(item.socialSupports).toFixed(
-        0
-      )
-    }
-  })
-  const meanTime = () => {
-    return (
-      followupMeanTimeRows.reduce(
-        (total: number, item) => total + Number(item.number),
-        0
-      ) / followupMeanTimeRows.length
+  const meanTimeRows: DurationRow[] = followupMeanTime.map(item => ({
+    label: item.name,
+    number: Math.round(
+      getSocialSupportSubjectTotalDuration(item.socialSupports)
     )
-  }
-  const followupTotalMeanTimeRows = [
-    {
-      label: 'Durée moyenne des entretiens',
-      number: meanTime().toFixed(2)
-    },
-    {
-      label: '',
-      number: ''
-    }
-  ]
+  }))
+  const meanTimeValue =
+    meanTimeRows.length > 0
+      ? meanTimeRows.reduce((total, item) => total + (item.number ?? 0), 0) /
+        meanTimeRows.length
+      : null
+  addDurationWorksheet(workbook, [
+    { label: 'Durée moyenne des entretiens', number: meanTimeValue },
+    { label: '', number: null },
+    ...meanTimeRows
+  ])
 
-  exportData.push({
-    name: 'Durée moyenne par objet d’accompagnement',
-    columns: followupMeanTimeCols,
-    rows: [...followupTotalMeanTimeRows, ...followupMeanTimeRows]
-  })
-
-  const stream = await createExport(user.id, exportData)
+  const stream = await createExportFromWorkbook(user.id, workbook)
 
   return { data: stream.toString('base64') }
 }

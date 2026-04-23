@@ -3,13 +3,14 @@ import { createQuery } from '~/server/route'
 import type { ExportAttendanceInput } from '~/server/schema'
 import { exportAttendanceSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { createExport } from '~/utils/export/createExport'
+import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import type { RowType } from '~/types/export'
 import { WorkshopRepo } from '~/server/database'
 import { calculateAge } from '~/utils'
 import { UserService } from '~/server/services'
 import { isReferent } from '~/server/security'
+import { prismaDecimalToNumber } from '~/utils/prisma'
+import ExcelPkg from 'exceljs'
 
 const handler = async ({
   input,
@@ -24,40 +25,15 @@ const handler = async ({
   })
 
   const workshop = await getWorkshopInfo(ctx, input)
-  const attendees = workshop.workshopAttendees
-  const { sortedRows: rows, columns } = createFile(attendees)
-  const header = getWorksheetHeader(workshop)
+
+  const { Workbook: WorkbookConstructor } = ExcelPkg
+  const workbook = new WorkbookConstructor()
+  buildWorksheet(workbook, workshop)
 
   // Forced to return base64 encoded version of the file in tRPC
   // Cf. https://github.com/trpc/trpc/discussions/658
   // & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
-  const stream = await createExport(ctx.user.id, [
-    {
-      name: 'Émargement',
-      columns,
-      rows,
-      options: {
-        headerFooter: {
-          firstHeader: header,
-          oddHeader: header,
-          evenHeader: header
-        },
-        properties: {
-          showGridLines: false
-        },
-        pageSetup: {
-          orientation: 'landscape'
-        },
-        views: [
-          {
-            state: 'normal',
-            style: 'pageLayout'
-          }
-        ],
-        state: 'visible'
-      }
-    }
-  ])
+  const stream = await createExportFromWorkbook(ctx.user.id, workbook)
   return { data: stream.toString('base64') }
 }
 
@@ -88,26 +64,56 @@ const getWorksheetHeader = (workshop: WorkshopInfo) => {
   return header
 }
 
-const createFile = (attendees: Attendees) => {
-  const rows: RowType[] = attendees
+const buildWorksheet = (
+  workbook: ExcelPkg.Workbook,
+  workshop: WorkshopInfo
+) => {
+  const header = getWorksheetHeader(workshop)
+  const worksheet = workbook.addWorksheet('Émargement', {
+    headerFooter: {
+      firstHeader: header,
+      oddHeader: header,
+      evenHeader: header
+    },
+    properties: { showGridLines: false },
+    pageSetup: { orientation: 'landscape' },
+    views: [{ state: 'normal', style: 'pageLayout' }],
+    state: 'visible'
+  })
+
+  worksheet.columns = [
+    { key: 'firstName', header: 'Prénom', width: 14 },
+    { key: 'lastName', header: 'Nom', width: 14 },
+    { key: 'age', header: 'Âge', width: 8, style: { numFmt: '0' } },
+    { key: 'phone', header: 'Téléphone', width: 14 },
+    { key: 'email', header: 'Email', width: 28 },
+    {
+      key: 'paymentAmount',
+      header: 'Montant payé',
+      width: 10,
+      style: { numFmt: '#,##0.00 "€"' }
+    },
+    { key: 'signature', header: 'Signature', width: 20 }
+  ]
+  worksheet.getRow(1).font = { bold: true }
+
+  const rows = workshop.workshopAttendees
     .map(attendee => {
-      const sharedInfo = {
-        paymentAmount:
-          attendee.paymentReceived && attendee.paymentAmount
-            ? attendee.paymentAmount.toString()
-            : '',
-        signature: ' '
-      }
+      const paymentAmount =
+        attendee.paymentReceived && attendee.paymentAmount
+          ? prismaDecimalToNumber(attendee.paymentAmount)
+          : null
       if (attendee.beneficiary) {
         return {
           firstName: attendee.beneficiary.firstName || '(non renseigné)',
           lastName: attendee.beneficiary.usualName || '(non renseigné)',
           age: attendee.beneficiary.birthDate
-            ? calculateAge(attendee.beneficiary.birthDate).toString()
-            : '',
+            ? calculateAge(attendee.beneficiary.birthDate)
+            : null,
           phone: attendee.beneficiary.phone1 || '',
           email: attendee.beneficiary.email || '',
-          ...sharedInfo
+          paymentAmount,
+          signature: ' '
         }
       }
       if (attendee.workshopExternalAttendee) {
@@ -116,56 +122,21 @@ const createFile = (attendees: Attendees) => {
           lastName:
             attendee.workshopExternalAttendee.lastName?.toUpperCase() || '',
           age: attendee.workshopExternalAttendee.birthDate
-            ? calculateAge(
-                attendee.workshopExternalAttendee.birthDate
-              ).toString()
-            : '',
+            ? calculateAge(attendee.workshopExternalAttendee.birthDate)
+            : null,
           phone: attendee.workshopExternalAttendee.phone || '',
           email: attendee.workshopExternalAttendee.email || '',
-          ...sharedInfo
+          paymentAmount,
+          signature: ' '
         }
       }
     })
     .filter(row => row != null)
+    .sort((a, b) =>
+      a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase())
+    )
 
-  const columns = [
-    {
-      key: 'firstName',
-      header: 'Prénom'
-    },
-    {
-      key: 'lastName',
-      header: 'Nom'
-    },
-    {
-      key: 'age',
-      header: 'Age'
-    },
-    {
-      key: 'phone',
-      header: 'Téléphone'
-    },
-    {
-      key: 'email',
-      header: 'Email'
-    },
-    {
-      key: 'paymentAmount',
-      header: 'Montant payé'
-    },
-    {
-      key: 'signature',
-      header: 'Signature'
-    }
-  ]
-
-  const sortedRows = rows.sort((a, b) =>
-    (a.lastName as string)
-      .toLowerCase()
-      .localeCompare((b.lastName as string).toLowerCase())
-  )
-
-  return { sortedRows, columns }
+  rows.forEach(row => worksheet.addRow(row))
 }
 
 const getWorkshopInfo = async (
