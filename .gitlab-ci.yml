@@ -148,6 +148,7 @@ sonarcloud-check:
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     NUXT_PUBLIC_APP_URL: http://localhost:3000
+    NUXT_PUBLIC_LANDING_PAGE_URL: http://
   cache:
     policy: pull
   artifacts:

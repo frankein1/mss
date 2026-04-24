@@ -25,7 +25,10 @@ async function setAuthenticationToken(
     structureType: StructureType
   }
 ) {
-  const token = signJwt(user, 'test-auth-jwt-key', 60)
+  if (!process.env.NUXT_AUTH_JWT_KEY) {
+    throw new Error('Missing NUXT_AUTH_JWT_KEY')
+  }
+  const token = signJwt(user, process.env.NUXT_AUTH_JWT_KEY, 60)
 
   const expires = parseInt(
     ((new Date().getTime() + minutesToMillis(30)) / 1000).toFixed(0)
