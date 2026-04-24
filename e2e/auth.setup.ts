@@ -25,11 +25,7 @@ async function setAuthenticationToken(
     structureType: StructureType
   }
 ) {
-  const token = signJwt(
-    user,
-    process.env.AUTH_JWT_KEY || 'secretJWT',
-    parseInt(process.env.TOKEN_VALIDATION_IN_MINUTES || '30')
-  )
+  const token = signJwt(user, 'test-auth-jwt-key', 60)
 
   const expires = parseInt(
     ((new Date().getTime() + minutesToMillis(30)) / 1000).toFixed(0)
