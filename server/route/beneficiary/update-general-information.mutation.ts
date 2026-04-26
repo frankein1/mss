@@ -9,7 +9,7 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
 import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo, UserRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
@@ -25,18 +25,28 @@ const securityCheck = async (
     familyFile: beneficiary.familyFile
   })
 
-  if (!permissions.changeReferent) {
-    const referentsInDb = new Set(
-      beneficiary.familyFile.referents.map(r => r.id)
-    )
-    const newReferents = new Set(input.referents)
-    const referentsAreUnchanged =
-      newReferents.size === referentsInDb.size &&
-      newReferents.isSubsetOf(referentsInDb)
-    if (!referentsAreUnchanged) {
+  const referentsInDb = new Set(
+    beneficiary.familyFile.referents.map(r => r.id)
+  )
+  const newReferents = new Set(input.referents)
+  const referentsAreUnchanged =
+    newReferents.size === referentsInDb.size &&
+    newReferents.isSubsetOf(referentsInDb)
+
+  if (!permissions.changeReferent && !referentsAreUnchanged) {
+    return false
+  }
+
+  if (!referentsAreUnchanged) {
+    const referentsInStructureCount = await UserRepo.count(ctx.user, {
+      where: { id: { in: input.referents } }
+    })
+    // UserRepo.count applies structure constraints, so a mismatch means some referents are from another structure
+    if (referentsInStructureCount !== input.referents.length) {
       return false
     }
   }
+
   return permissions.edit.general
 }
 
