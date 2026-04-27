@@ -64,5 +64,8 @@ export const beneficiaryRouter = router({
     .mutation(routes.linkToFamilyFileMutation.execute),
   addReferent: protectedProcedure
     .input(routes.addReferentToBeneficiariesMutation.inputValidation)
-    .mutation(routes.addReferentToBeneficiariesMutation.execute)
+    .mutation(routes.addReferentToBeneficiariesMutation.execute),
+  deleteReferent: protectedProcedure
+    .input(routes.removeReferentFromBeneficiariesMutation.inputValidation)
+    .mutation(routes.removeReferentFromBeneficiariesMutation.execute)
 })

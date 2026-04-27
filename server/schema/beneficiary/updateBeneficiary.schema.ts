@@ -219,6 +219,15 @@ export type AddReferentToBeneficiariesInput = z.infer<
   typeof addReferentToBeneficiariesSchema
 >
 
+export const removeReferentFromBeneficiariesSchema = z.object({
+  beneficiaries: z.array(beneficiaryWithFamilyFileSchema),
+  referentId: z.string().uuid()
+})
+
+export type RemoveReferentFromBeneficiariesInput = z.infer<
+  typeof removeReferentFromBeneficiariesSchema
+>
+
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >
