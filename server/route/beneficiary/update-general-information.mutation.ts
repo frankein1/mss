@@ -2,7 +2,7 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
-  type FamilyFilePermissions,
+  validateBelongsToStructure,
   type SecurityRuleContext
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
@@ -25,9 +25,7 @@ const securityCheck = async (
     familyFile: beneficiary.familyFile
   })
 
-  const referentsInDb = new Set(
-    beneficiary.familyFile.referents.map(r => r.id)
-  )
+  const referentsInDb = new Set(beneficiary.familyFile.referents.map(r => r.id))
   const newReferents = new Set(input.referents)
   const referentsAreUnchanged =
     newReferents.size === referentsInDb.size &&
@@ -38,11 +36,12 @@ const securityCheck = async (
   }
 
   if (!referentsAreUnchanged) {
-    const referentsInStructureCount = await UserRepo.count(ctx.user, {
-      where: { id: { in: input.referents } }
-    })
-    // UserRepo.count applies structure constraints, so a mismatch means some referents are from another structure
-    if (referentsInStructureCount !== input.referents.length) {
+    const allInStructure = await validateBelongsToStructure(
+      ctx.user,
+      input.referents,
+      UserRepo.count
+    )
+    if (!allInStructure) {
       return false
     }
   }
