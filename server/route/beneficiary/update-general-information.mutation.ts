@@ -2,14 +2,14 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
-  type FamilyFilePermissions,
+  validateBelongsToStructure,
   type SecurityRuleContext
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
 import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo, UserRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
@@ -25,18 +25,27 @@ const securityCheck = async (
     familyFile: beneficiary.familyFile
   })
 
-  if (!permissions.changeReferent) {
-    const referentsInDb = new Set(
-      beneficiary.familyFile.referents.map(r => r.id)
+  const referentsInDb = new Set(beneficiary.familyFile.referents.map(r => r.id))
+  const newReferents = new Set(input.referents)
+  const referentsAreUnchanged =
+    newReferents.size === referentsInDb.size &&
+    newReferents.isSubsetOf(referentsInDb)
+
+  if (!permissions.changeReferent && !referentsAreUnchanged) {
+    return false
+  }
+
+  if (!referentsAreUnchanged) {
+    const allInStructure = await validateBelongsToStructure(
+      ctx.user,
+      input.referents,
+      UserRepo.count
     )
-    const newReferents = new Set(input.referents)
-    const referentsAreUnchanged =
-      newReferents.size === referentsInDb.size &&
-      newReferents.isSubsetOf(referentsInDb)
-    if (!referentsAreUnchanged) {
+    if (!allInStructure) {
       return false
     }
   }
+
   return permissions.edit.general
 }
 
