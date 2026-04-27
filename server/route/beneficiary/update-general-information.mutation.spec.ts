@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, expect } from 'vitest'
+import { afterEach, beforeEach, describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import {
   fixtureStructures,
@@ -14,6 +14,8 @@ let beneficiaryId: string
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
 const referentId = fixturesUsers[FixtureUserRole.Referent].id
+const structureManagerMinistereId =
+  fixturesUsers[FixtureUserRole.StructureManagerMinistere].id
 
 beforeEach(async () => {
   const familyFile = await prismaClient.familyFile.create({
@@ -41,17 +43,49 @@ afterEach(async () => {
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
 })
 
-test("updateGeneralInformation - un agent d'accueil ne peut pas modifier les référents d'un bénéficiaire", async ({
-  trpc
-}) => {
-  await expect(
-    trpc.receptionAgent.beneficiary.updateGeneralInformation({
-      id: beneficiaryId,
-      structureId,
-      referents: [referentId, socialWorkerId],
-      aidantConnectAuthorized: false,
-      vulnerablePerson: false,
-      status: 'Active'
-    })
-  ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+describe('Beneficiary - updateGeneralInformation - Authorizations', () => {
+  test("A ReceptionAgent cannot change a beneficiary's referents", async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.receptionAgent.beneficiary.updateGeneralInformation({
+        id: beneficiaryId,
+        structureId,
+        referents: [referentId, socialWorkerId],
+        aidantConnectAuthorized: false,
+        vulnerablePerson: false,
+        status: 'Active'
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+  })
+
+  test('A StructureManager from another structure cannot update general information', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.structureManagerMinistere.beneficiary.updateGeneralInformation({
+        id: beneficiaryId,
+        structureId,
+        referents: [referentId],
+        aidantConnectAuthorized: false,
+        vulnerablePerson: false,
+        status: 'Active'
+      })
+    ).rejects.toThrowError(/no record/i)
+  })
+
+  test('A StructureManager cannot assign a referent from another structure', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.structureManager.beneficiary.updateGeneralInformation({
+        id: beneficiaryId,
+        structureId,
+        referents: [referentId, structureManagerMinistereId],
+        aidantConnectAuthorized: false,
+        vulnerablePerson: false,
+        status: 'Active'
+      })
+    ).rejects.toThrowError(/not allowed to access route/i)
+  })
 })
