@@ -102,9 +102,7 @@ export async function createUsers(date: Date, structureId: string) {
           data: [
             {
               provider: 'proconnect',
-              type: 'internal',
-              providerAccountId: 'random-account-id',
-              accessToken: 'random-token-value'
+              providerAccountId: 'random-account-id'
             }
           ]
         }
@@ -131,9 +129,7 @@ export async function createUsers(date: Date, structureId: string) {
           data: [
             {
               provider: 'proconnect',
-              type: 'internal',
-              providerAccountId: 'other-random-account-id',
-              accessToken: 'other-random-token-value'
+              providerAccountId: 'other-random-account-id'
             }
           ]
         }
