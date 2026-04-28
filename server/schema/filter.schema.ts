@@ -59,6 +59,7 @@ const statFilterSchema = z
       .nullish(),
     ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
     createdById: z.array(z.string().uuid()).nullish(),
+    supportProgramNameIds: z.array(z.string().uuid()).nullish(),
     beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
     qpv: kindOfBooleanSchema(),
     ageGroup: z.nativeEnum(AgeGroup).nullish(),
@@ -161,7 +162,8 @@ const beneficiaryFilterSchema = z
       .string()
       .nullish()
       .transform(val => (val ? val === 'true' : undefined)),
-    notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
+    notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish(),
+    supportProgramNameIds: z.array(z.string().uuid()).nullish()
   })
   .superRefine((data, ctx) => {
     if (
@@ -251,7 +253,8 @@ const socialSupportFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).optional(),
   status: z.nativeEnum(SocialSupportStatus).optional(),
   typeSuivi: z.nativeEnum(TypeSuivi).optional(),
-  beneficiaryId: z.string().uuid().optional()
+  beneficiaryId: z.string().uuid().optional(),
+  supportProgramNameIds: z.array(z.string().uuid()).optional()
 })
 
 type SocialSupportFilterInput = z.infer<typeof socialSupportFilterSchema>

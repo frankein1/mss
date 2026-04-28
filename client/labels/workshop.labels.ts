@@ -4,6 +4,7 @@ import type { FieldLabels } from '~~/types/fieldLabels'
 type WorkshopFieldLabels = Omit<
   Workshop & { name: string },
   | 'partnerOrganization'
+  | 'supportProgramName'
   | 'structure'
   | 'structureId'
   | 'createdAt'
@@ -19,6 +20,7 @@ export const workshopLabels: FieldLabels<WorkshopFieldLabels> = {
   endTime: 'Heure de fin',
   location: 'Lieu',
   partnerOrganizationId: 'Partenaire ou organisme financeur',
+  supportProgramNameId: "Dispositif ou axe d'intervention",
   host: 'Personne intervenante',
   sessionName: 'Nom ou numéro de cette séance',
   description: 'Description / notes',

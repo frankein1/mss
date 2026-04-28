@@ -26,6 +26,7 @@
   }>()
 
   const r = routes.beneficiary
+  const { hasSupportProgramNames } = await useHasSupportProgramNames()
 
   const navigationRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
     const editRoutes: AppBeneficiaryEditRoute[] = []
@@ -49,6 +50,13 @@
 
     if (props.permissions?.edit.externalOrganisations) {
       editRoutes.push(r.AppBeneficiaryEditExternalOrganisations.name)
+    }
+
+    if (
+      props.permissions?.edit.supportPrograms &&
+      hasSupportProgramNames.value
+    ) {
+      editRoutes.push(r.AppBeneficiaryEditSupportPrograms.name)
     }
 
     return editRoutes

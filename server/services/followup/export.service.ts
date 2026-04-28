@@ -47,6 +47,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'numeroPegase',
   'minister',
   'subjects',
+  'supportProgramId',
   'medium',
   'prescribingOrganizationId',
   'firstFollowup',
@@ -126,9 +127,11 @@ export async function exportFollowups({
       documents: socialSupport.documents
     }
 
-    rows.push(
-      formatRow(filtered, { userMap, partnerMap, contactMap, ministerMap })
-    )
+    rows.push({
+      ...formatRow(filtered, { userMap, partnerMap, contactMap, ministerMap }),
+      supportProgramId:
+        socialSupport.supportProgram?.supportProgramName?.name || ''
+    })
   }
 
   return { rows, columns }

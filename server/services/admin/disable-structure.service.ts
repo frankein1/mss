@@ -151,6 +151,7 @@ export const disableStructure = async ({
       | 'updated'
       | 'socialSupportType'
       | 'subtype'
+      | 'supportProgramId'
     >
   > = {
     synthesis: null,
@@ -304,7 +305,13 @@ export const disableStructure = async ({
       data: structureUpdate
     })
 
+  const deleteSupportProgramNames = () =>
+    prismaClient.supportProgramName.deleteMany({
+      where: { structureId: id }
+    })
+
   await prismaClient.$transaction([
+    deleteSupportProgramNames(),
     deleteNotifications(),
     deleteComments(),
     deleteDocuments(),

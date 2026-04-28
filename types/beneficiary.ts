@@ -1,5 +1,6 @@
 import type {
   Beneficiary,
+  SupportProgram,
   BeneficiaryRelative,
   Prisma,
   RepClassification,
@@ -78,6 +79,14 @@ export type ContributingPartnerOutput =
     select: typeof contributingPartnerSelect
   }>
 
+export type GetSupportProgramItem = Pick<
+  SupportProgram,
+  'id' | 'startDate' | 'endDate' | 'exitReason' | 'outcome'
+> & {
+  supportProgramName: { id: string; name: string; hasLifecycle: boolean }
+  partnerOrganisations: { id: string; name: string }[]
+}
+
 export type GetBeneficiaryExternalOrganisations = Pick<
   Beneficiary,
   | 'protectionMeasure'
@@ -93,6 +102,8 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   prescribingOrganizationContact: { id: string; name: string } | null
   contributingPartners: ContributingPartnerOutput[]
 }
+
+export type GetBeneficiarySupportPrograms = GetSupportProgramItem[]
 
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,
@@ -188,6 +199,7 @@ export type GetBeneficiaryOutput = Pick<
     general: GetBeneficiaryGeneral
     health: GetBeneficiaryHealth | undefined
     externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
+    supportPrograms: GetBeneficiarySupportPrograms | undefined
     occupationIncome: GetBeneficiaryOccupationIncome | undefined
     entourages: GetBeneficiaryRelative[] | undefined
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined

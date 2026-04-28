@@ -3,6 +3,11 @@
     v-if="errors.length > 1"
     :errors="errors"
   />
+  <AtomAlert
+    v-if="hasSupportProgramNames && fetchProgramsError"
+    message="Les dispositifs ou axes d'intervention associés au bénéficiaire n'ont pas pu être chargés."
+    :alert-type="AlertType.Warning"
+  ></AtomAlert>
   <form
     ref="form"
     novalidate
@@ -25,9 +30,7 @@
 
     <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
       <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
-      <div
-        class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
-      >
+      <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--top">
         <div class="fr-col-12">
           <div class="btn-container md-row-btn-container">
             <VeeCheckbox
@@ -111,7 +114,24 @@
           </div>
         </template>
 
-        <div class="fr-col-12">
+        <div
+          v-if="hasSupportProgramNames"
+          class="fr-col-12 fr-col-lg-6"
+        >
+          <VeeSelect
+            name="supportProgramId"
+            :label="followupFieldLabels.supportProgramId"
+            :options="withEmptyValue(supportProgramOptions)"
+            :disabled="supportProgramOptions.length === 0"
+            :hint="
+              supportProgramOptions.length === 0
+                ? 'Aucun dispositif ou axe d\'intervention renseigné pour ce bénéficiaire'
+                : undefined
+            "
+          />
+        </div>
+
+        <div class="fr-col-12 fr-col-lg-6">
           <MultiSelect
             name="subjects"
             :label="followupFieldLabels.subjects"
@@ -120,7 +140,7 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <div class="fr-col-12 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
             :to="routes.structure.AppStructureCustomObjects.path()"
@@ -360,9 +380,11 @@
   import type { PartnerOrganizationIdName } from '~~/types/partner'
   import type { BeneficiaryFileIdentification } from '~~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~~/types/matomo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { AlertType } from '~/utils/constants/alert'
 
   const props = withDefaults(
     defineProps<{
@@ -380,6 +402,8 @@
 
   const { application } = usePermissions()
   const matomo = useMatomo()
+  const trpcClient = useTrpcClient()
+  const { hasSupportProgramNames } = await useHasSupportProgramNames()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -388,7 +412,22 @@
   const form = useTemplateRef('form')
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+  const { setValue: setSupportProgramId } = useField<string | null>(
+    'supportProgramId'
+  )
   const { value: familyFileId } = useField<string | null>('familyFileId')
+
+  const { data: supportProgramsData, error: fetchProgramsError } =
+    await trpcClient.supportProgram.getForBeneficiary.useQuery(
+      toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
+    )
+  const supportProgramOptions = computed(() =>
+    (supportProgramsData.value ?? []).map(formatSupportProgramOption)
+  )
+
+  watch(beneficiaryId, () => {
+    setSupportProgramId(null)
+  })
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'
   )

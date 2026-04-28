@@ -130,6 +130,12 @@ type SS = SocialSupport & {
   subjects: SocialSupportSubject[]
   documents?: Pick<Document, 'key' | 'name'>[]
   comments?: (Comment & { createdBy: User })[]
+  supportProgram?: {
+    id: string
+    startDate: Date | null
+    endDate: Date | null
+    supportProgramName: { id: string; name: string; hasLifecycle: boolean }
+  } | null
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
     | 'createdAt'
@@ -199,7 +205,12 @@ export function filterSocialSupport<T extends SS>({
       conditions.details
     ),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister),
-    endOfSocialSupport: socialSupport.endOfSocialSupport
+    endOfSocialSupport: socialSupport.endOfSocialSupport,
+    supportProgramId: show(socialSupport.supportProgramId, conditions.details),
+    supportProgram: show(
+      socialSupport.supportProgram ?? null,
+      conditions.details
+    )
   }
 }
 

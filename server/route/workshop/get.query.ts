@@ -41,8 +41,23 @@ export const getOne = async (user: SecurityRuleGrantee, id: string) => {
   const [workshop, _count] = await Promise.all([
     WorkshopRepo.findUniqueOrThrow(user, {
       where: { id },
-      include: {
-        workshopName: true
+      select: {
+        id: true,
+        date: true,
+        startTime: true,
+        endTime: true,
+        location: true,
+        partnerOrganizationId: true,
+        supportProgramNameId: true,
+        host: true,
+        sessionName: true,
+        description: true,
+        ageLimit: true,
+        ageLimitCondition: true,
+        attendeeLimit: true,
+        chargeable: true,
+        workshopName: { select: { name: true } },
+        supportProgramName: { select: { id: true, name: true } }
       }
     }),
     getAttendeeCount(user, id)
@@ -57,13 +72,38 @@ export const getOneWithAttendees = async (
   const [{ workshopAttendees, ...rest }, _count] = await Promise.all([
     WorkshopRepo.findUniqueOrThrow(user, {
       where: { id },
-      include: {
-        workshopName: true,
-        partnerOrganization: {
-          select: { id: true, name: true }
-        },
+      select: {
+        id: true,
+        date: true,
+        startTime: true,
+        endTime: true,
+        location: true,
+        partnerOrganizationId: true,
+        supportProgramNameId: true,
+        host: true,
+        sessionName: true,
+        description: true,
+        ageLimit: true,
+        ageLimitCondition: true,
+        attendeeLimit: true,
+        chargeable: true,
+        workshopName: { select: { name: true } },
+        partnerOrganization: { select: { id: true, name: true } },
+        supportProgramName: { select: { id: true, name: true } },
         workshopAttendees: {
-          include: {
+          select: {
+            id: true,
+            created: true,
+            updated: true,
+            workshopId: true,
+            attendance: true,
+            type: true,
+            listType: true,
+            comment: true,
+            paymentReceived: true,
+            paymentAmount: true,
+            beneficiaryId: true,
+            workshopExternalAttendeeId: true,
             beneficiary: {
               select: {
                 birthDate: true,
@@ -91,7 +131,7 @@ export const getOneWithAttendees = async (
               }
             }
           },
-          // TODO: add this to WorkshopConstraint
+          // WorkshopAttendeeConstraints can't apply here — nested relation selects bypass the constraint layer
           ...(isReferent(user) && {
             where: {
               OR: [

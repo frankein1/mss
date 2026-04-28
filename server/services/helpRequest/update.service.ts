@@ -85,7 +85,8 @@ export async function update({ input, ctx }: UpdateParams) {
     fullFile,
     endOfSocialSupport,
     date,
-    isRefundable
+    isRefundable,
+    supportProgramId
   } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
   const disconnectSubject = target.fileInstruction.socialSupport.subjects
     .filter(s => s.id !== subjectId)
@@ -152,6 +153,9 @@ export async function update({ input, ctx }: UpdateParams) {
         endOfSocialSupport,
         dueDate,
         date,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : { disconnect: true },
         subjects: {
           ...connect(subjectId),
           disconnect: disconnectSubject

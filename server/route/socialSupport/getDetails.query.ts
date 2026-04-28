@@ -38,6 +38,17 @@ async function getSocialSupportDetail({
       updated: true,
       socialSupportType: true,
       subtype: true,
+      supportProgramId: true,
+      supportProgram: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          supportProgramName: {
+            select: { id: true, name: true, hasLifecycle: true }
+          }
+        }
+      },
       createdBy: {
         select: {
           id: true,

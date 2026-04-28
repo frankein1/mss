@@ -65,6 +65,7 @@
       endTime: workshop.value?.endTime,
       location: workshop.value?.location,
       partnerOrganizationId: workshop.value?.partnerOrganizationId,
+      supportProgramNameId: workshop.value?.supportProgramNameId,
       host: workshop.value?.host,
       sessionName: workshop.value?.sessionName,
       description: workshop.value?.description,

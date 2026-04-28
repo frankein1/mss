@@ -10,6 +10,7 @@ import { updateExternalOrganisationsMutation } from './update-external-organisat
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
+import { updateSupportProgramsMutation } from './update-support-programs.mutation'
 import { updateTaxHouseholdMutation } from './update-tax-household.mutation'
 import { createBeneficiaryMutation } from './create.mutation'
 import { deleteBeneficiaryMutation } from './delete.mutation'
@@ -36,6 +37,7 @@ export const beneficiaryRoutes = {
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,
+  updateSupportProgramsMutation,
   updateTaxHouseholdMutation,
   createBeneficiaryMutation,
   deleteBeneficiaryMutation,

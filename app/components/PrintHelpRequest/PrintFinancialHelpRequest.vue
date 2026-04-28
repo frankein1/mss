@@ -31,6 +31,7 @@
           v-if="
             helpRequest.fileInstruction.socialSupport.numeroPegase ||
             ministerName ||
+            helpRequest.fileInstruction.socialSupport.supportProgram ||
             helpRequest.subject?.name ||
             helpRequest.prescribingOrganization?.name ||
             helpRequest.prescribingOrganizationContact?.name ||
@@ -47,6 +48,15 @@
           <PrintDetailItem
             :title="helpRequestFieldLabels.minister"
             :content="ministerName"
+          />
+          <PrintDetailItem
+            v-if="helpRequest.fileInstruction.socialSupport.supportProgram"
+            :title="helpRequestFieldLabels.supportProgramId"
+            :content="
+              formatSupportProgramOption(
+                helpRequest.fileInstruction.socialSupport.supportProgram
+              ).label
+            "
           />
           <PrintDetailItem
             :title="helpRequestFieldLabels.subjectId"
@@ -241,6 +251,7 @@
   import type { HelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { helpRequestFieldLabels } from '~~/client/labels/helpRequest.labels'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { socialSupportRedirectionLabels } from '~~/client/labels/redirection.labels'
   import { baseRefusalReasonKeys, paymentMethodKeys } from '~~/client/options'
   import { socialSupportRedirectionTypeKeys } from '~~/client/options/redirection'

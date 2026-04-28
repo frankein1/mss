@@ -178,6 +178,19 @@ const select = {
   },
   _count: {
     select: { socialSupports: true }
+  },
+  supportPrograms: {
+    select: {
+      id: true,
+      startDate: true,
+      endDate: true,
+      exitReason: true,
+      outcome: true,
+      supportProgramName: {
+        select: { id: true, name: true, hasLifecycle: true }
+      },
+      partnerOrganisations: { select: { id: true, name: true } }
+    }
   }
 } satisfies Prisma.BeneficiarySelect
 
@@ -239,6 +252,9 @@ const filter = (
   const externalOrganisations = view.externalOrganisations
     ? getExternalOrganisations(beneficiary)
     : undefined
+  const supportPrograms = view.supportPrograms
+    ? getSupportPrograms(beneficiary)
+    : undefined
   const health =
     appPermissions.module.health && view.health
       ? getHealth(beneficiary, appPermissions.edit.health.nir)
@@ -273,6 +289,7 @@ const filter = (
     externalOrganisations: !isObjectEmpty(externalOrganisations)
       ? externalOrganisations
       : undefined,
+    supportPrograms: supportPrograms?.length ? supportPrograms : undefined,
     health: !isObjectEmpty(health) ? health : undefined,
     occupationIncome: !isObjectEmpty(occupationIncome)
       ? occupationIncome
@@ -434,4 +451,23 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     prescribingOrganizationContact: beneficiary.prescribingOrganizationContact,
     contributingPartners: beneficiary.contributingPartners
   }
+}
+
+function getSupportPrograms(beneficiary: BeneficiaryOutput) {
+  return beneficiary.supportPrograms.map(d => {
+    const hasLifecycle = d.supportProgramName.hasLifecycle
+    return {
+      id: d.id,
+      startDate: hasLifecycle ? d.startDate : null,
+      endDate: hasLifecycle ? d.endDate : null,
+      exitReason: hasLifecycle ? d.exitReason : null,
+      outcome: hasLifecycle ? d.outcome : null,
+      supportProgramName: {
+        id: d.supportProgramName.id,
+        name: d.supportProgramName.name,
+        hasLifecycle: d.supportProgramName.hasLifecycle
+      },
+      partnerOrganisations: d.partnerOrganisations
+    }
+  })
 }

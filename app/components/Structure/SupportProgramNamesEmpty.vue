@@ -1,0 +1,32 @@
+<template>
+  <div class="spn-list-empty__container">
+    <img
+      src="~/assets/img/empty-social-subject-list.svg"
+      class="fr-responsive-img"
+      alt=""
+    />
+    <p class="text">
+      Vous n'avez aucun dispositif ou axe d'intervention configuré.
+    </p>
+  </div>
+</template>
+
+<style scoped lang="scss">
+  .spn-list-empty__container {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    > .fr-responsive-img {
+      margin-bottom: 1.5rem;
+      max-width: 15rem;
+    }
+
+    > .text {
+      margin-bottom: 0;
+      text-align: center;
+    }
+  }
+</style>

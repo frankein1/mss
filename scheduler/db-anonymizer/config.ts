@@ -249,7 +249,8 @@ const configSocialSupport: Record<
   synthesis_rich_text: false,
   private_synthesis: false,
   private_synthesis_rich_text: false,
-  numero_pegase: false
+  numero_pegase: false,
+  support_program_id: true
 }
 
 const configDocumentToSocialSupport = {
@@ -479,6 +480,7 @@ const configWorkshop: Record<
   created_by_id: true,
   structure_id: true,
   partner_organization_id: true,
+  support_program_name_id: true,
   chargeable: true,
   workshop_name_id: true,
   location: true,
@@ -773,6 +775,39 @@ const configMinister: Record<
   updated: true
 }
 
+const configSupportProgramName: Record<
+  SnakeCase<keyof typeof Prisma.SupportProgramNameScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  name: true,
+  has_lifecycle: true,
+  structure_id: true,
+  created_by_id: true,
+  updated_at: true,
+  created_at: true
+}
+
+const configSupportProgram: Record<
+  SnakeCase<keyof typeof Prisma.SupportProgramScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  beneficiary_id: true,
+  support_program_name_id: true,
+  start_date: true,
+  end_date: true,
+  exit_reason: true,
+  created_at: true,
+  updated_at: true,
+  outcome: true
+}
+
+const configPartnerOrganizationToSupportProgram = {
+  A: true,
+  B: true
+} as Record<'A' | 'B', boolean>
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -811,7 +846,11 @@ export const CONFIG = {
   external_account: configExternalAccount,
   social_support_redirection: configRedirection,
   redirection_reason: configRedirectionReason,
-  minister: configMinister
+  minister: configMinister,
+  support_program_name: configSupportProgramName,
+  support_program: configSupportProgram,
+  _partner_organization_to_support_program:
+    configPartnerOrganizationToSupportProgram
 }
 
 export type TableName = keyof typeof CONFIG

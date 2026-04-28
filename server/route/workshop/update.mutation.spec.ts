@@ -12,6 +12,7 @@ import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 let workshopIds: string[] = []
 let workshopNameIds: string[] = []
 let partnerOrganizationIds: string[] = []
+let supportProgramNameIds: string[] = []
 
 const date = new Date()
 const structureId = fixtureStructures[FixtureStructure.Test].id
@@ -60,7 +61,12 @@ const createWorkshopNameWithWorkshops = async (
 
 afterEach(
   async () =>
-    await resetDatabase(workshopIds, workshopNameIds, partnerOrganizationIds)
+    await resetDatabase(
+      workshopIds,
+      workshopNameIds,
+      partnerOrganizationIds,
+      supportProgramNameIds
+    )
 )
 
 describe('Workshop - Update - Update workshop data', () => {
@@ -379,7 +385,106 @@ describe('Workshop - Update - Update chargeable to false', () => {
   })
 })
 
-async function resetDatabase(wids: string[], wnids: string[], poids: string[]) {
+describe('Workshop - Update - Support program name', () => {
+  test('A manager can assign a support program name to a workshop', async ({
+    trpc
+  }) => {
+    const w1 = await createWorkshopNameWithWorkshops()
+    const programName = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UWK-Program-${Date.now()}`,
+        structureId,
+        createdById
+      },
+      select: { id: true }
+    })
+    supportProgramNameIds.push(programName.id)
+
+    await trpc.structureManager.workshop.updateWorkshop({
+      id: w1.workshopId,
+      date,
+      mode: UpdateWorkshopNameMode.current,
+      name: w1.name,
+      supportProgramNameId: programName.id
+    })
+
+    const workshop = await prismaClient.workshop.findUniqueOrThrow({
+      where: { id: w1.workshopId },
+      select: { supportProgramNameId: true }
+    })
+    expect(workshop.supportProgramNameId).toBe(programName.id)
+  })
+
+  test('A manager can clear the support program name from a workshop', async ({
+    trpc
+  }) => {
+    const programName = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UWK-Clear-${Date.now()}`,
+        structureId,
+        createdById
+      },
+      select: { id: true }
+    })
+    supportProgramNameIds.push(programName.id)
+
+    const w1 = await createWorkshopNameWithWorkshops()
+
+    await trpc.structureManager.workshop.updateWorkshop({
+      id: w1.workshopId,
+      date,
+      mode: UpdateWorkshopNameMode.current,
+      name: w1.name,
+      supportProgramNameId: programName.id
+    })
+
+    await trpc.structureManager.workshop.updateWorkshop({
+      id: w1.workshopId,
+      date,
+      mode: UpdateWorkshopNameMode.current,
+      name: w1.name,
+      supportProgramNameId: null
+    })
+
+    const workshop = await prismaClient.workshop.findUniqueOrThrow({
+      where: { id: w1.workshopId },
+      select: { supportProgramNameId: true }
+    })
+    expect(workshop.supportProgramNameId).toBeNull()
+  })
+
+  test('An Agent cannot update a workshop with a support program name from another structure', async ({
+    trpc
+  }) => {
+    const w1 = await createWorkshopNameWithWorkshops()
+    const otherProgramName = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UWK-Other-${Date.now()}`,
+        structureId: fixtureStructures[FixtureStructure.Autun].id,
+        createdById
+      },
+      select: { id: true }
+    })
+    supportProgramNameIds.push(otherProgramName.id)
+
+    await expect(() =>
+      trpc.structureManager.workshop.updateWorkshop({
+        id: w1.workshopId,
+        date,
+        mode: UpdateWorkshopNameMode.current,
+        name: w1.name,
+        supportProgramNameId: otherProgramName.id
+      })
+    ).rejects.toThrowError(/not allowed to access route/i)
+  })
+})
+
+async function resetDatabase(
+  wids: string[],
+  wnids: string[],
+  poids: string[],
+  spnids: string[] = []
+) {
   // Cascade delete handles WorkshopAttendee and WorkshopExternalAttendee
   if (wids.length > 0) {
     await prismaClient.workshop.deleteMany({
@@ -399,8 +504,15 @@ async function resetDatabase(wids: string[], wnids: string[], poids: string[]) {
     })
   }
 
+  if (spnids.length > 0) {
+    await prismaClient.supportProgramName.deleteMany({
+      where: { id: { in: spnids } }
+    })
+  }
+
   // Reset for next test
   workshopIds = []
   workshopNameIds = []
   partnerOrganizationIds = []
+  supportProgramNameIds = []
 }

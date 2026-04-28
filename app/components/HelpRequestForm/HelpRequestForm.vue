@@ -31,6 +31,9 @@
         :has-set-external-structure="hasSetExternalStructure"
         :is-housing-support="isHousingSupport"
         :minister-id-error="ministerIdError"
+        :support-program-options="supportProgramOptions"
+        :support-program-options-disabled="supportProgramOptionsDisabled"
+        :has-support-program-names="hasSupportProgramNames"
       />
     </section>
 
@@ -130,6 +133,7 @@
   import type { PartnerOrganizationIdName } from '~~/types/partner'
   import type { BeneficiaryFileIdentification } from '~~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { routes } from '~/utils/routes'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
@@ -173,7 +177,28 @@
   }>()
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+  const { setValue: setSupportProgramId } = useField<string | null>(
+    'supportProgramId'
+  )
   const { value: familyFileId } = useField<string | null>('familyFileId')
+
+  const trpcClient = useTrpcClient()
+  const { hasSupportProgramNames } = await useHasSupportProgramNames()
+
+  const { data: supportProgramsData } =
+    await trpcClient.supportProgram.getForBeneficiary.useQuery(
+      toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
+    )
+  const supportProgramOptions = computed(() =>
+    (supportProgramsData.value ?? []).map(formatSupportProgramOption)
+  )
+  const supportProgramOptionsDisabled = computed(
+    () => supportProgramOptions.value.length === 0
+  )
+
+  watch(beneficiaryId, () => {
+    setSupportProgramId(null)
+  })
   const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(
     'externalStructure'

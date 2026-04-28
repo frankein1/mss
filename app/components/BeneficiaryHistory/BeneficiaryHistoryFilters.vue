@@ -34,10 +34,16 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import type { BeneficiaryFileIdentification } from '~~/types/beneficiary'
 
-  const { familyFileIdentification, values, resultsLabel } = defineProps<{
+  const {
+    familyFileIdentification,
+    values,
+    resultsLabel,
+    supportProgramNameOptions
+  } = defineProps<{
     resultsLabel: string
     values: FamilyFileHistoryFilterInput
     familyFileIdentification: BeneficiaryFileIdentification[]
+    supportProgramNameOptions: { id: string; name: string }[]
   }>()
 
   const { socialSupportStatusOptions } = useSocialSupportStatus()
@@ -77,10 +83,6 @@
   })
 
   const typeSuiviValue = computed(() => values.typeSuivi)
-
-  // const isFilteringHelpRequests = computed(
-  //   () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
-  // )
 
   const isFilteringHousingHelpRequests = computed(
     () => typeSuiviValue.value === TypeSuivi.HousingHelpRequest
@@ -144,22 +146,25 @@
       })
     }
 
-    // if (!isFilteringHelpRequests.value) {
-    //   filters.push({
-    //     name: 'medium',
-    //     label: followupFieldLabels.medium,
-    //     options: followupMediumKeys.options,
-    //     type: FilterType.SelectMultiple,
-    //     alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-    //     matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-    //     matomoEventAction: FollowupFilterEventAction.Medium
-    //   })
-    // }
+    if (supportProgramNameOptions.length > 0) {
+      filters.push({
+        name: 'supportProgramNameIds',
+        label: "Dispositif ou axe d'intervention",
+        options: supportProgramNameOptions.map(({ id, name }) => ({
+          label: name,
+          value: id
+        })),
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.SupportProgram,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb
+      })
+    }
 
     if (familyFileIdentification.length > 1) {
       filters.push({
         name: 'beneficiaryId',
-        label: 'Bénéficiaire concerné :',
+        label: 'Bénéficiaire concerné',
         options: withEmptyValue(beneficiaryOptions.value, 'Tous'),
         type: FilterType.Radio,
         asTag: true,

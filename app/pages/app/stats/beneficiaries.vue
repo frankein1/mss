@@ -6,6 +6,7 @@
     :beneficiaries-employers-options="beneficiariesEmployersOptions"
     :beneficiaries-schools-options="beneficiariesSchoolsOptions"
     :agent-options="agentOptions"
+    :support-program-name-options="supportProgramNameOptions"
   />
 </template>
 
@@ -18,6 +19,7 @@
     beneficiariesEmployersOptions?: Options
     beneficiariesSchoolsOptions?: Options
     agentOptions?: Options
+    supportProgramNameOptions?: Options
   }>()
 </script>
 

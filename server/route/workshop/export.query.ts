@@ -92,6 +92,11 @@ const getWorkshops = async (
           name: true
         }
       },
+      supportProgramName: {
+        select: {
+          name: true
+        }
+      },
       _count: {
         select: {
           workshopAttendees: true
@@ -115,6 +120,7 @@ const createFile = (workshops: Awaited<ReturnType<typeof getWorkshops>>) => {
         endTime: workshop.endTime || '',
         location: workshop.location || '',
         partnerOrganization: workshop.partnerOrganization?.name || '',
+        supportProgramName: workshop.supportProgramName?.name || '',
         host: workshop.host || '',
         sessionName: workshop.sessionName || '',
         description: workshop.description || '',
@@ -151,6 +157,10 @@ const createFile = (workshops: Awaited<ReturnType<typeof getWorkshops>>) => {
     {
       key: 'partnerOrganization',
       header: workshopLabels.partnerOrganizationId
+    },
+    {
+      key: 'supportProgramName',
+      header: workshopLabels.supportProgramNameId
     },
     {
       key: 'host',

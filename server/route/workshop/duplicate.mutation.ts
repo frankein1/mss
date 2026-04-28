@@ -6,10 +6,12 @@ import { duplicateWorkshopSchema } from '~~/server/schema'
 import {
   WorkshopRepo,
   PartnerOrganizationRepo,
+  SupportProgramNameRepo,
   WorkshopAttendeeRepo
 } from '~~/server/database'
 import {
   getAppContextPermissions,
+  validateOneBelongsToStructure,
   type SecurityRuleContext
 } from '~~/server/security'
 import { prismaClient } from '~~/server/prisma'
@@ -25,26 +27,35 @@ const securityCheck = async (
   ) {
     return false
   }
-  try {
-    await WorkshopRepo.findUniqueOrThrow(ctx.user, {
-      select: { id: true },
-      where: { id: input.sourceWorkshopId }
-    })
-    if (input.partnerOrganizationId) {
-      await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {
-        where: { id: input.partnerOrganizationId },
-        select: { id: true }
-      })
-    }
-  } catch {
-    return false
-  }
-  return true
+  const { user } = ctx
+  const { partnerOrganizationId: pid, supportProgramNameId: sid } = input
+  const [wfound, pfound, sfound] = await Promise.all([
+    validateOneBelongsToStructure(
+      user,
+      input.sourceWorkshopId,
+      WorkshopRepo.findUniqueOrThrow
+    ),
+    !pid ||
+      validateOneBelongsToStructure(
+        user,
+        pid,
+        PartnerOrganizationRepo.findUniqueOrThrow
+      ),
+    !sid ||
+      validateOneBelongsToStructure(
+        user,
+        sid,
+        SupportProgramNameRepo.findUniqueOrThrow
+      )
+  ])
+
+  return wfound && pfound && sfound
 }
 
 const handler = async ({
   input: {
     partnerOrganizationId,
+    supportProgramNameId,
     name,
     sourceWorkshopId,
     duplicateParticipants,
@@ -112,7 +123,10 @@ const handler = async ({
         attendeeLimit,
         partnerOrganization: partnerOrganizationId
           ? { connect: { id: partnerOrganizationId } }
-          : {},
+          : undefined,
+        supportProgramName: supportProgramNameId
+          ? { connect: { id: supportProgramNameId } }
+          : undefined,
         workshopName: {
           connectOrCreate: {
             where: {

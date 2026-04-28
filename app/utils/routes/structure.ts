@@ -25,7 +25,7 @@ export const routes = {
   },
   AppStructureCustomObjects: {
     name: 'AppStructureCustomObjects',
-    title: 'Objets d’accompagnement',
+    title: 'Accompagnements et Dispositifs',
     path: () => `${StructureRoute}/custom-objects`
   },
   AppStructureEdit: {

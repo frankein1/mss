@@ -58,6 +58,12 @@ function prepareSocialSupportFilters(
     }
   }
 
+  if (filters.supportProgramNameIds?.length) {
+    formattedFilters.supportProgram = {
+      supportProgramNameId: { in: filters.supportProgramNameIds }
+    }
+  }
+
   if (filters.typeSuivi) {
     switch (filters.typeSuivi) {
       case TypeSuivi.Followup:
