@@ -7,10 +7,11 @@ import {
   FixtureUserRole
 } from '~/prisma/fixtures'
 import { prismaClient } from '~/server/prisma'
-import { MAX_BENEFICIARIES } from './add-referent.mutation'
+import { MAX_BENEFICIARIES_REFERENT_TRANSFER as MAX_BENEFICIARIES } from '~/utils/constants'
 
 const JEANNE_REFERENTE_ID = fixturesUsers[FixtureUserRole.Referent].id
 const STRUCTURE_ID = fixtureStructures[FixtureStructure.Test].id
+const CREATED_FILES_NUMBER = 800
 
 let referentTestId: string
 let familyFileIds: string[]
@@ -32,7 +33,9 @@ beforeEach(async () => {
 
   const familyFiles = await prismaClient.familyFile.createManyAndReturn({
     select: { id: true },
-    data: new Array(200).fill(null).map(() => ({ structureId: STRUCTURE_ID }))
+    data: new Array(CREATED_FILES_NUMBER)
+      .fill(null)
+      .map(() => ({ structureId: STRUCTURE_ID }))
   })
   familyFileIds = familyFiles.map(f => f.id)
 
