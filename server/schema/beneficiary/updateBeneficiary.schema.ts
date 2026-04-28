@@ -206,12 +206,16 @@ export const updateBeneficiaryArchiveDate = z.object({
   id: z.string().uuid()
 })
 
+export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
+  typeof updateBeneficiaryExternalOrganisationsSchema
+>
+
 const beneficiaryWithFamilyFileSchema = z.object({
   beneficiaryId: z.string().uuid(),
   familyFileId: z.string().uuid()
 })
 
-export const addReferentToBeneficiariesSchema = z.object({
+export const addReferentToFamilyFileSchema = z.object({
   beneficiaries: z
     .array(beneficiaryWithFamilyFileSchema)
     .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
@@ -220,11 +224,11 @@ export const addReferentToBeneficiariesSchema = z.object({
   referentId: z.string().uuid()
 })
 
-export type AddReferentToBeneficiariesInput = z.infer<
-  typeof addReferentToBeneficiariesSchema
+export type AddReferentToFamilyFileInput = z.infer<
+  typeof addReferentToFamilyFileSchema
 >
 
-export const removeReferentFromBeneficiariesSchema = z.object({
+export const deleteReferentFromFamilyFileSchema = z.object({
   beneficiaries: z
     .array(beneficiaryWithFamilyFileSchema)
     .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
@@ -233,10 +237,6 @@ export const removeReferentFromBeneficiariesSchema = z.object({
   referentId: z.string().uuid()
 })
 
-export type RemoveReferentFromBeneficiariesInput = z.infer<
-  typeof removeReferentFromBeneficiariesSchema
->
-
-export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
-  typeof updateBeneficiaryExternalOrganisationsSchema
+export type DeleteReferentFromFamilyFileSchema = z.infer<
+  typeof deleteReferentFromFamilyFileSchema
 >

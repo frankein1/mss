@@ -77,7 +77,7 @@ test("deleteReferentFromBeneficiaries - refuse l'accès à un agent d'accueil", 
   trpc
 }) => {
   await expect(
-    trpc.receptionAgent.beneficiary.deleteReferent({
+    trpc.receptionAgent.file.deleteReferent({
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
@@ -107,7 +107,7 @@ test("deleteReferentFromBeneficiaries - refuse si un bénéficiaire n'a qu'un se
   })
 
   await expect(
-    trpc.structureManager.beneficiary.deleteReferent({
+    trpc.structureManager.file.deleteReferent({
       beneficiaries: [
         { beneficiaryId: soloBeneficiary.id, familyFileId: soloFile.id }
       ],
@@ -122,7 +122,7 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
-  const result = await trpc.structureManager.beneficiary.deleteReferent({
+  const result = await trpc.structureManager.file.deleteReferent({
     beneficiaries: firstBeneficiaries,
     referentId: referentTestId
   })

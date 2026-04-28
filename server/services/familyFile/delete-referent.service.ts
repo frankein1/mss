@@ -4,7 +4,7 @@ import type { SecurityRuleGrantee } from '~/server/security'
 
 const BATCH_SIZE = 10
 
-export async function addReferentToBeneficiaries({
+export async function deleteReferentFromFamilyfile({
   user,
   beneficiaries,
   referentId
@@ -21,7 +21,7 @@ export async function addReferentToBeneficiaries({
       batch.map(id =>
         FamilyFileRepo.update(user, {
           where: { id },
-          data: { referents: { connect: [{ id: referentId }] } }
+          data: { referents: { disconnect: [{ id: referentId }] } }
         })
       )
     )
