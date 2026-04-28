@@ -43,6 +43,7 @@ import {
   validIntNumber,
   requiredErrorMessage
 } from '~/utils/zod'
+import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 
 export const updateBeneficiaryGeneralInformationSchema = z.object({
   id: z.string().uuid(),
@@ -211,7 +212,11 @@ const beneficiaryWithFamilyFileSchema = z.object({
 })
 
 export const addReferentToBeneficiariesSchema = z.object({
-  beneficiaries: z.array(beneficiaryWithFamilyFileSchema),
+  beneficiaries: z
+    .array(beneficiaryWithFamilyFileSchema)
+    .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
+      message: `Pas plus de ${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires.`
+    }),
   referentId: z.string().uuid()
 })
 
@@ -220,7 +225,11 @@ export type AddReferentToBeneficiariesInput = z.infer<
 >
 
 export const removeReferentFromBeneficiariesSchema = z.object({
-  beneficiaries: z.array(beneficiaryWithFamilyFileSchema),
+  beneficiaries: z
+    .array(beneficiaryWithFamilyFileSchema)
+    .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
+      message: `Pas plus de ${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires.`
+    }),
   referentId: z.string().uuid()
 })
 

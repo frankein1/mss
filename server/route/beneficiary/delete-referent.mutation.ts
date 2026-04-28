@@ -11,20 +11,14 @@ import {
 } from '~/server/schema'
 import { FamilyFileRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { MAX_BENEFICIARIES } from './add-referent.mutation'
+import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
+import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: RemoveReferentFromBeneficiariesInput
 ) => {
-  if (
-    ctx.user.role === UserRole.Administrator ||
-    ctx.user.role === UserRole.ReceptionAgent
-  ) {
-    return false
-  }
-
-  if (input.beneficiaries.length > MAX_BENEFICIARIES) {
+  if (ctx.user.role === UserRole.ReceptionAgent) {
     return false
   }
 
@@ -60,6 +54,13 @@ const handler = async ({
   input: RemoveReferentFromBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
+  if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Over max beneficiaries'
+    })
+  }
+
   return BeneficiaryService.removeReferentFromBeneficiaries({
     user: ctx.user,
     beneficiaries: input.beneficiaries,

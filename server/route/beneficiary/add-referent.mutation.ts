@@ -1,4 +1,5 @@
 import { UserActivityType, UserRole } from '@prisma/client'
+import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
@@ -11,23 +12,14 @@ import {
 } from '~/server/schema'
 import { FamilyFileRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-
-export const MAX_BENEFICIARIES = 100
+import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddReferentToBeneficiariesInput
 ) => {
   // Test type de user
-  if (
-    ctx.user.role === UserRole.Administrator ||
-    ctx.user.role === UserRole.ReceptionAgent
-  ) {
-    return false
-  }
-
-  // Nombre de bénéficiaire max
-  if (input.beneficiaries.length > MAX_BENEFICIARIES) {
+  if (ctx.user.role === UserRole.ReceptionAgent) {
     return false
   }
 
@@ -44,10 +36,6 @@ const securityCheck = async (
     }
   })
 
-  // Test les permissions 'changeReferent' pour chaque beneficiaire
-  // TODO: est-ce bloquant pour faire le batch? ou laisser faire le script et ignorer le bénéficiaire lorsque le droit n'est pas ok
-  // car c'est assez flou pour l'utilisateur, il ne comprend pas pourquoi il se mange une erreur
-  // TODO: lister les cas ou ceci peut arriver (à priori uniquement le rôle Referent)
   return familyFiles.every(familyFile => {
     const permissions = getFamilyFilePermissions({
       ctx,
@@ -64,6 +52,12 @@ const handler = async ({
   input: AddReferentToBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
+  if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Over max beneficiaries'
+    })
+  }
   return BeneficiaryService.addReferentToBeneficiaries({
     user: ctx.user,
     beneficiaries: input.beneficiaries,
