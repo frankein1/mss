@@ -50,6 +50,12 @@ export const beneficiaryRouter = router({
   updateExternalOrganisations: protectedProcedure
     .input(routes.updateExternalOrganisationsMutation.inputValidation)
     .mutation(routes.updateExternalOrganisationsMutation.execute),
+  updateDevices: protectedProcedure
+    .input(routes.updateDevicesMutation.inputValidation)
+    .mutation(routes.updateDevicesMutation.execute),
+  getDeviceNameList: protectedProcedure
+    .input(routes.getDeviceNameListQuery.inputValidation)
+    .query(routes.getDeviceNameListQuery.execute),
   updateArchiveDate: protectedProcedure
     .input(routes.updateArchiveDateMutation.inputValidation)
     .mutation(routes.updateArchiveDateMutation.execute),
