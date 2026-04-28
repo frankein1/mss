@@ -4,10 +4,15 @@ import { getDocumentsQuery } from './get-documents.query'
 import { getExaminationDatesQuery } from './getExaminationDates.query'
 import { split } from './split.mutation'
 
+import { addReferentToFamilyFileMutation } from './add-referent.mutation'
+import { deleteReferentFromFamilyFileMutation } from './delete-referent.mutation'
+
 export const familyFileRoutes = {
   getFamilyFileMinimalInfoQuery,
   getSocialSupports,
   getDocumentsQuery,
   getExaminationDatesQuery,
-  split
+  split,
+  addReferentToFamilyFileMutation,
+  deleteReferentFromFamilyFileMutation
 }

@@ -1,4 +1,4 @@
-import { UserActivityType, UserRole } from '@prisma/client'
+import { UserActivityObject, UserActivityType, UserRole } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
@@ -6,17 +6,17 @@ import {
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import {
-  removeReferentFromBeneficiariesSchema,
-  type RemoveReferentFromBeneficiariesInput
+  deleteReferentFromFamilyFileSchema,
+  type DeleteReferentFromFamilyFileSchema
 } from '~/server/schema'
 import { FamilyFileRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { FamilyFileService } from '~/server/services'
 import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: RemoveReferentFromBeneficiariesInput
+  input: DeleteReferentFromFamilyFileSchema
 ) => {
   if (ctx.user.role === UserRole.ReceptionAgent) {
     return false
@@ -51,7 +51,7 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: RemoveReferentFromBeneficiariesInput
+  input: DeleteReferentFromFamilyFileSchema
   ctx: ProtectedAppContext
 }) => {
   if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
@@ -61,22 +61,22 @@ const handler = async ({
     })
   }
 
-  return BeneficiaryService.removeReferentFromBeneficiaries({
+  return FamilyFileService.deleteReferentFromFamilyfile({
     user: ctx.user,
     beneficiaries: input.beneficiaries,
     referentId: input.referentId
   })
 }
 
-export const removeReferentFromBeneficiariesMutation = createMutation({
-  inputValidation: removeReferentFromBeneficiariesSchema,
+export const deleteReferentFromFamilyFileMutation = createMutation({
+  inputValidation: deleteReferentFromFamilyFileSchema,
   securityCheck,
   handler,
   auditLog: {
-    key: 'beneficiary.removeReferent',
-    target: 'Beneficiary',
+    key: 'familyFile.deleteReferent',
+    target: UserActivityObject.FamilyFile,
     targetId: ({ input }) =>
-      input.beneficiaries.map(b => b.beneficiaryId).join(', '),
+      input.beneficiaries.map(b => b.familyFileId).join(', '),
     action: UserActivityType.UPDATE
   }
 })

@@ -4,7 +4,7 @@ import type { SecurityRuleGrantee } from '~/server/security'
 
 const BATCH_SIZE = 10
 
-export async function removeReferentFromBeneficiaries({
+export async function addReferentToFamilyFile({
   user,
   beneficiaries,
   referentId
@@ -17,12 +17,11 @@ export async function removeReferentFromBeneficiaries({
 
   for (let i = 0; i < familyFileIds.length; i += BATCH_SIZE) {
     const batch = familyFileIds.slice(i, i + BATCH_SIZE)
-
     await prismaClient.$transaction(
       batch.map(id =>
         FamilyFileRepo.update(user, {
           where: { id },
-          data: { referents: { disconnect: [{ id: referentId }] } }
+          data: { referents: { connect: [{ id: referentId }] } }
         })
       )
     )

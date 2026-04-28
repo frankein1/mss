@@ -73,7 +73,7 @@ test("addReferentToBeneficiaries - refuse l'accès à un agent d'accueil", async
   trpc
 }) => {
   await expect(
-    trpc.receptionAgent.beneficiary.addReferent({
+    trpc.receptionAgent.file.addReferent({
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
@@ -86,7 +86,7 @@ test(`addReferentToBeneficiaries - ajoute le référent aux ${MAX_BENEFICIARIES}
   const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
-  const result = await trpc.structureManager.beneficiary.addReferent({
+  const result = await trpc.structureManager.file.addReferent({
     beneficiaries: firstBeneficiaries,
     referentId: referentTestId
   })
