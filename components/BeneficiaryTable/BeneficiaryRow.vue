@@ -1,5 +1,29 @@
 <template>
   <tr class="clickable-row">
+    <th
+      v-if="selectable"
+      class="fr-cell--fixed"
+      scope="row"
+    >
+      <div class="fr-checkbox-group fr-checkbox-group--sm">
+        <input
+          :id="`table-select-checkbox--${beneficiary.id}`"
+          name="row-select"
+          type="checkbox"
+          :checked="selected"
+          :disabled="disabled"
+          @change="emit('toggle')"
+        />
+        <label
+          class="fr-label"
+          :for="`table-select-checkbox--${beneficiary.id}`"
+        >
+          <span class="fr-sr-only"
+            >Sélectionner {{ beneficiary.firstName }} {{ lastName }}</span
+          >
+        </label>
+      </div>
+    </th>
     <td>
       <NuxtLink
         class="table-row-link"
@@ -40,8 +64,15 @@
   import { routes } from '~/utils/routes'
   import { formatTableValue } from '~/utils/table'
 
-  const { beneficiary } = defineProps<{
+  const { beneficiary, selectable, selected, disabled } = defineProps<{
     beneficiary: BeneficiaryListItem
+    selectable?: boolean
+    selected?: boolean
+    disabled?: boolean
+  }>()
+
+  const emit = defineEmits<{
+    toggle: []
   }>()
 
   const addressCodeAndCity = computed(() =>
@@ -63,5 +94,10 @@
   .address-data,
   .social-support-subjects-data {
     max-width: 15rem;
+  }
+
+  .fr-cell--fixed {
+    position: relative;
+    z-index: 1;
   }
 </style>
