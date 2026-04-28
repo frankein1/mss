@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryInfoSection
-    title="Structures extérieures"
+    title="Structures et dispositifs"
     :edit-link="editLink"
   >
     <div class="fr-container">

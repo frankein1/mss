@@ -57,6 +57,16 @@ export const include = {
   },
   _count: {
     select: { socialSupports: true }
+  },
+  devices: {
+    select: {
+      id: true,
+      startDate: true,
+      endDate: true,
+      partnerOrganisationName: true,
+      precisions: true,
+      deviceName: { select: { id: true, name: true } }
+    }
   }
 }
 
@@ -307,8 +317,14 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     prescribingStructure: beneficiary.prescribingStructure,
     orientationType: beneficiary.orientationType,
     orientationStructure: beneficiary.orientationStructure,
-    serviceProviders: beneficiary.serviceProviders,
-    involvedPartners: beneficiary.involvedPartners,
-    additionalInformation: beneficiary.additionalInformation
+    additionalInformation: beneficiary.additionalInformation,
+    devices: beneficiary.devices.map(d => ({
+      id: d.id,
+      startDate: d.startDate,
+      endDate: d.endDate,
+      partnerOrganisationName: d.partnerOrganisationName,
+      precisions: d.precisions,
+      deviceName: d.deviceName
+    }))
   }
 }
