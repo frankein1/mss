@@ -55,6 +55,16 @@ function prepareSocialSupportFilters(
     }
   }
 
+  if (filters.beneficiaryDeviceNames?.length) {
+    formattedFilters.beneficiary = {
+      devices: {
+        some: {
+          deviceName: { name: { in: filters.beneficiaryDeviceNames } }
+        }
+      }
+    }
+  }
+
   if (filters.typeSuivi) {
     switch (filters.typeSuivi) {
       case TypeSuivi.Followup:

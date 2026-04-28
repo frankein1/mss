@@ -14,6 +14,12 @@
     >
     {{ askedHousing }}
   </li>
+  <li v-if="housingHelpRequest.beneficiaryDevice">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.beneficiaryDeviceId }}&nbsp;:</span
+    >
+    {{ formatDeviceOption(housingHelpRequest.beneficiaryDevice).label }}
+  </li>
   <li v-if="housingHelpRequest.prescribingOrganization?.name">
     <span class="information-label"
       >{{ helpRequestFieldLabels.prescribingOrganizationId }}&nbsp;:</span
@@ -158,6 +164,7 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import { euros } from '~/utils/euros'
+  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
 
   const props = defineProps<{
     fileInstruction: FileInstructionData

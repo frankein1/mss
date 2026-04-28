@@ -1,5 +1,6 @@
 import type {
   Beneficiary,
+  BeneficiaryDevice,
   BeneficiaryRelative,
   RepClassification,
   SchoolStatus,
@@ -71,6 +72,18 @@ export type GetBeneficiaryGeneral = Pick<
   | 'additionalInformation'
 >
 
+export type GetBeneficiaryDeviceItem = Pick<
+  BeneficiaryDevice,
+  | 'id'
+  | 'startDate'
+  | 'endDate'
+  | 'exitReason'
+  | 'partnerOrganisationName'
+  | 'precisions'
+> & {
+  deviceName: { id: string; name: string }
+}
+
 export type GetBeneficiaryExternalOrganisations = Pick<
   Beneficiary,
   | 'protectionMeasure'
@@ -78,10 +91,10 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'prescribingStructure'
   | 'orientationType'
   | 'orientationStructure'
-  | 'serviceProviders'
-  | 'involvedPartners'
   | 'additionalInformation'
->
+> & {
+  devices: GetBeneficiaryDeviceItem[]
+}
 
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,

@@ -63,7 +63,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   housingType: z.array(z.nativeEnum(HousingType)).nullish(),
   roomCount: z.array(z.nativeEnum(HousingRoomCount)).nullish(),
   isPmr: z.boolean().default(false),
-  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish()
+  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish(),
+  beneficiaryDeviceId: z.string().nullish()
 })
 
 export const createHousingHelpRequestSchema = z.discriminatedUnion(

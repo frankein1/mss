@@ -421,6 +421,7 @@ async function updateHelpRequests(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
+    beneficiaryDeviceId: null,
     askedAmount: null,
     allocatedAmount: null,
     paymentMethod: null,
@@ -478,6 +479,7 @@ async function updateFollowups(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
+    beneficiaryDeviceId: null,
     helpRequested: null,
     place: null,
     thirdPersonName: null,

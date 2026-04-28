@@ -55,12 +55,18 @@
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
+      deviceNameOptions?: Options
       filters: StatFilterInput
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
+    {
+      isHelpRequest: false,
+      isHistory: false,
+      validationSchema: undefined,
+      deviceNameOptions: () => []
+    }
   )
 
   const emit = defineEmits<{
@@ -144,6 +150,15 @@
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
         disabled: props.filters.helpRequestSubject === 'Housing'
+      })
+    }
+    if (props.deviceNameOptions?.length) {
+      statsFilters.push({
+        name: 'deviceNameIds',
+        label: 'Dispositif',
+        options: props.deviceNameOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     if (props.beneficiariesCitiesOptions.length) {

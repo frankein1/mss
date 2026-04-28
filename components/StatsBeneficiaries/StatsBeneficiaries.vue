@@ -7,6 +7,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
+      :device-name-options="deviceNameOptions"
       :validation-schema="statFilterSchema"
     />
 
@@ -236,6 +237,14 @@
             :filters="filters"
         /></StatsCard>
       </template>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.devices.id"
+        :card-name="beneficiariesCardConfig.devices.name"
+      >
+        <StatsBeneficiariesDevices :filters="filters" />
+      </StatsCard>
     </section>
   </div>
 </template>
@@ -259,11 +268,13 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
+      deviceNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
-      agentOptions: () => []
+      agentOptions: () => [],
+      deviceNameOptions: () => []
     }
   )
 
@@ -313,6 +324,10 @@
   }
 
   const beneficiariesCardConfig = {
+    devices: {
+      id: 'stats-beneficiaries-devices',
+      name: 'Dispositifs'
+    },
     gender: {
       id: 'stats-beneficiaries-gender',
       name: 'Genres'

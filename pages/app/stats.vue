@@ -22,12 +22,14 @@
             v-if="
               socialSupportSubjectOptions &&
               beneficiariesCitiesOptions &&
-              agentsOptions
+              agentsOptions &&
+              deviceNameOptions
             "
             :key="route.path"
             :social-support-subject-options="socialSupportSubjectOptions"
             :beneficiaries-cities-options="beneficiariesCitiesOptions"
             :agent-options="agentsOptions"
+            :device-name-options="deviceNameOptions"
           />
         </AtomRouteTabs>
       </div>
@@ -125,6 +127,11 @@
       queryKey: 'config.getAgents.options'
     })
 
+  const { data: deviceNameOptions, error: deviceNameOptionsError } =
+    await trpcClient.beneficiary.getDeviceNameList.useQuery(undefined, {
+      transform: deviceNames => toOptions(deviceNames, 'id', 'name')
+    })
+
   const fetchError = computed(() => {
     if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
@@ -134,6 +141,9 @@
     }
     if (agentsOptionsError.value) {
       return "La liste des référents n'a pas pu être chargée."
+    }
+    if (deviceNameOptionsError.value) {
+      return "La liste des dispositifs n'a pas pu être chargée."
     }
     return ''
   })

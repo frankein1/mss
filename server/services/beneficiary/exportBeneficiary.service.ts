@@ -324,6 +324,7 @@ type FollowupData = FieldLabels<
     | 'socialSupportId'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
+    | 'beneficiaryDeviceId'
   >
 > &
   SocialSupportForFollowupData & {
@@ -425,6 +426,7 @@ type HelpRequestData = FieldLabels<
       | 'socialSupportId'
       | 'prescribingOrganizationId'
       | 'prescribingOrganizationContactId'
+      | 'beneficiaryDeviceId'
       | 'subjectId'
       | 'fileInstructionId'
       | 'financialSupport'

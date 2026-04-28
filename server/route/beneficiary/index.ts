@@ -7,6 +7,10 @@ import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
 import { updateEntourageMutation } from './update-entourage.mutation'
 import { updateExternalOrganisationsMutation } from './update-external-organisations.mutation'
+import { updateDevicesMutation } from './update-devices.mutation'
+import { getDeviceNameListQuery } from './get-device-name-list.query'
+import { getDevicesForBeneficiaryQuery } from './get-devices-for-beneficiary.query'
+import { checkDeviceHasFollowupQuery } from './check-device-has-followup.query'
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
@@ -33,6 +37,10 @@ export const beneficiaryRoutes = {
   getBeneficiaryArchivePermissionsQuery,
   updateEntourageMutation,
   updateExternalOrganisationsMutation,
+  updateDevicesMutation,
+  getDeviceNameListQuery,
+  getDevicesForBeneficiaryQuery,
+  checkDeviceHasFollowupQuery,
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,

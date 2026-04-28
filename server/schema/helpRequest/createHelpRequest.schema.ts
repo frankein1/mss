@@ -56,7 +56,8 @@ export const createHelpRequestSchemaBase = z.object({
   endOfSocialSupport: z.boolean().default(false),
   financialSupport: z.boolean(),
   isRefundable: kindOfBooleanSchema(),
-  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()
+  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish(),
+  beneficiaryDeviceId: z.string().nullish()
 })
 
 export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [

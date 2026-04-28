@@ -6,6 +6,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
+      :device-name-options="deviceNameOptions"
       :is-help-request="true"
       :is-history="true"
     />
@@ -205,11 +206,13 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
+      deviceNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
-      agentOptions: () => []
+      agentOptions: () => [],
+      deviceNameOptions: () => []
     }
   )
 

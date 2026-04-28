@@ -1,6 +1,6 @@
 <template>
   <h3 class="fr-h4">Contexte du dossier d'instruction</h3>
-  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
     <div class="fr-col-12">
       <VeeInput
         name="date"
@@ -91,18 +91,30 @@
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
       </div>
+
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSelect
+          name="beneficiaryDeviceId"
+          :label="helpRequestFieldLabels.beneficiaryDeviceId"
+          :options="withEmptyValue(deviceOptions)"
+          :disabled="deviceOptionsDisabled"
+          :hint="
+            deviceOptionsDisabled
+              ? 'Aucun dispositif renseigné pour ce bénéficiaire'
+              : undefined
+          "
+        />
+      </div>
     </template>
 
     <template v-else>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-md-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.subjectId"
           name="subjectId"
           :options="socialSupportSubjectOptions"
           required
         />
-      </div>
-      <div class="fr-col-12 fr-mt-0 fr-pt-0">
         <NuxtLink
           v-if="application.edit.structure"
           :to="routes.structure.AppStructureCustomObjects.path()"
@@ -113,6 +125,20 @@
           Les responsables de votre structure peuvent personnaliser les objets
           d'accompagnement
         </p>
+      </div>
+
+      <div class="fr-col-12 fr-col-md-6">
+        <VeeSelect
+          name="beneficiaryDeviceId"
+          :label="helpRequestFieldLabels.beneficiaryDeviceId"
+          :options="withEmptyValue(deviceOptions)"
+          :disabled="deviceOptionsDisabled"
+          :hint="
+            deviceOptionsDisabled
+              ? 'Aucun dispositif renseigné pour ce bénéficiaire'
+              : undefined
+          "
+        />
       </div>
 
       <!-- ROW -->
@@ -220,6 +246,7 @@
   import type { CreateHousingHelpRequestInput } from '~/server/schema'
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import { routes } from '~/utils/routes'
+  import { withEmptyValue } from '~/utils/options'
 
   const { application } = usePermissions()
 
@@ -233,6 +260,8 @@
       name: string
       message: string
     }
+    deviceOptions: { value: string; label: string }[]
+    deviceOptionsDisabled: boolean
   }>()
 
   const { value: isFirst } =

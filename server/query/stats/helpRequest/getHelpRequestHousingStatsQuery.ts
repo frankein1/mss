@@ -13,9 +13,16 @@ export async function getHelpRequestHousingStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
+  const deviceFilter = input.deviceNameIds?.length
+    ? { beneficiaryDevice: { deviceNameId: { in: input.deviceNameIds } } }
+    : {}
+
   const socialSupportFilters = {
     ...prepareSocialSupportStatFilters(input),
-    socialSupportType: SocialSupportType.HelpRequestHousing
+    socialSupportType: SocialSupportType.HelpRequestHousing,
+    ...(input.deviceNameIds?.length
+      ? { fileInstruction: { housingHelpRequest: deviceFilter } }
+      : {})
   }
   const socialSupportWhere = { where: socialSupportFilters }
   appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
@@ -29,6 +36,7 @@ export async function getHelpRequestHousingStatsQuery(
     HousingHelpRequestRepo.prisma.groupBy({
       by: ['isFirst'],
       where: {
+        ...deviceFilter,
         fileInstruction: { socialSupport: socialSupportWhere.where }
       },
       _count: true,
@@ -37,6 +45,7 @@ export async function getHelpRequestHousingStatsQuery(
     HousingHelpRequestRepo.prisma.groupBy({
       by: ['reason'],
       where: {
+        ...deviceFilter,
         fileInstruction: { socialSupport: socialSupportWhere.where }
       },
       _count: true,

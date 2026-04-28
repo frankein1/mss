@@ -27,5 +27,6 @@ export const followupFieldLabels = {
   lastUpdatedById: 'Modifié par',
   duration: "Durée de l'entretien",
   partnerOrganizationId: "Nom de l'organisme",
-  externalStructureName: 'Nom structure / personne'
+  externalStructureName: 'Nom structure / personne',
+  beneficiaryDeviceId: 'Dispositif concerné'
 }

@@ -48,17 +48,9 @@ export const create = async ({ ctx, input }: CreateParams) => {
     classified,
     forwardedToJustice,
     duration,
-    socialSupportRedirections
+    socialSupportRedirections,
+    beneficiaryDeviceId
   } = input
-
-  let prescribingOrganization
-  if (prescribingOrganizationId) {
-    prescribingOrganization = connect(prescribingOrganizationId)
-  }
-  let prescribingOrganizationContact
-  if (prescribingOrganizationContactId) {
-    prescribingOrganizationContact = connect(prescribingOrganizationContactId)
-  }
 
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(user, {
     where: { id: familyFileId },
@@ -127,8 +119,12 @@ export const create = async ({ ctx, input }: CreateParams) => {
       dueDate,
       followup: {
         create: {
-          prescribingOrganization,
-          prescribingOrganizationContact,
+          prescribingOrganization: prescribingOrganizationId
+            ? connect(prescribingOrganizationId)
+            : undefined,
+          prescribingOrganizationContact: prescribingOrganizationContactId
+            ? connect(prescribingOrganizationContactId)
+            : undefined,
           medium,
           place: medium === FollowupMedium.ExternalAppointment ? place : null,
           thirdPersonName:
@@ -137,7 +133,10 @@ export const create = async ({ ctx, input }: CreateParams) => {
           firstFollowup,
           classified,
           forwardedToJustice,
-          duration
+          duration,
+          beneficiaryDevice: beneficiaryDeviceId
+            ? connect(beneficiaryDeviceId)
+            : undefined
         }
       },
       socialSupportRedirections: {

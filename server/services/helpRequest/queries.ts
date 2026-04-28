@@ -33,6 +33,15 @@ export const select = {
   prescribingOrganizationContact: {
     select: { id: true, name: true }
   },
+  beneficiaryDeviceId: true,
+  beneficiaryDevice: {
+    select: {
+      id: true,
+      startDate: true,
+      endDate: true,
+      deviceName: { select: { id: true, name: true } }
+    }
+  },
   fileInstruction: {
     select: {
       id: true,

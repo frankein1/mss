@@ -132,7 +132,16 @@ async function getSocialSupportDetail({
               handlingDate: true,
               fileInstructionId: true,
               prescribingOrganization: true,
-              prescribingOrganizationContact: true
+              prescribingOrganizationContact: true,
+              beneficiaryDeviceId: true,
+              beneficiaryDevice: {
+                select: {
+                  id: true,
+                  startDate: true,
+                  endDate: true,
+                  deviceName: { select: { id: true, name: true } }
+                }
+              }
             }
           },
           housingHelpRequest: {
@@ -176,7 +185,16 @@ async function getSocialSupportDetail({
           duration: true,
           socialSupportId: true,
           prescribingOrganization: true,
-          prescribingOrganizationContact: true
+          prescribingOrganizationContact: true,
+          beneficiaryDeviceId: true,
+          beneficiaryDevice: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              deviceName: { select: { id: true, name: true } }
+            }
+          }
         }
       },
       _count: {

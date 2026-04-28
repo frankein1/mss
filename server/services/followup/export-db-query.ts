@@ -68,6 +68,13 @@ const followupExportSelect = {
         }
       }
     }
+  },
+  beneficiaryDevice: {
+    select: {
+      deviceName: {
+        select: { name: true }
+      }
+    }
   }
 } satisfies Prisma.FollowupSelect
 
