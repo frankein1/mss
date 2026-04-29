@@ -9,8 +9,8 @@
     <button
       ref="triggerBtn"
       :disabled="loading"
-      class="fr-btn fr-icon-arrow-down-s-line fr-btn--icon-right disclosure-btn"
-      :class="dropdownBtnClass"
+      class="fr-btn fr-btn--icon-right disclosure-btn"
+      :class="[icon ?? 'fr-icon-arrow-down-s-line', dropdownBtnClass]"
       :aria-expanded="expanded"
       :aria-controls="MENU_ID"
       @click="toggle"
@@ -20,12 +20,6 @@
         border-color="#DDDDDD"
         :diameter="20"
         class="fr-mr-1w"
-      />
-      <span
-        v-else-if="icon"
-        :class="icon"
-        class="fr-mr-1w"
-        aria-hidden="true"
       />
       {{ label }}
     </button>
