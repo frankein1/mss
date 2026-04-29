@@ -109,10 +109,10 @@ export const routes = {
     path: (beneficiaryId: string) =>
       `${BeneficiariesRoute}/${beneficiaryId}/archive`
   },
-  AppBeneficiariesEditReferents: {
-    name: 'AppBeneficiariesEditReferents',
+  AppBeneficiariesReferentTransfer: {
+    name: 'AppBeneficiariesReferentTransfer',
     title: 'Modifier les agents référents',
-    path: () => `${BeneficiariesRoute}/edit-referents`
+    path: () => `${BeneficiariesRoute}/referent-transfer`
   },
   AppBeneficiary: {
     name: 'AppBeneficiary',

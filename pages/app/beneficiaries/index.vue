@@ -188,7 +188,7 @@
     {
       label: 'Modifier agent référent',
       icon: 'fr-icon-user-line',
-      href: routes.beneficiary.AppBeneficiariesEditReferents.path()
+      href: routes.beneficiary.AppBeneficiariesReferentTransfer.path()
     }
   ]
 
