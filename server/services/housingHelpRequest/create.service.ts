@@ -61,7 +61,8 @@ export async function create({ input, ctx }: CreateParams) {
     reason,
     taxHouseholdAdditionalInformation,
     uniqueId,
-    askedHousing
+    askedHousing,
+    beneficiaryDeviceId
   } = cleanCreateInput(input)
 
   const reasonIds = await resolveRedirectionReasonIds(
@@ -104,6 +105,9 @@ export async function create({ input, ctx }: CreateParams) {
         : undefined,
       prescribingOrganizationContact: prescribingOrganizationContactId
         ? connect(prescribingOrganizationContactId)
+        : undefined,
+      beneficiaryDevice: beneficiaryDeviceId
+        ? connect(beneficiaryDeviceId)
         : undefined,
       fileInstruction: {
         create: {

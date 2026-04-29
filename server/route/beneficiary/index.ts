@@ -9,6 +9,7 @@ import { updateEntourageMutation } from './update-entourage.mutation'
 import { updateExternalOrganisationsMutation } from './update-external-organisations.mutation'
 import { updateDevicesMutation } from './update-devices.mutation'
 import { getDeviceNameListQuery } from './get-device-name-list.query'
+import { getDevicesForBeneficiaryQuery } from './get-devices-for-beneficiary.query'
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
@@ -37,6 +38,7 @@ export const beneficiaryRoutes = {
   updateExternalOrganisationsMutation,
   updateDevicesMutation,
   getDeviceNameListQuery,
+  getDevicesForBeneficiaryQuery,
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,

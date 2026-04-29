@@ -110,7 +110,15 @@ function findMany(
           prescribingOrganizationId: true,
           prescribingOrganizationContactId: true,
           prescribingOrganization: { select: { id: true, name: true } },
-          prescribingOrganizationContact: { select: { id: true, name: true } }
+          prescribingOrganizationContact: { select: { id: true, name: true } },
+          beneficiaryDevice: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              deviceName: { select: { id: true, name: true } }
+            }
+          }
         }
       },
       housingHelpRequest: {

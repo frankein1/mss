@@ -82,7 +82,8 @@
       ministerId: followup.value.ministerId,
       socialSupportRedirections: toRedirectionFormValues(
         followup.value.socialSupportRedirections
-      )
+      ),
+      beneficiaryDeviceId: followup.value.beneficiaryDeviceId
     }
   })
 
