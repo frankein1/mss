@@ -106,10 +106,14 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   relationship: 'Lien de la relation'
 }
 
+const beneficiaryReferentTransfertLabels = {
+  referentId: 'Sélectionnez l’agent référent à ajouter'
+}
+
 export const beneficiaryExportFieldLabels = {
   beneficiaryFileNumber: 'N° de dossier bénéficiaire',
   beneficiaryLastName: 'Nom bénéficiaire',
   beneficiaryFirstName: 'Prénom bénéficiaire'
 }
 
-export { beneficiaryFieldLabels }
+export { beneficiaryFieldLabels, beneficiaryReferentTransfertLabels }

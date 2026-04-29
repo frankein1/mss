@@ -41,6 +41,10 @@
       />
       <MassReferentTransferStepButtons
         class="order-1"
+        :disable-next="
+          selectedBeneficiaries.length < 1 ||
+          selectedBeneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER
+        "
         @previous="emit('previous')"
         @next="emit('next')"
       />
