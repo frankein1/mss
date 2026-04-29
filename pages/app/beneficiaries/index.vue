@@ -188,9 +188,7 @@
     {
       label: 'Modifier agent référent',
       icon: 'fr-icon-user-line',
-      onClick: _item => {
-        navigateTo(routes.beneficiary.AppBeneficiariesEditReferents.path())
-      }
+      href: routes.beneficiary.AppBeneficiariesEditReferents.path()
     }
   ]
 
