@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
-import type { EditHousingHelpRequestInput } from '~/server/schema'
+import type { EditHousingHelpRequestServerInput } from '~/server/schema'
 import { editHousingHelpRequestSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
@@ -12,7 +12,7 @@ const handler = ({
   input,
   ctx
 }: {
-  input: EditHousingHelpRequestInput
+  input: EditHousingHelpRequestServerInput
   ctx: ProtectedAppContext
 }) => {
   return HousingHelpRequestService.update({ ctx, input })
@@ -20,7 +20,7 @@ const handler = ({
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: EditHousingHelpRequestInput
+  input: EditHousingHelpRequestServerInput
 ) => {
   const permissions = await HousingHelpRequestService.getEditionPermissions(
     ctx,

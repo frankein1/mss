@@ -9,6 +9,7 @@ import {
   amountNumber,
   dateOrEmpty,
   emailOrEmpty,
+  kindOfBooleanSchema,
   limitedStringConstraint,
   phoneConstraint,
   requiredNativeEnum,
@@ -47,19 +48,6 @@ export type UpdateAttendeeListTypeInput = z.infer<
   typeof updateAttendeeListTypeSchema
 >
 
-const paymentReceivedSchema = z
-  .union([z.enum(['true', 'false', '']), z.boolean()])
-  .nullish()
-  .transform(v => {
-    if (v === 'false' || v === false) {
-      return false
-    }
-    if (v === 'true' || v === true) {
-      return true
-    }
-    return null
-  })
-
 export const createExternalAttendeeSchema = z.object({
   workshopId: z.string().uuid(),
   gender: nativeEnum(Gender).optional(),
@@ -70,7 +58,7 @@ export const createExternalAttendeeSchema = z.object({
   email: emailOrEmpty(),
   city: limitedStringConstraint(null, 50).optional(),
   comment: limitedStringConstraint(null, 500).optional(),
-  paymentReceived: paymentReceivedSchema,
+  paymentReceived: kindOfBooleanSchema(),
   paymentAmount: amountNumber.nullish()
 })
 
@@ -92,7 +80,7 @@ export const updateAttendeeSchema = z.object({
   email: emailOrEmpty(),
   city: limitedStringConstraint(null, 50).nullable(),
   comment: limitedStringConstraint(null, 500).nullable(),
-  paymentReceived: paymentReceivedSchema,
+  paymentReceived: kindOfBooleanSchema(),
   paymentAmount: amountNumber.nullish()
 })
 export type UpdateAttendeeInput = z.input<typeof updateAttendeeSchema>

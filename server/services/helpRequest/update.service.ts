@@ -8,7 +8,7 @@ import {
   FileInstructionRepo,
   NotificationRepo
 } from '~/server/database'
-import type { EditHelpRequestInput } from '~/server/schema'
+import type { EditHelpRequestServerInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import {
   prepareDocumentsMutations,
@@ -22,7 +22,7 @@ import { v4 } from 'uuid'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
-  input: EditHelpRequestInput
+  input: EditHelpRequestServerInput
 }
 
 export async function update({ input, ctx }: UpdateParams) {

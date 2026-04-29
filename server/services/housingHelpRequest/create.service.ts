@@ -5,14 +5,14 @@ import {
 } from '@prisma/client'
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HousingHelpRequestRepo } from '~/server/database'
-import type { CreateHousingHelpRequestInput } from '~/server/schema'
+import type { CreateHousingHelpRequestServerInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { v4 } from 'uuid'
 
 type CreateParams = {
   ctx: SecurityRuleContext
-  input: CreateHousingHelpRequestInput
+  input: CreateHousingHelpRequestServerInput
   target?: undefined
 }
 

@@ -1,14 +1,14 @@
 import { SocialSupportStatus } from '@prisma/client'
 import type {
-  CreateHelpRequestInput,
-  EditHelpRequestInput
+  CreateHelpRequestServerInput,
+  EditHelpRequestServerInput
 } from '~/server/schema'
 
 export function cleanUpdateInput({
   input,
   isFinancial
 }: {
-  input: EditHelpRequestInput
+  input: EditHelpRequestServerInput
   isFinancial: boolean
 }) {
   return cleanInput({
@@ -17,7 +17,7 @@ export function cleanUpdateInput({
   })
 }
 
-export function cleanCreateInput(input: CreateHelpRequestInput) {
+export function cleanCreateInput(input: CreateHelpRequestServerInput) {
   const { financialSupport, ...data } = input
   return cleanInput({ input: data, isFinancial: financialSupport })
 }
@@ -26,7 +26,7 @@ function cleanInput({
   input,
   isFinancial
 }: {
-  input: Omit<EditHelpRequestInput, 'id' | 'socialSupportId'>
+  input: Omit<EditHelpRequestServerInput, 'id' | 'socialSupportId'>
   isFinancial: boolean
 }) {
   const {
@@ -46,7 +46,7 @@ function cleanInput({
     ...data
   } = input
 
-  const isExternalStructure = externalStructure === 'true'
+  const isExternalStructure = externalStructure
   const isAccepted = status === SocialSupportStatus.Accepted
   const isRefused = status === SocialSupportStatus.Refused
 
@@ -71,9 +71,6 @@ function cleanInput({
       isFinancial && isAccepted && !isExternalStructure ? paymentMethod : null,
     paymentDate:
       isFinancial && isAccepted && !isExternalStructure ? paymentDate : null,
-    isRefundable:
-      !isFinancial || isRefundable === null || isRefundable === undefined
-        ? null
-        : isRefundable === 'true'
+    isRefundable: !isFinancial ? null : isRefundable
   }
 }

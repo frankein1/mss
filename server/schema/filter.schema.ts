@@ -13,7 +13,6 @@ import {
   BeneficiaryMinistereStructure
 } from '@prisma/client'
 import {
-  kindOfBooleanSchema,
   stringConstraint,
   withEmptyValueOptionalNativeEnum
 } from './helpers.schema'
@@ -236,8 +235,6 @@ const familyFileHistoryFilterSchema = z.object({
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema(),
-  externalStructure: kindOfBooleanSchema(),
   referents: z.array(z.string().uuid()).nullish(),
   beneficiaryId: z.string().uuid().nullish() // exemple
 })

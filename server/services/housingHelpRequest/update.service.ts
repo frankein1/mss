@@ -7,7 +7,7 @@ import {
   FileInstructionRepo,
   NotificationRepo
 } from '~/server/database'
-import type { EditHousingHelpRequestInput } from '~/server/schema'
+import type { EditHousingHelpRequestServerInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import {
   connect,
@@ -21,7 +21,7 @@ import { v4 } from 'uuid'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
-  input: EditHousingHelpRequestInput
+  input: EditHousingHelpRequestServerInput
 }
 
 export async function update({ input, ctx }: UpdateParams) {

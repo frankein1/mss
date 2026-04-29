@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
-import type { CreateHelpRequestInput } from '~/server/schema'
+import type { CreateHelpRequestServerInput } from '~/server/schema'
 import { createHelpRequestSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { HelpRequestService, FamilyFileService } from '~/server/services'
@@ -11,7 +11,7 @@ const handler = ({
   input,
   ctx
 }: {
-  input: CreateHelpRequestInput
+  input: CreateHelpRequestServerInput
   ctx: ProtectedAppContext
 }) => {
   return HelpRequestService.create({ ctx, input })
@@ -19,7 +19,7 @@ const handler = ({
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: CreateHelpRequestInput
+  input: CreateHelpRequestServerInput
 ) => {
   const permissions = await FamilyFileService.getEditionPermissions(
     ctx,

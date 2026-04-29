@@ -104,15 +104,34 @@ export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
     z.nativeEnum(nativeEnum).nullish()
   )
 
-export const kindOfBooleanSchema = (required = false) => {
-  if (required) {
-    return z.enum(['true', 'false'], { required_error: requiredErrorMessage })
-  }
+const requiredKindOfBoolean = z
+  .union([z.enum(['true', 'false']), z.boolean()])
+  .transform(v => v === 'true' || v === true)
 
-  return z.preprocess(
-    arg => (arg === '' ? null : arg),
-    z.enum(['true', 'false']).nullish()
-  )
+const optionalKindOfBoolean = z
+  .union([z.enum(['true', 'false', '']), z.boolean()])
+  .nullish()
+  .transform(v => {
+    if (v === 'true' || v === true) {
+      return true
+    }
+    if (v === 'false' || v === false) {
+      return false
+    }
+    return null
+  })
+
+export function kindOfBooleanSchema(
+  required: true
+): typeof requiredKindOfBoolean
+export function kindOfBooleanSchema(
+  required?: false
+): typeof optionalKindOfBoolean
+export function kindOfBooleanSchema(required = false) {
+  if (required) {
+    return requiredKindOfBoolean
+  }
+  return optionalKindOfBoolean
 }
 
 export const amountNumberCanBeNegative = z.preprocess(

@@ -16,6 +16,9 @@ export const editHousingHelpRequestSchema = createHousingHelpRequestSchemaBase
     }
   })
 
-export type EditHousingHelpRequestInput = z.infer<
+export type EditHousingHelpRequestInput = z.input<
+  typeof editHousingHelpRequestSchema
+>
+export type EditHousingHelpRequestServerInput = z.infer<
   typeof editHousingHelpRequestSchema
 >

@@ -6,14 +6,14 @@ import {
 import { SocialSupportSubjectService } from '..'
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'
-import type { CreateHelpRequestInput } from '~/server/schema'
+import type { CreateHelpRequestServerInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 import { v4 } from 'uuid'
 
 type CreateParams = {
   ctx: SecurityRuleContext
-  input: CreateHelpRequestInput
+  input: CreateHelpRequestServerInput
   target?: undefined
 }
 

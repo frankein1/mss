@@ -1,21 +1,11 @@
 import type { AskedHousing } from '@prisma/client'
 import { SocialSupportStatus } from '@prisma/client'
-import type { CreateHousingHelpRequestInput } from '~/server/schema'
+import type { CreateHousingHelpRequestServerInput } from '~/server/schema'
 
 export const cleanCreateInput = cleanInput
 export const cleanUpdateInput = cleanInput
 
-function cleanIsFirst(isFirst: CreateHousingHelpRequestInput['isFirst']) {
-  if (isFirst === 'true') {
-    return true
-  }
-  if (isFirst === 'false') {
-    return false
-  }
-  return isFirst
-}
-
-function cleanInput(input: CreateHousingHelpRequestInput) {
+function cleanInput(input: CreateHousingHelpRequestServerInput) {
   const {
     status,
     refusalReason,
@@ -32,7 +22,7 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     ...data
   } = input
 
-  const isExternalStructure = externalStructure === 'true'
+  const isExternalStructure = externalStructure
   const isAccepted = status === SocialSupportStatus.Accepted
   const isRefused = status === SocialSupportStatus.Refused
 
@@ -59,7 +49,7 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     refusalReason: isRefused ? refusalReason : null,
     dispatchDate: isExternalStructure ? dispatchDate : null,
     examinationDate: !isExternalStructure ? examinationDate : null,
-    isFirst: cleanIsFirst(isFirst),
+    isFirst,
     askedHousing
   }
 }

@@ -1,5 +1,9 @@
 import { describe, test, expect } from 'vitest'
-import { dateOrEmpty, phoneConstraint } from './helpers.schema'
+import {
+  dateOrEmpty,
+  kindOfBooleanSchema,
+  phoneConstraint
+} from './helpers.schema'
 import { validDate } from '~/utils/zod'
 
 describe('phone number schema', () => {
@@ -129,5 +133,42 @@ describe('date or empty schema', () => {
     const d = dateOrEmpty.safeParse('Jan 20 2020')
     expect(d.success).toBe(true)
     expect(d.data).toStrictEqual(new Date('2020-01-20'))
+  })
+})
+
+describe('kindOfBooleanSchema (optional)', () => {
+  const schema = kindOfBooleanSchema()
+
+  test.each([
+    { input: 'true', expected: true },
+    { input: 'false', expected: false },
+    { input: true, expected: true },
+    { input: false, expected: false },
+    { input: '', expected: null },
+    { input: null, expected: null },
+    { input: undefined, expected: null }
+  ])('parses $input to $expected', ({ input, expected }) => {
+    expect(schema.parse(input)).toBe(expected)
+  })
+
+  test('rejects invalid string', () => {
+    expect(() => schema.parse('maybe')).toThrow()
+  })
+})
+
+describe('kindOfBooleanSchema (required)', () => {
+  const schema = kindOfBooleanSchema(true)
+
+  test.each([
+    { input: 'true', expected: true },
+    { input: 'false', expected: false },
+    { input: true, expected: true },
+    { input: false, expected: false }
+  ])('parses $input to $expected', ({ input, expected }) => {
+    expect(schema.parse(input)).toBe(expected)
+  })
+
+  test.each([null, undefined, ''])('rejects %s', input => {
+    expect(() => schema.parse(input)).toThrow()
   })
 })

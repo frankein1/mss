@@ -85,6 +85,9 @@ export const createHousingHelpRequestSchema = z.discriminatedUnion(
   ]
 )
 
-export type CreateHousingHelpRequestInput = z.infer<
+export type CreateHousingHelpRequestInput = z.input<
+  typeof createHousingHelpRequestSchema
+>
+export type CreateHousingHelpRequestServerInput = z.infer<
   typeof createHousingHelpRequestSchema
 >

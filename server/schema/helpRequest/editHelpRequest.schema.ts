@@ -19,4 +19,5 @@ export const editHelpRequestSchema = createHelpRequestSchemaBase
     }
   })
 
-export type EditHelpRequestInput = z.infer<typeof editHelpRequestSchema>
+export type EditHelpRequestInput = z.input<typeof editHelpRequestSchema>
+export type EditHelpRequestServerInput = z.infer<typeof editHelpRequestSchema>

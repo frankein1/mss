@@ -18,11 +18,11 @@ import type { SocialSupportDetail } from './getDetails.query'
 import { StructureRepo } from '~/server/database'
 import type {
   AddFollowupInput,
-  CreateHelpRequestInput,
-  CreateHousingHelpRequestInput,
+  CreateHelpRequestServerInput,
+  CreateHousingHelpRequestServerInput,
   EditFollowupInput,
-  EditHelpRequestInput,
-  EditHousingHelpRequestInput
+  EditHelpRequestServerInput,
+  EditHousingHelpRequestServerInput
 } from '~/server/schema'
 
 export function formatSocialSupportDetail(
@@ -120,10 +120,10 @@ export const checkRedirectionPermissions = async (
   redirections:
     | AddFollowupInput['socialSupportRedirections']
     | EditFollowupInput['socialSupportRedirections']
-    | CreateHelpRequestInput['socialSupportRedirections']
-    | EditHelpRequestInput['socialSupportRedirections']
-    | EditHousingHelpRequestInput['socialSupportRedirections']
-    | CreateHousingHelpRequestInput['socialSupportRedirections'],
+    | CreateHelpRequestServerInput['socialSupportRedirections']
+    | EditHelpRequestServerInput['socialSupportRedirections']
+    | EditHousingHelpRequestServerInput['socialSupportRedirections']
+    | CreateHousingHelpRequestServerInput['socialSupportRedirections'],
   ctx: SecurityRuleContext
 ) => {
   if (!redirections?.length) {

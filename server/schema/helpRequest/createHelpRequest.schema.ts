@@ -75,4 +75,7 @@ export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [
   })
 ])
 
-export type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>
+export type CreateHelpRequestInput = z.input<typeof createHelpRequestSchema>
+export type CreateHelpRequestServerInput = z.infer<
+  typeof createHelpRequestSchema
+>
