@@ -1,0 +1,1630 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Data Inclusion v1 — Migration Review</title>
+    <style>
+      :root {
+        --blue: #000091;
+        --blue-light: #e3e3fd;
+        --red: #ce0500;
+        --red-light: #fddede;
+        --green: #18753c;
+        --green-light: #b8fec9;
+        --orange: #b34000;
+        --orange-light: #ffe9e6;
+        --grey: #666;
+        --grey-light: #eee;
+        --bg: #f6f6f6;
+        --white: #fff;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Marianne', system-ui, sans-serif;
+        background: var(--bg);
+        color: #1e1e1e;
+        line-height: 1.5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      h1 {
+        color: var(--blue);
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+      }
+      h2 {
+        color: var(--blue);
+        margin: 1.5rem 0 0.75rem;
+        font-size: 1.2rem;
+        border-bottom: 2px solid var(--blue);
+        padding-bottom: 0.25rem;
+      }
+      h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .summary {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+      }
+      .summary-card {
+        background: var(--white);
+        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        border-left: 4px solid var(--blue);
+        min-width: 140px;
+      }
+      .summary-card .num {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .summary-card .label {
+        font-size: 0.8rem;
+        color: var(--grey);
+      }
+      .summary-card.green {
+        border-color: var(--green);
+      }
+      .summary-card.orange {
+        border-color: var(--orange);
+      }
+      .summary-card.red {
+        border-color: var(--red);
+      }
+
+      .progress-bar {
+        background: var(--grey-light);
+        border-radius: 4px;
+        height: 8px;
+        margin: 0.5rem 0 1rem;
+        overflow: hidden;
+        display: flex;
+      }
+      .progress-bar .seg {
+        height: 100%;
+        transition: width 0.3s;
+      }
+      .progress-bar .seg.done {
+        background: var(--green);
+      }
+      .progress-bar .seg.pending {
+        background: var(--orange);
+      }
+
+      .file-picker {
+        margin: 1rem 0;
+      }
+      .file-picker label {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: var(--blue);
+        color: var(--white);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .file-picker input {
+        display: none;
+      }
+      .file-info {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--grey);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0;
+        margin-top: 1rem;
+        border-bottom: 2px solid var(--blue);
+      }
+      .tab {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        background: var(--grey-light);
+        border: 1px solid #ccc;
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        font-size: 0.9rem;
+        margin-right: 2px;
+        position: relative;
+        bottom: -2px;
+      }
+      .tab.active {
+        background: var(--white);
+        border-color: var(--blue);
+        border-bottom: 2px solid var(--white);
+        font-weight: bold;
+      }
+      .tab .badge {
+        display: inline-block;
+        background: var(--blue-light);
+        color: var(--blue);
+        border-radius: 10px;
+        padding: 0 6px;
+        font-size: 0.75rem;
+        margin-left: 4px;
+      }
+      .tab .badge.done {
+        background: var(--green-light);
+        color: var(--green);
+      }
+
+      .tab-description {
+        font-size: 0.85rem;
+        color: var(--grey);
+        padding: 0.75rem 0;
+        margin-bottom: 0.25rem;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      .card {
+        background: var(--white);
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border: 1px solid #ddd;
+        transition: border-color 0.2s;
+      }
+      .card.resolved {
+        border-color: var(--green);
+        background: #f8fff8;
+      }
+      .card.rejected {
+        border-color: var(--red);
+        background: #fff8f8;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+      }
+      .card-header .org-name {
+        font-weight: bold;
+        font-size: 0.95rem;
+      }
+      .card-header .org-id {
+        font-size: 0.75rem;
+        color: var(--grey);
+        font-family: monospace;
+      }
+
+      .details {
+        font-size: 0.85rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+      .details span {
+        margin-right: 1rem;
+      }
+      .details .label {
+        color: var(--grey);
+      }
+
+      .candidates {
+        margin: 0.5rem 0;
+      }
+      .candidate {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+      .candidate:hover {
+        background: var(--blue-light);
+      }
+      .candidate input[type='radio'] {
+        flex-shrink: 0;
+      }
+      .candidate .v1-id {
+        font-family: monospace;
+        font-size: 0.75rem;
+        color: var(--grey);
+        word-break: break-all;
+      }
+      .candidate .v1-name {
+        font-weight: 500;
+      }
+      .candidate .v1-zip {
+        color: var(--grey);
+      }
+
+      .side-by-side {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        font-size: 0.85rem;
+        margin: 0.5rem 0;
+      }
+      .side {
+        padding: 0.5rem;
+        border-radius: 3px;
+      }
+      .side.left {
+        background: var(--grey-light);
+      }
+      .side.right {
+        background: var(--blue-light);
+      }
+      .side .side-label {
+        font-weight: bold;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--grey);
+        margin-bottom: 0.25rem;
+      }
+
+      .warning {
+        color: var(--orange);
+        font-weight: bold;
+        font-size: 0.8rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 0.5rem;
+      }
+      .btn {
+        padding: 0.3rem 0.75rem;
+        border: 1px solid;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-family: inherit;
+      }
+      .btn-approve {
+        background: var(--green-light);
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .btn-approve.active {
+        background: var(--green);
+        color: var(--white);
+      }
+      .btn-reject {
+        background: var(--red-light);
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .btn-reject.active {
+        background: var(--red);
+        color: var(--white);
+      }
+      .btn-primary {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: var(--white);
+      }
+      .btn-secondary {
+        background: var(--white);
+        border-color: var(--grey);
+        color: #333;
+      }
+      .btn-danger {
+        background: var(--red-light);
+        border-color: var(--red);
+        color: var(--red);
+      }
+
+      .manual-input {
+        margin-top: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .manual-input input {
+        flex: 1;
+        padding: 0.3rem 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+      .manual-input input:focus {
+        outline: 2px solid var(--blue);
+        border-color: var(--blue);
+      }
+
+      .export-area {
+        margin: 1rem 0;
+      }
+      .export-area textarea {
+        width: 100%;
+        min-height: 200px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+      .export-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+      }
+      .filter-group {
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+        font-size: 0.85rem;
+      }
+      .filter-group label {
+        cursor: pointer;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+      }
+      .filter-group input:checked + label {
+        background: var(--blue);
+        color: var(--white);
+        border-color: var(--blue);
+      }
+      .filter-group input {
+        display: none;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--grey);
+      }
+
+      .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+      .status-dot.resolved {
+        background: var(--green);
+      }
+      .status-dot.pending {
+        background: var(--orange);
+      }
+      .status-dot.rejected {
+        background: var(--red);
+      }
+
+      .search-box {
+        margin: 0.5rem 0;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .search-box input {
+        flex: 1;
+        padding: 0.3rem 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 0.85rem;
+      }
+      .search-box input:focus {
+        outline: 2px solid var(--blue);
+        border-color: var(--blue);
+      }
+      .search-results {
+        margin: 0.5rem 0;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 0.25rem 0;
+      }
+      .search-results .candidate {
+        font-size: 0.8rem;
+      }
+      .search-results-label {
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: var(--grey);
+        padding: 0.25rem 0.5rem;
+      }
+      .search-results.from-batch {
+        border-color: var(--blue);
+        border-left: 3px solid var(--blue);
+        background: #e8edff;
+      }
+      .search-results.from-search {
+        border-color: #b86fd1;
+        border-left: 3px solid #b86fd1;
+        background: #f3e8f9;
+      }
+      .search-no-result {
+        font-size: 0.85rem;
+        color: var(--orange);
+        padding: 0.35rem 0.5rem;
+        font-style: italic;
+      }
+      .batch-bar {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: var(--white);
+        border-radius: 4px;
+        border: 1px solid #ddd;
+      }
+      .batch-bar .batch-progress {
+        font-size: 0.85rem;
+        color: var(--grey);
+      }
+
+      @media (max-width: 768px) {
+        .side-by-side {
+          grid-template-columns: 1fr;
+        }
+        .summary {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Data Inclusion v1 — Migration Review</h1>
+
+      <div class="file-picker">
+        <label for="file-input">Charger un rapport JSON</label>
+        <input
+          type="file"
+          id="file-input"
+          accept=".json"
+        />
+        <div
+          class="file-info"
+          id="file-info"
+        >
+          Aucun fichier chargé
+        </div>
+      </div>
+
+      <div class="file-picker">
+        <label for="v1-file-input"
+          >Charger les structures Data Inclusion v1 (optionnel)</label
+        >
+        <input
+          type="file"
+          id="v1-file-input"
+          accept=".json"
+        />
+        <div
+          class="file-info"
+          id="v1-file-info"
+        >
+          Aucun fichier v1 chargé
+        </div>
+      </div>
+
+      <div
+        id="app"
+        style="display: none"
+      >
+        <div
+          class="summary"
+          id="summary"
+        ></div>
+        <div
+          class="progress-bar"
+          id="progress-bar"
+        ></div>
+
+        <div class="toolbar">
+          <div class="filter-group">
+            <input
+              type="radio"
+              name="filter"
+              id="filter-all"
+              value="all"
+              checked
+            />
+            <label for="filter-all">Tous</label>
+            <input
+              type="radio"
+              name="filter"
+              id="filter-pending"
+              value="pending"
+            />
+            <label for="filter-pending">À traiter</label>
+            <input
+              type="radio"
+              name="filter"
+              id="filter-done"
+              value="done"
+            />
+            <label for="filter-done">Traités</label>
+          </div>
+          <button
+            class="btn btn-danger"
+            id="reset-btn"
+          >
+            Réinitialiser
+          </button>
+        </div>
+
+        <div
+          class="tabs"
+          id="tabs"
+        ></div>
+        <div
+          class="tab-description"
+          id="tab-description"
+        ></div>
+
+        <div
+          id="tab-no-match"
+          class="tab-content"
+        ></div>
+        <div
+          id="tab-ambiguous-siret"
+          class="tab-content"
+        ></div>
+        <div
+          id="tab-ambiguous-name"
+          class="tab-content"
+        ></div>
+        <div
+          id="tab-siret-fallback"
+          class="tab-content"
+        ></div>
+        <div
+          id="tab-search-v1"
+          class="tab-content"
+        ></div>
+        <div
+          id="tab-export"
+          class="tab-content"
+        ></div>
+      </div>
+    </div>
+
+    <script>
+      const TABS = [
+        {
+          id: 'no-match',
+          label: 'Sans correspondance',
+          description:
+            "Organisations partenaires pour lesquelles aucune structure v1 n'a été trouvée, ni par nom+CP, ni par SIRET. Saisir manuellement l'identifiant v1 si connu."
+        },
+        {
+          id: 'ambiguous-siret',
+          label: 'Ambigus SIRET',
+          description:
+            'Plusieurs structures v1 partagent le même SIRET que la structure v0. Sélectionner la bonne structure v1 parmi les candidats.'
+        },
+        {
+          id: 'ambiguous-name',
+          label: 'Ambigus Nom',
+          description:
+            'Plusieurs structures v1 partagent le même nom normalisé et code postal. Sélectionner la bonne structure v1 parmi les candidats.'
+        },
+        {
+          id: 'siret-fallback',
+          label: 'SIRET Fallback',
+          description:
+            "Correspondance unique trouvée par SIRET, mais pas par nom+CP. Vérifier que la structure v1 proposée correspond bien à l'organisation partenaire. Approuver ou rejeter chaque correspondance."
+        },
+        {
+          id: 'search-v1',
+          label: 'Recherche v1',
+          description:
+            'Recherche libre dans les structures Data Inclusion v1. Nécessite le chargement du fichier structures v1.'
+        },
+        {
+          id: 'export',
+          label: 'Export',
+          description:
+            "Exporter les décisions prises sous forme de map d'overrides à coller dans le script de migration."
+        }
+      ]
+
+      let report = null
+      let reportKey = null
+      let state = {}
+      let v1Structures = null
+      let v1BySiret = null
+      let v1ByDept = null
+      let v1Normalized = null
+      let batchResults = {}
+
+      function normalize(str) {
+        return str
+          .normalize('NFD')
+          .replace(/[̀-ͯ]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+      }
+
+      function tokenize(str) {
+        return normalize(str)
+          .split(' ')
+          .filter(t => t.length > 1)
+      }
+
+      function buildV1Indexes(structures) {
+        v1Structures = structures
+        v1BySiret = new Map()
+        v1ByDept = new Map()
+        v1Normalized = []
+        for (const s of structures) {
+          const norm = normalize(
+            [s.name, s.siret, s.zipcode].filter(Boolean).join(' ')
+          )
+          v1Normalized.push({
+            ...s,
+            norm,
+            tokens: norm.split(' ').filter(t => t.length > 1)
+          })
+          if (s.siret) {
+            const arr = v1BySiret.get(s.siret) || []
+            arr.push(s)
+            v1BySiret.set(s.siret, arr)
+          }
+          if (s.zipcode) {
+            const dept = s.zipcode.slice(0, 2)
+            const arr = v1ByDept.get(dept) || []
+            arr.push(v1Normalized[v1Normalized.length - 1])
+            v1ByDept.set(dept, arr)
+          }
+        }
+      }
+
+      function searchV1(query, dept, maxResults = 10) {
+        const queryTokens = tokenize(query)
+        if (!queryTokens.length) return []
+
+        const pool =
+          dept && v1ByDept.has(dept) ? v1ByDept.get(dept) : v1Normalized
+        const results = []
+        for (const s of pool) {
+          const matchCount = queryTokens.filter(qt =>
+            s.norm.includes(qt)
+          ).length
+          if (matchCount === queryTokens.length) {
+            results.push({ ...s, score: 2 })
+          } else if (matchCount > 0) {
+            results.push({ ...s, score: matchCount / queryTokens.length })
+          }
+          if (results.length >= maxResults * 3) break
+        }
+        results.sort((a, b) => b.score - a.score)
+        return results.slice(0, maxResults)
+      }
+
+      function autoSearchForItem(item) {
+        let results = []
+        if (item.v0Siret) {
+          const siretMatches = v1BySiret.get(item.v0Siret)
+          if (siretMatches?.length) {
+            results = siretMatches.slice(0, 3).map(s => ({ ...s, score: 3 }))
+            if (results.length >= 3) return results
+          }
+        }
+        const dept = item.v0Zipcode?.replace(/\D/g, '').slice(0, 2)
+        const name = item.v0Name || item.name
+        if (dept) {
+          const deptResults = searchV1(name, dept, 3)
+          for (const r of deptResults) {
+            if (!results.find(x => x.id === r.id)) results.push(r)
+          }
+          if (results.length >= 3) return results.slice(0, 3)
+        }
+        const allResults = searchV1(name, null, 3)
+        for (const r of allResults) {
+          if (!results.find(x => x.id === r.id)) results.push(r)
+        }
+        return results.slice(0, 3)
+      }
+
+      function storageKey() {
+        return `di-review-${reportKey}`
+      }
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(storageKey())
+          return raw ? JSON.parse(raw) : {}
+        } catch {
+          return {}
+        }
+      }
+      function saveState() {
+        localStorage.setItem(storageKey(), JSON.stringify(state))
+      }
+
+      function getDecision(section, partnerOrgId) {
+        return state[section]?.[partnerOrgId] || null
+      }
+      function setDecision(section, partnerOrgId, decision) {
+        if (!state[section]) state[section] = {}
+        state[section][partnerOrgId] = decision
+        saveState()
+        updateUI()
+      }
+      function clearDecision(section, partnerOrgId) {
+        if (state[section]) {
+          delete state[section][partnerOrgId]
+          saveState()
+          updateUI()
+        }
+      }
+
+      function zipDeptWarning(z1, z2) {
+        if (!z1 || !z2) return false
+        const d1 = z1.replace(/\D/g, '').slice(0, 2)
+        const d2 = z2.replace(/\D/g, '').slice(0, 2)
+        return d1 !== d2
+      }
+
+      function escHtml(s) {
+        if (!s) return '<em>—</em>'
+        const d = document.createElement('div')
+        d.textContent = s
+        return d.innerHTML
+      }
+
+      function escAttr(s) {
+        if (!s) return ''
+        const d = document.createElement('div')
+        d.textContent = s
+        return d.innerHTML
+      }
+
+      function getFilter() {
+        return (
+          document.querySelector('input[name="filter"]:checked')?.value || 'all'
+        )
+      }
+
+      function isResolved(section, id) {
+        const d = getDecision(section, id)
+        if (!d) return false
+        if (
+          d.action === 'select' ||
+          d.action === 'approve' ||
+          d.action === 'manual'
+        )
+          return true
+        if (d.action === 'reject' && d.manualV1Id) return true
+        return false
+      }
+
+      function isDone(section, id) {
+        const d = getDecision(section, id)
+        return d != null
+      }
+
+      function shouldShow(section, id) {
+        const filter = getFilter()
+        if (filter === 'all') return true
+        if (filter === 'done') return isDone(section, id)
+        if (filter === 'pending') return !isDone(section, id)
+        return true
+      }
+
+      function countSection(section, items) {
+        let total = items.length
+        let done = 0
+        let resolved = 0
+        for (const item of items) {
+          const id = item.partnerOrgId
+          if (isDone(section, id)) done++
+          if (isResolved(section, id)) resolved++
+        }
+        return { total, done, resolved }
+      }
+
+      function renderTabs() {
+        const tabsEl = document.getElementById('tabs')
+        tabsEl.innerHTML = ''
+        const sections = {
+          'ambiguous-siret': report.ambiguousBySiretDetails || [],
+          'ambiguous-name': report.ambiguousByNameDetails || [],
+          'siret-fallback': report.matchedBySiretFallbackDetails || [],
+          'no-match': report.noMatchDetails || []
+        }
+        for (const tab of TABS) {
+          const el = document.createElement('div')
+          el.className = `tab${tab.id === activeTab ? ' active' : ''}`
+          el.dataset.tab = tab.id
+          const items = sections[tab.id]
+          if (items) {
+            const c = countSection(tab.id, items)
+            const badgeClass =
+              c.done === c.total && c.total > 0 ? 'badge done' : 'badge'
+            el.innerHTML = `${escHtml(tab.label)} <span class="${badgeClass}">${c.done}/${c.total}</span>`
+          } else {
+            el.textContent = tab.label
+          }
+          el.addEventListener('click', () => {
+            activeTab = tab.id
+            updateUI()
+          })
+          tabsEl.appendChild(el)
+        }
+      }
+
+      function renderSummary() {
+        const el = document.getElementById('summary')
+        const allSections = [
+          {
+            key: 'ambiguous-siret',
+            items: report.ambiguousBySiretDetails || []
+          },
+          { key: 'ambiguous-name', items: report.ambiguousByNameDetails || [] },
+          {
+            key: 'siret-fallback',
+            items: report.matchedBySiretFallbackDetails || []
+          },
+          { key: 'no-match', items: report.noMatchDetails || [] }
+        ]
+        let totalItems = 0,
+          totalDone = 0,
+          totalResolved = 0
+        for (const s of allSections) {
+          const c = countSection(s.key, s.items)
+          totalItems += c.total
+          totalDone += c.done
+          totalResolved += c.resolved
+        }
+        el.innerHTML = `
+    <div class="summary-card"><div class="num">${report.expected}</div><div class="label">Total à migrer</div></div>
+    <div class="summary-card green"><div class="num">${report.matchedByName}</div><div class="label">Matchés nom+CP</div></div>
+    <div class="summary-card green"><div class="num">${totalResolved}</div><div class="label">Résolus ici</div></div>
+    <div class="summary-card orange"><div class="num">${totalItems - totalDone}</div><div class="label">À traiter</div></div>
+    <div class="summary-card red"><div class="num">${report.noMatch}</div><div class="label">Sans correspondance</div></div>
+  `
+        const bar = document.getElementById('progress-bar')
+        const pctDone = totalItems > 0 ? (totalDone / totalItems) * 100 : 0
+        bar.innerHTML = `
+    <div class="seg done" style="width:${pctDone}%"></div>
+    <div class="seg pending" style="width:${100 - pctDone}%"></div>
+  `
+      }
+
+      function renderAmbiguousSiret() {
+        const container = document.getElementById('tab-ambiguous-siret')
+        const items = report.ambiguousBySiretDetails || []
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">Aucun élément</div>'
+          return
+        }
+        container.innerHTML = ''
+        for (const item of items) {
+          if (!shouldShow('ambiguous-siret', item.partnerOrgId)) continue
+          const decision = getDecision('ambiguous-siret', item.partnerOrgId)
+          const card = document.createElement('div')
+          const resolved =
+            decision?.action === 'select' || decision?.action === 'manual'
+          card.className = `card${resolved ? ' resolved' : ''}`
+          let candidatesHtml = ''
+          for (const c of item.candidates) {
+            const checked =
+              decision?.action === 'select' && decision.v1Id === c.v1Id
+                ? 'checked'
+                : ''
+            candidatesHtml += `
+        <div class="candidate" data-v1id="${escAttr(c.v1Id)}">
+          <input type="radio" name="amb-siret-${item.partnerOrgId}" value="${escAttr(c.v1Id)}" ${checked}>
+          <span class="v1-name">${escHtml(c.v1Name)}</span>
+          <span class="v1-zip">${escHtml(c.v1Zipcode)}</span>
+          <span class="v1-id">${escHtml(c.v1Id)}</span>
+        </div>`
+          }
+          card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
+          <div class="org-id">${escHtml(item.partnerOrgId)}</div>
+        </div>
+      </div>
+      <div class="details">
+        <span><span class="label">SIRET v0 :</span> ${escHtml(item.v0Siret)}</span>
+        <span><span class="label">Candidats :</span> ${item.candidates.length}</span>
+      </div>
+      <div class="candidates">${candidatesHtml}</div>
+      <div class="manual-input">
+        <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${decision?.action === 'manual' ? escAttr(decision.v1Id) : ''}" class="amb-manual-input">
+        <button class="btn btn-primary save-manual-btn">OK</button>
+      </div>
+      ${decision ? '<div class="actions"><button class="btn btn-secondary clear-btn">Annuler</button></div>' : ''}
+    `
+          card.querySelectorAll('.candidate').forEach(el => {
+            el.addEventListener('click', e => {
+              if (e.target.tagName === 'INPUT') return
+              const radio = el.querySelector('input[type="radio"]')
+              radio.checked = true
+              card.querySelector('.amb-manual-input').value = ''
+              setDecision('ambiguous-siret', item.partnerOrgId, {
+                action: 'select',
+                v1Id: el.dataset.v1id
+              })
+            })
+            const radio = el.querySelector('input[type="radio"]')
+            radio.addEventListener('change', () => {
+              card.querySelector('.amb-manual-input').value = ''
+              setDecision('ambiguous-siret', item.partnerOrgId, {
+                action: 'select',
+                v1Id: el.dataset.v1id
+              })
+            })
+          })
+          card
+            .querySelector('.save-manual-btn')
+            .addEventListener('click', () => {
+              const val = card.querySelector('.amb-manual-input').value.trim()
+              if (val)
+                setDecision('ambiguous-siret', item.partnerOrgId, {
+                  action: 'manual',
+                  v1Id: val
+                })
+            })
+          card
+            .querySelector('.amb-manual-input')
+            .addEventListener('keydown', e => {
+              if (e.key === 'Enter')
+                card.querySelector('.save-manual-btn').click()
+            })
+          card.querySelector('.clear-btn')?.addEventListener('click', () => {
+            clearDecision('ambiguous-siret', item.partnerOrgId)
+          })
+          container.appendChild(card)
+        }
+        if (!container.children.length)
+          container.innerHTML =
+            '<div class="empty-state">Aucun élément avec ce filtre</div>'
+      }
+
+      function renderAmbiguousName() {
+        const container = document.getElementById('tab-ambiguous-name')
+        const items = report.ambiguousByNameDetails || []
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">Aucun élément</div>'
+          return
+        }
+        container.innerHTML = ''
+        for (const item of items) {
+          if (!shouldShow('ambiguous-name', item.partnerOrgId)) continue
+          const decision = getDecision('ambiguous-name', item.partnerOrgId)
+          const card = document.createElement('div')
+          const resolved =
+            decision?.action === 'select' || decision?.action === 'manual'
+          card.className = `card${resolved ? ' resolved' : ''}`
+          let candidatesHtml = ''
+          for (const c of item.candidates) {
+            const checked =
+              decision?.action === 'select' && decision.v1Id === c.v1Id
+                ? 'checked'
+                : ''
+            candidatesHtml += `
+        <div class="candidate" data-v1id="${escAttr(c.v1Id)}">
+          <input type="radio" name="amb-name-${item.partnerOrgId}" value="${escAttr(c.v1Id)}" ${checked}>
+          <span class="v1-name">${escHtml(c.v1Name)}</span>
+          <span class="v1-zip">${escHtml(c.v1Siret || '—')}</span>
+          <span class="v1-id">${escHtml(c.v1Id)}</span>
+        </div>`
+          }
+          card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
+          <div class="org-id">${escHtml(item.partnerOrgId)}</div>
+        </div>
+      </div>
+      <div class="details">
+        <span><span class="label">Nom v0 :</span> ${escHtml(item.v0Name)}</span>
+        <span><span class="label">CP v0 :</span> ${escHtml(item.v0Zipcode)}</span>
+        <span><span class="label">Candidats :</span> ${item.candidates.length}</span>
+      </div>
+      <div class="candidates">${candidatesHtml}</div>
+      <div class="manual-input">
+        <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${decision?.action === 'manual' ? escAttr(decision.v1Id) : ''}" class="amb-manual-input">
+        <button class="btn btn-primary save-manual-btn">OK</button>
+      </div>
+      ${decision ? '<div class="actions"><button class="btn btn-secondary clear-btn">Annuler</button></div>' : ''}
+    `
+          card.querySelectorAll('.candidate').forEach(el => {
+            el.addEventListener('click', e => {
+              if (e.target.tagName === 'INPUT') return
+              const radio = el.querySelector('input[type="radio"]')
+              radio.checked = true
+              card.querySelector('.amb-manual-input').value = ''
+              setDecision('ambiguous-name', item.partnerOrgId, {
+                action: 'select',
+                v1Id: el.dataset.v1id
+              })
+            })
+            const radio = el.querySelector('input[type="radio"]')
+            radio.addEventListener('change', () => {
+              card.querySelector('.amb-manual-input').value = ''
+              setDecision('ambiguous-name', item.partnerOrgId, {
+                action: 'select',
+                v1Id: el.dataset.v1id
+              })
+            })
+          })
+          card
+            .querySelector('.save-manual-btn')
+            .addEventListener('click', () => {
+              const val = card.querySelector('.amb-manual-input').value.trim()
+              if (val)
+                setDecision('ambiguous-name', item.partnerOrgId, {
+                  action: 'manual',
+                  v1Id: val
+                })
+            })
+          card
+            .querySelector('.amb-manual-input')
+            .addEventListener('keydown', e => {
+              if (e.key === 'Enter')
+                card.querySelector('.save-manual-btn').click()
+            })
+          card.querySelector('.clear-btn')?.addEventListener('click', () => {
+            clearDecision('ambiguous-name', item.partnerOrgId)
+          })
+          container.appendChild(card)
+        }
+        if (!container.children.length)
+          container.innerHTML =
+            '<div class="empty-state">Aucun élément avec ce filtre</div>'
+      }
+
+      function renderSiretFallback() {
+        const container = document.getElementById('tab-siret-fallback')
+        const items = report.matchedBySiretFallbackDetails || []
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">Aucun élément</div>'
+          return
+        }
+        container.innerHTML = ''
+        for (const item of items) {
+          if (!shouldShow('siret-fallback', item.partnerOrgId)) continue
+          const decision = getDecision('siret-fallback', item.partnerOrgId)
+          const deptWarn = zipDeptWarning(item.v0Zipcode, item.v1Zipcode)
+          const card = document.createElement('div')
+          const cardClass =
+            decision?.action === 'approve'
+              ? 'resolved'
+              : decision?.action === 'reject'
+                ? 'rejected'
+                : ''
+          card.className = `card ${cardClass}`
+
+          const dot =
+            decision?.action === 'approve'
+              ? '<span class="status-dot resolved"></span>'
+              : decision?.action === 'reject'
+                ? '<span class="status-dot rejected"></span>'
+                : '<span class="status-dot pending"></span>'
+
+          let manualHtml = ''
+          if (decision?.action === 'reject') {
+            manualHtml = `
+        <div class="manual-input">
+          <input type="text" placeholder="ID v1 manuel (optionnel)" value="${escAttr(decision.manualV1Id || '')}" class="reject-manual-input">
+          <button class="btn btn-primary save-manual-btn">OK</button>
+        </div>`
+          }
+
+          card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="org-name">${dot}${escHtml(item.name)}</div>
+          <div class="org-id">${escHtml(item.partnerOrgId)}</div>
+        </div>
+        ${deptWarn ? '<div class="warning">Départements différents</div>' : ''}
+      </div>
+      <div class="side-by-side">
+        <div class="side left">
+          <div class="side-label">Structure v0</div>
+          <div><strong>SIRET :</strong> ${escHtml(item.v0Siret)}</div>
+          <div><strong>CP :</strong> ${escHtml(item.v0Zipcode)}</div>
+        </div>
+        <div class="side right">
+          <div class="side-label">Structure v1 proposée</div>
+          <div><strong>Nom :</strong> ${escHtml(item.v1Name)}</div>
+          <div><strong>CP :</strong> ${escHtml(item.v1Zipcode)}</div>
+          <div class="v1-id" style="font-family:monospace;font-size:0.75rem;color:var(--grey);margin-top:0.25rem">${escHtml(item.v1Id)}</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-approve${decision?.action === 'approve' ? ' active' : ''} approve-btn">Approuver</button>
+        <button class="btn btn-reject${decision?.action === 'reject' ? ' active' : ''} reject-btn">Rejeter</button>
+        ${decision ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
+      </div>
+      ${manualHtml}
+    `
+          card.querySelector('.approve-btn').addEventListener('click', () => {
+            setDecision('siret-fallback', item.partnerOrgId, {
+              action: 'approve',
+              v1Id: item.v1Id
+            })
+          })
+          card.querySelector('.reject-btn').addEventListener('click', () => {
+            setDecision('siret-fallback', item.partnerOrgId, {
+              action: 'reject',
+              v1Id: item.v1Id,
+              v1Name: item.v1Name,
+              manualV1Id: ''
+            })
+          })
+          card.querySelector('.clear-btn')?.addEventListener('click', () => {
+            clearDecision('siret-fallback', item.partnerOrgId)
+          })
+          card
+            .querySelector('.save-manual-btn')
+            ?.addEventListener('click', () => {
+              const input = card.querySelector('.reject-manual-input')
+              const d = getDecision('siret-fallback', item.partnerOrgId)
+              setDecision('siret-fallback', item.partnerOrgId, {
+                ...d,
+                manualV1Id: input.value.trim()
+              })
+            })
+          card
+            .querySelector('.reject-manual-input')
+            ?.addEventListener('keydown', e => {
+              if (e.key === 'Enter') {
+                card.querySelector('.save-manual-btn')?.click()
+              }
+            })
+          container.appendChild(card)
+        }
+        if (!container.children.length)
+          container.innerHTML =
+            '<div class="empty-state">Aucun élément avec ce filtre</div>'
+      }
+
+      function renderSearchResults(results) {
+        return results
+          .map(
+            r =>
+              `<div class="candidate" data-v1id="${escAttr(r.id)}">
+      <input type="radio" value="${escAttr(r.id)}">
+      <span class="v1-name">${escHtml(r.name)}</span>
+      <span class="v1-zip">${escHtml(r.zipcode)}</span>
+      <span class="v1-id">${escHtml(r.id)}</span>
+    </div>`
+          )
+          .join('')
+      }
+
+      function attachSearchResultListeners(container, partnerOrgId) {
+        container.querySelectorAll('.search-results .candidate').forEach(el => {
+          el.addEventListener('click', e => {
+            if (e.target.tagName === 'INPUT') return
+            const radio = el.querySelector('input[type="radio"]')
+            radio.checked = true
+            setDecision('no-match', partnerOrgId, {
+              action: 'manual',
+              v1Id: el.dataset.v1id
+            })
+          })
+          el.querySelector('input[type="radio"]').addEventListener(
+            'change',
+            () => {
+              setDecision('no-match', partnerOrgId, {
+                action: 'manual',
+                v1Id: el.dataset.v1id
+              })
+            }
+          )
+        })
+      }
+
+      function runBatchSearch() {
+        if (!v1Structures) return
+        const items = report.noMatchDetails || []
+        batchResults = {}
+        for (const item of items) {
+          if (getDecision('no-match', item.partnerOrgId)) continue
+          const results = autoSearchForItem(item)
+          batchResults[item.partnerOrgId] = results
+        }
+        updateUI()
+      }
+
+      function renderNoMatch() {
+        const container = document.getElementById('tab-no-match')
+        const items = report.noMatchDetails || []
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">Aucun élément</div>'
+          return
+        }
+        container.innerHTML = ''
+
+        if (v1Structures) {
+          const bar = document.createElement('div')
+          bar.className = 'batch-bar'
+          const batchCount = Object.keys(batchResults).length
+          bar.innerHTML = `
+      <button class="btn btn-primary" id="batch-search-btn">Rechercher pour tous</button>
+      <span class="batch-progress">${batchCount ? `${batchCount} résultats trouvés` : 'Lancer la recherche automatique sur les entrées non traitées'}</span>
+    `
+          container.appendChild(bar)
+          bar
+            .querySelector('#batch-search-btn')
+            .addEventListener('click', () => {
+              bar.querySelector('#batch-search-btn').textContent =
+                'Recherche en cours…'
+              setTimeout(() => {
+                runBatchSearch()
+              }, 10)
+            })
+        }
+
+        for (const item of items) {
+          if (!shouldShow('no-match', item.partnerOrgId)) continue
+          const decision = getDecision('no-match', item.partnerOrgId)
+          const card = document.createElement('div')
+          const resolved = decision?.action === 'manual' && decision.v1Id
+          card.className = `card${resolved ? ' resolved' : ''}`
+
+          const dot = resolved
+            ? '<span class="status-dot resolved"></span>'
+            : '<span class="status-dot pending"></span>'
+
+          const batch = batchResults[item.partnerOrgId]
+          let resultsBoxHtml = ''
+          if (v1Structures && !resolved) {
+            let resultsInner = ''
+            let resultsClass = 'search-results'
+            if (batch !== undefined) {
+              resultsClass += ' from-batch'
+              if (batch.length > 0) {
+                resultsInner = `<div class="search-results-label">Suggestions automatiques</div>${renderSearchResults(batch)}`
+              } else {
+                resultsInner =
+                  '<div class="search-no-result">Aucune suggestion automatique</div>'
+              }
+            }
+            resultsBoxHtml = `<div class="search-box">
+          <input type="text" placeholder="Rechercher une structure v1 par nom…" value="${escAttr(item.v0Name || item.name)}" class="v1-search-input">
+          <button class="btn btn-secondary search-btn">Chercher</button>
+        </div>
+        <div class="${resultsClass}">${resultsInner}</div>`
+          }
+
+          card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="org-name">${dot}${escHtml(item.name)}</div>
+          <div class="org-id">${escHtml(item.partnerOrgId)}</div>
+        </div>
+      </div>
+      <div class="details">
+        <span><span class="label">ID v0 :</span> ${escHtml(item.dataInclusionId)}</span>
+        <span><span class="label">Nom v0 :</span> ${escHtml(item.v0Name)}</span>
+        <span><span class="label">SIRET v0 :</span> ${escHtml(item.v0Siret)}</span>
+        <span><span class="label">CP v0 :</span> ${escHtml(item.v0Zipcode)}</span>
+      </div>
+      ${resultsBoxHtml}
+      <div class="manual-input">
+        <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${escAttr(decision?.v1Id || '')}" class="no-match-input">
+        <button class="btn btn-primary save-manual-btn">OK</button>
+        ${resolved ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
+      </div>
+    `
+
+          if (batch?.length > 0 && !resolved)
+            attachSearchResultListeners(card, item.partnerOrgId)
+
+          card.querySelector('.search-btn')?.addEventListener('click', () => {
+            const query = card.querySelector('.v1-search-input').value.trim()
+            if (!query) return
+            const dept = item.v0Zipcode?.replace(/\D/g, '').slice(0, 2)
+            const results = searchV1(query, dept, 10)
+            const resultsContainer = card.querySelector('.search-results')
+            resultsContainer.className = 'search-results from-search'
+            if (results.length) {
+              resultsContainer.innerHTML = `<div class="search-results-label">Résultats de recherche</div>${renderSearchResults(results)}`
+              attachSearchResultListeners(card, item.partnerOrgId)
+            } else {
+              resultsContainer.innerHTML =
+                '<div class="search-no-result">Aucun résultat</div>'
+            }
+          })
+          card
+            .querySelector('.v1-search-input')
+            ?.addEventListener('keydown', e => {
+              if (e.key === 'Enter') card.querySelector('.search-btn').click()
+            })
+
+          card
+            .querySelector('.save-manual-btn')
+            .addEventListener('click', () => {
+              const val = card.querySelector('.no-match-input').value.trim()
+              if (val)
+                setDecision('no-match', item.partnerOrgId, {
+                  action: 'manual',
+                  v1Id: val
+                })
+            })
+          card
+            .querySelector('.no-match-input')
+            .addEventListener('keydown', e => {
+              if (e.key === 'Enter')
+                card.querySelector('.save-manual-btn').click()
+            })
+          card.querySelector('.clear-btn')?.addEventListener('click', () => {
+            clearDecision('no-match', item.partnerOrgId)
+          })
+          container.appendChild(card)
+        }
+        if (container.children.length <= (v1Structures ? 1 : 0))
+          container.innerHTML +=
+            '<div class="empty-state">Aucun élément avec ce filtre</div>'
+      }
+
+      function buildExport() {
+        const overrides = {}
+        const rejected = []
+
+        for (const section of ['ambiguous-siret', 'ambiguous-name']) {
+          const decisions = state[section] || {}
+          for (const [orgId, d] of Object.entries(decisions)) {
+            if ((d.action === 'select' || d.action === 'manual') && d.v1Id) {
+              overrides[orgId] = d.v1Id
+            }
+          }
+        }
+
+        const siretDecisions = state['siret-fallback'] || {}
+        for (const [orgId, d] of Object.entries(siretDecisions)) {
+          if (d.action === 'approve') {
+            overrides[orgId] = d.v1Id
+          } else if (d.action === 'reject') {
+            rejected.push({
+              partnerOrgId: orgId,
+              rejectedV1Id: d.v1Id,
+              rejectedV1Name: d.v1Name || null,
+              manualV1Id: d.manualV1Id || null
+            })
+            if (d.manualV1Id) {
+              overrides[orgId] = d.manualV1Id
+            }
+          }
+        }
+
+        const noMatchDecisions = state['no-match'] || {}
+        for (const [orgId, d] of Object.entries(noMatchDecisions)) {
+          if (d.action === 'manual' && d.v1Id) {
+            overrides[orgId] = d.v1Id
+          }
+        }
+
+        return { overrides, rejected }
+      }
+
+      function renderSearchV1() {
+        const container = document.getElementById('tab-search-v1')
+        if (!v1Structures) {
+          container.innerHTML =
+            '<div class="empty-state">Chargez le fichier structures Data Inclusion v1 pour activer la recherche.</div>'
+          return
+        }
+        const existing = container.querySelector('.v1-global-search')
+        if (existing) return
+        container.innerHTML = `
+    <div class="v1-global-search">
+      <div class="search-box" style="margin-bottom:1rem">
+        <input type="text" id="v1-global-input" placeholder="Rechercher par nom, SIRET, code postal…" style="font-size:1rem;padding:0.5rem">
+        <button class="btn btn-primary" id="v1-global-btn">Rechercher</button>
+      </div>
+      <div id="v1-global-results"></div>
+    </div>
+  `
+        const input = container.querySelector('#v1-global-input')
+        const btn = container.querySelector('#v1-global-btn')
+        const resultsEl = container.querySelector('#v1-global-results')
+        function doSearch() {
+          const query = input.value.trim()
+          if (!query) return
+          const results = searchV1(query, null, 30)
+          if (!results.length) {
+            resultsEl.innerHTML =
+              '<div class="search-no-result">Aucun résultat</div>'
+            return
+          }
+          resultsEl.innerHTML =
+            `<div style="font-size:0.85rem;color:var(--grey);margin-bottom:0.5rem">${results.length} résultat(s)</div>` +
+            results
+              .map(
+                r => `<div class="card" style="margin-bottom:0.5rem;padding:0.5rem 0.75rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>${escHtml(r.name)}</strong>
+            <div style="font-size:0.8rem;color:var(--grey)">
+              <span class="label">ID :</span> ${escHtml(r.id)}
+              <span style="margin-left:0.75rem"><span class="label">SIRET :</span> ${escHtml(r.siret)}</span>
+              <span style="margin-left:0.75rem"><span class="label">CP :</span> ${escHtml(r.zipcode)}</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary copy-v1-id" data-v1id="${escAttr(r.id)}" style="white-space:nowrap">Copier l'ID</button>
+        </div>
+      </div>`
+              )
+              .join('')
+          resultsEl.querySelectorAll('.copy-v1-id').forEach(btn => {
+            btn.addEventListener('click', () => {
+              navigator.clipboard.writeText(btn.dataset.v1id)
+              btn.textContent = 'Copié !'
+              setTimeout(() => {
+                btn.textContent = "Copier l'ID"
+              }, 1500)
+            })
+          })
+        }
+        btn.addEventListener('click', doSearch)
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') doSearch()
+        })
+        input.focus()
+      }
+
+      function renderExport() {
+        const container = document.getElementById('tab-export')
+        const { overrides, rejected } = buildExport()
+
+        const overridesStr = JSON.stringify(overrides, null, 2)
+          .replace(/"([^"]+)":/g, "'$1':")
+          .replace(/: "([^"]+)"/g, ": '$1'")
+
+        const rejectedStr = JSON.stringify(rejected, null, 2)
+
+        container.innerHTML = `
+    <h3>Overrides map (${Object.keys(overrides).length} entrées)</h3>
+    <p style="font-size:0.85rem;color:var(--grey);margin-bottom:0.5rem">À coller dans <code>ambiguousOverrides</code> dans le script</p>
+    <div class="export-area">
+      <textarea readonly id="export-overrides">const ambiguousOverrides: Record&lt;string, string&gt; = ${overridesStr}</textarea>
+      <div class="export-buttons">
+        <button class="btn btn-primary" id="copy-overrides">Copier</button>
+      </div>
+    </div>
+    <h3 style="margin-top:1rem">SIRET fallback rejetés (${rejected.length} entrées)</h3>
+    <div class="export-area">
+      <textarea readonly id="export-rejected">${escAttr(rejectedStr)}</textarea>
+      <div class="export-buttons">
+        <button class="btn btn-primary" id="copy-rejected">Copier</button>
+      </div>
+    </div>
+  `
+        document
+          .getElementById('copy-overrides')
+          .addEventListener('click', () => {
+            navigator.clipboard.writeText(
+              document.getElementById('export-overrides').value
+            )
+            document.getElementById('copy-overrides').textContent = 'Copié !'
+            setTimeout(() => {
+              document.getElementById('copy-overrides').textContent = 'Copier'
+            }, 1500)
+          })
+        document
+          .getElementById('copy-rejected')
+          .addEventListener('click', () => {
+            navigator.clipboard.writeText(
+              document.getElementById('export-rejected').value
+            )
+            document.getElementById('copy-rejected').textContent = 'Copié !'
+            setTimeout(() => {
+              document.getElementById('copy-rejected').textContent = 'Copier'
+            }, 1500)
+          })
+      }
+
+      let activeTab = 'no-match'
+
+      function updateUI() {
+        renderSummary()
+        renderTabs()
+        const activeTabDef = TABS.find(t => t.id === activeTab)
+        document.getElementById('tab-description').textContent =
+          activeTabDef?.description || ''
+        document.querySelectorAll('.tab-content').forEach(el => {
+          el.classList.toggle('active', el.id === `tab-${activeTab}`)
+        })
+        if (activeTab === 'ambiguous-siret') renderAmbiguousSiret()
+        else if (activeTab === 'ambiguous-name') renderAmbiguousName()
+        else if (activeTab === 'siret-fallback') renderSiretFallback()
+        else if (activeTab === 'no-match') renderNoMatch()
+        else if (activeTab === 'search-v1') renderSearchV1()
+        else if (activeTab === 'export') renderExport()
+      }
+
+      document.getElementById('file-input').addEventListener('change', e => {
+        const file = e.target.files[0]
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = ev => {
+          try {
+            report = JSON.parse(ev.target.result)
+            reportKey = file.name
+            document.getElementById('file-info').textContent =
+              `${file.name} — ${report.date} — ${report.dryRun ? 'DRY RUN' : 'LIVE'}`
+            const existingKey = localStorage.getItem('di-review-current-key')
+            if (existingKey && existingKey !== reportKey) {
+              localStorage.removeItem(`di-review-${existingKey}`)
+            }
+            localStorage.setItem('di-review-current-key', reportKey)
+            state = loadState()
+            document.getElementById('app').style.display = ''
+            activeTab = 'no-match'
+            updateUI()
+          } catch (err) {
+            alert('Erreur de parsing JSON: ' + err.message)
+          }
+        }
+        reader.readAsText(file)
+      })
+
+      document.getElementById('v1-file-input').addEventListener('change', e => {
+        const file = e.target.files[0]
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = ev => {
+          try {
+            const data = JSON.parse(ev.target.result)
+            buildV1Indexes(data)
+            batchResults = {}
+            document.getElementById('v1-file-info').textContent =
+              `${file.name} — ${data.length} structures chargées`
+            if (report) updateUI()
+          } catch (err) {
+            alert('Erreur de parsing JSON: ' + err.message)
+          }
+        }
+        reader.readAsText(file)
+      })
+
+      document.querySelectorAll('input[name="filter"]').forEach(el => {
+        el.addEventListener('change', () => updateUI())
+      })
+
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (confirm('Réinitialiser toutes les décisions pour ce rapport ?')) {
+          state = {}
+          saveState()
+          updateUI()
+        }
+      })
+    </script>
+  </body>
+</html>

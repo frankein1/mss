@@ -17,5 +17,7 @@ coverage
 /playwright/.auth
 .DS_Store
 /ignore/
+*.ignore.*
 .vscode
 .output-scheduler
+.output-scheduler_caller
