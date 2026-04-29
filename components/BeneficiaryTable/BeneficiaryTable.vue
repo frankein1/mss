@@ -59,6 +59,12 @@
             />
             <th scope="col">Téléphone</th>
             <th scope="col">Adresse</th>
+            <th
+              v-if="showReferents"
+              scope="col"
+            >
+              Référents
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -69,6 +75,7 @@
             :selectable="selectable"
             :selected="isSelected(beneficiary.id)"
             :disabled="isRowDisabled(beneficiary.id)"
+            :show-referents="showReferents"
             @toggle="toggleRow(beneficiary)"
           />
         </tbody>
@@ -88,6 +95,7 @@
     sort: BeneficiarySort
     selectable?: boolean
     selectionLimit?: number
+    showReferents?: boolean
   }>()
 
   const emit = defineEmits<{

@@ -31,6 +31,7 @@
         :pending="pending"
         :selection-limit="MAX_BENEFICIARIES_REFERENT_TRANSFER"
         selectable
+        show-referents
       />
       <AtomPagination
         class="fr-mt-4w fr-px-5v order-2"
@@ -85,7 +86,8 @@
     page: page.value,
     perPage: perPage.value,
     orderBy: orderBy.value,
-    filters: props.filters
+    filters: props.filters,
+    referents: true
   }))
 
   const {

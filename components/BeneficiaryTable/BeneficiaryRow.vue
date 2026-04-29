@@ -53,6 +53,12 @@
       </template>
       <template v-else>{{ EMPTY_TABLE_CELL }}</template>
     </td>
+    <td
+      v-if="showReferents"
+      class="address-data"
+    >
+      {{ formatTableValue(referentNames) }}
+    </td>
   </tr>
 </template>
 
@@ -64,12 +70,14 @@
   import { routes } from '~/utils/routes'
   import { formatTableValue } from '~/utils/table'
 
-  const { beneficiary, selectable, selected, disabled } = defineProps<{
-    beneficiary: BeneficiaryListItem
-    selectable?: boolean
-    selected?: boolean
-    disabled?: boolean
-  }>()
+  const { beneficiary, selectable, selected, disabled, showReferents } =
+    defineProps<{
+      beneficiary: BeneficiaryListItem
+      selectable?: boolean
+      selected?: boolean
+      disabled?: boolean
+      showReferents?: boolean
+    }>()
 
   const emit = defineEmits<{
     toggle: []
@@ -77,6 +85,14 @@
 
   const addressCodeAndCity = computed(() =>
     [beneficiary.zipcode, beneficiary.city].filter(v => !!v).join(' ')
+  )
+
+  const referentNames = computed(() =>
+    beneficiary.familyFile?.referents
+      ? beneficiary.familyFile?.referents
+          .map(r => `${r.firstName} ${r.lastName}`)
+          .join(', ')
+      : null
   )
 
   const lastName = computed(() => {

@@ -4,7 +4,8 @@ import type { SecurityRuleContext } from '~/server/security'
 
 export async function getBeneficiaryListQuery(
   ctx: SecurityRuleContext,
-  args: Omit<Prisma.BeneficiaryFindManyArgs, 'select' | 'include'>
+  args: Omit<Prisma.BeneficiaryFindManyArgs, 'select' | 'include'>,
+  options?: { referents?: boolean }
 ) {
   return BeneficiaryRepo.findMany(ctx.user, {
     where: args.where,
@@ -18,7 +19,16 @@ export async function getBeneficiaryListQuery(
       phone1: true,
       street: true,
       city: true,
-      zipcode: true
+      zipcode: true,
+      ...(options?.referents && {
+        familyFile: {
+          select: {
+            referents: {
+              select: { id: true, firstName: true, lastName: true }
+            }
+          }
+        }
+      })
     },
     take: args.take,
     skip: args.skip,
