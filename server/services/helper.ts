@@ -205,6 +205,12 @@ export function filterFollowup({
   followup: Followup & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
+    beneficiaryDevice: {
+      id: string
+      startDate: Date | null
+      endDate: Date | null
+      deviceName: { id: string; name: string }
+    } | null
   }
   conditions: {
     details: boolean
@@ -232,7 +238,9 @@ export function filterFollowup({
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
-    duration: show(followup.duration, conditions.details)
+    duration: show(followup.duration, conditions.details),
+    beneficiaryDeviceId: followup.beneficiaryDeviceId,
+    beneficiaryDevice: followup.beneficiaryDevice
   }
 }
 export function filterFileInstruction({
@@ -325,12 +333,19 @@ export function filterHousingHelpRequest({
     | 'lowIncomeHousingType'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
+    | 'beneficiaryDeviceId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
+    beneficiaryDevice: {
+      id: string
+      startDate: Date | null
+      endDate: Date | null
+      deviceName: { id: string; name: string }
+    } | null
   }
   conditions: {
     details: boolean
@@ -380,7 +395,9 @@ export function filterHousingHelpRequest({
           housingHelpRequest.prescribingOrganizationContact
         ),
       details
-    )
+    ),
+    beneficiaryDeviceId: housingHelpRequest.beneficiaryDeviceId,
+    beneficiaryDevice: housingHelpRequest.beneficiaryDevice
   }
 }
 
@@ -400,12 +417,19 @@ export function filterHelpRequest({
     | 'paymentMethod'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
+    | 'beneficiaryDeviceId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
+    beneficiaryDevice: {
+      id: string
+      startDate: Date | null
+      endDate: Date | null
+      deviceName: { id: string; name: string }
+    } | null
   }
   conditions: {
     details: boolean
@@ -446,7 +470,9 @@ export function filterHelpRequest({
           helpRequest.prescribingOrganizationContact
         ),
       details
-    )
+    ),
+    beneficiaryDeviceId: helpRequest.beneficiaryDeviceId,
+    beneficiaryDevice: helpRequest.beneficiaryDevice
   }
 }
 

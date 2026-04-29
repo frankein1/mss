@@ -25,5 +25,6 @@ export const followupFieldLabels = {
   createdById: 'Agent',
   duration: "Durée de l'entretien",
   partnerOrganizationId: "Nom de l'organisme",
-  externalStructureName: 'Nom structure / personne'
+  externalStructureName: 'Nom structure / personne',
+  beneficiaryDeviceId: 'Dispositif concerné'
 }

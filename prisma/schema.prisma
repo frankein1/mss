@@ -463,6 +463,9 @@ model Followup {
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("followup_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
 
+  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
+  beneficiaryDevice   BeneficiaryDevice? @relation("followup_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
+
   medium FollowupMedium
 
   helpRequested      Boolean?          @map("help_requested")
@@ -554,6 +557,9 @@ model HelpRequest {
 
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("help_request_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
+
+  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
+  beneficiaryDevice   BeneficiaryDevice? @relation("help_request_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -651,6 +657,9 @@ model HousingHelpRequest {
   reason                            HousingReason?
   lowIncomeHousingType              LowIncomeHousingType[] @map("low_income_housing_type")
   handlingDate                      DateTime?              @map("handling_date") @db.Date
+
+  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
+  beneficiaryDevice   BeneficiaryDevice? @relation("housing_help_request_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
@@ -1771,6 +1780,10 @@ model BeneficiaryDevice {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  followups           Followup[]           @relation("followup_beneficiary_device")
+  helpRequests        HelpRequest[]        @relation("help_request_beneficiary_device")
+  housingHelpRequests HousingHelpRequest[] @relation("housing_help_request_beneficiary_device")
 
   @@index(fields: [beneficiaryId], map: "beneficiary_device_beneficiary_id_idx")
   @@map("beneficiary_device")

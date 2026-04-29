@@ -31,6 +31,8 @@
         :has-set-external-structure="hasSetExternalStructure"
         :is-housing-support="isHousingSupport"
         :minister-id-error="ministerIdError"
+        :device-options="deviceOptions"
+        :device-options-disabled="deviceOptionsDisabled"
       />
     </section>
 
@@ -130,6 +132,7 @@
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
   import { routes } from '~/utils/routes'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
@@ -173,7 +176,24 @@
   }>()
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+  const { setValue: setBeneficiaryDeviceId } = useField<string | null>(
+    'beneficiaryDeviceId'
+  )
   const { value: familyFileId } = useField<string | null>('familyFileId')
+
+  const trpcClient = useTrpcClient()
+  const { data: beneficiaryDevicesData } =
+    await trpcClient.beneficiary.getDevicesForBeneficiary.useQuery(
+      toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
+    )
+  const deviceOptions = computed(() =>
+    (beneficiaryDevicesData.value ?? []).map(formatDeviceOption)
+  )
+  const deviceOptionsDisabled = computed(() => deviceOptions.value.length === 0)
+
+  watch(beneficiaryId, () => {
+    setBeneficiaryDeviceId(null)
+  })
   const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(
     'externalStructure'
