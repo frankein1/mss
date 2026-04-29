@@ -96,10 +96,9 @@
 
   const { tableContainer } = useTable(toRef(() => props.pending))
 
-  const selectedBeneficiaries = defineModel<{ id: string; familyId: string }[]>(
-    'selectedBeneficiaries',
-    { default: () => [] }
-  )
+  const selectedBeneficiaries = defineModel<
+    { beneficiaryId: string; familyFileId: string }[]
+  >('selectedBeneficiaries', { default: () => [] })
   const selectAllCheckbox = ref<HTMLInputElement | null>(null)
 
   const isLimitReached = computed(
@@ -109,7 +108,7 @@
   )
 
   function isSelected(id: string) {
-    return selectedBeneficiaries.value.some(b => b.id === id)
+    return selectedBeneficiaries.value.some(b => b.beneficiaryId === id)
   }
 
   function isRowDisabled(id: string) {
@@ -119,12 +118,15 @@
   function toggleRow(beneficiary: BeneficiaryListItem) {
     if (isSelected(beneficiary.id)) {
       selectedBeneficiaries.value = selectedBeneficiaries.value.filter(
-        b => b.id !== beneficiary.id
+        b => b.beneficiaryId !== beneficiary.id
       )
     } else if (!isLimitReached.value) {
       selectedBeneficiaries.value = [
         ...selectedBeneficiaries.value,
-        { id: beneficiary.id, familyId: beneficiary.familyFileId }
+        {
+          beneficiaryId: beneficiary.id,
+          familyFileId: beneficiary.familyFileId
+        }
       ]
     }
   }
@@ -154,18 +156,20 @@
     if (isAllSelected.value) {
       const visibleIds = new Set(props.beneficiaryList.map(b => b.id))
       selectedBeneficiaries.value = selectedBeneficiaries.value.filter(
-        b => !visibleIds.has(b.id)
+        b => !visibleIds.has(b.beneficiaryId)
       )
     } else {
       const remaining =
         props.selectionLimit !== undefined
           ? props.selectionLimit - selectedBeneficiaries.value.length
           : Infinity
-      const existingIds = new Set(selectedBeneficiaries.value.map(b => b.id))
+      const existingIds = new Set(
+        selectedBeneficiaries.value.map(b => b.beneficiaryId)
+      )
       const toAdd = props.beneficiaryList
         .filter(b => !existingIds.has(b.id))
         .slice(0, remaining)
-        .map(b => ({ id: b.id, familyId: b.familyFileId }))
+        .map(b => ({ beneficiaryId: b.id, familyFileId: b.familyFileId }))
       selectedBeneficiaries.value = [...selectedBeneficiaries.value, ...toAdd]
     }
   }

@@ -13,7 +13,7 @@ function getBread<
   T extends
     | 'AppBeneficiaries'
     | 'AppBeneficiariesAdd'
-    | 'AppBeneficiariesEditReferents'
+    | 'AppBeneficiariesReferentTransfer'
 >(name: T) {
   const title = r[name].title as Routes[T]['title']
   return [{ text: title, to: r[name].path() }]
@@ -65,10 +65,10 @@ export const breadcrumbs = {
     ...user.AppOverview(),
     ...getBread('AppBeneficiaries')
   ],
-  AppBeneficiariesEditReferents: () => [
+  AppBeneficiariesReferentTransfer: () => [
     ...user.AppOverview(),
     ...getBread('AppBeneficiaries'),
-    ...getBread('AppBeneficiariesEditReferents')
+    ...getBread('AppBeneficiariesReferentTransfer')
   ],
   AppBeneficiariesAdd: () => [
     ...user.AppOverview(),

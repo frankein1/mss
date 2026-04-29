@@ -33,17 +33,22 @@
       closeable?: boolean
       message: string
       titleTag?: keyof HTMLElementTagNameMap
+      size?: 'md' | 'sm'
     }>(),
-    { closeable: false, titleTag: 'p' }
+    { closeable: false, titleTag: 'p', size: 'md' }
   )
 
   const emit = defineEmits<{
     close: []
   }>()
 
-  const alertClass = computed(() =>
-    props.alertType ? `fr-alert--${props.alertType}` : ''
-  )
+  const alertClass = computed(() => {
+    let classBase = `fr-alert--${props.alertType}`
+    if (props.size === 'sm') {
+      classBase = classBase + ' fr-alert--sm'
+    }
+    return classBase
+  })
 
   const text = computed(() => {
     switch (props.alertType) {

@@ -11,7 +11,7 @@ import {
   type AddReferentToFamilyFileInput
 } from '~/server/schema'
 import { FamilyFileRepo } from '~/server/database'
-import { BeneficiaryService, FamilyFileService } from '~/server/services'
+import { FamilyFileService } from '~/server/services'
 import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
@@ -55,7 +55,7 @@ const handler = async ({
   if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
-      message: 'Over max beneficiaries'
+      message: 'Maximum number of beneficiaries exceeded'
     })
   }
   return FamilyFileService.addReferentToFamilyFile({
