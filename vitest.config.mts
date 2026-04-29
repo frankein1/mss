@@ -14,7 +14,7 @@ export default defineVitestConfig({
   },
   test: {
     environment: 'nuxt',
-    exclude: [...configDefaults.exclude, 'e2e/**'],
+    exclude: [...configDefaults.exclude, 'e2e/**', 'scripts/**'],
     coverage: {
       reporter: 'lcov',
       exclude: [
