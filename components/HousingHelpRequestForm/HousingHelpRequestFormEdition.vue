@@ -20,6 +20,7 @@
   import type { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { toKindOfBoolean } from '~/utils/form/toKindOfBoolean'
 
   const { application } = usePermissions()
 
@@ -68,10 +69,7 @@
       externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',
-      isFirst:
-        typeof housingHelpRequest.value.isFirst === 'boolean'
-          ? (housingHelpRequest.value.isFirst.toString() as 'true' | 'false')
-          : undefined,
+      isFirst: toKindOfBoolean(housingHelpRequest.value.isFirst),
       fullFile: fileInstruction.value.fullFile || false,
       isPmr: housingHelpRequest.value.isPmr || false,
       maxRent: prismaDecimalToNumber(housingHelpRequest.value.maxRent),

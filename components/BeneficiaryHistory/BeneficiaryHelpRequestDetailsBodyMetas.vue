@@ -25,7 +25,7 @@
     <span class="information-label"
       >{{ helpRequestFieldLabels.isRefundable }} :</span
     >
-    {{ isRefundableKeys.value(helpRequest.isRefundable ? 'true' : 'false') }}
+    {{ helpRequest.isRefundable ? 'Oui' : 'Non' }}
   </li>
   <li v-if="helpRequest.askedAmount">
     <span class="information-label"

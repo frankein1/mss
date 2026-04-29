@@ -37,6 +37,7 @@
         />
       </div>
 
+      <!-- FIXME: fix ambiguity between false and undefined -->
       <div
         v-if="isFirst === 'false'"
         class="fr-col-12"

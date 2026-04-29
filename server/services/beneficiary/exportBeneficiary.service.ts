@@ -530,9 +530,12 @@ const getHelpRequestData = (
         handlingDate:
           socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(),
         fullFile: socialSupport.fileInstruction?.fullFile ? 'oui' : 'non',
-        isRefundable: socialSupport.fileInstruction?.helpRequest?.isRefundable
-          ? 'Remboursable'
-          : 'Non remboursable',
+        isRefundable:
+          socialSupport.fileInstruction?.helpRequest?.isRefundable === true
+            ? 'Remboursable'
+            : socialSupport.fileInstruction?.helpRequest?.isRefundable === false
+              ? 'Non remboursable'
+              : '',
         askedAmount: socialSupport.fileInstruction?.helpRequest?.askedAmount,
         allocatedAmount:
           socialSupport.fileInstruction?.helpRequest?.allocatedAmount,
@@ -544,9 +547,13 @@ const getHelpRequestData = (
     ...(socialSupport.socialSupportType === 'HelpRequestHousing' && {
       housingHelpRequest: {
         ...commonObjects,
-        isFirst: socialSupport.fileInstruction?.housingHelpRequest?.isFirst
-          ? 'Oui'
-          : 'Non',
+        isFirst:
+          socialSupport.fileInstruction?.housingHelpRequest?.isFirst === true
+            ? 'Oui'
+            : socialSupport.fileInstruction?.housingHelpRequest?.isFirst ===
+                false
+              ? 'Non'
+              : '',
         firstOpeningDate:
           socialSupport.fileInstruction?.housingHelpRequest?.firstOpeningDate?.toLocaleDateString(
             'fr-FR'
