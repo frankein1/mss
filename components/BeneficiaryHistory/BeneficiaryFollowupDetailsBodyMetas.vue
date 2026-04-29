@@ -1,5 +1,11 @@
 <template>
   <li><span class="information-label">Type :</span> {{ medium }}</li>
+  <li v-if="followup.beneficiaryDevice">
+    <span class="information-label"
+      >{{ followupFieldLabels.beneficiaryDeviceId }} :</span
+    >
+    {{ formatDeviceOption(followup.beneficiaryDevice).label }}
+  </li>
   <li v-if="followup.prescribingOrganization?.name">
     <span class="information-label"
       >{{ followupFieldLabels.prescribingOrganizationId }} :</span
@@ -41,6 +47,7 @@
   import type { FollowupData } from './types'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
   import { followupFieldLabels } from '~/client/labels'
+  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
 
   const props = defineProps<{
     followup: FollowupData

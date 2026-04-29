@@ -96,21 +96,13 @@
             :label="followupFieldLabels.thirdPersonName"
           />
         </div>
-        <div
-          v-else
-          class="fr-col-12 fr-col-md-6"
-        ></div>
-
-        <div class="fr-col-12">
+        <div class="fr-col-12 fr-col-md-6">
           <MultiSelect
             name="subjects"
             :label="followupFieldLabels.subjects"
             :options="socialSupportSubjectOptions"
             required
           />
-        </div>
-
-        <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
             :to="routes.structure.AppStructure.path()"
@@ -128,6 +120,20 @@
             Les responsables de votre structure peuvent personnaliser les objets
             d'accompagnement.
           </template>
+        </div>
+
+        <div class="fr-col-12 fr-col-md-6">
+          <VeeSelect
+            name="beneficiaryDeviceId"
+            :label="followupFieldLabels.beneficiaryDeviceId"
+            :options="withEmptyValue(deviceOptions)"
+            :disabled="deviceOptions.length === 0"
+            :hint="
+              deviceOptions.length === 0
+                ? 'Aucun dispositif renseigné pour ce bénéficiaire'
+                : undefined
+            "
+          />
         </div>
 
         <div class="fr-col-12 fr-col-md-6">
@@ -349,6 +355,7 @@
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -377,7 +384,23 @@
   const form = useTemplateRef('form')
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+  const { setValue: setBeneficiaryDeviceId } = useField<string | null>(
+    'beneficiaryDeviceId'
+  )
   const { value: familyFileId } = useField<string | null>('familyFileId')
+
+  const trpcClient = useTrpcClient()
+  const { data: beneficiaryDevicesData } =
+    await trpcClient.beneficiary.getDevicesForBeneficiary.useQuery(
+      toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
+    )
+  const deviceOptions = computed(() =>
+    (beneficiaryDevicesData.value ?? []).map(formatDeviceOption)
+  )
+
+  watch(beneficiaryId, () => {
+    setBeneficiaryDeviceId(null)
+  })
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'
   )

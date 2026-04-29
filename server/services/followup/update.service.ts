@@ -67,7 +67,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     forwardedToJustice,
     socialSupportId,
     duration,
-    socialSupportRedirections
+    socialSupportRedirections,
+    beneficiaryDeviceId
   } = input
 
   const { socialSupportRedirections: previousRedirectionIds } =
@@ -160,7 +161,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         firstFollowup,
         classified,
         forwardedToJustice,
-        duration
+        duration,
+        beneficiaryDeviceId: beneficiaryDeviceId || null
       },
       select: {
         id: true
