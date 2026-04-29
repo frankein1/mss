@@ -18,9 +18,13 @@ function normalize(str: string): string {
 async function main() {
   const startTime = performance.now()
 
-  const { ambiguousOverrides } = await import(
+  const { ambiguousOverrides } = (await import(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     './migrate-data-inclusion-v1-unmatched.overrides.ignore'
-  ).catch(() => ({ ambiguousOverrides: {} as Record<string, string> }))
+  ).catch(() => ({
+    ambiguousOverrides: {}
+  }))) as { ambiguousOverrides: Record<string, string> }
   console.log(
     `Loaded ${Object.keys(ambiguousOverrides).length} overrides from file`
   )
