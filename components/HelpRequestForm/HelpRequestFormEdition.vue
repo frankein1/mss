@@ -20,6 +20,7 @@
   import type { EditHelpRequestInput } from '~/server/schema'
   import { editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { toKindOfBoolean } from '~/utils/form/toKindOfBoolean'
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
@@ -81,7 +82,7 @@
       privateSynthesis: socialSupport.value.privateSynthesis,
       privateSynthesisRichText: socialSupport.value.privateSynthesisRichText,
       dueDate: socialSupport.value.dueDate,
-      isRefundable: helpRequest.value.isRefundable ? 'true' : 'false',
+      isRefundable: toKindOfBoolean(helpRequest.value.isRefundable),
       isMinistry: application.value.module.ministere,
       date: socialSupport.value.date,
       documents: initialDocumentIds.value,
