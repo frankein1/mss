@@ -66,7 +66,15 @@ function findMany(
       helpRequest: {
         include: {
           prescribingOrganization: true,
-          prescribingOrganizationContact: true
+          prescribingOrganizationContact: true,
+          beneficiaryDevice: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              deviceName: { select: { id: true, name: true } }
+            }
+          }
         }
       },
       housingHelpRequest: {
