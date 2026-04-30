@@ -51,9 +51,10 @@
             :content="ministerName"
           />
           <PrintDetailItem
-            title="1ère demande ou renouvellement"
+            v-if="housingHelpRequest.isFirst != null"
+            :title="helpRequestFieldLabels.isFirst"
             :content="
-              housingHelpRequest.isFirst ? '1ère demande' : 'renouvellement'
+              isFirstKeys.value(housingHelpRequest.isFirst ? 'true' : 'false')
             "
           />
           <PrintDetailItem
@@ -306,7 +307,8 @@
     lowIncomeHousingKeys,
     housingTypeKeys,
     roomCountKeys,
-    baseRefusalReasonKeys
+    baseRefusalReasonKeys,
+    isFirstKeys
   } from '~/client/options'
   import {
     housingHelpRequestFieldLabels,

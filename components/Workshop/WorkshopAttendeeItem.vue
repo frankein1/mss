@@ -109,17 +109,17 @@
           aria-hidden="true"
         ></i>
         {{ attendee.paymentReceived ? 'Payé' : 'Non payé' }}
-        {{
-          attendee.paymentAmount != null
-            ? '&nbsp;:&nbsp;' + attendee.paymentAmount + '&nbsp;€'
-            : ''
-        }}
+        <template v-if="attendee.paymentAmount != null">
+          {{ `&nbsp;:&nbsp;${attendee.paymentAmount}&nbsp;€` }}
+        </template>
         <i
+          v-if="attendee.paymentReceived != null"
           class="fr-icon--sm"
           :class="{
-            'fr-message--valid fr-icon-check-line': attendee.paymentReceived,
+            'fr-message--valid fr-icon-check-line':
+              attendee.paymentReceived === true,
             'fr-message--error fr-icon-close-line':
-              !attendee.paymentReceived || attendee.paymentReceived === null
+              attendee.paymentReceived === false
           }"
           aria-hidden="true"
         ></i>

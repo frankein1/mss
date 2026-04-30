@@ -1,11 +1,11 @@
 <template>
   <li
-    v-if="
-      housingHelpRequest.isFirst !== undefined &&
-      housingHelpRequest.isFirst !== null
-    "
+    v-if="housingHelpRequest.isFirst != null"
     class="fr-icon-success-line"
   >
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.isFirst }}&nbsp;:</span
+    >
     {{ isFirstKeys.value(housingHelpRequest.isFirst ? 'true' : 'false') }}
   </li>
   <li v-if="askedHousing">

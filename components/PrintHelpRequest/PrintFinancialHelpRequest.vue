@@ -86,7 +86,7 @@
         </ul>
         <template
           v-if="
-            helpRequest.isRefundable ||
+            helpRequest.isRefundable !== null ||
             helpRequest.askedAmount ||
             helpRequest.allocatedAmount ||
             helpRequest.fileInstruction.decisionDate ||
@@ -101,6 +101,7 @@
           <h3>Informations sur l'aide financière</h3>
           <ul>
             <PrintDetailItem
+              v-if="helpRequest.isRefundable !== null"
               :title="helpRequestFieldLabels.isRefundable"
               :content="helpRequest.isRefundable ? 'Oui' : 'Non'"
             />
