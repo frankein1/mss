@@ -104,7 +104,7 @@
             </span>{{{helpRequest.status}}}</li>
         {{/if}}
 
-        {{#if helpRequest.isRefundable}}
+        {{#if helpRequest.isFinancial}}
           <li><span class='bold'>Cette aide est-elle remboursable ?
             </span>{{{helpRequest.isRefundable}}}</li>
         {{/if}}
@@ -177,7 +177,7 @@
             </span>{{{date}}}</li>
         {{/if}}
 
-        <li><span class='bold'>Première demande :</span>
+        <li><span class='bold'>Il s'agit :</span>
           {{{housingHelpRequest.isFirst}}}
         </li>
 
