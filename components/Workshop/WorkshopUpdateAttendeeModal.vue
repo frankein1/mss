@@ -121,6 +121,7 @@
   import type { UpdateAttendeeInput } from '~/server/schema'
   import { updateAttendeeSchema } from '~/server/schema'
   import type { WorkshopAttendee } from '~/types/workshop'
+  import { toKindOfBoolean } from '~/utils/form/toKindOfBoolean'
 
   const modal = useModal()
   const snackbar = useSnackbar()
@@ -141,12 +142,7 @@
     }
   })
   // initialValues doesn't work for paymentReceived
-  setFieldValue(
-    'paymentReceived',
-    typeof attendee.paymentReceived === 'boolean'
-      ? (attendee.paymentReceived.toString() as 'true' | 'false')
-      : undefined
-  )
+  setFieldValue('paymentReceived', toKindOfBoolean(attendee.paymentReceived))
 
   const form = ref<HTMLFormElement | null>(null)
 

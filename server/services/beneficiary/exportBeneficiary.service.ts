@@ -460,6 +460,18 @@ type FileInstructionData = SocialSupportForFileInstructionData & {
   redirections: RedirectionData[] | null
 }
 
+function toBooleanLabel(
+  value: boolean | null | undefined,
+  trueLabel: string,
+  falseLabel: string
+) {
+  if (value == null) {
+    return ''
+  }
+
+  return value ? trueLabel : falseLabel
+}
+
 const getHelpRequestData = (
   socialSupport: SocialSupportItem
 ): FileInstructionData => {
@@ -530,9 +542,11 @@ const getHelpRequestData = (
         handlingDate:
           socialSupport.fileInstruction?.helpRequest?.handlingDate?.toLocaleDateString(),
         fullFile: socialSupport.fileInstruction?.fullFile ? 'oui' : 'non',
-        isRefundable: socialSupport.fileInstruction?.helpRequest?.isRefundable
-          ? 'Remboursable'
-          : 'Non remboursable',
+        isRefundable: toBooleanLabel(
+          socialSupport.fileInstruction?.helpRequest?.isRefundable,
+          'Remboursable',
+          'Non remboursable'
+        ),
         askedAmount: socialSupport.fileInstruction?.helpRequest?.askedAmount,
         allocatedAmount:
           socialSupport.fileInstruction?.helpRequest?.allocatedAmount,
@@ -544,9 +558,11 @@ const getHelpRequestData = (
     ...(socialSupport.socialSupportType === 'HelpRequestHousing' && {
       housingHelpRequest: {
         ...commonObjects,
-        isFirst: socialSupport.fileInstruction?.housingHelpRequest?.isFirst
-          ? 'Oui'
-          : 'Non',
+        isFirst: toBooleanLabel(
+          socialSupport.fileInstruction?.housingHelpRequest?.isFirst,
+          'Oui',
+          'Non'
+        ),
         firstOpeningDate:
           socialSupport.fileInstruction?.housingHelpRequest?.firstOpeningDate?.toLocaleDateString(
             'fr-FR'
