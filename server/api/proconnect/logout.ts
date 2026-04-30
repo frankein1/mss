@@ -79,12 +79,7 @@ async function cleanAccountData(userId: string, proconnectProvider: string) {
   await prismaClient.account.update({
     where: { id: accounts[0].id },
     data: {
-      accessToken: null,
-      expiresAt: null,
-      refreshToken: null,
-      tokenType: null,
-      idToken: null,
-      scope: null
+      idToken: null
     }
   })
 

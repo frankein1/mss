@@ -178,10 +178,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     auth: {
-      jwtKey: process.env.NUXT_AUTH_JWT_KEY || 'secretJWT',
-      sessionSecret:
-        process.env.NUXT_AUTH_SESSION_SECRET ||
-        'sessionSecretsessionSecretsession',
+      jwtKey: process.env.NUXT_AUTH_JWT_KEY,
+      sessionSecret: process.env.NUXT_AUTH_SESSION_SECRET,
       proconnectIssuer: process.env.NUXT_AUTH_PROCONNECT_ISSUER_URL,
       proconnectClientId: process.env.NUXT_AUTH_PROCONNECT_CLIENT_ID,
       proconnectClientSecret: process.env.NUXT_AUTH_PROCONNECT_CLIENT_SECRET,
