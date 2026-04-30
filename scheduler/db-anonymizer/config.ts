@@ -368,18 +368,12 @@ const configAccount: Record<
   boolean
 > = {
   id: true,
-  type: true,
   created: true,
   updated: true,
   user_id: true,
   provider: true,
   // -- BEGIN ANONYMIZED
   provider_account_id: false,
-  refresh_token: false,
-  access_token: false,
-  expires_at: false,
-  token_type: false,
-  scope: false,
   id_token: false,
   session_state: false
 }

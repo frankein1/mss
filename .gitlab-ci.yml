@@ -95,7 +95,7 @@ pnpm:test:
         POSTGRES_PORT: 5432
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
-    APP_URL: http://localhost:3000
+    NUXT_PUBLIC_APP_URL: http://localhost:3000
   script:
     - if [[ ! -e /lib/libssl.so.3 ]]; then ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3; else echo "Link already exists"; fi
     - pnpm prisma migrate deploy
@@ -147,11 +147,9 @@ sonarcloud-check:
         POSTGRES_PORT: 5432
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
-    APP_URL: http://localhost:3000
-    LANDING_PAGE_URL: https://monsuivisocial.dev.incubateur.anct.gouv.fr
-    AUTH_PROCONNECT_ISSUER_URL: https://fca.integ01.dev-agentconnect.fr/api/v2
-    AUTH_PROCONNECT_CLIENT_ID: ${E2E_AUTH_PROCONNECT_CLIENT_ID}
-    AUTH_PROCONNECT_CLIENT_SECRET: ${E2E_AUTH_PROCONNECT_CLIENT_SECRET}
+    NUXT_PUBLIC_APP_URL: http://localhost:3000
+    NUXT_PUBLIC_LANDING_PAGE_URL: http://
+    NUXT_AUTH_JWT_KEY: test-auth
   cache:
     policy: pull
   artifacts:

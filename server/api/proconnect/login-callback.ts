@@ -4,7 +4,6 @@ import pkg from 'jsonwebtoken'
 import { signJwt } from '~/server/lib/jwt'
 import { getProConnectClient } from '~/server/lib/proconnect.client'
 import type {
-  ProConnectToken,
   ProConnectUserInfo,
   ProConnectClient
 } from '~/server/lib/proconnect.client'
@@ -27,7 +26,6 @@ const {
   auth: {
     sessionSecret,
     proconnectProvider,
-    proconnectLabel,
     proconnectIssuer,
     proconnectClientId,
     proconnectSigningAlgorithm,
@@ -199,7 +197,7 @@ export default defineEventHandler(async event => {
   await upsertAccount({
     providerAccountId: sub,
     user,
-    proConnectToken,
+    idToken,
     state: state as string
   })
 
@@ -366,17 +364,14 @@ async function getAccount({ sub }: { sub: string }) {
 async function upsertAccount({
   user,
   providerAccountId,
-  proConnectToken,
+  idToken,
   state
 }: {
   user: UserAuthInfo
   providerAccountId: string
-  proConnectToken: ProConnectToken
+  idToken: string
   state: string
 }) {
-  const { accessToken, expiresIn, refreshToken, tokenType, idToken, scope } =
-    proConnectToken
-
   return await prismaClient.account.upsert({
     where: {
       provider_providerAccountId: {
@@ -386,24 +381,13 @@ async function upsertAccount({
     },
     create: {
       userId: user.id,
-      type: proconnectLabel,
       provider: proconnectProvider,
       providerAccountId,
-      accessToken,
-      expiresAt: expiresIn,
-      refreshToken,
-      tokenType,
       idToken,
-      scope,
       sessionState: state
     },
     update: {
-      accessToken,
-      expiresAt: expiresIn,
-      refreshToken,
-      tokenType,
       idToken,
-      scope,
       sessionState: state
     }
   })
