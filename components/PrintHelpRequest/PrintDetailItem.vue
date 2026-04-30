@@ -3,7 +3,7 @@
     v-if="content"
     class="details"
   >
-    <span class="fr-text--bold">{{ title }} : </span>
+    <span class="fr-text--bold">{{ title }}&nbsp;: </span>
     <br v-if="title === 'Compte rendu'" />
     {{ content }}
   </li>
