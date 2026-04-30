@@ -52,7 +52,9 @@ import {
   fileInstructionTypeFilterKeys,
   nationalityKeys,
   workshopAttendeeAttendanceKeys,
-  socialSupportRedirectionTypeKeys
+  socialSupportRedirectionTypeKeys,
+  isFirstKeys,
+  isRefundableKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
@@ -544,8 +546,8 @@ const getHelpRequestData = (
         fullFile: socialSupport.fileInstruction?.fullFile ? 'oui' : 'non',
         isRefundable: toBooleanLabel(
           socialSupport.fileInstruction?.helpRequest?.isRefundable,
-          'Remboursable',
-          'Non remboursable'
+          isRefundableKeys.byKey.true,
+          isRefundableKeys.byKey.false
         ),
         askedAmount: socialSupport.fileInstruction?.helpRequest?.askedAmount,
         allocatedAmount:
@@ -560,8 +562,8 @@ const getHelpRequestData = (
         ...commonObjects,
         isFirst: toBooleanLabel(
           socialSupport.fileInstruction?.housingHelpRequest?.isFirst,
-          'Oui',
-          'Non'
+          isFirstKeys.byKey.true,
+          isFirstKeys.byKey.false
         ),
         firstOpeningDate:
           socialSupport.fileInstruction?.housingHelpRequest?.firstOpeningDate?.toLocaleDateString(
