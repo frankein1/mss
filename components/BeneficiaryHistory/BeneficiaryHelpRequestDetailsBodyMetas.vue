@@ -84,7 +84,6 @@
   import type { FileInstructionData, HelpRequestData } from './types'
   import {
     paymentMethodKeys,
-    isRefundableKeys,
     fileInstructionRefusalReasonKeys
   } from '~/client/options'
   import { euros } from '~/utils/euros'

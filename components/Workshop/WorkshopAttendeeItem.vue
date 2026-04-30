@@ -108,9 +108,7 @@
           class="fr-icon--sm fr-icon-money-euro-box-line"
           aria-hidden="true"
         ></i>
-        <template v-if="attendee.paymentReceived != null">
-          {{ attendee.paymentReceived ? 'Payé' : 'Non payé' }}
-        </template>
+        {{ attendee.paymentReceived ? 'Payé' : 'Non payé' }}
         <template v-if="attendee.paymentAmount != null">
           {{ `&nbsp;:&nbsp;${attendee.paymentAmount}&nbsp;€` }}
         </template>
