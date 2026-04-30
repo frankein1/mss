@@ -8,6 +8,7 @@
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
       :validation-schema="statFilterSchema"
+      :hint="periodFilterHint"
     />
 
     <section class="fr-grid-row fr-grid-row--gutters">
@@ -232,6 +233,9 @@
   import { StatPeriodFilter } from '~/types/stat'
   import { exportStats, zipAndDownloadImages } from '~/utils/stats/exportStats'
   import { EventCategory, ExportEventAction } from '~/types/matomo'
+
+  const periodFilterHint =
+    'Le filtre "Période" s\'applique aux bénéficiaires ayant reçu au moins un accompagnement dans la période concernée'
 
   const alertClose = ref<boolean>(true)
   const trpcClient = useTrpcClient()

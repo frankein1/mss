@@ -205,7 +205,7 @@ export function prepareFollowupStatFilters(
 }
 
 /** filterOnBeneficiaryCreated: if true, when filtering on period,
- *  don't filter on socialSupport created during the period
+ *  don't filter on socialSupport date during the period
  * but on beneficiaries created during the period */
 export function prepareBeneficiaryStatFilters(
   filters: StatFilterInput,
@@ -218,10 +218,9 @@ export function prepareBeneficiaryStatFilters(
     (filters.period === StatPeriodFilter.Custom &&
       (filters.fromDate || filters.toDate))
 
-  const filterOnSocialSupportCreated =
-    hasDateFilter && !filterOnBeneficiaryCreated
-  if (filterOnSocialSupportCreated) {
-    socialSupportFilters.created = prepareDateFilters(filters)
+  const filterOnSocialSupportDate = hasDateFilter && !filterOnBeneficiaryCreated
+  if (filterOnSocialSupportDate) {
+    socialSupportFilters.date = prepareDateFilters(filters)
   }
 
   if (filters.socialSupportSubjects?.length) {
@@ -241,7 +240,7 @@ export function prepareBeneficiaryStatFilters(
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (
-    filterOnSocialSupportCreated ||
+    filterOnSocialSupportDate ||
     filters.socialSupportSubjects?.length ||
     filters.ministerId
   ) {

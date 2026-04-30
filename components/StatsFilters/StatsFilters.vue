@@ -18,6 +18,12 @@
       :validation-schema="validationSchema"
       @filter="emit('update:filters', $event)"
     />
+    <p
+      v-if="hint"
+      class="fr-hint-text fr-m-0"
+    >
+      {{ hint }}
+    </p>
   </section>
 </template>
 
@@ -58,8 +64,14 @@
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
+      hint?: string
     }>(),
-    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
+    {
+      isHelpRequest: false,
+      isHistory: false,
+      validationSchema: undefined,
+      hint: undefined
+    }
   )
 
   const emit = defineEmits<{
