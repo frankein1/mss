@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.58.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.58.0...v1.58.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* affichage et valeurs par défaut des booléens optionnels dans UI/exports/impressions ([6dbb5d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6dbb5d6add72f7723e57fea4a83e4865b3a22bcf)), closes [#1088](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1088)
+* **archivage:** labels aide remboursable et 1ère demande ([60b9360](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/60b9360d69228719723d35e7baf8895ce8d9f79a)), closes [#1088](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1088)
+
 ## [1.58.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.57.0...v1.58.0) (2026-04-21)
 
 
