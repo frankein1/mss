@@ -13,7 +13,7 @@ import {
   type Queries
 } from './restore'
 import { performance } from 'node:perf_hooks'
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import { cleanTargetSchema } from './clean/clean-target-schema'
 import { withErrorCapture } from '../utils'
 import { SCHEDULER_ENV } from '../env'
@@ -38,7 +38,7 @@ async function exportAnonymizedDatabase() {
   console.log('Target schema', TARGET_SCHEMA)
 
   if (isDeployedEnvironment) {
-    execSync(`dbclient-fetcher postgresql ${PGSQL_VERSION}`)
+    execFileSync('dbclient-fetcher', ['postgresql', PGSQL_VERSION])
   }
 
   // Execute dump

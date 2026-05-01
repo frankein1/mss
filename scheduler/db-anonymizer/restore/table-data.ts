@@ -2,7 +2,7 @@ import { escapeIdentifier } from 'pg'
 import { TARGET_SCHEMA } from '../db'
 import { getCsvFilename, getFilteredColumnNames } from '../utils'
 import { TABLE_NAMES, type TableName } from '../config'
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 
 const sqlRestoreTargetTableDataFromCsv = (
   tableName: TableName,
@@ -20,7 +20,6 @@ export async function restoreAnonymizedDataWithPsql(dburl: string) {
   )
 
   tablesDataDumpQueries.forEach(q => {
-    const command = `psql "${dburl}" -c '${q}'`
-    execSync(command)
+    execFileSync('psql', [dburl, '-c', q])
   })
 }

@@ -8,7 +8,7 @@ import {
 import { getCsvFilename, getFilteredColumnNames } from '../utils'
 import { TABLE_NAMES, type TableName } from '../config'
 import { rm } from 'node:fs/promises'
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 
 const sqlDumpSourceTableDataIntoCsv = (
   tableName: TableName,
@@ -61,7 +61,6 @@ export async function dumpAnonymizedDataWithPsql(dburl: string) {
   )
 
   tablesDataDumpQueries.forEach(q => {
-    const command = `psql "${dburl}" -c '${q}'`
-    execSync(command)
+    execFileSync('psql', [dburl, '-c', q])
   })
 }
