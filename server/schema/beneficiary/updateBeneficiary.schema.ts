@@ -207,7 +207,8 @@ export const beneficiaryDeviceSchema = z.object({
   partnerOrganisationName: stringConstraint
     .max(200, maxStringLengthMessage(200))
     .nullish(),
-  precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
+  precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish(),
+  exitReason: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
 })
 
 export const updateBeneficiaryDevicesSchema = z.object({
