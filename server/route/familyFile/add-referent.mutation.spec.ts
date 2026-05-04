@@ -1,4 +1,4 @@
-import { beforeEach, afterEach, expect } from 'vitest'
+import { beforeEach, afterEach, describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import {
   fixtureStructures,
@@ -69,15 +69,39 @@ afterEach(async () => {
   await prismaClient.user.delete({ where: { id: referentTestId } })
 })
 
-test("addReferentToBeneficiaries - refuse l'accès à un agent d'accueil", async ({
-  trpc
-}) => {
-  await expect(
-    trpc.receptionAgent.file.addReferent({
+describe('Authorizations', () => {
+  test("refuse l'accès à un agent d'accueil", async ({ trpc }) => {
+    await expect(
+      trpc.receptionAgent.file.addReferent({
+        beneficiaries: beneficiaries.slice(0, 1),
+        referentId: referentTestId
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+  })
+
+  test('autorise un travailleur social', async ({ trpc }) => {
+    const result = await trpc.socialWorker.file.addReferent({
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-  ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    expect(result.count).toBe(1)
+  })
+
+  test('autorise un gestionnaire de structure', async ({ trpc }) => {
+    const result = await trpc.structureManager.file.addReferent({
+      beneficiaries: beneficiaries.slice(0, 1),
+      referentId: referentTestId
+    })
+    expect(result.count).toBe(1)
+  })
+
+  test('autorise un référent affecté aux dossiers', async ({ trpc }) => {
+    const result = await trpc.referent.file.addReferent({
+      beneficiaries: beneficiaries.slice(0, 1),
+      referentId: referentTestId
+    })
+    expect(result.count).toBe(1)
+  })
 })
 
 test(`addReferentToBeneficiaries - ajoute le référent aux ${MAX_BENEFICIARIES} premiers bénéficiaires uniquement`, async ({
