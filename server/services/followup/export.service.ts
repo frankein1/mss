@@ -33,6 +33,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'numeroPegase',
   'minister',
   'subjects',
+  'beneficiaryDeviceId',
   'medium',
   'prescribingOrganizationId',
   'firstFollowup',
@@ -88,6 +89,8 @@ export async function exportFollowups({
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
           status: socialSupportStatusKeys.value(followup.status) || '',
           subjects: followup.subjects.map(({ name }) => name).join(', '),
+          beneficiaryDeviceId:
+            followup.beneficiaryDevice?.deviceName?.name || '',
           beneficiaryFileNumber: followup.beneficiary.fileNumber || '',
           beneficiaryLastName: nameOrEmpty(
             followup.beneficiary.usualName?.toLocaleUpperCase() ||
