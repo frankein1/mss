@@ -79,7 +79,6 @@
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import type { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const title = routes.beneficiary.AppBeneficiariesReferentTransfer.title
 
@@ -89,20 +88,10 @@
     name: routes.beneficiary.AppBeneficiariesReferentTransfer.name
   })
 
-  const route = useRoute()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
 
   // Filters
-  const notFilled = route.query['not-filled'] as FilterBeneficiaryNotFilled
-  if (notFilled) {
-    if (filtersState.beneficiary.value) {
-      filtersState.beneficiary.value.notFilled = notFilled
-    } else {
-      filtersState.beneficiary.value = { notFilled }
-    }
-  }
-
   const filters = ref<BeneficiaryFilterInput>(
     filtersState.beneficiary.value || {}
   )

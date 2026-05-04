@@ -102,13 +102,19 @@
   } = useTrpcClient().file.addReferent.useMutation()
 
   async function onAddReferent() {
+    if (referentId.value == null || selectedBeneficiaries.value.length === 0) {
+      useSnackbar().error('La mise à jour des référents à échouée.')
+      return
+    }
     const values: AddReferentToFamilyFileInput = {
       beneficiaries: selectedBeneficiaries.value,
-      referentId: referentId.value || '' // TODO
+      referentId: referentId.value
     }
     const res = await mutate(values)
     if (mutationError.value || !res) {
       return
     }
+    selectedBeneficiaries.value = []
+    referentId.value = null
   }
 </script>

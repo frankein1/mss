@@ -110,10 +110,12 @@
 
     .order-1 {
       order: 1;
+      max-width: 100%;
     }
 
     .order-2 {
       order: 2;
+      max-width: 100%;
     }
   }
 </style>

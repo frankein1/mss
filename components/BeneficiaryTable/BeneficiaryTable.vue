@@ -17,6 +17,7 @@
               v-if="selectable"
               class="fr-cell--fixed"
               role="columnheader"
+              scope="row"
             >
               <div class="fr-checkbox-group fr-checkbox-group--sm">
                 <input
@@ -29,6 +30,7 @@
                   @change="toggleAll"
                 />
                 <label
+                  aria-describedby="tooltip"
                   class="fr-label"
                   for="table-select-all"
                 >
@@ -36,6 +38,14 @@
                     >Sélectionner toutes les lignes visibles</span
                   >
                 </label>
+
+                <span
+                  id="tooltip"
+                  class="fr-tooltip fr-placement"
+                  role="tooltip"
+                  aria-hidden="true"
+                  >Sélectionner toutes les lignes visibles</span
+                >
               </div>
             </th>
             <TableSortableHeader
