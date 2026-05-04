@@ -70,7 +70,8 @@
         startDate: d.startDate,
         endDate: d.endDate,
         partnerOrganisationName: d.partnerOrganisationName,
-        precisions: d.precisions
+        precisions: d.precisions,
+        exitReason: d.exitReason
       }))
     }
   })

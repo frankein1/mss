@@ -71,6 +71,15 @@
     queryKey: 'config.getAgents.options'
   })
 
+  const { data: deviceNameList } =
+    await trpcClient.beneficiary.getDeviceNameList.useQuery()
+
+  const deviceNameOptions = computed(
+    () =>
+      deviceNameList.value?.map(({ name }) => ({ label: name, value: name })) ??
+      []
+  )
+
   const pending = computed(
     () => socialSupportSubjectOptionsPending.value || agentOptionsPending.value
   )
@@ -110,6 +119,18 @@
         matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
       }
     ]
+
+    if (deviceNameOptions.value.length > 0) {
+      filters.push({
+        name: 'deviceNames',
+        label: 'Dispositif',
+        options: deviceNameOptions.value,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: true,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
+      })
+    }
 
     if (hasReferentsFilters) {
       filters.push({

@@ -1832,8 +1832,9 @@ model BeneficiaryDevice {
   partnerOrganisationName String? @map("partner_organisation_name") @db.VarChar(200)
   precisions              String? @db.VarChar(500)
 
-  startDate DateTime? @map("start_date") @db.Date
-  endDate   DateTime? @map("end_date") @db.Date
+  startDate  DateTime? @map("start_date") @db.Date
+  endDate    DateTime? @map("end_date") @db.Date
+  exitReason String?   @map("exit_reason") @db.VarChar(500)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
