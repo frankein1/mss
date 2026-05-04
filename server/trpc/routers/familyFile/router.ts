@@ -16,5 +16,8 @@ export const fileRouter = router({
     .query(routes.getExaminationDatesQuery.execute),
   split: protectedProcedure
     .input(routes.split.inputValidation)
-    .mutation(routes.split.execute)
+    .mutation(routes.split.execute),
+  getDeviceNamesForFamilyFile: protectedProcedure
+    .input(routes.getDeviceNamesForFamilyFileQuery.inputValidation)
+    .query(routes.getDeviceNamesForFamilyFileQuery.execute)
 })

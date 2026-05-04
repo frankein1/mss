@@ -70,7 +70,12 @@ export type GetBeneficiaryGeneral = Pick<
 
 export type GetBeneficiaryDeviceItem = Pick<
   BeneficiaryDevice,
-  'id' | 'startDate' | 'endDate' | 'partnerOrganisationName' | 'precisions'
+  | 'id'
+  | 'startDate'
+  | 'endDate'
+  | 'exitReason'
+  | 'partnerOrganisationName'
+  | 'precisions'
 > & {
   deviceName: { id: string; name: string }
 }

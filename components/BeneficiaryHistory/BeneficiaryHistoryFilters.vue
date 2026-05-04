@@ -34,11 +34,13 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const { familyFileIdentification, values, resultsLabel } = defineProps<{
-    resultsLabel: string
-    values: FamilyFileHistoryFilterInput
-    familyFileIdentification: BeneficiaryFileIdentification[]
-  }>()
+  const { familyFileIdentification, values, resultsLabel, deviceNameOptions } =
+    defineProps<{
+      resultsLabel: string
+      values: FamilyFileHistoryFilterInput
+      familyFileIdentification: BeneficiaryFileIdentification[]
+      deviceNameOptions: string[]
+    }>()
 
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
@@ -141,6 +143,19 @@
         matomoEventAction:
           BeneficiaryHistoryFilterEventAction.SocialSupportSubject,
         alwaysExpanded: true
+      })
+    }
+
+    if (deviceNameOptions.length > 0) {
+      filters.push({
+        name: 'beneficiaryDeviceNames',
+        label: 'Dispositif concerné',
+        options: deviceNameOptions.map(name => ({ label: name, value: name })),
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction:
+          BeneficiaryHistoryFilterEventAction.SocialSupportSubject,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }
 

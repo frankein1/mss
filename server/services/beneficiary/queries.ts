@@ -63,6 +63,7 @@ export const include = {
       id: true,
       startDate: true,
       endDate: true,
+      exitReason: true,
       partnerOrganisationName: true,
       precisions: true,
       deviceName: { select: { id: true, name: true } }
@@ -321,6 +322,7 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
       id: d.id,
       startDate: d.startDate,
       endDate: d.endDate,
+      exitReason: d.exitReason,
       partnerOrganisationName: d.partnerOrganisationName,
       precisions: d.precisions,
       deviceName: d.deviceName

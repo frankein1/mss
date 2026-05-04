@@ -71,6 +71,12 @@
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
+        v-if="device.endDate"
+        label="Motif de sortie"
+        :value="device.exitReason ?? undefined"
+        class="fr-col-12"
+      />
+      <BeneficiaryInfoLabel
         label="Précisions"
         :value="device.precisions"
         class="fr-col-12"
