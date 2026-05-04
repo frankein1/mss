@@ -95,20 +95,14 @@
   })
 
   // Action
-  const {
-    mutate,
-    status: mutationStatus,
-    error: mutationError
-  } = useTrpcClient().file.addReferent.useMutation()
+  const { mutate, status: mutationStatus } =
+    useTrpcClient().file.addReferent.useMutation()
 
   async function onAddReferent() {
     const values: AddReferentToFamilyFileInput = {
       beneficiaries: selectedBeneficiaries.value,
       referentId: referentId.value || '' // TODO
     }
-    const res = await mutate(values)
-    if (mutationError.value || !res) {
-      return
-    }
+    await mutate(values)
   }
 </script>

@@ -122,7 +122,7 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
-  const result = await trpc.structureManager.file.deleteReferent({
+  await trpc.structureManager.file.deleteReferent({
     beneficiaries: firstBeneficiaries,
     referentId: referentTestId
   })
@@ -131,7 +131,13 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
     `[PERF] deleteReferent (${MAX_BENEFICIARIES} bénéficiaires): ${mutationDurationS.toFixed(1)} s.`
   )
 
-  expect(result.count).toBe(MAX_BENEFICIARIES)
+  const updatedCount = await prismaClient.familyFile.count({
+    where: {
+      id: { in: firstBeneficiaries.map(b => b.familyFileId) },
+      referents: { some: { id: referentTestId } }
+    }
+  })
+  expect(updatedCount).toBe(0)
 
   const updatedFiles = await prismaClient.familyFile.findMany({
     where: { id: { in: firstBeneficiaries.map(b => b.familyFileId) } },
@@ -146,6 +152,14 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   const lastFamilyFileIds = beneficiaries
     .slice(MAX_BENEFICIARIES)
     .map(b => b.familyFileId)
+  const untouchedCount = await prismaClient.familyFile.count({
+    where: {
+      id: { in: lastFamilyFileIds },
+      referents: { some: { id: referentTestId } }
+    }
+  })
+  expect(untouchedCount).toBe(CREATED_FILES_NUMBER - MAX_BENEFICIARIES)
+
   const untouchedFiles = await prismaClient.familyFile.findMany({
     where: { id: { in: lastFamilyFileIds } },
     select: { referents: { select: { id: true } } }
