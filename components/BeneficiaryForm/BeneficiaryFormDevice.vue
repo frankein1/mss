@@ -36,6 +36,16 @@
       />
     </div>
 
+    <div
+      v-if="endDate"
+      class="fr-col-12"
+    >
+      <VeeInput
+        :name="`devices[${index}].exitReason`"
+        label="Motif de sortie"
+      />
+    </div>
+
     <div class="fr-col-12">
       <VeeCombobox
         :name="`devices[${index}].partnerOrganisationName`"
@@ -62,13 +72,18 @@
 </template>
 
 <script setup lang="ts">
+  import { useFieldValue } from 'vee-validate'
   import { routes } from '~/utils/routes'
 
-  defineProps<{
+  const props = defineProps<{
     index: number
     deviceNameOptions: Options
     partnerOrganisationOptions: Options
   }>()
+
+  const endDate = useFieldValue<string | null | undefined>(
+    () => `devices[${props.index}].endDate`
+  )
 
   const emit = defineEmits<{
     removeDevice: []

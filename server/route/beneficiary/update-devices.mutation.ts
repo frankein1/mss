@@ -39,6 +39,7 @@ const handler = async ({
           endDate: device.endDate ?? null,
           partnerOrganisationName: device.partnerOrganisationName ?? null,
           precisions: device.precisions ?? null,
+          exitReason: device.exitReason ?? null,
           deviceName: {
             connectOrCreate: {
               where: { structureId_name: { structureId, name: device.name } },
