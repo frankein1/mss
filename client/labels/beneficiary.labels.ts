@@ -112,4 +112,13 @@ export const beneficiaryExportFieldLabels = {
   beneficiaryFirstName: 'Prénom bénéficiaire'
 }
 
+export const beneficiaryDeviceExportFieldLabels = {
+  deviceName: 'Nom dispositif',
+  deviceStartDate: "Date d'entrée",
+  deviceEndDate: 'Date de sortie',
+  deviceExitReason: 'Motif de sortie',
+  devicePartnerOrganisationName: 'Organisme partenaire',
+  devicePrecisions: 'Précisions'
+}
+
 export { beneficiaryFieldLabels }
