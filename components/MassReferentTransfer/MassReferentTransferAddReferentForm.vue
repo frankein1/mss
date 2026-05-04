@@ -13,7 +13,7 @@
   >
     <VeeSelect
       name="referentId"
-      :label="beneficiaryReferentTransfertLabels.referentId"
+      :label="inputLabel"
       :options="agentOptions ? withEmptyValue(agentOptions) : []"
       required
     />
@@ -25,9 +25,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiaryReferentTransfertLabels } from '~/client/labels/beneficiary.labels'
-  import type { AddReferentToFamilyFileInput } from '~/server/schema'
-  import { addReferentToFamilyFileSchema } from '~/server/schema'
+  import {
+    addReferentToFamilyFileSchema,
+    deleteReferentFromFamilyFileSchema,
+    type AddReferentToFamilyFileInput
+  } from '~/server/schema'
   import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import type { Options } from '~/utils/options'
 
@@ -40,16 +42,33 @@
     next: []
   }>()
 
-  const { selectedBeneficiaries, referentId } = useMassReferentTransferState()
+  const { selectedBeneficiaries, referentId, editionChoice } =
+    useMassReferentTransferState()
+
+  const inputLabel = computed(() => {
+    if (editionChoice.value === 'add') {
+      return 'Sélectionnez l’agent référent à ajouter'
+    }
+    if (editionChoice.value === 'delete') {
+      return 'Sélectionnez l’agent référent à retirer'
+    }
+    return 'Sélectionnez l’agent référent à transferer'
+  })
+
+  const validationSchema = computed(() =>
+    editionChoice.value === 'delete'
+      ? deleteReferentFromFamilyFileSchema
+      : addReferentToFamilyFileSchema
+  )
 
   const { handleSubmit } = useForm<AddReferentToFamilyFileInput>({
-    validationSchema: toTypedSchema(addReferentToFamilyFileSchema),
+    validationSchema: computed(() => toTypedSchema(validationSchema.value)),
     initialValues: {
       beneficiaries: selectedBeneficiaries.value.map(b => ({
         beneficiaryId: b.beneficiaryId,
         familyFileId: b.familyFileId
       })),
-      referentId: undefined
+      referentId: referentId.value ?? undefined
     }
   })
 

@@ -13,6 +13,11 @@
           MAX_BENEFICIARIES_REFERENT_TRANSFER
         }}
         bénéficiaires sélectionné(s).
+        <template v-if="editionChoice === 'delete'">
+          <br />
+          Vous ne pouvez pas séléctionner des bénéficiaires qui ont moins de 2
+          agents référents.
+        </template>
       </p>
       <AtomAlert
         v-if="
@@ -30,6 +35,7 @@
         :beneficiary-list="items"
         :pending="pending"
         :selection-limit="MAX_BENEFICIARIES_REFERENT_TRANSFER"
+        :disabled-beneficiary-ids="disabledBeneficiaryIds"
         selectable
         show-referents
       />
@@ -61,6 +67,7 @@
   } from '~/utils/constants'
   import { SortOrder, type BeneficiarySort } from '~/types/table'
   import type { BeneficiaryFilterInput } from '~/server/schema'
+  import type { BeneficiaryListItem } from './types'
 
   const props = defineProps<{
     filters: BeneficiaryFilterInput
@@ -75,7 +82,8 @@
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const orderBy = ref<BeneficiarySort>({ usualName: SortOrder.Asc })
-  const { selectedBeneficiaries } = useMassReferentTransferState()
+  const { selectedBeneficiaries, editionChoice } =
+    useMassReferentTransferState()
 
   const computedFilters = computed(() => props.filters)
 
@@ -98,9 +106,22 @@
 
   const beneficiariesCount = computed(() => pageData.value?.count || 0)
 
-  const items = computed(() => pageData.value?.items || [])
+  const items = computed(
+    () => (pageData.value?.items as Array<BeneficiaryListItem>) || []
+  )
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
+
+  const disabledBeneficiaryIds = computed(() => {
+    if (editionChoice.value !== 'delete') {
+      return []
+    }
+    return items.value
+      .filter(
+        b => b.familyFile?.referents && b.familyFile.referents?.length <= 1
+      )
+      .map(b => b.id)
+  })
 </script>
 
 <style lang="scss" scoped>

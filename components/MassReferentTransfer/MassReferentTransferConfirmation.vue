@@ -9,7 +9,7 @@
     <AtomAlert
       :alert-type="AlertType.Warning"
       size="sm"
-      :message="`Êtes-vous sur de vouloir ajouter ${agentName ? agentName : '(nom introuvable)'} sur ${selectedBeneficiaries.length} dossiers bénéficiaires ?`"
+      :message="confirmationMessage"
       :closeable="false"
       title-tag="p"
       class="fr-mb-6v"
@@ -68,17 +68,17 @@
     next-label="Valider"
     :disable-previous="mutationStatus === 'pending'"
     @previous="emit('previous')"
-    @next="onAddReferent"
+    @next="onConfirm"
   />
 </template>
 
 <script setup lang="ts">
-  import type { AddReferentToFamilyFileInput } from '~/server/schema'
   import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
-  const { selectedBeneficiaries, referentId } = useMassReferentTransferState()
+  const { selectedBeneficiaries, referentId, editionChoice } =
+    useMassReferentTransferState()
 
   const props = defineProps<{
     agentOptions?: Options
@@ -88,30 +88,45 @@
     previous: []
   }>()
 
-  // Get agent name
   const agentName = computed(() => {
     const agent = props.agentOptions?.find(a => a.value === referentId.value)
     return agent?.label
   })
 
-  // Action
-  const {
-    mutate,
-    status: mutationStatus,
-    error: mutationError
-  } = useTrpcClient().file.addReferent.useMutation()
+  const confirmationMessage = computed(() => {
+    const name = agentName.value ?? '(nom introuvable)'
+    const count = selectedBeneficiaries.value.length
+    if (editionChoice.value === 'add') {
+      return `Êtes-vous sûr de vouloir ajouter ${name} sur ${count} dossiers bénéficiaires ?`
+    }
+    return `Êtes-vous sûr de vouloir retirer ${name} de ${count} dossiers bénéficiaires ?`
+  })
 
-  async function onAddReferent() {
+  const addReferentMutation = useTrpcClient().file.addReferent.useMutation()
+  const deleteReferentMutation =
+    useTrpcClient().file.deleteReferent.useMutation()
+
+  const mutationStatus = computed(() =>
+    editionChoice.value === 'add'
+      ? addReferentMutation.status.value
+      : deleteReferentMutation.status.value
+  )
+
+  async function onConfirm() {
     if (referentId.value == null || selectedBeneficiaries.value.length === 0) {
       useSnackbar().error('La mise à jour des référents à échouée.')
       return
     }
-    const values: AddReferentToFamilyFileInput = {
+    const values = {
       beneficiaries: selectedBeneficiaries.value,
       referentId: referentId.value
     }
+    const { mutate, error } =
+      editionChoice.value === 'add'
+        ? addReferentMutation
+        : deleteReferentMutation
     const res = await mutate(values)
-    if (mutationError.value || !res) {
+    if (error.value || !res) {
       return
     }
     selectedBeneficiaries.value = []

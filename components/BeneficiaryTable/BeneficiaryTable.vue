@@ -106,6 +106,7 @@
     selectable?: boolean
     selectionLimit?: number
     showReferents?: boolean
+    disabledBeneficiaryIds?: string[]
   }>()
 
   const emit = defineEmits<{
@@ -129,8 +130,14 @@
     return selectedBeneficiaries.value.some(b => b.beneficiaryId === id)
   }
 
+  const disabledSet = computed(
+    () => new Set(props.disabledBeneficiaryIds ?? [])
+  )
+
   function isRowDisabled(id: string) {
-    return isLimitReached.value && !isSelected(id)
+    return (
+      (isLimitReached.value && !isSelected(id)) || disabledSet.value.has(id)
+    )
   }
 
   function toggleRow(beneficiary: BeneficiaryListItem) {
@@ -149,15 +156,20 @@
     }
   }
 
+  const selectableBeneficiaries = computed(() =>
+    props.beneficiaryList.filter(b => !disabledSet.value.has(b.id))
+  )
+
   const isAllSelected = computed(
     () =>
-      props.beneficiaryList.length > 0 &&
-      props.beneficiaryList.every(b => isSelected(b.id))
+      selectableBeneficiaries.value.length > 0 &&
+      selectableBeneficiaries.value.every(b => isSelected(b.id))
   )
 
   const isIndeterminate = computed(
     () =>
-      !isAllSelected.value && props.beneficiaryList.some(b => isSelected(b.id))
+      !isAllSelected.value &&
+      selectableBeneficiaries.value.some(b => isSelected(b.id))
   )
 
   const isSelectAllDisabled = computed(
@@ -172,9 +184,11 @@
 
   function toggleAll() {
     if (isAllSelected.value) {
-      const visibleIds = new Set(props.beneficiaryList.map(b => b.id))
+      const visibleSelectableIds = new Set(
+        selectableBeneficiaries.value.map(b => b.id)
+      )
       selectedBeneficiaries.value = selectedBeneficiaries.value.filter(
-        b => !visibleIds.has(b.beneficiaryId)
+        b => !visibleSelectableIds.has(b.beneficiaryId)
       )
     } else {
       const remaining =
@@ -184,7 +198,7 @@
       const existingIds = new Set(
         selectedBeneficiaries.value.map(b => b.beneficiaryId)
       )
-      const toAdd = props.beneficiaryList
+      const toAdd = selectableBeneficiaries.value
         .filter(b => !existingIds.has(b.id))
         .slice(0, remaining)
         .map(b => ({ beneficiaryId: b.id, familyFileId: b.familyFileId }))

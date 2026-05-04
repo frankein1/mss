@@ -1,4 +1,11 @@
+export type EditionChoice = 'delete' | 'add'
+
 export function useMassReferentTransferState() {
+  const editionChoice = useState<EditionChoice | null>(
+    'editReferents:editionChoice',
+    () => null
+  )
+
   const selectedBeneficiaries = useState<
     { beneficiaryId: string; familyFileId: string }[]
   >('editReferents:selectedBeneficiaries', () => [])
@@ -8,5 +15,5 @@ export function useMassReferentTransferState() {
     () => null
   )
 
-  return { selectedBeneficiaries, referentId }
+  return { selectedBeneficiaries, referentId, editionChoice }
 }

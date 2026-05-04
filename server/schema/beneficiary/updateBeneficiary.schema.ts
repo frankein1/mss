@@ -239,8 +239,14 @@ export const deleteReferentFromFamilyFileSchema = z.object({
     .array(beneficiaryWithFamilyFileSchema)
     .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
       message: `Pas plus de ${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires.`
+    })
+    .min(1, {
+      message: `Veuillez sélectionner au moins 1 bénéficiaire.`
     }),
-  referentId: z.string().uuid()
+  referentId: z
+    .string({ required_error: requiredErrorMessage })
+    .min(1, requiredErrorMessage)
+    .uuid()
 })
 
 export type DeleteReferentFromFamilyFileSchema = z.infer<

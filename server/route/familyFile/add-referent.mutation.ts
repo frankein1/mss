@@ -13,7 +13,6 @@ import {
 } from '~/server/schema'
 import { FamilyFileRepo, UserRepo } from '~/server/database'
 import { FamilyFileService } from '~/server/services'
-import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
