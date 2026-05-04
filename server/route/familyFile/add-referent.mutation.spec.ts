@@ -84,7 +84,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 
   test('autorise un gestionnaire de structure', async ({ trpc }) => {
@@ -92,7 +92,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 
   test('autorise un référent affecté aux dossiers', async ({ trpc }) => {
@@ -100,7 +100,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 })
 
@@ -110,7 +110,7 @@ test(`addReferentToBeneficiaries - ajoute le référent aux ${MAX_BENEFICIARIES}
   const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
-  const result = await trpc.structureManager.file.addReferent({
+  await trpc.structureManager.file.addReferent({
     beneficiaries: firstBeneficiaries,
     referentId: referentTestId
   })
@@ -118,8 +118,6 @@ test(`addReferentToBeneficiaries - ajoute le référent aux ${MAX_BENEFICIARIES}
   console.log(
     `[PERF] addReferent (${MAX_BENEFICIARIES} beneficiaries): ${mutationDurationS.toFixed(1)} s.`
   )
-
-  expect(result.count).toBe(MAX_BENEFICIARIES)
 
   const updatedFiles = await prismaClient.familyFile.findMany({
     where: { id: { in: firstBeneficiaries.map(b => b.familyFileId) } },

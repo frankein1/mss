@@ -12,7 +12,7 @@
         {{ selectedBeneficiaries.length }}/{{
           MAX_BENEFICIARIES_REFERENT_TRANSFER
         }}
-        bénéficiaires sélectionné(s).
+        bénéficiaires maximum sélectionné(s).
         <template v-if="editionChoice === 'delete'">
           <br />
           Vous ne pouvez pas séléctionner des bénéficiaires qui ont moins de 2

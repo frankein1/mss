@@ -88,7 +88,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 
   test('autorise un gestionnaire de structure', async ({ trpc }) => {
@@ -96,7 +96,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 
   test('autorise un référent affecté aux dossiers', async ({ trpc }) => {
@@ -104,7 +104,7 @@ describe('Authorizations', () => {
       beneficiaries: beneficiaries.slice(0, 1),
       referentId: referentTestId
     })
-    expect(result.count).toBe(1)
+    expect(result.id).toBe(referentTestId)
   })
 })
 
@@ -137,7 +137,7 @@ test("deleteReferentFromBeneficiaries - refuse si un bénéficiaire n'a qu'un se
       ],
       referentId: referentTestId
     })
-  ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+  ).rejects.toMatchObject({ code: 'BAD_REQUEST' })
 })
 
 test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFICIARIES} premiers bénéficiaires uniquement`, async ({
@@ -146,7 +146,7 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
-  const result = await trpc.structureManager.file.deleteReferent({
+  await trpc.structureManager.file.deleteReferent({
     beneficiaries: firstBeneficiaries,
     referentId: referentTestId
   })
@@ -154,8 +154,6 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   console.log(
     `[PERF] deleteReferent (${MAX_BENEFICIARIES} bénéficiaires): ${mutationDurationS.toFixed(1)} s.`
   )
-
-  expect(result.count).toBe(MAX_BENEFICIARIES)
 
   const updatedFiles = await prismaClient.familyFile.findMany({
     where: { id: { in: firstBeneficiaries.map(b => b.familyFileId) } },

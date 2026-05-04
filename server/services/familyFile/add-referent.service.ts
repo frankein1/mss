@@ -1,4 +1,4 @@
-import { FamilyFileRepo } from '~/server/database'
+import { FamilyFileRepo, UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'
 
@@ -13,19 +13,21 @@ export async function addReferentToFamilyFile({
   beneficiaries: { beneficiaryId: string; familyFileId: string }[]
   referentId: string
 }) {
-  const familyFileIds = beneficiaries.map(b => b.familyFileId)
+  const updatedReferent = await UserRepo.update(user, {
+    where: {
+      id: referentId
+    },
+    data: {
+      referentFor: {
+        connect: beneficiaries.map(b => ({
+          id: b.familyFileId
+        }))
+      }
+    },
+    select: {
+      id: true
+    }
+  })
 
-  for (let i = 0; i < familyFileIds.length; i += BATCH_SIZE) {
-    const batch = familyFileIds.slice(i, i + BATCH_SIZE)
-    await prismaClient.$transaction(
-      batch.map(id =>
-        FamilyFileRepo.update(user, {
-          where: { id },
-          data: { referents: { connect: [{ id: referentId }] } }
-        })
-      )
-    )
-  }
-
-  return { count: familyFileIds.length }
+  return { id: updatedReferent.id }
 }
