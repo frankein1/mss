@@ -43,7 +43,6 @@ import {
   validIntNumber,
   requiredErrorMessage
 } from '~/utils/zod'
-import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 
 export const updateBeneficiaryGeneralInformationSchema = z.object({
   id: z.string().uuid(),
@@ -208,47 +207,4 @@ export const updateBeneficiaryArchiveDate = z.object({
 
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
->
-
-const beneficiaryWithFamilyFileSchema = z.object({
-  beneficiaryId: z.string().uuid(),
-  familyFileId: z.string().uuid()
-})
-
-export const addReferentToFamilyFileSchema = z.object({
-  beneficiaries: z
-    .array(beneficiaryWithFamilyFileSchema)
-    .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
-      message: `Pas plus de ${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires.`
-    })
-    .min(1, {
-      message: `Veuillez sélectionner au moins 1 bénéficiaire.`
-    }),
-  referentId: z
-    .string({ required_error: requiredErrorMessage })
-    .min(1, requiredErrorMessage)
-    .uuid()
-})
-
-export type AddReferentToFamilyFileInput = z.infer<
-  typeof addReferentToFamilyFileSchema
->
-
-export const deleteReferentFromFamilyFileSchema = z.object({
-  beneficiaries: z
-    .array(beneficiaryWithFamilyFileSchema)
-    .max(MAX_BENEFICIARIES_REFERENT_TRANSFER, {
-      message: `Pas plus de ${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires.`
-    })
-    .min(1, {
-      message: `Veuillez sélectionner au moins 1 bénéficiaire.`
-    }),
-  referentId: z
-    .string({ required_error: requiredErrorMessage })
-    .min(1, requiredErrorMessage)
-    .uuid()
-})
-
-export type DeleteReferentFromFamilyFileSchema = z.infer<
-  typeof deleteReferentFromFamilyFileSchema
 >

@@ -7,8 +7,8 @@ import {
 } from '~/server/security'
 import { invalidError, type ProtectedAppContext } from '~/server/trpc'
 import {
-  deleteReferentFromFamilyFileSchema,
-  type DeleteReferentFromFamilyFileSchema
+  transfertReferentToFamilyFileSchema,
+  type TransferReferentToFamilyFileInput
 } from '~/server/schema'
 import { FamilyFileRepo, UserRepo } from '~/server/database'
 import { FamilyFileService } from '~/server/services'
@@ -16,7 +16,7 @@ import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: DeleteReferentFromFamilyFileSchema
+  input: TransferReferentToFamilyFileInput
 ) => {
   // check User type
   if (ctx.user.role === UserRole.ReceptionAgent) {
@@ -33,7 +33,7 @@ const securityCheck = async (
   }
 
   // check FamilyFile Permissions
-  const familyFileIds = input.beneficiaries.map(b => b.familyFileId)
+  const familyFileIds = [...new Set(input.familyFileIds)] // deduplicate
   const familyFiles = await FamilyFileRepo.findMany(ctx.user, {
     where: { id: { in: familyFileIds } },
     select: {
@@ -54,14 +54,15 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: DeleteReferentFromFamilyFileSchema
+  input: TransferReferentToFamilyFileInput
   ctx: ProtectedAppContext
 }) => {
-  if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
+  if (input.familyFileIds.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
     throw invalidError('Maximum number of beneficiaries exceeded')
   }
 
-  const familyFileIds = input.beneficiaries.map(b => b.familyFileId)
+  const familyFileIds = [...new Set(input.familyFileIds)] // deduplicate
+
   const familyFiles = await FamilyFileRepo.findMany(ctx.user, {
     where: { id: { in: familyFileIds } },
     select: {
@@ -72,27 +73,25 @@ const handler = async ({
       }
     }
   })
-
   if (familyFiles.some(ff => ff.referents.length < 2)) {
     throw invalidError('Family file must have, at least, 2 referent agents.')
   }
 
   return FamilyFileService.deleteReferentFromFamilyfile({
     user: ctx.user,
-    beneficiaries: input.beneficiaries,
+    familyFileIds,
     referentId: input.referentId
   })
 }
 
 export const deleteReferentFromFamilyFileMutation = createMutation({
-  inputValidation: deleteReferentFromFamilyFileSchema,
+  inputValidation: transfertReferentToFamilyFileSchema,
   securityCheck,
   handler,
   auditLog: {
     key: 'familyFile.deleteReferent',
     target: UserActivityObject.FamilyFile,
-    targetId: ({ input }) =>
-      input.beneficiaries.map(b => b.familyFileId).join(', '),
+    targetId: ({ input }) => [...new Set(input.familyFileIds)].join(', '),
     action: UserActivityType.UPDATE
   }
 })

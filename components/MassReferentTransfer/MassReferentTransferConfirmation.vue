@@ -118,7 +118,7 @@
       return
     }
     const values = {
-      beneficiaries: selectedBeneficiaries.value,
+      familyFileIds: selectedBeneficiaries.value.map(b => b.familyFileId),
       referentId: referentId.value
     }
     const { mutate, error } =

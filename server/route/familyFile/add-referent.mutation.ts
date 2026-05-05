@@ -8,15 +8,15 @@ import {
 } from '~/server/security'
 import { invalidError, type ProtectedAppContext } from '~/server/trpc'
 import {
-  addReferentToFamilyFileSchema,
-  type AddReferentToFamilyFileInput
+  transfertReferentToFamilyFileSchema,
+  type TransferReferentToFamilyFileInput
 } from '~/server/schema'
 import { FamilyFileRepo, UserRepo } from '~/server/database'
 import { FamilyFileService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: AddReferentToFamilyFileInput
+  input: TransferReferentToFamilyFileInput
 ) => {
   // check User type
   if (ctx.user.role === UserRole.ReceptionAgent) {
@@ -34,7 +34,7 @@ const securityCheck = async (
   }
 
   // check FamilyFile Permissions
-  const familyFileIds = input.beneficiaries.map(b => b.familyFileId)
+  const familyFileIds = [...new Set(input.familyFileIds)] // deduplicate
   const familyFiles = await FamilyFileRepo.findMany(ctx.user, {
     where: { id: { in: familyFileIds } },
     select: {
@@ -58,28 +58,28 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: AddReferentToFamilyFileInput
+  input: TransferReferentToFamilyFileInput
   ctx: ProtectedAppContext
 }) => {
-  if (input.beneficiaries.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
+  if (input.familyFileIds.length > MAX_BENEFICIARIES_REFERENT_TRANSFER) {
     throw invalidError('Maximum number of beneficiaries exceeded')
   }
+  const familyFileIds = [...new Set(input.familyFileIds)] // deduplicate
   return FamilyFileService.addReferentToFamilyFile({
     user: ctx.user,
-    beneficiaries: input.beneficiaries,
+    familyFileIds,
     referentId: input.referentId
   })
 }
 
 export const addReferentToFamilyFileMutation = createMutation({
-  inputValidation: addReferentToFamilyFileSchema,
+  inputValidation: transfertReferentToFamilyFileSchema,
   securityCheck,
   handler,
   auditLog: {
     key: 'familyFile.addReferent',
     target: UserActivityObject.FamilyFile,
-    targetId: ({ input }) =>
-      input.beneficiaries.map(b => b.familyFileId).join(', '),
+    targetId: ({ input }) => [...new Set(input.familyFileIds)].join(', '),
     action: UserActivityType.UPDATE
   }
 })

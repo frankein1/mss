@@ -3,18 +3,20 @@ import type { SecurityRuleGrantee } from '~/server/security'
 
 export async function deleteReferentFromFamilyfile({
   user,
-  beneficiaries,
+  familyFileIds,
   referentId
 }: {
   user: SecurityRuleGrantee
-  beneficiaries: { beneficiaryId: string; familyFileId: string }[]
+  familyFileIds: string[]
   referentId: string
 }) {
   const updatedReferent = await UserRepo.update(user, {
     where: { id: referentId },
     data: {
       referentFor: {
-        disconnect: beneficiaries.map(b => ({ id: b.familyFileId }))
+        disconnect: familyFileIds.map(id => ({
+          id
+        }))
       }
     }
   })

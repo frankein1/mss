@@ -26,9 +26,8 @@
 
 <script lang="ts" setup>
   import {
-    addReferentToFamilyFileSchema,
-    deleteReferentFromFamilyFileSchema,
-    type AddReferentToFamilyFileInput
+    transfertReferentToFamilyFileSchema,
+    type TransferReferentToFamilyFileInput
   } from '~/server/schema'
   import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import type { Options } from '~/utils/options'
@@ -55,19 +54,10 @@
     return 'Sélectionnez l’agent référent à transferer'
   })
 
-  const validationSchema = computed(() =>
-    editionChoice.value === 'delete'
-      ? deleteReferentFromFamilyFileSchema
-      : addReferentToFamilyFileSchema
-  )
-
-  const { handleSubmit } = useForm<AddReferentToFamilyFileInput>({
-    validationSchema: computed(() => toTypedSchema(validationSchema.value)),
+  const { handleSubmit } = useForm<TransferReferentToFamilyFileInput>({
+    validationSchema: toTypedSchema(transfertReferentToFamilyFileSchema),
     initialValues: {
-      beneficiaries: selectedBeneficiaries.value.map(b => ({
-        beneficiaryId: b.beneficiaryId,
-        familyFileId: b.familyFileId
-      })),
+      familyFileIds: selectedBeneficiaries.value.map(b => b.familyFileId),
       referentId: referentId.value ?? undefined
     }
   })

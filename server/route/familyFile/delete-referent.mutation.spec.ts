@@ -15,7 +15,6 @@ const CREATED_FILES_NUMBER = 800
 
 let referentTestId: string
 let familyFileIds: string[]
-let beneficiaries: { beneficiaryId: string; familyFileId: string }[]
 
 beforeEach(async () => {
   const referentTest = await prismaClient.user.create({
@@ -48,7 +47,7 @@ beforeEach(async () => {
     data: { referentFor: { connect: familyFiles } }
   })
 
-  const created = await prismaClient.beneficiary.createManyAndReturn({
+  await prismaClient.beneficiary.createManyAndReturn({
     select: { id: true, familyFileId: true },
     data: familyFiles.map(({ id }) => ({
       structureId: STRUCTURE_ID,
@@ -57,10 +56,6 @@ beforeEach(async () => {
       familyFileId: id
     }))
   })
-  beneficiaries = created.map(b => ({
-    beneficiaryId: b.id,
-    familyFileId: b.familyFileId!
-  }))
 })
 
 afterEach(async () => {
@@ -77,7 +72,7 @@ describe('Authorizations', () => {
   test("refuse l'accès à un agent d'accueil", async ({ trpc }) => {
     await expect(
       trpc.receptionAgent.file.deleteReferent({
-        beneficiaries: beneficiaries.slice(0, 1),
+        familyFileIds: familyFileIds.slice(0, 1),
         referentId: referentTestId
       })
     ).rejects.toMatchObject({ code: 'FORBIDDEN' })
@@ -85,7 +80,7 @@ describe('Authorizations', () => {
 
   test('autorise un travailleur social', async ({ trpc }) => {
     const result = await trpc.socialWorker.file.deleteReferent({
-      beneficiaries: beneficiaries.slice(0, 1),
+      familyFileIds: familyFileIds.slice(0, 1),
       referentId: referentTestId
     })
     expect(result.id).toBe(referentTestId)
@@ -93,7 +88,7 @@ describe('Authorizations', () => {
 
   test('autorise un gestionnaire de structure', async ({ trpc }) => {
     const result = await trpc.structureManager.file.deleteReferent({
-      beneficiaries: beneficiaries.slice(0, 1),
+      familyFileIds: familyFileIds.slice(0, 1),
       referentId: referentTestId
     })
     expect(result.id).toBe(referentTestId)
@@ -101,7 +96,7 @@ describe('Authorizations', () => {
 
   test('autorise un référent affecté aux dossiers', async ({ trpc }) => {
     const result = await trpc.referent.file.deleteReferent({
-      beneficiaries: beneficiaries.slice(0, 1),
+      familyFileIds: familyFileIds.slice(0, 1),
       referentId: referentTestId
     })
     expect(result.id).toBe(referentTestId)
@@ -120,7 +115,7 @@ test("deleteReferentFromBeneficiaries - refuse si un bénéficiaire n'a qu'un se
   })
   familyFileIds.push(soloFile.id)
 
-  const soloBeneficiary = await prismaClient.beneficiary.create({
+  await prismaClient.beneficiary.create({
     select: { id: true },
     data: {
       structureId: STRUCTURE_ID,
@@ -132,9 +127,7 @@ test("deleteReferentFromBeneficiaries - refuse si un bénéficiaire n'a qu'un se
 
   await expect(
     trpc.structureManager.file.deleteReferent({
-      beneficiaries: [
-        { beneficiaryId: soloBeneficiary.id, familyFileId: soloFile.id }
-      ],
+      familyFileIds: [soloFile.id],
       referentId: referentTestId
     })
   ).rejects.toMatchObject({ code: 'BAD_REQUEST' })
@@ -143,11 +136,11 @@ test("deleteReferentFromBeneficiaries - refuse si un bénéficiaire n'a qu'un se
 test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFICIARIES} premiers bénéficiaires uniquement`, async ({
   trpc
 }) => {
-  const firstBeneficiaries = beneficiaries.slice(0, MAX_BENEFICIARIES)
+  const firstFamilyfileIds = familyFileIds.slice(0, MAX_BENEFICIARIES)
 
   const t0 = performance.now()
   await trpc.structureManager.file.deleteReferent({
-    beneficiaries: firstBeneficiaries,
+    familyFileIds: firstFamilyfileIds,
     referentId: referentTestId
   })
   const mutationDurationS = (performance.now() - t0) / 1000
@@ -156,7 +149,7 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
   )
 
   const updatedFiles = await prismaClient.familyFile.findMany({
-    where: { id: { in: firstBeneficiaries.map(b => b.familyFileId) } },
+    where: { id: { in: firstFamilyfileIds } },
     select: { referents: { select: { id: true } } }
   })
   for (const file of updatedFiles) {
@@ -165,9 +158,7 @@ test(`deleteReferentFromBeneficiaries - supprime le référent des ${MAX_BENEFIC
     expect(ids).toContain(JEANNE_REFERENTE_ID)
   }
 
-  const lastFamilyFileIds = beneficiaries
-    .slice(MAX_BENEFICIARIES)
-    .map(b => b.familyFileId)
+  const lastFamilyFileIds = familyFileIds.slice(MAX_BENEFICIARIES)
   const untouchedFiles = await prismaClient.familyFile.findMany({
     where: { id: { in: lastFamilyFileIds } },
     select: { referents: { select: { id: true } } }
