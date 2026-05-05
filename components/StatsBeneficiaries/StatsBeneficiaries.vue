@@ -7,6 +7,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
+      :device-name-options="deviceNameOptions"
       :validation-schema="statFilterSchema"
     />
 
@@ -259,11 +260,13 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
+      deviceNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
-      agentOptions: () => []
+      agentOptions: () => [],
+      deviceNameOptions: () => []
     }
   )
 
