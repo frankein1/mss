@@ -1,6 +1,7 @@
 export {
   beneficiaryFieldLabels,
-  beneficiaryExportFieldLabels
+  beneficiaryExportFieldLabels,
+  beneficiaryDeviceExportFieldLabels
 } from './beneficiary.labels'
 export { userFieldLabels } from './user.labels'
 export { socialSupportSubjectFieldLabels } from './social-support-subject.labels'

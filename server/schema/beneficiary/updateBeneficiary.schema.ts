@@ -192,19 +192,34 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   orientationType: withEmptyValueOptionalNativeEnum(BeneficiaryOrientationType),
   orientationStructure: stringConstraint
     .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  serviceProviders: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  involvedPartners: stringConstraint
-    .max(200, maxStringLengthMessage(200))
     .nullish()
-})
-
-export const updateBeneficiaryArchiveDate = z.object({
-  id: z.string().uuid()
 })
 
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >
+
+export const beneficiaryDeviceSchema = z.object({
+  id: z.string().uuid(),
+  name: stringConstraint.max(200, maxStringLengthMessage(200)),
+  startDate: dateOrEmpty,
+  endDate: dateOrEmpty,
+  partnerOrganisationName: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
+  precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish(),
+  exitReason: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
+})
+
+export const updateBeneficiaryDevicesSchema = z.object({
+  id: z.string().uuid(),
+  devices: z.array(beneficiaryDeviceSchema)
+})
+
+export type UpdateBeneficiaryDevicesInput = z.infer<
+  typeof updateBeneficiaryDevicesSchema
+>
+
+export const updateBeneficiaryArchiveDate = z.object({
+  id: z.string().uuid()
+})

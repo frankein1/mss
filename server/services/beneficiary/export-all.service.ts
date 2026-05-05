@@ -6,7 +6,10 @@ import type { ExportBeneficiariesInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
-import { beneficiaryFieldLabels } from '~/client/labels'
+import {
+  beneficiaryFieldLabels,
+  beneficiaryDeviceExportFieldLabels
+} from '~/client/labels'
 import type {
   GetBeneficiaryOutput,
   GetBeneficiaryRelative
@@ -154,18 +157,51 @@ export const exportWorkbook = async ({
   return workbook
 }
 
+const DEVICE_EXPORTED_FIELDS = Object.keys(
+  beneficiaryDeviceExportFieldLabels
+) as (keyof typeof beneficiaryDeviceExportFieldLabels)[]
+
 function getColumns(userRole: UserRole) {
-  return userRole === UserRole.StructureManager
-    ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE.map(key => ({
-        key,
-        header: beneficiaryFieldLabels[key],
-        width: 32
-      }))
-    : BENEFICIARY_EXPORTED_FIELDS_PARTIAL.map(key => ({
-        key,
-        header: beneficiaryFieldLabels[key],
-        width: 32
-      }))
+  const baseFields =
+    userRole === UserRole.StructureManager
+      ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE
+      : BENEFICIARY_EXPORTED_FIELDS_PARTIAL
+  return [
+    ...baseFields.map(key => ({
+      key,
+      header: beneficiaryFieldLabels[key],
+      width: 32
+    })),
+    ...DEVICE_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: beneficiaryDeviceExportFieldLabels[key],
+      width: 32
+    }))
+  ]
+}
+
+function formatDeviceFields(beneficiary: GetBeneficiaryOutput) {
+  const devices = beneficiary.externalOrganisations?.devices ?? []
+  const join = (values: (string | null | undefined)[]) =>
+    values.filter(Boolean).join(' / ')
+  return {
+    deviceName: join(devices.map(d => d.deviceName?.name)),
+    deviceStartDate: join(
+      devices.map(d =>
+        d.startDate ? new Date(d.startDate).toLocaleDateString('fr-FR') : null
+      )
+    ),
+    deviceEndDate: join(
+      devices.map(d =>
+        d.endDate ? new Date(d.endDate).toLocaleDateString('fr-FR') : null
+      )
+    ),
+    deviceExitReason: join(devices.map(d => d.exitReason)),
+    devicePartnerOrganisationName: join(
+      devices.map(d => d.partnerOrganisationName)
+    ),
+    devicePrecisions: join(devices.map(d => d.precisions))
+  }
 }
 
 function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
@@ -203,7 +239,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
   }
 
   if (userRole !== UserRole.StructureManager) {
-    return exported
+    return { ...exported, ...formatDeviceFields(beneficiary) }
   }
 
   return {
@@ -268,7 +304,8 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
-    lastActivity: beneficiary.lastActivity
+    lastActivity: beneficiary.lastActivity,
+    ...formatDeviceFields(beneficiary)
   }
 }
 

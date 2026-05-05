@@ -7,6 +7,9 @@ import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
 import { updateEntourageMutation } from './update-entourage.mutation'
 import { updateExternalOrganisationsMutation } from './update-external-organisations.mutation'
+import { updateDevicesMutation } from './update-devices.mutation'
+import { getDeviceNameListQuery } from './get-device-name-list.query'
+import { getDevicesForBeneficiaryQuery } from './get-devices-for-beneficiary.query'
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
@@ -20,6 +23,7 @@ import { getBeneficiaryArchivePermissionsQuery } from './get-archive-permissions
 import { updateArchiveDateMutation } from './update-archive-date.mutation'
 import { linkToFamilyFileMutation } from './link-to-family-file.mutation'
 import getBeneficiaryListQuery from './get-list.query'
+import { checkDeviceHasFollowupQuery } from './check-device-has-followup.query'
 
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
@@ -33,6 +37,9 @@ export const beneficiaryRoutes = {
   getBeneficiaryArchivePermissionsQuery,
   updateEntourageMutation,
   updateExternalOrganisationsMutation,
+  updateDevicesMutation,
+  getDeviceNameListQuery,
+  getDevicesForBeneficiaryQuery,
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,
@@ -42,7 +49,8 @@ export const beneficiaryRoutes = {
   createFamilyFileMemberMutation,
   updateArchiveDateMutation,
   linkToFamilyFileMutation,
-  getBeneficiaryListQuery
+  getBeneficiaryListQuery,
+  checkDeviceHasFollowupQuery
 }
 
 export type { SimilarBeneficiary }

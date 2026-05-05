@@ -80,7 +80,8 @@
       isMinistry: application.value.module.ministere,
       duration: followup.value.duration,
       ministerId: followup.value.ministerId,
-      socialSupportRedirections: followup.value.socialSupportRedirections
+      socialSupportRedirections: followup.value.socialSupportRedirections,
+      beneficiaryDeviceId: followup.value.beneficiaryDeviceId
     }
   })
 

@@ -192,16 +192,49 @@ export function prepareHelpRequestStatFilters(
       break
   }
 
+  if (filters.deviceNameIds?.length) {
+    const deviceFilter = { deviceNameId: { in: filters.deviceNameIds } }
+    if (filters.helpRequestSubject === FileInstructionType.Housing) {
+      socialSupport.fileInstruction!.housingHelpRequest = {
+        beneficiaryDevice: deviceFilter
+      }
+    } else if (
+      filters.helpRequestSubject === FileInstructionType.Financial ||
+      filters.helpRequestSubject === FileInstructionType.Other
+    ) {
+      socialSupport.fileInstruction!.helpRequest = {
+        financialSupport:
+          filters.helpRequestSubject === FileInstructionType.Financial,
+        beneficiaryDevice: deviceFilter
+      }
+    } else {
+      const base = externalStructure ? { externalStructure: true as const } : {}
+      socialSupport.fileInstruction = {
+        ...base,
+        OR: [
+          { helpRequest: { beneficiaryDevice: deviceFilter } },
+          { housingHelpRequest: { beneficiaryDevice: deviceFilter } }
+        ]
+      }
+    }
+  }
+
   return socialSupport
 }
 
 export function prepareFollowupStatFilters(
   filters: StatFilterInput
 ): Prisma.SocialSupportWhereInput {
-  return {
+  const result: Prisma.SocialSupportWhereInput = {
     ...prepareSocialSupportStatFilters(filters),
     socialSupportType: SocialSupportType.Followup
   }
+  if (filters.deviceNameIds?.length) {
+    result.followup = {
+      beneficiaryDevice: { deviceNameId: { in: filters.deviceNameIds } }
+    }
+  }
+  return result
 }
 
 /** filterOnBeneficiaryCreated: if true, when filtering on period,
@@ -296,6 +329,12 @@ export function prepareBeneficiaryStatFilters(
   if (filters.ministereDepartementServiceAc) {
     formattedFilters.ministereDepartementServiceAc =
       filters.ministereDepartementServiceAc
+  }
+
+  if (filters.deviceNameIds?.length) {
+    formattedFilters.devices = {
+      some: { deviceNameId: { in: filters.deviceNameIds } }
+    }
   }
 
   return formattedFilters

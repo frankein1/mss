@@ -5,7 +5,7 @@
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :permissions="permissions"
-    :schema="updateBeneficiaryExternalOrganisationsSchema"
+    :schema="combinedSchema"
     :is-submitting="status === 'pending'"
     :current-route="
       routes.beneficiary.AppBeneficiaryEditExternalOrganisations.name
@@ -25,9 +25,18 @@
 </template>
 
 <script lang="ts" setup>
-  import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
-  import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
+  import type { z } from 'zod'
+  import {
+    updateBeneficiaryExternalOrganisationsSchema,
+    updateBeneficiaryDevicesSchema
+  } from '~/server/schema'
   import { routes } from '~/utils/routes'
+
+  const combinedSchema = updateBeneficiaryExternalOrganisationsSchema.merge(
+    updateBeneficiaryDevicesSchema.omit({ id: true })
+  )
+
+  type CombinedInput = z.infer<typeof combinedSchema>
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -54,25 +63,49 @@
     return {
       id,
       structureId,
-      ...externalOrganisations
+      ...externalOrganisations,
+      devices: (externalOrganisations?.devices ?? []).map(d => ({
+        id: d.id,
+        name: d.deviceName.name,
+        startDate: d.startDate,
+        endDate: d.endDate,
+        partnerOrganisationName: d.partnerOrganisationName,
+        precisions: d.precisions,
+        exitReason: d.exitReason
+      }))
     }
   })
 
   const router = trpcClient.beneficiary
-  const { mutate, error, status } =
-    router.updateExternalOrganisations.useMutation()
+  const {
+    mutate: mutateExternalOrganisations,
+    error,
+    status
+  } = router.updateExternalOrganisations.useMutation()
+  const { mutate: mutateDevices, error: devicesError } =
+    router.updateDevices.useMutation()
 
   async function onSaveBeneficiary(
-    ben: UpdateBeneficiaryExternalOrganisationsInput,
+    values: CombinedInput,
     target: string | undefined
   ) {
     if (!beneficiary.value) {
       return
     }
 
-    const updated = await mutate(ben)
+    const { devices, ...externalOrganisations } = values
 
-    if (error.value || !updated) {
+    const [updatedExternal, updatedDevices] = await Promise.all([
+      mutateExternalOrganisations(externalOrganisations),
+      mutateDevices({ id: externalOrganisations.id, devices })
+    ])
+
+    if (
+      error.value ||
+      devicesError.value ||
+      !updatedExternal ||
+      !updatedDevices
+    ) {
       snackbar.error(
         'La mise à jour de la fiche bénéficiaire a échoué.',
         snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)

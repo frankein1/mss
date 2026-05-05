@@ -50,6 +50,15 @@ export const beneficiaryRouter = router({
   updateExternalOrganisations: protectedProcedure
     .input(routes.updateExternalOrganisationsMutation.inputValidation)
     .mutation(routes.updateExternalOrganisationsMutation.execute),
+  updateDevices: protectedProcedure
+    .input(routes.updateDevicesMutation.inputValidation)
+    .mutation(routes.updateDevicesMutation.execute),
+  getDeviceNameList: protectedProcedure
+    .input(routes.getDeviceNameListQuery.inputValidation)
+    .query(routes.getDeviceNameListQuery.execute),
+  getDevicesForBeneficiary: protectedProcedure
+    .input(routes.getDevicesForBeneficiaryQuery.inputValidation)
+    .query(routes.getDevicesForBeneficiaryQuery.execute),
   updateArchiveDate: protectedProcedure
     .input(routes.updateArchiveDateMutation.inputValidation)
     .mutation(routes.updateArchiveDateMutation.execute),
@@ -61,5 +70,8 @@ export const beneficiaryRouter = router({
     .mutation(routes.createFamilyFileMemberMutation.execute),
   linkToFamilyFile: protectedProcedure
     .input(routes.linkToFamilyFileMutation.inputValidation)
-    .mutation(routes.linkToFamilyFileMutation.execute)
+    .mutation(routes.linkToFamilyFileMutation.execute),
+  checkDeviceHasFollowup: protectedProcedure
+    .input(routes.checkDeviceHasFollowupQuery.inputValidation)
+    .query(routes.checkDeviceHasFollowupQuery.execute)
 })
