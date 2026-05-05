@@ -17,7 +17,7 @@
       :index="idx"
       :device-name-options="deviceNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
-      @remove-device="remove(idx)"
+      @remove-device="handleRemoveDevice(idx)"
     />
 
     <BeneficiaryFormSection>
@@ -36,8 +36,10 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
+  import BeneficiaryFormDeviceDeleteModal from './BeneficiaryFormDeviceDeleteModal.vue'
 
   const trpcClient = useTrpcClient()
+  const modal = useModal()
 
   const { data: deviceNames } =
     await trpcClient.beneficiary.getDeviceNameList.useQuery()
@@ -62,5 +64,32 @@
 
   function addDevice() {
     push({ id: v4(), name: '' })
+  }
+
+  async function handleRemoveDevice(idx: number) {
+    const deviceId = (fields.value[idx].value as { id?: string }).id
+
+    if (!deviceId) {
+      remove(idx)
+      return
+    }
+
+    const isLinked = await trpcClient.beneficiary.checkDeviceHasFollowup.query({
+      deviceId
+    })
+
+    if (!isLinked) {
+      remove(idx)
+      return
+    }
+
+    modal.open(BeneficiaryFormDeviceDeleteModal, {
+      title: 'Attention : ce dispositif est déjà lié à un accompagnement',
+      triggerOpen: true,
+      onConfirm: () => {
+        remove(idx)
+        modal.close()
+      }
+    })
   }
 </script>
