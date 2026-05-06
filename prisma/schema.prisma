@@ -126,6 +126,7 @@ model User {
   WorkshopName          WorkshopName[]
   Workshop              Workshop[]
   BeneficiaryDeviceName BeneficiaryDeviceName[]
+  letterTemplates       LetterTemplate[]
 
   @@map("user")
 }
@@ -178,6 +179,7 @@ model Structure {
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
   BeneficiaryDeviceName BeneficiaryDeviceName[]
+  letterTemplates       LetterTemplate[]
 
   @@map("structure")
 }
@@ -2298,6 +2300,30 @@ enum WorkshopAttendeeType {
 enum WorkshopAttendeeListType {
   Main
   Waiting
+}
+
+model LetterTemplate {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @db.VarChar(200)
+  s3Key       String?   @map("s3_key")
+  structureId String    @map("structure_id") @db.Uuid
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  createdById String    @map("created_by_id") @db.Uuid
+  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  letterTemplateContent LetterTemplateContent?
+
+  @@map("letter_template")
+}
+
+model LetterTemplateContent {
+  id               String         @id @default(uuid()) @db.Uuid
+  letterTemplate   LetterTemplate @relation(fields: [letterTemplateId], references: [id], onDelete: Cascade)
+  letterTemplateId String         @unique @map("letter_template_id") @db.Uuid
+  content          Bytes
+
+  @@map("letter_template_content")
 }
 
 model WorkshopExternalAttendee {

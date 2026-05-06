@@ -11,6 +11,7 @@ function getBread<
     | 'AppStructure'
     | 'AppPartners'
     | 'AppStructureUserAdd'
+    | 'AppStructureLetterTemplates'
 >(name: T) {
   const title = r[name].title as Routes[T]['title']
   return [{ text: title, to: r[name].path() }]
@@ -41,6 +42,11 @@ export const breadcrumbs = {
     ...user.AppOverview(),
     ...getBread('AppStructure'),
     ...getBread('AppStructureUserAdd')
+  ],
+  AppStructureLetterTemplates: () => [
+    ...user.AppOverview(),
+    ...getBread('AppStructure'),
+    ...getBread('AppStructureLetterTemplates')
   ]
 }
 

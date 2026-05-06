@@ -177,3 +177,40 @@ export async function downloadWithEncryption({
 
   return { success: true, fileContent } as const
 }
+
+export async function uploadPlain(
+  config: Pick<AppConfig, 's3' | 'public'>,
+  bucketKey: string,
+  data: Buffer,
+  contentType = 'application/octet-stream'
+) {
+  const client = getS3Client(config)
+  const upload = new Upload({
+    client,
+    params: {
+      Bucket: config.s3.bucket,
+      Body: data,
+      Key: bucketKey,
+      ContentType: contentType
+    }
+  })
+  await upload.done()
+  return bucketKey
+}
+
+export async function downloadPlain(
+  config: Pick<AppConfig, 's3' | 'public'>,
+  bucketKey: string
+): Promise<Buffer | null> {
+  const client = getS3Client(config)
+  try {
+    const download = await client.send(
+      new GetObjectCommand({ Bucket: config.s3.bucket, Key: bucketKey })
+    )
+    if (!download.Body) {return null}
+    const bytes = await download.Body.transformToByteArray()
+    return Buffer.from(bytes)
+  } catch {
+    return null
+  }
+}

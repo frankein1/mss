@@ -40,5 +40,10 @@ export const routes = {
     name: 'AppStructureDora',
     title: `Rechercher un acteur du territoire sur DORA`,
     path: () => `${AppRoute}/structure/dora`
+  },
+  AppStructureLetterTemplates: {
+    name: 'AppStructureLetterTemplates',
+    title: `Configurer les courriers`,
+    path: () => `${AppRoute}/structure/letter-templates`
   }
 } as const

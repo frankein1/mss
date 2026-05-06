@@ -13,8 +13,17 @@
         tab-list-name="Statistiques de la structure"
         :tab-titles="
           authState.isStructureManager()
-            ? [userTabTitle, structureTabTitle, socialSupportSubjectsTabTitle]
-            : [structureTabTitle, socialSupportSubjectsTabTitle]
+            ? [
+                userTabTitle,
+                structureTabTitle,
+                socialSupportSubjectsTabTitle,
+                letterTemplatesTabTitle
+              ]
+            : [
+                structureTabTitle,
+                socialSupportSubjectsTabTitle,
+                letterTemplatesTabTitle
+              ]
         "
         :heading-level="2"
       >
@@ -40,6 +49,21 @@
             :edit-path="routes.structure.AppStructureSubjects.path()"
             @refresh="refresh"
           />
+        </template>
+        <template #[letterTemplatesTabTitle.panelId]>
+          <section class="feature-section bg-color-white fr-p-4w">
+            <p class="fr-mb-3w">
+              Créez des modèles de courriers Word (.docx) pré-remplis
+              automatiquement avec les données des dossiers de vos
+              bénéficiaires.
+            </p>
+            <NuxtLink
+              class="fr-btn fr-btn--icon-left fr-icon-settings-4-line"
+              :to="routes.structure.AppStructureLetterTemplates.path()"
+            >
+              Configurer les modèles de courriers
+            </NuxtLink>
+          </section>
         </template>
       </AtomTabs>
     </AtomLazyComponent>
@@ -82,6 +106,12 @@
     panelId: panelId('Objets d’accompagnement'),
     title: 'Objets d’accompagnement',
     icon: 'fr-icon-checkbox-circle-line'
+  }
+  const letterTemplatesTabTitle = {
+    tabId: 'Modèles de courriers',
+    panelId: panelId('Modèles de courriers'),
+    title: 'Modèles de courriers',
+    icon: 'fr-icon-draft-line'
   }
 
   // Structure info
