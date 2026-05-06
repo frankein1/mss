@@ -1,4 +1,4 @@
-import type { SocialSupport } from '@prisma/client'
+import { UserRole, type SocialSupport } from '@prisma/client'
 import { NotificationType } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
@@ -9,12 +9,6 @@ import {
 } from '~/server/database'
 import { withErrorCapture } from '../utils'
 
-function socialSupportHasDefinedCreatedBy<
-  T extends { createdById: string | null }
->(item: T): item is T & { createdById: string } {
-  return item.createdById !== null
-}
-
 function hasDefinedCreatedBy<
   T extends { socialSupport: { createdById: string | null } }
 >(item: T): item is T & { createdById: string } {
@@ -22,28 +16,67 @@ function hasDefinedCreatedBy<
 }
 
 async function createDueSocialSupportNotifications(
-  dueSocialSupports: SocialSupport[],
+  dueSocialSupports: (Pick<
+    SocialSupport,
+    'id' | 'createdById' | 'beneficiaryId'
+  > & {
+    familyFile?: { referents: { id: string; role: UserRole }[] } | null
+  })[],
   type: 'DueDateToday' | 'DueDateOneMonth'
 ) {
-  const dueFollowupNotifications = dueSocialSupports
-    .filter(socialSupportHasDefinedCreatedBy)
-    .map(socialSupport => ({
-      recipientId: socialSupport.createdById,
+  const dueFollowupNotifications = dueSocialSupports.flatMap(socialSupport => {
+    const recipientIds = new Set<string>() // use Set to avoid duplication
+
+    // ReceptionAgent, Instructor and Referent will receive a notification as they are social support creators
+    if (socialSupport.createdById !== null) {
+      recipientIds.add(socialSupport.createdById)
+    }
+
+    for (const referent of socialSupport.familyFile?.referents ?? []) {
+      if (
+        referent.role !== UserRole.ReceptionAgent &&
+        referent.role !== UserRole.Instructor &&
+        referent.role !== UserRole.Referent
+      ) {
+        recipientIds.add(referent.id)
+      }
+    }
+
+    return Array.from(recipientIds).map(recipientId => ({
+      recipientId,
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
       type
     }))
+  })
 
   return await NotificationRepo.prisma.createMany({
     data: dueFollowupNotifications
   })
 }
 
+const select = {
+  id: true,
+  createdById: true,
+  beneficiaryId: true,
+  familyFile: {
+    select: {
+      referents: {
+        select: {
+          id: true,
+          role: true
+        }
+      }
+    }
+  }
+}
+
 async function createDueInAMonthSocialSupportNotifications() {
   const dueSocialSupports = await SocialSupportRepo.prisma.findMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
-    }
+    },
+    select
   })
 
   const res = await createDueSocialSupportNotifications(
@@ -60,7 +93,8 @@ async function createDueTodaySocialSupportNotifications() {
   const dueSocialSupports = await SocialSupportRepo.prisma.findMany({
     where: {
       dueDate: new Date()
-    }
+    },
+    select
   })
 
   const res = await createDueSocialSupportNotifications(

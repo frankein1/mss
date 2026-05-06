@@ -1,3 +1,4 @@
+import { NotificationType } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import {
@@ -87,5 +88,94 @@ describe('Beneficiary - updateGeneralInformation - Authorizations', () => {
         status: 'Active'
       })
     ).rejects.toThrowError(/not allowed to access route/i)
+  })
+})
+
+describe('Beneficiary - updateGeneralInformation - Referent changes', () => {
+  test('Removing a referent updates the referents list and deletes their notifications', async ({
+    trpc
+  }) => {
+    await prismaClient.notification.createMany({
+      data: [
+        {
+          type: NotificationType.DueDateOneMonth,
+          recipientId: referentId,
+          beneficiaryId,
+          structureId
+        },
+        {
+          type: NotificationType.DueDateToday,
+          recipientId: referentId,
+          beneficiaryId,
+          structureId
+        }
+      ]
+    })
+
+    await trpc.structureManager.beneficiary.updateGeneralInformation({
+      id: beneficiaryId,
+      structureId,
+      referents: [socialWorkerId],
+      aidantConnectAuthorized: false,
+      vulnerablePerson: false,
+      status: 'Active'
+    })
+
+    const familyFile = await prismaClient.familyFile.findUniqueOrThrow({
+      where: { id: familyFileId },
+      select: { referents: { select: { id: true } } }
+    })
+    expect(familyFile.referents.map(r => r.id)).toEqual([socialWorkerId])
+
+    const remainingNotifications = await prismaClient.notification.findMany({
+      where: { beneficiaryId, recipientId: referentId }
+    })
+    expect(remainingNotifications).toHaveLength(0)
+  })
+
+  test('Notifications of a kept referent are preserved when another referent is removed', async ({
+    trpc
+  }) => {
+    await prismaClient.familyFile.update({
+      where: { id: familyFileId },
+      data: { referents: { connect: { id: socialWorkerId } } }
+    })
+
+    await prismaClient.notification.createMany({
+      data: [
+        {
+          type: NotificationType.DueDateOneMonth,
+          recipientId: referentId,
+          beneficiaryId,
+          structureId
+        },
+        {
+          type: NotificationType.DueDateOneMonth,
+          recipientId: socialWorkerId,
+          beneficiaryId,
+          structureId
+        }
+      ]
+    })
+
+    await trpc.structureManager.beneficiary.updateGeneralInformation({
+      id: beneficiaryId,
+      structureId,
+      referents: [socialWorkerId],
+      aidantConnectAuthorized: false,
+      vulnerablePerson: false,
+      status: 'Active'
+    })
+
+    const removedReferentNotifications =
+      await prismaClient.notification.findMany({
+        where: { beneficiaryId, recipientId: referentId }
+      })
+    expect(removedReferentNotifications).toHaveLength(0)
+
+    const keptReferentNotifications = await prismaClient.notification.findMany({
+      where: { beneficiaryId, recipientId: socialWorkerId }
+    })
+    expect(keptReferentNotifications).toHaveLength(1)
   })
 })

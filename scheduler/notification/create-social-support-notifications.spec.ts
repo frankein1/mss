@@ -11,7 +11,9 @@ import {
   FamilyFileRepo,
   BeneficiaryRepo,
   HelpRequestRepo,
-  NotificationRepo
+  NotificationRepo,
+  SocialSupportRepo,
+  UserRepo
 } from '~/server/database'
 import dayjs from 'dayjs'
 import { faker } from '@faker-js/faker'
@@ -25,6 +27,7 @@ import {
 import * as socialSupportNotifications from './create-social-support-notifications'
 
 const ID_AUDREY_HORN = faker.string.uuid()
+const ID_SECOND_REFERENT = faker.string.uuid()
 const beneficiary = {
   id: ID_AUDREY_HORN,
   usualName: 'HORN',
@@ -38,6 +41,61 @@ const IN_A_MONTH = dayjs().add(1, 'month').toDate()
 
 beforeEach(async () => await createBeneficiaryWithHelpRequests())
 afterEach(async () => await deleteBeneficiary())
+
+describe('Notification - Due Social Support (referent filtering)', () => {
+  it('should notify creator and non-excluded referents (SocialWorker, StructureManager)', async () => {
+    await socialSupportNotifications.default.createDueInAMonthSocialSupportNotifications()
+
+    const notifs = await NotificationRepo.prisma.findMany({
+      where: {
+        type: NotificationType.DueDateOneMonth,
+        beneficiaryId: ID_AUDREY_HORN
+      }
+    })
+
+    // Creator (Referent role) + SocialWorker + StructureManager
+    expect(notifs.length).toBe(3)
+    expect(
+      notifs.some(
+        n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
+      )
+    ).toBe(true)
+    expect(
+      notifs.some(
+        n => n.recipientId === fixturesUsers[FixtureUserRole.SocialWorker].id
+      )
+    ).toBe(true)
+    expect(
+      notifs.some(
+        n =>
+          n.recipientId === fixturesUsers[FixtureUserRole.StructureManager].id
+      )
+    ).toBe(true)
+  })
+
+  it('should not notify ReceptionAgent, Instructor, nor Referent who is not the creator', async () => {
+    await socialSupportNotifications.default.createDueInAMonthSocialSupportNotifications()
+
+    const notifs = await NotificationRepo.prisma.findMany({
+      where: {
+        type: NotificationType.DueDateOneMonth,
+        beneficiaryId: ID_AUDREY_HORN
+      }
+    })
+
+    expect(
+      notifs.some(
+        n => n.recipientId === fixturesUsers[FixtureUserRole.ReceptionAgent].id
+      )
+    ).toBe(false)
+    expect(
+      notifs.some(
+        n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
+      )
+    ).toBe(false)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(false)
+  })
+})
 
 describe('Notification - Social Support', () => {
   it('should have ONE notification for handling date today', async () => {
@@ -68,12 +126,31 @@ describe('Notification - Social Support', () => {
 })
 
 const createBeneficiaryWithHelpRequests = async () => {
+  await UserRepo.prisma.create({
+    data: {
+      id: ID_SECOND_REFERENT,
+      firstName: 'Second',
+      lastName: 'Référent',
+      email: 'second.referent.test@yopmail.com',
+      role: 'Referent',
+      status: 'Active',
+      structureId: fixtureStructures[FixtureStructure.Test].id
+    }
+  })
+
   const ff = await FamilyFileRepo.prisma.create({
     data: {
       id: ID_AUDREY_HORN,
       structureId: fixtureStructures[0].id,
       referents: {
-        connect: [{ id: fixturesUsers[FixtureUserRole.StructureManager].id }]
+        connect: [
+          { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+          { id: fixturesUsers[FixtureUserRole.SocialWorker].id },
+          { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
+          { id: fixturesUsers[FixtureUserRole.Instructor].id },
+          { id: fixturesUsers[FixtureUserRole.Referent].id },
+          { id: ID_SECOND_REFERENT }
+        ]
       }
     }
   })
@@ -116,11 +193,23 @@ const createBeneficiaryWithHelpRequests = async () => {
         ...helpRequestData
       }
     }),
-    // HelpRequest with handling date in a mouth
+    // HelpRequest with handling date in a month
     HelpRequestRepo.prisma.create({
       data: {
         handlingDate: IN_A_MONTH,
         ...helpRequestData
+      }
+    }),
+    // SocialSupport with dueDate in a month (for DueDateOneMonth notifications)
+    SocialSupportRepo.prisma.create({
+      data: {
+        familyFileId: ff.id,
+        beneficiaryId: b.id,
+        structureId: fixtureStructures[FixtureStructure.Test].id,
+        socialSupportType: SocialSupportType.Followup,
+        status: SocialSupportStatus.InProgress,
+        createdById: fixturesUsers[FixtureUserRole.Referent].id,
+        dueDate: IN_A_MONTH
       }
     })
   ])
@@ -128,8 +217,9 @@ const createBeneficiaryWithHelpRequests = async () => {
 
 const deleteBeneficiary = async () => {
   await FamilyFileRepo.prisma.delete({
-    where: {
-      id: ID_AUDREY_HORN
-    }
+    where: { id: ID_AUDREY_HORN }
+  })
+  await prismaClient?.user.delete({
+    where: { id: ID_SECOND_REFERENT }
   })
 }
