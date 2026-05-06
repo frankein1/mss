@@ -17,6 +17,7 @@ datasource db {
 
 model Account {
   id                String  @id @default(uuid()) // FIXME: Cannot set as @db.Uuid as no cast is possible
+  type              String
   userId            String  @map("user_id") @db.Uuid
   provider          String
   providerAccountId String  @map("provider_account_id")

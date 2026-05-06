@@ -1,5 +1,29 @@
 <template>
   <BeneficiaryFormSection section-title="Adresse/Hébergement">
+    <template v-if="showSuggestions">
+      <div
+        v-for="member in membersWithAccommodation"
+        :key="member.id"
+        class="fr-col-12"
+      >
+        <div
+          class="fr-alert fr-alert--info fr-alert--sm fr-mb-2w"
+          role="alert"
+        >
+          <p class="fr-alert__title">
+            Informations d'hébergement de {{ member.firstName }}
+            {{ member.usualName ?? member.birthName }} disponibles
+          </p>
+          <button
+            type="button"
+            class="fr-btn fr-btn--sm fr-btn--secondary"
+            @click="applyAccommodation(member)"
+          >
+            Utiliser ces informations
+          </button>
+        </div>
+      </div>
+    </template>
     <div class="fr-col-12">
       <VeeSelect
         name="accommodationMode"
@@ -87,6 +111,7 @@
 </template>
 
 <script setup lang="ts">
+  import { inject } from 'vue'
   import type { BeneficiaryAccommodationMode } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
@@ -131,4 +156,57 @@
     setRegionValue,
     setDepartmentValue
   })
+
+  // Suggestion d'hébergement depuis un autre membre du foyer
+  const familyFileId = inject<string>('familyFileId')
+  const route = useRoute()
+  const currentBeneficiaryId = route.params['id'] as string
+  const trpcClient = useTrpcClient()
+
+  const { data: familyFileData } =
+    await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
+      { id: familyFileId ?? '' },
+      { immediate: Boolean(familyFileId) }
+    )
+
+  const membersWithAccommodation = computed(() =>
+    (familyFileData.value?.beneficiaries ?? []).filter(
+      m =>
+        m.id !== currentBeneficiaryId &&
+        (m.accommodationMode || m.street || m.city || m.zipcode)
+    )
+  )
+
+  const { values, setFieldValue } = useFormContext()
+
+  const sectionIsEmpty = computed(
+    () =>
+      !values.accommodationMode &&
+      !values.street &&
+      !values.city &&
+      !values.zipcode
+  )
+
+  const showSuggestions = computed(
+    () => sectionIsEmpty.value && membersWithAccommodation.value.length > 0
+  )
+
+  type FamilyMember = (typeof membersWithAccommodation.value)[0]
+
+  function applyAccommodation(member: FamilyMember) {
+    setFieldValue('accommodationMode', member.accommodationMode ?? null)
+    setFieldValue('accommodationName', member.accommodationName ?? '')
+    setFieldValue(
+      'accommodationAdditionalInformation',
+      member.accommodationAdditionalInformation ?? ''
+    )
+    setFieldValue('street', member.street ?? '')
+    setFieldValue('addressComplement', member.addressComplement ?? '')
+    setFieldValue('zipcode', member.zipcode ?? '')
+    setFieldValue('city', member.city ?? '')
+    setFieldValue('department', member.department ?? '')
+    setFieldValue('region', member.region ?? '')
+    setFieldValue('qpv', member.qpv ?? false)
+    setFieldValue('accommodationZone', member.accommodationZone ?? null)
+  }
 </script>

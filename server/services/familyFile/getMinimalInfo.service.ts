@@ -21,7 +21,18 @@ export async function getMinimalInfo({
           usualName: true,
           birthName: true,
           birthDate: true,
-          relationship: true
+          relationship: true,
+          accommodationMode: true,
+          accommodationName: true,
+          accommodationAdditionalInformation: true,
+          street: true,
+          addressComplement: true,
+          zipcode: true,
+          city: true,
+          department: true,
+          region: true,
+          qpv: true,
+          accommodationZone: true
         },
         orderBy: { created: 'asc' }
       },

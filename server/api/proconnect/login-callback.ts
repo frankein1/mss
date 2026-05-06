@@ -380,6 +380,7 @@ async function upsertAccount({
       }
     },
     create: {
+      type: 'oauth',
       userId: user.id,
       provider: proconnectProvider,
       providerAccountId,
