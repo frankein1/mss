@@ -113,14 +113,22 @@ async function createEndOfSupportHelpRequestNotifications(
   const handlingDate =
     type === 'EndOfSupport' ? new Date() : dayjs().add(1, 'month').toDate()
 
-  const endOfSupportHelpRequests = await HelpRequestRepo.prisma.findMany({
-    include: {
-      fileInstruction: {
-        include: {
-          socialSupport: true
+  const endOfSupportHelpRequestSelect = {
+    fileInstruction: {
+      select: {
+        socialSupport: {
+          select: {
+            id: true,
+            createdById: true,
+            beneficiaryId: true
+          }
         }
       }
-    },
+    }
+  }
+
+  const endOfSupportHelpRequests = await HelpRequestRepo.prisma.findMany({
+    select: endOfSupportHelpRequestSelect,
     where: {
       handlingDate
     }
@@ -128,13 +136,7 @@ async function createEndOfSupportHelpRequestNotifications(
 
   const endOfSupportHousinhHelpRequests =
     await HousingHelpRequestRepo.prisma.findMany({
-      include: {
-        fileInstruction: {
-          include: {
-            socialSupport: true
-          }
-        }
-      },
+      select: endOfSupportHelpRequestSelect,
       where: {
         handlingDate
       }
