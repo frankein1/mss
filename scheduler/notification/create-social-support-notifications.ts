@@ -15,47 +15,7 @@ function hasDefinedCreatedBy<
   return item.socialSupport.createdById !== null
 }
 
-async function createDueSocialSupportNotifications(
-  dueSocialSupports: (Pick<
-    SocialSupport,
-    'id' | 'createdById' | 'beneficiaryId'
-  > & {
-    familyFile?: { referents: { id: string; role: UserRole }[] } | null
-  })[],
-  type: 'DueDateToday' | 'DueDateOneMonth'
-) {
-  const dueFollowupNotifications = dueSocialSupports.flatMap(socialSupport => {
-    const recipientIds = new Set<string>() // use Set to avoid duplication
-
-    // ReceptionAgent, Instructor and Referent will receive a notification as they are social support creators
-    if (socialSupport.createdById !== null) {
-      recipientIds.add(socialSupport.createdById)
-    }
-
-    for (const referent of socialSupport.familyFile?.referents ?? []) {
-      if (
-        referent.role !== UserRole.ReceptionAgent &&
-        referent.role !== UserRole.Instructor &&
-        referent.role !== UserRole.Referent
-      ) {
-        recipientIds.add(referent.id)
-      }
-    }
-
-    return Array.from(recipientIds).map(recipientId => ({
-      recipientId,
-      beneficiaryId: socialSupport.beneficiaryId,
-      socialSupportId: socialSupport.id,
-      type
-    }))
-  })
-
-  return await NotificationRepo.prisma.createMany({
-    data: dueFollowupNotifications
-  })
-}
-
-const select = {
+const socialSupportSelect = {
   id: true,
   createdById: true,
   beneficiaryId: true,
@@ -71,15 +31,57 @@ const select = {
   }
 }
 
+type SocialSupportForNotification = Pick<
+  SocialSupport,
+  'id' | 'createdById' | 'beneficiaryId'
+> & {
+  familyFile?: { referents: { id: string; role: UserRole }[] } | null
+}
+
+const getRecipientIds = (
+  socialSupport: SocialSupportForNotification
+): Set<string> => {
+  const recipientIds = new Set<string>()
+  if (socialSupport.createdById !== null) {
+    recipientIds.add(socialSupport.createdById)
+  }
+  for (const referent of socialSupport.familyFile?.referents ?? []) {
+    if (
+      referent.role !== UserRole.ReceptionAgent &&
+      referent.role !== UserRole.Instructor &&
+      referent.role !== UserRole.Referent
+    ) {
+      recipientIds.add(referent.id)
+    }
+  }
+  return recipientIds
+}
+
+async function createSocialSupportNotifications(
+  socialSupports: SocialSupportForNotification[],
+  type: NotificationType
+) {
+  const notifications = socialSupports.flatMap(socialSupport =>
+    Array.from(getRecipientIds(socialSupport)).map(recipientId => ({
+      recipientId,
+      beneficiaryId: socialSupport.beneficiaryId,
+      socialSupportId: socialSupport.id,
+      type
+    }))
+  )
+
+  return await NotificationRepo.prisma.createMany({ data: notifications })
+}
+
 async function createDueInAMonthSocialSupportNotifications() {
   const dueSocialSupports = await SocialSupportRepo.prisma.findMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
     },
-    select
+    select: socialSupportSelect
   })
 
-  const res = await createDueSocialSupportNotifications(
+  const res = await createSocialSupportNotifications(
     dueSocialSupports,
     NotificationType.DueDateOneMonth
   )
@@ -94,10 +96,10 @@ async function createDueTodaySocialSupportNotifications() {
     where: {
       dueDate: new Date()
     },
-    select
+    select: socialSupportSelect
   })
 
-  const res = await createDueSocialSupportNotifications(
+  const res = await createSocialSupportNotifications(
     dueSocialSupports,
     NotificationType.DueDateToday
   )
@@ -117,11 +119,7 @@ async function createEndOfSupportHelpRequestNotifications(
     fileInstruction: {
       select: {
         socialSupport: {
-          select: {
-            id: true,
-            createdById: true,
-            beneficiaryId: true
-          }
+          select: socialSupportSelect
         }
       }
     }
@@ -142,24 +140,22 @@ async function createEndOfSupportHelpRequestNotifications(
       }
     })
 
-  const endOfSupportHelpRequestNotifications = [
+  const notificationType =
+    type === 'EndOfSupport'
+      ? NotificationType.EndOfSupport
+      : NotificationType.EndOfSupportOneMonth
+
+  const socialSupports = [
     ...endOfSupportHelpRequests,
     ...endOfSupportHousinhHelpRequests
   ]
     .filter(hr => hasDefinedCreatedBy(hr.fileInstruction))
-    .map(({ fileInstruction: { socialSupport } }) => ({
-      recipientId: socialSupport.createdById,
-      beneficiaryId: socialSupport.beneficiaryId,
-      socialSupportId: socialSupport.id,
-      type:
-        type === 'EndOfSupport'
-          ? NotificationType.EndOfSupport
-          : NotificationType.EndOfSupportOneMonth
-    }))
+    .map(hr => hr.fileInstruction.socialSupport)
 
-  const res = await NotificationRepo.prisma.createMany({
-    data: endOfSupportHelpRequestNotifications
-  })
+  const res = await createSocialSupportNotifications(
+    socialSupports,
+    notificationType
+  )
 
   console.log(
     `create-social-support-notifications [${new Date().toISOString()}]: ${res.count} notifications created for help request end of support ${type === 'EndOfSupport' ? 'today' : 'in a month'}`
