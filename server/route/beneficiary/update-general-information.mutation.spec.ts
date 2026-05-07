@@ -154,6 +154,18 @@ describe('Beneficiary - updateGeneralInformation - Referent changes', () => {
           recipientId: socialWorkerId,
           beneficiaryId,
           structureId
+        },
+        {
+          type: NotificationType.EndOfSupport,
+          recipientId: referentId,
+          beneficiaryId,
+          structureId
+        },
+        {
+          type: NotificationType.EndOfSupportOneMonth,
+          recipientId: socialWorkerId,
+          beneficiaryId,
+          structureId
         }
       ]
     })
@@ -176,6 +188,6 @@ describe('Beneficiary - updateGeneralInformation - Referent changes', () => {
     const keptReferentNotifications = await prismaClient.notification.findMany({
       where: { beneficiaryId, recipientId: socialWorkerId }
     })
-    expect(keptReferentNotifications).toHaveLength(1)
+    expect(keptReferentNotifications).toHaveLength(2)
   })
 })

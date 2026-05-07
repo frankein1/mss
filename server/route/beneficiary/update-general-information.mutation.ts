@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { UserActivityType } from '@prisma/client'
+import { NotificationType, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
@@ -112,7 +112,12 @@ const handler = async ({
         where: {
           beneficiaryId: input.id,
           type: {
-            in: ['DueDateOneMonth', 'DueDateToday']
+            in: [
+              NotificationType.DueDateOneMonth,
+              NotificationType.DueDateToday,
+              NotificationType.EndOfSupport,
+              NotificationType.EndOfSupportOneMonth
+            ]
           },
           recipientId: { in: removedReferentsIds }
         }
