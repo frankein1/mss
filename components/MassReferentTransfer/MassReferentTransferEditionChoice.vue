@@ -64,5 +64,14 @@
     next: []
   }>()
 
-  const { editionChoice } = useMassReferentTransferState()
+  const { editionChoice, selectedBeneficiaries, referentId } =
+    useMassReferentTransferState()
+
+  onMounted(() => {
+    // reset values
+    if (editionChoice.value) {
+      selectedBeneficiaries.value = []
+      referentId.value = null
+    }
+  })
 </script>
