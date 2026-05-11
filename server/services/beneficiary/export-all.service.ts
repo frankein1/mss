@@ -131,6 +131,8 @@ export const exportWorkbook = async ({
   const formatedBeneficiaries = dataRequest.map(({ beneficiary }) =>
     formatData(beneficiary, ctx.user.role)
   )
+
+  // 2 create workbook
   const { Workbook: WorkbookConstructor } = ExcelPkg
   const workbook = new WorkbookConstructor()
   const worksheet = workbook.addWorksheet('Bénéficiaires')
@@ -198,6 +200,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       : '',
     minorChildren: Number(taxHouseholds?.minorChildren) || '',
     majorChildren: Number(taxHouseholds?.majorChildren) || '',
+    subjects: beneficiary.history?.subjects.map(s => s.name).join(', ') || '',
     created: beneficiary.created || '',
     fileNumber: readableFileNumber(beneficiary.id)
   }
