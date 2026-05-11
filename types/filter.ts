@@ -6,6 +6,7 @@ type FilterPropBase = {
   name: string
   label: string
   placeholder?: string
+  hint?: string
   alwaysExpanded?: boolean
   matomoEventCategory?: EventCategory
   matomoEventAction?: EventAction

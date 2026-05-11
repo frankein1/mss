@@ -58,8 +58,14 @@
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
+      hints?: Partial<Record<keyof StatFilterInput, string>>
     }>(),
-    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
+    {
+      isHelpRequest: false,
+      isHistory: false,
+      validationSchema: undefined,
+      hints: undefined
+    }
   )
 
   const emit = defineEmits<{
@@ -100,6 +106,7 @@
       {
         name: 'helpRequestSubject',
         label: "Thématique d'instruction",
+        hint: props.hints?.helpRequestSubject,
         options: withEmptyValue(
           fileInstructionTypeFilterKeys.options,
           'Toutes'
@@ -112,6 +119,7 @@
       {
         name: 'period',
         label: 'Période',
+        hint: props.hints?.period,
         type: FilterType.SelectOne,
         options: withEmptyValue(periodKeys.options, ''),
         alwaysExpanded: true
@@ -123,12 +131,14 @@
         {
           name: 'fromDate',
           label: 'Du',
+          hint: props.hints?.fromDate,
           type: FilterType.Date,
           alwaysExpanded: true
         },
         {
           name: 'toDate',
           label: 'Au',
+          hint: props.hints?.toDate,
           type: FilterType.Date,
           alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
         }
@@ -139,6 +149,7 @@
       statsFilters.push({
         name: 'socialSupportSubjects',
         label: "Objet de l'accompagnement",
+        hint: props.hints?.socialSupportSubjects,
         options: props.socialSupportSubjectOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
@@ -149,6 +160,7 @@
       statsFilters.push({
         name: 'cities',
         label: 'Ville',
+        hint: props.hints?.cities,
         options: props.beneficiariesCitiesOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -158,6 +170,7 @@
       statsFilters.push({
         name: 'referent',
         label: 'Référent',
+        hint: props.hints?.referent,
         options: agentOptionsWithEmptyValue.value,
         type: FilterType.SelectOne,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -166,6 +179,7 @@
     statsFilters.push({
       name: 'beneficiaryStatus',
       label: 'Statut du bénéficiaire',
+      hint: props.hints?.beneficiaryStatus,
       options: withEmptyValue(beneficiaryStatusKeys.options),
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -174,6 +188,7 @@
       statsFilters.push({
         name: 'createdById',
         label: 'Agent',
+        hint: props.hints?.createdById,
         options: props.agentOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -184,6 +199,7 @@
         statsFilters.push({
           name: 'ministerId',
           label: helpRequestFieldLabels.minister,
+          hint: props.hints?.ministerId,
           options: ministerOptions.value,
           type: FilterType.SelectMultiple,
           alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -192,6 +208,7 @@
       statsFilters.push({
         name: 'ministereDepartementServiceAc',
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,
+        hint: props.hints?.ministereDepartementServiceAc,
         options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
         type: FilterType.SelectOne,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -199,6 +216,7 @@
       statsFilters.push({
         name: 'ministereStructure',
         label: beneficiaryFieldLabels.ministereStructure,
+        hint: props.hints?.ministereStructure,
         options: withEmptyValue(ministereStructureKeys.options),
         type: FilterType.SelectOne,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
@@ -207,6 +225,7 @@
     statsFilters.push({
       name: 'ageGroup',
       label: "Tranche d'âge",
+      hint: props.hints?.ageGroup,
       options: withEmptyValue(
         ageGroupKeys.options,
         "Toutes les tranches d'âge"
@@ -220,12 +239,14 @@
         {
           name: 'fromAge',
           label: 'De (âge minimum)',
+          hint: props.hints?.fromAge,
           type: FilterType.Number,
           alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
         },
         {
           name: 'toAge',
           label: 'À (âge maximum)',
+          hint: props.hints?.toAge,
           type: FilterType.Number,
           alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
         }

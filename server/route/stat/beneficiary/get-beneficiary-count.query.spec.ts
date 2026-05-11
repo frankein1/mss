@@ -3,6 +3,7 @@ import type { inferProcedureInput } from '@trpc/server'
 import { test } from '~/test/server/test-utils'
 import { AgeGroup } from '~/client/options'
 import type { AppRouter } from '~/server/trpc/routers'
+import { StatPeriodFilter } from '~/types/stat'
 
 type Input = inferProcedureInput<AppRouter['stat']['getBeneficiaryCount']>
 
@@ -61,5 +62,19 @@ describe('Statistics - Beneficiary - Beneficiary Count', () => {
     const stats = await trpc.structureManager.stat.getBeneficiaryCount(input)
 
     expect(stats.count).toBe(2)
+  })
+
+  test('should filter accompanied beneficiaries by socialSupport date (not created date)', async ({
+    trpc
+  }) => {
+    const input: Input = {
+      period: StatPeriodFilter.Custom,
+      fromDate: new Date('2022-10-20'),
+      toDate: new Date('2022-10-25')
+    }
+
+    const stats = await trpc.structureManager.stat.getBeneficiaryCount(input)
+
+    expect(stats.count).toBe(4)
   })
 })
