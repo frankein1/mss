@@ -2,7 +2,6 @@
   <tr>
     <td class="name">
       <p>
-        {{ storage[document.key] }}
         <span
           class="name-link"
           :title="document.name"
@@ -20,39 +19,46 @@
           · {{ formatBeneficiary(document.beneficiaryId) }}
         </template>
       </p>
-      <span
+      <p
         v-if="document.confidential"
-        class="fr-badge fr-badge--warning"
-        >CONFIDENTIEL</span
+        class="fr-badge fr-badge--warning fr-mb-0"
       >
-      <span
+        CONFIDENTIEL
+      </p>
+      <p
         v-if="hasUnreadNotifications"
-        class="fr-badge fr-badge--new fr-badge--no-icon"
+        class="fr-badge fr-badge--new fr-badge--no-icon fr-mb-0"
       >
         <span class="fr-icon-notification-3-fill fr-icon--sm fr-mr-1v"></span>
         NOUVEAU
-      </span>
+      </p>
+      <p
+        v-if="hasBeenOpened"
+        class="fr-badge fr-badge--sm fr-badge--no-icon fr-mb-0"
+      >
+        CONSULTÉ
+      </p>
     </td>
     <td>
       <template v-if="document.expirationDate">
-        {{ formatDate(document.expirationDate) }}
-        <br />
-        <span
+        <p>{{ formatDate(document.expirationDate) }}</p>
+        <p
           v-if="isExpired"
           class="fr-badge fr-badge--sm fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-time-line"
         >
           EXPIRÉ
-        </span>
+        </p>
       </template>
       <template v-else>—</template>
     </td>
     <td class="tags-data">
-      <span
+      <p
         v-if="document.tags.length"
         class="fr-tag"
-        >{{ documentTagKeys.value(document.tags[0] as DocumentTag) }}</span
       >
-      <span
+        {{ documentTagKeys.value(document.tags[0] as DocumentTag) }}
+      </p>
+      <p
         v-if="document.tags.length > 1"
         class="fr-tag fr-ml-1w"
         :title="
@@ -61,18 +67,18 @@
             .map(t => documentTagKeys.value(t as DocumentTag))
             .join(', ')
         "
-        >+{{ document.tags.length - 1 }}</span
       >
+        +{{ document.tags.length - 1 }}
+      </p>
     </td>
     <td>
-      {{ formatDateToLocalTimezone(document.created) }}
-      <span
+      <p class="fr-mb-0">{{ formatDateToLocalTimezone(document.created) }}</p>
+      <p
         v-if="createdByName"
-        class="created-by"
+        class="created-by fr-mb-0"
       >
-        <br />
         {{ createdByName }}
-      </span>
+      </p>
     </td>
     <td>
       <ul class="fr-btns-group fr-btns-group--inline">
@@ -212,16 +218,11 @@
     return formatBeneficiaryShortenedName(selected[0])
   }
 
-  const storage = reactive(sessionStorage)
+  const hasBeenOpened = ref(!!sessionStorage.getItem(props.document.key))
 
-  watch(
-    () => storage,
-    () => {
-      console.log(storage)
-    }
-  )
   async function onView() {
-    sessionStorage.setItem(props.document.key, 'VU')
+    sessionStorage.setItem(props.document.key, 'seen')
+    hasBeenOpened.value = true
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
     const data = await $fetch<Blob>(
       `/api/document/download?key=${props.document.key}`
@@ -230,6 +231,8 @@
   }
 
   async function onDownload() {
+    sessionStorage.setItem(props.document.key, 'seen')
+    hasBeenOpened.value = true
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
     const data = await $fetch<Blob>(
       `/api/document/download?key=${props.document.key}`
@@ -302,11 +305,13 @@
   .name-subtitle {
     color: var(--text-mention-grey);
     font-size: 0.75rem;
+    line-height: 1rem;
   }
 
   .created-by {
     color: var(--text-mention-grey);
     font-size: 0.75rem;
+    line-height: 1rem;
   }
 
   .tags-data {
