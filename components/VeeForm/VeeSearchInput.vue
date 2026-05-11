@@ -11,6 +11,12 @@
       :for="id"
     >
       {{ label }}
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+      >
+        {{ hint }}
+      </span>
     </label>
     <div class="fr-search-bar">
       <input
@@ -54,10 +60,12 @@
       name: string
       label: string
       placeholder?: string
+      hint?: string
       labelVisible?: boolean
     }>(),
     {
       placeholder: undefined,
+      hint: undefined,
       labelVisible: false
     }
   )

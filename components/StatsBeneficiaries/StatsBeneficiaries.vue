@@ -8,7 +8,7 @@
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
       :validation-schema="statFilterSchema"
-      :hint="periodFilterHint"
+      :hints="{ period: periodFilterHint }"
     />
 
     <section class="fr-grid-row fr-grid-row--gutters">
@@ -30,7 +30,25 @@
         <template #title>
           <p class="fr-mb-0 fr-h3 title-blue">
             {{ beneficiaryCountLabel[0] }}
+            <button
+              v-if="beneficiaryCountLabel[1]"
+              id="btn-tooltip-beneficiary-count"
+              class="fr-btn--tooltip fr-btn"
+              aria-describedby="tooltip-beneficiary-count"
+            >
+              Information contextuelle
+            </button>
           </p>
+          <span
+            v-if="beneficiaryCountLabel[1]"
+            id="tooltip-beneficiary-count"
+            class="fr-tooltip fr-placement"
+            role="tooltip"
+            aria-hidden="true"
+          >
+            Bénéficiaire ayant reçu au moins un accompagnement dans la période
+            concernée
+          </span>
           <p
             v-if="beneficiaryCountLabel[1] && beneficiaryCount?.count"
             class="fr-text--lg fr-mb-0"
@@ -235,7 +253,7 @@
   import { EventCategory, ExportEventAction } from '~/types/matomo'
 
   const periodFilterHint =
-    'Le filtre "Période" s\'applique aux bénéficiaires ayant reçu au moins un accompagnement dans la période concernée'
+    'Filtre les bénéficiaires accompagnés durant la période'
 
   const alertClose = ref<boolean>(true)
   const trpcClient = useTrpcClient()
