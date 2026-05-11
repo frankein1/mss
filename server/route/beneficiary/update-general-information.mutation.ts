@@ -1,5 +1,4 @@
-import type { Prisma } from '@prisma/client'
-import { NotificationType, UserActivityType } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
@@ -10,9 +9,8 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
 import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo, NotificationRepo, UserRepo } from '~/server/database'
+import { BeneficiaryRepo, UserRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { prismaClient } from '~/server/prisma/prismaClient'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -85,49 +83,20 @@ const handler = async ({
     previousReferentIds
   )
 
-  const updateBeneficiary = () => {
-    return BeneficiaryRepo.update(ctx.user, {
-      select: { id: true },
-      where: { id },
-      data: {
-        ...cleaned,
-        familyFile: {
-          update: {
-            data: {
-              referents: referentConnections
-            }
+  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
+    where: { id },
+    data: {
+      ...cleaned,
+      familyFile: {
+        update: {
+          data: {
+            referents: referentConnections
           }
         }
       }
-    })
-  }
-
-  const transactions: (() => Prisma.PrismaPromise<any>)[] = [updateBeneficiary]
-
-  // Delete removed referents notifications
-  if (!sameIds(referents, previousReferentIds)) {
-    const removedReferentsIds = referentConnections.disconnect.map(r => r.id)
-    transactions.push(() =>
-      NotificationRepo.prisma.deleteMany({
-        where: {
-          beneficiaryId: input.id,
-          type: {
-            in: [
-              NotificationType.DueDateOneMonth,
-              NotificationType.DueDateToday,
-              NotificationType.EndOfSupport,
-              NotificationType.EndOfSupportOneMonth,
-              NotificationType.DocumentExpirationToday
-            ]
-          },
-          recipientId: { in: removedReferentsIds }
-        }
-      })
-    )
-  }
-
-  const [updatedBeneficiary, _deletedNotification] =
-    await prismaClient.$transaction(transactions.map(t => t()))
+    }
+  })
 
   return updatedBeneficiary
 }
@@ -145,15 +114,3 @@ export const updateGeneralInformationMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
-
-const sameIds = (a: string[], b: string[]) => {
-  if (a.length !== b.length) {
-    return false
-  }
-  const setA = new Set(a)
-  const setB = new Set(b)
-  if (setA.size !== setB.size) {
-    return false
-  }
-  return [...setA].every(id => setB.has(id))
-}
