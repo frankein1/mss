@@ -23,7 +23,8 @@ export default withNuxt(
       'no-warning-comments': [
         'warn',
         { terms: ['todo', 'fixme'], location: 'anywhere' }
-      ]
+      ],
+      '@typescript-eslint/restrict-template-expressions': 'error'
     }
   },
   {
