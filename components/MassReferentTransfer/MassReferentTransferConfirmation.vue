@@ -73,6 +73,7 @@
 </template>
 
 <script setup lang="ts">
+  import { BeneficiaryAction, EventCategory } from '~/types/matomo'
   import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
@@ -129,6 +130,12 @@
     if (error.value || !res) {
       return
     }
+    useMatomo().trackEvent(
+      EventCategory.Beneficiary,
+      editionChoice.value === 'add'
+        ? BeneficiaryAction.MassReferentTransferAddition
+        : BeneficiaryAction.MassReferentTransferRemoval
+    )
     selectedBeneficiaries.value = []
     referentId.value = null
   }
