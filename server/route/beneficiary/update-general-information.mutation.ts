@@ -116,7 +116,8 @@ const handler = async ({
               NotificationType.DueDateOneMonth,
               NotificationType.DueDateToday,
               NotificationType.EndOfSupport,
-              NotificationType.EndOfSupportOneMonth
+              NotificationType.EndOfSupportOneMonth,
+              NotificationType.DocumentExpirationToday
             ]
           },
           recipientId: { in: removedReferentsIds }
