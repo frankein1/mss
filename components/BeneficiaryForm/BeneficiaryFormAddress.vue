@@ -111,7 +111,6 @@
 </template>
 
 <script setup lang="ts">
-  import { inject } from 'vue'
   import type { BeneficiaryAccommodationMode } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
@@ -122,6 +121,16 @@
     beneficiaryAccommodationZoneKeys
   } from '~/client/options'
   import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
+  import type { MemberAccommodation } from './types'
+
+  const props = withDefaults(
+    defineProps<{
+      membersAccommodation?: MemberAccommodation[]
+    }>(),
+    {
+      membersAccommodation: () => []
+    }
+  )
 
   const { application } = usePermissions()
 
@@ -157,20 +166,11 @@
     setDepartmentValue
   })
 
-  // Suggestion d'hébergement depuis un autre membre du foyer
-  const familyFileId = inject<string>('familyFileId')
   const route = useRoute()
   const currentBeneficiaryId = route.params['id'] as string
-  const trpcClient = useTrpcClient()
-
-  const { data: familyFileData } =
-    await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
-      { id: familyFileId ?? '' },
-      { immediate: Boolean(familyFileId) }
-    )
 
   const membersWithAccommodation = computed(() =>
-    (familyFileData.value?.beneficiaries ?? []).filter(
+    props.membersAccommodation.filter(
       m =>
         m.id !== currentBeneficiaryId &&
         (m.accommodationMode || m.street || m.city || m.zipcode)
@@ -191,9 +191,7 @@
     () => sectionIsEmpty.value && membersWithAccommodation.value.length > 0
   )
 
-  type FamilyMember = (typeof membersWithAccommodation.value)[0]
-
-  function applyAccommodation(member: FamilyMember) {
+  function applyAccommodation(member: MemberAccommodation) {
     setFieldValue('accommodationMode', member.accommodationMode ?? null)
     setFieldValue('accommodationName', member.accommodationName ?? '')
     setFieldValue(

@@ -1,5 +1,6 @@
 import { getPageDocuments } from './getPageDocuments.service'
 import { getMinimalInfo } from './getMinimalInfo.service'
+import { getMembersAccommodation } from './getMembersAccommodation.service'
 import type { FamilyFileSecurityTarget } from './permission.service'
 import {
   getCreationPermissions,
@@ -16,6 +17,7 @@ export const FamilyFileService = {
   getFamilyFileSecurityTarget,
   getPageDocuments,
   getMinimalInfo,
+  getMembersAccommodation,
   split,
   addReferentToFamilyFile,
   deleteReferentFromFamilyfile

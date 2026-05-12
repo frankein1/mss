@@ -1,11 +1,14 @@
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
-import type { IdInput } from '~/server/schema'
-import { idSchema } from '~/server/schema'
+import type { GetBeneficiaryDetailsInput } from '~/server/schema'
+import { getBeneficiaryDetailsSchema } from '~/server/schema'
 import { BeneficiaryService, FamilyFileService } from '~/server/services'
 
-const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: GetBeneficiaryDetailsInput
+) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.id
@@ -17,7 +20,7 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: { id: string }
+  input: GetBeneficiaryDetailsInput
   ctx: ProtectedAppContext
 }) => {
   const data = await BeneficiaryService.get({
@@ -25,19 +28,29 @@ const handler = async ({
     id: input.id
   })
 
+  const familyFileId = data.beneficiary.familyFileId
+
   const familyFileMinimalInfo = await FamilyFileService.getMinimalInfo({
     ctx,
-    input: { id: data.beneficiary.familyFileId }
+    input: { id: familyFileId }
   })
+
+  const membersAccommodation = input.options?.accommodation
+    ? await FamilyFileService.getMembersAccommodation({
+        ctx,
+        input: { id: familyFileId }
+      })
+    : null
 
   return {
     ...data,
-    familyFileMinimalInfo
+    familyFileMinimalInfo,
+    membersAccommodation
   }
 }
 
 export const getBeneficiaryDetailsQuery = createQuery({
-  inputValidation: idSchema,
+  inputValidation: getBeneficiaryDetailsSchema,
   securityCheck,
   handler
 })

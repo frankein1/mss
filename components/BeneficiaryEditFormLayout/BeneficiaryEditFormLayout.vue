@@ -64,7 +64,6 @@
 </template>
 
 <script setup lang="ts" generic="T extends ZodSchema">
-  import { provide } from 'vue'
   import type { ZodSchema, z } from 'zod'
   import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
@@ -107,8 +106,6 @@
       smallTitle: false
     }
   )
-
-  provide('familyFileId', props.familyFileId)
 
   const emit = defineEmits<{
     save: [beneficiary: SubmitType, target: string | undefined]
