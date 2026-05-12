@@ -2,7 +2,7 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
-  validateBelongsToStructure,
+  validateManyBelongToStructure,
   type SecurityRuleContext
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
@@ -36,7 +36,7 @@ const securityCheck = async (
   }
 
   if (!referentsAreUnchanged) {
-    const allInStructure = await validateBelongsToStructure(
+    const allInStructure = await validateManyBelongToStructure(
       ctx.user,
       input.referents,
       UserRepo.count
