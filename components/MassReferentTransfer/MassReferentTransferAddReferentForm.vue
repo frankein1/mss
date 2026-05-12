@@ -1,7 +1,7 @@
 <template>
   <p>
     {{ selectedBeneficiaries.length }}/{{ MAX_BENEFICIARIES_REFERENT_TRANSFER }}
-    bénéficiaires sélectionné(s).
+    bénéficiaires sélectionnés.
   </p>
   <FormErrors
     v-if="errors.length > 0"
@@ -46,12 +46,12 @@
 
   const inputLabel = computed(() => {
     if (editionChoice.value === 'add') {
-      return 'Sélectionnez l’agent référent à ajouter'
+      return 'Sélectionner l’agent référent à ajouter'
     }
     if (editionChoice.value === 'delete') {
-      return 'Sélectionnez l’agent référent à retirer'
+      return 'Sélectionner l’agent référent à retirer'
     }
-    return 'Sélectionnez l’agent référent à transferer'
+    return 'Sélectionner l’agent référent à transferer'
   })
 
   const { handleSubmit } = useForm<TransferReferentToFamilyFileInput>({
