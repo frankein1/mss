@@ -1,23 +1,44 @@
 <template>
   <BeneficiaryFormSection section-title="Adresse/Hébergement">
-    <template v-if="showAccomodationSuggestion">
-      <div
-        v-for="member in membersAccommodation"
-        :key="member.id"
-        class="fr-col-12"
+    <div
+      v-if="showAccomodationSuggestion"
+      class="fr-col-12"
+    >
+      <AtomAlert
+        :alert-type="AlertType.Info"
+        message="des informations d'hébergement sont disponibles dans le dossier foyer"
       >
-        <AtomAlert
-          :alert-type="AlertType.Info"
-          :message="`Informations d'hébergement de ${formatBeneficiaryDisplayName(member)} disponibles`"
-        >
-          <template #detailedMessage>
-            <DsfrButton @click="applyAccommodation(member)"
-              >Utiliser ces informations</DsfrButton
+        <template #detailedMessage>
+          <div class="accommodation-suggestions">
+            <p>
+              L'encart du formulaire Adresse/Hébergement sera intégralement
+              complété avec les données du bénéficiaire choisi.
+            </p>
+            <template
+              v-for="member in membersAccommodation"
+              :key="member.id"
             >
-          </template>
-        </AtomAlert>
-      </div>
-    </template>
+              <hr class="fr-hr fr-my-2w" />
+              <div class="accommodation-suggestion-row">
+                <div>
+                  <p class="fr-text--bold fr-mb-0">
+                    {{ formatBeneficiaryDisplayName(member) }}
+                  </p>
+                  <p class="fr-text--sm fr-mb-0">
+                    {{ formatAccommodationSummary(member) }}
+                  </p>
+                </div>
+                <DsfrButton
+                  secondary
+                  label="Appliquer"
+                  @click="applyAccommodation(member)"
+                />
+              </div>
+            </template>
+          </div>
+        </template>
+      </AtomAlert>
+    </div>
     <div class="fr-col-12">
       <VeeSelect
         name="accommodationMode"
@@ -169,6 +190,23 @@
     () => sectionIsEmpty.value && membersAccommodation.length > 0
   )
 
+  function formatAccommodationSummary(member: MemberAccommodation): string {
+    const parts: string[] = []
+    const modeLabel = beneficiaryAccommodationModeKeys.value(
+      member.accommodationMode
+    )
+    if (modeLabel) {
+      parts.push(modeLabel)
+    }
+    const addressParts = [member.street, member.zipcode, member.city]
+      .filter(Boolean)
+      .join(', ')
+    if (addressParts) {
+      parts.push(addressParts)
+    }
+    return parts.join(' — ')
+  }
+
   function applyAccommodation(member: MemberAccommodation) {
     setValues({
       accommodationMode: member.accommodationMode ?? null,
@@ -185,3 +223,12 @@
     })
   }
 </script>
+
+<style lang="scss" scoped>
+  .accommodation-suggestion-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+</style>
