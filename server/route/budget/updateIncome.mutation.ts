@@ -4,33 +4,11 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBudgetIncomeInput } from '~/server/schema'
 import { updateBudgetIncomeSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
+import { getAppContextPermissions } from '~/server/security/permissions'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { getBudgetPermissions } from '~/server/security/permissions'
-import { BudgetIncomeRepo } from '~/server/database'
 
-const securityCheck = async (
-  ctx: SecurityRuleContext,
-  input: UpdateBudgetIncomeInput
-) => {
-  try {
-    const income = await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
-      select: {
-        budget: {
-          select: {
-            familyFile: {
-              select: { structureId: true, referents: { select: { id: true } } }
-            }
-          }
-        }
-      },
-      where: { id: input.id }
-    })
-    return getBudgetPermissions({ ctx, familyFile: income.budget.familyFile })
-      .edit
-  } catch {
-    return false
-  }
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input,

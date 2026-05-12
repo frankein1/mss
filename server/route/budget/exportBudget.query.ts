@@ -3,26 +3,13 @@ import type { GetBudgetInput } from '~/server/schema'
 import { getBudgetSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
+import { getAppContextPermissions } from '~/server/security/permissions'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { getBudget } from '~/server/services/budget/getBudget.service'
 import { exportBudgetWorkbook } from '~/server/services/budget/exportBudgetSpreadsheet'
-import { getBudgetPermissions } from '~/server/security/permissions'
-import { FamilyFileRepo } from '~/server/database'
 
-const securityCheck = async (
-  ctx: SecurityRuleContext,
-  input: GetBudgetInput
-) => {
-  try {
-    const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
-      select: { structureId: true, referents: { select: { id: true } } },
-      where: { id: input.familyFileId }
-    })
-    return getBudgetPermissions({ ctx, familyFile }).view
-  } catch {
-    return false
-  }
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input: { familyFileId },
