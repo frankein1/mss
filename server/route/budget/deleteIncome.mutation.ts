@@ -3,8 +3,30 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
+import { getBudgetPermissions } from '~/server/security/permissions'
 import { BudgetIncomeRepo, BudgetRepo } from '~/server/database'
+
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  try {
+    const income = await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
+      select: {
+        budget: {
+          select: {
+            familyFile: {
+              select: { structureId: true, referents: { select: { id: true } } }
+            }
+          }
+        }
+      },
+      where: { id: input.id }
+    })
+    return getBudgetPermissions({ ctx, familyFile: income.budget.familyFile })
+      .edit
+  } catch {
+    return false
+  }
+}
 
 const handler = async ({
   input,
@@ -32,7 +54,7 @@ const handler = async ({
 
 export const deleteIncome = createMutation({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler,
   auditLog: {
     key: 'budget.deleteIncome',

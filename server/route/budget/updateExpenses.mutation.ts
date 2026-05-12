@@ -4,7 +4,33 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBudgetExpensesInput } from '~/server/schema'
 import { updateBudgetExpensesSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
+import { getBudgetPermissions } from '~/server/security/permissions'
+import { BudgetExpensesRepo } from '~/server/database'
+
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: UpdateBudgetExpensesInput
+) => {
+  try {
+    const expenses = await BudgetExpensesRepo.findUniqueOrThrow(ctx.user, {
+      select: {
+        budget: {
+          select: {
+            familyFile: {
+              select: { structureId: true, referents: { select: { id: true } } }
+            }
+          }
+        }
+      },
+      where: { id: input.id }
+    })
+    return getBudgetPermissions({ ctx, familyFile: expenses.budget.familyFile })
+      .edit
+  } catch {
+    return false
+  }
+}
 
 const handler = async ({
   input,
@@ -18,7 +44,7 @@ const handler = async ({
 
 export const updateExpenses = createMutation({
   inputValidation: updateBudgetExpensesSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler,
   auditLog: {
     key: 'budget.updateExpenses',

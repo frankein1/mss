@@ -12,7 +12,6 @@ import { getAppContextPermissions } from '~/server/security/permissions'
 import { BeneficiaryRepo, BudgetRepo } from '~/server/database'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
-/** Validate that budgetId and beneficiaryId (optional) belong to the structure */
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateBudgetIncomeInput
