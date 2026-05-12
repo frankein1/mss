@@ -190,9 +190,12 @@
   })
 
   const instructorOrganization = computed(() => {
-    return props.fileInstruction.externalStructure
-      ? props.fileInstruction.instructorOrganization?.name || ''
-      : 'Interne'
+    if (!props.fileInstruction.externalStructure) {
+      return 'Interne'
+    }
+    return props.fileInstruction.instructorOrganization
+      ? props.fileInstruction.instructorOrganization.name
+      : 'Externe'
   })
 
   const refusalReason = computed(() => {
