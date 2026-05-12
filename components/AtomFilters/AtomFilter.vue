@@ -5,7 +5,6 @@
     :class="filter.name"
     :label="filter.label"
     type="date"
-    hint="helllo je suis un hint"
     :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
