@@ -1,4 +1,4 @@
-import { UserRole, type SocialSupport } from '@prisma/client'
+import type { SocialSupport, UserRole } from '@prisma/client'
 import { NotificationType } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
@@ -8,6 +8,7 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { withErrorCapture } from '../utils'
+import { getSocialSupportNotificationRecipientIds } from './getNotificationRecipientIds'
 
 function hasDefinedCreatedBy<
   T extends { socialSupport: { createdById: string | null } }
@@ -40,22 +41,11 @@ type SocialSupportForNotification = Pick<
 
 const getRecipientIds = (
   socialSupport: SocialSupportForNotification
-): Set<string> => {
-  const recipientIds = new Set<string>()
-  if (socialSupport.createdById !== null) {
-    recipientIds.add(socialSupport.createdById)
-  }
-  for (const referent of socialSupport.familyFile?.referents ?? []) {
-    if (
-      referent.role !== UserRole.ReceptionAgent &&
-      referent.role !== UserRole.Instructor &&
-      referent.role !== UserRole.Referent
-    ) {
-      recipientIds.add(referent.id)
-    }
-  }
-  return recipientIds
-}
+): Set<string> =>
+  getSocialSupportNotificationRecipientIds({
+    createdById: socialSupport.createdById,
+    referents: socialSupport.familyFile?.referents ?? []
+  })
 
 async function createSocialSupportNotifications(
   socialSupports: SocialSupportForNotification[],
