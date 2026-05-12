@@ -33,11 +33,14 @@
               <p class="results-count">
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
-              <ExportDataButton
-                :is-downloading="isDownloading"
-                :has-filters="true"
-                @export="exportBeneficiaries"
+              <AtomMenuDisclosure
+                dropdown-btn-class="fr-btn--tertiary-no-outline"
+                label="Options"
+                icon="fr-icon-more-line"
+                align-right
+                :menus="optionMenu"
               />
+              <OpenModalHack />
             </div>
             <div v-if="pending">
               <AtomLoader class="fr-mx-auto" />
@@ -80,6 +83,8 @@
   import type { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
   import { EventCategory, BeneficiaryAction } from '~/types/matomo'
   import { isTRPCClientError } from '~/utils/error'
+  import type { MenuItem } from '~/types/menu'
+  import ExportDataConfirm from '~/components/ExportData/ExportDataConfirm.vue'
 
   const title = routes.beneficiary.AppBeneficiaries.title
 
@@ -92,6 +97,7 @@
   const route = useRoute()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
+  const modal = useModal()
 
   const notFilled = route.query['not-filled'] as FilterBeneficiaryNotFilled
   if (notFilled) {
@@ -168,6 +174,32 @@
     } finally {
       isDownloading.value = false
     }
+  }
+
+  // Option menu
+  const optionMenu: MenuItem[] = [
+    {
+      label: 'Exporter le tableau (.xlsx)',
+      icon: 'fr-icon-download-line',
+      onClick: _item => {
+        exportConfirm()
+      }
+    },
+    {
+      label: 'Modifier agent référent',
+      icon: 'fr-icon-user-line',
+      href: routes.beneficiary.AppBeneficiariesReferentTransfer.path()
+    }
+  ]
+
+  function exportConfirm() {
+    modal.open(ExportDataConfirm, {
+      title: 'Attention aux données des bénéficiaires',
+      triggerOpen: true,
+
+      hasFilters: true,
+      export: (code: string) => exportBeneficiaries(code)
+    })
   }
 </script>
 

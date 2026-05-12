@@ -57,7 +57,9 @@ export enum BeneficiaryHistoryAction {
 export enum BeneficiaryAction {
   Print = 'Imprimer',
   Split = 'Dissocier',
-  ExportAll = 'Exporter tous les bénéficiaires'
+  ExportAll = 'Exporter tous les bénéficiaires',
+  MassReferentTransferRemoval = "Transfert massif d'agent référent / Supression",
+  MassReferentTransferAddition = "Transfert massif d'agent référent / Ajout"
 }
 
 export enum BeneficiaryHistoryFilterEventAction {

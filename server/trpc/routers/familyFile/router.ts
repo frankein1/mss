@@ -16,5 +16,11 @@ export const fileRouter = router({
     .query(routes.getExaminationDatesQuery.execute),
   split: protectedProcedure
     .input(routes.split.inputValidation)
-    .mutation(routes.split.execute)
+    .mutation(routes.split.execute),
+  addReferent: protectedProcedure
+    .input(routes.addReferentToFamilyFileMutation.inputValidation)
+    .mutation(routes.addReferentToFamilyFileMutation.execute),
+  deleteReferent: protectedProcedure
+    .input(routes.deleteReferentFromFamilyFileMutation.inputValidation)
+    .mutation(routes.deleteReferentFromFamilyFileMutation.execute)
 })

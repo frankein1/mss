@@ -22,7 +22,11 @@ export default async function getBeneficiaryList({
     ...prepareBeneficiaryFilters(input.filters)
   }
   const [items, count] = await Promise.all([
-    getBeneficiaryListQuery(ctx, { where, take, skip, orderBy: input.orderBy }),
+    getBeneficiaryListQuery(
+      ctx,
+      { where, take, skip, orderBy: input.orderBy },
+      { referents: input.referents }
+    ),
     BeneficiaryRepo.count(ctx.user, {
       where
     })

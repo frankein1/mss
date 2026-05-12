@@ -1,5 +1,29 @@
 <template>
   <tr class="clickable-row">
+    <th
+      v-if="selectable"
+      class="fr-cell--fixed"
+      scope="row"
+    >
+      <div class="fr-checkbox-group fr-checkbox-group--sm">
+        <input
+          :id="`table-select-checkbox--${beneficiary.id}`"
+          name="row-select"
+          type="checkbox"
+          :checked="selected"
+          :disabled="disabled"
+          @change="emit('toggle')"
+        />
+        <label
+          class="fr-label"
+          :for="`table-select-checkbox--${beneficiary.id}`"
+        >
+          <span class="fr-sr-only"
+            >Sélectionner {{ beneficiary.firstName }} {{ lastName }}</span
+          >
+        </label>
+      </div>
+    </th>
     <td>
       <NuxtLink
         class="table-row-link"
@@ -29,6 +53,12 @@
       </template>
       <template v-else>{{ EMPTY_TABLE_CELL }}</template>
     </td>
+    <td
+      v-if="showReferents"
+      class="address-data"
+    >
+      {{ formatTableValue(referentNames) }}
+    </td>
   </tr>
 </template>
 
@@ -40,12 +70,29 @@
   import { routes } from '~/utils/routes'
   import { formatTableValue } from '~/utils/table'
 
-  const { beneficiary } = defineProps<{
-    beneficiary: BeneficiaryListItem
+  const { beneficiary, selectable, selected, disabled, showReferents } =
+    defineProps<{
+      beneficiary: BeneficiaryListItem
+      selectable?: boolean
+      selected?: boolean
+      disabled?: boolean
+      showReferents?: boolean
+    }>()
+
+  const emit = defineEmits<{
+    toggle: []
   }>()
 
   const addressCodeAndCity = computed(() =>
     [beneficiary.zipcode, beneficiary.city].filter(v => !!v).join(' ')
+  )
+
+  const referentNames = computed(() =>
+    beneficiary.familyFile?.referents
+      ? beneficiary.familyFile?.referents
+          .map(r => `${r.firstName} ${r.lastName}`)
+          .join(', ')
+      : null
   )
 
   const lastName = computed(() => {
@@ -63,5 +110,10 @@
   .address-data,
   .social-support-subjects-data {
     max-width: 15rem;
+  }
+
+  .fr-cell--fixed {
+    position: relative;
+    z-index: 1;
   }
 </style>
