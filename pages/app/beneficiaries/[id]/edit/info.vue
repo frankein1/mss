@@ -23,7 +23,7 @@
         :permissions="permissions"
         :initial-beneficiary="beneficiaryIdentification"
         :initial-beneficiary-status="beneficiaryStatus"
-        :members-accommodation="membersAccommodation"
+        :members-accommodation
         @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>

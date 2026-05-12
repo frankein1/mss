@@ -1,27 +1,21 @@
 <template>
   <BeneficiaryFormSection section-title="Adresse/Hébergement">
-    <template v-if="showSuggestions">
+    <template v-if="showAccomodationSuggestion">
       <div
-        v-for="member in membersWithAccommodation"
+        v-for="member in membersAccommodation"
         :key="member.id"
         class="fr-col-12"
       >
-        <div
-          class="fr-alert fr-alert--info fr-alert--sm fr-mb-2w"
-          role="alert"
+        <AtomAlert
+          :alert-type="AlertType.Info"
+          :message="`Informations d'hébergement de ${formatBeneficiaryDisplayName(member)} disponibles`"
         >
-          <p class="fr-alert__title">
-            Informations d'hébergement de {{ member.firstName }}
-            {{ member.usualName ?? member.birthName }} disponibles
-          </p>
-          <button
-            type="button"
-            class="fr-btn fr-btn--sm fr-btn--secondary"
-            @click="applyAccommodation(member)"
-          >
-            Utiliser ces informations
-          </button>
-        </div>
+          <template #detailedMessage>
+            <DsfrButton @click="applyAccommodation(member)"
+              >Utiliser ces informations</DsfrButton
+            >
+          </template>
+        </AtomAlert>
       </div>
     </template>
     <div class="fr-col-12">
@@ -122,17 +116,14 @@
   } from '~/client/options'
   import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
   import type { MemberAccommodation } from './types'
+  import { AlertType } from '~/utils/constants/alert'
 
-  const props = withDefaults(
-    defineProps<{
-      membersAccommodation?: MemberAccommodation[]
-    }>(),
-    {
-      membersAccommodation: () => []
-    }
-  )
+  const { membersAccommodation = [] } = defineProps<{
+    membersAccommodation?: MemberAccommodation[]
+  }>()
 
   const { application } = usePermissions()
+  const { values, setValues } = useFormContext()
 
   const { value: accommodationMode } =
     useField<BeneficiaryAccommodationMode>('accommodationMode')
@@ -166,19 +157,6 @@
     setDepartmentValue
   })
 
-  const route = useRoute()
-  const currentBeneficiaryId = route.params['id'] as string
-
-  const membersWithAccommodation = computed(() =>
-    props.membersAccommodation.filter(
-      m =>
-        m.id !== currentBeneficiaryId &&
-        (m.accommodationMode || m.street || m.city || m.zipcode)
-    )
-  )
-
-  const { values, setFieldValue } = useFormContext()
-
   const sectionIsEmpty = computed(
     () =>
       !values.accommodationMode &&
@@ -187,24 +165,23 @@
       !values.zipcode
   )
 
-  const showSuggestions = computed(
-    () => sectionIsEmpty.value && membersWithAccommodation.value.length > 0
+  const showAccomodationSuggestion = computed(
+    () => sectionIsEmpty.value && membersAccommodation.length > 0
   )
 
   function applyAccommodation(member: MemberAccommodation) {
-    setFieldValue('accommodationMode', member.accommodationMode ?? null)
-    setFieldValue('accommodationName', member.accommodationName ?? '')
-    setFieldValue(
-      'accommodationAdditionalInformation',
-      member.accommodationAdditionalInformation ?? ''
-    )
-    setFieldValue('street', member.street ?? '')
-    setFieldValue('addressComplement', member.addressComplement ?? '')
-    setFieldValue('zipcode', member.zipcode ?? '')
-    setFieldValue('city', member.city ?? '')
-    setFieldValue('department', member.department ?? '')
-    setFieldValue('region', member.region ?? '')
-    setFieldValue('qpv', member.qpv ?? false)
-    setFieldValue('accommodationZone', member.accommodationZone ?? null)
+    setValues({
+      accommodationMode: member.accommodationMode ?? null,
+      accommodationName: member.accommodationName ?? '',
+      accommodationZone: member.accommodationZone ?? null,
+      accommodationAdditionalInformation:
+        member.accommodationAdditionalInformation ?? '',
+      street: member.street ?? '',
+      addressComplement: member.addressComplement ?? '',
+      zipcode: member.zipcode ?? '',
+      department: member.department ?? '',
+      region: member.region ?? '',
+      qpv: member.qpv ?? false
+    })
   }
 </script>

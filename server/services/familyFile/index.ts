@@ -1,6 +1,6 @@
 import { getPageDocuments } from './getPageDocuments.service'
 import { getMinimalInfo } from './getMinimalInfo.service'
-import { getMembersAccommodation } from './getMembersAccommodation.service'
+import { getMembersAccommodation } from './get-members-accomodation.service'
 import type { FamilyFileSecurityTarget } from './permission.service'
 import {
   getCreationPermissions,

@@ -38,9 +38,9 @@ const handler = async ({
   const membersAccommodation = input.options?.accommodation
     ? await FamilyFileService.getMembersAccommodation({
         ctx,
-        input: { id: familyFileId }
+        input: { id: familyFileId, beneficiaryId: input.id }
       })
-    : null
+    : []
 
   return {
     ...data,

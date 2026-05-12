@@ -3,10 +3,10 @@ import { FamilyFileRepo } from '~/server/database'
 
 export async function getMembersAccommodation({
   ctx,
-  input: { id }
+  input: { id, beneficiaryId }
 }: {
   ctx: SecurityRuleContext
-  input: { id: string }
+  input: { id: string; beneficiaryId: string }
 }) {
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
@@ -34,5 +34,9 @@ export async function getMembersAccommodation({
     }
   })
 
-  return familyFile.beneficiaries
+  return familyFile.beneficiaries.filter(
+    m =>
+      m.id !== beneficiaryId &&
+      (m.accommodationMode || m.street || m.city || m.zipcode)
+  )
 }

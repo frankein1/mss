@@ -17,7 +17,7 @@
     <BeneficiaryFormContactDetails id="contact-details" />
     <BeneficiaryFormAddress
       id="address"
-      :members-accommodation="membersAccommodation"
+      :members-accommodation
     />
     <BeneficiaryFormMobility id="mobility" />
     <BeneficiaryFormAdditionalInformation id="additional-information" />
