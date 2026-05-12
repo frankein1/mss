@@ -6,28 +6,33 @@
   >
     <div class="beneficiaries-choice">
       <p class="fr-text--bold">
-        Total&nbsp;: {{ beneficiariesCount }} bénéficiaire(s)
-      </p>
-      <p>
-        {{ selectedBeneficiaries.length }}/{{
+        Total : {{ selectedBeneficiaries.length }}/{{
           MAX_BENEFICIARIES_REFERENT_TRANSFER
         }}
-        bénéficiaires maximum sélectionné(s).
-        <template v-if="editionChoice === 'delete'">
-          <br />
-          Vous ne pouvez pas séléctionner des bénéficiaires qui ont moins de 2
-          agents référents.
-        </template>
+        dossiers bénéficiaires.
+      </p>
+
+      <p v-if="editionChoice === 'delete'">
+        Vous ne pouvez pas séléctionner des dossiers bénéficiaires qui ont moins
+        de 2 agents référents.
       </p>
       <AtomAlert
         v-if="
           selectedBeneficiaries.length >= MAX_BENEFICIARIES_REFERENT_TRANSFER
         "
         :alert-type="AlertType.Warning"
-        :message="`limite de sélection atteinte (${MAX_BENEFICIARIES_REFERENT_TRANSFER} bénéficiaires).`"
+        :message="`Nombre total de dossiers bénéficiaires sélectionnés atteint`"
         size="sm"
         class="fr-mb-4v"
-      />
+      >
+        <template #detailedMessage>
+          <p>
+            Vous pouvez sélectionner jusqu'à
+            {{ MAX_BENEFICIARIES_REFERENT_TRANSFER }} dossiers bénéficiaires
+            maximum.
+          </p>
+        </template>
+      </AtomAlert>
       <BeneficiaryTable
         v-model:sort="orderBy"
         v-model:selected-beneficiaries="selectedBeneficiaries"
@@ -103,8 +108,6 @@
     pending,
     error
   } = await trpcClient.beneficiary.getBeneficiaryList.useQuery(queryInput)
-
-  const beneficiariesCount = computed(() => pageData.value?.count || 0)
 
   const items = computed(
     () => (pageData.value?.items as Array<BeneficiaryListItem>) || []
