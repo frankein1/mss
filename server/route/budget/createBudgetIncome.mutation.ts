@@ -5,36 +5,26 @@ import { BudgetService } from '~/server/services'
 import type { CreateBudgetIncomeInput } from '~/server/schema'
 import { createBudgetIncomeSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { BeneficiaryRepo, BudgetRepo } from '~/server/database'
-import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
+import { getBudgetPermissions } from '~/server/security/permissions'
+import { BudgetRepo } from '~/server/database'
 
-/** Validate that budgetId and beneficiaryId (optional) belong to the structure */
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateBudgetIncomeInput
 ) => {
-  const hasBeneficiaryId =
-    !!input.beneficiaryId &&
-    input.beneficiaryId !== BUDGET_INCOME_FOR_MEMBER_VALUE
   try {
-    await Promise.all([
-      BudgetRepo.findUniqueOrThrow(ctx.user, {
-        select: { id: true },
-        where: { id: input.budgetId }
-      }),
-      ...(hasBeneficiaryId
-        ? [
-            BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-              select: { id: true },
-              where: { id: input.beneficiaryId }
-            })
-          ]
-        : [])
-    ])
+    const budget = await BudgetRepo.findUniqueOrThrow(ctx.user, {
+      select: {
+        familyFile: {
+          select: { structureId: true, referents: { select: { id: true } } }
+        }
+      },
+      where: { id: input.budgetId }
+    })
+    return getBudgetPermissions({ ctx, familyFile: budget.familyFile }).edit
   } catch {
     return false
   }
-  return true
 }
 
 const handler = ({
