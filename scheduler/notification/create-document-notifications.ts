@@ -1,8 +1,8 @@
-import { UserRole } from '@prisma/client'
 import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { prismaClient } from '~/server/prisma'
 import { withErrorCapture } from '../utils'
+import { getDocumentNotificationRecipientIds } from './getNotificationRecipientIds'
 
 const documentSelect = {
   key: true,
@@ -26,22 +26,12 @@ type DocumentForNotification = Prisma.DocumentGetPayload<{
   select: typeof documentSelect
 }>
 
-const getRecipientIds = (doc: DocumentForNotification): Set<string> => {
-  const recipientIds = new Set<string>()
-  recipientIds.add(doc.createdById)
-  if (!doc.confidential) {
-    for (const referent of doc.familyFile.referents) {
-      if (
-        referent.role !== UserRole.ReceptionAgent &&
-        referent.role !== UserRole.Instructor &&
-        referent.role !== UserRole.Referent
-      ) {
-        recipientIds.add(referent.id)
-      }
-    }
-  }
-  return recipientIds
-}
+const getRecipientIds = (doc: DocumentForNotification): Set<string> =>
+  getDocumentNotificationRecipientIds({
+    createdById: doc.createdById,
+    confidential: doc.confidential,
+    referents: doc.familyFile.referents
+  })
 
 async function createNotifications(
   type: 'DocumentExpirationToday' | 'DocumentExpirationOneMonth'
