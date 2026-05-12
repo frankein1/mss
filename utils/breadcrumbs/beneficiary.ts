@@ -9,9 +9,12 @@ import { getBreadFamilyFile } from './file'
 const r = routes.beneficiary
 type Routes = typeof r
 
-function getBread<T extends 'AppBeneficiaries' | 'AppBeneficiariesAdd'>(
-  name: T
-) {
+function getBread<
+  T extends
+    | 'AppBeneficiaries'
+    | 'AppBeneficiariesAdd'
+    | 'AppBeneficiariesReferentTransfer'
+>(name: T) {
   const title = r[name].title as Routes[T]['title']
   return [{ text: title, to: r[name].path() }]
 }
@@ -61,6 +64,11 @@ export const breadcrumbs = {
   AppBeneficiaries: () => [
     ...user.AppOverview(),
     ...getBread('AppBeneficiaries')
+  ],
+  AppBeneficiariesReferentTransfer: () => [
+    ...user.AppOverview(),
+    ...getBread('AppBeneficiaries'),
+    ...getBread('AppBeneficiariesReferentTransfer')
   ],
   AppBeneficiariesAdd: () => [
     ...user.AppOverview(),

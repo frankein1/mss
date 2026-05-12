@@ -76,8 +76,13 @@
       </div>
 
       <h2 class="fr-col-12">Dropdown</h2>
-      <div class="fr-col-12 fr-mb-5w">
+      <div class="fr-col-12">
         <AtomDropdownStory />
+      </div>
+
+      <h2 class="fr-col-12">Menu Disclosure</h2>
+      <div class="fr-col-12 fr-mb-5w">
+        <AtomMenuDisclosureStory />
       </div>
     </div>
   </div>
@@ -99,6 +104,7 @@
   import MinisterComboboxStory from '~/components/Minister/MinisterCombobox.story.vue'
   import FollowupsTableStory from '~/components/Followups/FollowupsTable.story.vue'
   import AtomDropdownStory from '~/components/AtomDropdown/AtomDropdown.story.vue'
+  import AtomMenuDisclosureStory from '~/components/AtomMenuDisclosure/AtomMenuDisclosure.story.vue'
 
   definePageMeta({
     layout: 'landing'

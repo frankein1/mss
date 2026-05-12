@@ -7,6 +7,8 @@ import {
   getFamilyFileSecurityTarget
 } from './permission.service'
 import { split } from './split.service'
+import { addReferentToFamilyFile } from './add-referent.service'
+import { deleteReferentFromFamilyfile } from './delete-referent.service'
 
 export const FamilyFileService = {
   getCreationPermissions,
@@ -14,7 +16,9 @@ export const FamilyFileService = {
   getFamilyFileSecurityTarget,
   getPageDocuments,
   getMinimalInfo,
-  split
+  split,
+  addReferentToFamilyFile,
+  deleteReferentFromFamilyfile
 }
 
 export type { FamilyFileSecurityTarget }

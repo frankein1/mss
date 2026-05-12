@@ -46,3 +46,5 @@ export const COUNTDOWN_SESSION_LABEL = 'mss_countdown_session'
 
 // Local storage label for the countdown for user inactivity
 export const COUNTDOWN_INACTIVITY_LABEL = 'mss_countdown_inactivity'
+
+export const MAX_BENEFICIARIES_REFERENT_TRANSFER = 500
