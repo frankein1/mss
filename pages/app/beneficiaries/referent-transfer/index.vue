@@ -100,7 +100,7 @@
   // Steps
   const steps = [
     'Sélectionner le type de modification',
-    'Sélectionner les bénéficiaires à mettre à jour',
+    'Sélectionner les dossiers bénéficiaires à mettre à jour',
     'Sélectionner l’agent référent',
     'Confirmation'
   ]

@@ -1,5 +1,8 @@
 <template>
-  <tr class="clickable-row">
+  <tr
+    class="clickable-row"
+    :class="{ 'row--disabled': disabled }"
+  >
     <th
       v-if="selectable"
       class="fr-cell--fixed"
@@ -110,6 +113,11 @@
   .address-data,
   .social-support-subjects-data {
     max-width: 15rem;
+  }
+
+  .row--disabled td,
+  .row--disabled th {
+    color: #757575;
   }
 
   .fr-cell--fixed {

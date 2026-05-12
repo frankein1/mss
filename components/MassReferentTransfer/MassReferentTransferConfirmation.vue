@@ -4,7 +4,7 @@
       {{ selectedBeneficiaries.length }}/{{
         MAX_BENEFICIARIES_REFERENT_TRANSFER
       }}
-      bénéficiaires sélectionné(s).
+      bénéficiaires sélectionnés.
     </p>
     <AtomAlert
       :alert-type="AlertType.Warning"
