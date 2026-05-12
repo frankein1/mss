@@ -1,7 +1,47 @@
+import { UserRole } from '@prisma/client'
 import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { prismaClient } from '~/server/prisma'
 import { withErrorCapture } from '../utils'
+
+const documentSelect = {
+  key: true,
+  name: true,
+  createdById: true,
+  beneficiaryId: true,
+  confidential: true,
+  familyFile: {
+    select: {
+      referents: {
+        select: {
+          id: true,
+          role: true
+        }
+      }
+    }
+  }
+} satisfies Prisma.DocumentSelect
+
+type DocumentForNotification = Prisma.DocumentGetPayload<{
+  select: typeof documentSelect
+}>
+
+const getRecipientIds = (doc: DocumentForNotification): Set<string> => {
+  const recipientIds = new Set<string>()
+  recipientIds.add(doc.createdById)
+  if (!doc.confidential) {
+    for (const referent of doc.familyFile.referents) {
+      if (
+        referent.role !== UserRole.ReceptionAgent &&
+        referent.role !== UserRole.Instructor &&
+        referent.role !== UserRole.Referent
+      ) {
+        recipientIds.add(referent.id)
+      }
+    }
+  }
+  return recipientIds
+}
 
 async function createNotifications(
   type: 'DocumentExpirationToday' | 'DocumentExpirationOneMonth'
@@ -12,22 +52,19 @@ async function createNotifications(
       : dayjs().add(1, 'month').toDate()
 
   const docs = await prismaClient.document.findMany({
-    select: {
-      key: true,
-      name: true,
-      createdById: true,
-      beneficiaryId: true
-    },
+    select: documentSelect,
     where: { expirationDate }
   })
 
-  const data = docs.map(d => ({
-    recipientId: d.createdById,
-    beneficiaryId: d.beneficiaryId,
-    documentId: d.key,
-    detail: d.name,
-    type
-  })) satisfies Prisma.NotificationCreateManyInput[]
+  const data = docs.flatMap(d =>
+    Array.from(getRecipientIds(d)).map(recipientId => ({
+      recipientId,
+      beneficiaryId: d.beneficiaryId,
+      documentId: d.key,
+      detail: d.name,
+      type
+    }))
+  ) satisfies Prisma.NotificationCreateManyInput[]
 
   const res = await prismaClient.notification.createMany({ data })
 
