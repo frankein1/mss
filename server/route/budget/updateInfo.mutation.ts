@@ -5,27 +5,10 @@ import type { UpdateBudgetInfoInput } from '~/server/schema'
 import { updateBudgetInfoSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { getBudgetPermissions } from '~/server/security/permissions'
-import { BudgetRepo } from '~/server/database'
+import { getAppContextPermissions } from '~/server/security/permissions'
 
-const securityCheck = async (
-  ctx: SecurityRuleContext,
-  input: UpdateBudgetInfoInput
-) => {
-  try {
-    const budget = await BudgetRepo.findUniqueOrThrow(ctx.user, {
-      select: {
-        familyFile: {
-          select: { structureId: true, referents: { select: { id: true } } }
-        }
-      },
-      where: { id: input.id }
-    })
-    return getBudgetPermissions({ ctx, familyFile: budget.familyFile }).edit
-  } catch {
-    return false
-  }
-}
+const securityCheck = async (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input,

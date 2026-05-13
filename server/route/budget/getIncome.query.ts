@@ -4,29 +4,10 @@ import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { getBudgetPermissions } from '~/server/security/permissions'
-import { BudgetIncomeRepo } from '~/server/database'
+import { getAppContextPermissions } from '~/server/security/permissions'
 
-const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  try {
-    const income = await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
-      select: {
-        budget: {
-          select: {
-            familyFile: {
-              select: { structureId: true, referents: { select: { id: true } } }
-            }
-          }
-        }
-      },
-      where: { id: input.id }
-    })
-    return getBudgetPermissions({ ctx, familyFile: income.budget.familyFile })
-      .view
-  } catch {
-    return false
-  }
-}
+const securityCheck = async (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input: { id },
