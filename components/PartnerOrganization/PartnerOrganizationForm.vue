@@ -169,7 +169,7 @@
       <button
         class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
         type="button"
-        @click="push({ id: v4() })"
+        @click="push({ id: randomUUID() })"
       >
         Ajouter une personne
       </button>
@@ -199,7 +199,6 @@
 
 <script lang="ts" setup>
   import type { FormErrors } from 'vee-validate'
-  import { v4 } from 'uuid'
   import type { PartnerOrganizationData, DataInclusionStructure } from './types'
   import { partnerOrganizationFieldLabels } from '~/client/labels'
   import type {
@@ -208,6 +207,8 @@
   } from '~/server/schema'
   import { siretSchema } from '~/server/schema'
   import { SEARCH_NUMBER_CHARACTERS } from '~/utils/constants'
+
+  const randomUUID = () => crypto.randomUUID()
 
   const props = defineProps<{
     partnerId?: string

@@ -9,7 +9,7 @@ import { FamilyFileRepo, SocialSupportRepo } from '~/server/database'
 import type { AddFollowupInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -70,7 +70,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       ?.map(r => {
         if (r.type) {
           return {
-            id: r.id || v4(),
+            id: r.id || randomUUID(),
             type: r.type,
             motif: r.motif || null,
             externalStructureName: r.externalStructureName || null,

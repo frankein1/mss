@@ -10,7 +10,7 @@ import { test } from '~/test/server/test-utils'
 import { prismaClient } from '~/server/prisma'
 import dayjs from 'dayjs'
 import { BeneficiaryStatus } from '@prisma/client'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 
 let familyFileId: string
 
@@ -218,7 +218,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_PAUL,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Paul',
             created: twoYearsMinusTwoMonthsBeforeNow,
             updated: twoYearsMinusTwoMonthsBeforeNow,
@@ -227,7 +227,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_LETO,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Leto',
             created: threeYearsBeforeNow,
             updated: threeYearsBeforeNow,
@@ -236,7 +236,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_SIONA,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Siona',
             created: twoYearsMinusOneMonthsBeforeNow,
             updated: twoYearsMinusOneMonthsBeforeNow,
@@ -245,7 +245,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_VORIAN,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Vorian',
             archiveDueDate: inOneMonth,
             created: twoYearsMinusTwoMonthsBeforeNow,
@@ -255,7 +255,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_JESSICA,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Jessica',
             archiveDueDate: inOneMonth,
             created: twoYearsBeforeNow,
@@ -265,7 +265,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_ALIA,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Alia',
             archiveDueDate: oneMonthBeforeNow,
             created: twoYearsBeforeNow,
@@ -275,7 +275,7 @@ const createBeneficiaries = async () => {
           {
             ...beneficiaryBaseObject,
             id: ID_GHANIMA,
-            fileNumber: v4(),
+            fileNumber: randomUUID(),
             firstName: 'Ghanima',
             archiveDueDate: oneMonthBeforeNow,
             created: twoYearsBeforeNow,

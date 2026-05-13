@@ -29,7 +29,7 @@
         <button
           class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line"
           type="button"
-          @click="push({ id: v4() })"
+          @click="push({ id: randomUUID() })"
         >
           Ajouter un autre objet
         </button>
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { v4 } from 'uuid'
+  const randomUUID = () => crypto.randomUUID()
 
   const { fields, push, remove } = useFieldArray('customs')
 </script>
