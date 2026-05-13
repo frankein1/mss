@@ -14,7 +14,7 @@
               L'encart du formulaire Adresse/Hébergement sera intégralement
               complété avec les données du bénéficiaire choisi.
             </p>
-            <ul role="list">
+            <ul>
               <li
                 v-for="member in membersAccommodation"
                 :key="member.id"
