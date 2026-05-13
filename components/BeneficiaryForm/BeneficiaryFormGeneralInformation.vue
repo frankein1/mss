@@ -15,7 +15,10 @@
       @update="updateSimilarBeneficiary"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
-    <BeneficiaryFormAddress id="address" />
+    <BeneficiaryFormAddress
+      id="address"
+      :members-accommodation
+    />
     <BeneficiaryFormMobility id="mobility" />
     <BeneficiaryFormAdditionalInformation id="additional-information" />
   </div>
@@ -29,6 +32,7 @@
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import type { BeneficiaryStatus } from '@prisma/client'
   import type { FamilyFilePermissions } from '~/server/security'
+  import type { MemberAccommodation } from './types'
 
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
@@ -39,8 +43,11 @@
       initialBeneficiary: BeneficiaryIdentification | null
       initialBeneficiaryStatus: BeneficiaryStatus | undefined
       permissions: FamilyFilePermissions
+      membersAccommodation?: MemberAccommodation[]
     }>(),
-    {}
+    {
+      membersAccommodation: () => []
+    }
   )
 
   const emit = defineEmits<{
