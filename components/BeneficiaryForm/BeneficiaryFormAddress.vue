@@ -14,27 +14,39 @@
               L'encart du formulaire Adresse/Hébergement sera intégralement
               complété avec les données du bénéficiaire choisi.
             </p>
-            <template
-              v-for="member in membersAccommodation"
-              :key="member.id"
-            >
-              <hr class="fr-hr fr-my-2w" />
-              <div class="accommodation-suggestion-row">
-                <div>
-                  <p class="fr-text--bold fr-mb-0">
-                    {{ formatBeneficiaryDisplayName(member) }}
-                  </p>
-                  <p class="fr-text--sm fr-mb-0">
-                    {{ formatAccommodationSummary(member) }}
-                  </p>
+            <ul role="list">
+              <li
+                v-for="member in membersAccommodation"
+                :key="member.id"
+              >
+                <hr class="fr-hr fr-my-2w" />
+                <div class="accommodation-suggestion-row">
+                  <div>
+                    <p class="fr-text--bold fr-mb-0">
+                      {{ formatBeneficiaryDisplayName(member) }}
+                    </p>
+                    <p class="fr-text--sm fr-mb-0">
+                      {{ formatAccommodationSummary(member) }}
+                    </p>
+                    <details
+                      v-if="formatAccommodationComplement(member)"
+                      class="fr-text--sm"
+                    >
+                      <summary>Informations complémentaires</summary>
+                      <p class="fr-text--sm fr-mb-0">
+                        {{ formatAccommodationComplement(member) }}
+                      </p>
+                    </details>
+                  </div>
+                  <DsfrButton
+                    secondary
+                    size="sm"
+                    label="Appliquer"
+                    @click="applyAccommodation(member)"
+                  />
                 </div>
-                <DsfrButton
-                  secondary
-                  label="Appliquer"
-                  @click="applyAccommodation(member)"
-                />
-              </div>
-            </template>
+              </li>
+            </ul>
           </div>
         </template>
       </AtomAlert>
@@ -198,12 +210,34 @@
     if (modeLabel) {
       parts.push(modeLabel)
     }
-    const addressParts = [member.street, member.zipcode, member.city]
+    const zoneLabel = beneficiaryAccommodationZoneKeys.value(
+      member.accommodationZone
+    )
+    if (zoneLabel) {
+      parts.push(zoneLabel)
+    }
+    const addressParts = [
+      member.street,
+      member.addressComplement,
+      member.zipcode,
+      member.city
+    ]
       .filter(Boolean)
       .join(', ')
     if (addressParts) {
       parts.push(addressParts)
     }
+
+    return parts.join(' — ')
+  }
+
+  function formatAccommodationComplement(member: MemberAccommodation): string {
+    const parts = [
+      member.accommodationName,
+      member.accommodationAdditionalInformation,
+      member.qpv ? beneficiaryFieldLabels.qpv : null
+    ].filter(Boolean)
+
     return parts.join(' — ')
   }
 
@@ -217,6 +251,7 @@
       street: member.street ?? '',
       addressComplement: member.addressComplement ?? '',
       zipcode: member.zipcode ?? '',
+      city: member.city ?? '',
       department: member.department ?? '',
       region: member.region ?? '',
       qpv: member.qpv ?? false
@@ -225,6 +260,11 @@
 </script>
 
 <style lang="scss" scoped>
+  .accommodation-suggestions > ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
   .accommodation-suggestion-row {
     display: flex;
     align-items: center;
