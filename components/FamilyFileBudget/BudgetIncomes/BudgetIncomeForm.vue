@@ -144,7 +144,7 @@
         icon="fr-icon-add-line"
         tertiary
         no-outline
-        @click="push({ id: v4() })"
+        @click="push({ id: randomUUID() })"
       />
     </section>
   </div>
@@ -153,7 +153,8 @@
 <script setup lang="ts">
   import { budgetIncomeKeys } from '~/client/options'
   import type { UpdateLoanOrDebtInput } from '~/server/schema'
-  import { v4 } from 'uuid'
+
+  const randomUUID = () => crypto.randomUUID()
 
   const { fields, push, remove } =
     useFieldArray<UpdateLoanOrDebtInput>('customs')

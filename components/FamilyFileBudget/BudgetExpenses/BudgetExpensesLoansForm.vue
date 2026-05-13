@@ -15,7 +15,7 @@
       icon="fr-icon-add-line"
       tertiary
       no-outline
-      @click="push({ id: v4() })"
+      @click="push({ id: randomUUID() })"
     />
 
     <section class="subtotal fr-h4 fr-mt-3w">
@@ -31,8 +31,9 @@
 </template>
 
 <script setup lang="ts">
-  import { v4 } from 'uuid'
   import type { UpdateLoanOrDebtInput } from '~/server/schema'
+
+  const randomUUID = () => crypto.randomUUID()
 
   defineProps<{ total: number | null }>()
 

@@ -8,7 +8,7 @@ import { FamilyFileRepo, HousingHelpRequestRepo } from '~/server/database'
 import type { CreateHousingHelpRequestInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -65,7 +65,7 @@ export async function create({ input, ctx }: CreateParams) {
       ?.map(r => {
         if (r.type) {
           return {
-            id: r.id || v4(),
+            id: r.id || randomUUID(),
             type: r.type,
             motif: r.motif || null,
             externalStructureName: r.externalStructureName || null,

@@ -25,15 +25,13 @@
 <script lang="ts" setup>
   import type { SocialSupportRedirectionsInput } from '~/server/schema'
   import type { PartnerOrganizationIdName } from '~/types/partner'
-  import { v4 } from 'uuid'
-
   const { partnerOrganizations, partnerOrganizationOptions } = defineProps<{
     partnerOrganizationOptions: Options
     partnerOrganizations: Array<PartnerOrganizationIdName>
   }>()
 
   const addRedirectionAndReplaceFocus = async () => {
-    push({ id: v4() } as any)
+    push({ id: crypto.randomUUID() } as any)
     await nextTick()
     const wrappers = document.querySelectorAll('.redirection-wrapper')
     const lastWrapper = wrappers[wrappers.length - 1]
@@ -47,6 +45,6 @@
   const { fields, push, remove } =
     useFieldArray<SocialSupportRedirectionsInput>('socialSupportRedirections')
   if (fields.value.length === 0) {
-    fields.value.push({ id: v4() } as any) // push first entry
+    fields.value.push({ id: crypto.randomUUID() } as any) // push first entry
   }
 </script>

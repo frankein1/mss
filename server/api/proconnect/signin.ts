@@ -1,5 +1,5 @@
 import { useSession } from 'h3'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { getProConnectClient } from '~/server/lib'
 import type { AuthSession } from '~/server/types/session'
 
@@ -15,8 +15,8 @@ export default defineEventHandler(async event => {
     password: sessionSecret
   })
 
-  const nonce = v4()
-  const state = v4()
+  const nonce = randomUUID()
+  const state = randomUUID()
 
   await session.update(() => ({ nonce, state, redirectUrl }))
 
