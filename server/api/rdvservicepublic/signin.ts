@@ -1,5 +1,5 @@
 import { useSession } from 'h3'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import type { RdvspAuthSession } from '~/server/types/session'
 import { getConfig, authorize } from '~/server/lib/rdvsp-oauth.client'
 
@@ -20,8 +20,8 @@ export default defineEventHandler(async event => {
     password: auth.sessionSecret
   })
 
-  const nonce = v4()
-  const state = v4()
+  const nonce = randomUUID()
+  const state = randomUUID()
 
   await session.update(() => ({ nonce, state, metadata: { action, id } }))
 

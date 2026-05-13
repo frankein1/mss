@@ -17,7 +17,7 @@ import {
 import { prismaClient } from '~/server/prisma'
 import { filterOutEmptyElements } from '../helper'
 import { getSocialSupportWithRedirections } from '../socialSupport/helper'
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -72,7 +72,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     ?.map(r => {
       if (r.type) {
         return {
-          id: r.id || v4(),
+          id: r.id || randomUUID(),
           type: r.type,
           motif: r.motif,
           externalStructureName: r.externalStructureName,

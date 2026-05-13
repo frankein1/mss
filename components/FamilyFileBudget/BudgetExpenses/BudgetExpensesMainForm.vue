@@ -181,7 +181,7 @@
         icon="fr-icon-add-line"
         tertiary
         no-outline
-        @click="push({ id: v4() })"
+        @click="push({ id: randomUUID() })"
       />
     </section>
 
@@ -200,7 +200,8 @@
 <script setup lang="ts">
   import { budgetExpensesKeys } from '~/client/options'
   import type { UpdateLoanOrDebtInput } from '~/server/schema'
-  import { v4 } from 'uuid'
+
+  const randomUUID = () => crypto.randomUUID()
 
   defineProps<{ total: number | null }>()
 
