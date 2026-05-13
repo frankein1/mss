@@ -1,13 +1,13 @@
 export const useBeneficiaryDetails = async (
-  beneficiaryId: MaybeRef<string>
+  beneficiaryId: MaybeRef<string>,
+  options?: { accommodation?: boolean }
 ) => {
   const trpcClient = useTrpcClient()
   const idRef = isRef(beneficiaryId) ? beneficiaryId : ref(beneficiaryId)
 
-  // Make sure the query input is reactive, so that useQuery
-  // is run in watch mode (refetch when the input changes)
   const queryInput = computed(() => ({
-    id: idRef.value
+    id: idRef.value,
+    options: options ? { accommodation: options.accommodation } : undefined
   }))
 
   const { data, pending, error } =
@@ -33,11 +33,16 @@ export const useBeneficiaryDetails = async (
     () => data.value?.familyFileMinimalInfo?.beneficiaries || []
   )
 
+  const membersAccommodation = computed(
+    () => data.value?.membersAccommodation || []
+  )
+
   return {
     beneficiary,
     permissions,
     beneficiaryIdentification,
     familyIdentification,
+    membersAccommodation,
     pending,
     error
   }

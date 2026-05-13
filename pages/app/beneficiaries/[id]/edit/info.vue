@@ -23,6 +23,7 @@
         :permissions="permissions"
         :initial-beneficiary="beneficiaryIdentification"
         :initial-beneficiary-status="beneficiaryStatus"
+        :members-accommodation
         @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>
@@ -60,9 +61,10 @@
     permissions,
     beneficiaryIdentification,
     familyIdentification,
+    membersAccommodation,
     pending: beneficiaryPending,
     error: beneficiaryError
-  } = await useBeneficiaryDetails(beneficiaryId)
+  } = await useBeneficiaryDetails(beneficiaryId, { accommodation: true })
 
   const pending = computed(
     () => agentsPending.value || beneficiaryPending.value
