@@ -71,6 +71,11 @@ export default defineEventHandler(async event => {
     throw unauthorized('[ProConnect] `states` must be equal')
   }
 
+  if (redirectUrl && !isSafeRedirectUrl(redirectUrl)) {
+    throw unauthorized('[ProConnect] invalid redirect')
+  }
+  const validatedRedirectUrl = redirectUrl
+
   const client = getProConnectClient()
 
   const proConnectToken = await fetchProConnnectToken(client, code as string)
@@ -286,8 +291,8 @@ export default defineEventHandler(async event => {
   // - redirect to admin panel if admin
   // - redirect to user panel otherwise
   // Fetching user information and permissions will be executed on first page loading with auth plugin
-  if (redirectUrl && isSafeRedirectUrl(redirectUrl)) {
-    return sendRedirect(event, `${appUrl}${redirectUrl}`)
+  if (validatedRedirectUrl) {
+    return sendRedirect(event, validatedRedirectUrl)
   }
 
   if (user.role === 'Administrator') {
