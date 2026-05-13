@@ -20,13 +20,13 @@ Matches partner orgs to v1 structures by extracting the v0 suffix from v1 IDs (`
 
 ```sh
 # Dry run first
-npx tsx scripts/data-inclusion/migrate-data-inclusion-v1.ts --dry-run
+npx tsx scripts/data-inclusion/migrate-data-inclusion-v1.ts --env=prod --dry-run
 
 # Check the report for ambiguous entries, add overrides if needed
-# (see ambiguousOverrides map at the top of the file)
+# (see Override files section below)
 
 # Apply
-npx tsx scripts/data-inclusion/migrate-data-inclusion-v1.ts
+npx tsx scripts/data-inclusion/migrate-data-inclusion-v1.ts --env=prod
 ```
 
 Report fields:
@@ -44,13 +44,13 @@ Handles orgs that still have no `dataInclusionIdV1` after the first pass.
 
 ```sh
 # Dry run first
-npx tsx scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.ts --dry-run
+npx tsx scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.ts --env=prod --dry-run
 
 # Review report, add overrides for ambiguous/suspicious SIRET matches
-# (see ambiguousOverrides map at the top of the file)
+# (see Override files section below)
 
 # Apply
-npx tsx scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.ts
+npx tsx scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.ts --env=prod
 ```
 
 Report fields:
@@ -80,28 +80,31 @@ The migration is complete when:
 ## Prerequisites
 
 - `DataInclusionStructureV1` table must be populated (run the structure import first)
-- `DATABASE_URL` must be set
+- `DATABASE_URL` must point to the target environment's database
+- `--env=<dev|demo|prod>` is **required** — the script refuses to run without it
 
 Both scripts leave `dataInclusionId` (v0) untouched and are safe to rerun.
 
 ## Override files
 
-Ambiguous matches are resolved by creating a local override file (gitignored via `*.ignore.*`).
-Copy the example, fill in your entries, and rerun the script.
+Ambiguous matches are resolved by creating a **per-environment** override file (gitignored via `*.ignore.*`).
+Copy the example template, replacing `{env}` with the target environment, fill in your entries, and rerun the script.
 
 **First pass:**
 
 ```sh
-cp scripts/data-inclusion/migrate-data-inclusion-v1.overrides.example.ts \
-   scripts/data-inclusion/migrate-data-inclusion-v1.overrides.ignore.ts
+cp scripts/data-inclusion/migrate-data-inclusion-v1.overrides.\{env\}.example.ts \
+   scripts/data-inclusion/migrate-data-inclusion-v1.overrides.prod.ignore.ts
 ```
 
 **Second pass:**
 
 ```sh
-cp scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.overrides.example.ts \
-   scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.overrides.ignore.ts
+cp scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.overrides.\{env\}.example.ts \
+   scripts/data-inclusion/migrate-data-inclusion-v1-unmatched.overrides.prod.ignore.ts
 ```
+
+Replace `prod` with `dev` or `demo` as needed. Each environment has its own override file because partner organizations differ across environments.
 
 Each file exports a single `ambiguousOverrides` map:
 
@@ -111,7 +114,7 @@ export const ambiguousOverrides: Record<string, string> = {
 }
 ```
 
-If no override file exists the script falls back to an empty map and continues normally.
+If no override file exists for the given environment, the script falls back to an empty map and continues normally.
 
 ---
 
