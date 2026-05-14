@@ -2,6 +2,8 @@
 import { PrismaClient } from '@prisma/client'
 import {
   fixtureStructures,
+  fixturesDataInclusionStructures,
+  fixturesDataInclusionStructuresV1,
   fixturesPartnerOrganizations,
   fixturesPartnerOrganizationContacts,
   fixturesSocialSupportSubjects,
@@ -142,6 +144,24 @@ function loadFixturesBudgetExpenses() {
   })
 }
 
+function loadFixturesDataInclusionStructures() {
+  console.log('🗂️ Data Inclusion Structures (v0)...')
+
+  return prismaClient.dataInclusionStructure.createMany({
+    data: fixturesDataInclusionStructures,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesDataInclusionStructuresV1() {
+  console.log('🗂️ Data Inclusion Structures (v1)...')
+
+  return prismaClient.dataInclusionStructureV1.createMany({
+    data: fixturesDataInclusionStructuresV1,
+    skipDuplicates: true
+  })
+}
+
 function loadFixturesPartnerOrganizations() {
   console.log('🏙️ Partner Organizations...')
 
@@ -214,6 +234,8 @@ function loadFixtures() {
     loadFixturesCGUHistory(),
     ...loadFixturesFamilyFiles(),
     ...loadFixturesBeneficiaries(),
+    loadFixturesDataInclusionStructures(),
+    loadFixturesDataInclusionStructuresV1(),
     loadFixturesPartnerOrganizations(),
     loadFixturesPartnerOrganizationContacts(),
     ...loadFixturesSocialSupports(),
