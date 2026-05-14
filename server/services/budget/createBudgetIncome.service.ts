@@ -2,9 +2,13 @@ import type { Prisma } from '@prisma/client'
 import { BudgetIncomeType } from '@prisma/client'
 import { BudgetIncomeRepo } from '~/server/database'
 import type { CreateBudgetIncomeInput } from '~/server/schema'
+import type { SecurityRuleGrantee } from '~/server/security'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
-export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
+export async function createBudgetIncome(
+  user: SecurityRuleGrantee,
+  input: CreateBudgetIncomeInput
+) {
   const { budgetId, member, beneficiaryId } = input
 
   const data: Prisma.BudgetIncomeUncheckedCreateInput = {
@@ -20,7 +24,7 @@ export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
   } else {
     throw new Error('One of beneficiaryId or member props is compulsory')
   }
-  const income = await BudgetIncomeRepo.prisma.create({
+  const income = await BudgetIncomeRepo.create(user, {
     data,
     select: { id: true }
   })

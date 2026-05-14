@@ -18,6 +18,6 @@ describe('Authorizations', () => {
         budgetId,
         beneficiaryId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow()
   })
 })

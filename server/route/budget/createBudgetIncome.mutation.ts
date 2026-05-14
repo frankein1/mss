@@ -44,11 +44,11 @@ const securityCheck = async (
 
 const handler = ({
   input,
-  ctx: _ctx
+  ctx
 }: {
   input: CreateBudgetIncomeInput
   ctx: ProtectedAppContext
-}) => BudgetService.createBudgetIncome(input)
+}) => BudgetService.createBudgetIncome(ctx.user, input)
 
 export const createBudgetIncome = createMutation({
   inputValidation: createBudgetIncomeSchema,

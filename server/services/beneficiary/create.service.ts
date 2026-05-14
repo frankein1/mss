@@ -66,7 +66,7 @@ export async function create(params: CreateParams) {
     }
   })
 
-  await BudgetIncomeRepo.prisma.create({
+  await BudgetIncomeRepo.create(ctx.user, {
     data: {
       type: BudgetIncomeType.Beneficiary,
       beneficiaryId: id,
