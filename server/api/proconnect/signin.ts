@@ -7,10 +7,22 @@ import { isSafeRedirectUrl } from '~/utils/isSafeRedirectUrl'
 export default defineEventHandler(async event => {
   const client = getProConnectClient()
   const unckechedRedirectUrl = parseQuery(getQuery(event).redirectUrl)
-  const redirectUrl =
-    unckechedRedirectUrl && isSafeRedirectUrl(unckechedRedirectUrl)
-      ? unckechedRedirectUrl
-      : undefined
+  const isSafe = unckechedRedirectUrl
+    ? isSafeRedirectUrl(unckechedRedirectUrl)
+    : false
+
+  if (unckechedRedirectUrl && !isSafe) {
+    console.log('[ProConnect] Rejected unsafe redirect URL at signin')
+    event.context.sentry.captureMessage(
+      '[ProConnect] Rejected unsafe redirect URL at signin',
+      {
+        level: 'warning',
+        extra: { redirectUrl: unckechedRedirectUrl }
+      }
+    )
+  }
+
+  const redirectUrl = isSafe ? unckechedRedirectUrl : undefined
 
   const {
     auth: { sessionSecret }

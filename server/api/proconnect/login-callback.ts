@@ -34,8 +34,7 @@ const {
   },
   public: {
     mssEnvironment,
-    auth: { cookieKey, tokenValidationInMinutes },
-    appUrl
+    auth: { cookieKey, tokenValidationInMinutes }
   }
 } = useRuntimeConfig()
 
@@ -72,6 +71,14 @@ export default defineEventHandler(async event => {
   }
 
   if (redirectUrl && !isSafeRedirectUrl(redirectUrl)) {
+    console.log('[ProConnect] Rejected unsafe redirect URL at login callback')
+    event.context.sentry.captureMessage(
+      '[ProConnect] Rejected unsafe redirect URL at login callback',
+      {
+        level: 'warning',
+        extra: { redirectUrl }
+      }
+    )
     throw unauthorized('[ProConnect] invalid redirect')
   }
   const validatedRedirectUrl = redirectUrl
