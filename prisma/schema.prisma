@@ -1850,6 +1850,12 @@ model Comment {
   @@map("comment")
 }
 
+enum PartnerOrganizationDataSource {
+  Custom
+  DataInclusionV1
+  LegacyDataInclusionV0
+}
+
 model PartnerOrganization {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1871,6 +1877,8 @@ model PartnerOrganization {
   workingHours String? @map("working_hours")
 
   inactive Boolean @default(false)
+
+  dataSource PartnerOrganizationDataSource @default(Custom) @map("data_source")
 
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
