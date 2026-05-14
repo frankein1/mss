@@ -11,10 +11,9 @@
     <iframe
       v-else
       id="data-inclusion-frame"
-      ref="iframe"
+      title="Recherche et résultats d’acteurs du territoire dans DORA"
+      class="iframe-dora"
       :src="doraWidgetUrl"
-      :height="iframeHeight"
-      width="100%"
     ></iframe>
   </div>
 </template>
@@ -25,28 +24,11 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
-  let mqSmall: MediaQueryList | null = null
-  let mqMedium: MediaQueryList | null = null
-
   onMounted(() => {
     useMatomo().trackEvent(
       EventCategory.History,
       BeneficiaryHistoryAction.SearchDoraStructure
     )
-    mqSmall = window.matchMedia('(max-width: 767px)')
-    mqMedium = window.matchMedia('(max-width: 1247px)')
-    updateCols()
-    onresize()
-
-    mqSmall.addEventListener('change', updateCols)
-    mqMedium.addEventListener('change', updateCols)
-    window.addEventListener('resize', onresize)
-  })
-
-  onBeforeUnmount(() => {
-    mqSmall?.removeEventListener('change', updateCols)
-    mqMedium?.removeEventListener('change', updateCols)
-    window.removeEventListener('resize', onresize)
   })
 
   useHead({
@@ -89,33 +71,13 @@
   const doraWidgetUrl = computed(() => {
     const code_commune = codeCommune.value || '71014' // Autun fallback code
     const score_qualite_minimum = '0.8'
-    const rows = '4'
-    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&x=${cols.value}&y=${rows}`
-  })
-
-  // responsive columns
-  const cols = ref<'1' | '2' | '3'>('1')
-  const updateCols = () => {
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      cols.value = '1'
-      return
-    }
-
-    if (window.matchMedia('(max-width: 1247px)').matches) {
-      cols.value = '2'
-      return
-    }
-    cols.value = '3'
-  }
-
-  // height
-  const heading = ref<HTMLHeadingElement | null>(null)
-  const windowHeight = ref<number>(900)
-  const onresize = () => {
-    windowHeight.value = document.body.clientHeight
-  }
-  const iframeHeight = computed(() => {
-    const headingHeight = heading.value?.clientHeight || 0
-    return windowHeight.value - 2 * 2.5 * 16 - headingHeight
+    return `https://api.data.inclusion.gouv.fr/widget?token=${token}&code_commune=${code_commune}&score_qualite_minimum=${score_qualite_minimum}&size=12`
   })
 </script>
+
+<style lang="scss" scoped>
+  .iframe-dora {
+    height: calc(100vh - 6rem);
+    width: 100%;
+  }
+</style>
