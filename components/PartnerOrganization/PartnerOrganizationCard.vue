@@ -1,5 +1,12 @@
 <template>
   <div class="partner-card">
+    <AtomBadge
+      v-if="partner.dataSource === 'LegacyDataInclusionV0'"
+      small
+      :color="BadgeColor.Purple"
+    >
+      Ancien annuaire
+    </AtomBadge>
     <h3 class="fr-h6 fr-m-0">
       {{ el.name }}
     </h3>
@@ -10,10 +17,10 @@
       {{ `${el.address || ''} ${el.zipcode || ''} ${el.city || ''}` }}
     </div>
     <div
-      v-if="partner.dataInclusionStructure?.phone || partner.phone1"
+      v-if="phoneDisplay"
       class="fr-icon-phone-line partner-card-content__info fr-icon--sm fr-text--sm"
     >
-      {{ partner.dataInclusionStructure?.phone || partner.phone1 }}
+      {{ phoneDisplay }}
     </div>
     <div
       v-if="partner.phone2"
@@ -73,6 +80,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { BadgeColor } from '~/types/badge'
   import type { PartnerOrganizationData } from './types'
 
   const props = defineProps<{
@@ -86,9 +94,21 @@
 
   const { application } = usePermissions()
 
-  const el = computed(
-    () => props.partner.dataInclusionStructure || props.partner
-  )
+  const el = computed(() => {
+    if (props.partner.dataSource === 'DataInclusionV1') {
+      return props.partner.dataInclusionStructureV1 || props.partner
+    }
+    return props.partner
+  })
+
+  const phoneDisplay = computed(() => {
+    if (props.partner.dataSource === 'DataInclusionV1') {
+      return (
+        props.partner.dataInclusionStructureV1?.phone || props.partner.phone1
+      )
+    }
+    return props.partner.phone1
+  })
 </script>
 
 <style lang="scss" scoped>

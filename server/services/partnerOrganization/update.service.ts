@@ -12,9 +12,11 @@ export async function update({
   const { contacts, ...data } = input
 
   const partner =
-    'dataInclusionId' in data
+    data.dataSource === 'DataInclusionV1'
       ? {
-          dataInclusionId: data.dataInclusionId,
+          dataSource: 'DataInclusionV1' as const,
+          dataInclusionId: null,
+          dataInclusionIdV1: data.dataInclusionIdV1,
           name: data.name,
           ...(data.phone2 && { phone2: data.phone2 }),
           siret: null,
@@ -26,8 +28,18 @@ export async function update({
           workingHours: null
         }
       : {
+          dataSource: 'Custom' as const,
           dataInclusionId: null,
-          ...data
+          dataInclusionIdV1: null,
+          name: data.name,
+          siret: data.siret,
+          address: data.address,
+          zipcode: data.zipcode,
+          city: data.city,
+          email: data.email,
+          phone1: data.phone1,
+          phone2: data.phone2,
+          workingHours: data.workingHours
         }
 
   const previous = await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {

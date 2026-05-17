@@ -12,9 +12,10 @@ export async function create({
   const { contacts, ...data } = input
 
   const partner =
-    'dataInclusionId' in data
+    data.dataSource === 'DataInclusionV1'
       ? {
-          dataInclusionId: data.dataInclusionId,
+          dataSource: 'DataInclusionV1' as const,
+          dataInclusionIdV1: data.dataInclusionIdV1,
           name: data.name,
           ...(data.phone2 && { phone2: data.phone2 })
         }

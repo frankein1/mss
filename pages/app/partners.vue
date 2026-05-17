@@ -115,18 +115,18 @@
     )
   })
 
-  const existingDataInclusionIds = computed(
-    () =>
-      (data?.value || [])
-        .map(p => p.dataInclusionStructure?.id || null)
-        .filter(id => id !== null) as string[]
+  const existingDataInclusionV1Ids = computed(() =>
+    (data?.value || [])
+      .map(p => p.dataInclusionIdV1)
+      .filter((id): id is string => id !== null)
   )
 
   function openCreateModal() {
     modal.open(PartnerOrganizationCreation, {
       title: 'Ajouter un organisme partenaire',
+      size: 'lg',
       isSubmitting: isSubmitting.value,
-      existingDataInclusionIds: existingDataInclusionIds.value,
+      existingDataInclusionV1Ids: existingDataInclusionV1Ids.value,
       finish: finishCreation,
       cancel,
       restore: restorePartner
@@ -136,9 +136,10 @@
   function openEditModal(id: string) {
     modal.open(PartnerOrganizationEdition, {
       title: 'Modifier un organisme partenaire',
+      size: 'lg',
       id,
       isSubmitting: isSubmitting.value,
-      existingDataInclusionIds: existingDataInclusionIds.value,
+      existingDataInclusionV1Ids: existingDataInclusionV1Ids.value,
       finish: finishEdition,
       cancel,
       restore: restorePartner

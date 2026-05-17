@@ -34,8 +34,8 @@
           name="siret"
           :label="partnerOrganizationFieldLabels.siret"
           hint="Format attendu : 01234567890123"
-          :required="!hasDataInclusionStructure"
-          :disabled="hasDataInclusionStructure"
+          :required="dataSource === 'Custom'"
+          :disabled="fieldsDisabled"
           @change-input="onSiretChange"
         />
         <div
@@ -91,7 +91,7 @@
             name="address"
             :label="partnerOrganizationFieldLabels.address"
             hint="Numéro et voie"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
 
@@ -99,14 +99,14 @@
           <VeeInput
             name="zipcode"
             :label="partnerOrganizationFieldLabels.zipcode"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
         <div class="fr-col-8">
           <VeeInput
             name="city"
             :label="partnerOrganizationFieldLabels.city"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
 
@@ -115,7 +115,7 @@
             name="phone1"
             :label="partnerOrganizationFieldLabels.phone1"
             type="tel"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
         <div
@@ -145,14 +145,14 @@
             name="email"
             :label="partnerOrganizationFieldLabels.email"
             hint="Format attendu : nom@domaine.fr"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
         <div class="fr-col-12">
           <VeeTextarea
             name="workingHours"
             :label="partnerOrganizationFieldLabels.workingHours"
-            :disabled="hasDataInclusionStructure"
+            :disabled="fieldsDisabled"
           />
         </div>
       </div>
@@ -188,7 +188,7 @@
           title="Valider"
           type="submit"
           :data-submitting="isSubmitting"
-          :disabled="isSubmitting"
+          :disabled="isSubmitting || isDisabled"
         >
           Valider
         </button>
@@ -214,11 +214,12 @@
     partnerId?: string
     showPhone2: boolean
     isSubmitting: boolean
+    isDisabled?: boolean
     caughtErrors: FormErrors<
       AddPartnerOrganizationInput | EditPartnerOrganizationInput
     >
-    hasDataInclusionStructure?: boolean
-    existingDataInclusionIds?: string[]
+    dataSource: 'Custom' | 'DataInclusionV1' | 'LegacyDataInclusionV0'
+    existingDataInclusionV1Ids?: string[]
   }>()
 
   const trpcClient = useTrpcClient()
@@ -229,6 +230,8 @@
     restore: [partner: PartnerOrganizationData]
     selectStructure: [structure: DataInclusionStructure | null]
   }>()
+
+  const fieldsDisabled = computed(() => props.dataSource === 'DataInclusionV1')
 
   const form = ref<HTMLFormElement | null>(null)
   const showPhone2 = ref(props.showPhone2)
@@ -302,7 +305,7 @@
     return structures.value.map(({ id, name, siret, city }) => ({
       value: id,
       label: `${name}${city ? ' - ' + city : ''}${siret ? ' - ' + siret : ''}`,
-      disabled: (props.existingDataInclusionIds || []).includes(id)
+      disabled: (props.existingDataInclusionV1Ids || []).includes(id)
     }))
   }
 

@@ -25,10 +25,11 @@ export const limitPOAddress = 100
 export const limitPOWorkingHours = 1200
 
 export const addCustomPartnerOrganizationSchema = z.object({
+  dataSource: z.literal('Custom'),
   name: requiredLimitedStringConstraint(limitPOName),
   siret: siretConstraint,
   address: limitedStringConstraint(null, limitPOAddress).nullish(),
-  zipcode: limitedStringConstraint(null, 10).nullish(),
+  zipcode: limitedStringConstraint(null, 20).nullish(),
   city: limitedStringConstraint().nullish(),
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
@@ -37,37 +38,19 @@ export const addCustomPartnerOrganizationSchema = z.object({
   contacts: contactPartnerOrganizationSchema
 })
 
-export const addDataInclusionPartnerOrganizationSchema =
+export const addDataInclusionV1PartnerOrganizationSchema =
   addCustomPartnerOrganizationSchema.extend({
-    dataInclusionId: requiredStringConstraint,
+    dataSource: z.literal('DataInclusionV1'),
+    dataInclusionIdV1: requiredStringConstraint,
     siret: siretConstraint.nullish(),
     phone1: limitedStringConstraint(null, 20).nullish()
   })
 
-export const addPartnerOrganizationSchema = z.union([
-  addDataInclusionPartnerOrganizationSchema,
-  addCustomPartnerOrganizationSchema
+export const addPartnerOrganizationSchema = z.discriminatedUnion('dataSource', [
+  addCustomPartnerOrganizationSchema,
+  addDataInclusionV1PartnerOrganizationSchema
 ])
 
 export type AddPartnerOrganizationInput = z.infer<
   typeof addPartnerOrganizationSchema
->
-
-/** Server types */
-export const addDataInclusionPartnerOrganizationServerSchema = z.object({
-  dataInclusionId: requiredStringConstraint,
-  contacts: contactPartnerOrganizationSchema
-})
-
-export type AddDataInclusionPartnerOrganizationServerInput = z.infer<
-  typeof addDataInclusionPartnerOrganizationServerSchema
->
-
-export const addPartnerOrganizationServerSchema = z.union([
-  addDataInclusionPartnerOrganizationServerSchema,
-  addCustomPartnerOrganizationSchema
-])
-
-export type AddPartnerOrganizationServerInput = z.infer<
-  typeof addPartnerOrganizationServerSchema
 >

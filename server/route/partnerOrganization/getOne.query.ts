@@ -15,7 +15,7 @@ export const handler = async ({
     where: { id: input.id },
     include: {
       contacts: true,
-      dataInclusionStructure: true
+      dataInclusionStructureV1: true
     }
   })
 }

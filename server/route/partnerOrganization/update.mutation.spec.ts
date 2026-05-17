@@ -41,6 +41,7 @@ describe('Authorizations', () => {
         partnerIds[0] &&
         trpc.structureManagerMinistere.partner.update({
           id: partnerIds[0],
+          dataSource: 'Custom' as const,
           name: 'updated name',
           siret: '12345678901234'
         })

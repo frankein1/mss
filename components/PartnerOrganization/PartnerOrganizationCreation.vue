@@ -3,8 +3,8 @@
     :is-submitting="isSubmitting"
     :caught-errors="caughtErrors"
     :show-phone2="false"
-    :has-data-inclusion-structure="hasDataInclusionStructure"
-    :existing-data-inclusion-ids="existingDataInclusionIds"
+    :data-source="currentDataSource"
+    :existing-data-inclusion-v1-ids="existingDataInclusionV1Ids"
     @submit="onSubmit"
     @cancel="onCancel"
     @restore="onRestore"
@@ -18,7 +18,7 @@
   import type { AddPartnerOrganizationInput } from '~/server/schema'
   import {
     addCustomPartnerOrganizationSchema,
-    addDataInclusionPartnerOrganizationSchema,
+    addDataInclusionV1PartnerOrganizationSchema,
     limitPOAddress,
     limitPOName,
     limitPOWorkingHours
@@ -26,17 +26,17 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    existingDataInclusionIds: string[]
+    existingDataInclusionV1Ids: string[]
     finish: (partner: AddPartnerOrganizationInput) => void
     cancel: () => void
     restore: (partner: PartnerOrganizationData) => void
   }>()
 
-  const hasDataInclusionStructure = ref(false)
+  const currentDataSource = ref<'Custom' | 'DataInclusionV1'>('Custom')
 
   const schema = computed(() =>
-    hasDataInclusionStructure.value
-      ? toTypedSchema(addDataInclusionPartnerOrganizationSchema)
+    currentDataSource.value === 'DataInclusionV1'
+      ? toTypedSchema(addDataInclusionV1PartnerOrganizationSchema)
       : toTypedSchema(addCustomPartnerOrganizationSchema)
   )
 
@@ -65,19 +65,19 @@
     structure: DataInclusionStructure | null
   ) {
     if (!structure) {
-      if (hasDataInclusionStructure.value) {
+      if (currentDataSource.value === 'DataInclusionV1') {
         resetForm()
       }
-      hasDataInclusionStructure.value = false
-
+      currentDataSource.value = 'Custom'
       return
     }
 
-    hasDataInclusionStructure.value = true
+    currentDataSource.value = 'DataInclusionV1'
     // Some fields from data inclusion can evolve to be very long. Tey are truncated
     // to the limit specified in the schema
     setValues({
-      dataInclusionId: structure.id,
+      dataSource: 'DataInclusionV1',
+      dataInclusionIdV1: structure.id,
       name: structure.name.substring(0, limitPOName),
       siret: structure.siret || null,
       address: structure.address?.substring(0, limitPOAddress),
