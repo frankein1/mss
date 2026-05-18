@@ -5,6 +5,17 @@ import { join } from 'node:path'
 const prisma = new PrismaClient()
 const dryRun = process.argv.includes('--dry-run')
 
+const envArg = process.argv.find(a => a.startsWith('--env='))?.split('=')[1]
+const validEnvs = ['dev', 'demo', 'prod'] as const
+type Env = (typeof validEnvs)[number]
+if (!envArg || !validEnvs.includes(envArg as Env)) {
+  console.error(
+    `Usage: npx tsx migrate-data-inclusion-v1-unmatched.ts --env=<${validEnvs.join('|')}> [--dry-run]`
+  )
+  process.exit(1)
+}
+const env: Env = envArg as Env
+
 function normalize(str: string): string {
   return str
     .normalize('NFD')
@@ -18,15 +29,23 @@ function normalize(str: string): string {
 async function main() {
   const startTime = performance.now()
 
-  const { ambiguousOverrides } = (await import(
+  const {
+    ambiguousOverrides,
+    customPartnerOverrideIds: rawCustomPartnerOverrideIds
+  } = (await import(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    './migrate-data-inclusion-v1-unmatched.overrides.ignore'
+    `./migrate-data-inclusion-v1-unmatched.overrides.${env}.ignore`
   ).catch(() => ({
     ambiguousOverrides: {}
-  }))) as { ambiguousOverrides: Record<string, string> }
+  }))) as {
+    ambiguousOverrides: Record<string, string>
+    customPartnerOverrideIds?: Set<string>
+  }
+  const customPartnerOverrideIds =
+    rawCustomPartnerOverrideIds ?? new Set<string>()
   console.log(
-    `Loaded ${Object.keys(ambiguousOverrides).length} overrides from file`
+    `Loaded ${Object.keys(ambiguousOverrides).length} overrides and ${customPartnerOverrideIds.size} custom partner override IDs from file`
   )
 
   const t0 = performance.now()
@@ -125,6 +144,7 @@ async function main() {
     console.warn('')
   }
 
+  let skippedCustomPartnerOverride = 0
   // Unique match on normalized name + zipcode (trusted)
   let matchedByName = 0
   // Unique match on SIRET only — name+zipcode failed; review recommended (v0 SIRETs can be stale)
@@ -207,6 +227,11 @@ async function main() {
       continue
     }
 
+    if (customPartnerOverrideIds.has(org.id)) {
+      skippedCustomPartnerOverride++
+      continue
+    }
+
     if (v0Structure.zipcode) {
       const key = `${normalize(v0Structure.name)}|${v0Structure.zipcode}`
       const v1Candidates = v1ByNormalizedNameZipcode.get(key)
@@ -280,6 +305,7 @@ async function main() {
 
   const report = {
     date: new Date().toISOString(),
+    env,
     dryRun,
     expected: partnerOrgs.length,
     matchedByName,
@@ -295,6 +321,7 @@ async function main() {
     noV0StructureDetails: noV0Structure,
     noMatch: noMatch.length,
     noMatchDetails: noMatch,
+    skippedCustomPartnerOverride,
     invalidOverrides: invalidOverrides.length,
     invalidOverridesDetails: invalidOverrides
   }
@@ -305,6 +332,7 @@ async function main() {
       `\n  ${matchedByName} matched by name+zipcode` +
       `\n  ${matchedBySiretFallback} siret fallback (not applied — needs override to confirm)` +
       `\n  ${overrideDetails.length} overrides applied` +
+      `\n  ${skippedCustomPartnerOverride} skipped (custom partner override — DI Legacy)` +
       `\n  ${ambiguousByName.length} ambiguous by name+zipcode` +
       `\n  ${ambiguousBySiret.length} ambiguous by siret` +
       `\n  ${noV0Structure.length} no v0 structure found` +
@@ -315,7 +343,7 @@ async function main() {
 
   const reportPath = join(
     __dirname,
-    `report-unmatched-name-first-${Date.now()}.ignore.json`
+    `report-unmatched-name-first-${env}-${Date.now()}.ignore.json`
   )
   writeFileSync(reportPath, JSON.stringify(report, null, 2))
   console.log(`Report written to ${reportPath}`)

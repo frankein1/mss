@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import type { SecurityRuleContext } from '~/server/security'
-import { DataInclusionStructureRepo } from '~/server/database/repository'
+import { DataInclusionStructureV1Repo } from '~/server/database/repository'
 import type { SearchDataInclusionStructureInput } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 
@@ -19,7 +19,7 @@ function prepareSearch(
   zipcode: string,
   scale: 'city' | 'department' | 'country'
 ) {
-  const where: Prisma.DataInclusionStructureWhereInput = {
+  const where: Prisma.DataInclusionStructureV1WhereInput = {
     name: {
       contains: query,
       mode: 'insensitive'
@@ -52,8 +52,8 @@ export async function searchStructures({
   const department = prepareSearch(input.query, s.zipcode, 'department')
 
   const res = await Promise.all([
-    DataInclusionStructureRepo.findMany(ctx.user, { where: city }),
-    DataInclusionStructureRepo.findMany(ctx.user, { where: department })
+    DataInclusionStructureV1Repo.findMany(ctx.user, { where: city }),
+    DataInclusionStructureV1Repo.findMany(ctx.user, { where: department })
   ])
 
   if (res[0].length || res[1].length) {
@@ -64,7 +64,7 @@ export async function searchStructures({
   }
 
   const country = prepareSearch(input.query, s.zipcode, 'country')
-  const results = await DataInclusionStructureRepo.findMany(ctx.user, {
+  const results = await DataInclusionStructureV1Repo.findMany(ctx.user, {
     where: country
   })
 
