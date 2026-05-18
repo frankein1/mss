@@ -5,7 +5,6 @@ import type { EditHelpRequestInput } from '~/server/schema'
 import { editHelpRequestSchema } from '~/server/schema'
 import {
   getAppContextPermissions,
-  validatePartnerOrganizationIds,
   type SecurityRuleContext
 } from '~/server/security'
 import { HelpRequestService } from '~/server/services'

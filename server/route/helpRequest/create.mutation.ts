@@ -3,10 +3,7 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import { createHelpRequestSchema } from '~/server/schema'
-import {
-  validatePartnerOrganizationIds,
-  type SecurityRuleContext
-} from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 import { HelpRequestService, FamilyFileService } from '~/server/services'
 import { validateSocialSupportPartnerOrganisations } from '../helpers'
 

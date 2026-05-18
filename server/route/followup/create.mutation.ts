@@ -3,10 +3,7 @@ import { createMutation as createMutationFn } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { addFollowupSchema } from '~/server/schema'
-import {
-  validatePartnerOrganizationIds,
-  type SecurityRuleContext
-} from '~/server/security'
+import type { SecurityRuleContext } from '~/server/security'
 
 import { FamilyFileService, FollowupService } from '~/server/services'
 import { TRPCError } from '@trpc/server'

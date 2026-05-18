@@ -5,7 +5,6 @@ import type { EditFollowupInput } from '~/server/schema'
 import { editFollowupSchema } from '~/server/schema'
 import {
   getAppContextPermissions,
-  validatePartnerOrganizationIds,
   type SecurityRuleContext
 } from '~/server/security'
 
