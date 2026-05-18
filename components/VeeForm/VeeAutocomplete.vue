@@ -78,7 +78,10 @@
             },
             index
           ) in results"
-          :ref="el => setOptionRef(el, resultValue)"
+          :ref="
+            (el: Element | globalThis.ComponentPublicInstance | null) =>
+              setOptionRef(el, resultValue)
+          "
           :key="resultValue"
           class="menu-item"
           :class="{ 'active-menu-item': index === activeIndex }"

@@ -73,7 +73,10 @@
         v-for="(
           { value: optionValue, label: optionLabel }, index
         ) in orderedFilteredOptions"
-        :ref="el => setOptionRef(el, optionValue)"
+        :ref="
+          (el: Element | globalThis.ComponentPublicInstance | null) =>
+            setOptionRef(el, optionValue)
+        "
         :key="optionValue"
         :class="{
           'menu-item': !multiple,
