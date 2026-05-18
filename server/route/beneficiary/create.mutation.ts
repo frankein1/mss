@@ -3,10 +3,23 @@ import { createMutation } from '~/server/route'
 import type { CreateBeneficiaryInput } from '~/server/schema'
 import { createBeneficiarySchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import {
+  validateManyBelongToStructure,
+  type SecurityRuleContext
+} from '~/server/security'
+import { UserRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
-const securityCheck = AllowSecurityCheck
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: CreateBeneficiaryInput
+) => {
+  return validateManyBelongToStructure(
+    ctx.user,
+    input.referents,
+    UserRepo.count
+  )
+}
 
 const handler = ({
   input,

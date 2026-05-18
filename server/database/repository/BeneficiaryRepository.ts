@@ -1,6 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { BeneficiaryConstraints } from '../constraints'
-import { appendConstraints } from './helper/appendConstraints'
+import {
+  appendConstraints,
+  appendCreateConstraints
+} from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'
 
@@ -28,6 +31,14 @@ function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
   return prismaClient.beneficiary.count(params)
 }
 
+function create<T extends Prisma.BeneficiaryCreateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BeneficiaryCreateArgs>
+) {
+  appendCreateConstraints(user, params, BeneficiaryConstraints.create)
+  return prismaClient.beneficiary.create(params)
+}
+
 function update<T extends Prisma.BeneficiaryUpdateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
@@ -40,6 +51,7 @@ export const BeneficiaryRepo = {
   findMany,
   findUniqueOrThrow,
   count,
+  create,
   update,
   prisma: {
     count: prismaClient.beneficiary.count,

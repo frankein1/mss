@@ -46,7 +46,7 @@ export async function createFamilyFileMember(params: CreateParams) {
     ...restOfInput
   }
 
-  const { id } = await BeneficiaryRepo.prisma.create({ data })
+  const { id } = await BeneficiaryRepo.create(ctx.user, { data })
 
   return { id }
 }
