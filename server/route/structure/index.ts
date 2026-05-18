@@ -4,7 +4,6 @@ import { getActiveOrUsedSocialSupportSubjects } from './getActiveOrUsedSocialSup
 
 import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
 import { getStructure } from './getStructure.query'
-import { getStructureDPOStatus } from './getStructureDPOStatus.query'
 import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
 import { updateStructureInfo } from './updateStructureInfo.mutation'
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
@@ -16,7 +15,6 @@ export const structureRoutes = {
   getActiveOrUsedSocialSupportSubjects,
   getSocialSupportSubjects,
   getStructure,
-  getStructureDPOStatus,
   makeInactiveSocialSupportSubject,
   updateStructureInfo,
   updateStructureSubject,
