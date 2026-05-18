@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin, isReferent } from '~/server/security/rules/helpers'
 
@@ -38,9 +39,20 @@ const get = (user: SecurityRuleGrantee) => {
   return where
 }
 
+const create = (user: SecurityRuleGrantee) => {
+  if (isAdmin(user)) {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message: 'budget-income-constraints: create not implemented for admin'
+    })
+  }
+  const data: Partial<Prisma.BudgetIncomeUncheckedCreateInput> = {}
+  return data
+}
+
 export const BudgetIncomeConstraints = {
   get,
-  create: get,
+  create,
   delete: get,
   update: get
 }
