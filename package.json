@@ -106,15 +106,8 @@
     "vue-dsfr-nuxt-module": "^2.0.0",
     "vue-tsc": "^3.2.6"
   },
-  "pnpm": {
-    "overrides": {
-      "ws": "^8.18.3",
-      "flatted": "^3.4.2",
-      "rollup": "^4.59.0"
-    }
-  },
   "engines": {
-    "pnpm": ">=10 <11",
+    "pnpm": ">=11",
     "node": "^24"
   },
   "lint-staged": {
@@ -122,5 +115,5 @@
     "*.{css,scss,sass,html,vue}": "stylelint  --allow-empty-input",
     "*.**": "prettier --ignore-unknown --check {.,**/*.prisma}"
   },
-  "packageManager": "pnpm@10.29.2"
+  "packageManager": "pnpm@11.1.3"
 }
