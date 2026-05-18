@@ -13,7 +13,7 @@ HTTP/tRPC Request → Middleware (Auth validation) → tRPC Procedure → Route 
 1. **Middleware**: JWT validation, user context extraction
 2. **tRPC Procedure Level**: access scope gate — defined in `server/trpc/createRouter.ts`
 3. **Route Handlers**: role and resource ownership checks via `securityCheck`
-4. **Repository Pattern**: automatic data filtering by structure
+4. **Repository Pattern**: automatic data filtering by structure via **Constraints** (`server/database/constraints/`)
 5. **Audit Logging**: automatic mutation tracking (CREATE, UPDATE, DELETE)
 
 ### tRPC Procedures
@@ -43,26 +43,43 @@ Each layer has a single job — don't duplicate another layer's work:
 - Never write role deny-lists (`if (role === X) return false`). The permission system is allow-list by design
 - When input references external entities (user IDs, structure IDs, etc.), verify they exist and belong to the caller's structure. Don't trust client-supplied relationships between entities — resolve and validate them server-side
 
-Example — permission-based check:
+#### Structure-scoped validators (`server/security/validators/`)
 
-```ts
-const securityCheck = async (ctx: SecurityRuleContext) => {
-  const permissions = getAppContextPermissions(ctx)
-  return permissions.module.budget
-}
-```
+Use these reusable validators to prove entities belong to the caller's structure instead of writing raw repository queries in `securityCheck`:
 
-Example — ownership check via repository:
+- **`validateOneBelongsToStructure(user, id, Repo.findUniqueOrThrow)`** — checks a single entity belongs to the user's structure via the repo's structure-scoped finder
+- **`validateManyBelongToStructure(user, ids, Repo.count)`** — checks all IDs in an array belong to the user's structure (deduplicates, compares count)
+- **`validatePartnerOrganizationIds(user, orgIds, contactIds)`** — validates partner organizations and their contacts belong to the structure
+
+Check `server/route/helpers.ts` for domain-specific compositions before writing custom validation — e.g. `validateSocialSupportPartnerOrganisations` wraps `validatePartnerOrganizationIds` for social support routes with prescribing/instructor organizations and redirections.
+
+Example — permission check + single entity validation:
 
 ```ts
 const securityCheck = async (ctx: SecurityRuleContext, input: Input) => {
-  const some = await SomeRepo.findUnique(ctx.user, {
-    select: { id: true },
-    where: { id: input.entityId }
-  })
-  if (!some) {
+  if (!getAppContextPermissions(ctx).module.budget) {
     return false
   }
+  return validateOneBelongsToStructure(
+    ctx.user,
+    input.budgetId,
+    BudgetRepo.findUniqueOrThrow
+  )
+}
+```
+
+Example — permission check + batch entity validation:
+
+```ts
+const securityCheck = async (ctx: SecurityRuleContext, input: Input) => {
+  if (!getAppContextPermissions(ctx).module.budget) {
+    return false
+  }
+  return validateManyBelongToStructure(
+    ctx.user,
+    input.beneficiaryIds,
+    BeneficiaryRepo.count
+  )
 }
 ```
 
@@ -102,6 +119,10 @@ export const followupRouter = router({
 ```
 
 Router composition in `/server/trpc/routers/index.ts` aggregates domain routers. Error handling via `server/trpc/trpcErrors.ts`. Return DTOs instead of raw database models.
+
+### Constraints (`server/database/constraints/`)
+
+Each entity has a matching `*Constraints.ts` file that builds Prisma `where` clauses scoped by the user's structure and role. Repositories consume these automatically — route handlers don't use constraints directly. When creating a new entity with a repository, create a matching Constraints file in `server/database/constraints/`.
 
 ### ORM conventions
 
