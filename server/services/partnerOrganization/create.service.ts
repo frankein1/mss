@@ -19,7 +19,18 @@ export async function create({
           name: data.name,
           ...(data.phone2 && { phone2: data.phone2 })
         }
-      : data
+      : {
+          dataSource: 'Custom' as const,
+          name: data.name,
+          siret: data.siret,
+          address: data.address,
+          zipcode: data.zipcode,
+          city: data.city,
+          email: data.email,
+          phone1: data.phone1,
+          phone2: data.phone2,
+          workingHours: data.workingHours
+        }
 
   const contactsToCreate = (contacts || []).map(
     ({ id, name, email, phone }) => ({

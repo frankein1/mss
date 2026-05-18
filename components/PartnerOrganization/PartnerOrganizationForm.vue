@@ -218,7 +218,7 @@
     caughtErrors: FormErrors<
       AddPartnerOrganizationInput | EditPartnerOrganizationInput
     >
-    dataSource: 'Custom' | 'DataInclusionV1' | 'LegacyDataInclusionV0'
+    dataSource: 'Custom' | 'DataInclusionV1'
     existingDataInclusionV1Ids?: string[]
   }>()
 

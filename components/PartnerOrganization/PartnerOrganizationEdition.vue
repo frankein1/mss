@@ -66,9 +66,15 @@
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
 
   const initialDataSource = partner.dataSource
-  const currentDataSource = ref<
-    'Custom' | 'DataInclusionV1' | 'LegacyDataInclusionV0'
-  >(partner.dataSource)
+  // The form data source cannot be legacy since it is incompatible with the zod schema
+  // When the initial data source is legacy, the form validation is deactivated
+  // It only becomes usable when the form is modified and the partner is then saved
+  // as a Custom partner
+  const currentDataSource = ref<'Custom' | 'DataInclusionV1'>(
+    partner.dataSource === 'LegacyDataInclusionV0'
+      ? 'Custom'
+      : partner.dataSource
+  )
 
   const schema = computed(() => {
     if (currentDataSource.value === 'DataInclusionV1') {
@@ -173,7 +179,7 @@
     }
 
     currentDataSource.value = 'DataInclusionV1'
-    // Some fields from data inclusion can evolve to be very long. Tey are truncated
+    // Some fields from data inclusion can evolve to be very long. They are truncated
     // to the limit specified in the schema
     setValues({
       dataSource: 'DataInclusionV1',

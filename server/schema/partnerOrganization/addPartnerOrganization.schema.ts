@@ -29,7 +29,7 @@ export const addCustomPartnerOrganizationSchema = z.object({
   name: requiredLimitedStringConstraint(limitPOName),
   siret: siretConstraint,
   address: limitedStringConstraint(null, limitPOAddress).nullish(),
-  zipcode: limitedStringConstraint(null, 20).nullish(),
+  zipcode: limitedStringConstraint(null, 20).nullish(), // some values are "Code postal inconnu"
   city: limitedStringConstraint().nullish(),
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
