@@ -41,8 +41,6 @@
     name: routes.user.AppOverview.name
   })
 
-  useDPOCheckOnStartup()
-
   const isSafari = computed(() => {
     if (typeof navigator === 'undefined') {
       return false
