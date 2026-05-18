@@ -3,10 +3,12 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { editHelpRequestSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import {
+  getAppContextPermissions,
+  type SecurityRuleContext
+} from '~/server/security'
 import { HelpRequestService } from '~/server/services'
-import { checkRedirectionPermissions } from '../socialSupport/utils'
+import { validateSocialSupportPartnerOrganisations } from '../helpers'
 
 const handler = ({
   input,
@@ -43,15 +45,7 @@ const securityCheck = async (
     return false
   }
 
-  // check if partnerOrganization and partnerOrganizationContact are part of the structure
-  if (input.socialSupportRedirections?.length) {
-    return await checkRedirectionPermissions(
-      input.socialSupportRedirections,
-      ctx
-    )
-  }
-
-  return true
+  return validateSocialSupportPartnerOrganisations(ctx.user, input)
 }
 
 export const update = createMutation({
