@@ -61,9 +61,13 @@
 
 ## Development Guidelines
 
-### Local Setup and Development Commands
+### Use theses commands for local development
 
-[see README.md](./README.md)
+- type checking: `pnpm lint:typecheck`
+- developement server: `pnpm dev`
+- seed database: `pnpm prisma db seed`
+- unit and integration tests: `pnpm test`
+- e2e tests: `pnpm test:e2e`
 
 ### Code Review Focus
 
