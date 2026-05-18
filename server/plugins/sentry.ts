@@ -26,7 +26,9 @@ export default defineNitroPlugin(nitroApp => {
     Sentry.captureException(error)
   })
 
-  // Do not add Sentry in request context for now as we may not encounter this use case in our requests code
+  nitroApp.hooks.hook('request', event => {
+    event.context.sentry = Sentry
+  })
 
   nitroApp.hooks.hookOnce('close', async () => {
     await Sentry.close(2000)
