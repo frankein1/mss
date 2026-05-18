@@ -85,7 +85,7 @@ test('deleteIncome - removes the income and updates budget timestamp', async ({
     where: { id: budgetFixtures.ownStructure.budgetId },
     select: { updated: true }
   })
-  expect(budgetAfter.updated.getTime()).toBeGreaterThan(
-    budgetBefore.updated.getTime()
-  )
+  const updated = budgetAfter.updated!
+  expect(updated).toBeTruthy()
+  expect(updated.getTime()).toBeGreaterThan(budgetBefore.updated!.getTime())
 })
