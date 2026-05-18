@@ -49,7 +49,7 @@ export async function create(params: CreateParams) {
     id,
     familyFileId,
     familyFile: { budget }
-  } = await BeneficiaryRepo.prisma.create({
+  } = await BeneficiaryRepo.create(ctx.user, {
     data,
     select: {
       id: true,
