@@ -49,11 +49,11 @@
 </template>
 
 <script lang="ts" setup generic="M extends Component">
-  import { inject } from 'vue'
-  import { useModal, modalInjectionKey } from '../../composables/useModal'
+  import { useModal } from '../../composables/useModal'
   import type { Modal } from '~/types/modal'
 
-  const modalState = inject(modalInjectionKey)
+  const { isOpen, setReady, setIsOpen, title, triggerOpen, close, modalState } =
+    useModal()
 
   const modalProps = computed(() => {
     const props = modalState?.value.props
@@ -67,8 +67,6 @@
   })
 
   const modal = ref<HTMLDialogElement | null>(null)
-
-  const { isOpen, setReady, setIsOpen, title, triggerOpen, close } = useModal()
 
   function getModalSizeClassName(size: Modal['size']) {
     switch (size) {
