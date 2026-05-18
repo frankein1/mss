@@ -1,6 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { BudgetIncomeConstraints } from '../constraints'
-import { appendConstraints } from './helper/appendConstraints'
+import {
+  appendConstraints,
+  appendCreateConstraints
+} from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'
 
@@ -30,11 +33,17 @@ function deleteIncome<T extends Prisma.BudgetIncomeDeleteArgs>(
   return prismaClient.budgetIncome.delete(params)
 }
 
+function createIncome<T extends Prisma.BudgetIncomeCreateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BudgetIncomeCreateArgs>
+) {
+  appendCreateConstraints(user, params, BudgetIncomeConstraints.create)
+  return prismaClient.budgetIncome.create(params)
+}
+
 export const BudgetIncomeRepo = {
   findUniqueOrThrow,
   update,
   delete: deleteIncome,
-  prisma: {
-    create: prismaClient.budgetIncome.create
-  }
+  create: createIncome
 }

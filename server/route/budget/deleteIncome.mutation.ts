@@ -3,8 +3,12 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
+import { getAppContextPermissions } from '~/server/security/permissions'
 import { BudgetIncomeRepo, BudgetRepo } from '~/server/database'
+
+const securityCheck = async (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input,
@@ -32,7 +36,7 @@ const handler = async ({
 
 export const deleteIncome = createMutation({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler,
   auditLog: {
     key: 'budget.deleteIncome',

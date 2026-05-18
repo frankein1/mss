@@ -3,9 +3,13 @@ import type { GetBudgetInput } from '~/server/schema'
 import { getBudgetSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { getBudget } from '~/server/services/budget/getBudget.service'
 import { exportBudgetWorkbook } from '~/server/services/budget/exportBudgetSpreadsheet'
+import { getAppContextPermissions } from '~/server/security/permissions'
+
+const securityCheck = async (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input: { familyFileId },
@@ -23,6 +27,6 @@ const handler = async ({
 
 export const exportBudget = createQuery({
   inputValidation: getBudgetSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

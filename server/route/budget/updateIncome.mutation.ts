@@ -4,7 +4,11 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBudgetIncomeInput } from '~/server/schema'
 import { updateBudgetIncomeSchema } from '~/server/schema'
 import { BudgetService } from '~/server/services'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security/rules/types'
+import { getAppContextPermissions } from '~/server/security/permissions'
+
+const securityCheck = async (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.budget
 
 const handler = async ({
   input,
@@ -18,7 +22,7 @@ const handler = async ({
 
 export const updateIncome = createMutation({
   inputValidation: updateBudgetIncomeSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler,
   auditLog: {
     key: 'budget.updateIncome',
