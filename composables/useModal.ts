@@ -1,101 +1,95 @@
-import { ref, inject } from 'vue'
-import type { ShallowRef, Component, InjectionKey } from 'vue'
-import { createSharedComposable } from '@vueuse/core'
+import { inject, ref } from 'vue'
+import type { Component, InjectionKey } from 'vue'
 import type { ComponentProps } from '../types/component'
-import type { Modal, ModalState } from '../types/modal'
+import type { Modal, ModalProvided } from '../types/modal'
 
-export const modalInjectionKey: InjectionKey<ShallowRef<ModalState>> =
+export const modalInjectionKey: InjectionKey<ModalProvided> =
   Symbol('mss.modal')
 
-function _useModal() {
-  const modalState = inject(modalInjectionKey)
+export function useModal() {
+  const provided = inject(modalInjectionKey)
 
-  const triggerOpen = ref(false)
-  const isOpen = ref(false)
-  const title = ref()
-  const ready = ref(false)
+  const isReady = computed(() => provided?.ready.value ?? false)
 
-  function setIsOpen(value: boolean) {
-    isOpen.value = value
-  }
-
-  function setReady() {
-    ready.value = true
-  }
-
-  const isReady = computed(() => ready.value)
-
-  const defaultProps: Modal = {
-    size: 'md'
-  }
+  const defaultProps: Modal = { size: 'md' }
 
   function open<T extends Component>(
     component: T,
     props?: Modal & ComponentProps<T>
   ) {
-    if (!modalState) {
+    if (!provided) {
       return
     }
-    modalState.value = {
+    provided.modalState.value = {
       component,
       props: { ...defaultProps, ...props }
     }
-    triggerOpen.value = !!props?.triggerOpen
-    setIsOpen(true)
-    title.value = props?.title || ''
+    provided.triggerOpen.value = !!props?.triggerOpen
+    provided.isOpen.value = true
+    provided.title.value = props?.title || ''
   }
 
   function close() {
-    if (!modalState) {
+    if (!provided) {
       return
     }
-    setIsOpen(false)
-    title.value = ''
+    provided.isOpen.value = false
+    provided.title.value = ''
 
     // Closing modal waits for the AtomModal component
     // to disappear first
     setTimeout(() => {
-      modalState.value = {
+      provided.modalState.value = {
         component: 'div',
         props: {}
       }
     }, 600)
   }
 
-  /**
-   * Allows updating the modal props
-   */
   function patch<T extends Component = {}>(
     props: Partial<Modal & ComponentProps<T>>
   ) {
-    if (!modalState) {
+    if (!provided) {
       return
     }
-    modalState.value = {
-      ...modalState.value,
+    provided.modalState.value = {
+      ...provided.modalState.value,
       props: {
-        ...modalState.value.props,
+        ...provided.modalState.value.props,
         ...props
       }
     }
   }
 
+  function setIsOpen(value: boolean) {
+    if (provided) {
+      provided.isOpen.value = value
+    }
+  }
+
+  function setReady() {
+    if (provided) {
+      provided.ready.value = true
+    }
+  }
+
   function setTitle(value?: string) {
-    title.value = value
+    if (provided) {
+      provided.title.value = value || ''
+    }
   }
 
   return {
-    triggerOpen,
+    triggerOpen: provided?.triggerOpen ?? ref(false),
     setIsOpen,
-    isOpen,
+    isOpen: provided?.isOpen ?? ref(false),
     setReady,
     isReady,
-    title,
+    title: provided?.title ?? ref(''),
     open,
     close,
     patch,
-    setTitle
+    setTitle,
+    modalState: provided?.modalState
   }
 }
-
-export const useModal = createSharedComposable(_useModal)

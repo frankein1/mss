@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { Component, ShallowRef } from 'vue'
 
 export interface Modal {
   title?: string
@@ -9,4 +9,12 @@ export interface Modal {
 export interface ModalState {
   component: Component | string
   props: Modal
+}
+
+export interface ModalProvided {
+  modalState: ShallowRef<ModalState>
+  isOpen: Ref<boolean>
+  title: Ref<string>
+  triggerOpen: Ref<boolean>
+  ready: Ref<boolean>
 }

@@ -1,4 +1,4 @@
-import { shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { modalInjectionKey } from '../composables/useModal'
 import type { ModalState } from '../types/modal'
 
@@ -7,6 +7,16 @@ export default defineNuxtPlugin(nuxtApp => {
     component: 'div',
     props: {}
   })
+  const isOpen = ref(false)
+  const title = ref<string>('')
+  const triggerOpen = ref(false)
+  const ready = ref(false)
 
-  nuxtApp.vueApp.provide(modalInjectionKey, modalState)
+  nuxtApp.vueApp.provide(modalInjectionKey, {
+    modalState,
+    isOpen,
+    title,
+    triggerOpen,
+    ready
+  })
 })
