@@ -9,7 +9,7 @@ function deduplicate(ids: string[]): string[] {
   return [...new Set(ids)]
 }
 
-export async function validateBelongsToStructure(
+export async function validateManyBelongToStructure(
   user: SecurityRuleGrantee,
   ids: string[],
   counter: StructureScopedCounter

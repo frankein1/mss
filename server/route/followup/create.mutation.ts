@@ -7,8 +7,10 @@ import type { SecurityRuleContext } from '~/server/security'
 
 import { FamilyFileService, FollowupService } from '~/server/services'
 import { TRPCError } from '@trpc/server'
-import { validateRichTextSchema } from '../helpers'
-import { checkRedirectionPermissions } from '../socialSupport/utils'
+import {
+  validateRichTextSchema,
+  validateSocialSupportPartnerOrganisations
+} from '../helpers'
 
 const handler = ({
   input,
@@ -51,15 +53,7 @@ const securityCheck = async (
     return false
   }
 
-  // check if partnerOrganization and partnerOrganizationContact are part of the structure
-  if (input.socialSupportRedirections?.length) {
-    return await checkRedirectionPermissions(
-      input.socialSupportRedirections,
-      ctx
-    )
-  }
-
-  return true
+  return validateSocialSupportPartnerOrganisations(ctx.user, input)
 }
 
 export const create = createMutationFn({

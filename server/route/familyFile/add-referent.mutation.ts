@@ -3,7 +3,7 @@ import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
 import { createMutation } from '~/server/route'
 import {
   getFamilyFilePermissions,
-  validateBelongsToStructure,
+  validateOneBelongsToStructure,
   type SecurityRuleContext
 } from '~/server/security'
 import { invalidError, type ProtectedAppContext } from '~/server/trpc'
@@ -24,10 +24,10 @@ const securityCheck = async (
   }
 
   // check if user belongs to structure
-  const userIsInstructure = await validateBelongsToStructure(
+  const userIsInstructure = await validateOneBelongsToStructure(
     ctx.user,
-    [input.referentId],
-    UserRepo.count
+    input.referentId,
+    UserRepo.findUnique
   )
   if (!userIsInstructure) {
     return false
