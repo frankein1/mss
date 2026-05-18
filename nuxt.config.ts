@@ -101,6 +101,12 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module'
   ],
 
+  eslint: {
+    config: {
+      typescript: { strict: true, tsconfigPath: './tsconfig.json' }
+    }
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
     server: {
