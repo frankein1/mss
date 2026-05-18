@@ -12,7 +12,6 @@ import { getAppContextPermissions } from '~/server/security/permissions'
 import { BeneficiaryRepo, BudgetRepo } from '~/server/database'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
-/** Validate that budgetId and beneficiaryId (optional) belong to the structure */
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateBudgetIncomeInput
@@ -45,11 +44,11 @@ const securityCheck = async (
 
 const handler = ({
   input,
-  ctx: _ctx
+  ctx
 }: {
   input: CreateBudgetIncomeInput
   ctx: ProtectedAppContext
-}) => BudgetService.createBudgetIncome(input)
+}) => BudgetService.createBudgetIncome(ctx.user, input)
 
 export const createBudgetIncome = createMutation({
   inputValidation: createBudgetIncomeSchema,
