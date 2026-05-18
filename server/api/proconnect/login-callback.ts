@@ -18,6 +18,7 @@ import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'
 import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
+import { isSafeRedirectUrl } from '~/utils/isSafeRedirectUrl'
 import jwksClient from 'jwks-rsa'
 
 const { verify, decode } = pkg
@@ -33,8 +34,7 @@ const {
   },
   public: {
     mssEnvironment,
-    auth: { cookieKey, tokenValidationInMinutes },
-    appUrl
+    auth: { cookieKey, tokenValidationInMinutes }
   }
 } = useRuntimeConfig()
 
@@ -69,6 +69,19 @@ export default defineEventHandler(async event => {
   if (sessionState !== state) {
     throw unauthorized('[ProConnect] `states` must be equal')
   }
+
+  if (redirectUrl && !isSafeRedirectUrl(redirectUrl)) {
+    console.log('[ProConnect] Rejected unsafe redirect URL at login callback')
+    event.context.sentry.captureMessage(
+      '[ProConnect] Rejected unsafe redirect URL at login callback',
+      {
+        level: 'warning',
+        extra: { redirectUrl }
+      }
+    )
+    throw unauthorized('[ProConnect] invalid redirect')
+  }
+  const validatedRedirectUrl = redirectUrl
 
   const client = getProConnectClient()
 
@@ -285,8 +298,8 @@ export default defineEventHandler(async event => {
   // - redirect to admin panel if admin
   // - redirect to user panel otherwise
   // Fetching user information and permissions will be executed on first page loading with auth plugin
-  if (redirectUrl) {
-    return sendRedirect(event, `${appUrl}${redirectUrl}`)
+  if (validatedRedirectUrl) {
+    return sendRedirect(event, validatedRedirectUrl)
   }
 
   if (user.role === 'Administrator') {

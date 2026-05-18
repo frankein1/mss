@@ -39,7 +39,8 @@ export default defineNuxtPlugin(nuxtApp => {
         setUser: Sentry.setUser,
         setTag: Sentry.setTag,
         addBreadcrumb: Sentry.addBreadcrumb,
-        captureException: Sentry.captureException
+        captureException: Sentry.captureException,
+        captureMessage: Sentry.captureMessage
       }
     }
   }
