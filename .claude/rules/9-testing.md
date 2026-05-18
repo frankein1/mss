@@ -19,6 +19,14 @@ paths:
 - User flow testing in /e2e/
 - Realistic interaction scenarios
 
+## Error Assertion Convention
+
+- Use `.rejects.toThrowError(/regex/i)` with a case-insensitive regex matching a stable fragment of the error message
+- Never use bare `.rejects.toThrow()` — always assert on the error content
+- For securityCheck failures: `.rejects.toThrowError(/not allowed to access route/i)`
+- For admin calling protectedProcedure: `.rejects.toThrowError(/user routes are not available to admins/i)`
+- For not-found / constraint violations: include the Prisma model name before "no record", e.g. `.rejects.toThrowError(/workshop[\s\S]*?no record/im)`
+
 ## Common Commands
 
 - Run all tests via `pnpm test`

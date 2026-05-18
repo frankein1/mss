@@ -57,6 +57,6 @@ describe('Beneficiary - Create - Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.structureManagerMinistere.beneficiary.create(baseInput)
-    ).rejects.toThrow()
+    ).rejects.toThrowError(/not allowed to access route/i)
   })
 })
