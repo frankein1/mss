@@ -5,6 +5,17 @@ import { join } from 'node:path'
 const prisma = new PrismaClient()
 const dryRun = process.argv.includes('--dry-run')
 
+const envArg = process.argv.find(a => a.startsWith('--env='))?.split('=')[1]
+const validEnvs = ['dev', 'demo', 'prod'] as const
+type Env = (typeof validEnvs)[number]
+if (!envArg || !validEnvs.includes(envArg as Env)) {
+  console.error(
+    `Usage: npx tsx migrate-data-inclusion-v1.ts --env=<${validEnvs.join('|')}> [--dry-run]`
+  )
+  process.exit(1)
+}
+const env: Env = envArg as Env
+
 function buildV0ToV1Map(
   v1Structures: { id: string; doublons: string[] }[]
 ): Map<string, string[]> {
@@ -46,7 +57,7 @@ async function main() {
   const { ambiguousOverrides } = (await import(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    './migrate-data-inclusion-v1.overrides.ignore'
+    `./migrate-data-inclusion-v1.overrides.${env}.ignore`
   ).catch(() => ({ ambiguousOverrides: {} }))) as {
     ambiguousOverrides: Record<string, string>
   }
@@ -160,6 +171,8 @@ async function main() {
 
   const report = {
     date: new Date().toISOString(),
+    env,
+    dryRun,
     expected: partnerOrgs.length,
     matched,
     unmatched: unmatched.length,
@@ -175,7 +188,7 @@ async function main() {
     `\nDone in ${duration}ms: ${matched} matched, ${overrideDetails.length} overrides, ${ambiguous.length} ambiguous, ${unmatched.length} unmatched out of ${partnerOrgs.length} expected`
   )
 
-  const reportPath = join(__dirname, `report-${Date.now()}.ignore.json`)
+  const reportPath = join(__dirname, `report-${env}-${Date.now()}.ignore.json`)
   writeFileSync(reportPath, JSON.stringify(report, null, 2))
   console.log(`Report written to ${reportPath}`)
 }

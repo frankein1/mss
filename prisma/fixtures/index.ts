@@ -5,6 +5,14 @@ export { fixturesBeneficiaries, FixtureBeneficiary } from './beneficiaries'
 export { fixturesFamilyFiles } from './familyFiles'
 export { fixturesBeneficiaryRelatives } from './beneficiaryRelatives'
 export {
+  fixturesDataInclusionStructures,
+  FixtureDataInclusionStructure
+} from './dataInclusionStructures'
+export {
+  fixturesDataInclusionStructuresV1,
+  FixtureDataInclusionStructureV1
+} from './dataInclusionStructuresV1'
+export {
   fixturesPartnerOrganizations,
   FixturePartnerOrganization
 } from './partnerOrganizations'

@@ -193,6 +193,10 @@
         border-color: var(--red);
         background: #fff8f8;
       }
+      .card.skipped {
+        border-color: var(--grey);
+        background: #f5f5f5;
+      }
 
       .card-header {
         display: flex;
@@ -331,6 +335,15 @@
         border-color: var(--red);
         color: var(--red);
       }
+      .btn-skip {
+        background: var(--grey-light);
+        border-color: var(--grey);
+        color: #333;
+      }
+      .btn-skip.active {
+        background: var(--grey);
+        color: var(--white);
+      }
 
       .manual-input {
         margin-top: 0.5rem;
@@ -419,6 +432,9 @@
       }
       .status-dot.rejected {
         background: var(--red);
+      }
+      .status-dot.skipped {
+        background: var(--grey);
       }
 
       .search-box {
@@ -851,6 +867,36 @@
         return { total, done, resolved }
       }
 
+      function renderBulkBar(container, section, items) {
+        const pendingItems = items.filter(
+          item => !isDone(section, item.partnerOrgId)
+        )
+        if (pendingItems.length === 0) return
+        const bar = document.createElement('div')
+        bar.className = 'batch-bar'
+        bar.innerHTML = `
+          <button class="btn btn-skip bulk-skip-btn">Tous non traités → DI Legacy partenaire (${pendingItems.length})</button>
+          <span class="batch-progress">${pendingItems.length} non traité(s)</span>
+        `
+        bar.querySelector('.bulk-skip-btn').addEventListener('click', () => {
+          if (
+            !confirm(
+              `Marquer ${pendingItems.length} élément(s) comme "sera migré comme Data Inclusion Legacy partenaire" ?`
+            )
+          )
+            return
+          if (!state[section]) state[section] = {}
+          for (const item of pendingItems) {
+            state[section][item.partnerOrgId] = {
+              action: 'customPartnerOverride'
+            }
+          }
+          saveState()
+          updateUI()
+        })
+        container.appendChild(bar)
+      }
+
       function renderTabs() {
         const tabsEl = document.getElementById('tabs')
         tabsEl.innerHTML = ''
@@ -927,13 +973,15 @@
           return
         }
         container.innerHTML = ''
+        renderBulkBar(container, 'ambiguous-siret', items)
         for (const item of items) {
           if (!shouldShow('ambiguous-siret', item.partnerOrgId)) continue
           const decision = getDecision('ambiguous-siret', item.partnerOrgId)
           const card = document.createElement('div')
           const resolved =
             decision?.action === 'select' || decision?.action === 'manual'
-          card.className = `card${resolved ? ' resolved' : ''}`
+          const skipped = decision?.action === 'customPartnerOverride'
+          card.className = `card${resolved ? ' resolved' : skipped ? ' skipped' : ''}`
           let candidatesHtml = ''
           for (const c of item.candidates) {
             const checked =
@@ -951,7 +999,7 @@
           card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
+          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : skipped ? '<span class="status-dot skipped"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
           <div class="org-id">${escHtml(item.partnerOrgId)}</div>
         </div>
       </div>
@@ -964,7 +1012,10 @@
         <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${decision?.action === 'manual' ? escAttr(decision.v1Id) : ''}" class="amb-manual-input">
         <button class="btn btn-primary save-manual-btn">OK</button>
       </div>
-      ${decision ? '<div class="actions"><button class="btn btn-secondary clear-btn">Annuler</button></div>' : ''}
+      <div class="actions">
+        <button class="btn btn-skip${skipped ? ' active' : ''} skip-btn" title="Sera migré comme Data Inclusion Legacy partenaire">DI Legacy partenaire</button>
+        ${decision ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
+      </div>
     `
           card.querySelectorAll('.candidate').forEach(el => {
             el.addEventListener('click', e => {
@@ -1002,13 +1053,18 @@
               if (e.key === 'Enter')
                 card.querySelector('.save-manual-btn').click()
             })
+          card.querySelector('.skip-btn').addEventListener('click', () => {
+            setDecision('ambiguous-siret', item.partnerOrgId, {
+              action: 'customPartnerOverride'
+            })
+          })
           card.querySelector('.clear-btn')?.addEventListener('click', () => {
             clearDecision('ambiguous-siret', item.partnerOrgId)
           })
           container.appendChild(card)
         }
-        if (!container.children.length)
-          container.innerHTML =
+        if (!container.querySelectorAll('.card').length)
+          container.innerHTML +=
             '<div class="empty-state">Aucun élément avec ce filtre</div>'
       }
 
@@ -1020,13 +1076,15 @@
           return
         }
         container.innerHTML = ''
+        renderBulkBar(container, 'ambiguous-name', items)
         for (const item of items) {
           if (!shouldShow('ambiguous-name', item.partnerOrgId)) continue
           const decision = getDecision('ambiguous-name', item.partnerOrgId)
           const card = document.createElement('div')
           const resolved =
             decision?.action === 'select' || decision?.action === 'manual'
-          card.className = `card${resolved ? ' resolved' : ''}`
+          const skipped = decision?.action === 'customPartnerOverride'
+          card.className = `card${resolved ? ' resolved' : skipped ? ' skipped' : ''}`
           let candidatesHtml = ''
           for (const c of item.candidates) {
             const checked =
@@ -1044,7 +1102,7 @@
           card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
+          <div class="org-name">${resolved ? '<span class="status-dot resolved"></span>' : skipped ? '<span class="status-dot skipped"></span>' : '<span class="status-dot pending"></span>'}${escHtml(item.name)}</div>
           <div class="org-id">${escHtml(item.partnerOrgId)}</div>
         </div>
       </div>
@@ -1058,7 +1116,10 @@
         <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${decision?.action === 'manual' ? escAttr(decision.v1Id) : ''}" class="amb-manual-input">
         <button class="btn btn-primary save-manual-btn">OK</button>
       </div>
-      ${decision ? '<div class="actions"><button class="btn btn-secondary clear-btn">Annuler</button></div>' : ''}
+      <div class="actions">
+        <button class="btn btn-skip${skipped ? ' active' : ''} skip-btn" title="Sera migré comme Data Inclusion Legacy partenaire">DI Legacy partenaire</button>
+        ${decision ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
+      </div>
     `
           card.querySelectorAll('.candidate').forEach(el => {
             el.addEventListener('click', e => {
@@ -1096,13 +1157,18 @@
               if (e.key === 'Enter')
                 card.querySelector('.save-manual-btn').click()
             })
+          card.querySelector('.skip-btn').addEventListener('click', () => {
+            setDecision('ambiguous-name', item.partnerOrgId, {
+              action: 'customPartnerOverride'
+            })
+          })
           card.querySelector('.clear-btn')?.addEventListener('click', () => {
             clearDecision('ambiguous-name', item.partnerOrgId)
           })
           container.appendChild(card)
         }
-        if (!container.children.length)
-          container.innerHTML =
+        if (!container.querySelectorAll('.card').length)
+          container.innerHTML +=
             '<div class="empty-state">Aucun élément avec ce filtre</div>'
       }
 
@@ -1114,21 +1180,25 @@
           return
         }
         container.innerHTML = ''
+        renderBulkBar(container, 'siret-fallback', items)
         for (const item of items) {
           if (!shouldShow('siret-fallback', item.partnerOrgId)) continue
           const decision = getDecision('siret-fallback', item.partnerOrgId)
           const deptWarn = zipDeptWarning(item.v0Zipcode, item.v1Zipcode)
           const card = document.createElement('div')
-          const cardClass =
-            decision?.action === 'approve'
+          const skipped = decision?.action === 'customPartnerOverride'
+          const cardClass = skipped
+            ? 'skipped'
+            : decision?.action === 'approve'
               ? 'resolved'
               : decision?.action === 'reject'
                 ? 'rejected'
                 : ''
           card.className = `card ${cardClass}`
 
-          const dot =
-            decision?.action === 'approve'
+          const dot = skipped
+            ? '<span class="status-dot skipped"></span>'
+            : decision?.action === 'approve'
               ? '<span class="status-dot resolved"></span>'
               : decision?.action === 'reject'
                 ? '<span class="status-dot rejected"></span>'
@@ -1167,6 +1237,7 @@
       <div class="actions">
         <button class="btn btn-approve${decision?.action === 'approve' ? ' active' : ''} approve-btn">Approuver</button>
         <button class="btn btn-reject${decision?.action === 'reject' ? ' active' : ''} reject-btn">Rejeter</button>
+        <button class="btn btn-skip${skipped ? ' active' : ''} skip-btn" title="Sera migré comme Data Inclusion Legacy partenaire">DI Legacy partenaire</button>
         ${decision ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
       </div>
       ${manualHtml}
@@ -1183,6 +1254,11 @@
               v1Id: item.v1Id,
               v1Name: item.v1Name,
               manualV1Id: ''
+            })
+          })
+          card.querySelector('.skip-btn').addEventListener('click', () => {
+            setDecision('siret-fallback', item.partnerOrgId, {
+              action: 'customPartnerOverride'
             })
           })
           card.querySelector('.clear-btn')?.addEventListener('click', () => {
@@ -1207,8 +1283,8 @@
             })
           container.appendChild(card)
         }
-        if (!container.children.length)
-          container.innerHTML =
+        if (!container.querySelectorAll('.card').length)
+          container.innerHTML +=
             '<div class="empty-state">Aucun élément avec ce filtre</div>'
       }
 
@@ -1269,6 +1345,7 @@
           return
         }
         container.innerHTML = ''
+        renderBulkBar(container, 'no-match', items)
 
         if (v1Structures) {
           const bar = document.createElement('div')
@@ -1295,15 +1372,18 @@
           const decision = getDecision('no-match', item.partnerOrgId)
           const card = document.createElement('div')
           const resolved = decision?.action === 'manual' && decision.v1Id
-          card.className = `card${resolved ? ' resolved' : ''}`
+          const skipped = decision?.action === 'customPartnerOverride'
+          card.className = `card${resolved ? ' resolved' : skipped ? ' skipped' : ''}`
 
           const dot = resolved
             ? '<span class="status-dot resolved"></span>'
-            : '<span class="status-dot pending"></span>'
+            : skipped
+              ? '<span class="status-dot skipped"></span>'
+              : '<span class="status-dot pending"></span>'
 
           const batch = batchResults[item.partnerOrgId]
           let resultsBoxHtml = ''
-          if (v1Structures && !resolved) {
+          if (v1Structures && !resolved && !skipped) {
             let resultsInner = ''
             let resultsClass = 'search-results'
             if (batch !== undefined) {
@@ -1339,11 +1419,14 @@
       <div class="manual-input">
         <input type="text" placeholder="Ou saisir un ID v1 manuellement" value="${escAttr(decision?.v1Id || '')}" class="no-match-input">
         <button class="btn btn-primary save-manual-btn">OK</button>
-        ${resolved ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
+      </div>
+      <div class="actions">
+        <button class="btn btn-skip${skipped ? ' active' : ''} skip-btn" title="Sera migré comme Data Inclusion Legacy partenaire">DI Legacy partenaire</button>
+        ${decision ? '<button class="btn btn-secondary clear-btn">Annuler</button>' : ''}
       </div>
     `
 
-          if (batch?.length > 0 && !resolved)
+          if (batch?.length > 0 && !resolved && !skipped)
             attachSearchResultListeners(card, item.partnerOrgId)
 
           card.querySelector('.search-btn')?.addEventListener('click', () => {
@@ -1383,12 +1466,17 @@
               if (e.key === 'Enter')
                 card.querySelector('.save-manual-btn').click()
             })
+          card.querySelector('.skip-btn').addEventListener('click', () => {
+            setDecision('no-match', item.partnerOrgId, {
+              action: 'customPartnerOverride'
+            })
+          })
           card.querySelector('.clear-btn')?.addEventListener('click', () => {
             clearDecision('no-match', item.partnerOrgId)
           })
           container.appendChild(card)
         }
-        if (container.children.length <= (v1Structures ? 1 : 0))
+        if (!container.querySelectorAll('.card').length)
           container.innerHTML +=
             '<div class="empty-state">Aucun élément avec ce filtre</div>'
       }
@@ -1430,7 +1518,22 @@
           }
         }
 
-        return { overrides, rejected }
+        const customPartnerOverrideIds = []
+        for (const section of [
+          'ambiguous-siret',
+          'ambiguous-name',
+          'siret-fallback',
+          'no-match'
+        ]) {
+          const decisions = state[section] || {}
+          for (const [orgId, d] of Object.entries(decisions)) {
+            if (d.action === 'customPartnerOverride') {
+              customPartnerOverrideIds.push(orgId)
+            }
+          }
+        }
+
+        return { overrides, rejected, customPartnerOverrideIds }
       }
 
       function renderSearchV1() {
@@ -1501,13 +1604,17 @@
 
       function renderExport() {
         const container = document.getElementById('tab-export')
-        const { overrides, rejected } = buildExport()
+        const { overrides, rejected, customPartnerOverrideIds } = buildExport()
 
         const overridesStr = JSON.stringify(overrides, null, 2)
           .replace(/"([^"]+)":/g, "'$1':")
           .replace(/: "([^"]+)"/g, ": '$1'")
 
         const rejectedStr = JSON.stringify(rejected, null, 2)
+
+        const customIdsStr = customPartnerOverrideIds
+          .map(id => `  '${id}'`)
+          .join(',\n')
 
         container.innerHTML = `
     <h3>Overrides map (${Object.keys(overrides).length} entrées)</h3>
@@ -1516,6 +1623,16 @@
       <textarea readonly id="export-overrides">const ambiguousOverrides: Record&lt;string, string&gt; = ${overridesStr}</textarea>
       <div class="export-buttons">
         <button class="btn btn-primary" id="copy-overrides">Copier</button>
+      </div>
+    </div>
+    <h3 style="margin-top:1rem">DI Legacy partenaire (${customPartnerOverrideIds.length} entrées)</h3>
+    <p style="font-size:0.85rem;color:var(--grey);margin-bottom:0.5rem">Sera migré comme Data Inclusion Legacy partenaire — à coller dans <code>customPartnerOverrideIds</code> dans le fichier d'overrides</p>
+    <div class="export-area">
+      <textarea readonly id="export-custom">export const customPartnerOverrideIds: Set&lt;string&gt; = new Set([
+${customIdsStr}
+])</textarea>
+      <div class="export-buttons">
+        <button class="btn btn-primary" id="copy-custom">Copier</button>
       </div>
     </div>
     <h3 style="margin-top:1rem">SIRET fallback rejetés (${rejected.length} entrées)</h3>
@@ -1537,6 +1654,15 @@
               document.getElementById('copy-overrides').textContent = 'Copier'
             }, 1500)
           })
+        document.getElementById('copy-custom').addEventListener('click', () => {
+          navigator.clipboard.writeText(
+            document.getElementById('export-custom').value
+          )
+          document.getElementById('copy-custom').textContent = 'Copié !'
+          setTimeout(() => {
+            document.getElementById('copy-custom').textContent = 'Copier'
+          }, 1500)
+        })
         document
           .getElementById('copy-rejected')
           .addEventListener('click', () => {

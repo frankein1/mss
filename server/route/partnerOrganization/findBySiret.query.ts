@@ -15,7 +15,7 @@ export const handler = async ({
     where: { siret: input.siret, structureId: ctx.structure.id },
     include: {
       contacts: true,
-      dataInclusionStructure: true
+      dataInclusionStructureV1: true
     }
   })
   return res.length ? res[0] : null

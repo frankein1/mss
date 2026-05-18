@@ -16,7 +16,7 @@ export const handler = async ({
     },
     include: {
       contacts: true,
-      dataInclusionStructure: true
+      dataInclusionStructureV1: true
     },
     orderBy: [{ name: 'asc' }]
   })

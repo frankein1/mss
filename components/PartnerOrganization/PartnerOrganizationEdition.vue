@@ -1,11 +1,38 @@
 <template>
+  <AtomAlert
+    v-if="initialDataSource === 'LegacyDataInclusionV0'"
+    class="fr-mb-2w"
+    :alert-type="AlertType.Warning"
+    message="Organisme issu de l'ancien annuaire"
+  >
+    <template #detailedMessage>
+      <p>Cet organisme provient de l'ancien annuaire data·inclusion.</p>
+      <p>
+        Une recherche dans le champ «
+        {{ partnerOrganizationFieldLabels.name }} » permet de le rattacher à un
+        organisme de la nouvelle version de l'annuaire. À défaut, modifiez les
+        champs pour le convertir en organisme partenaire personnalisé.
+      </p>
+      <DsfrButton
+        tertiary
+        class="fr-mt-2v"
+        size="sm"
+        type="button"
+        label="Réinitialiser le formulaire"
+        :disabled="isOriginalLegacyPartnerForm"
+        @click="resetForm()"
+      >
+      </DsfrButton>
+    </template>
+  </AtomAlert>
   <PartnerOrganizationForm
     :is-submitting="isSubmitting"
+    :is-disabled="isOriginalLegacyPartnerForm"
     :caught-errors="caughtErrors"
     :partner-id="partner.id"
     :show-phone2="!!partner.phone2"
-    :has-data-inclusion-structure="hasDataInclusionStructure"
-    :existing-data-inclusion-ids="existingDataInclusionIds"
+    :data-source="currentDataSource"
+    :existing-data-inclusion-v1-ids="existingDataInclusionV1Ids"
     @submit="onSubmit"
     @cancel="onCancel"
     @restore="onRestore"
@@ -18,17 +45,19 @@
   import type { PartnerOrganizationData, DataInclusionStructure } from './types'
   import type { EditPartnerOrganizationInput } from '~/server/schema'
   import {
-    editDataInclusionPartnerOrganizationSchema,
+    editDataInclusionV1PartnerOrganizationSchema,
     editCustomPartnerOrganizationSchema,
     limitPOAddress,
     limitPOName,
     limitPOWorkingHours
   } from '~/server/schema'
+  import { AlertType } from '~/utils/constants/alert'
+  import { partnerOrganizationFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     isSubmitting: boolean
     id: string
-    existingDataInclusionIds: string[]
+    existingDataInclusionV1Ids: string[]
     finish: (partner: EditPartnerOrganizationInput) => void
     cancel: () => void
     restore: (partner: PartnerOrganizationData) => void
@@ -36,46 +65,82 @@
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
 
-  const hasDataInclusionStructure = ref(partner.dataInclusionStructure !== null)
-
-  const schema = computed(() =>
-    hasDataInclusionStructure.value
-      ? toTypedSchema(editDataInclusionPartnerOrganizationSchema)
-      : toTypedSchema(editCustomPartnerOrganizationSchema)
+  const initialDataSource = partner.dataSource
+  // The form data source cannot be legacy since it is incompatible with the zod schema
+  // When the initial data source is legacy, the form validation is deactivated
+  // It only becomes usable when the form is modified and the partner is then saved
+  // as a Custom partner
+  const currentDataSource = ref<'Custom' | 'DataInclusionV1'>(
+    partner.dataSource === 'LegacyDataInclusionV0'
+      ? 'Custom'
+      : partner.dataSource
   )
 
+  const schema = computed(() => {
+    if (currentDataSource.value === 'DataInclusionV1') {
+      return toTypedSchema(editDataInclusionV1PartnerOrganizationSchema)
+    }
+    return toTypedSchema(editCustomPartnerOrganizationSchema)
+  })
+
+  function formatContacts(contacts: typeof partner.contacts) {
+    return (contacts || []).map(({ id, name, email, phone }) => ({
+      id,
+      name,
+      email,
+      phone,
+      deleted: false
+    }))
+  }
+
   function setInitialValues() {
-    const structure = partner.dataInclusionStructure
-    const el = structure || partner
+    if (partner.dataSource === 'DataInclusionV1') {
+      const v1 = partner.dataInclusionStructureV1
+      return {
+        id: partner.id,
+        dataSource: 'DataInclusionV1' as const,
+        dataInclusionIdV1: partner.dataInclusionIdV1 || undefined,
+        name: v1?.name || partner.name,
+        siret: v1?.siret,
+        phone1: v1?.phone,
+        phone2: partner.phone2,
+        address: v1?.address,
+        city: v1?.city,
+        zipcode: v1?.zipcode,
+        email: v1?.email,
+        workingHours: v1?.workingHours,
+        contacts: formatContacts(partner.contacts)
+      }
+    }
 
     return {
       id: partner.id,
-      ...(structure !== null && {
-        dataInclusionId: partner.dataInclusionId || undefined
-      }),
-      siret: el.siret,
-      name: el.name,
-      email: el.email,
-      phone1: structure ? structure.phone : partner.phone1,
+      dataSource: 'Custom' as const, // To match zod schema for vee-validate
+      name: partner.name,
+      siret: partner.siret ?? undefined,
+      phone1: partner.phone1,
       phone2: partner.phone2,
-      address: el.address,
-      city: el.city,
-      zipcode: el.zipcode,
-      workingHours: el.workingHours,
-      contacts: (partner.contacts || []).map(({ id, name, email, phone }) => ({
-        id,
-        name,
-        email,
-        phone,
-        deleted: false
-      }))
+      address: partner.address,
+      city: partner.city,
+      zipcode: partner.zipcode,
+      email: partner.email,
+      workingHours: partner.workingHours,
+      contacts: formatContacts(partner.contacts)
     }
   }
 
-  const { handleSubmit, setValues } = useForm<EditPartnerOrganizationInput>({
+  const {
+    handleSubmit,
+    setValues: _setValues,
+    meta,
+    resetForm
+  } = useForm<EditPartnerOrganizationInput>({
     validationSchema: schema,
     initialValues: setInitialValues()
   })
+
+  // setValues accepts partials that don't match the discriminated union shape
+  const setValues = _setValues as (values: Record<string, unknown>) => void
 
   const { caughtErrors, onSubmit } = useCatchFormErrors(
     handleSubmit,
@@ -96,8 +161,9 @@
     structure: DataInclusionStructure | null
   ) {
     if (!structure) {
-      if (hasDataInclusionStructure.value) {
+      if (currentDataSource.value === 'DataInclusionV1') {
         setValues({
+          dataSource: 'Custom',
           siret: null,
           email: null,
           phone1: null,
@@ -107,17 +173,17 @@
           zipcode: null,
           workingHours: null
         })
+        currentDataSource.value = 'Custom'
       }
-      hasDataInclusionStructure.value = false
-
       return
     }
 
-    hasDataInclusionStructure.value = true
-    // Some fields from data inclusion can evolve to be very long. Tey are truncated
+    currentDataSource.value = 'DataInclusionV1'
+    // Some fields from data inclusion can evolve to be very long. They are truncated
     // to the limit specified in the schema
     setValues({
-      dataInclusionId: structure.id,
+      dataSource: 'DataInclusionV1',
+      dataInclusionIdV1: structure.id,
       name: structure.name.substring(0, limitPOName),
       siret: structure.siret || null,
       address: structure.address?.substring(0, limitPOAddress),
@@ -128,4 +194,11 @@
       workingHours: structure.workingHours?.substring(0, limitPOWorkingHours)
     })
   }
+
+  /** Legacy Data Inclusion v0 partners cannot be modified
+   * When the form is edited with such a partner, it is saved as Custom
+   */
+  const isOriginalLegacyPartnerForm = computed(
+    () => initialDataSource === 'LegacyDataInclusionV0' && !meta.value.dirty
+  )
 </script>

@@ -12,13 +12,25 @@ export async function create({
   const { contacts, ...data } = input
 
   const partner =
-    'dataInclusionId' in data
+    data.dataSource === 'DataInclusionV1'
       ? {
-          dataInclusionId: data.dataInclusionId,
+          dataSource: 'DataInclusionV1' as const,
+          dataInclusionIdV1: data.dataInclusionIdV1,
           name: data.name,
           ...(data.phone2 && { phone2: data.phone2 })
         }
-      : data
+      : {
+          dataSource: 'Custom' as const,
+          name: data.name,
+          siret: data.siret,
+          address: data.address,
+          zipcode: data.zipcode,
+          city: data.city,
+          email: data.email,
+          phone1: data.phone1,
+          phone2: data.phone2,
+          workingHours: data.workingHours
+        }
 
   const contactsToCreate = (contacts || []).map(
     ({ id, name, email, phone }) => ({
