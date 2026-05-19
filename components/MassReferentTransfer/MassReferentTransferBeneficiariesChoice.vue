@@ -5,12 +5,7 @@
     message="La liste des bénéficiaires n'a pas pu être chargée."
   >
     <div class="beneficiaries-choice">
-      <p class="fr-text--bold">
-        Total : {{ selectedBeneficiaries.length }}/{{
-          MAX_BENEFICIARIES_REFERENT_TRANSFER
-        }}
-        dossiers bénéficiaires.
-      </p>
+      <p class="fr-text--bold">{{ summarySelected }}</p>
 
       <p v-if="editionChoice === 'delete'">
         Vous ne pouvez pas séléctionner des dossiers bénéficiaires qui ont moins
@@ -66,13 +61,12 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    BENEFICIARIES_REQUEST_LIMIT_DEFAULT,
-    MAX_BENEFICIARIES_REFERENT_TRANSFER
-  } from '~/utils/constants'
+  import { BENEFICIARIES_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { SortOrder, type BeneficiarySort } from '~/types/table'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { BeneficiaryListItem } from './types'
+
+  const MAX_BENEFICIARIES_REFERENT_TRANSFER = 4
 
   const props = defineProps<{
     filters: BeneficiaryFilterInput
@@ -114,6 +108,12 @@
   )
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
+
+  const summarySelected = computed(() =>
+    selectedBeneficiaries.value.length > 1
+      ? `${selectedBeneficiaries.value.length} dossiers bénéficiaires sélectionnés sur un total de ${pageData.value?.count || 0}.`
+      : `${selectedBeneficiaries.value.length} dossier bénéficiaire sélectionné sur un total de ${pageData.value?.count || 0}.`
+  )
 
   const disabledBeneficiaryIds = computed(() => {
     if (editionChoice.value !== 'delete') {
