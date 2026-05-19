@@ -1,12 +1,5 @@
 <template>
   <div class="partner-card">
-    <AtomBadge
-      v-if="partner.dataSource === 'LegacyDataInclusionV0'"
-      small
-      :color="BadgeColor.Purple"
-    >
-      Ancien annuaire
-    </AtomBadge>
     <h3 class="fr-h6 fr-m-0">
       {{ el.name }}
     </h3>
@@ -80,7 +73,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { BadgeColor } from '~/types/badge'
   import type { PartnerOrganizationData } from './types'
 
   const props = defineProps<{
