@@ -257,15 +257,16 @@ const configPartnerOrganization: Record<
   data_inclusion_id_v1: true,
   data_source: true,
   inactive: true,
+  siret: true,
+  address: true,
+  city: true,
+  zipcode: true,
+  phone1: true,
+  phone2: true,
+  working_hours: true,
+  website: true,
   // -- BEGIN ANONYMIZED
-  siret: false,
-  address: false,
-  city: false,
-  zipcode: false,
-  phone1: false,
-  phone2: false,
-  email: false,
-  working_hours: false
+  email: false
 }
 
 const configPartnerOrganizationContact: Record<

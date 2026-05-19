@@ -22,6 +22,7 @@
     editCustomPartnerOrganizationSchema,
     limitPOAddress,
     limitPOName,
+    limitPOWebsite,
     limitPOWorkingHours
   } from '~/server/schema'
 
@@ -74,6 +75,7 @@
         city: v1?.city,
         zipcode: v1?.zipcode,
         email: v1?.email,
+        website: v1?.website,
         workingHours: v1?.workingHours,
         contacts: formatContacts(partner.contacts)
       }
@@ -90,6 +92,7 @@
       city: partner.city,
       zipcode: partner.zipcode,
       email: partner.email,
+      website: partner.website,
       workingHours: partner.workingHours,
       contacts: formatContacts(partner.contacts)
     }
@@ -130,6 +133,7 @@
           email: null,
           phone1: null,
           phone2: null,
+          website: null,
           address: null,
           city: null,
           zipcode: null,
@@ -153,6 +157,7 @@
       city: structure.city,
       email: structure.email,
       phone1: structure.phone,
+      website: structure.website?.substring(0, limitPOWebsite),
       workingHours: structure.workingHours?.substring(0, limitPOWorkingHours)
     })
   }

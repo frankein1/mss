@@ -45,6 +45,11 @@ Prefer vue-dsfr rather than direct DSFR html when possible:
 - Automatic type generation from tRPC endpoints
 - Zod runtime validation at API boundaries
 
+### Links
+
+- Always use `<NuxtLink>` instead of `<a>` — for both internal and external links
+- For external links, add the `external` prop to `<NuxtLink>`
+
 ### Routing
 
 - File-based routing via Nuxt pages directory
