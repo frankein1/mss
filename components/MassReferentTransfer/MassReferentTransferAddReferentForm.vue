@@ -1,8 +1,6 @@
 <template>
-  <p>
-    {{ selectedBeneficiaries.length }}/{{ MAX_BENEFICIARIES_REFERENT_TRANSFER }}
-    bénéficiaires sélectionnés.
-  </p>
+  <p class="fr-text--bold">{{ summarySelected }}</p>
+
   <FormErrors
     v-if="errors.length > 0"
     :errors
@@ -29,7 +27,6 @@
     transfertReferentToFamilyFileSchema,
     type TransferReferentToFamilyFileInput
   } from '~/server/schema'
-  import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import type { Options } from '~/utils/options'
 
   defineProps<{
@@ -41,7 +38,7 @@
     next: []
   }>()
 
-  const { selectedBeneficiaries, referentId, editionChoice } =
+  const { selectedBeneficiaries, referentId, editionChoice, summarySelected } =
     useMassReferentTransferState()
 
   const inputLabel = computed(() => {

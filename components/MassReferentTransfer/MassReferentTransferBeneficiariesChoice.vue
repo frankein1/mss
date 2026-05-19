@@ -5,12 +5,7 @@
     message="La liste des bénéficiaires n'a pas pu être chargée."
   >
     <div class="beneficiaries-choice">
-      <p class="fr-text--bold">
-        Total : {{ selectedBeneficiaries.length }}/{{
-          MAX_BENEFICIARIES_REFERENT_TRANSFER
-        }}
-        dossiers bénéficiaires.
-      </p>
+      <p class="fr-text--bold">{{ summarySelected }}</p>
 
       <p v-if="editionChoice === 'delete'">
         Vous ne pouvez pas séléctionner des dossiers bénéficiaires qui ont moins
@@ -66,13 +61,12 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    BENEFICIARIES_REQUEST_LIMIT_DEFAULT,
-    MAX_BENEFICIARIES_REFERENT_TRANSFER
-  } from '~/utils/constants'
+  import { BENEFICIARIES_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { SortOrder, type BeneficiarySort } from '~/types/table'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { BeneficiaryListItem } from './types'
+
+  const MAX_BENEFICIARIES_REFERENT_TRANSFER = 4
 
   const props = defineProps<{
     filters: BeneficiaryFilterInput
@@ -87,8 +81,12 @@
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const orderBy = ref<BeneficiarySort>({ usualName: SortOrder.Asc })
-  const { selectedBeneficiaries, editionChoice } =
-    useMassReferentTransferState()
+  const {
+    selectedBeneficiaries,
+    editionChoice,
+    summarySelected,
+    totalBeneficiaries
+  } = useMassReferentTransferState()
 
   const computedFilters = computed(() => props.filters)
 
@@ -108,6 +106,7 @@
     pending,
     error
   } = await trpcClient.beneficiary.getBeneficiaryList.useQuery(queryInput)
+  totalBeneficiaries.value = pageData.value?.count || 0
 
   const items = computed(
     () => (pageData.value?.items as Array<BeneficiaryListItem>) || []
