@@ -1,16 +1,11 @@
 <template>
   <template v-if="mutationStatus === 'idle'">
-    <p>
-      {{ selectedBeneficiaries.length }}/{{
-        MAX_BENEFICIARIES_REFERENT_TRANSFER
-      }}
-      bénéficiaires sélectionnés.
-    </p>
+    <p class="fr-text--bold">{{ summarySelected }}</p>
+
     <AtomAlert
       :alert-type="AlertType.Warning"
       size="sm"
       :message="confirmationMessage"
-      :closeable="false"
       title-tag="p"
       class="fr-mb-6v"
     />
@@ -19,25 +14,26 @@
     <AtomAlert
       :alert-type="AlertType.Warning"
       size="sm"
-      :message="`Ne pas fermer cette fenêtre`"
-      :closeable="false"
+      message="Ne pas fermer cette fenêtre"
       title-tag="p"
       class="fr-mb-6v"
-      >La mise à jour des agents référents est en cours. Cela peut prendre
-      quelques minutes.</AtomAlert
+    >
+      <template #detailedMessage>
+        La mise à jour {{ pluralAgentLabel }} est en cours. Cela peut prendre
+        quelques minutes.
+      </template></AtomAlert
     >
   </template>
   <template v-else-if="mutationStatus === 'error'">
     <AtomAlert
       :alert-type="AlertType.Error"
       size="sm"
-      :message="`echec`"
-      :closeable="false"
+      :message="`La mise à jour ${pluralAgentLabel} a échoué.`"
       title-tag="p"
       class="fr-mb-6v"
     >
       <template #detailedMessage>
-        <p>La mise à jour des agents référents a échoué.</p>
+        <p>Réessayez l'action ou contactez le support.</p>
       </template>
     </AtomAlert>
   </template>
@@ -45,7 +41,7 @@
     <AtomAlert
       :alert-type="AlertType.Success"
       size="sm"
-      :message="`La mise à jour des agents référents à réussi.`"
+      :message="`La mise à jour ${pluralAgentLabel} a réussi.`"
       :closeable="false"
       title-tag="p"
       class="fr-mb-6v"
@@ -74,11 +70,10 @@
 
 <script setup lang="ts">
   import { BeneficiaryAction, EventCategory } from '~/types/matomo'
-  import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
-  const { selectedBeneficiaries, referentId, editionChoice } =
+  const { selectedBeneficiaries, referentId, editionChoice, summarySelected } =
     useMassReferentTransferState()
 
   const props = defineProps<{
@@ -94,13 +89,20 @@
     return agent?.label
   })
 
+  const count = computed(() => selectedBeneficiaries.value.length)
+  const pluralAgentLabel = computed(() =>
+    count.value > 1 ? 'des agents référents' : "de l'agent référent"
+  )
+  const pluralBeneficiaryLabel = computed(() =>
+    count.value > 1 ? 'dossiers bénéficiaires' : 'dossier bénéficiaire'
+  )
+
   const confirmationMessage = computed(() => {
     const name = agentName.value ?? '(nom introuvable)'
-    const count = selectedBeneficiaries.value.length
     if (editionChoice.value === 'add') {
-      return `Êtes-vous sûr de vouloir ajouter ${name} sur ${count} dossiers bénéficiaires ?`
+      return `Êtes-vous sûr de vouloir ajouter ${name} sur ${count.value} ${pluralBeneficiaryLabel.value} ?`
     }
-    return `Êtes-vous sûr de vouloir retirer ${name} de ${count} dossiers bénéficiaires ?`
+    return `Êtes-vous sûr de vouloir retirer ${name} de ${count.value} ${pluralBeneficiaryLabel.value} ?`
   })
 
   const addReferentMutation = useTrpcClient().file.addReferent.useMutation()
@@ -115,7 +117,9 @@
 
   async function onConfirm() {
     if (referentId.value == null || selectedBeneficiaries.value.length === 0) {
-      useSnackbar().error('La mise à jour des référents à échouée.')
+      useSnackbar().error(
+        "Référent ou bénéficiaires manquants. Le transfert n'a pas pu être effectué."
+      )
       return
     }
     const values = {
