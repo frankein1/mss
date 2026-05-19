@@ -81,8 +81,12 @@
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const orderBy = ref<BeneficiarySort>({ usualName: SortOrder.Asc })
-  const { selectedBeneficiaries, editionChoice } =
-    useMassReferentTransferState()
+  const {
+    selectedBeneficiaries,
+    editionChoice,
+    summarySelected,
+    totalBeneficiaries
+  } = useMassReferentTransferState()
 
   const computedFilters = computed(() => props.filters)
 
@@ -102,18 +106,13 @@
     pending,
     error
   } = await trpcClient.beneficiary.getBeneficiaryList.useQuery(queryInput)
+  totalBeneficiaries.value = pageData.value?.count || 0
 
   const items = computed(
     () => (pageData.value?.items as Array<BeneficiaryListItem>) || []
   )
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
-
-  const summarySelected = computed(() =>
-    selectedBeneficiaries.value.length > 1
-      ? `${selectedBeneficiaries.value.length} dossiers bénéficiaires sélectionnés sur un total de ${pageData.value?.count || 0}.`
-      : `${selectedBeneficiaries.value.length} dossier bénéficiaire sélectionné sur un total de ${pageData.value?.count || 0}.`
-  )
 
   const disabledBeneficiaryIds = computed(() => {
     if (editionChoice.value !== 'delete') {

@@ -1,11 +1,7 @@
 <template>
   <template v-if="mutationStatus === 'idle'">
-    <p>
-      {{ selectedBeneficiaries.length }}/{{
-        MAX_BENEFICIARIES_REFERENT_TRANSFER
-      }}
-      bénéficiaires sélectionnés.
-    </p>
+    <p class="fr-text--bold">{{ summarySelected }}</p>
+
     <AtomAlert
       :alert-type="AlertType.Warning"
       size="sm"
@@ -21,20 +17,23 @@
       message="Ne pas fermer cette fenêtre"
       title-tag="p"
       class="fr-mb-6v"
-      >La mise à jour {{ pluralAgentLabel }} est en cours. Cela peut prendre
-      quelques minutes.</AtomAlert
+    >
+      <template #detailedMessage>
+        La mise à jour {{ pluralAgentLabel }} est en cours. Cela peut prendre
+        quelques minutes.
+      </template></AtomAlert
     >
   </template>
   <template v-else-if="mutationStatus === 'error'">
     <AtomAlert
       :alert-type="AlertType.Error"
       size="sm"
-      message="Echec"
+      :message="`La mise à jour ${pluralAgentLabel} a échoué.`"
       title-tag="p"
       class="fr-mb-6v"
     >
       <template #detailedMessage>
-        <p>La mise à jour {{ pluralAgentLabel }} a échoué.</p>
+        <p>Réessayez l'action ou contactez le support.</p>
       </template>
     </AtomAlert>
   </template>
@@ -42,7 +41,7 @@
     <AtomAlert
       :alert-type="AlertType.Success"
       size="sm"
-      :message="`La mise à jour${pluralAgentLabel} a réussi.`"
+      :message="`La mise à jour ${pluralAgentLabel} a réussi.`"
       :closeable="false"
       title-tag="p"
       class="fr-mb-6v"
@@ -71,11 +70,10 @@
 
 <script setup lang="ts">
   import { BeneficiaryAction, EventCategory } from '~/types/matomo'
-  import { MAX_BENEFICIARIES_REFERENT_TRANSFER } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
-  const { selectedBeneficiaries, referentId, editionChoice } =
+  const { selectedBeneficiaries, referentId, editionChoice, summarySelected } =
     useMassReferentTransferState()
 
   const props = defineProps<{
