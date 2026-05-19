@@ -61,12 +61,13 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { BENEFICIARIES_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    BENEFICIARIES_REQUEST_LIMIT_DEFAULT,
+    MAX_BENEFICIARIES_REFERENT_TRANSFER
+  } from '~/utils/constants'
   import { SortOrder, type BeneficiarySort } from '~/types/table'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { BeneficiaryListItem } from './types'
-
-  const MAX_BENEFICIARIES_REFERENT_TRANSFER = 4
 
   const props = defineProps<{
     filters: BeneficiaryFilterInput
