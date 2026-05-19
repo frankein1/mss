@@ -13,7 +13,7 @@ export default defineEventHandler(async event => {
 
   if (uncheckedRedirectUrl && !isSafe) {
     console.log('[ProConnect] Rejected unsafe redirect URL at signin')
-    event.context.sentry.captureMessage(
+    event.context.sentry?.captureMessage(
       '[ProConnect] Rejected unsafe redirect URL at signin',
       {
         level: 'warning',
