@@ -31,15 +31,15 @@
       v-if="websiteDisplay"
       class="fr-icon-global-line partner-card-content__info fr-icon--sm fr-text--sm"
     >
-      <a
-        :href="websiteHref"
+      <NuxtLink
+        :to="websiteHref"
         target="_blank"
-        rel="noopener external"
         :title="`${websiteDisplay} - nouvelle fenêtre`"
         class="fr-link fr-text--sm"
+        external
       >
         {{ websiteDisplay }}
-      </a>
+      </NuxtLink>
     </div>
     <div
       v-if="el.workingHours"
@@ -88,6 +88,7 @@
 
 <script lang="ts" setup>
   import type { PartnerOrganizationData } from './types'
+  import { sanitizeUrl } from '@braintree/sanitize-url'
 
   const props = defineProps<{
     partner: PartnerOrganizationData
@@ -130,10 +131,11 @@
     if (!url) {
       return ''
     }
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url
-    }
-    return `https://${url}`
+    const fullUrl =
+      url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : `https://${url}`
+    return sanitizeUrl(fullUrl)
   })
 </script>
 
