@@ -1,33 +1,6 @@
 <template>
-  <AtomAlert
-    v-if="initialDataSource === 'LegacyDataInclusionV0'"
-    class="fr-mb-2w"
-    :alert-type="AlertType.Warning"
-    message="Organisme issu de l'ancien annuaire"
-  >
-    <template #detailedMessage>
-      <p>Cet organisme provient de l'ancien annuaire data·inclusion.</p>
-      <p>
-        Une recherche dans le champ «
-        {{ partnerOrganizationFieldLabels.name }} » permet de le rattacher à un
-        organisme de la nouvelle version de l'annuaire. À défaut, modifiez les
-        champs pour le convertir en organisme partenaire personnalisé.
-      </p>
-      <DsfrButton
-        tertiary
-        class="fr-mt-2v"
-        size="sm"
-        type="button"
-        label="Réinitialiser le formulaire"
-        :disabled="isOriginalLegacyPartnerForm"
-        @click="resetForm()"
-      >
-      </DsfrButton>
-    </template>
-  </AtomAlert>
   <PartnerOrganizationForm
     :is-submitting="isSubmitting"
-    :is-disabled="isOriginalLegacyPartnerForm"
     :caught-errors="caughtErrors"
     :partner-id="partner.id"
     :show-phone2="!!partner.phone2"
@@ -51,8 +24,6 @@
     limitPOName,
     limitPOWorkingHours
   } from '~/server/schema'
-  import { AlertType } from '~/utils/constants/alert'
-  import { partnerOrganizationFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -65,11 +36,6 @@
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
 
-  const initialDataSource = partner.dataSource
-  // The form data source cannot be legacy since it is incompatible with the zod schema
-  // When the initial data source is legacy, the form validation is deactivated
-  // It only becomes usable when the form is modified and the partner is then saved
-  // as a Custom partner
   const currentDataSource = ref<'Custom' | 'DataInclusionV1'>(
     partner.dataSource === 'LegacyDataInclusionV0'
       ? 'Custom'
@@ -129,15 +95,11 @@
     }
   }
 
-  const {
-    handleSubmit,
-    setValues: _setValues,
-    meta,
-    resetForm
-  } = useForm<EditPartnerOrganizationInput>({
-    validationSchema: schema,
-    initialValues: setInitialValues()
-  })
+  const { handleSubmit, setValues: _setValues } =
+    useForm<EditPartnerOrganizationInput>({
+      validationSchema: schema,
+      initialValues: setInitialValues()
+    })
 
   // setValues accepts partials that don't match the discriminated union shape
   const setValues = _setValues as (values: Record<string, unknown>) => void
@@ -194,11 +156,4 @@
       workingHours: structure.workingHours?.substring(0, limitPOWorkingHours)
     })
   }
-
-  /** Legacy Data Inclusion v0 partners cannot be modified
-   * When the form is edited with such a partner, it is saved as Custom
-   */
-  const isOriginalLegacyPartnerForm = computed(
-    () => initialDataSource === 'LegacyDataInclusionV0' && !meta.value.dirty
-  )
 </script>
