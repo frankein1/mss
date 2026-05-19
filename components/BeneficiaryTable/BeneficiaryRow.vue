@@ -1,7 +1,7 @@
 <template>
   <tr
-    class="clickable-row"
-    :class="{ 'row--disabled': disabled }"
+    :class="rowClasses"
+    @click="onRowClick"
   >
     <th
       v-if="selectable"
@@ -29,6 +29,7 @@
     </th>
     <td>
       <NuxtLink
+        v-if="!selectable"
         class="table-row-link"
         :to="
           routes.file.AppFile.path(beneficiary.familyFileId, {
@@ -38,6 +39,7 @@
       >
         {{ formatTableValue(lastName) }}
       </NuxtLink>
+      <span v-else>{{ formatTableValue(lastName) }}</span>
     </td>
     <td>{{ formatTableValue(nameOrEmpty(beneficiary.firstName)) }}</td>
     <td>
@@ -86,6 +88,18 @@
     toggle: []
   }>()
 
+  const rowClasses = computed(() => ({
+    'clickable-row': !selectable || !disabled,
+    'row--disabled': disabled,
+    'row--selectable': selectable
+  }))
+
+  function onRowClick() {
+    if (selectable && !disabled) {
+      emit('toggle')
+    }
+  }
+
   const addressCodeAndCity = computed(() =>
     [beneficiary.zipcode, beneficiary.city].filter(v => !!v).join(' ')
   )
@@ -118,6 +132,14 @@
   .row--disabled td,
   .row--disabled th {
     color: #757575;
+  }
+
+  .row--disabled {
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: inherit;
+    }
   }
 
   .fr-cell--fixed {
