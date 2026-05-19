@@ -149,6 +149,13 @@
           />
         </div>
         <div class="fr-col-12">
+          <VeeInput
+            name="website"
+            :label="partnerOrganizationFieldLabels.website"
+            :disabled="fieldsDisabled"
+          />
+        </div>
+        <div class="fr-col-12">
           <VeeTextarea
             name="workingHours"
             :label="partnerOrganizationFieldLabels.workingHours"

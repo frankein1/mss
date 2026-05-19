@@ -1870,9 +1870,10 @@ model PartnerOrganization {
   city    String?
   zipcode String?
 
-  phone1 String?
-  phone2 String?
-  email  String?
+  phone1  String?
+  phone2  String?
+  email   String?
+  website String?
 
   workingHours String? @map("working_hours")
 

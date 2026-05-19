@@ -7,6 +7,7 @@ export const partnerOrganizationFieldLabels = {
   phone1: 'Numéro de téléphone',
   phone2: 'Numéro de téléphone 2',
   email: 'Email',
+  website: 'Site internet',
   workingHours: 'Horaires de permanence',
   contactName: 'Nom',
   contactPhone: 'Numéro de téléphone',

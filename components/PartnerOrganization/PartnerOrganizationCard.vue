@@ -28,6 +28,20 @@
       {{ el.email }}
     </div>
     <div
+      v-if="websiteDisplay"
+      class="fr-icon-global-line partner-card-content__info fr-icon--sm fr-text--sm"
+    >
+      <a
+        :href="websiteHref"
+        target="_blank"
+        rel="noopener external"
+        :title="`${websiteDisplay} - nouvelle fenêtre`"
+        class="fr-link fr-text--sm"
+      >
+        {{ websiteDisplay }}
+      </a>
+    </div>
+    <div
       v-if="el.workingHours"
       class="partner-card-content__info partner-card-content__working-hours fr-text--sm fr-m-0"
     >
@@ -100,6 +114,26 @@
       )
     }
     return props.partner.phone1
+  })
+
+  const websiteDisplay = computed(() => {
+    if (props.partner.dataSource === 'DataInclusionV1') {
+      return (
+        props.partner.dataInclusionStructureV1?.website || props.partner.website
+      )
+    }
+    return props.partner.website
+  })
+
+  const websiteHref = computed(() => {
+    const url = websiteDisplay.value
+    if (!url) {
+      return ''
+    }
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url
+    }
+    return `https://${url}`
   })
 </script>
 

@@ -22,6 +22,7 @@ const contactPartnerOrganizationSchema = z
 
 export const limitPOName = 300
 export const limitPOAddress = 100
+export const limitPOWebsite = 500
 export const limitPOWorkingHours = 1200
 
 export const addCustomPartnerOrganizationSchema = z.object({
@@ -34,6 +35,7 @@ export const addCustomPartnerOrganizationSchema = z.object({
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
+  website: limitedStringConstraint(null, limitPOWebsite).nullish(),
   workingHours: limitedStringConstraint(null, limitPOWorkingHours).nullish(),
   contacts: contactPartnerOrganizationSchema
 })

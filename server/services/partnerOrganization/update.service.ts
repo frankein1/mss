@@ -25,6 +25,7 @@ export async function update({
           city: null,
           email: null,
           phone1: null,
+          website: null,
           workingHours: null
         }
       : {
@@ -39,6 +40,7 @@ export async function update({
           email: data.email,
           phone1: data.phone1,
           phone2: data.phone2,
+          website: data.website,
           workingHours: data.workingHours
         }
 
