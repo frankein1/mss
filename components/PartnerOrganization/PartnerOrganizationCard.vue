@@ -28,6 +28,20 @@
       {{ el.email }}
     </div>
     <div
+      v-if="websiteDisplay"
+      class="fr-icon-global-line partner-card-content__info fr-icon--sm fr-text--sm"
+    >
+      <NuxtLink
+        :to="websiteHref"
+        target="_blank"
+        :title="`${websiteDisplay} - nouvelle fenêtre`"
+        class="fr-link fr-text--sm"
+        external
+      >
+        {{ websiteDisplay }}
+      </NuxtLink>
+    </div>
+    <div
       v-if="el.workingHours"
       class="partner-card-content__info partner-card-content__working-hours fr-text--sm fr-m-0"
     >
@@ -74,6 +88,7 @@
 
 <script lang="ts" setup>
   import type { PartnerOrganizationData } from './types'
+  import { sanitizeUrl } from '@braintree/sanitize-url'
 
   const props = defineProps<{
     partner: PartnerOrganizationData
@@ -100,6 +115,27 @@
       )
     }
     return props.partner.phone1
+  })
+
+  const websiteDisplay = computed(() => {
+    if (props.partner.dataSource === 'DataInclusionV1') {
+      return (
+        props.partner.dataInclusionStructureV1?.website || props.partner.website
+      )
+    }
+    return props.partner.website
+  })
+
+  const websiteHref = computed(() => {
+    const url = websiteDisplay.value
+    if (!url) {
+      return ''
+    }
+    const fullUrl =
+      url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : `https://${url}`
+    return sanitizeUrl(fullUrl)
   })
 </script>
 

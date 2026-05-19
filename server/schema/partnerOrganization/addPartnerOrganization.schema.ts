@@ -6,7 +6,9 @@ import {
   siretConstraint,
   requiredLimitedStringConstraint,
   limitedStringConstraint,
-  stringOrEmpty
+  stringOrEmpty,
+  websiteConstraint,
+  websiteSanitizeTransform
 } from '..'
 
 const contactPartnerOrganizationSchema = z
@@ -22,6 +24,7 @@ const contactPartnerOrganizationSchema = z
 
 export const limitPOName = 300
 export const limitPOAddress = 100
+export const limitPOWebsite = 500
 export const limitPOWorkingHours = 1200
 
 export const addCustomPartnerOrganizationSchema = z.object({
@@ -34,6 +37,7 @@ export const addCustomPartnerOrganizationSchema = z.object({
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
+  website: websiteConstraint(limitPOWebsite).nullish(),
   workingHours: limitedStringConstraint(null, limitPOWorkingHours).nullish(),
   contacts: contactPartnerOrganizationSchema
 })
@@ -43,7 +47,8 @@ export const addDataInclusionV1PartnerOrganizationSchema =
     dataSource: z.literal('DataInclusionV1'),
     dataInclusionIdV1: requiredStringConstraint,
     siret: siretConstraint.nullish(),
-    phone1: limitedStringConstraint(null, 20).nullish()
+    phone1: limitedStringConstraint(null, 20).nullish(),
+    website: websiteSanitizeTransform(limitPOWebsite).nullish()
   })
 
 export const addPartnerOrganizationSchema = z.discriminatedUnion('dataSource', [

@@ -29,6 +29,7 @@ export async function create({
           email: data.email,
           phone1: data.phone1,
           phone2: data.phone2,
+          website: data.website,
           workingHours: data.workingHours
         }
 

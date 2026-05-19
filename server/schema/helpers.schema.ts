@@ -9,6 +9,7 @@ import {
   validYear,
   validDate
 } from '~/utils/zod'
+import { sanitizeUrl } from '@braintree/sanitize-url'
 
 export const paginatedSchema = z.object({
   page: z.number().int().gte(1),
@@ -133,6 +134,17 @@ export const dateOrEmpty = z
     { errorMap: () => ({ message: validDate }) }
   )
   .refine(d => !d || d.getFullYear() <= 9999, { message: validYear })
+
+export const websiteConstraint = (max = 500) =>
+  limitedStringConstraint(null, max).refine(
+    v => !v || sanitizeUrl(v) !== 'about:blank',
+    "L'adresse du site internet n'est pas valide."
+  )
+
+export const websiteSanitizeTransform = (max = 500) =>
+  limitedStringConstraint(null, max).transform(v =>
+    sanitizeUrl(v) !== 'about:blank' ? v : null
+  )
 
 export const openText = (maxLength: number) =>
   stringConstraint

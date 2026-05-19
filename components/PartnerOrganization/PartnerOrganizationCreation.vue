@@ -21,6 +21,7 @@
     addDataInclusionV1PartnerOrganizationSchema,
     limitPOAddress,
     limitPOName,
+    limitPOWebsite,
     limitPOWorkingHours
   } from '~/server/schema'
 
@@ -85,6 +86,7 @@
       city: structure.city,
       email: structure.email,
       phone1: structure.phone,
+      website: structure.website?.substring(0, limitPOWebsite),
       workingHours: structure.workingHours?.substring(0, limitPOWorkingHours)
     })
   }
