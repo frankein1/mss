@@ -12,8 +12,7 @@ import {
   BeneficiaryRepo,
   HelpRequestRepo,
   NotificationRepo,
-  SocialSupportRepo,
-  UserRepo
+  SocialSupportRepo
 } from '~/server/database'
 import dayjs from 'dayjs'
 import { faker } from '@faker-js/faker'
@@ -29,6 +28,7 @@ import * as socialSupportNotifications from './create-social-support-notificatio
 
 const ID_AUDREY_HORN = faker.string.uuid()
 const ID_SECOND_REFERENT = faker.string.uuid()
+const ID_INACTIVE_SOCIAL_WORKER = faker.string.uuid()
 const beneficiary = {
   id: ID_AUDREY_HORN,
   usualName: 'HORN',
@@ -44,7 +44,7 @@ beforeEach(async () => await createBeneficiaryWithHelpRequests())
 afterEach(async () => await deleteBeneficiary())
 
 describe('Notification - Due Social Support (referent filtering)', () => {
-  it('should notify creator and non-excluded referents (SocialWorker, StructureManager)', async () => {
+  it('should notify creator and non-excluded referents (SocialWorker, StructureManager, Referent)', async () => {
     await socialSupportNotifications.default.createDueInAMonthSocialSupportNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -54,8 +54,8 @@ describe('Notification - Due Social Support (referent filtering)', () => {
       }
     })
 
-    // Creator (Referent role) + SocialWorker + StructureManager
-    expect(notifs.length).toBe(3)
+    // Creator (Referent role) + SocialWorker + StructureManager + Second Referent
+    expect(notifs.length).toBe(4)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -72,9 +72,10 @@ describe('Notification - Due Social Support (referent filtering)', () => {
           n.recipientId === fixturesUsers[FixtureUserRole.StructureManager].id
       )
     ).toBe(true)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
   })
 
-  it('should not notify ReceptionAgent, Instructor, nor Referent who is not the creator', async () => {
+  it('should not notify ReceptionAgent nor Instructor', async () => {
     await socialSupportNotifications.default.createDueInAMonthSocialSupportNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -94,12 +95,12 @@ describe('Notification - Due Social Support (referent filtering)', () => {
         n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
       )
     ).toBe(false)
-    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(false)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
   })
 })
 
 describe('Notification - Due Social Support today (referent filtering)', () => {
-  it('should notify creator and non-excluded referents (SocialWorker, StructureManager)', async () => {
+  it('should notify creator and non-excluded referents (SocialWorker, StructureManager, Referent)', async () => {
     await socialSupportNotifications.default.createDueTodaySocialSupportNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -109,8 +110,8 @@ describe('Notification - Due Social Support today (referent filtering)', () => {
       }
     })
 
-    // Creator (Referent role) + SocialWorker + StructureManager
-    expect(notifs.length).toBe(3)
+    // Creator (Referent role) + SocialWorker + StructureManager + Second Referent
+    expect(notifs.length).toBe(4)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -127,9 +128,10 @@ describe('Notification - Due Social Support today (referent filtering)', () => {
           n.recipientId === fixturesUsers[FixtureUserRole.StructureManager].id
       )
     ).toBe(true)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
   })
 
-  it('should not notify ReceptionAgent, Instructor, nor Referent who is not the creator', async () => {
+  it('should not notify ReceptionAgent nor Instructor', async () => {
     await socialSupportNotifications.default.createDueTodaySocialSupportNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -149,7 +151,6 @@ describe('Notification - Due Social Support today (referent filtering)', () => {
         n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
       )
     ).toBe(false)
-    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(false)
   })
 })
 
@@ -164,7 +165,7 @@ describe('Notification - Social Support with handling date', () => {
       }
     })
 
-    expect(notifs.length).toBe(3)
+    expect(notifs.length).toBe(4)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -181,6 +182,7 @@ describe('Notification - Social Support with handling date', () => {
           n.recipientId === fixturesUsers[FixtureUserRole.StructureManager].id
       )
     ).toBe(true)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
   })
 
   it('should notify Referent, SocialWorker and StructureManager for handling date in a month', async () => {
@@ -193,7 +195,7 @@ describe('Notification - Social Support with handling date', () => {
       }
     })
 
-    expect(notifs.length).toBe(3)
+    expect(notifs.length).toBe(4)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -210,20 +212,49 @@ describe('Notification - Social Support with handling date', () => {
           n.recipientId === fixturesUsers[FixtureUserRole.StructureManager].id
       )
     ).toBe(true)
+    expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
+  })
+})
+
+describe('Notification - should not notify inactive referents', () => {
+  it('should not notify an inactive SocialWorker referent', async () => {
+    await socialSupportNotifications.default.createDueInAMonthSocialSupportNotifications()
+
+    const notifs = await NotificationRepo.prisma.findMany({
+      where: {
+        type: NotificationType.DueDateOneMonth,
+        beneficiaryId: ID_AUDREY_HORN
+      }
+    })
+
+    expect(notifs.some(n => n.recipientId === ID_INACTIVE_SOCIAL_WORKER)).toBe(
+      false
+    )
   })
 })
 
 const createBeneficiaryWithHelpRequests = async () => {
-  await UserRepo.prisma.create({
-    data: {
-      id: ID_SECOND_REFERENT,
-      firstName: 'Second',
-      lastName: 'Référent',
-      email: 'second.referent.test@yopmail.com',
-      role: 'Referent',
-      status: 'Active',
-      structureId: fixtureStructures[FixtureStructure.Test].id
-    }
+  await prismaClient.user.createMany({
+    data: [
+      {
+        id: ID_SECOND_REFERENT,
+        firstName: 'Second',
+        lastName: 'Référent',
+        email: 'second.referent.test@yopmail.com',
+        role: 'Referent',
+        status: 'Active',
+        structureId: fixtureStructures[FixtureStructure.Test].id
+      },
+      {
+        id: ID_INACTIVE_SOCIAL_WORKER,
+        firstName: 'Inactive',
+        lastName: 'SocialWorker',
+        email: 'inactive.socialworker.test@yopmail.com',
+        role: 'SocialWorker',
+        status: 'Disabled',
+        structureId: fixtureStructures[FixtureStructure.Test].id
+      }
+    ]
   })
 
   const ff = await FamilyFileRepo.prisma.create({
@@ -237,7 +268,8 @@ const createBeneficiaryWithHelpRequests = async () => {
           { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
           { id: fixturesUsers[FixtureUserRole.Instructor].id },
           { id: fixturesUsers[FixtureUserRole.Referent].id },
-          { id: ID_SECOND_REFERENT }
+          { id: ID_SECOND_REFERENT },
+          { id: ID_INACTIVE_SOCIAL_WORKER }
         ]
       }
     }
@@ -319,7 +351,7 @@ const deleteBeneficiary = async () => {
   await FamilyFileRepo.prisma.delete({
     where: { id: ID_AUDREY_HORN }
   })
-  await prismaClient.user.delete({
-    where: { id: ID_SECOND_REFERENT }
+  await prismaClient.user.deleteMany({
+    where: { id: { in: [ID_SECOND_REFERENT, ID_INACTIVE_SOCIAL_WORKER] } }
   })
 }
