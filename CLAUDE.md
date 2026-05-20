@@ -76,3 +76,4 @@
 - Security: Access control at all layers, input validation
 - Testing: Critical paths covered
 - Accessibility
+- Comments in code in English and not in French
