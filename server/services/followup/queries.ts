@@ -117,13 +117,13 @@ export async function getPage(
     skip: args.skip,
     orderBy: args.orderBy
   })
+  const appPermissions = getAppContextPermissions(ctx)
   return followups.map(followup => {
     const permissions = getFollowupPermissions({
       ctx,
       familyFile: followup.socialSupport.familyFile,
       socialSupport: followup.socialSupport
     })
-    const appPermissions = getAppContextPermissions(ctx)
     return {
       followup: filter(appPermissions, permissions, followup),
       permissions

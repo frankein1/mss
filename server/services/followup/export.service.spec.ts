@@ -4,12 +4,39 @@
  */
 import { describe, expect, beforeAll } from 'vitest'
 import { createSecurityContext, test } from '~/test/server/test-utils'
-import { exportFollowups } from './export.service'
+import { exportFollowups, exportWorkbook } from './export.service'
 import type { ExportFollowupsInput } from '~/server/schema'
 import { rowsToCsv } from '~/utils/export/createExport'
 import { prismaClient } from '~/server/prisma'
 import { FollowupPeriodFilter } from '~/types/followup'
 import { parseCsvReference } from '~/test/server/helper'
+import type { Workbook } from 'exceljs'
+
+function getWorksheetRows(workbook: Workbook) {
+  const worksheet = workbook.getWorksheet('Entretiens')!
+  const rows: Record<string, unknown>[] = []
+  const headers: string[] = []
+
+  worksheet.getRow(1).eachCell((cell, colNumber) => {
+    headers[colNumber] = String(cell.value)
+  })
+
+  worksheet.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      return
+    }
+    const rowData: Record<string, unknown> = {}
+    row.eachCell((cell, colNumber) => {
+      const header = headers[colNumber]
+      if (header) {
+        rowData[header] = cell.value
+      }
+    })
+    rows.push(rowData)
+  })
+
+  return { rows, headers }
+}
 
 let fixtureDate: Date
 beforeAll(async () => {
@@ -24,7 +51,7 @@ beforeAll(async () => {
 
 const orderBy = { socialSupport: { date: 'desc' } } as const
 
-describe.skip('Followup - Export Service', () => {
+describe.skip('Followup - Export Service (legacy)', () => {
   test('should export all followups with no regression in content', async ({
     users
   }) => {
@@ -126,6 +153,61 @@ describe.skip('Followup - Export Service', () => {
     const input: ExportFollowupsInput = { code: '', filters: {}, orderBy }
 
     const { rows } = await exportFollowups({ ctx, input })
+
+    expect(rows).toHaveLength(0)
+  })
+})
+
+describe('Followup - Export Workbook (chunked)', () => {
+  test('should export all followups as a workbook with correct row count', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.structureManager)
+    const input: ExportFollowupsInput = { code: '', filters: {}, orderBy }
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const { rows, headers } = getWorksheetRows(workbook)
+
+    expect(rows.length).toBe(6)
+    expect(headers.length).toBeGreaterThan(0)
+  })
+
+  test('should produce a workbook with an empty worksheet when filters match nothing', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.structureManager)
+    const input: ExportFollowupsInput = {
+      code: '',
+      filters: { status: 'Adjourned' },
+      orderBy: {}
+    }
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const { rows } = getWorksheetRows(workbook)
+
+    expect(rows).toHaveLength(0)
+  })
+
+  test('should only include followups visible to a referent (assigned family files)', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.referent)
+    const input: ExportFollowupsInput = { code: '', filters: {}, orderBy }
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const { rows } = getWorksheetRows(workbook)
+
+    expect(rows.length).toBe(2)
+  })
+
+  test('should return no rows when exporting from another structure', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.structureManagerMinistere)
+    const input: ExportFollowupsInput = { code: '', filters: {}, orderBy }
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const { rows } = getWorksheetRows(workbook)
 
     expect(rows).toHaveLength(0)
   })

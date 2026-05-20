@@ -56,6 +56,65 @@ const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
   'externalStructureName'
 ]
 
+type FollowupPageItem = Awaited<ReturnType<typeof getPage>>[number]
+
+function toExportRow(followup: FollowupPageItem['followup']): RowType {
+  const redirections = followup.socialSupportRedirections || []
+  return {
+    date: followup.date || '',
+    firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
+    status: socialSupportStatusKeys.value(followup.status) || '',
+    subjects: followup.subjects.map(({ name }) => name).join(', '),
+    beneficiaryFileNumber: followup.beneficiary.fileNumber || '',
+    beneficiaryLastName: nameOrEmpty(
+      followup.beneficiary.usualName?.toLocaleUpperCase() ||
+        (followup.beneficiary.birthName
+          ? `(${followup.beneficiary.birthName?.toLocaleUpperCase()})`
+          : '')
+    ),
+    beneficiaryFirstName: nameOrEmpty(followup.beneficiary.firstName),
+    medium: followupMediumKeys.value(followup.medium) || '',
+    classified: getBooleanOrEmpty(followup.classified),
+    documents:
+      followup.documents?.map(document => document.name).join(', ') || '',
+    dueDate: followup.dueDate || '',
+    forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
+    helpRequested: getBooleanOrEmpty(followup.helpRequested),
+    minister: followup.minister ? formatMinisterName(followup.minister) : '',
+    numeroPegase: followup.numeroPegase || '',
+    place: followup.place || '',
+    prescribingOrganizationId: followup.prescribingOrganization?.name || '',
+    synthesis: followup.synthesis || '',
+    thirdPersonName: followup.thirdPersonName || '',
+    updated: followup.updated || '',
+    createdById: followup.createdBy
+      ? formatUserDisplayName(followup.createdBy)
+      : '',
+    duration: followupDurationKeys.value(followup.duration) || '',
+    type: redirections
+      .map(r => socialSupportRedirectionTypeKeys.value(r.type))
+      .filter((type): type is string => type != null)
+      .join(', '),
+    motif: redirections
+      .map(r => r.motif)
+      .filter((motif): motif is string => motif != null)
+      .join(', '),
+    partnerOrganizationId: redirections
+      .map(r => r.partnerOrganization.name)
+      .filter((name): name is string => name != null)
+      .join(', '),
+    partnerOrganizationContactId: redirections
+      .map(r => r.partnerOrganizationContact.name)
+      .filter((name): name is string => name != null)
+      .join(', '),
+    externalStructureName: redirections
+      .map(r => r.externalStructureName)
+      .filter((name): name is string => name != null)
+      .join(', ')
+  }
+}
+
+// FIXME: remove this as well as linked tests
 export async function exportFollowups({
   ctx,
   input
@@ -82,63 +141,7 @@ export async function exportFollowups({
   const rows = dataRequest.reduce(
     (followups: RowType[], { permissions, followup }) => {
       if (permissions.view) {
-        const redirections = followup.socialSupportRedirections || []
-        followups.push({
-          date: followup.date || '',
-          firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
-          status: socialSupportStatusKeys.value(followup.status) || '',
-          subjects: followup.subjects.map(({ name }) => name).join(', '),
-          beneficiaryFileNumber: followup.beneficiary.fileNumber || '',
-          beneficiaryLastName: nameOrEmpty(
-            followup.beneficiary.usualName?.toLocaleUpperCase() ||
-              (followup.beneficiary.birthName
-                ? `(${followup.beneficiary.birthName?.toLocaleUpperCase()})`
-                : '')
-          ),
-          beneficiaryFirstName: nameOrEmpty(followup.beneficiary.firstName),
-          medium: followupMediumKeys.value(followup.medium) || '',
-          classified: getBooleanOrEmpty(followup.classified),
-          documents:
-            followup.documents?.map(document => document.name).join(', ') || '',
-          dueDate: followup.dueDate || '',
-          forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
-          helpRequested: getBooleanOrEmpty(followup.helpRequested),
-          minister: followup.minister
-            ? formatMinisterName(followup.minister)
-            : '',
-          numeroPegase: followup.numeroPegase || '',
-          place: followup.place || '',
-          prescribingOrganizationId:
-            followup.prescribingOrganization?.name || '',
-          synthesis: followup.synthesis || '',
-          thirdPersonName: followup.thirdPersonName || '',
-          // Technically it should be converted into timezone of the user
-          updated: followup.updated || '',
-          createdById: followup.createdBy
-            ? formatUserDisplayName(followup.createdBy)
-            : '',
-          duration: followupDurationKeys.value(followup.duration) || '',
-          type: redirections
-            .map(r => socialSupportRedirectionTypeKeys.value(r.type))
-            .filter((type): type is string => type != null)
-            .join(', '),
-          motif: redirections
-            .map(r => r.motif)
-            .filter((motif): motif is string => motif != null)
-            .join(', '),
-          partnerOrganizationId: redirections
-            .map(r => r.partnerOrganization.name)
-            .filter((name): name is string => name != null)
-            .join(', '),
-          partnerOrganizationContactId: redirections
-            .map(r => r.partnerOrganizationContact.name)
-            .filter((name): name is string => name != null)
-            .join(', '),
-          externalStructureName: redirections
-            .map(r => r.externalStructureName)
-            .filter((name): name is string => name != null)
-            .join(', ')
-        })
+        followups.push(toExportRow(followup))
       }
       return followups
     },
@@ -147,6 +150,8 @@ export async function exportFollowups({
   return { rows, columns }
 }
 
+const EXPORT_CHUNK_SIZE = 1000
+
 export async function exportWorkbook({
   ctx,
   input
@@ -154,13 +159,48 @@ export async function exportWorkbook({
   ctx: SecurityRuleContext
   input: ExportFollowupsInput
 }) {
-  const { rows, columns } = await exportFollowups({ ctx, input })
+  const allColumns = [
+    ...FOLLOWUP_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: exportLabels[key]
+    })),
+    ...REDIRECTION_EXPORTED_FIELDS.map(key => ({
+      key,
+      header: redirectionExportLabels[key]
+    }))
+  ]
+
+  const where = prepareFilters(input.filters)
+  const orderBy = prepareSort(input.orderBy)
+
+  const rows: RowType[] = []
+  let skip = 0
+
+  while (true) {
+    const chunk = await getPage(ctx, {
+      where,
+      orderBy,
+      take: EXPORT_CHUNK_SIZE,
+      skip
+    })
+
+    for (const { permissions, followup } of chunk) {
+      if (permissions.view) {
+        rows.push(toExportRow(followup))
+      }
+    }
+
+    if (chunk.length < EXPORT_CHUNK_SIZE) {
+      break
+    }
+    skip += EXPORT_CHUNK_SIZE
+  }
 
   const { Workbook: WorkbookConstructor } = ExcelPkg
   const workbook = new WorkbookConstructor()
   const worksheet = workbook.addWorksheet('Entretiens')
 
-  const fullColumns = columns.filter(column => {
+  const fullColumns = allColumns.filter(column => {
     return rows.some(
       row =>
         column.key &&
