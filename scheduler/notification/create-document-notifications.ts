@@ -1,9 +1,16 @@
-import type { Prisma } from '@prisma/client'
+import { UserStatus, type Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { prismaClient } from '~/server/prisma'
 import { withErrorCapture } from '../utils'
 import { getDocumentNotificationRecipientIds } from './getNotificationRecipientIds'
 
+// Recipients for document expiration notifications:
+// - Confidential document: only the document creator
+// - Non-confidential document:
+//   - The document creator, regardless of their role
+//   - Active family file referents with an allowed role:
+//     StructureManager, SocialWorker, Referent
+//   - Excluded: ReceptionAgent, Instructor, disabled users
 const documentSelect = {
   key: true,
   name: true,
@@ -13,6 +20,7 @@ const documentSelect = {
   familyFile: {
     select: {
       referents: {
+        where: { status: UserStatus.Active },
         select: {
           id: true,
           role: true
