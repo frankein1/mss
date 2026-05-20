@@ -1,5 +1,5 @@
 import { Cron } from 'croner'
-import { initSentry, terminateSentry } from './utils'
+import { initSentry } from './utils'
 import anonymizeExternalAttendees from './workshop/anonymize-external-attendees'
 import exportAnonymizedDatabase from './db-anonymizer'
 import cleanupUserActivities from './user-activity/cleanup-user-activities'
@@ -12,6 +12,14 @@ import documentNotifications from './notification/create-document-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 
+/**
+ * WARNING!
+ * Crons that do exact date matching against @db.Date columns must run
+ * **after 2 AM Paris**.
+ *
+ * Otherwise, in summer time (CEST), the UTC date is still the previous
+ * day
+ */
 const timezone = 'Europe/Paris'
 
 function startScheduler() {
@@ -46,9 +54,15 @@ function startScheduler() {
     { timezone, name: 'anonymizer' }
   )
 
-  const at1am = '0 1 * * *'
+  const at30past2am = '30 2 * * *'
+  new Cron(at30past2am, disableInactiveStructures, {
+    timezone,
+    name: 'disableInactiveStructures'
+  })
+
+  const at3am = '0 3 * * *'
   new Cron(
-    at1am,
+    at3am,
     async () => {
       await socialSupportNotifications.createDueInAMonthSocialSupportNotifications()
       await socialSupportNotifications.createDueTodaySocialSupportNotifications()
@@ -64,20 +78,14 @@ function startScheduler() {
     { timezone, name: 'notificationCreator' }
   )
 
-  const at30past2am = '30 2 * * *'
-  new Cron(at30past2am, disableInactiveStructures, {
-    timezone,
-    name: 'disableInactiveStructures'
-  })
-
   const at5am = '0 5 * * *'
   new Cron(at5am, exportAnonymizedDatabase, {
     timezone,
     name: 'metabaseAnonymization'
   })
 
-  const everySundayAt3am = '0 3 * * 0'
-  new Cron(everySundayAt3am, importDataInclusionStructures, {
+  const everySundayAt6am = '0 6 * * 0'
+  new Cron(everySundayAt6am, importDataInclusionStructures, {
     timezone,
     name: 'dataInclusionStructureImport'
   })
