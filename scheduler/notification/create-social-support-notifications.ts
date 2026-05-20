@@ -1,5 +1,5 @@
 import type { SocialSupport, UserRole } from '@prisma/client'
-import { NotificationType } from '@prisma/client'
+import { NotificationType, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
   HelpRequestRepo,
@@ -16,6 +16,11 @@ function hasDefinedCreatedBy<
   return item.socialSupport.createdById !== null
 }
 
+// Recipients for social support notifications (DueDate, EndOfSupport):
+// - The social support creator, regardless of their role
+// - Active family file referents with an allowed role:
+//   StructureManager, SocialWorker, Referent
+// - Excluded: ReceptionAgent, Instructor, disabled users
 const socialSupportSelect = {
   id: true,
   createdById: true,
@@ -23,6 +28,7 @@ const socialSupportSelect = {
   familyFile: {
     select: {
       referents: {
+        where: { status: UserStatus.Active },
         select: {
           id: true,
           role: true

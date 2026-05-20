@@ -4,7 +4,8 @@ type UserPayload = { id: string; role: UserRole }
 
 const ALLOWED_ROLES: ReadonlySet<UserRole> = new Set([
   UserRole.StructureManager,
-  UserRole.SocialWorker
+  UserRole.SocialWorker,
+  UserRole.Referent
 ])
 
 function getEligibleReferentIds(referents: UserPayload[]): Set<string> {
