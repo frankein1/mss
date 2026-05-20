@@ -107,7 +107,13 @@
     pending,
     error
   } = await trpcClient.beneficiary.getBeneficiaryList.useQuery(queryInput)
-  totalBeneficiaries.value = pageData.value?.count || 0
+  watch(
+    () => pageData.value?.count,
+    count => {
+      totalBeneficiaries.value = count || 0
+    },
+    { immediate: true }
+  )
 
   const items = computed(
     () => (pageData.value?.items as Array<BeneficiaryListItem>) || []
