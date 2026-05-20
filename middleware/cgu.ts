@@ -1,11 +1,13 @@
 import { routes } from '~/utils/routes'
+import { isDefaultRedirect } from '~/utils/isDefaultRedirect'
 
 export default defineNuxtRouteMiddleware(to => {
   const authState = useAuthState()
   if (!authState.isAuthenticated()) {
+    const redirectUrl = isDefaultRedirect(to.fullPath) ? undefined : to.fullPath
     return navigateTo({
       path: routes.auth.AuthLogin.path(),
-      query: { redirectUrl: to.fullPath }
+      query: { redirectUrl }
     })
   }
   const {
