@@ -198,6 +198,51 @@ export function filterSocialSupport<T extends SS>({
   }
 }
 
+export function filterSocialSupportForExport<
+  T extends Partial<SocialSupport> & {
+    subjects: Partial<SocialSupportSubject>[]
+  } & {
+    familyFile: Partial<FamilyFile> & { referents: Partial<User>[] }
+  } & {
+    beneficiary: Partial<Beneficiary>
+  } & {
+    socialSupportRedirections: Partial<SocialSupportRedirection>[]
+  }
+>({
+  socialSupport,
+  conditions
+}: {
+  socialSupport: T
+  conditions: {
+    details: boolean
+    minister: boolean
+    dueDate: boolean
+  }
+}) {
+  return {
+    id: socialSupport.id,
+    updated: socialSupport.updated,
+    status: socialSupport.status,
+    date: socialSupport.date,
+    subjects: socialSupport.subjects,
+    synthesis: show(socialSupport.synthesis, conditions.details),
+    ministerId: show(socialSupport.ministerId, conditions.minister),
+    numeroPegase: show(socialSupport.numeroPegase, conditions.minister),
+    dueDate: show(socialSupport.dueDate, conditions.details),
+    createdById: socialSupport.createdById,
+    familyFile: {
+      id: socialSupport.familyFile.id,
+      referents:
+        socialSupport.familyFile.referents?.map(r => ({ id: r.id })) || []
+    },
+    beneficiary: socialSupport.beneficiary,
+    socialSupportRedirections: show(
+      socialSupport.socialSupportRedirections || [],
+      conditions.details
+    )
+  }
+}
+
 export function filterFollowup({
   followup,
   conditions
@@ -226,6 +271,36 @@ export function filterFollowup({
     ),
     prescribingOrganizationContact: show(
       followup.prescribingOrganizationContact,
+      conditions.details
+    ),
+    firstFollowup: show(followup.firstFollowup, conditions.details),
+    helpRequested: show(followup.helpRequested, conditions.details),
+    thirdPersonName: show(followup.thirdPersonName, conditions.details),
+    place: show(followup.place, conditions.details),
+    duration: show(followup.duration, conditions.details)
+  }
+}
+export function filterFollowupForExport<T extends Partial<Followup>>({
+  followup,
+  conditions
+}: {
+  followup: T
+  conditions: {
+    details: boolean
+    minister: boolean
+  }
+}) {
+  return {
+    id: followup.id,
+    medium: followup.medium,
+    classified: show(followup.classified, conditions.minister),
+    forwardedToJustice: show(followup.forwardedToJustice, conditions.minister),
+    prescribingOrganizationId: show(
+      followup.prescribingOrganizationId,
+      conditions.details
+    ),
+    prescribingOrganizationContactId: show(
+      followup.prescribingOrganizationContactId,
       conditions.details
     ),
     firstFollowup: show(followup.firstFollowup, conditions.details),
