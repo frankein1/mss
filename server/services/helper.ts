@@ -216,7 +216,6 @@ export function filterSocialSupportForExport<
   conditions: {
     details: boolean
     minister: boolean
-    dueDate: boolean
   }
 }) {
   return {

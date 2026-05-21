@@ -9,7 +9,7 @@ const followupExportSelect = {
   classified: true,
   forwardedToJustice: true,
   helpRequested: true,
-  // thirdPersonName: true,
+  thirdPersonName: true,
   place: true,
   duration: true,
   prescribingOrganizationId: true,
@@ -21,8 +21,8 @@ const followupExportSelect = {
       status: true,
       date: true,
       ministerId: true,
-      // numeroPegase: true,
-      // synthesis: true,
+      numeroPegase: true,
+      synthesis: true,
       dueDate: true,
       createdById: true,
       subjects: {
@@ -39,17 +39,17 @@ const followupExportSelect = {
       },
       beneficiary: {
         select: {
-          id: true
-          // fileNumber: true,
-          // usualName: true,
-          // firstName: true,
-          // birthName: true
+          id: true,
+          fileNumber: true,
+          usualName: true,
+          firstName: true,
+          birthName: true
         }
       },
       documents: {
         select: {
-          key: true
-          // name: true
+          key: true,
+          name: true
         }
       },
       socialSupportRedirections: {
