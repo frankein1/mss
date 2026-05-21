@@ -78,7 +78,10 @@
     >
       <li
         v-for="({ value: optionValue, label: optionLabel }, index) in options"
-        :ref="el => setOptionRef(el, optionValue)"
+        :ref="
+          (el: Element | globalThis.ComponentPublicInstance | null) =>
+            setOptionRef(el, optionValue)
+        "
         :key="optionValue"
         role="option"
         :aria-selected="selectedValues.includes(optionValue)"
