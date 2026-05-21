@@ -1,0 +1,19 @@
+overrides:
+  ws: '^8.18.3'
+  flatted: '^3.4.2'
+  rollup: '^4.59.0'
+
+engineStrict: true
+#  Only packages released at least 15 days ago can be installed
+minimumReleaseAge: 21600
+# Install fails if a package's trust level has decreased compared to previous releases
+trustPolicy: no-downgrade
+# To preserve older versions, after 6 months of package age the trust policy is removed
+trustPolicyIgnoreAfter: 432000
+allowBuilds:
+  '@parcel/watcher': false
+  '@prisma/client': false
+  '@prisma/engines': false
+  esbuild: false
+  prisma: false
+  unrs-resolver: false
