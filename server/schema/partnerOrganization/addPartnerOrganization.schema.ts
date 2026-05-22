@@ -27,8 +27,11 @@ export const limitPOAddress = 100
 export const limitPOWebsite = 500
 export const limitPOWorkingHours = 1200
 
+const MISSING_HIDDEN_DATA_SOURCE =
+  'Erreur interne, merci de contacter le support'
+
 export const addCustomPartnerOrganizationSchema = z.object({
-  dataSource: z.literal('Custom'),
+  dataSource: z.literal('Custom', { message: MISSING_HIDDEN_DATA_SOURCE }),
   name: requiredLimitedStringConstraint(limitPOName),
   siret: siretConstraint,
   address: limitedStringConstraint(null, limitPOAddress).nullish(),
@@ -44,7 +47,9 @@ export const addCustomPartnerOrganizationSchema = z.object({
 
 export const addDataInclusionV1PartnerOrganizationSchema =
   addCustomPartnerOrganizationSchema.extend({
-    dataSource: z.literal('DataInclusionV1'),
+    dataSource: z.literal('DataInclusionV1', {
+      message: MISSING_HIDDEN_DATA_SOURCE
+    }),
     dataInclusionIdV1: requiredStringConstraint,
     siret: siretConstraint.nullish(),
     phone1: limitedStringConstraint(null, 20).nullish(),
