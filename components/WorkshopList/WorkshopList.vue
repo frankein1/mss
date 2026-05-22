@@ -167,6 +167,7 @@
   }
 
   // Export workshop list
+  const modal = useModal()
   const exportWorkshopList = async (code: string) => {
     isDownloading.value = true
 
@@ -185,7 +186,7 @@
       downloadLink.remove()
       matomo.trackEvent(EventCategory.Workshop, WorkshopAction.ExportWorkshops)
 
-      useModal().close()
+      modal.close()
     } catch (err: unknown) {
       if (isTRPCClientError(err)) {
         const msg =

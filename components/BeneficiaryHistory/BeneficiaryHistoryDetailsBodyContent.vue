@@ -216,8 +216,9 @@
 
   const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 
+  const modal = useModal()
   function onDelete() {
-    useModal().open(BeneficiaryHistoryDeleteForm, {
+    modal.open(BeneficiaryHistoryDeleteForm, {
       title: isFollowup.value
         ? "Supprimer la synthèse d'entretien"
         : "Supprimer l'instruction de dossier",
