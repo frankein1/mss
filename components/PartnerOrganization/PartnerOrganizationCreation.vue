@@ -44,7 +44,7 @@
   const { handleSubmit, setValues, resetForm } =
     useForm<AddPartnerOrganizationInput>({
       validationSchema: schema,
-      initialValues: {}
+      initialValues: { dataSource: currentDataSource.value }
     })
 
   const { caughtErrors, onSubmit } = useCatchFormErrors(
