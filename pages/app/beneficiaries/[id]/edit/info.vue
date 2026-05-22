@@ -115,6 +115,7 @@
     return ''
   })
 
+  const modal = useModal()
   const onSaveBeneficiary = (
     beneficiary: UpdateBeneficiaryGeneralInformationInput,
     target: string | undefined
@@ -123,7 +124,7 @@
       similarBeneficiary.value &&
       beneficiaryIdentification.value?.id !== similarBeneficiary.value.id
     ) {
-      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () => {
+      useBeneficiaryFormSimilarModal(modal, similarBeneficiary.value, () => {
         saveBeneficiary(beneficiary, target)
       })
       return

@@ -19,7 +19,7 @@
         label="Annuler"
         type="button"
         secondary
-        @click="useModal().close()"
+        @click="modal.close()"
       ></DsfrButton>
     </li>
 
@@ -34,4 +34,5 @@
 
 <script setup lang="ts">
   defineProps<{ options: { value: string; label: string }[] }>()
+  const modal = useModal()
 </script>

@@ -271,8 +271,9 @@
     navigateTo(budgetTabRoute)
   }
 
+  const modal = useModal()
   function onDelete() {
-    useModal().open(BudgetDeleteConfirmation, {
+    modal.open(BudgetDeleteConfirmation, {
       title: `Supprimer les revenus ${subtitle.value}`,
       deleteItem: async () => {
         await useTrpcMutation({
@@ -281,7 +282,7 @@
               id: income.value?.id || ''
             }),
           onSuccess: () => {
-            useModal().close()
+            modal.close()
             navigateTo(budgetTabRoute)
             snackbar.success('Les revenus mensuels ont été supprimés.')
           },

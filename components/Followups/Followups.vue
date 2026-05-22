@@ -107,6 +107,7 @@
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
+  const modal = useModal()
   async function exportFollowups(code: string) {
     isDownloading.value = true
     useMatomo().trackEvent(
@@ -129,7 +130,7 @@
       downloadLink.click()
       downloadLink.remove()
 
-      useModal().close()
+      modal.close()
     } catch (err: unknown) {
       if (isTRPCClientError(err)) {
         const msg =
