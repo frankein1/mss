@@ -5,7 +5,7 @@ export function useLeaveFormConfirmation(options?: {
   isFormDirty?: Ref<boolean>
 }) {
   const isNavigatingWithFormActions = ref(false)
-
+  const modal = useModal()
   onBeforeRouteLeave((_, __, next) => {
     if (
       isNavigatingWithFormActions.value ||
@@ -14,7 +14,7 @@ export function useLeaveFormConfirmation(options?: {
       return next()
     }
 
-    useModal().open(LeaveFormModal, {
+    modal.open(LeaveFormModal, {
       title: 'Attention les informations seront perdues',
       triggerOpen: true,
       cancel: () => next(false),

@@ -111,6 +111,7 @@
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
+  const modal = useModal()
   async function exportFileInstructions(code: string) {
     isDownloading.value = true
     useMatomo().trackEvent(
@@ -133,7 +134,7 @@
       downloadLink.download = getExportFilename('instructions_dossier')
       downloadLink.click()
       downloadLink.remove()
-      useModal().close()
+      modal.close()
     } catch (err: unknown) {
       if (isTRPCClientError(err)) {
         const msg =
