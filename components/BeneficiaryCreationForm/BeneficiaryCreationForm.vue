@@ -217,12 +217,13 @@
     isFormDirty
   })
 
+  const modal = useModal()
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
       isNavigatingWithFormActions.value = true
       if (similarBeneficiary.value) {
-        useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
+        useBeneficiaryFormSimilarModal(modal, similarBeneficiary.value, () =>
           emit('saveBeneficiary', values, complete.value)
         )
         return

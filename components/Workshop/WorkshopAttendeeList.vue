@@ -253,7 +253,7 @@
         WorkshopAction.DownloadPresenceList
       )
 
-      useModal().close()
+      modal.close()
     } catch (err: unknown) {
       if (isTRPCClientError(err)) {
         const msg =

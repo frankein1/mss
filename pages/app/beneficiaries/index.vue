@@ -160,7 +160,7 @@
       downloadLink.click()
       downloadLink.remove()
 
-      useModal().close()
+      modal.close()
     } catch (err: unknown) {
       if (isTRPCClientError(err)) {
         const msg =
