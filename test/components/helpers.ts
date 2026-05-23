@@ -5,6 +5,9 @@ import { flushPromises } from '@vue/test-utils'
 export function createFakeTrpcClient() {
   return {
     partner: {
+      getOne: {
+        query: vi.fn()
+      },
       findBySiret: {
         query: vi.fn().mockResolvedValue(null)
       }
@@ -14,6 +17,30 @@ export function createFakeTrpcClient() {
         query: vi.fn().mockResolvedValue({ results: [] })
       }
     }
+  }
+}
+
+export function createFakePartner(
+  overrides?: Record<string, unknown>
+): Record<string, unknown> {
+  return {
+    id: '00000000-0000-0000-0000-000000000001',
+    name: 'Organisme Test',
+    siret: '12345678901234',
+    address: '1 rue de la Paix',
+    city: 'Paris',
+    zipcode: '75001',
+    phone1: '0100000001',
+    phone2: null,
+    email: 'contact@organisme.fr',
+    website: 'https://organisme.fr',
+    workingHours: 'Lundi-Vendredi 9h-17h',
+    inactive: false,
+    dataSource: 'Custom',
+    dataInclusionIdV1: null,
+    dataInclusionStructureV1: null,
+    contacts: [],
+    ...overrides
   }
 }
 
