@@ -4,7 +4,7 @@ export type FocusHTMLTag = keyof HTMLElementTagNameMap
 
 export function setFocusAfterClose(
   selector: HTMLElement | string = 'form',
-  tag: FocusHTMLTag = 'input'
+  tag: keyof HTMLElementTagNameMap | (string & {}) = 'input'
 ) {
   const el =
     typeof selector === 'string' ? document.querySelector(selector) : selector
@@ -12,10 +12,9 @@ export function setFocusAfterClose(
     return () => {}
   }
 
-  const tofocus = el.querySelector(tag)
+  const tofocus = el.querySelector<HTMLElement>(tag)
 
   return () => {
-    console.debug(tofocus)
     tofocus?.focus()
   }
 }
