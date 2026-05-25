@@ -122,7 +122,7 @@ export default defineNuxtConfig({
         'zod',
         'vue-scrollto',
         'node-fetch-native',
-        'uuid',
+        '@vueuse/core',
         '@trpc/client',
         '@gouvminint/vue-dsfr',
         'html-to-image',
