@@ -75,7 +75,11 @@ export async function getPageDocuments({
         _count: {
           select: {
             notifications: {
-              where: { read: false, recipientId: user.id }
+              where: {
+                structureId: ctx.structure.id,
+                recipientId: ctx.user.id,
+                read: false
+              }
             }
           }
         }
