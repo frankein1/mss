@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.59.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.1...v1.59.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* **partenaire:** création de partenaires personnalisés ([7ed741d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7ed741da9b5064c9fb7fe87019dcad8af809fce8)), closes [#1108](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1108)
+* temporaire, modale doit être initialisée au setup ([b2f70c2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b2f70c2eb1766a1b1effa2ccdfe67cdda55bb2f4)), closes [#1109](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1109)
+
 ## [1.59.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.0...v1.59.1) (2026-05-20)
 
 ## [1.59.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.58.0...v1.59.0) (2026-05-20)
