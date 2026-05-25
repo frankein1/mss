@@ -20,7 +20,7 @@ export const fixturesUsers = [
     lastName: 'Instructeur',
     email: 'jeanne.instructeure@yopmail.com',
     role: 'Instructor',
-    status: 'Disabled',
+    status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
