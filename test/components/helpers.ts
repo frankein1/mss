@@ -8,8 +8,23 @@ export function createFakeTrpcClient() {
       getOne: {
         query: vi.fn()
       },
+      getAll: {
+        useQuery: vi.fn()
+      },
       findBySiret: {
         query: vi.fn().mockResolvedValue(null)
+      },
+      create: {
+        mutate: vi.fn().mockResolvedValue(undefined)
+      },
+      update: {
+        mutate: vi.fn().mockResolvedValue(undefined)
+      },
+      remove: {
+        mutate: vi.fn().mockResolvedValue(undefined)
+      },
+      makeActive: {
+        mutate: vi.fn().mockResolvedValue(undefined)
       }
     },
     dataInclusion: {
