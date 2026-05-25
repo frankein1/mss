@@ -19,7 +19,7 @@ import {
   filterFollowupForExport,
   filterSocialSupportForExport
 } from '../helper'
-import { findAllForExport, type ExportFollowupResult } from './export.query'
+import { findAllForExport, type ExportFollowupResult } from './export-db-query'
 import type { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
