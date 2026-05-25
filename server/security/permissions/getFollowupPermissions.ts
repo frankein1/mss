@@ -17,7 +17,6 @@ export type FollowupPermissions = {
   view: boolean
   get: {
     details: boolean
-    dueDate: boolean
     privateSynthesis: boolean
   }
   set: {
@@ -32,7 +31,6 @@ const FALSY_PERMISSIONS: FollowupPermissions = {
   view: false,
   get: {
     details: false,
-    dueDate: false,
     privateSynthesis: false
   },
   set: {
@@ -70,7 +68,6 @@ function getCreationPermissions(): FollowupPermissions {
     },
     get: {
       details: true,
-      dueDate: true,
       privateSynthesis: true
     },
     delete: false
@@ -116,7 +113,6 @@ function getEditionPermissions({
         (instructor && creator) ||
         isReferent ||
         (receptionAgent && creator),
-      dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },
     delete: manager || creator,

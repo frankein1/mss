@@ -101,12 +101,9 @@ export async function exportFollowups({
 
     const permissions = getFollowupPermissions({
       ctx,
-      familyFile: {
-        structureId: ctx.structure.id,
-        referents: socialSupport.familyFile.referents
-      },
+      familyFile: socialSupport.familyFile,
       socialSupport: {
-        structureId: ctx.structure.id,
+        structureId: socialSupport.structureId,
         createdById: socialSupport.createdById
       }
     })

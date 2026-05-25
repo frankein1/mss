@@ -154,7 +154,6 @@ export function filter(
   const { socialSupport } = followup
   const conditions = {
     details: permissions.get.details,
-    dueDate: permissions.get.dueDate,
     minister: appPermissions.module.ministere,
     ministerId: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis

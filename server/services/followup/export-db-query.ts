@@ -17,6 +17,7 @@ const followupExportSelect = {
   socialSupport: {
     select: {
       id: true,
+      structureId: true, // used for permission check
       updated: true,
       status: true,
       date: true,
@@ -34,6 +35,7 @@ const followupExportSelect = {
       familyFile: {
         select: {
           id: true,
+          structureId: true, // used for permission check
           referents: { select: { id: true } }
         }
       },
