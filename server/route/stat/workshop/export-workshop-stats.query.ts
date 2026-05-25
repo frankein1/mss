@@ -3,7 +3,10 @@ import {
   type SecurityRuleContext
 } from '~/server/security'
 import { createQuery } from '../../createRoute'
-import { statFilterSchema, type WorkshopStatFilterInput } from '~/server/schema'
+import {
+  workshopStatFilterSchema,
+  type WorkshopStatFilterInput
+} from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { getWorkshopGender } from './get-workshop-attendee-gender-stats.query'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
@@ -170,7 +173,7 @@ const handler = async ({
 }
 
 export const exportWorkshopStatsQuery = createQuery({
-  inputValidation: statFilterSchema,
+  inputValidation: workshopStatFilterSchema,
   securityCheck,
   handler
 })
