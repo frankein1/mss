@@ -62,10 +62,10 @@ const users = {
     status: fixturesUsers[FixtureUserRole.SocialWorker].status
   },
   instructor: {
-    id: fixturesUsers[FixtureUserRole.Instructor].id,
+    id: fixturesUsers[FixtureUserRole.InstructorActive].id,
     structure,
-    role: fixturesUsers[FixtureUserRole.Instructor].role,
-    status: fixturesUsers[FixtureUserRole.Instructor].status
+    role: fixturesUsers[FixtureUserRole.InstructorActive].role,
+    status: fixturesUsers[FixtureUserRole.InstructorActive].status
   },
   referent: {
     id: fixturesUsers[FixtureUserRole.Referent].id,

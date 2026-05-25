@@ -10,7 +10,8 @@ export enum FixtureUserRole {
   Administrator = 5,
   StructureManagerNew = 6,
   SocialWorkerNew = 7,
-  StructureManagerMinistere = 8
+  StructureManagerMinistere = 8,
+  InstructorActive = 9
 }
 
 export const fixturesUsers = [
@@ -20,7 +21,7 @@ export const fixturesUsers = [
     lastName: 'Instructeur',
     email: 'jeanne.instructeure@yopmail.com',
     role: 'Instructor',
-    status: 'Active',
+    status: 'Disabled',
     structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
@@ -93,8 +94,18 @@ export const fixturesUsers = [
     role: 'StructureManager',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Ministère].id
+  },
+  {
+    id: 'e9402cfb-9c15-4cf5-84e5-75299b165e2a',
+    firstName: 'Marc',
+    lastName: 'Instructeur',
+    email: 'marc.instructeur@yopmail.com',
+    role: 'Instructor',
+    status: 'Active',
+    structureId: fixtureStructures[FixtureStructure.Test].id
   }
 ] satisfies [
+  Prisma.UserCreateManyInput,
   Prisma.UserCreateManyInput,
   Prisma.UserCreateManyInput,
   Prisma.UserCreateManyInput,
@@ -148,6 +159,12 @@ export const fixturesCGUHistory = [
   {
     id: 'bb432162-a268-49a6-b8bd-f4d02be601a6',
     userId: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id,
+    date: new Date('2023-01-01'),
+    version: CGU_VERSION
+  },
+  {
+    id: '8a088e41-5938-4bcf-83ed-dcecac0bcc76',
+    userId: fixturesUsers[FixtureUserRole.InstructorActive].id,
     date: new Date('2023-01-01'),
     version: CGU_VERSION
   }
