@@ -111,10 +111,7 @@ const workshopStatFilterSchema = z.object({
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
   workshopNameIds: z.array(z.string().uuid()).optional(),
-  partnerOrganizationIds: z.array(z.string().uuid()).optional(),
-  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  createdById: z.array(z.string().uuid()).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish()
+  partnerOrganizationIds: z.array(z.string().uuid()).optional()
 })
 
 type WorkshopStatFilterInput = z.infer<typeof workshopStatFilterSchema>

@@ -19,21 +19,21 @@
   import { periodKeys } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { withEmptyValue } from '~/utils/options'
-  import type { StatFilterInput } from '~/server/schema'
+  import type { WorkshopStatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { StatPeriodFilter } from '~/types/stat'
 
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    filters: StatFilterInput
+    filters: WorkshopStatFilterInput
   }>()
 
   const emit = defineEmits<{
-    'update:filters': [filters: StatFilterInput]
+    'update:filters': [filters: WorkshopStatFilterInput]
   }>()
 
-  const defaultValues = computed<StatFilterInput | undefined>(() => {
+  const defaultValues = computed<WorkshopStatFilterInput | undefined>(() => {
     return undefined
   })
 
