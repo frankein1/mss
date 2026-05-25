@@ -14,6 +14,13 @@ export default defineVitestConfig({
   },
   test: {
     environment: 'nuxt',
+    environmentOptions: {
+      nuxt: {
+        overrides: {
+          modules: ['./test/components/strip-plugins.module.ts']
+        }
+      }
+    },
     exclude: [...configDefaults.exclude, 'e2e/**', 'scripts/**'],
     coverage: {
       reporter: 'lcov',
