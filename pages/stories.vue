@@ -52,10 +52,6 @@
         <VeeInputStory />
       </div>
 
-      <div class="fr-col-6">
-        <VeeSearchableSelectStory />
-      </div>
-
       <div class="fr-col-12">
         <VeeRadioButtonsStory />
       </div>
@@ -91,7 +87,6 @@
 <script setup>
   import TableSortableHeaderStory from '~/components/TableSortableHeader/TableSortableHeader.story.vue'
   import AtomFiltersStory from '~/components/AtomFilters/AtomFilters.story.vue'
-  import VeeSearchableSelectStory from '~/components/VeeForm/VeeSearchableSelect.story.vue'
   import VeeInputStory from '~/components/VeeForm/VeeInput.story.vue'
   import VeeRadioButtonsStory from '~/components/VeeForm/VeeRadioButtons.story.vue'
   import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
