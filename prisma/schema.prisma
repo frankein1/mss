@@ -2191,7 +2191,7 @@ model WorkshopName {
   structureId String     @map("structure_id") @db.Uuid
   createdBy   User       @relation(fields: [createdById], references: [id])
   createdById String     @map("created_by_id") @db.Uuid
-  createdAt   DateTime   @default(now()) @map("created_by")
+  createdAt   DateTime   @default(now()) @map("created_at")
   workshops   Workshop[]
 
   @@unique([structureId, name])
