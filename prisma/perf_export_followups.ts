@@ -2,17 +2,26 @@ import { prismaClient } from '~/server/prisma'
 import { exportWorkbook } from '~/server/services/followup/export.service'
 import type { SecurityRuleContext } from '~/server/security'
 import type { ExportFollowupsInput } from '~/server/schema'
+import {
+  fixtureStructures,
+  FixtureStructure,
+  fixturesUsers,
+  FixtureUserRole
+} from './fixtures'
+
+const user = fixturesUsers[FixtureUserRole.StructureManager]
+const structure = fixtureStructures[FixtureStructure.Test]
 
 const ctx: SecurityRuleContext = {
   user: {
-    id: '7e5c1734-35cb-4047-9035-a944961a67a4',
-    role: 'StructureManager',
-    status: 'Active',
-    structureId: '8adcd106-c652-4e4c-80df-beb373fae252'
+    id: user.id,
+    role: user.role,
+    status: user.status,
+    structureId: structure.id
   },
   structure: {
-    id: '8adcd106-c652-4e4c-80df-beb373fae252',
-    type: 'Ccas',
+    id: structure.id,
+    type: structure.type,
     externalRdvspActive: null
   }
 }

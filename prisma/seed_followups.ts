@@ -6,28 +6,37 @@ import type {
 } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
 import { equiRandomEnum } from './fixtures/utils'
+import {
+  fixtureStructures,
+  FixtureStructure,
+  fixturesUsers,
+  FixtureUserRole,
+  fixturesSocialSupportSubjects,
+  fixturesPartnerOrganizations,
+  FixturePartnerOrganization
+} from './fixtures'
 import { prismaClient } from '~/server/prisma'
 
-const STRUCTURE_ID = '8adcd106-c652-4e4c-80df-beb373fae252'
+const STRUCTURE_ID = fixtureStructures[FixtureStructure.Test].id
 
 const CREATOR_IDS = [
-  '7e5c1734-35cb-4047-9035-a944961a67a4', // Jeanne Responsable
-  'ddd586d1-d747-4a54-896d-3e7cf90ea91f', // Jeanne Référente
-  '9840ff03-0fef-4967-b533-66d81c25b44a' // Jean Travailleur social
+  fixturesUsers[FixtureUserRole.StructureManager].id,
+  fixturesUsers[FixtureUserRole.Referent].id,
+  fixturesUsers[FixtureUserRole.SocialWorker].id
 ]
 
 const SUBJECT_IDS = [
-  '30790553-9df4-478b-a6a0-bef6945bfbaf',
-  '6a493607-7a32-43d1-a529-5b15ba34839f',
-  '1975ce96-dc1e-4af1-a3e7-119652569908',
-  'afb7eded-3693-4dd9-97a5-d7c57d8118d4',
-  '3d9c5e6d-4b10-4358-8bad-3eb1b1922c51'
+  fixturesSocialSupportSubjects[0].id,
+  fixturesSocialSupportSubjects[1].id,
+  fixturesSocialSupportSubjects[2].id,
+  fixturesSocialSupportSubjects[3].id,
+  fixturesSocialSupportSubjects[4].id
 ]
 
 const PARTNER_ORG_IDS = [
-  '16f4c01f-738a-41b0-918c-73ae14e4267c',
-  '8a2d66f7-1d4b-4ac5-8238-7082d51b8281',
-  'f4105259-e47e-46b3-8a52-61b3ea273be4'
+  fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id,
+  fixturesPartnerOrganizations[FixturePartnerOrganization.FranceTravail].id,
+  fixturesPartnerOrganizations[FixturePartnerOrganization.MairieValence].id
 ]
 
 const BENEFICIARY_COUNT = 1000
