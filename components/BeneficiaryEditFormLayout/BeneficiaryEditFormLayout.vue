@@ -112,8 +112,10 @@
   }>()
 
   const saveTarget = ref<string | undefined>(undefined)
-  const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
-  const form = ref<HTMLFormElement | null>(null)
+  const beneficiaryFormLayoutMainContainer = useTemplateRef(
+    'beneficiaryFormLayoutMainContainer'
+  )
+  const form = useTemplateRef('form')
 
   const title = computed(() => {
     let title = 'Informations'

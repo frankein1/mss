@@ -66,7 +66,7 @@
     return rest
   })
 
-  const modal = ref<HTMLDialogElement | null>(null)
+  const modal = useTemplateRef('modal')
 
   function getModalSizeClassName(size: Modal['size']) {
     switch (size) {

@@ -135,7 +135,7 @@
 
   const modal = useModal()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { handleSubmit } = useForm<EditStructureInfoInput>({
     validationSchema: toTypedSchema(editStructureInfoSchema),

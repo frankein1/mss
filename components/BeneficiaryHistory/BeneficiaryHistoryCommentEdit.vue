@@ -58,7 +58,7 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const props = defineProps<{
     comment: CommentData

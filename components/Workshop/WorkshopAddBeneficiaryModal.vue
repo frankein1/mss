@@ -132,7 +132,7 @@
   const modal = useModal()
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const waitingListAlert = ref<{
     beneficiaryId: string
     workshops: string[]

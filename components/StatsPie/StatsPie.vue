@@ -30,7 +30,7 @@
     notFilledRoute?: string
   }>()
 
-  const chart = ref<ChartItem>('')
+  const chart = useTemplateRef('chart')
   let instance: Chart | null = null
 
   const chartData = computed(() => ({
@@ -50,6 +50,9 @@
   )
 
   function plotChart() {
+    if (!chart.value) {
+      return null
+    }
     return $buildChart(chart.value, {
       type: 'pie',
       options: {

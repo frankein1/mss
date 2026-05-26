@@ -52,7 +52,7 @@
   const userId = route.params.id as string
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const {
     data: user,

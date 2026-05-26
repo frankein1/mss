@@ -101,7 +101,7 @@
     updateUser: [user: AdminEditUserInput | AdminCreateUserInput]
   }>()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { data: structures } = await trpcClient.admin.getStructures.useQuery()
 

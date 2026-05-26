@@ -201,13 +201,13 @@
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
   const displayedValue = ref<string>('')
-  const combobox = ref<HTMLInputElement | null>(null)
+  const combobox = useTemplateRef('combobox')
   const selectedValues = ref<string[]>(
     (((props.multiple ? value.value : [value.value]) || []) as string[]).filter(
       v => hasOption(props.options, v)
     )
   )
-  const hiddenInput = ref<HTMLInputElement | null>(null)
+  const hiddenInput = useTemplateRef('hiddenInput')
 
   const valueIsOption = ref<boolean>(false)
   const preventMenuReopen = ref<boolean>(false)

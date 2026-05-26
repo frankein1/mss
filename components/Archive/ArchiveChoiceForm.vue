@@ -57,8 +57,6 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
 
-  const archiveChoiceForm = ref<HTMLFormElement | null>(null)
-
   const props = defineProps<{
     archiveDueDateHistory: number
     pending: boolean

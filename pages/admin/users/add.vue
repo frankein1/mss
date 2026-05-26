@@ -26,7 +26,6 @@
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
-  const formContainer = ref<HTMLFormElement | null>(null)
 
   function onAddUser(user: AdminCreateUserInput) {
     useTrpcMutation({

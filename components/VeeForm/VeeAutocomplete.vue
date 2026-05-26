@@ -155,7 +155,7 @@
   const results = ref<OptionsWithDisabled>([])
   const loading = ref<boolean>(false)
   const fetchResultsError = ref('')
-  const combobox = ref<HTMLInputElement | null>(null)
+  const combobox = useTemplateRef('combobox')
 
   const optionRefs: { [key: string]: Ref<HTMLElement | null> } = {}
 

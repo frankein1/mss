@@ -1,7 +1,7 @@
 import { focusAndScrollTo } from '~/utils/focusAndScrollTo'
 
 export function useTable(pending: Ref<boolean>) {
-  const tableContainer = ref<HTMLDivElement | null>(null)
+  const tableContainer = useTemplateRef<HTMLDivElement>('tableContainer')
 
   watch(
     pending,

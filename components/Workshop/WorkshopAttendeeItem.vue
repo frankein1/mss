@@ -169,7 +169,6 @@
   import { beneficiaryTitleKeys } from '~/client/options'
   import WorkshopUpdateAttendeeModal from './WorkshopUpdateAttendeeModal.vue'
 
-  const attendeeForm = ref<HTMLFormElement | null>(null)
   const modal = useModal()
 
   const {
