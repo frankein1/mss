@@ -476,18 +476,14 @@ const configWorkshop: Record<
 }
 
 const configWorkshopName: Record<
-  | Exclude<
-      SnakeCase<keyof typeof Prisma.WorkshopNameScalarFieldEnum>,
-      'created_at'
-    >
-  | 'created_by',
+  SnakeCase<keyof typeof Prisma.WorkshopNameScalarFieldEnum>,
   boolean
 > = {
   id: true,
-  created_by: true,
-  created_by_id: true,
+  name: true,
   structure_id: true,
-  name: true
+  created_by_id: true,
+  created_at: true
 }
 
 const configWorkshopAttendee: Record<
