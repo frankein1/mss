@@ -1,3 +1,8 @@
+import type {
+  FamilyFileIdentificationRef,
+  FamilyFilePermissionsRef
+} from './familyFileMinimalInfoTypes'
+
 export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -14,10 +19,12 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     { queryKey: 'getFamilyFileMinimalInfo' }
   )
 
-  const familyFileIdentification = computed(() =>
-    familyFile.value && familyFile.value.beneficiaries
-      ? familyFile.value.beneficiaries
-      : null
+  const familyFileIdentification: FamilyFileIdentificationRef = computed(
+    () => familyFile.value?.beneficiaries ?? null
+  )
+
+  const familyFilePermissions: FamilyFilePermissionsRef = computed(
+    () => familyFile.value?.permissions
   )
 
   const getBeneficiaryIdOnPageLoad = () => {
@@ -33,6 +40,7 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
 
   return {
     familyFileIdentification,
+    familyFilePermissions,
     pending,
     error,
     refreshFamilyFile: refresh,
