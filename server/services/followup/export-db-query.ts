@@ -51,7 +51,8 @@ const followupExportSelect = {
       documents: {
         select: {
           key: true,
-          name: true
+          name: true,
+          confidential: true
         }
       },
       socialSupportRedirections: {

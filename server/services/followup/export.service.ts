@@ -212,7 +212,9 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
     medium: followupMediumKeys.value(filtered.medium) || '',
     classified: getBooleanOrEmpty(filtered.classified),
     documents:
-      filtered.documents?.map(document => document.name).join(', ') || '',
+      filtered.documents
+        ?.map(d => (d.confidential ? `${d.name} (confidentiel)` : d.name))
+        .join(', ') || '',
     dueDate: filtered.dueDate || '',
     forwardedToJustice: getBooleanOrEmpty(filtered.forwardedToJustice),
     helpRequested: getBooleanOrEmpty(filtered.helpRequested),
