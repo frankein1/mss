@@ -23,7 +23,7 @@
           v-for="notification in notifications"
           :key="notification.id"
           :notification="notification"
-          @toggle-read-state="onToggleReadState(notification.id, $event)"
+          @toggle-read-state="onToggleReadState"
         />
       </ul>
       <NotificationListEmptyState
@@ -122,11 +122,11 @@
     }
   })
 
-  const { data, error, pending } =
+  const { data, error, pending, refresh } =
     await trpcClient.notification.get.useQuery(queryInput)
 
   // get archive notifications
-  const { data: archiveData } =
+  const { data: archiveData, refresh: refreshArchive } =
     await trpcClient.archiveNotification.get.useQuery()
 
   const notifications = computed(() => {
@@ -237,44 +237,10 @@
     })
   }
 
-  /**
-   * It does not use the refresh function from `useQuery` as multiple pages may have been loaded
-   */
-  function onToggleReadState(notificationId: string, read: boolean) {
-    // normal data
-    if (data.value) {
-      data.value = {
-        totalCount: data.value.totalCount,
-        notifications: data.value.notifications.map(notification =>
-          notification.id === notificationId
-            ? { ...notification, read }
-            : notification
-        )
-      }
-
-      if (!showReadNotifications.value && read) {
-        data.value = {
-          totalCount: data.value.totalCount - 1,
-          notifications: data.value.notifications.filter(
-            ({ id }) => id !== notificationId
-          )
-        }
-      }
-    }
-    // archive data
-    if (archiveData.value) {
-      archiveData.value = archiveData.value.map(notification =>
-        notification.id === notificationId
-          ? { ...notification, read }
-          : notification
-      )
-
-      if (!showReadNotifications.value && read) {
-        archiveData.value = archiveData.value.filter(
-          ({ id }) => id !== notificationId
-        )
-      }
-    }
+  function onToggleReadState() {
+    page.value = 1
+    refresh()
+    refreshArchive()
   }
 
   const beneficiariesToArchived = computed(() => {
