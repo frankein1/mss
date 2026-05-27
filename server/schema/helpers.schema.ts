@@ -79,7 +79,7 @@ export const siretConstraint = stringConstraint
 export const socialSecurityNumberConstraint = z
   .string()
   .regex(
-    /^([12] \d{2} (0[1-9]|1[0-2]) (2[AB]|\d{2}) \d{3} \d{3})( \d{2})?$|^$/,
+    /^([1-478] \d{2} \d{2} (2[AB]|\d{2}) \d{3} \d{3})( \d{2})?$|^$/,
     'Veuillez entrer un numéro de sécurité sociale valide.'
   )
 
