@@ -18,7 +18,7 @@
         v-if="beneficiaryId"
         :beneficiary-id="beneficiaryId"
         :family-file-id="familyFileId"
-        :permissions="familyFilePermissions"
+        :permissions="familyFilePermissions ? familyFilePermissions : undefined"
         :family-file="familyFileIdentification.length > 1"
         :is-submitting-appointment-plan="
           statusAppointment === 'pending' || isSubmittingAppointmentPlan
@@ -50,7 +50,9 @@
               <template #actions>
                 <BeneficiaryDetailsActions
                   :beneficiary-id
-                  :permissions="familyFilePermissions"
+                  :permissions="
+                    familyFilePermissions ? familyFilePermissions : undefined
+                  "
                   :family-file="familyFileIdentification.length > 1"
                   :beneficiary-relationship="selectedBeneficiary?.relationship"
                   @delete="openDeleteModal"
@@ -195,7 +197,10 @@
     () => route.query.beneficiaryId,
     async () => {
       if (!route.query.beneficiaryId) {
-        if (!familyFileIdentification.value[0]) {
+        if (
+          !familyFileIdentification.value ||
+          !familyFileIdentification.value[0]
+        ) {
           // eslint-disable-next-line no-console
           console.warn('no beneficiary retrieved')
           return
