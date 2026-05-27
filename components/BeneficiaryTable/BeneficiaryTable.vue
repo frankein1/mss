@@ -32,6 +32,7 @@
                 <label
                   class="fr-label"
                   for="table-select-all"
+                  title="Sélectionner toutes les lignes visibles"
                 >
                   <span class="fr-sr-only"
                     >Sélectionner toutes les lignes visibles</span
