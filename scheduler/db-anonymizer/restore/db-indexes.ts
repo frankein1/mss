@@ -42,8 +42,15 @@ const sqlCreateForeignKey = (row: {
   tablename: string
   conname: string
   condef: string
-}) =>
-  `ALTER TABLE ${escapeIdentifier(TARGET_SCHEMA)}.${escapeIdentifier(row.tablename)} ADD CONSTRAINT ${escapeIdentifier(row.conname)} ${row.condef}`
+}) => {
+  // Adapt the foreign key definition to use the table in the target schema:
+  // FOREIGN KEY (<column>) REFERENCES "<table>"(<target_column>) --> FOREIGN KEY (<column>) REFERENCES "<TARGET_SCHEMA>"."<table>"(<target_column>)
+  const targetSchemaConstraintDef = row.condef.replace(
+    'REFERENCES ',
+    `REFERENCES "${escapeIdentifier(TARGET_SCHEMA)}".`
+  )
+  return `ALTER TABLE ${escapeIdentifier(TARGET_SCHEMA)}.${escapeIdentifier(row.tablename)} ADD CONSTRAINT ${escapeIdentifier(row.conname)} ${targetSchemaConstraintDef}`
+}
 
 export async function createSQLQueriesForForeignKeys(source: Client) {
   const querySchema = z.object({
