@@ -14,7 +14,8 @@ function getApiKey() {
 }
 
 export async function getContact(userId: string) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const result = await fetch(
@@ -22,7 +23,7 @@ export async function getContact(userId: string) {
     {
       method: 'GET',
       headers: {
-        'api-key': getApiKey()
+        'api-key': apiKey
       }
     }
   )
@@ -33,13 +34,14 @@ export async function getContact(userId: string) {
 export async function createOrUpdateContact(
   contact: ReturnType<typeof mapUserToBrevoContact>
 ) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/contacts`, {
     method: 'POST',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(contact)
@@ -47,14 +49,15 @@ export async function createOrUpdateContact(
 }
 
 export async function createCompany(structure: Pick<Structure, 'id' | 'name'>) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const { id, name } = structure
   const result = await fetch(`${API_HOST}/companies`, {
     method: 'POST',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({ name, attributes: { ext_id: id } })
@@ -67,13 +70,14 @@ export async function updateCompany(
   id: string,
   company: ReturnType<typeof mapStructureToBrevoCompany>
 ) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies/${id}`, {
     method: 'PATCH',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(company)
@@ -87,13 +91,14 @@ export async function linkContactToCompany({
   companyId: string
   contactId: string
 }) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies/link-unlink/${companyId}`, {
     method: 'PATCH',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({ linkContactIds: [contactId] })
@@ -101,13 +106,14 @@ export async function linkContactToCompany({
 }
 
 export async function getCompanyAttributes() {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/crm/attributes/companies`, {
     method: 'GET',
     headers: {
-      'api-key': getApiKey()
+      'api-key': apiKey
     }
   })
 }
@@ -121,13 +127,14 @@ export async function createCompanyAttribute({
   type: 'text' | 'boolean' | 'date' | 'number' | 'single-select'
   options?: string[]
 }) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/crm/attributes`, {
     method: 'POST',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
@@ -148,7 +155,8 @@ export async function createContactAttribute({
   type: 'id' | 'text' | 'boolean' | 'date' | 'float' | 'category'
   options?: string[]
 }) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(
@@ -156,7 +164,7 @@ export async function createContactAttribute({
     {
       method: 'POST',
       headers: {
-        'api-key': getApiKey(),
+        'api-key': apiKey,
         'content-type': 'application/json'
       },
       body: JSON.stringify({
@@ -174,13 +182,14 @@ export async function createContactAttribute({
 }
 
 export async function getCompanies() {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies`, {
     method: 'GET',
     headers: {
-      'api-key': getApiKey()
+      'api-key': apiKey
     }
   })
 }
@@ -205,13 +214,14 @@ interface SendEventOptions {
 }
 
 export async function sendEvent(options: SendEventOptions) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/events`, {
     method: 'POST',
     headers: {
-      'api-key': getApiKey(),
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(options)
@@ -219,7 +229,8 @@ export async function sendEvent(options: SendEventOptions) {
 }
 
 export async function getCompanyByStructureId(structure_id: string) {
-  if (!getApiKey()) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const queryParams = new URLSearchParams({
@@ -228,7 +239,7 @@ export async function getCompanyByStructureId(structure_id: string) {
   const result = await fetch(`${API_HOST}/companies?${queryParams}`, {
     method: 'GET',
     headers: {
-      'api-key': getApiKey()
+      'api-key': apiKey
     }
   })
   if (!result.ok) {
