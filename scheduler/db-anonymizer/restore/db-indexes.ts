@@ -47,7 +47,7 @@ const sqlCreateForeignKey = (row: {
   // FOREIGN KEY (<column>) REFERENCES "<table>"(<target_column>) --> FOREIGN KEY (<column>) REFERENCES "<TARGET_SCHEMA>"."<table>"(<target_column>)
   const targetSchemaConstraintDef = row.condef.replace(
     'REFERENCES ',
-    `REFERENCES "${escapeIdentifier(TARGET_SCHEMA)}".`
+    `REFERENCES ${escapeIdentifier(TARGET_SCHEMA)}.`
   )
   return `ALTER TABLE ${escapeIdentifier(TARGET_SCHEMA)}.${escapeIdentifier(row.tablename)} ADD CONSTRAINT ${escapeIdentifier(row.conname)} ${targetSchemaConstraintDef}`
 }
