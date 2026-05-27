@@ -51,6 +51,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'medium',
   'prescribingOrganizationId',
   'firstFollowup',
+  'isThirdPartyInterview',
   'synthesis',
   'classified',
   'documents',

@@ -31,10 +31,16 @@
     <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
       <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
       <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--top">
-        <div class="fr-col-12">
+        <div class="fr-col-12 fr-col-md-6">
           <VeeCheckbox
             :label="followupFieldLabels.firstFollowup"
             name="firstFollowup"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <VeeCheckbox
+            :label="followupFieldLabels.isThirdPartyInterview"
+            name="isThirdPartyInterview"
           />
         </div>
 
@@ -59,7 +65,7 @@
           <VeeSelect
             name="medium"
             :label="followupFieldLabels.medium"
-            :options="withEmptyValue(followupMediumKeys.options)"
+            :options="withEmptyValue(mediumOptions)"
             required
           />
         </div>
@@ -91,7 +97,7 @@
           />
         </div>
         <div
-          v-else-if="medium === FollowupMedium.ThirdParty"
+          v-else-if="isThirdPartyInterview"
           class="fr-col-12 fr-col-md-6"
         >
           <VeeInput
@@ -348,6 +354,7 @@
   import {
     followupStatusKeys,
     followupMediumKeys,
+    followupMediumSelectKeys,
     followupDurationKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -393,6 +400,15 @@
     'supportProgramId'
   )
   const { value: familyFileId } = useField<string | null>('familyFileId')
+  const { value: isThirdPartyInterview } = useField<boolean>(
+    'isThirdPartyInterview'
+  )
+
+  const mediumOptions = computed(() =>
+    props.medium === FollowupMedium.ThirdParty
+      ? followupMediumKeys.options
+      : followupMediumSelectKeys.options
+  )
 
   const { data: supportProgramsData, error: fetchProgramsError } =
     await trpcClient.supportProgram.getForBeneficiary.useQuery(

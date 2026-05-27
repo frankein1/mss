@@ -19,6 +19,17 @@ export const followupMediumKeys = buildKeys({
   [FollowupMedium.Videoconference]: 'Visioconférence'
 })
 
+export const followupMediumSelectKeys = buildKeys({
+  [FollowupMedium.UnplannedInPerson]: 'Accueil physique spontané',
+  [FollowupMedium.PlannedInPerson]: 'Accueil physique sur rendez-vous',
+  [FollowupMedium.PostalMail]: 'Courrier',
+  [FollowupMedium.PhoneCall]: 'Entretien téléphonique',
+  [FollowupMedium.Email]: 'E-mail',
+  [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
+  [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
+  [FollowupMedium.Videoconference]: 'Visioconférence'
+})
+
 export const followupStatusKeys = buildKeys({
   [SocialSupportStatus.Todo]: 'À traiter',
   [SocialSupportStatus.InProgress]: 'En cours',

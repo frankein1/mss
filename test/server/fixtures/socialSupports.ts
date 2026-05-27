@@ -129,6 +129,7 @@ export async function createSocialSupports(
           helpRequested: true,
           place: 'CCAS de Lyon',
           thirdPersonName: 'Mme Dubois',
+          isThirdPartyInterview: true,
           classified: true,
           firstFollowup: true,
           forwardedToJustice: true,

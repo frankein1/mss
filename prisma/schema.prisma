@@ -488,13 +488,14 @@ model Followup {
 
   medium FollowupMedium
 
-  helpRequested      Boolean?          @map("help_requested")
-  place              String?
-  thirdPersonName    String?           @map("third_person_name")
-  classified         Boolean?
-  firstFollowup      Boolean?          @map("first_followup")
-  forwardedToJustice Boolean?          @map("forwarded_to_justice")
-  duration           FollowupDuration?
+  helpRequested         Boolean?          @map("help_requested")
+  place                 String?
+  thirdPersonName       String?           @map("third_person_name")
+  classified            Boolean?
+  firstFollowup         Boolean?          @map("first_followup")
+  isThirdPartyInterview Boolean?          @default(false) @map("is_third_party_interview")
+  forwardedToJustice    Boolean?          @map("forwarded_to_justice")
+  duration              FollowupDuration?
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)

@@ -35,6 +35,11 @@
           />
 
           <PrintDetailItem
+            v-if="followup.isThirdPartyInterview"
+            :title="followupFieldLabels.isThirdPartyInterview"
+            content="Oui"
+          />
+          <PrintDetailItem
             :title="followupFieldLabels.thirdPersonName"
             :content="followup.thirdPersonName"
           />

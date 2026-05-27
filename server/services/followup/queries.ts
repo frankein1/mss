@@ -20,6 +20,7 @@ const select = {
   classified: true,
   forwardedToJustice: true,
   firstFollowup: true,
+  isThirdPartyInterview: true,
   helpRequested: true,
   thirdPersonName: true,
   place: true,

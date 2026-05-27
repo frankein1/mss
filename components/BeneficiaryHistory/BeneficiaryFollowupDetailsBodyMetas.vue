@@ -49,15 +49,23 @@
   const medium = computed(() => {
     const label = followupMediumKeys.value(props.followup.medium)
     if (
-      (props.followup.medium !== FollowupMedium.ExternalAppointment ||
-        !props.followup.place) &&
-      (props.followup.medium !== FollowupMedium.ThirdParty ||
-        !props.followup.thirdPersonName)
+      props.followup.medium === FollowupMedium.ExternalAppointment &&
+      props.followup.place
     ) {
-      return label
+      return `${label} - ${props.followup.place}`
     }
-    return `${label} - ${
-      props.followup.place || props.followup.thirdPersonName
-    }`
+    if (
+      props.followup.isThirdPartyInterview &&
+      props.followup.thirdPersonName
+    ) {
+      return `${followupFieldLabels.isThirdPartyInterview} - ${props.followup.thirdPersonName}`
+    }
+    if (
+      props.followup.medium === FollowupMedium.ThirdParty &&
+      props.followup.thirdPersonName
+    ) {
+      return `${label} - ${props.followup.thirdPersonName}`
+    }
+    return label
   })
 </script>

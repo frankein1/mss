@@ -297,6 +297,10 @@ export function filterFollowup({
       conditions.details
     ),
     firstFollowup: show(followup.firstFollowup, conditions.details),
+    isThirdPartyInterview: show(
+      followup.isThirdPartyInterview,
+      conditions.details
+    ),
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),

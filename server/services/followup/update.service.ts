@@ -65,6 +65,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     numeroPegase,
     classified,
     forwardedToJustice,
+    isThirdPartyInterview,
     socialSupportId,
     duration,
     socialSupportRedirections,
@@ -158,10 +159,10 @@ export const update = async ({ ctx, input }: UpdateParams) => {
           prescribingOrganizationContactId || null,
         medium,
         place: medium === FollowupMedium.ExternalAppointment ? place : null,
-        thirdPersonName:
-          medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+        thirdPersonName: isThirdPartyInterview ? thirdPersonName : null,
         helpRequested,
         firstFollowup,
+        isThirdPartyInterview,
         classified,
         forwardedToJustice,
         duration

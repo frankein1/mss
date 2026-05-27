@@ -43,6 +43,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     helpRequested,
     dueDate,
     firstFollowup,
+    isThirdPartyInterview,
     numeroPegase,
     classified,
     forwardedToJustice,
@@ -126,10 +127,10 @@ export const create = async ({ ctx, input }: CreateParams) => {
             : undefined,
           medium,
           place: medium === FollowupMedium.ExternalAppointment ? place : null,
-          thirdPersonName:
-            medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+          thirdPersonName: isThirdPartyInterview ? thirdPersonName : null,
           helpRequested,
           firstFollowup,
+          isThirdPartyInterview,
           classified,
           forwardedToJustice,
           duration
