@@ -117,6 +117,7 @@
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage, filters)
+  const { isReceptionAgent } = useAuthState()
 
   const queryInput = computed(() => ({
     page: page.value,
@@ -184,13 +185,15 @@
       onClick: _item => {
         exportConfirm()
       }
-    },
-    {
+    }
+  ]
+  if (!isReceptionAgent()) {
+    optionMenu.push({
       label: 'Modifier agent référent',
       icon: 'fr-icon-user-line',
       href: routes.beneficiary.AppBeneficiariesReferentTransfer.path()
-    }
-  ]
+    })
+  }
 
   function exportConfirm() {
     modal.open(ExportDataConfirm, {

@@ -145,5 +145,13 @@
   .fr-cell--fixed {
     position: relative;
     z-index: 1;
+    vertical-align: middle;
+
+    .fr-checkbox-group {
+      margin-inline: auto;
+      width: 1rem;
+      height: 1rem;
+      transform: translateY(-4px);
+    }
   }
 </style>

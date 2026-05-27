@@ -32,6 +32,7 @@
                 <label
                   class="fr-label"
                   for="table-select-all"
+                  title="Sélectionner toutes les lignes visibles"
                 >
                   <span class="fr-sr-only"
                     >Sélectionner toutes les lignes visibles</span
@@ -197,3 +198,18 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .fr-cell--fixed {
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+
+    .fr-checkbox-group {
+      margin-inline: auto;
+      width: 1rem;
+      height: 1rem;
+      transform: translateY(-4px);
+    }
+  }
+</style>
