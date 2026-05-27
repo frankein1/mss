@@ -1,77 +1,84 @@
 <template>
   <PageContainer no-max-width>
-    <AtomBreadcrumb
-      :links="breadcrumbs.beneficiary.AppBeneficiariesReferentTransfer()"
+    <AtomAlert
+      v-if="isReceptionAgent()"
+      :alert-type="AlertType.Error"
+      message="Le rôle “Agent d'accueil” n'est pas authorisé à voir cette page."
     />
-    <PageTitle
-      class="title"
-      no-margin
-      :title="title"
-    />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
-      <div class="fr-col-12">
-        <section class="feature-section">
-          <AtomStepper
-            :steps
-            :current-step
-          />
-        </section>
-      </div>
-      <!-- STEP 1 -->
-      <div
-        v-if="currentStep === 1 && agentOptions"
-        class="fr-col-12"
-      >
-        <section class="feature-section fr-pt-6v">
-          <MassReferentTransferEditionChoice @next="currentStep = 2" />
-        </section>
-      </div>
+    <template v-else>
+      <AtomBreadcrumb
+        :links="breadcrumbs.beneficiary.AppBeneficiariesReferentTransfer()"
+      />
+      <PageTitle
+        class="title"
+        no-margin
+        :title="title"
+      />
+      <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+        <div class="fr-col-12">
+          <section class="feature-section">
+            <AtomStepper
+              :steps
+              :current-step
+            />
+          </section>
+        </div>
+        <!-- STEP 1 -->
+        <div
+          v-if="currentStep === 1 && agentOptions"
+          class="fr-col-12"
+        >
+          <section class="feature-section fr-pt-6v">
+            <MassReferentTransferEditionChoice @next="currentStep = 2" />
+          </section>
+        </div>
 
-      <!-- STEP 2 -->
-      <div
-        v-if="currentStep === 2"
-        class="fr-col-12"
-      >
-        <h2 class="fr-sr-only">Filtres</h2>
-        <section class="feature-section beneficiary-filters">
-          <BeneficiaryFilters @filter="filters = $event" />
-        </section>
-        <section class="feature-section fr-mt-2w">
-          <MassReferentTransferBeneficiariesChoice
-            :filters="filters"
-            @previous="currentStep = 1"
-            @next="currentStep = 3"
-          />
-        </section>
-      </div>
+        <!-- STEP 2 -->
+        <div
+          v-if="currentStep === 2"
+          class="fr-col-12"
+        >
+          <h2 class="fr-sr-only">Filtres</h2>
+          <section class="feature-section beneficiary-filters">
+            <BeneficiaryFilters @filter="filters = $event" />
+          </section>
+          <section class="feature-section fr-mt-2w">
+            <MassReferentTransferBeneficiariesChoice
+              :filters="filters"
+              @previous="currentStep = 1"
+              @next="currentStep = 3"
+            />
+          </section>
+        </div>
 
-      <!-- STEP 3 -->
-      <div
-        v-if="currentStep === 3 && agentOptions"
-        class="fr-col-12"
-      >
-        <section class="feature-section fr-mt-2w">
-          <MassReferentTransferAddReferentForm
-            :agent-options="agentOptions"
-            @previous="currentStep = 2"
-            @next="currentStep = 4"
-          />
-        </section>
-      </div>
+        <!-- STEP 3 -->
+        <div
+          v-if="currentStep === 3 && agentOptions"
+          class="fr-col-12"
+        >
+          <section class="feature-section fr-mt-2w">
+            <MassReferentTransferAddReferentForm
+              :agent-options="agentOptions"
+              @previous="currentStep = 2"
+              @next="currentStep = 4"
+            />
+          </section>
+        </div>
 
-      <!-- STEP 4 -->
-      <div
-        v-if="currentStep === 4"
-        class="fr-col-12"
-      >
-        <section class="feature-section fr-mt-2w">
-          <MassReferentTransferConfirmation
-            :agent-options="agentOptions"
-            @previous="currentStep = 3"
-          />
-        </section>
+        <!-- STEP 4 -->
+        <div
+          v-if="currentStep === 4"
+          class="fr-col-12"
+        >
+          <section class="feature-section fr-mt-2w">
+            <MassReferentTransferConfirmation
+              :agent-options="agentOptions"
+              @previous="currentStep = 3"
+            />
+          </section>
+        </div>
       </div>
-    </div>
+    </template>
   </PageContainer>
 </template>
 
@@ -79,6 +86,7 @@
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { AlertType } from '~/utils/constants/alert'
 
   const title = routes.beneficiary.AppBeneficiariesReferentTransfer.title
 
@@ -90,6 +98,7 @@
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
+  const { isReceptionAgent } = useAuthState()
 
   // Filters
   const filters = ref<BeneficiaryFilterInput>(
