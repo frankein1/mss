@@ -129,10 +129,7 @@
       v-if="attendee.listType === WorkshopAttendeeListType.Main"
       class="presence"
     >
-      <form
-        ref="attendeeForm"
-        novalidate
-      >
+      <form novalidate>
         <VeeRadioButtons
           :id="ATTENDEE_PRESENCE_ID"
           name="attendance"

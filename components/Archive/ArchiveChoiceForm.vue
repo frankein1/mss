@@ -23,10 +23,7 @@
       :alert-type="AlertType.Warning"
       :message="getWarningMessage()"
     />
-    <form
-      ref="archiveChoiceForm"
-      novalidate
-    >
+    <form novalidate>
       <VeeRadioButtons
         name="archive"
         label="archiver"

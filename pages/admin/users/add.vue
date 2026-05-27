@@ -2,10 +2,7 @@
   <PageContainer>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <div
-          ref="formContainer"
-          class="main-container fr-p-5w"
-        >
+        <div class="main-container fr-p-5w">
           <UserFormAdmin
             :is-submitting="isSubmitting"
             @update-user="onAddUser($event as AdminCreateUserInput)"
