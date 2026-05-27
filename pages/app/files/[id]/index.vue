@@ -1,6 +1,6 @@
 <template>
   <AtomAlert
-    v-if="!familyFile"
+    v-if="!familyFileIdentification"
     :alert-type="AlertType.Error"
     message="Le dossier n'a pas pu être chargé."
   />
@@ -18,7 +18,7 @@
         v-if="beneficiaryId"
         :beneficiary-id="beneficiaryId"
         :family-file-id="familyFileId"
-        :permissions="familyFile?.permissions"
+        :permissions="familyFilePermissions ? familyFilePermissions : undefined"
         :family-file="familyFileIdentification.length > 1"
         :is-submitting-appointment-plan="
           statusAppointment === 'pending' || isSubmittingAppointmentPlan
@@ -50,7 +50,9 @@
               <template #actions>
                 <BeneficiaryDetailsActions
                   :beneficiary-id
-                  :permissions="familyFile?.permissions"
+                  :permissions="
+                    familyFilePermissions ? familyFilePermissions : undefined
+                  "
                   :family-file="familyFileIdentification.length > 1"
                   :beneficiary-relationship="selectedBeneficiary?.relationship"
                   @delete="openDeleteModal"
@@ -71,7 +73,7 @@
 
         <template #[tabTitles.at(2)?.panelId]>
           <AtomAlert
-            v-if="!familyFile?.permissions || !beneficiaryId"
+            v-if="!familyFilePermissions || !beneficiaryId"
             :alert-type="AlertType.Error"
             message="L'historique du bénéficiaire n'a pas pu être chargé."
           />
@@ -79,7 +81,7 @@
             v-else
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
-            :family-file-permissions="familyFile.permissions"
+            :family-file-permissions="familyFilePermissions"
             @refresh="getBeneficiaryDetails(beneficiaryId)"
           />
         </template>
@@ -103,7 +105,6 @@
     getStructureInfoInjectionKey
   } from '~/composables/useGetStructureInfoForBeneficiary'
   import type { TRPCClientErrorLike } from '@trpc/client'
-  import { TRPCClientError } from '@trpc/client'
   import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import type { GetBeneficiaryOutput } from '~/types/beneficiary'
@@ -131,15 +132,8 @@
     () => route.query.beneficiaryId as string | null
   )
 
-  const { data: familyFile } =
-    await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
-      { id: familyFileId.value },
-      { queryKey: 'file.getFamilyFileMinimalInfo' }
-    )
-
-  const familyFileIdentification = computed(
-    () => familyFile.value?.beneficiaries ?? []
-  )
+  const { familyFileIdentification, familyFilePermissions, refreshFamilyFile } =
+    await useFamilyFileMinimalInfo(familyFileId.value)
 
   const si = await useGetStructureInfo()
   provide(getStructureInfoInjectionKey, si)
@@ -203,7 +197,10 @@
     () => route.query.beneficiaryId,
     async () => {
       if (!route.query.beneficiaryId) {
-        if (!familyFileIdentification.value[0]) {
+        if (
+          !familyFileIdentification.value ||
+          !familyFileIdentification.value[0]
+        ) {
           // eslint-disable-next-line no-console
           console.warn('no beneficiary retrieved')
           return
@@ -244,10 +241,7 @@
       success: async () => {
         const beneficiaryCount = familyFileIdentification.value?.length ?? 0
         if (beneficiaryCount > 1) {
-          // Refresh family file data: beneficiaries, budget etc...
-          // We have to do this because deleting a beneficiary changes
-          // family file data, and the client can't detect it by itself.
-          await reloadData()
+          await refreshFamilyFile()
           await navigateTo(routes.file.AppFile.path(familyFileId.value))
         } else {
           await navigateTo(routes.beneficiary.AppBeneficiaries.path())
@@ -266,6 +260,7 @@
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
         familyFileId: familyFileId.value,
+        refresh: refreshFamilyFile,
         add: onAddBeneficiary,
         editBeneficiary: async (newBeneficiaryId: string) => {
           await navigateTo(
@@ -299,7 +294,7 @@
           beneficiaryID = id
           // Refresh family file data so that the new beneficiary can be
           // visible in the UI (and refresh data like the budget, socialSupports...)
-          await reloadData()
+          await refreshFamilyFile()
           await navigateTo(
             routes.file.AppFile.path(familyFileId.value, { beneficiaryId: id })
           )
@@ -337,7 +332,7 @@
       mutationSplit: () => trpcClient.file.split.mutate({ id }),
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
-      reloadData
+      reloadData: refreshFamilyFile
     })
   }
 
@@ -436,9 +431,5 @@
         )
       )
     }
-  }
-
-  async function reloadData() {
-    await refreshNuxtData(['file.getFamilyFileMinimalInfo'])
   }
 </script>

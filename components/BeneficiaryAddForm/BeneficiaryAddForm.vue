@@ -112,6 +112,7 @@
     <div v-else>
       <BeneficiaryLinkForm
         :family-file-id="props.familyFileId"
+        :refresh="props.refresh"
         @go-to-success-page="goToSuccessPage"
         @close="onClose"
       />
@@ -137,11 +138,8 @@
 
   const matomo = useMatomo()
   const modal = useModal()
-  const success = useState('success', () => false)
-  const newBeneficiaryId = useState(
-    'newBeneficiaryId',
-    (): string | undefined => undefined
-  )
+  const success = ref(false)
+  const newBeneficiaryId = ref<string | undefined>(undefined)
   const form = ref<HTMLFormElement | null>(null)
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
@@ -164,6 +162,7 @@
   const props = defineProps<{
     isSubmitting: boolean
     familyFileId: string
+    refresh: () => Promise<void>
     add: (values: CreateFamilyFileMemberInput) => Promise<string | undefined>
     editBeneficiary: (beneficiaryId: string) => Promise<void>
   }>()
@@ -206,7 +205,6 @@
 
   const onClose = () => {
     modal.close()
-    success.value = false
   }
 
   const goToFilePage = () => {
@@ -219,15 +217,6 @@
       onClose()
     }
   }
-
-  const stopWatchingIsOpen = watch(modal.isOpen, value => {
-    if (!value) {
-      success.value = false
-    }
-  })
-  onUnmounted(() => {
-    stopWatchingIsOpen()
-  })
 </script>
 
 <style scoped lang="scss">

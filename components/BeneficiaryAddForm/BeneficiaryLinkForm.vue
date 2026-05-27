@@ -107,6 +107,7 @@
 
   const props = defineProps<{
     familyFileId: string
+    refresh: () => Promise<void>
   }>()
   const emit = defineEmits<{
     close: []
@@ -156,7 +157,7 @@
       isSubmitting.value = true
       await trpcClient.beneficiary.linkToFamilyFile
         .mutate(payload)
-        .then(() => refreshNuxtData(['file.getFamilyFileMinimalInfo']))
+        .then(() => props.refresh())
         .then(async () => {
           await navigateTo(
             routes.file.AppFile.path(props.familyFileId, {

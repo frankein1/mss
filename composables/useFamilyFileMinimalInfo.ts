@@ -14,10 +14,12 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     { queryKey: 'getFamilyFileMinimalInfo' }
   )
 
-  const familyFileIdentification = computed(() =>
-    familyFile.value && familyFile.value.beneficiaries
-      ? familyFile.value.beneficiaries
-      : null
+  const familyFileIdentification = computed(
+    () => familyFile.value?.beneficiaries ?? null
+  )
+
+  const familyFilePermissions = computed(
+    () => familyFile.value?.permissions ?? null
   )
 
   const getBeneficiaryIdOnPageLoad = () => {
@@ -33,6 +35,7 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
 
   return {
     familyFileIdentification,
+    familyFilePermissions,
     pending,
     error,
     refreshFamilyFile: refresh,
