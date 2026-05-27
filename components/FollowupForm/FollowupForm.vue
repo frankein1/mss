@@ -25,9 +25,7 @@
 
     <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
       <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
-      <div
-        class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
-      >
+      <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--top">
         <div class="fr-col-12">
           <VeeCheckbox
             :label="followupFieldLabels.firstFollowup"
