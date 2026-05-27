@@ -18,6 +18,7 @@ import dayjs from 'dayjs'
 mockNuxtImport('useRuntimeConfig', () => {
   return () => {
     return {
+      app: { baseURL: '/' },
       public: {
         email: { from: 'mss@example.com' }
       },

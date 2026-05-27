@@ -5,8 +5,6 @@ import { formatUTCTimestamp } from '~/server/utils/formatUTCTimestamp'
 
 const BREVO_LIST_ID = 10
 
-const runtimeConfig = useRuntimeConfig()
-
 export function mapUserToBrevoContact(
   user: Pick<
     User,
@@ -109,6 +107,8 @@ export function mapStructureToBrevoCompany(
     dpoLastName,
     type
   } = structure
+
+  const runtimeConfig = useRuntimeConfig()
 
   // Be careful about the case with company attributes:
   // Brevo API seems to be case-sensitive when it wants to.
