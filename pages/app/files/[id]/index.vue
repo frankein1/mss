@@ -241,9 +241,6 @@
       success: async () => {
         const beneficiaryCount = familyFileIdentification.value?.length ?? 0
         if (beneficiaryCount > 1) {
-          // Refresh family file data: beneficiaries, budget etc...
-          // We have to do this because deleting a beneficiary changes
-          // family file data, and the client can't detect it by itself.
           await refreshFamilyFile()
           await navigateTo(routes.file.AppFile.path(familyFileId.value))
         } else {
@@ -335,7 +332,7 @@
       mutationSplit: () => trpcClient.file.split.mutate({ id }),
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
         trpcClient.beneficiary.updateTaxHousehold.mutate(values),
-      reloadData
+      reloadData: refreshFamilyFile
     })
   }
 
@@ -434,9 +431,5 @@
         )
       )
     }
-  }
-
-  async function reloadData() {
-    await refreshNuxtData(['file.getFamilyFileMinimalInfo'])
   }
 </script>
