@@ -1,9 +1,7 @@
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import { encrypt } from './encrypt'
 import { decrypt } from './decrypt'
 import { randomBytes } from 'node:crypto'
-
-vi.mock('~/server/lib/encryption/kms')
 
 const CONFIG = {
   kms: {
