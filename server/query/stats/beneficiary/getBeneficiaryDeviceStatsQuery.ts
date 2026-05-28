@@ -11,21 +11,27 @@ export async function getBeneficiaryDeviceStatsQuery(
   // HACK: right solution is to abstract groupBy in repo
   const constraints = BeneficiaryConstraints.get(user)
 
-  const grouped = await prismaClient.beneficiaryDevice.groupBy({
-    by: ['deviceNameId'],
+  // Group by (deviceNameId, beneficiaryId) to get unique (device, beneficiary) pairs,
+  // then count in JS — equivalent to COUNT(DISTINCT beneficiaryId) GROUP BY deviceNameId
+  const pairs = await prismaClient.beneficiaryDevice.groupBy({
+    by: ['deviceNameId', 'beneficiaryId'],
     where: {
       beneficiary: {
         ...prepareBeneficiaryStatFilters(input),
         ...constraints
       }
-    },
-    _count: true,
-    orderBy: { _count: { deviceNameId: 'desc' } }
+    }
   })
 
-  if (grouped.length === 0) {return []}
+  if (pairs.length === 0) {return []}
 
-  const deviceNameIds = grouped.map(g => g.deviceNameId)
+  const countByDeviceNameId: Record<string, number> = {}
+  for (const { deviceNameId } of pairs) {
+    countByDeviceNameId[deviceNameId] =
+      (countByDeviceNameId[deviceNameId] ?? 0) + 1
+  }
+
+  const deviceNameIds = Object.keys(countByDeviceNameId)
   const deviceNames = await prismaClient.beneficiaryDeviceName.findMany({
     where: { id: { in: deviceNameIds } },
     select: { id: true, name: true }
@@ -33,8 +39,10 @@ export async function getBeneficiaryDeviceStatsQuery(
 
   const nameById = Object.fromEntries(deviceNames.map(d => [d.id, d.name]))
 
-  return grouped.map(g => ({
-    name: nameById[g.deviceNameId] ?? '',
-    count: g._count
-  }))
+  return Object.entries(countByDeviceNameId)
+    .map(([deviceNameId, count]) => ({
+      name: nameById[deviceNameId] ?? '',
+      count
+    }))
+    .sort((a, b) => b.count - a.count)
 }
