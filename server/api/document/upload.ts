@@ -218,7 +218,7 @@ async function uploadToDb({
       expirationDate: expirationDate ?? null,
       documentContent: {
         create: {
-          content: file.data
+          content: file.data as Uint8Array<ArrayBuffer>
         }
       }
     }

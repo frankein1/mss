@@ -33,7 +33,7 @@
     "@braintree/sanitize-url": "^7.1.2",
     "@gouvfr/dsfr": "~1.14.1",
     "@gouvminint/vue-dsfr": "^8.8.0",
-    "@prisma/client": "^6.14.0",
+    "@prisma/client": "^6.19.3",
     "@scaleway/sdk": "^3.2.1",
     "@sentry/node": "^10.46.0",
     "@sentry/vue": "^10.46.0",
