@@ -9,7 +9,12 @@ export async function getFollowupMediumStatsQuery(
   input: StatFilterInput
 ) {
   const where = {
-    where: { socialSupport: prepareSocialSupportStatFilters(input) }
+    where: {
+      socialSupport: prepareSocialSupportStatFilters(input),
+      ...(input.deviceNameIds?.length
+        ? { beneficiaryDevice: { deviceNameId: { in: input.deviceNameIds } } }
+        : {})
+    }
   }
   appendConstraints(user, where, FollowupConstraints.get)
 
