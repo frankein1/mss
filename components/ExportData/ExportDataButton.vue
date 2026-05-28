@@ -19,23 +19,24 @@
 
   const modal = useModal()
 
-  const emit = defineEmits<{ export: [code: string] }>()
-
   const {
     isDownloading,
     title = undefined,
-    hasFilters = true
+    hasFilters = true,
+    export: exportFn
   } = defineProps<{
     isDownloading: boolean
     title?: string
     hasFilters?: boolean
+    export: (code: string) => Promise<void>
   }>()
 
   function exportConfirm() {
     modal.open(ExportDataConfirm, {
-      title: 'Attention aux données des bénéficiaires',
+      title: 'Saisir un code de validation pour télécharger les données',
+      size: 'lg',
       hasFilters: hasFilters,
-      export: (code: string) => emit('export', code)
+      export: exportFn
     })
   }
 </script>
