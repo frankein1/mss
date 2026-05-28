@@ -7,7 +7,8 @@ import { BeneficiaryDeviceNameRepo } from '~/server/database'
 const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
   BeneficiaryDeviceNameRepo.findMany(ctx.user, {
     select: { id: true, name: true },
-    where: { structureId: ctx.structure.id }
+    where: { structureId: ctx.structure.id, devices: { some: {} } },
+    orderBy: { name: 'asc' }
   })
 
 export const getDeviceNameListQuery = createQuery({
