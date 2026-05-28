@@ -69,14 +69,6 @@
 
       <StatsCard
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.devices.id"
-        :card-name="beneficiariesCardConfig.devices.name"
-      >
-        <StatsBeneficiariesDevices :filters="filters" />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="beneficiariesCardConfig.gender.id"
         :card-name="beneficiariesCardConfig.gender.name"
       >
@@ -229,6 +221,14 @@
             :filters="filters"
         /></StatsCard>
       </template>
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.devices.id"
+        :card-name="beneficiariesCardConfig.devices.name"
+      >
+        <StatsBeneficiariesDevices :filters="filters" />
+      </StatsCard>
     </section>
   </div>
 </template>
