@@ -152,7 +152,7 @@
     }
   )
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { errors } = useDisplayFormErrors(
     form,

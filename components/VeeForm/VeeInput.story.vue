@@ -102,7 +102,7 @@
     dateOrEmpty
   } from '~/server/schema/helpers.schema'
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const schema = z.object({
     free: z.string(),
     required: z.string(),

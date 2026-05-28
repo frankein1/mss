@@ -39,7 +39,7 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const title = routes.structure.AppStructureUserAdd.title
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   useHead({ title })
 

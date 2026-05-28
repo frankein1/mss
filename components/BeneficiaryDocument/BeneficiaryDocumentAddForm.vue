@@ -107,7 +107,7 @@
     }))
   )
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const isSubmitting = ref(false)
 
   const initialBeneficiaryId =

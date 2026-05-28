@@ -7,13 +7,12 @@ import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticate
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
-const { auth } = useRuntimeConfig()
-
 /** RDVSP Oauth callback endpoint
  * Register rdvsp auth token in database and redirect to page
  * which will handle the action to be performed after signin
  */
 export default defineEventHandler(async event => {
+  const { auth } = useRuntimeConfig()
   console.log('in rdvsp callback for auth')
   const { code, state } = getQuery(event)
 

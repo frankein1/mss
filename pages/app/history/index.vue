@@ -1,3 +1,9 @@
 <script setup lang="ts">
-  await navigateTo('/app/history/followups', { replace: true })
+  definePageMeta({
+    middleware: [
+      function () {
+        return navigateTo('/app/history/followups', { replace: true })
+      }
+    ]
+  })
 </script>

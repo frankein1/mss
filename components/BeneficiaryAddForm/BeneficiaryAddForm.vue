@@ -140,7 +140,7 @@
   const modal = useModal()
   const success = ref(false)
   const newBeneficiaryId = ref<string | undefined>(undefined)
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const addMemberModeOptions = [

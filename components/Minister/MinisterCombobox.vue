@@ -84,11 +84,7 @@
   const currentMinister = ref(true)
   const inputQuery = ref<string | null>()
   const trpcClient = useTrpcClient()
-  const {
-    data,
-    status,
-    error: getMinisterError
-  } = await trpcClient.minister.getMinisters.useQuery()
+  const { data } = await trpcClient.minister.getMinisters.useQuery()
 
   if (data) {
     ministers.value =
@@ -169,7 +165,7 @@
     }
   })
   // focus
-  const header = ref<HTMLElement | null>(null)
+  const header = useTemplateRef('header')
   const onFocusHeader = () => {
     if (!header.value) {
       return

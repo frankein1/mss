@@ -374,7 +374,7 @@
     submit: [payload: Event]
   }>()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
   const { value: familyFileId } = useField<string | null>('familyFileId')

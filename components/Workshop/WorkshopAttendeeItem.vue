@@ -129,10 +129,7 @@
       v-if="attendee.listType === WorkshopAttendeeListType.Main"
       class="presence"
     >
-      <form
-        ref="attendeeForm"
-        novalidate
-      >
+      <form novalidate>
         <VeeRadioButtons
           :id="ATTENDEE_PRESENCE_ID"
           name="attendance"
@@ -169,7 +166,6 @@
   import { beneficiaryTitleKeys } from '~/client/options'
   import WorkshopUpdateAttendeeModal from './WorkshopUpdateAttendeeModal.vue'
 
-  const attendeeForm = ref<HTMLFormElement | null>(null)
   const modal = useModal()
 
   const {

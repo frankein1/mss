@@ -86,7 +86,7 @@
   import { useForm } from 'vee-validate'
   import ModalStory from '~/components/MultiSelect/modal.story.vue'
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const modal = useModal()
 
   const tabTitles = [

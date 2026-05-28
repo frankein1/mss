@@ -33,11 +33,8 @@ export default defineVitestConfig({
     },
     // tests will run sequentially, but in the same global context
     // so you must provide isolation yourself
-    poolOptions: {
-      threads: {
-        singleThread: true
-      }
-    },
+    maxWorkers: 1,
+    isolate: false,
     setupFiles: 'test/server/setup.ts'
   }
 })

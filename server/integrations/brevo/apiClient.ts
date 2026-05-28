@@ -2,8 +2,6 @@ import type { Structure } from '@prisma/client'
 import type { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import { URLSearchParams } from 'url'
 
-const runtimeConfig = useRuntimeConfig()
-
 // Do not use Brevo's official TypeScript SDK under any circumstances.
 // It was obviously poorly auto-generated from another language, is not maintained,
 // and even the simplest example from the README doesn't work.
@@ -11,10 +9,13 @@ const runtimeConfig = useRuntimeConfig()
 // Use direct HTTP calls for now.
 
 const API_HOST = 'https://api.brevo.com/v3'
-const BREVO_API_KEY = runtimeConfig?.brevo?.apiKey
+function getApiKey() {
+  return useRuntimeConfig()?.brevo?.apiKey
+}
 
 export async function getContact(userId: string) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const result = await fetch(
@@ -22,7 +23,7 @@ export async function getContact(userId: string) {
     {
       method: 'GET',
       headers: {
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       }
     }
   )
@@ -33,13 +34,14 @@ export async function getContact(userId: string) {
 export async function createOrUpdateContact(
   contact: ReturnType<typeof mapUserToBrevoContact>
 ) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/contacts`, {
     method: 'POST',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(contact)
@@ -47,14 +49,15 @@ export async function createOrUpdateContact(
 }
 
 export async function createCompany(structure: Pick<Structure, 'id' | 'name'>) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const { id, name } = structure
   const result = await fetch(`${API_HOST}/companies`, {
     method: 'POST',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({ name, attributes: { ext_id: id } })
@@ -67,13 +70,14 @@ export async function updateCompany(
   id: string,
   company: ReturnType<typeof mapStructureToBrevoCompany>
 ) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies/${id}`, {
     method: 'PATCH',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(company)
@@ -87,13 +91,14 @@ export async function linkContactToCompany({
   companyId: string
   contactId: string
 }) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies/link-unlink/${companyId}`, {
     method: 'PATCH',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({ linkContactIds: [contactId] })
@@ -101,13 +106,14 @@ export async function linkContactToCompany({
 }
 
 export async function getCompanyAttributes() {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/crm/attributes/companies`, {
     method: 'GET',
     headers: {
-      'api-key': BREVO_API_KEY
+      'api-key': apiKey
     }
   })
 }
@@ -121,13 +127,14 @@ export async function createCompanyAttribute({
   type: 'text' | 'boolean' | 'date' | 'number' | 'single-select'
   options?: string[]
 }) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/crm/attributes`, {
     method: 'POST',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
@@ -148,7 +155,8 @@ export async function createContactAttribute({
   type: 'id' | 'text' | 'boolean' | 'date' | 'float' | 'category'
   options?: string[]
 }) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(
@@ -156,7 +164,7 @@ export async function createContactAttribute({
     {
       method: 'POST',
       headers: {
-        'api-key': BREVO_API_KEY,
+        'api-key': apiKey,
         'content-type': 'application/json'
       },
       body: JSON.stringify({
@@ -174,13 +182,14 @@ export async function createContactAttribute({
 }
 
 export async function getCompanies() {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/companies`, {
     method: 'GET',
     headers: {
-      'api-key': BREVO_API_KEY
+      'api-key': apiKey
     }
   })
 }
@@ -205,13 +214,14 @@ interface SendEventOptions {
 }
 
 export async function sendEvent(options: SendEventOptions) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   await fetch(`${API_HOST}/events`, {
     method: 'POST',
     headers: {
-      'api-key': BREVO_API_KEY,
+      'api-key': apiKey,
       'content-type': 'application/json'
     },
     body: JSON.stringify(options)
@@ -219,7 +229,8 @@ export async function sendEvent(options: SendEventOptions) {
 }
 
 export async function getCompanyByStructureId(structure_id: string) {
-  if (!BREVO_API_KEY) {
+  const apiKey = getApiKey()
+  if (!apiKey) {
     return
   }
   const queryParams = new URLSearchParams({
@@ -228,7 +239,7 @@ export async function getCompanyByStructureId(structure_id: string) {
   const result = await fetch(`${API_HOST}/companies?${queryParams}`, {
     method: 'GET',
     headers: {
-      'api-key': BREVO_API_KEY
+      'api-key': apiKey
     }
   })
   if (!result.ok) {

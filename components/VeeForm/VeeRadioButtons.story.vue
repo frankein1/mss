@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const options = [
     { value: 'optionOne', label: 'Option 1', disabled: false },
     { value: 'optionTwo', label: 'Option 2', disabled: false },

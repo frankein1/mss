@@ -49,7 +49,7 @@
   const route = useRoute()
 
   const isSubmitting = ref<boolean>(false)
-  const formContainer = ref<HTMLElement | null>(null)
+  const formContainer = useTemplateRef('formContainer')
 
   const familyFileId = route.params.id as string
 

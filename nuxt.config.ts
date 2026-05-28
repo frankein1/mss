@@ -1,5 +1,7 @@
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
 import { createRequire } from 'module'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { MAX_UPLOAD_SIZE_BYTES } from './utils/constants'
 
 const prismaClientPath = createRequire(import.meta.url).resolve(
@@ -138,13 +140,14 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          includePaths: ['./node_modules', './node_modules/@gouvfr/dsfr'],
-          // Note: will be migrated to modern-compiled with sass-embedded when dsfr will be migrated to sass 2.0
-          // https://vite.dev/config/shared-options.html#css-preprocessoroptions
-          api: 'legacy',
-          silenceDeprecations: ['legacy-js-api'],
-          // Note: The syntax in sass 2.0 will have to be migrated in dsfr. Warnings are suppressed in the mean time.
-          // See https://sass-lang.com/documentation/breaking-changes/import/
+          loadPaths: [
+            resolve(dirname(fileURLToPath(import.meta.url)), 'node_modules'),
+            resolve(
+              dirname(fileURLToPath(import.meta.url)),
+              'node_modules/@gouvfr/dsfr'
+            )
+          ],
+          silenceDeprecations: ['import', 'global-builtin'],
           quietDeps: true
         }
       }

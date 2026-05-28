@@ -55,7 +55,7 @@
 <script setup lang="ts">
   import { useForm } from 'vee-validate'
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   type InitialValue = { [key: string]: boolean }
 

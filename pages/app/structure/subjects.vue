@@ -128,7 +128,7 @@
   const { data, pending, error } =
     await trpcClient.structure.getSocialSupportSubjects.useQuery()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const isSubmitting = ref(false)
 
   const { handleSubmit, meta, setErrors } =
