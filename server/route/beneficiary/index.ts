@@ -10,6 +10,7 @@ import { updateExternalOrganisationsMutation } from './update-external-organisat
 import { updateDevicesMutation } from './update-devices.mutation'
 import { getDeviceNameListQuery } from './get-device-name-list.query'
 import { getDevicesForBeneficiaryQuery } from './get-devices-for-beneficiary.query'
+import { checkDeviceHasFollowupQuery } from './check-device-has-followup.query'
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
@@ -23,7 +24,6 @@ import { getBeneficiaryArchivePermissionsQuery } from './get-archive-permissions
 import { updateArchiveDateMutation } from './update-archive-date.mutation'
 import { linkToFamilyFileMutation } from './link-to-family-file.mutation'
 import getBeneficiaryListQuery from './get-list.query'
-import { checkDeviceHasFollowupQuery } from './check-device-has-followup.query'
 
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
@@ -40,6 +40,7 @@ export const beneficiaryRoutes = {
   updateDevicesMutation,
   getDeviceNameListQuery,
   getDevicesForBeneficiaryQuery,
+  checkDeviceHasFollowupQuery,
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,
