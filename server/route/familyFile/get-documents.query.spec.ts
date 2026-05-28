@@ -255,15 +255,25 @@ describe('Confidential documents', () => {
     })
 
     const input: Input = { familyFileId: FAMILY_FILE_ID }
-    const roles = ['structureManager', 'instructor', 'receptionAgent'] as const
+    // ReceptionAgent and Referent cannot see the document
+    const roles = ['structureManager', 'instructor'] as const
     const results = await Promise.all(
       roles.map(r => trpc[r].file.getDocuments(input))
     )
 
-    results.forEach(res => {
-      const doc = res.documents.find(d => d.document.key === key)
-      expect(doc).toBeDefined()
-      expect(doc!.permissions.view).toBe(false)
+    results.forEach((res, index) => {
+      expect(res.count).toBe(1)
+      expect(res.documents[0]!.document.key).toBe(key)
+
+      expect(res.documents[0]!.permissions).toEqual({
+        edit: false,
+        view: false,
+        // Structure manager can delete a confidential document that she has not created
+        delete: index === 0 ? true : false,
+        set: {
+          confidential: false
+        }
+      })
     })
   })
 })
