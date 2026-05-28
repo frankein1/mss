@@ -19,10 +19,12 @@
         :with-creation="true"
       />
       <AtomAlert
-        v-if="isDuplicate"
+        v-if="showDuplicateAlert"
         :alert-type="AlertType.Info"
         message="Attention, ce bénéficiaire semble déjà être inscrit dans un dispositif similaire"
+        :closeable="true"
         class="fr-mt-2w"
+        @close="closeDuplicateAlert"
       />
     </div>
 
@@ -92,6 +94,26 @@
   const endDate = useFieldValue<string | null | undefined>(
     () => `devices[${props.index}].endDate`
   )
+
+  const dismissed = ref(false)
+  const showDuplicateAlert = ref(false)
+
+  watch(
+    () => props.isDuplicate,
+    isDuplicate => {
+      if (isDuplicate && !dismissed.value) {
+        showDuplicateAlert.value = true
+      } else if (!isDuplicate) {
+        showDuplicateAlert.value = false
+        dismissed.value = false
+      }
+    }
+  )
+
+  function closeDuplicateAlert() {
+    showDuplicateAlert.value = false
+    dismissed.value = true
+  }
 
   const emit = defineEmits<{
     removeDevice: []
