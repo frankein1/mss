@@ -40,7 +40,7 @@
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
-  const formContainer = ref<HTMLFormElement | null>(null)
+  const formContainer = useTemplateRef('formContainer')
 
   const {
     data: user,

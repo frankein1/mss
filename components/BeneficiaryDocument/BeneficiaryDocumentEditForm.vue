@@ -72,7 +72,7 @@
   }>()
 
   const isSubmitting = ref(false)
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { handleSubmit } = useForm<EditDocumentInput>({
     validationSchema: toTypedSchema(editDocumentSchema),

@@ -45,7 +45,7 @@
   import { addCommentSchema } from '~/server/schema'
 
   const snackbar = useSnackbar()
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const props = defineProps<{
     socialSupport: SocialSupportDetailData

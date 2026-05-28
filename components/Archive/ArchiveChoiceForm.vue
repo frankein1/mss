@@ -23,10 +23,7 @@
       :alert-type="AlertType.Warning"
       :message="getWarningMessage()"
     />
-    <form
-      ref="archiveChoiceForm"
-      novalidate
-    >
+    <form novalidate>
       <VeeRadioButtons
         name="archive"
         label="archiver"
@@ -56,8 +53,6 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-
-  const archiveChoiceForm = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
     archiveDueDateHistory: number

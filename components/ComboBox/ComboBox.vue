@@ -135,7 +135,7 @@
   }
 
   const loading = ref<boolean>(false)
-  const input = ref<HTMLFormElement | null>(null)
+  const input = useTemplateRef('input')
   const errorId = computed(() => `${useId()}-error`)
   const ariaDescribedby = computed(() => (error ? errorId.value : undefined))
 

@@ -90,7 +90,7 @@
     error
   } = await trpcClient.budget.getInfo.useQuery({ familyFileId })
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const isSubmitting = ref(false)
 
   function getRemainingAfterExpenses(

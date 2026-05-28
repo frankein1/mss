@@ -1,5 +1,6 @@
 import type { FormErrors, GenericObject } from 'vee-validate'
 import type { FieldLabels } from '~/types/fieldLabels'
+import type { Ref } from 'vue'
 
 function isDefinedError(
   error: [string, string | undefined]

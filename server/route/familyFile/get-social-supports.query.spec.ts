@@ -11,6 +11,7 @@ type Input = inferProcedureInput<AppRouter['file']['getSocialSupports']>
 mockNuxtImport('useRuntimeConfig', () => {
   return () => {
     return {
+      app: { baseURL: '/' },
       rdvsp: {
         issuer: 'https://demo.anct.gouv.fr'
       }

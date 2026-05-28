@@ -240,7 +240,7 @@
 
   const fieldsDisabled = computed(() => props.dataSource === 'DataInclusionV1')
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const showPhone2 = ref(props.showPhone2)
   const partnerWithSameSiret = ref<PartnerOrganizationData>()
 

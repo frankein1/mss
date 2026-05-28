@@ -100,7 +100,7 @@
     toggleReadState: [read: boolean]
   }>()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { controlledValues } = useForm<{ read: boolean }>({
     initialValues: { read: !!props.notification.read }

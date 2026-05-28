@@ -167,7 +167,7 @@
   const { version, sourceCode } = useClientVersion()
   const { application } = usePermissions()
 
-  const menuButton = ref(null)
+  const menuButton = useTemplateRef('menuButton')
 
   const closeMenu = () => {
     if (

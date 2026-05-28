@@ -59,7 +59,7 @@
     }
   })
 
-  const formRef = ref<HTMLFormElement | null>(null)
+  const formRef = useTemplateRef('formRef')
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,

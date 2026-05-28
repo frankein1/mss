@@ -55,7 +55,7 @@
 
   const modal = useModal()
 
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
 
   const { handleSubmit } = useForm<{ beneficiaryId: string }>({
     validationSchema: toTypedSchema(z.object({ beneficiaryId: z.string() })),

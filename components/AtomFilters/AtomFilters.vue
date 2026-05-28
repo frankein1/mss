@@ -151,7 +151,7 @@
   }>()
 
   const FILTERS_ID = 'filters-' + useId()
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const expanded = ref<boolean>(props.expandedByDefault)
 
   const { controlledValues, resetForm, setFieldValue, validate } = useForm({

@@ -190,7 +190,7 @@
   }>()
 
   const complete = ref<boolean>(false)
-  const form = ref<HTMLFormElement | null>(null)
+  const form = useTemplateRef('form')
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const { application } = usePermissions()
