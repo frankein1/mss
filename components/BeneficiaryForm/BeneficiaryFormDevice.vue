@@ -18,6 +18,12 @@
         :options="deviceNameOptions"
         :with-creation="true"
       />
+      <AtomAlert
+        v-if="isDuplicate"
+        :alert-type="AlertType.Info"
+        message="Attention, ce bénéficiaire semble déjà être inscrit dans un dispositif similaire"
+        class="fr-mt-2w"
+      />
     </div>
 
     <div class="fr-col-12 fr-col-lg-6">
@@ -74,9 +80,11 @@
 <script setup lang="ts">
   import { useFieldValue } from 'vee-validate'
   import { routes } from '~/utils/routes'
+  import { AlertType } from '~/utils/constants/alert'
 
   const props = defineProps<{
     index: number
+    isDuplicate: boolean
     deviceNameOptions: Options
     partnerOrganisationOptions: Options
   }>()

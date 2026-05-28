@@ -11,21 +11,11 @@
       </div>
     </BeneficiaryFormSection>
 
-    <BeneficiaryFormSection v-if="showDuplicateWarning && hasDuplicateDevice">
-      <div class="fr-col-12">
-        <AtomAlert
-          :alert-type="AlertType.Info"
-          text="Ce bénéficiaire est déjà inscrit dans un dispositif similaire"
-          :closeable="true"
-          @close="showDuplicateWarning = false"
-        />
-      </div>
-    </BeneficiaryFormSection>
-
     <BeneficiaryFormDevice
       v-for="(field, idx) in fields"
       :key="field.key"
       :index="idx"
+      :is-duplicate="duplicateFlags[idx] ?? false"
       :device-name-options="deviceNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
       @remove-device="handleRemoveDevice(idx)"
@@ -48,7 +38,6 @@
 <script setup lang="ts">
   import { v4 } from 'uuid'
   import BeneficiaryFormDeviceDeleteModal from './BeneficiaryFormDeviceDeleteModal.vue'
-  import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
   const modal = useModal()
@@ -74,17 +63,14 @@
 
   const { remove, fields, push } = useFieldArray('devices')
 
-  const hasDuplicateDevice = computed(() => {
-    const names = fields.value
-      .map(f => (f.value as { name?: string }).name)
-      .filter(Boolean)
-    return new Set(names).size < names.length
-  })
-
-  const showDuplicateWarning = ref(true)
-
-  watch(hasDuplicateDevice, val => {
-    if (val) {showDuplicateWarning.value = true}
+  const duplicateFlags = computed(() => {
+    const names = fields.value.map(
+      f => (f.value as { name?: string }).name ?? ''
+    )
+    return names.map(
+      (name, idx) =>
+        Boolean(name) && names.some((n, i) => i !== idx && n === name)
+    )
   })
 
   function addDevice() {
@@ -92,7 +78,8 @@
   }
 
   async function handleRemoveDevice(idx: number) {
-    const deviceId = (fields.value[idx].value as { id?: string }).id
+    const deviceId = (fields.value[idx]?.value as { id?: string } | undefined)
+      ?.id
 
     if (!deviceId) {
       remove(idx)
