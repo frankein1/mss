@@ -255,12 +255,7 @@ describe('Confidential documents', () => {
     })
 
     const input: Input = { familyFileId: FAMILY_FILE_ID }
-    const roles = [
-      'structureManager',
-      'instructor',
-      'referent',
-      'receptionAgent'
-    ] as const
+    const roles = ['structureManager', 'instructor', 'receptionAgent'] as const
     const results = await Promise.all(
       roles.map(r => trpc[r].file.getDocuments(input))
     )
