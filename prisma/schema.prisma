@@ -466,9 +466,12 @@ enum FollowupMedium {
   Videoconference
   // Entretien avec un tiers
   ThirdParty
+  // Gestion administrative
+  Administrative
 }
 
 enum FollowupDuration {
+  LessThanQuarter
   Quarter
   Half
   ThreeQuarter

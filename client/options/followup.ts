@@ -14,6 +14,7 @@ export const followupMediumKeys = buildKeys({
   [FollowupMedium.ThirdParty]: 'Entretien avec un tiers',
   [FollowupMedium.PhoneCall]: 'Entretien téléphonique',
   [FollowupMedium.Email]: 'E-mail',
+  [FollowupMedium.Administrative]: 'Gestion administrative',
   [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
   [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
   [FollowupMedium.Videoconference]: 'Visioconférence'
@@ -25,6 +26,7 @@ export const followupMediumSelectKeys = buildKeys({
   [FollowupMedium.PostalMail]: 'Courrier',
   [FollowupMedium.PhoneCall]: 'Entretien téléphonique',
   [FollowupMedium.Email]: 'E-mail',
+  [FollowupMedium.Administrative]: 'Gestion administrative',
   [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
   [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
   [FollowupMedium.Videoconference]: 'Visioconférence'
@@ -37,11 +39,12 @@ export const followupStatusKeys = buildKeys({
 })
 
 export const followupDurationKeys = buildKeys({
+  [FollowupDuration.LessThanQuarter]: '- de 15 min',
   [FollowupDuration.Quarter]: '15 min',
   [FollowupDuration.Half]: '30 min',
   [FollowupDuration.ThreeQuarter]: '45 min',
   [FollowupDuration.Hour]: '1 heure',
-  [FollowupDuration.MoreThanHour]: '+ de 1 heure'
+  [FollowupDuration.MoreThanHour]: '+ de 1 heure'
 })
 
 export const followupNotFilledKeys = buildKeys({
