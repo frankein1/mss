@@ -29,6 +29,22 @@
         <template #title>
           <p class="fr-mb-0 fr-h3 title-blue">
             {{ beneficiaryCountLabel[0] }}
+            <template v-if="hasDateFilter">
+              <button
+                aria-describedby="tooltip-beneficiary-count"
+                type="button"
+                class="fr-btn--tooltip fr-btn"
+              >
+                infobulle
+              </button>
+              <span
+                id="tooltip-beneficiary-count"
+                class="fr-tooltip fr-placement"
+                role="tooltip"
+                >Bénéficiaires ayant reçu au moins un accompagnement dans la
+                période concernée.
+              </span>
+            </template>
           </p>
           <p
             v-if="beneficiaryCountLabel[1] && beneficiaryCount?.count"
@@ -263,17 +279,19 @@
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : `${word}`
 
-  const beneficiaryCountLabel = computed(() => {
-    const hasDateFilter =
+  const hasDateFilter = computed(
+    () =>
       (filters.value.period &&
         filters.value.period !== StatPeriodFilter.Custom) ||
       (filters.value.period === StatPeriodFilter.Custom &&
         (filters.value.fromDate || filters.value.toDate))
+  )
 
+  const beneficiaryCountLabel = computed(() => {
     const count = beneficiaryCount.value?.count || 0
     const countNew = beneficiaryCount.value?.new || 0
 
-    if (hasDateFilter) {
+    if (hasDateFilter.value) {
       return [
         `${count} ${plural('Bénéficiaire', count)} ${plural('accompagné', count)}`,
         `${countNew} ${plural('bénéficiaire', countNew)} ${plural('créé', countNew)} dans la période`
