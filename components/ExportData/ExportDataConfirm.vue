@@ -42,7 +42,7 @@
         <AtomLoader :diameter="32" />
         <p class="fr-mt-1w fr-text--sm">
           Export en cours... Le téléchargement peut prendre plusieurs secondes
-          avant de démarrer
+          avant de démarrer.
         </p>
       </div>
 
