@@ -50,8 +50,7 @@ export const beneficiaryRoutes = {
   createFamilyFileMemberMutation,
   updateArchiveDateMutation,
   linkToFamilyFileMutation,
-  getBeneficiaryListQuery,
-  checkDeviceHasFollowupQuery
+  getBeneficiaryListQuery
 }
 
 export type { SimilarBeneficiary }
