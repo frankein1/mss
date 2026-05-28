@@ -1,9 +1,21 @@
 import { UserRole, UserStatus } from '@prisma/client'
-import type { JwtUser } from '~/server/lib/jwt'
+import type { StructureType } from '@prisma/client'
 import { formatUserDisplayName } from '~/utils/user'
 
+export type UserProfile = {
+  id: string
+  lastName: string
+  firstName: string
+  email: string
+  role: UserRole
+  status: UserStatus
+  structureId: string | null
+  structureType: StructureType | null
+  CGUHistoryVersion: string | null
+}
+
 export function useAuthState() {
-  const user = useState<JwtUser | undefined | null>(
+  const user = useState<UserProfile | undefined | null>(
     'auth:state',
     () => undefined
   )

@@ -1,7 +1,7 @@
-import type { JwtUser } from '~/server/lib/jwt'
+import type { SecurityRuleGrantee } from '~/server/security'
 import { forbidden } from '../../utils/api/errors'
 
-export const checkUserIsAuthenticated = (user: JwtUser) => {
+export const checkUserIsAuthenticated = (user: SecurityRuleGrantee) => {
   if (
     !user ||
     user.status !== 'Active' ||

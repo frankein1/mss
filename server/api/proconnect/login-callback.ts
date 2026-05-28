@@ -3,6 +3,7 @@ import { UserStatus, UserActivityType } from '@prisma/client'
 import pkg from 'jsonwebtoken'
 import { signJwt } from '~/server/lib/jwt'
 import { getProConnectClient } from '~/server/lib/proconnect.client'
+import { structureContextSelect } from '~/server/utils/fetchUserContext'
 import type {
   ProConnectUserInfo,
   ProConnectClient
@@ -14,9 +15,7 @@ import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
 import type { AuthSession } from '~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
-import { structureContextQuery } from '~/server/trpc/createContext'
 import { cookieOptions } from '~/utils/cookie'
-import type { JwtUser } from '~/server/lib/jwt'
 import { routes } from '~/utils/routes'
 import { isSafeRedirectUrl } from '~/utils/isSafeRedirectUrl'
 import jwksClient from 'jwks-rsa'
@@ -222,33 +221,9 @@ export default defineEventHandler(async event => {
   }
 
   // Generate MSS token
-  const {
-    firstName,
-    lastName,
-    id,
-    role,
-    status,
-    CGUHistory,
-    structure,
-    firstAccess
-  } = user
+  const { id, firstAccess } = user
 
-  const CGUHistoryVersion = CGUHistory[0]?.version || null
-
-  const jwtUser: JwtUser = {
-    firstName,
-    lastName,
-    id,
-    email,
-    role,
-    status,
-    structureId: structure?.id || null,
-    CGUHistoryVersion,
-    structureType: structure?.type || null
-  }
-
-  // Create auth mss token
-  const sessionToken = signJwt(jwtUser, jwtKey, tokenValidationInMinutes)
+  const sessionToken = signJwt({ id }, jwtKey, tokenValidationInMinutes)
 
   const now = new Date()
   const data: Prisma.UserUpdateInput = {
@@ -353,7 +328,7 @@ const userSelect: { select: Prisma.UserSelect } = {
     ...includeOrderedCGUHistory(),
     structure: {
       select: {
-        ...structureContextQuery().select,
+        ...structureContextSelect,
         disabled: true
       }
     }

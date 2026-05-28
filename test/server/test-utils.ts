@@ -46,42 +46,49 @@ const users = {
   structureManager: {
     id: fixturesUsers[FixtureUserRole.StructureManager].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.StructureManager].role,
     status: fixturesUsers[FixtureUserRole.StructureManager].status
   },
   receptionAgent: {
     id: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.ReceptionAgent].role,
     status: fixturesUsers[FixtureUserRole.ReceptionAgent].status
   },
   socialWorker: {
     id: fixturesUsers[FixtureUserRole.SocialWorker].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.SocialWorker].role,
     status: fixturesUsers[FixtureUserRole.SocialWorker].status
   },
   instructor: {
     id: fixturesUsers[FixtureUserRole.InstructorActive].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.InstructorActive].role,
     status: fixturesUsers[FixtureUserRole.InstructorActive].status
   },
   referent: {
     id: fixturesUsers[FixtureUserRole.Referent].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.Referent].role,
     status: fixturesUsers[FixtureUserRole.Referent].status
   },
   administrator: {
     id: fixturesUsers[FixtureUserRole.Administrator].id,
     structure,
+    structureId: structure.id,
     role: fixturesUsers[FixtureUserRole.Administrator].role,
     status: fixturesUsers[FixtureUserRole.Administrator].status
   },
   structureManagerMinistere: {
     id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id,
     structure: structureMinistere,
+    structureId: structureMinistere.id,
     role: fixturesUsers[FixtureUserRole.StructureManagerMinistere].role,
     status: fixturesUsers[FixtureUserRole.StructureManagerMinistere].status
   }

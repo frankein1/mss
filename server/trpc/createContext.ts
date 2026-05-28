@@ -1,33 +1,16 @@
 import type { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
-import { UserRepo } from '~/server/database'
-
-export const structureContextQuery = () => ({
-  // FIXME: move 'externalRdvspActive' to the token
-  select: { id: true, type: true, externalRdvspActive: true }
-})
-
-export const userContextQuery = () => ({
-  select: { id: true, role: true, status: true }
-})
+import { fetchUserContext } from '~/server/utils/fetchUserContext'
 
 export const createContext = async (event: H3Event) => {
-  const authUser = event.context.auth?.user
+  const userId = event.context.auth?.userId
 
-  if (!authUser) {
+  if (!userId) {
     return { event }
   }
 
   try {
-    // FIXME: remove this call & retrieve info directly from the token
-    const user = await UserRepo.prisma.findUniqueOrThrow({
-      where: { id: authUser.id },
-      select: {
-        ...userContextQuery().select,
-        structure: structureContextQuery()
-      }
-    })
-
+    const user = await fetchUserContext(userId)
     return { event, user }
   } catch {
     return { event, user: null }

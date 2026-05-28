@@ -1,6 +1,6 @@
 import { useAuthState } from './useAuthState'
+import type { UserProfile } from './useAuthState'
 import type { AppContextPermissions } from '~/server/security'
-import type { JwtUser } from '~/server/lib/jwt'
 
 export function useAuth() {
   const state = useAuthState()
@@ -11,15 +11,14 @@ export function useAuth() {
     reset()
   }
 
-  /** Fetch a new auth token after having verified the current one */
   function refreshToken() {
-    return $fetch<JwtUser>('/api/auth/refresh-token')
+    return $fetch('/api/auth/refresh-token')
   }
 
   async function getSession() {
     const headers = useRequestHeaders(['cookie'])
     const session = await $fetch<{
-      user: JwtUser
+      user: UserProfile
       permissions: AppContextPermissions
     }>('/api/auth/get-session', {
       headers
