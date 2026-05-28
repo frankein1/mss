@@ -59,6 +59,9 @@ export const beneficiaryRouter = router({
   getDevicesForBeneficiary: protectedProcedure
     .input(routes.getDevicesForBeneficiaryQuery.inputValidation)
     .query(routes.getDevicesForBeneficiaryQuery.execute),
+  checkDeviceHasFollowup: protectedProcedure
+    .input(routes.checkDeviceHasFollowupQuery.inputValidation)
+    .query(routes.checkDeviceHasFollowupQuery.execute),
   updateArchiveDate: protectedProcedure
     .input(routes.updateArchiveDateMutation.inputValidation)
     .mutation(routes.updateArchiveDateMutation.execute),
