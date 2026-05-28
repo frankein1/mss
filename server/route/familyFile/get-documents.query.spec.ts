@@ -255,11 +255,21 @@ describe('Confidential documents', () => {
     })
 
     const input: Input = { familyFileId: FAMILY_FILE_ID }
-    const result = await trpc.structureManager.file.getDocuments(input)
+    const roles = [
+      'structureManager',
+      'instructor',
+      'referent',
+      'receptionAgent'
+    ] as const
+    const results = await Promise.all(
+      roles.map(r => trpc[r].file.getDocuments(input))
+    )
 
-    const doc = result.documents.find(d => d.document.key === key)
-    expect(doc).toBeDefined()
-    expect(doc!.permissions.view).toBe(false)
+    results.forEach(res => {
+      const doc = res.documents.find(d => d.document.key === key)
+      expect(doc).toBeDefined()
+      expect(doc!.permissions.view).toBe(false)
+    })
   })
 })
 
