@@ -2,20 +2,26 @@
   <div v-if="isSubmitting">Loading...</div>
   <div v-else-if="error">{{ error.message }}</div>
   <div v-else>
-    <p>Ne fermez pas cette fenêtre.</p>
-
-    <p>
-      Vous êtes sur le point d'exporter des données personnelles des
-      bénéficiaires.
-      <strong>
+    <p v-if="hasFilters">
+      Toutes les pages de résultats seront exportées avec les filtres actuels.
+    </p>
+    <AtomAlert
+      class="fr-mb-2w"
+      :alert-type="AlertType.Warning"
+      message="Vous êtes sur le point d'exporter des données personnelles des bénéficiaires."
+    >
+      <template #detailedMessage>
         Nous attirons votre attention sur les données sensibles du fichier que
         vous téléchargez.
-      </strong>
+      </template>
+    </AtomAlert>
+
+    <p class="fr-mb-2v">
+      Entrez le code reçu par email valable 10 minutes pour valider l'export de
+      données.
     </p>
 
-    <p v-if="hasFilters">
-      Toutes les pages seront exportées avec les filtres actuels.
-    </p>
+    <p class="fr-mb-2w">Veuillez ne pas fermer la modale.</p>
 
     <form
       ref="form"
@@ -25,13 +31,25 @@
       <VeeInput
         name="code"
         required
-        label="Veuillez entrer le code reçu par email valable 10 minutes pour valider
-      l'export de données"
+        :disabled="isExporting"
+        label="Code de validation"
       />
+
+      <div
+        v-if="isExporting"
+        class="export-loading"
+      >
+        <AtomLoader :diameter="32" />
+        <p class="fr-mt-1w fr-text--sm">
+          Export en cours... Le téléchargement peut prendre plusieurs secondes
+          avant de démarrer.
+        </p>
+      </div>
 
       <div class="export-btn-container">
         <button
           class="fr-btn"
+          :disabled="isExporting"
           @click="onSubmit"
         >
           Exporter
@@ -43,16 +61,18 @@
 
 <script lang="ts" setup>
   import { z } from 'zod'
+  import { AlertType } from '~/utils/constants/alert'
   import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
 
   const props = defineProps<{
     hasFilters?: boolean
-    export: (code: string) => void
+    export: (code: string) => Promise<void>
   }>()
 
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
+  const isExporting = ref(false)
   const error = ref<Error | null>(null)
 
   useTrpcMutation({
@@ -69,7 +89,7 @@
     validationSchema: toTypedSchema(
       z.object({
         code: z
-          .string()
+          .string({ required_error: requiredErrorMessage })
           .length(
             VALIDATION_CODE_LENGTH,
             'Le champ doit contenir 8 caractères.'
@@ -79,7 +99,12 @@
   })
 
   const onSubmit = handleSubmit(async ({ code }) => {
-    props.export(code)
+    isExporting.value = true
+    try {
+      await props.export(code)
+    } finally {
+      isExporting.value = false
+    }
   })
 </script>
 
@@ -89,5 +114,12 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+  }
+
+  .export-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
   }
 </style>

@@ -81,7 +81,7 @@
         view: true,
         edit: true,
         delete: false,
-        get: { details: true, dueDate: true, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -136,7 +136,7 @@
         view: true,
         edit: false,
         delete: false,
-        get: { details: true, dueDate: true, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -184,7 +184,7 @@
         view: true,
         edit: true,
         delete: true,
-        get: { details: true, dueDate: true, privateSynthesis: true },
+        get: { details: true, privateSynthesis: true },
         set: { privateSynthesis: true }
       }
     },
@@ -240,7 +240,7 @@
         view: true,
         edit: false,
         delete: false,
-        get: { details: false, dueDate: false, privateSynthesis: false },
+        get: { details: false, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -275,7 +275,7 @@
         view: true,
         edit: true,
         delete: false,
-        get: { details: true, dueDate: true, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -320,7 +320,7 @@
         view: true,
         edit: true,
         delete: true,
-        get: { details: true, dueDate: true, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -387,7 +387,7 @@
         view: true,
         edit: false,
         delete: false,
-        get: { details: true, dueDate: false, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -433,7 +433,7 @@
         view: true,
         edit: true,
         delete: false,
-        get: { details: true, dueDate: true, privateSynthesis: false },
+        get: { details: true, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     },
@@ -480,7 +480,7 @@
         view: true,
         edit: true,
         delete: true,
-        get: { details: true, dueDate: true, privateSynthesis: true },
+        get: { details: true, privateSynthesis: true },
         set: { privateSynthesis: true }
       }
     },
@@ -526,7 +526,7 @@
         view: true,
         edit: false,
         delete: false,
-        get: { details: false, dueDate: false, privateSynthesis: false },
+        get: { details: false, privateSynthesis: false },
         set: { privateSynthesis: false }
       }
     }

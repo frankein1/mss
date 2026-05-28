@@ -25,7 +25,7 @@
           v-if="application.export.history"
           :is-downloading="isDownloading"
           :has-filters="true"
-          @export="exportFollowups"
+          :export="exportFollowups"
         />
       </div>
       <div v-if="pending">

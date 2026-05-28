@@ -1,6 +1,6 @@
 ---
 paths:
-  - **/*.vue
+  - ./**/*.vue
 ---
 
 # Accessibility
@@ -16,3 +16,9 @@ Must be RGAA compliant (https://accessibilite.numerique.gouv.fr/methode/criteres
 - don't override DSFR components
 - Use `aria-label` or `aria-labelledby` on every interactive element without visible text
 - Use `aria-live="polite"` on dynamic content areas
+
+## Automatic testing
+
+- End to end playwright tests for a11y validation with Axe plugin tool
+- Test files in folder /e2e/\*
+- Run E2E tests via `pnpm test:e2e`
