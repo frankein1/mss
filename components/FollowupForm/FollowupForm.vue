@@ -43,6 +43,15 @@
             name="isThirdPartyInterview"
           />
         </div>
+        <div
+          v-if="isThirdPartyInterview"
+          class="fr-col-12"
+        >
+          <VeeInput
+            name="thirdPersonName"
+            :label="followupFieldLabels.thirdPersonName"
+          />
+        </div>
 
         <!-- ROW -->
         <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
@@ -94,15 +103,6 @@
           <VeeInput
             name="place"
             :label="followupFieldLabels.place"
-          />
-        </div>
-        <div
-          v-else-if="isThirdPartyInterview"
-          class="fr-col-12 fr-col-md-6"
-        >
-          <VeeInput
-            name="thirdPersonName"
-            :label="followupFieldLabels.thirdPersonName"
           />
         </div>
         <div class="fr-col-12 fr-col-md-6">

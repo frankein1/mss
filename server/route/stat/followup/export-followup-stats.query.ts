@@ -117,13 +117,21 @@ const handler = async ({
   addStatsWorksheet(workbook, "Objets d'accompagnement", subjectRows)
 
   // Followup medium
-  const followupMediumData = await getFollowupMediumStatsQuery(user, input)
-  const followupMediumRows: StatsRow[] = followupMediumData.map(item => ({
-    label: (followupMediumKeys.value(item.medium) ||
-      STATS_NULL_LABEL) as string,
-    number: item._count,
-    percent: toRatio(item._count, followupCount)
-  }))
+  const { mediumStats, isThirdPartyInterviewCount } =
+    await getFollowupMediumStatsQuery(user, input)
+  const followupMediumRows: StatsRow[] = [
+    {
+      label: 'Entretien avec une tierce personne',
+      number: isThirdPartyInterviewCount,
+      percent: toRatio(isThirdPartyInterviewCount, followupCount)
+    },
+    ...mediumStats.map(item => ({
+      label: (followupMediumKeys.value(item.medium) ||
+        STATS_NULL_LABEL) as string,
+      number: item._count,
+      percent: toRatio(item._count, followupCount)
+    }))
+  ]
   followupMediumRows.push({ label: 'Total', number: followupCount, percent: 1 })
   addStatsWorksheet(workbook, "Types d'entretien", followupMediumRows)
 
