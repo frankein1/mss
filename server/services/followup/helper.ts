@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import type { SocialSupportSubject, Prisma } from '@prisma/client'
+import { FollowupMedium } from '@prisma/client'
 import type { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
 import { FollowupPeriodFilter } from '~/types/followup'
 import { SortOrder } from '~/types/table'
@@ -34,8 +35,20 @@ export function prepareFilters(filters: FollowupFilterInput) {
 
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
-  if (medium) {
-    formattedFilters.medium = { in: medium }
+  if (medium && medium.length > 0) {
+    const hasThirdParty = medium.includes(FollowupMedium.ThirdParty)
+    const otherMediums = medium.filter(m => m !== FollowupMedium.ThirdParty)
+
+    if (hasThirdParty && otherMediums.length > 0) {
+      formattedFilters.OR = [
+        { medium: { in: otherMediums } },
+        { isThirdPartyInterview: true }
+      ]
+    } else if (hasThirdParty) {
+      formattedFilters.isThirdPartyInterview = true
+    } else {
+      formattedFilters.medium = { in: otherMediums }
+    }
   }
 
   if (
