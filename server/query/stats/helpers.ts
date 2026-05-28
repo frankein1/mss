@@ -218,10 +218,10 @@ export function prepareBeneficiaryStatFilters(
     (filters.period === StatPeriodFilter.Custom &&
       (filters.fromDate || filters.toDate))
 
-  const filterOnSocialSupportCreated =
-    hasDateFilter && !filterOnBeneficiaryCreated
-  if (filterOnSocialSupportCreated) {
-    socialSupportFilters.created = prepareDateFilters(filters)
+  const filterOnSocialSupportDate = hasDateFilter && !filterOnBeneficiaryCreated
+
+  if (filterOnSocialSupportDate) {
+    socialSupportFilters.date = prepareDateFilters(filters)
   }
 
   if (filters.socialSupportSubjects?.length) {
@@ -241,7 +241,7 @@ export function prepareBeneficiaryStatFilters(
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (
-    filterOnSocialSupportCreated ||
+    filterOnSocialSupportDate ||
     filters.socialSupportSubjects?.length ||
     filters.ministerId
   ) {
