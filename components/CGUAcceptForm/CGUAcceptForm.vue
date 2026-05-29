@@ -50,7 +50,7 @@
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const { getSession } = useAuth()
+  const { setCGUVersion } = useAuth()
 
   const { handleSubmit } = useForm<AcceptCGUInput>({
     validationSchema: toTypedSchema(acceptCGUSchema)
@@ -61,8 +61,8 @@
   const onSubmit = handleSubmit(async () => {
     isSubmitting.value = true
     try {
-      await trpcClient.user.acceptCGU.mutate()
-      await getSession()
+      const { cguVersion } = await trpcClient.user.acceptCGU.mutate()
+      setCGUVersion(cguVersion)
       await navigateTo(routes.user.AppOverview.path())
     } catch {
       snackbar.error("L'acceptation des CGU a échoué.")

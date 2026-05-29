@@ -22,6 +22,7 @@ import {
 import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
 import { fetchUserContext } from '~/server/utils/fetchUserContext'
 import type { UserContext } from '~/server/utils/fetchUserContext'
+import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 
 export interface MultiPartData {
   data: Buffer
@@ -37,13 +38,9 @@ export default defineEventHandler(async event => {
   }
 
   const user = await fetchUserContext(userId)
+  checkUserIsAuthenticated(user)
 
-  if (
-    user.status !== 'Active' ||
-    user.role === 'Administrator' ||
-    !user.structureId ||
-    !user.structure
-  ) {
+  if (!user.structure) {
     throw forbidden('upload: not authorized')
   }
 

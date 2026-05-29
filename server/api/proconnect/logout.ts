@@ -18,17 +18,20 @@ export default defineEventHandler(async event => {
 
   const userId = deleteMSSToken(event, cookieKey)
 
-  const user = await fetchUserContext(userId)
+  try {
+    const user = await fetchUserContext(userId)
+    addUserActivity({
+      key: 'auth.logout',
+      user,
+      activity: UserActivityType.LOGOUT,
+      object: 'User',
+      objectId: user.id
+    }).catch(error => console.error(error))
+  } catch (error) {
+    console.error('logout: failed to log user activity', error)
+  }
 
-  await addUserActivity({
-    key: 'auth.logout',
-    user,
-    activity: UserActivityType.LOGOUT,
-    object: 'User',
-    objectId: user.id
-  })
-
-  const account = await cleanAccountData(user.id, proconnectProvider)
+  const account = await cleanAccountData(userId, proconnectProvider)
 
   const client = getProConnectClient()
   const logoutUrl = client.getLogoutUrl({
@@ -81,7 +84,8 @@ async function cleanAccountData(userId: string, proconnectProvider: string) {
   await prismaClient.account.update({
     where: { id: accounts[0].id },
     data: {
-      idToken: null
+      idToken: null,
+      sessionState: null
     }
   })
 

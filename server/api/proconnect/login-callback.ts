@@ -12,7 +12,6 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
-import { includeOrderedCGUHistory } from '~/server/query'
 import type { AuthSession } from '~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
 import { cookieOptions } from '~/utils/cookie'
@@ -317,15 +316,12 @@ async function updateEmail(userId: string, email: string) {
 
 const userSelect: { select: Prisma.UserSelect } = {
   select: {
-    firstName: true,
-    lastName: true,
     id: true,
     email: true,
     role: true,
     status: true,
-    firstAccess: true,
     structureId: true,
-    ...includeOrderedCGUHistory(),
+    firstAccess: true,
     structure: {
       select: {
         ...structureContextSelect,

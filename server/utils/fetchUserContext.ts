@@ -1,17 +1,18 @@
 import { UserRepo } from '~/server/database'
+import type { Prisma } from '@prisma/client'
 
 export const structureContextSelect = {
   id: true,
   type: true,
   externalRdvspActive: true
-} as const
+} satisfies Prisma.StructureSelect
 
 export const userContextSelect = {
   id: true,
   role: true,
   status: true,
   structureId: true
-} as const
+} satisfies Prisma.UserSelect
 
 export async function fetchUserContext(userId: string) {
   return await UserRepo.prisma.findUniqueOrThrow({

@@ -2,7 +2,6 @@ import { UserRepo } from '~/server/database'
 import { signJwt } from '~/server/lib/jwt'
 import { getAppContextPermissions } from '~/server/security'
 import { cookieOptions } from '~/utils/cookie'
-import { includeOrderedCGUHistory } from '~/server/query'
 import { structureContextSelect } from '~/server/utils/fetchUserContext'
 
 /** Renew session using most recent user information from database
@@ -29,7 +28,11 @@ export default defineEventHandler(async event => {
       role: true,
       status: true,
       structureId: true,
-      ...includeOrderedCGUHistory(),
+      CGUHistory: {
+        orderBy: {
+          date: 'desc' as const
+        }
+      },
       structure: { select: structureContextSelect }
     }
   })
@@ -42,7 +45,11 @@ export default defineEventHandler(async event => {
     auth: { jwtKey }
   } = config
 
-  const newSessionToken = signJwt({ id: user.id }, jwtKey, tokenValidationInMinutes)
+  const newSessionToken = signJwt(
+    { id: user.id },
+    jwtKey,
+    tokenValidationInMinutes
+  )
 
   setCookie(
     event,
@@ -65,7 +72,10 @@ export default defineEventHandler(async event => {
     CGUHistoryVersion
   }
 
-  const permissions = getAppContextPermissions({ user, structure: user.structure })
+  const permissions = getAppContextPermissions({
+    user,
+    structure: user.structure
+  })
 
   return { user: userProfile, permissions }
 })

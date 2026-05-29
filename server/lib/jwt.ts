@@ -10,7 +10,7 @@ const jwtUserSchema = z.object({
   id: z.string().uuid()
 })
 
-export type JwtUser = z.infer<typeof jwtUserSchema>
+type JwtUser = z.infer<typeof jwtUserSchema>
 
 export function verifyJwt(token: string, jwtKey: string) {
   const payload = verify(token, jwtKey, {

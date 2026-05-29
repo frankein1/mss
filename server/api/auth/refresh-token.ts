@@ -3,6 +3,12 @@ import { signJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
 
+/** Regenerate a new session token using the information
+ * from the former token. This does not fetch
+ * the latest user information from the database
+ *
+ * If the refresh fails, the user is logged out of Proconnect
+ */
 export default defineEventHandler(event => {
   const userId = event.context.auth?.userId
 
@@ -18,7 +24,11 @@ export default defineEventHandler(event => {
     auth: { jwtKey }
   } = config
 
-  const newSessionToken = signJwt({ id: userId }, jwtKey, tokenValidationInMinutes)
+  const newSessionToken = signJwt(
+    { id: userId },
+    jwtKey,
+    tokenValidationInMinutes
+  )
 
   setCookie(
     event,

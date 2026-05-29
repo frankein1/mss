@@ -8,6 +8,7 @@ import { prismaClient } from '~/server/prisma'
 import type { RuntimeConfig } from 'nuxt/schema'
 import { downloadWithEncryption } from '~/server/lib/s3/file'
 import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 
 export default defineEventHandler(async event => {
   const userId = event.context.auth?.userId
@@ -16,13 +17,9 @@ export default defineEventHandler(async event => {
   }
 
   const user = await fetchUserContext(userId)
+  checkUserIsAuthenticated(user)
 
-  if (
-    user.status !== 'Active' ||
-    user.role === 'Administrator' ||
-    !user.structureId ||
-    !user.structure
-  ) {
+  if (!user.structure) {
     throw forbidden('download: not authorized')
   }
 

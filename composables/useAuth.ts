@@ -1,6 +1,4 @@
 import { useAuthState } from './useAuthState'
-import type { UserProfile } from './useAuthState'
-import type { AppContextPermissions } from '~/server/security'
 
 export function useAuth() {
   const state = useAuthState()
@@ -17,10 +15,7 @@ export function useAuth() {
 
   async function getSession() {
     const headers = useRequestHeaders(['cookie'])
-    const session = await $fetch<{
-      user: UserProfile
-      permissions: AppContextPermissions
-    }>('/api/auth/get-session', {
+    const session = await $fetch('/api/auth/get-session', {
       headers
     })
     if (session) {
@@ -29,5 +24,12 @@ export function useAuth() {
     }
   }
 
-  return { logout, refreshToken, getSession }
+  function setCGUVersion(version: string) {
+    if (!state.user.value) {
+      return
+    }
+    state.user.value.CGUHistoryVersion = version
+  }
+
+  return { logout, refreshToken, getSession, setCGUVersion }
 }
