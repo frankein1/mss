@@ -48,6 +48,13 @@
         </div>
         <!-- ROW -->
         <div class="fr-col-12">
+          <VeeSelect
+            name="gender"
+            :label="beneficiaryFieldLabels.gender"
+            :options="withEmptyValue(beneficiaryGenderKeys.options)"
+          />
+        </div>
+        <div class="fr-col-12">
           <VeeRadioButtons
             class="fr-mb-0"
             name="title"
@@ -126,12 +133,14 @@
 </template>
 
 <script setup lang="ts">
+  import { BeneficiaryTitle, Gender } from '@prisma/client'
   import type { CreateFamilyFileMemberInput } from '~/server/schema'
   import { createFamilyFileMemberSchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
-    commonRelationshipKeys,
-    beneficiaryTitleKeys
+    beneficiaryGenderKeys,
+    beneficiaryTitleKeys,
+    commonRelationshipKeys
   } from '~/client/options'
   import type { SimilarBeneficiary } from '~/server/route'
   import { EventCategory, FamilyFileAction } from '~/types/matomo'
@@ -167,13 +176,27 @@
     editBeneficiary: (beneficiaryId: string) => Promise<void>
   }>()
 
-  const { handleSubmit, controlledValues } =
+  const { handleSubmit, controlledValues, setFieldValue } =
     useForm<CreateFamilyFileMemberInput>({
       validationSchema: toTypedSchema(createFamilyFileMemberSchema),
       initialValues: {
         familyFileId: props.familyFileId
       }
     })
+
+  watch(
+    () => controlledValues.value.gender,
+    newGender => {
+      if (controlledValues.value.title) {
+        return
+      }
+      if (newGender === Gender.Female) {
+        setFieldValue('title', BeneficiaryTitle.Miss)
+      } else if (newGender === Gender.Male) {
+        setFieldValue('title', BeneficiaryTitle.Mister)
+      }
+    }
+  )
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
