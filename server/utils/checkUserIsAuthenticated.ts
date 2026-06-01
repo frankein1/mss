@@ -1,12 +1,13 @@
-import type { SecurityRuleGrantee } from '~/server/security'
 import { forbidden } from '../../utils/api/errors'
+import type { UserContext } from './fetchUserContext'
 
-export const checkUserIsAuthenticated = (user: SecurityRuleGrantee) => {
+export const checkUserIsAuthenticated = (user: UserContext) => {
   if (
     !user ||
     user.status !== 'Active' ||
     user.role === 'Administrator' ||
-    !user.structureId
+    !user.structureId ||
+    !user.structure
   ) {
     throw forbidden('Could not retrieve user info')
   }

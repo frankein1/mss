@@ -94,7 +94,6 @@ async function createOrUpdateToken(
   // FIXME nonce verification could be implemented here
 
   const agent = await client.getAgentInfo(cfg, token.access_token)
-  console.log(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
 
   if ('error' in agent || !agent) {
     throw badrequest('rdvsp-auth-callback: Could not retrieve agent info')

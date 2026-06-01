@@ -1,4 +1,3 @@
-import type { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
 import { fetchUserContext } from '~/server/utils/fetchUserContext'
 
@@ -17,4 +16,4 @@ export const createContext = async (event: H3Event) => {
   }
 }
 
-export type AppContext = inferAsyncReturnType<typeof createContext>
+export type AppContext = Awaited<ReturnType<typeof createContext>>

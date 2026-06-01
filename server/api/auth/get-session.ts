@@ -16,6 +16,7 @@ export default defineEventHandler(async event => {
     return null
   }
 
+  // Fetch user and structure info from the token that contains only the user id
   const user = await UserRepo.prisma.findUnique({
     where: {
       id: userId
@@ -29,6 +30,7 @@ export default defineEventHandler(async event => {
       status: true,
       structureId: true,
       CGUHistory: {
+        select: { version: true },
         orderBy: {
           date: 'desc' as const
         }
