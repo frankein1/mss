@@ -18,7 +18,14 @@
           <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
             Identité du bénéficiaire
           </h2>
-          <div class="fr-col-12">
+          <div class="fr-col-12 fr-col-lg-6">
+            <VeeSelect
+              name="gender"
+              :label="beneficiaryFieldLabels.gender"
+              :options="withEmptyValue(beneficiaryGenderKeys.options)"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
             <VeeRadioButtons
               class="fr-mb-0"
               name="title"
@@ -170,14 +177,14 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus } from '@prisma/client'
+  import { BeneficiaryStatus, BeneficiaryTitle, Gender } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { BeneficiaryReferent } from '~/types/beneficiary'
   import type { CreateBeneficiaryInput } from '~/server/schema'
   import { createBeneficiarySchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
-  import { beneficiaryTitleKeys } from '~/client/options'
+  import { beneficiaryGenderKeys, beneficiaryTitleKeys } from '~/client/options'
 
   defineProps<{
     isSubmitting: boolean
@@ -240,6 +247,20 @@
   )
 
   const zipcode = computed(() => controlledValues.value.zipcode)
+
+  watch(
+    () => controlledValues.value.gender,
+    newGender => {
+      if (controlledValues.value.title) {
+        return
+      }
+      if (newGender === Gender.Female) {
+        setFieldValue('title', BeneficiaryTitle.Miss)
+      } else if (newGender === Gender.Male) {
+        setFieldValue('title', BeneficiaryTitle.Mister)
+      }
+    }
+  )
 
   const { onCitySelected, onAddressSelected } = useAddressFields({
     setCityValue: (value: string) => setFieldValue('city', value),

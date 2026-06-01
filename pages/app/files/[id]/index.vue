@@ -279,6 +279,7 @@
       const payload = {
         familyFileId: familyFileId.value,
         title: newBeneficiary.title,
+        gender: newBeneficiary.gender,
         usualName: newBeneficiary.usualName,
         firstName: newBeneficiary.firstName,
         birthDate: newBeneficiary.birthDate
