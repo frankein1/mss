@@ -29,10 +29,6 @@ export const idSchema = z.object({
 
 export type IdInput = z.infer<typeof idSchema>
 
-export const keySchema = z.object({
-  key: z.string()
-})
-
 export const emptySchema = z.undefined()
 
 export const numeroPegaseContraint = z
@@ -42,7 +38,14 @@ export const numeroPegaseContraint = z
     'Le numéro Pégase doit être de la forme A-00-000000.'
   )
 
-export const stringConstraint = z.string(errorMessages).trim()
+export const stringConstraint = z
+  .string(errorMessages)
+  .trim()
+  .regex(
+    // eslint-disable-next-line no-control-regex
+    /^[^\x00-\x08\x0B\x0C\x0E-\x1F<>‎-‏‪-‮⁦-⁩]*$/,
+    'Les caractères spéciaux < et > et les caractères de contrôle ne sont pas acceptés.'
+  )
 
 export const requiredStringConstraint = stringConstraint.min(
   2,
@@ -147,18 +150,10 @@ export const websiteSanitizeTransform = (max = 500) =>
   )
 
 export const openText = (maxLength: number) =>
-  stringConstraint
-    .max(maxLength, maxStringLengthMessage(maxLength))
-    .refine(
-      v => !v.includes('<') && !v.includes('>'),
-      'Les caractères spéciaux < et > ne sont pas acceptés.'
-    )
+  stringConstraint.max(maxLength, maxStringLengthMessage(maxLength))
 
 export const openRichText = () => {
-  return stringConstraint.refine(
-    text => !text.includes('<') && !text.includes('>'),
-    'Les caractères spéciaux < et > ne sont pas acceptés.'
-  )
+  return stringConstraint
 }
 
 export const beneficiaryIdSchema = z.object({
