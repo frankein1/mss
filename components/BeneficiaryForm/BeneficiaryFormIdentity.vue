@@ -1,6 +1,13 @@
 <template>
   <BeneficiaryFormSection section-title="Identité du bénéficiaire">
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeSelect
+        name="gender"
+        :label="beneficiaryFieldLabels.gender"
+        :options="withEmptyValue(beneficiaryGenderKeys.options)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeRadioButtons
         class="fr-mb-0"
         name="title"
@@ -50,13 +57,6 @@
     />
     <div class="fr-col-12">
       <VeeSelect
-        name="gender"
-        :label="beneficiaryFieldLabels.gender"
-        :options="withEmptyValue(beneficiaryGenderKeys.options)"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeSelect
         name="nationality"
         :label="beneficiaryFieldLabels.nationality"
         :options="withEmptyValue(nationalityKeys.options)"
@@ -77,6 +77,7 @@
 
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~/client/labels'
+  import { Gender, BeneficiaryTitle } from '@prisma/client'
   import {
     beneficiaryGenderKeys,
     beneficiaryTitleKeys,
@@ -98,6 +99,20 @@
   const { value: birthName } = useField<string | null | undefined>('birthName')
   const { value: firstName } = useField<string | null | undefined>('firstName')
   const { value: birthDate } = useField<Date | null | undefined>('birthDate')
+  const { value: gender } = useField<Gender | null | undefined>('gender')
+  const { value: title, setValue: setTitle } =
+    useField<BeneficiaryTitle | null>('title')
+
+  watch(gender, newGender => {
+    if (title.value) {
+      return
+    }
+    if (newGender === Gender.Female) {
+      setTitle(BeneficiaryTitle.Miss)
+    } else if (newGender === Gender.Male) {
+      setTitle(BeneficiaryTitle.Mister)
+    }
+  })
 
   const updateSimilarBeneficiary = () => {
     emit('update', similarBeneficiary.value)

@@ -7,6 +7,7 @@ import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 export const createFamilyFileMemberSchema =
   updateBeneficiaryGeneralInformationSchema
     .pick({
+      gender: true,
       title: true,
       firstName: true,
       birthDate: true
