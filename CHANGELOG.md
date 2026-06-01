@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.59.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.1...v1.59.3) (2026-06-01)
+
+
+### Bug Fixes
+
+* **atelier:** filtres sur les statistiques des ateliers dans l'export ([4259238](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/42592384a3aead66f806476ba7bfb7a1f07f0ad7)), closes [#1099](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1099)
+* **ateliers:** modification du nom d'un atelier ([81092ba](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/81092baa8f507e7c262af965ecac629f2140a074)), closes [#1110](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1110)
+* **bénéficiaires:** corrections UX page 'transfère d'agents' ([051f321](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/051f32170ab49deffd2cc297a7b7c175bf50299c)), closes [#1106](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1106)
+* **bénéficiaires:** format attendu nir ([20e5b0b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/20e5b0b44f6220e43d1c25ad982ebaa54c22c5ca)), closes [#1087](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1087)
+* **bénéficiaires:** gestion du genre et civilité ([c52f912](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c52f9126aab55d07f7d8b3468c7f2e5aae5f52b0)), closes [#1027](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1027)
+* **db-anonymizer:** restauration des clés étrangères sur le schéma cible de la base anonymisée ([8db4cfa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8db4cfa09d9c4ee90c8da46aed35ecd7fb7b9f6d)), closes [#1110](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1110)
+* **db-anonymizer:** typo ([bae4ee2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bae4ee28b6af4096af805f22891e83634eafb323))
+* **dossier:** modale détruite après ajout d'un membre au dossier ([7e67891](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7e67891d5c007811fb52514eb2a9c7c92e0c4119)), closes [#1112](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1112)
+* **partenaire:** création de partenaires personnalisés ([14af167](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14af1674dd8f6a616df30680dc627a02285d0c3f)), closes [#1108](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1108)
+* **statistiques:** correction nombre de bénéficiaires accompagnés ([d3a86fa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d3a86fa242e93f5ec484c20b5316d52b59db46d1)), closes [#1081](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1081)
+* temporaire, modale doit être initialisée au setup ([72d208e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/72d208ed7b74f08fa65b52cfb2bc1432ed1952a9)), closes [#1109](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1109)
+
 ## [1.59.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.0...v1.59.1) (2026-05-20)
 
 ## [1.59.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.58.0...v1.59.0) (2026-05-20)
