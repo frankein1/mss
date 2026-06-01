@@ -100,9 +100,22 @@ export default defineNuxtConfig({
     'nuxt-security',
     'vue-dsfr-nuxt-module',
     '@nuxt/eslint',
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    '@nuxtjs/robots'
   ],
-
+  robots: {
+    groups: [
+      {
+        userAgent: ['*'],
+        disallow:
+          process.env.NUXT_PUBLIC_MSS_ENVIRONMENT === 'production'
+            ? ['/app', '/admin']
+            : ['/'],
+        allow:
+          process.env.NUXT_PUBLIC_MSS_ENVIRONMENT === 'production' ? ['/'] : []
+      }
+    ]
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
     server: {
