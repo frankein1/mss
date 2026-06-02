@@ -102,7 +102,11 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/test-utils/module'
   ],
-
+  app: {
+    head: {
+      meta: [{ name: 'robots', content: 'noindex' }]
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
     server: {
