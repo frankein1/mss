@@ -9,9 +9,9 @@
     message="Les statistiques des dispositifs n'ont pas pu être chargées."
   />
 
-  <template v-else-if="deviceStats && deviceStats.length">
+  <template v-else-if="deviceStatsList.length">
     <StatsList
-      :stats="deviceStats"
+      :stats="deviceStatsList"
       :stats-percentage="false"
       :display-total="false"
     />
@@ -24,6 +24,7 @@
 <script lang="ts" setup>
   import type { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
+  import { StatPeriodFilter } from '~/types/stat'
 
   const props = defineProps<{
     filters: StatFilterInput
@@ -35,12 +36,45 @@
       toRef(() => props.filters)
     )
 
-  const deviceStats = computed(
-    () =>
-      data.value?.map(({ name, count }) => ({
-        key: name,
-        label: name,
-        count
-      })) ?? []
-  )
+  const hasPeriodFilter = computed(() => {
+    const { period, fromDate, toDate } = props.filters
+    return (
+      (period && period !== StatPeriodFilter.Custom) ||
+      (period === StatPeriodFilter.Custom && (fromDate || toDate))
+    )
+  })
+
+  const deviceStatsList = computed(() => {
+    if (!data.value?.length) {return []}
+
+    const list: Array<{
+      key: string
+      label: string
+      count: number
+      emphasis?: boolean
+    }> = []
+
+    for (const { name, count, entryCount, exitCount } of data.value) {
+      list.push({ key: name, label: name, count, emphasis: true })
+
+      if (hasPeriodFilter.value) {
+        list.push(
+          {
+            key: `${name}-entry`,
+            label: 'Entrée',
+            count: entryCount,
+            emphasis: false
+          },
+          {
+            key: `${name}-exit`,
+            label: 'Sortie',
+            count: exitCount,
+            emphasis: false
+          }
+        )
+      }
+    }
+
+    return list
+  })
 </script>
