@@ -18,6 +18,3 @@ allowBuilds:
   prisma: false
   unrs-resolver: false
 shamefullyHoist: true
-minimumReleaseAgeExclude:
-  - '@nuxt/kit@4.4.6'
-  - '@nuxtjs/robots@6.0.9'

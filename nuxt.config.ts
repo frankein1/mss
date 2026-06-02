@@ -100,21 +100,12 @@ export default defineNuxtConfig({
     'nuxt-security',
     'vue-dsfr-nuxt-module',
     '@nuxt/eslint',
-    '@nuxt/test-utils/module',
-    '@nuxtjs/robots'
+    '@nuxt/test-utils/module'
   ],
-  robots: {
-    groups: [
-      {
-        userAgent: ['*'],
-        disallow:
-          process.env.NUXT_PUBLIC_MSS_ENVIRONMENT === 'production'
-            ? ['/app', '/admin']
-            : ['/'],
-        allow:
-          process.env.NUXT_PUBLIC_MSS_ENVIRONMENT === 'production' ? ['/'] : []
-      }
-    ]
+  app: {
+    head: {
+      meta: [{ name: 'robots', content: 'noindex' }]
+    }
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
