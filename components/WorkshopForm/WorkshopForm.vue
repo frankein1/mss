@@ -18,6 +18,7 @@
       <WorkshopFormName
         v-else
         :is-submitting
+        :mode
       />
       <WorkshopFormInformation :is-submitting="isSubmitting" />
       <WorkshopFormDescription :is-submitting="isSubmitting" />

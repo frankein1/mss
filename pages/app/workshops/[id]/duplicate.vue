@@ -16,9 +16,10 @@
         :is-submitting="status === 'pending'"
         :caught-errors
         mode="duplicate"
-        @submit="onSubmit"
+        @submit="askForParticipants"
         @cancel="onCancel"
       />
+      <OpenModalHack />
     </AtomLazyComponent>
   </div>
 </template>
@@ -26,9 +27,10 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import type { CreateWorkshopInput } from '~/server/schema'
-  import { createWorkshopSchema } from '~/server/schema'
+  import type { DuplicateWorkshopInput } from '~/server/schema'
+  import { duplicateWorkshopSchema } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
+  import WorkshopDuplicateModal from '~/components/WorkshopForm/WorkshopDuplicateModal.vue'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -37,7 +39,7 @@
   const matomo = useMatomo()
   const router = useRouter()
   const { mutate, error, status } =
-    trpcClient.workshop.createWorkshop.useMutation()
+    trpcClient.workshop.duplicateWorkshop.useMutation()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
@@ -56,8 +58,8 @@
   })
 
   // Form
-  const { handleSubmit } = useForm<CreateWorkshopInput>({
-    validationSchema: toTypedSchema(createWorkshopSchema),
+  const { handleSubmit } = useForm<DuplicateWorkshopInput>({
+    validationSchema: toTypedSchema(duplicateWorkshopSchema),
     initialValues: {
       name: workshop.value?.workshopName.name,
       startTime: workshop.value?.startTime,
@@ -74,31 +76,49 @@
     }
   })
 
-  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
-    const workshopCreated = await mutate(input)
+  const pendingFormValues = ref<DuplicateWorkshopInput | null>(null)
+
+  const onDuplicateWorkshop = async (duplicateParticipants: boolean) => {
+    if (!pendingFormValues.value) {
+      return
+    }
+    modal.close()
+
+    const workshopCreated = await mutate({
+      ...pendingFormValues.value,
+      sourceWorkshopId: workshopId,
+      duplicateParticipants
+    })
 
     if (error.value || !workshopCreated) {
       snackbar.error(
-        "La création de l'atelier a échoué.",
+        "La duplication de l'atelier a échoué.",
         snackbar.focus('form', 'select')
       )
       return
     }
     matomo.trackEvent(EventCategory.Workshop, WorkshopAction.DuplicateWorkshop)
-    if (input.startTime !== workshop.value?.startTime) {
+    if (pendingFormValues.value.startTime !== workshop.value?.startTime) {
       matomo.trackEvent(
         EventCategory.Workshop,
         WorkshopAction.DuplicateWorkshopAndChangeDateTime
       )
     }
-    const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)
-    navigateTo(workshopRoute)
+    navigateTo(routes.workshop.AppWorkshop.path(workshopCreated.id))
   }
 
-  const { onSubmit, caughtErrors } = useCatchFormErrors(
+  // open Modal after form validation
+  const modal = useModal()
+  const { onSubmit: askForParticipants, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      onCreateWorkshop(values)
+      pendingFormValues.value = values
+      modal.open(WorkshopDuplicateModal, {
+        triggerOpen: true,
+        title: 'Dupliquer les personnes participantes',
+        cancel: () => modal.close(),
+        submit: onDuplicateWorkshop
+      })
     }
   )
 

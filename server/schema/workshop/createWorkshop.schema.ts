@@ -69,3 +69,12 @@ export const createWorkshopSchema = createWorkshopSchemaBase
   )
 
 export type CreateWorkshopInput = z.infer<typeof createWorkshopSchema>
+
+export const duplicateWorkshopSchema = createWorkshopSchema.and(
+  z.object({
+    sourceWorkshopId: z.string().uuid(),
+    duplicateParticipants: z.boolean().default(false)
+  })
+)
+
+export type DuplicateWorkshopInput = z.infer<typeof duplicateWorkshopSchema>
