@@ -37,14 +37,14 @@
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
-  const workshopId = route.params.id as string
+  const workshopId = computed(() => route.params.id as string)
   const modal = useModal()
   const matomo = useMatomo()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
     await trpcClient.workshop.getOne.useQuery({
-      id: workshopId
+      id: workshopId.value
     })
 
   const fetchError = computed(() => {
@@ -128,7 +128,7 @@
 
   const deleteWorkshop = async () => {
     const { mutate, error } = trpcClient.workshop.delete.useMutation()
-    const workshopDeleted = await mutate({ id: workshopId })
+    const workshopDeleted = await mutate({ id: workshopId.value })
     if (error.value || !workshopDeleted) {
       snackbar.error("La suppression de l'atelier a échoué.")
       return
