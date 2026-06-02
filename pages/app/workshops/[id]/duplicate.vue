@@ -108,7 +108,7 @@
           WorkshopAction.DuplicateWorkshopAndChangeDateTime
         )
       }
-      if (values.duplicateParticipants) {
+      if (duplicateParticipantsOption.value === 'keepParticipants') {
         matomo.trackEvent(
           EventCategory.Workshop,
           WorkshopAction.DuplicateWorkshopAndParticipants

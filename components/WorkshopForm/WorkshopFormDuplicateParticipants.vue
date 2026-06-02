@@ -9,7 +9,7 @@
         :options="options"
         :hint="
           isReferent()
-            ? ' Le rôle Référent ne possede pas les droits pour dupliquer les personnes participantes.'
+            ? 'Le rôle Référent ne possede pas les droits pour dupliquer les personnes participantes.'
             : undefined
         "
       />

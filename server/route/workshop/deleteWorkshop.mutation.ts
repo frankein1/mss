@@ -2,10 +2,16 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security'
+import type { IdInput } from '~/server/schema'
 import { WorkshopNameRepo, WorkshopRepo } from '~/server/database'
 
-const securityCheck = AllowSecurityCheck
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  const count = await WorkshopRepo.count(ctx.user, {
+    where: { id: input.id }
+  })
+  return count === 1
+}
 
 const handler = async ({
   input: { id },
@@ -15,10 +21,7 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const res = await WorkshopRepo.delete(ctx.user, {
-    where: {
-      id,
-      structureId: ctx.structure.id
-    },
+    where: { id },
     select: {
       id: true,
       workshopNameId: true
