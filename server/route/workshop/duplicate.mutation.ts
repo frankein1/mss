@@ -1,8 +1,4 @@
-import {
-  UserActivityType,
-  WorkshopAttendeeListType,
-  WorkshopAttendeeType
-} from '@prisma/client'
+import { UserActivityType, WorkshopAttendeeType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { DuplicateWorkshopInput } from '~/server/schema'
@@ -12,13 +8,16 @@ import {
   PartnerOrganizationRepo,
   WorkshopAttendeeRepo
 } from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security'
+import { isReferent, type SecurityRuleContext } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: DuplicateWorkshopInput
 ) => {
+  if (isReferent(ctx.user) && input.duplicateParticipants) {
+    return false
+  }
   try {
     await WorkshopRepo.findUniqueOrThrow(ctx.user, {
       select: { id: true },
@@ -49,7 +48,10 @@ const handler = async ({
   input: DuplicateWorkshopInput
   ctx: ProtectedAppContext
 }) => {
-  const sourceAttendees = duplicateParticipants
+  const canDuplicateParticipants =
+    duplicateParticipants && !isReferent(ctx.user)
+
+  const sourceAttendees = canDuplicateParticipants
     ? await WorkshopAttendeeRepo.findMany(ctx.user, {
         where: { workshopId: sourceWorkshopId },
         select: {
@@ -103,7 +105,7 @@ const handler = async ({
       }
     })
 
-    if (!duplicateParticipants || sourceAttendees.length === 0) {
+    if (!canDuplicateParticipants || sourceAttendees.length === 0) {
       return newWorkshop
     }
 

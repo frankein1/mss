@@ -6,11 +6,38 @@
       <VeeRadioButtons
         name="duplicateParticipantsOption"
         label="Souhaitez-vous conserver la liste des personnes participantes sur l'atelier dupliqué ?"
-        :options="[
-          { value: 'removeParticipants', label: 'Ne pas conserver la liste' },
-          { value: 'keepParticipants', label: 'Conserver la liste' }
-        ]"
+        :options="options"
+        :hint="
+          isReferent()
+            ? ' Le rôle Référent ne possede pas les droits pour dupliquer les personnes participantes.'
+            : undefined
+        "
       />
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+  const { isReferent } = useAuthState()
+  const referent = isReferent()
+
+  const { value: duplicateParticipantsOption } = useField<string>(
+    'duplicateParticipantsOption'
+  )
+  if (referent) {
+    duplicateParticipantsOption.value = 'removeParticipants'
+  }
+
+  const options = [
+    {
+      value: 'removeParticipants',
+      label: 'Ne pas conserver la liste',
+      disabled: referent
+    },
+    {
+      value: 'keepParticipants',
+      label: 'Conserver la liste',
+      disabled: referent
+    }
+  ]
+</script>
