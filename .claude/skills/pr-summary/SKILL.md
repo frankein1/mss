@@ -1,49 +1,51 @@
 # PR Summary — Write a pull request summary to a markdown file
 
-Generate a PR summary document for the current branch, written in French, and save it to `docs/pr-<branch-suffix>.md`.
+Generate a concise PR summary for the current branch, written in French, and save it to `docs/pr-<branch-suffix>.md`.
+
+The summary should help reviewers understand **why** the change was made and **what choices matter** — not enumerate every modified file or line.
 
 ## Steps
 
-1. **Gather context** — run these commands to understand the full scope of changes:
+1. **Gather context** — run these commands:
    - `git log main..HEAD --oneline` — all commits on the branch
    - `git diff main --stat` — files changed
    - `git diff main` — full diff
    - Read any existing `docs/pr-*.md` for this branch
 
-2. **Analyze changes** — categorize each change:
-   - Performance improvements (indexes, query changes, caching)
-   - New features or endpoints
-   - Bug fixes
-   - Test coverage (new test files, what they cover)
-   - Infrastructure / tooling changes (fixtures, test utils, config)
-   - Schema / migration changes
+2. **Identify what matters for review** — focus on:
+   - The motivation: what problem exists, why act now
+   - Architecture decisions: new patterns, structural choices, tradeoffs made
+   - Breaking changes: API changes, schema migrations, removed features, changed behavior
+   - Risks and edge cases worth calling out
+   - Measured results if applicable (perf benchmarks, before/after)
 
-3. **Write the summary** in French using this exact template:
+   **Do NOT** list every file changed, every function added, or every test written. Reviewers can read the diff for that.
+
+3. **Write the summary** in French using this template:
 
 ```markdown
-## Contexte/Problème
+## Contexte
 
-<Why this branch exists. What problem it solves. 2-4 sentences.>
+<Why this branch exists. What problem it solves. 2-3 sentences max.>
 
-## Implémentation/Changements
+## Choix et points d'attention
 
-<Group changes by category with ### subheadings. For each change:
+<What the reviewer needs to understand beyond the diff:
 
-- What file/area changed
-- What specifically changed and why
-- Include measured results if applicable (perf benchmarks, before/after)>
+- Key architecture or design decisions and their rationale
+- Breaking changes or behavioral changes
+- Risks, tradeoffs, or known limitations
+- Performance impact with numbers if relevant
+
+Keep it to the essential points. A few focused bullets beat a wall of text.>
 
 ## Screenshots
 
-<Screenshots if UI changes, otherwise "N/A (pas de changement UI)">
+<If UI changes, otherwise omit this section entirely.>
 
 ## Comment tester
 
-<Numbered steps to verify the changes locally. Include:
-
-1. Setup steps (migrations, seeds)
-2. How to run relevant tests
-3. Manual verification steps if applicable>
+<Numbered steps to verify locally. Keep it short — only non-obvious steps.>
 
 ## TODO avant merge
 
@@ -55,12 +57,12 @@ Generate a PR summary document for the current branch, written in French, and sa
 #[issue-number]
 ```
 
-4. **Save** to `docs/pr-<branch-suffix>.md` where `<branch-suffix>` is the branch name with the leading ticket number (e.g. branch `948-chargement-liste-documents` → `docs/pr-948-chargement-liste-documents.md`). If the file already exists, update it with the latest changes rather than duplicating content.
+4. **Save** to `docs/pr-<branch-suffix>.md` where `<branch-suffix>` is the branch name with the leading ticket number (e.g. branch `948-chargement-liste-documents` → `docs/pr-948-chargement-liste-documents.md`). If the file already exists, update it.
 
 ## Guidelines
 
 - Write in French (the team's working language)
-- Be specific and quantitative — include test counts, performance numbers, file names
-- For test coverage sections, list the test categories and count per category
-- Mark env var checkbox as done (`[x] Y a-t-il ajout de variables d'environnement ?`) when no env vars are added
-- Keep the tone factual and concise — no marketing language
+- Be concise, but don't compress at the expense of clarity — complex PRs deserve longer summaries
+- Focus on the "why" and the "what matters", not the "what was done"
+- Mark env var checkbox as done (`[x]`) when no env vars are added
+- Factual tone, no filler
