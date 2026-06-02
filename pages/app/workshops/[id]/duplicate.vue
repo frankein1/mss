@@ -108,6 +108,17 @@
           WorkshopAction.DuplicateWorkshopAndChangeDateTime
         )
       }
+      if (values.duplicateParticipants) {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopAndParticipants
+        )
+      } else {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopWithoutParticipants
+        )
+      }
       snackbar.success("La duplication de l'atelier a réussi.")
       navigateTo(routes.workshop.AppWorkshop.path(workshopCreated.id))
     }
