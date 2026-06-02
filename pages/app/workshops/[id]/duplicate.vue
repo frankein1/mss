@@ -16,10 +16,9 @@
         :is-submitting="status === 'pending'"
         :caught-errors
         mode="duplicate"
-        @submit="askForParticipants"
+        @submit="onSubmit"
         @cancel="onCancel"
       />
-      <OpenModalHack />
     </AtomLazyComponent>
   </div>
 </template>
@@ -30,7 +29,6 @@
   import type { DuplicateWorkshopInput } from '~/server/schema'
   import { duplicateWorkshopSchema } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
-  import WorkshopDuplicateModal from '~/components/WorkshopForm/WorkshopDuplicateModal.vue'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
@@ -61,6 +59,7 @@
   const { handleSubmit } = useForm<DuplicateWorkshopInput>({
     validationSchema: toTypedSchema(duplicateWorkshopSchema),
     initialValues: {
+      sourceWorkshopId: workshop.value?.id,
       name: workshop.value?.workshopName.name,
       startTime: workshop.value?.startTime,
       endTime: workshop.value?.endTime,
@@ -76,49 +75,41 @@
     }
   })
 
-  const pendingFormValues = ref<DuplicateWorkshopInput | null>(null)
+  const { value: duplicateParticipantsOption } = useField<
+    'keepParticipants' | 'removeParticipants'
+  >('duplicateParticipantsOption', undefined, {
+    initialValue: 'removeParticipants'
+  })
 
-  const onDuplicateWorkshop = async (duplicateParticipants: boolean) => {
-    if (!pendingFormValues.value) {
-      return
-    }
-    modal.close()
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    async values => {
+      const workshopCreated = await mutate({
+        ...values,
+        sourceWorkshopId: workshopId,
+        duplicateParticipants:
+          duplicateParticipantsOption.value === 'keepParticipants'
+      })
 
-    const workshopCreated = await mutate({
-      ...pendingFormValues.value,
-      sourceWorkshopId: workshopId,
-      duplicateParticipants
-    })
-
-    if (error.value || !workshopCreated) {
-      snackbar.error(
-        "La duplication de l'atelier a échoué.",
-        snackbar.focus('form', 'select')
-      )
-      return
-    }
-    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.DuplicateWorkshop)
-    if (pendingFormValues.value.startTime !== workshop.value?.startTime) {
+      if (error.value || !workshopCreated) {
+        snackbar.error(
+          "La duplication de l'atelier a échoué.",
+          snackbar.focus('form', 'select')
+        )
+        return
+      }
       matomo.trackEvent(
         EventCategory.Workshop,
-        WorkshopAction.DuplicateWorkshopAndChangeDateTime
+        WorkshopAction.DuplicateWorkshop
       )
-    }
-    navigateTo(routes.workshop.AppWorkshop.path(workshopCreated.id))
-  }
-
-  // open Modal after form validation
-  const modal = useModal()
-  const { onSubmit: askForParticipants, caughtErrors } = useCatchFormErrors(
-    handleSubmit,
-    values => {
-      pendingFormValues.value = values
-      modal.open(WorkshopDuplicateModal, {
-        triggerOpen: true,
-        title: 'Dupliquer les personnes participantes',
-        cancel: () => modal.close(),
-        submit: onDuplicateWorkshop
-      })
+      if (values.startTime !== workshop.value?.startTime) {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopAndChangeDateTime
+        )
+      }
+      snackbar.success("La duplication de l'atelier a réussi.")
+      navigateTo(routes.workshop.AppWorkshop.path(workshopCreated.id))
     }
   )
 

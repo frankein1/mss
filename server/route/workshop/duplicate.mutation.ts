@@ -55,6 +55,10 @@ const handler = async ({
         select: {
           type: true,
           beneficiaryId: true,
+          listType: true,
+          comment: true,
+          paymentReceived: true,
+          paymentAmount: true,
           workshopExternalAttendee: {
             select: {
               firstName: true,
@@ -103,19 +107,20 @@ const handler = async ({
       return newWorkshop
     }
 
-    const beneficiaryIds = sourceAttendees
-      .filter(
-        a => a.type === WorkshopAttendeeType.Beneficiary && a.beneficiaryId
-      )
-      .map(a => a.beneficiaryId!)
+    const beneficiariesToDuplicate = sourceAttendees.filter(
+      a => a.type === WorkshopAttendeeType.Beneficiary
+    )
 
-    if (beneficiaryIds.length > 0) {
+    if (beneficiariesToDuplicate.length > 0) {
       await prismaClient.workshopAttendee.createMany({
-        data: beneficiaryIds.map(beneficiaryId => ({
+        data: beneficiariesToDuplicate.map(beneficiary => ({
           workshopId: newWorkshop.id,
           type: WorkshopAttendeeType.Beneficiary,
-          listType: WorkshopAttendeeListType.Main,
-          beneficiaryId
+          listType: beneficiary.listType,
+          beneficiaryId: beneficiary.beneficiaryId,
+          comment: beneficiary.comment,
+          paymentReceived: beneficiary.paymentReceived,
+          paymentAmount: beneficiary.paymentAmount
         }))
       })
     }
@@ -133,7 +138,10 @@ const handler = async ({
         data: {
           workshop: { connect: { id: newWorkshop.id } },
           type: WorkshopAttendeeType.External,
-          listType: WorkshopAttendeeListType.Main,
+          listType: attendee.listType,
+          comment: attendee.comment,
+          paymentReceived: attendee.paymentReceived,
+          paymentAmount: attendee.paymentAmount,
           workshopExternalAttendee: {
             create: {
               firstName: ext.firstName,

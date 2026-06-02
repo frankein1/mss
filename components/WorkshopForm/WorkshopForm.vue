@@ -20,6 +20,7 @@
         :is-submitting
         :mode
       />
+      <WorkshopFormDuplicateParticipants v-if="mode === 'duplicate'" />
       <WorkshopFormInformation :is-submitting="isSubmitting" />
       <WorkshopFormDescription :is-submitting="isSubmitting" />
       <WorkshopFormConditions
