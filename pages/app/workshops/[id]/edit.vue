@@ -128,8 +128,8 @@
 
   const deleteWorkshop = async () => {
     const { mutate, error } = trpcClient.workshop.delete.useMutation()
-    const workshopCreated = await mutate({ id: workshopId })
-    if (error.value || !workshopCreated) {
+    const workshopDeleted = await mutate({ id: workshopId })
+    if (error.value || !workshopDeleted) {
       snackbar.error("La suppression de l'atelier a échoué.")
       return
     }

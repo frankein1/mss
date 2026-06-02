@@ -14,7 +14,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const { workshopNameId } = await WorkshopRepo.delete(ctx.user, {
+  const res = await WorkshopRepo.delete(ctx.user, {
     where: {
       id,
       structureId: ctx.structure.id
@@ -25,14 +25,16 @@ const handler = async ({
     }
   })
   const workshopCount = await WorkshopRepo.count(ctx.user, {
-    where: { workshopNameId, structureId: ctx.structure.id }
+    where: { workshopNameId: res.workshopNameId, structureId: ctx.structure.id }
   })
   if (workshopCount === 0) {
     await WorkshopNameRepo.delete(ctx.user, {
-      where: { id: workshopNameId },
+      where: { id: res.workshopNameId },
       select: { id: true }
     })
   }
+
+  return res.id
 }
 
 export const deleteWorkshop = createMutation({
