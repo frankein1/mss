@@ -98,9 +98,9 @@
           :label="helpRequestFieldLabels.beneficiaryDeviceId"
           :options="withEmptyValue(deviceOptions)"
           :disabled="deviceOptionsDisabled"
-          :hint="
+          :description="
             deviceOptionsDisabled
-              ? 'Aucun dispositif renseigné pour ce bénéficiaire'
+              ? 'Aucun dispositif renseigné pour ce bénéficiaire.'
               : undefined
           "
         />
@@ -131,9 +131,9 @@
         <VeeSelect
           name="beneficiaryDeviceId"
           :label="helpRequestFieldLabels.beneficiaryDeviceId"
-          :options="withEmptyValue(deviceOptions)"
+          :options="deviceOptions.length ? withEmptyValue(deviceOptions) : []"
           :disabled="deviceOptionsDisabled"
-          :hint="
+          :description="
             deviceOptionsDisabled
               ? 'Aucun dispositif renseigné pour ce bénéficiaire'
               : undefined
@@ -263,6 +263,8 @@
     deviceOptions: { value: string; label: string }[]
     deviceOptionsDisabled: boolean
   }>()
+
+  console.log(props.deviceOptions)
 
   const { value: isFirst } =
     useField<CreateHousingHelpRequestInput['isFirst']>('isFirst')
