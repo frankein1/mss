@@ -278,10 +278,10 @@ async function uploadEncryptedToS3({
         tags: input.tags,
         size: input.file.size,
         mimeType: input.file.mimeType,
+        expirationDate: input.expirationDate ?? null,
         migrated: true // migrated to S3
       }
     })
-
     return document
   } catch (e) {
     await deleteFile(config, bucketKey).catch(s3e =>
