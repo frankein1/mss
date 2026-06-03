@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <BeneficiaryFormSection>
-      <div class="fr-col-12">
-        <p class="fr-text--bold fr-text--uppercase fr-mb-1w">
-          Prestations / Dispositifs d'accompagnement
-        </p>
-        <p class="fr-hint-text fr-mb-0">
-          Exemple : portage de repas, dispositif de retour à l'emploi...
-        </p>
-      </div>
-    </BeneficiaryFormSection>
+  <BeneficiaryFormSection>
+    <div class="fr-col-12">
+      <p class="fr-text--bold fr-text--uppercase fr-mb-1w">
+        Prestations / Dispositifs d'accompagnement
+      </p>
+      <p class="fr-hint-text fr-mb-0">
+        Exemple : portage de repas, dispositif de retour à l'emploi...
+      </p>
+    </div>
 
     <BeneficiaryFormDevice
       v-for="(field, idx) in fields"
@@ -21,22 +19,19 @@
       @remove-device="handleRemoveDevice(idx)"
     />
 
-    <BeneficiaryFormSection>
-      <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-circle-line"
-          type="button"
-          @click="addDevice"
-        >
-          Ajouter un dispositif
-        </button>
-      </div>
-    </BeneficiaryFormSection>
-  </div>
+    <div class="fr-col-12">
+      <button
+        class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-circle-line"
+        type="button"
+        @click="addDevice"
+      >
+        Ajouter un dispositif
+      </button>
+    </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">
-  import { v4 } from 'uuid'
   import BeneficiaryFormDeviceDeleteModal from './BeneficiaryFormDeviceDeleteModal.vue'
 
   const trpcClient = useTrpcClient()
@@ -74,7 +69,7 @@
   })
 
   function addDevice() {
-    push({ id: v4(), name: '' })
+    push({ id: crypto.randomUUID(), name: '' })
   }
 
   async function handleRemoveDevice(idx: number) {

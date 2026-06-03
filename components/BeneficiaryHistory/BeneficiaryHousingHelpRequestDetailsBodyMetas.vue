@@ -14,12 +14,7 @@
     >
     {{ askedHousing }}
   </li>
-  <li v-if="housingHelpRequest.beneficiaryDevice">
-    <span class="information-label"
-      >{{ helpRequestFieldLabels.beneficiaryDeviceId }}&nbsp;:</span
-    >
-    {{ formatDeviceOption(housingHelpRequest.beneficiaryDevice).label }}
-  </li>
+
   <li v-if="housingHelpRequest.prescribingOrganization?.name">
     <span class="information-label"
       >{{ helpRequestFieldLabels.prescribingOrganizationId }}&nbsp;:</span
@@ -33,6 +28,12 @@
       }}&nbsp;:</span
     >
     {{ housingHelpRequest.prescribingOrganizationContact.name }}
+  </li>
+  <li v-if="housingHelpRequest.beneficiaryDevice">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.beneficiaryDeviceId }}&nbsp;:</span
+    >
+    {{ formatDeviceOption(housingHelpRequest.beneficiaryDevice).label }}
   </li>
   <li v-if="instructorOrganization">
     <span class="information-label">Instruction&nbsp;:</span>
