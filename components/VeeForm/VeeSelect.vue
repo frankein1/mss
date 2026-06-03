@@ -45,6 +45,13 @@
       :value="value"
       hidden
     />
+    <p
+      v-if="description"
+      :id="descriptionId"
+      class="fr-hint-text fr-mt-2v"
+    >
+      {{ description }}
+    </p>
     <div
       :id="errorId"
       class="fr-messages-group"
@@ -74,13 +81,15 @@
       labelledBy?: string
       disabled?: boolean
       disabledOptions?: string[]
+      description?: string
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
       disabled: false,
       disabledOptions: () => [],
-      required: false
+      required: false,
+      description: undefined
     }
   )
 
@@ -96,10 +105,18 @@
   const { errorMessage: error, value, handleChange } = useField<string>(name)
 
   const { id, errorId } = useFormFieldId(name)
+  const descriptionId = useId()
 
-  const ariaDescribedby = computed(() =>
-    error.value ? errorId.value : undefined
-  )
+  const ariaDescribedby = computed(() => {
+    const describedBy = []
+    if (props.description) {
+      describedBy.push(descriptionId)
+    }
+    if (error.value) {
+      describedBy.push(errorId.value)
+    }
+    return describedBy.join(' ')
+  })
 
   function onChange(event: Event) {
     emit('changeValue', (event.target as HTMLSelectElement).value)

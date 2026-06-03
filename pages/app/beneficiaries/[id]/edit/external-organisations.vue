@@ -32,10 +32,12 @@
   } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
+  // TODO: supprimer combinedSchema et CombinedInput
+  // et résoudre le schema dans server/schema/beneficiary/updateBeneficiary.schema.ts
+  // lorsque les mutations seront mergée en une seule (mutateExternalOrganisations)
   const combinedSchema = updateBeneficiaryExternalOrganisationsSchema.merge(
     updateBeneficiaryDevicesSchema.omit({ id: true })
   )
-
   type CombinedInput = z.infer<typeof combinedSchema>
 
   const trpcClient = useTrpcClient()
