@@ -39,9 +39,11 @@ Each layer has a single job — don't duplicate another layer's work:
 
 ### Security check conventions
 
-- Centralized permission system in `server/security/permissions/` (`getContextPermissions`, `getFamilyFilePermissions`, `getFollowupPermissions`, `getDocumentPermissions`, `getSocialSupportPermissions`, etc.) — avoid reimplementing role logic manually. Role helpers (`getGranteRole`) are in `server/security/rules/helpers`
+- Centralized permission system in `server/security/permissions/` (`getAppContextPermissions`, `getFamilyFilePermissions`, `getFollowupPermissions`, `getDocumentPermissions`, `getSocialSupportPermissions`, `getCommentPermissions`, etc.)
+- **`securityCheck` must use these permission functions** to determine authorization — never call role helpers (`isReferent`, `isAdmin`, `getGranteRole`, etc.) directly in `securityCheck`, handlers, or services. Role helpers are internal to the permission system (`server/security/permissions/`) and the constraint layer (`server/database/constraints/`) — they must not be used outside these boundaries
 - Never write role deny-lists (`if (role === X) return false`). The permission system is allow-list by design
-- When input references external entities (user IDs, structure IDs, etc.), verify they exist and belong to the caller's structure. Don't trust client-supplied relationships between entities — resolve and validate them server-side
+- Use `getAppContextPermissions(ctx)` for global role-based capabilities (module access, export rights). Use entity-level permission functions (`getFamilyFilePermissions`, `getFollowupPermissions`, etc.) when authorization depends on the user's relationship to a specific resource (ownership, referent assignment, membership)
+- When input references external entities (user IDs, structure IDs, etc.), always verify they exist and belong to the caller's structure. Never trust client-supplied relationships between entities — resolve and validate them server-side
 
 #### Structure-scoped validators (`server/security/validators/`)
 
