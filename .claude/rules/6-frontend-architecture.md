@@ -50,6 +50,15 @@ Prefer vue-dsfr rather than direct DSFR html when possible:
 - Always use `<NuxtLink>` instead of `<a>` — for both internal and external links
 - For external links, add the `external` prop to `<NuxtLink>`
 
+### Permissions
+
+Two mechanisms for authorization decisions in components and pages — never check roles directly:
+
+- **Global capabilities**: use `usePermissions()` (backed by `AppContextPermissions` from the server). Gates module access, export rights, edit rights. Example: `application.value.module.budget` to show/hide budget features
+- **Entity-level capabilities**: use the `permissions` object returned by backend queries (e.g. `familyFile.permissions`, `followup.permissions`). Gates actions on a specific resource based on ownership, referent assignment, etc.
+
+**`useAuthState()` role helpers** (`isAdmin()`, `isReferent()`, `isStructureManager()`, `isReceptionAgent()`) are reserved for **middleware and layout routing only** — choosing which app shell or page to render (e.g. admin panel vs. user panel, CGU acceptance flow). Never use them in components to gate actions, disable buttons, or hide features — use the permission mechanisms above instead.
+
 ### Routing
 
 - File-based routing via Nuxt pages directory
