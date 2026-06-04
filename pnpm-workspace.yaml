@@ -1,5 +1,6 @@
 overrides:
-  ws: '^8.18.3'
+  uuid: '14.0.0'
+  tmp: '0.2.7'
   flatted: '^3.4.2'
   rollup: '^4.59.0'
 
@@ -18,3 +19,5 @@ allowBuilds:
   prisma: false
   unrs-resolver: false
 shamefullyHoist: true
+minimumReleaseAgeExclude:
+  - tmp@0.2.7
