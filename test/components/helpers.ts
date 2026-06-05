@@ -1,6 +1,56 @@
 import { vi } from 'vitest'
+import { defineComponent, h } from 'vue'
+import type { Component } from 'vue'
 import type { VueWrapper } from '@vue/test-utils'
 import { flushPromises } from '@vue/test-utils'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import type { ZodSchema } from 'zod'
+import type { AppContextPermissions } from '~/server/security'
+import { defaultPermissions } from '~/composables/usePermissions'
+
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+}
+
+export function setPermissions(overrides: DeepPartial<AppContextPermissions>) {
+  const state = useState<AppContextPermissions>(
+    'permissions:app',
+    defaultPermissions
+  )
+  const base = defaultPermissions()
+  state.value = {
+    view: {
+      ...base.view,
+      ...overrides.view,
+      cgu: { ...base.view.cgu, ...overrides.view?.cgu }
+    },
+    export: { ...base.export, ...overrides.export },
+    edit: {
+      ...base.edit,
+      ...overrides.edit,
+      health: { ...base.edit.health, ...overrides.edit?.health },
+      beneficiary: { ...base.edit.beneficiary, ...overrides.edit?.beneficiary }
+    },
+    archive: { ...base.archive, ...overrides.archive },
+    module: { ...base.module, ...overrides.module }
+  }
+}
+
+export function withForm(
+  component: Component,
+  schema: ZodSchema,
+  props: Record<string, unknown> = {}
+): Component {
+  return defineComponent({
+    setup() {
+      useForm({ validationSchema: toTypedSchema(schema) })
+    },
+    render() {
+      return h(component, props)
+    }
+  })
+}
 
 export function createFakeTrpcClient() {
   return {
