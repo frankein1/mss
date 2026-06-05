@@ -68,7 +68,7 @@
               </li>
             </NuxtLink>
             <li
-              v-if="!authState.isAdmin()"
+              v-if="application.view.admin === false"
               class="fr-mt-3w"
             >
               <NuxtLink
@@ -93,13 +93,13 @@
         <footer>
           <ul class="fr-footer__bottom-list">
             <li
-              v-if="!authState.isAdmin()"
+              v-if="application.view.admin === false"
               class="fr-footer__bottom-item"
             >
               <NuxtLink
                 class="fr-footer__bottom-link"
                 :to="
-                  authState.isStructureManager()
+                  application.view.cgu.asManager
                     ? routes.cgu.CGUManager.path({ readonly: true })
                     : routes.cgu.CGUUser.path({ readonly: true })
                 "
@@ -162,7 +162,6 @@
   } = useRuntimeConfig()
 
   const homePage = useHomePage()
-  const authState = useAuthState()
 
   const { version, sourceCode } = useClientVersion()
   const { application } = usePermissions()
@@ -178,10 +177,9 @@
     }
   }
 
-  // TODO: Add pages to sitemap (pages/plan-du-site.vue)
   const menuItems = computed(() => {
     const items = []
-    if (authState.isAdmin()) {
+    if (application.value.view.admin) {
       items.push({
         to: routes.admin.AdminOverview.path(),
         label: 'Tableau de bord',

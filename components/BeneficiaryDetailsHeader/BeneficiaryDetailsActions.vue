@@ -42,7 +42,8 @@
         >Vous ne pouvez pas dissocier le bénéficiaire principal du foyer</span
       >
     </li>
-    <li v-if="structureManager">
+    <!-- Allows archiving before inactivity threshold -->
+    <li v-if="application.archive.beneficiary">
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0 edit-btn"
         data-fr-opened="false"
@@ -71,8 +72,8 @@
   import type { FamilyFilePermissions } from '~/server/security'
   import type { RelativeRelationship } from '@prisma/client'
 
-  const { isStructureManager } = useAuthState()
   const route = useRoute()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -80,8 +81,6 @@
     familyFile?: boolean
     beneficiaryRelationship?: RelativeRelationship | null
   }>()
-
-  const structureManager = computed(() => isStructureManager())
 
   const emit = defineEmits<{ delete: []; split: []; archive: [] }>()
 

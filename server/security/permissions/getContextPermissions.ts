@@ -3,6 +3,12 @@ import type { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
 
 export type AppContextPermissions = {
+  view: {
+    admin: boolean
+    cgu: {
+      asManager: boolean
+    }
+  }
   export: {
     stats: boolean
     history: boolean
@@ -12,9 +18,17 @@ export type AppContextPermissions = {
     health: {
       nir: boolean
     }
+    beneficiary: {
+      referent: boolean
+    }
+  }
+  archive: {
+    // Allows to archive before inactivity threshold
+    // The per beneficiary authorization is available in permissions.service.ts/getArchivePermissions
+    beneficiary: boolean
   }
   module: {
-    users: boolean
+    users: boolean // User management
     stats: boolean
     statsByReferent: boolean
     health: boolean
@@ -45,6 +59,12 @@ export function getAppContextPermissions({
 
 function getAdminContextPermissions(): AppContextPermissions {
   return {
+    view: {
+      admin: true,
+      cgu: {
+        asManager: false
+      }
+    },
     export: {
       history: false,
       stats: false
@@ -53,7 +73,13 @@ function getAdminContextPermissions(): AppContextPermissions {
       structure: true,
       health: {
         nir: false
+      },
+      beneficiary: {
+        referent: false
       }
+    },
+    archive: {
+      beneficiary: false
     },
     module: {
       users: false,
@@ -81,8 +107,9 @@ function getUserContextPermissions(
     socialWorker,
     instructor,
     referent,
-    ministryAgent,
     receptionAgent,
+    // Structure types
+    ministryAgent,
     ngo,
     cias,
     ccas,
@@ -91,6 +118,12 @@ function getUserContextPermissions(
   const hasRdvAccess = ctx.structure.externalRdvspActive || false
 
   return {
+    view: {
+      admin: false,
+      cgu: {
+        asManager: manager
+      }
+    },
     export: {
       history: manager || socialWorker || referent || instructor,
       stats: ministryAgent
@@ -101,7 +134,13 @@ function getUserContextPermissions(
       structure: manager,
       health: {
         nir: cias || ccas || city
+      },
+      beneficiary: {
+        referent: manager || socialWorker || referent || instructor
       }
+    },
+    archive: {
+      beneficiary: manager
     },
     module: {
       users: manager,
