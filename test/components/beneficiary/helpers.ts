@@ -13,8 +13,16 @@ export function createFakeTrpcClientBeneficiary() {
   }
 }
 
+type FamilyFilePermissionsOverrides = {
+  edit?: Partial<FamilyFilePermissions['edit']>
+  view?: Partial<FamilyFilePermissions['view']>
+  create?: Partial<FamilyFilePermissions['create']>
+  delete?: boolean
+  changeReferent?: boolean
+}
+
 export function createFakeFamilyFilePermissions(
-  overrides?: Partial<FamilyFilePermissions>
+  overrides?: FamilyFilePermissionsOverrides
 ): FamilyFilePermissions {
   return {
     edit: {
@@ -22,7 +30,8 @@ export function createFakeFamilyFilePermissions(
       relatives: true,
       health: true,
       occupationIncome: true,
-      externalOrganisations: true
+      externalOrganisations: true,
+      ...overrides?.edit
     },
     view: {
       general: true,
@@ -31,17 +40,18 @@ export function createFakeFamilyFilePermissions(
       occupationIncome: true,
       externalOrganisations: true,
       documents: true,
-      history: true
+      history: true,
+      ...overrides?.view
     },
     create: {
       helpRequest: true,
       document: true,
       followup: true,
-      comment: true
+      comment: true,
+      ...overrides?.create
     },
-    delete: true,
-    changeReferent: true,
-    ...overrides
+    delete: overrides?.delete ?? true,
+    changeReferent: overrides?.changeReferent ?? true
   }
 }
 
