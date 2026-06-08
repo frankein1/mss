@@ -14,43 +14,73 @@
           "
         />
       </div>
-      <!-- Disable until we have validation/autocomplete on the School Name-->
-      <!-- <div
-        v-show="
-          socioProfessionalCategory ===
-          BeneficiarySocioProfessionalCategory.Student
-        "
-        class="fr-col-12"
-      >
-        <VeeInput
-          name="schoolName"
-          :label="beneficiaryFieldLabels.schoolName"
-        />
-      </div>
-      <div
-        v-show="
-          socioProfessionalCategory ===
-          BeneficiarySocioProfessionalCategory.Student
-        "
-        class="fr-col-12"
-      >
-        <VeeCheckbox
-          :label="beneficiaryFieldLabels.isSchoolInQPV"
-          name="isSchoolInQPV"
-        />
-      </div> -->
+
       <div class="fr-col-12">
         <VeeInput
           name="occupation"
           :label="beneficiaryFieldLabels.occupation"
         />
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="studyLevel"
           :label="beneficiaryFieldLabels.studyLevel"
           :options="withEmptyValue(beneficiaryStudyLevelKeys.options)"
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <div
+          class="fr-select-group"
+          :class="{ 'fr-select-group--error': schoolClassError }"
+        >
+          <label
+            class="fr-label"
+            for="schoolClass"
+          >
+            {{ beneficiaryFieldLabels.schoolClass }}
+          </label>
+          <select
+            id="schoolClass"
+            class="fr-select"
+            :class="{ 'fr-select--error': schoolClassError }"
+            name="schoolClass"
+            :aria-describedby="
+              schoolClassError ? 'schoolClass-error' : undefined
+            "
+            @change="handleSchoolClassChange"
+          >
+            <option
+              value=""
+              :selected="!schoolClassValue"
+            />
+            <optgroup
+              v-for="group in beneficiarySchoolClassGroups"
+              :key="group.label"
+              :label="group.label"
+            >
+              <option
+                v-for="option in group.options"
+                :key="option.value"
+                :value="option.value"
+                :selected="option.value === schoolClassValue"
+              >
+                {{ option.label }}
+              </option>
+            </optgroup>
+          </select>
+          <div
+            id="schoolClass-error"
+            class="fr-messages-group"
+            aria-live="polite"
+          >
+            <p
+              v-if="schoolClassError"
+              class="fr-message fr-message--error"
+            >
+              {{ schoolClassError }}
+            </p>
+          </div>
+        </div>
       </div>
       <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
@@ -142,6 +172,7 @@
   import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
+    beneficiarySchoolClassGroups,
     pensionOrganisationKeys,
     ministereDepartmentServiceAcKeys,
     ministereStructureKeys,
@@ -152,6 +183,12 @@
   import { routes } from '~/utils/routes'
 
   const { application } = usePermissions()
+
+  const {
+    value: schoolClassValue,
+    errorMessage: schoolClassError,
+    handleChange: handleSchoolClassChange
+  } = useField<string>('schoolClass')
 
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]

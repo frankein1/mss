@@ -990,6 +990,42 @@ enum BeneficiaryStudyLevel {
   Doctorat
 }
 
+enum BeneficiarySchoolClass {
+  // Maternelle
+  ToutesPetiteSection
+  PetiteSection
+  MoyenneSection
+  GrandeSection
+  // Élémentaire
+  CP
+  CE1
+  CE2
+  CM1
+  CM2
+  // Collège
+  Sixieme
+  Cinquieme
+  Quatrieme
+  Troisieme
+  // Lycée général et technologique
+  SecondeGenerale
+  PremiereGenerale
+  PremiereTechno
+  TerminaleGenerale
+  TerminaleTechno
+  // Lycée professionnel
+  SecondePro
+  PremierePro
+  TerminalePro
+  CAP1
+  CAP2
+  BMA1
+  BMA2
+  BNMA1
+  BNMA2
+  BNMA3
+}
+
 enum BeneficiaryProtectionMeasure {
   //Tutelle
   Tutelle
@@ -1683,6 +1719,7 @@ model Beneficiary {
   schoolName                String?                               @map("school_name")
   isSchoolInQPV             Boolean                               @default(false) @map("is_school_in_qpv")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
+  schoolClass               BeneficiarySchoolClass?               @map("school_class")
   occupation                String?
   employer                  String?
   employerSiret             String?                               @map("employer_siret")
