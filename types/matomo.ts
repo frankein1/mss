@@ -24,7 +24,8 @@ export enum EventCategory {
 
 export enum FamilyFileAction {
   CreateBeneficiary = 'Créer un bénéficiaire',
-  LinkBeneficiary = 'Lier un bénéficiaire'
+  LinkBeneficiary = 'Lier un bénéficiaire',
+  CopyAccommodation = `Copier les infos d'hébèrgement d'un membre du foyer`
 }
 
 export enum BeneficiaryFilterEventAction {

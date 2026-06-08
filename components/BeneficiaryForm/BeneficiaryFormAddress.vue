@@ -150,6 +150,7 @@
   import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
   import type { MemberAccommodation } from './types'
   import { AlertType } from '~/utils/constants/alert'
+  import { EventCategory, FamilyFileAction } from '~/types/matomo.js'
 
   const { membersAccommodation = [] } = defineProps<{
     membersAccommodation?: MemberAccommodation[]
@@ -157,6 +158,7 @@
 
   const { application } = usePermissions()
   const { values, setValues } = useFormContext()
+  const matomo = useMatomo()
 
   const { value: accommodationMode } =
     useField<BeneficiaryAccommodationMode>('accommodationMode')
@@ -256,6 +258,10 @@
       region: member.region ?? '',
       qpv: member.qpv ?? false
     })
+    matomo.trackEvent(
+      EventCategory.FamilyFile,
+      FamilyFileAction.CopyAccommodation
+    )
   }
 </script>
 
