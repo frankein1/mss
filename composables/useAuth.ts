@@ -18,12 +18,9 @@ export function useAuth() {
 
   async function verifySession() {
     let session: UserSession | null = null
-    const headers = useRequestHeaders(['cookie'])
 
     try {
-      session = await $fetch<UserSession>('/api/auth/verify-session', {
-        headers
-      })
+      session = await $fetch<UserSession>('/api/auth/verify-session')
     } catch (e: unknown) {
       logout()
       console.error(e)
@@ -44,13 +41,10 @@ export function useAuth() {
   }
 
   async function getSession() {
-    const headers = useRequestHeaders(['cookie'])
     const session = await $fetch<{
       user: JwtUser
       permissions: AppContextPermissions
-    }>('/api/auth/get-session', {
-      headers
-    })
+    }>('/api/auth/get-session')
     if (session) {
       state.user.value = session.user
       application.value = session.permissions

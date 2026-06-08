@@ -20,6 +20,15 @@ const connectSrcCsp = [
 ]
 
 export default defineNuxtConfig({
+  ssr: false,
+
+  experimental: {
+    // Required in SPA mode: without this, ViteNodePlugin never sets NUXT_VITE_NODE_OPTIONS.socketPath
+    // (it only fires on the SSR Vite server creation which is skipped when ssr:false),
+    // causing a 500 "Vite Node IPC socket path not configured" on every dev page request.
+    viteEnvironmentApi: true
+  },
+
   // https://nuxt.com/blog/v3-8
   typescript: {
     tsConfig: {
@@ -184,6 +193,7 @@ export default defineNuxtConfig({
   ],
 
   runtimeConfig: {
+    databaseUrl: process.env.DATABASE_URL ?? '',
     auth: {
       jwtKey: process.env.NUXT_AUTH_JWT_KEY,
       sessionSecret: process.env.NUXT_AUTH_SESSION_SECRET,
@@ -336,6 +346,12 @@ export default defineNuxtConfig({
           tokensPerInterval: 2
         }
       }
+    }
+  },
+
+  nitro: {
+    externals: {
+      inline: ['dayjs']
     }
   },
 

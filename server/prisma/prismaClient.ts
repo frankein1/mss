@@ -18,6 +18,8 @@ if (shouldLogPrisma) {
   prismaLogLevels.push({ emit: 'event', level: 'query' })
 }
 
+const { databaseUrl } = useRuntimeConfig()
+
 // If prismaClient variable is renamed, the Prisma eslint rule `no-restricted-syntax` in eslint.config must be adapted accordingly.
 export const prismaClient: PrismaClient<
   Prisma.PrismaClientOptions,
@@ -26,7 +28,12 @@ export const prismaClient: PrismaClient<
 > =
   global.prismaClient ||
   new PrismaClient({
-    log: prismaLogLevels
+    log: prismaLogLevels,
+    // DATABASE_URL is not loaded from .env in the production Nitro server;
+    // pass it explicitly via runtimeConfig (set NUXT_DATABASE_URL at runtime
+    // or DATABASE_URL at build time). Fall back to process.env for Scalingo
+    // and other platforms that inject it as a plain process environment variable.
+    datasourceUrl: databaseUrl || process.env.DATABASE_URL
   })
 
 export * from '@prisma/client'

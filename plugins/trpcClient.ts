@@ -5,13 +5,11 @@ import { splitLink } from '@trpc/client'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  const headers = useRequestHeaders()
   const batchLinkOptions = {
     url: `${config.public.appUrl}/api/trpc`,
     transformer: superjson,
-    headers() {
-      // You can add more custom headers here
-      return headers
+    fetch(url: Parameters<typeof fetch>[0], options?: Parameters<typeof fetch>[1]) {
+      return fetch(url, { ...options, credentials: 'include' })
     }
   }
   const client = createTRPCNuxtClient<AppRouter>({

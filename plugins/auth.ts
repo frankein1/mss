@@ -1,23 +1,21 @@
-import { getHeader } from 'h3'
 import { useAuth } from '~/composables/useAuth'
 import { minutesToMillis } from '~/utils/time'
 
+// Security note: this middleware runs client-side only (SPA mode).
+// It is a UX redirect, not a security boundary. All data authorization
+// is enforced server-side via tRPC protectedProcedure and server/middleware/setContext.ts.
 export default defineNuxtPlugin(async nuxtApp => {
   const { getSession } = useAuth()
 
-  let nitroPrerender = false
-  if (nuxtApp.ssrContext) {
-    nitroPrerender =
-      getHeader(nuxtApp.ssrContext.event, 'x-nitro-prerender') !== undefined
-  }
-
   const { user } = useAuthState()
 
-  // Only fetch session if it was not yet initialized server-side
-  if (!user.value && !nitroPrerender) {
-    // For the time being the session is renewed on app load to avoid problems with
-    // expired tokens
-    await getSession()
+  if (!user.value) {
+    try {
+      await getSession()
+    } catch (e) {
+      console.error('auth-plugin: failed to fetch session on boot', e)
+      // Continue in unauthenticated state; route middleware will redirect to login
+    }
   }
 
   let cleanupVisibilityHandler: (() => void) | undefined

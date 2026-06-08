@@ -94,8 +94,13 @@ test.describe('a11y - Website', () => {
 test.describe('a11y - Application', () => {
   test.use({ storageState: 'playwright/.auth/structure-manager.json' })
 
+  // In SPA mode page.goto() resolves at the load event, before getSession() completes
+  // and the component mounts. AxeBuilder.analyze() is not a retrying assertion, so we
+  // must wait for networkidle (which covers getSession() + initial tRPC queries) before scanning.
+
   test('Home', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -104,7 +109,7 @@ test.describe('a11y - Application', () => {
 
   test('Dashboard', async ({ page }) => {
     await page.goto('/app/overview')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -113,7 +118,7 @@ test.describe('a11y - Application', () => {
 
   test('Beneficiaries', async ({ page }) => {
     await page.goto('/app/beneficiaries')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -122,7 +127,7 @@ test.describe('a11y - Application', () => {
 
   test('Social supports', async ({ page }) => {
     await page.goto('/app/history')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -131,7 +136,7 @@ test.describe('a11y - Application', () => {
 
   test('Statistics', async ({ page }) => {
     await page.goto('/app/stats')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -140,7 +145,7 @@ test.describe('a11y - Application', () => {
 
   test('Structure manager - User Management', async ({ page }) => {
     await page.goto('/app/users')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
@@ -149,7 +154,7 @@ test.describe('a11y - Application', () => {
 
   test('Structure manager - Structure configuration', async ({ page }) => {
     await page.goto('/app/structure')
-
+    await page.waitForLoadState('networkidle')
     await analyze(page, {
       exclude: appExcludeElements,
       disableRules: siteFacileDisableRules
