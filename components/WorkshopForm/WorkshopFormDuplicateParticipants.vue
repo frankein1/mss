@@ -8,8 +8,8 @@
         label="Souhaitez-vous conserver la liste des personnes participantes sur l'atelier dupliqué ?"
         :options="options"
         :hint="
-          isReferent()
-            ? 'Le rôle Référent ne possede pas les droits pour dupliquer les personnes participantes.'
+          !canDuplicateParticipants
+            ? 'Vous ne disposez pas des droits pour dupliquer les personnes participantes.'
             : undefined
         "
       />
@@ -18,13 +18,14 @@
 </template>
 
 <script setup lang="ts">
-  const { isReferent } = useAuthState()
-  const referent = isReferent()
+  const { application } = usePermissions()
+  const canDuplicateParticipants =
+    application.value.workshop.duplicateParticipants
 
   const { value: duplicateParticipantsOption } = useField<string>(
     'duplicateParticipantsOption'
   )
-  if (referent) {
+  if (!canDuplicateParticipants) {
     duplicateParticipantsOption.value = 'removeParticipants'
   }
 
@@ -32,12 +33,12 @@
     {
       value: 'removeParticipants',
       label: 'Ne pas conserver la liste',
-      disabled: referent
+      disabled: !canDuplicateParticipants
     },
     {
       value: 'keepParticipants',
       label: 'Conserver la liste',
-      disabled: referent
+      disabled: !canDuplicateParticipants
     }
   ]
 </script>

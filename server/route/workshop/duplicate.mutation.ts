@@ -8,14 +8,20 @@ import {
   PartnerOrganizationRepo,
   WorkshopAttendeeRepo
 } from '~/server/database'
-import { isReferent, type SecurityRuleContext } from '~/server/security'
+import {
+  getAppContextPermissions,
+  type SecurityRuleContext
+} from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: DuplicateWorkshopInput
 ) => {
-  if (isReferent(ctx.user) && input.duplicateParticipants) {
+  if (
+    input.duplicateParticipants &&
+    !getAppContextPermissions(ctx).workshop.duplicateParticipants
+  ) {
     return false
   }
   try {
@@ -49,7 +55,8 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const canDuplicateParticipants =
-    duplicateParticipants && !isReferent(ctx.user)
+    duplicateParticipants &&
+    getAppContextPermissions(ctx).workshop.duplicateParticipants
 
   const sourceAttendees = canDuplicateParticipants
     ? await WorkshopAttendeeRepo.findMany(ctx.user, {

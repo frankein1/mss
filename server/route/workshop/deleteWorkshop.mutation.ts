@@ -3,15 +3,16 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
+import { validateOneBelongsToStructure } from '~/server/security'
 import type { IdInput } from '~/server/schema'
 import { WorkshopNameRepo, WorkshopRepo } from '~/server/database'
 
-const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const count = await WorkshopRepo.count(ctx.user, {
-    where: { id: input.id }
-  })
-  return count === 1
-}
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) =>
+  validateOneBelongsToStructure(
+    ctx.user,
+    input.id,
+    WorkshopRepo.findUniqueOrThrow
+  )
 
 const handler = async ({
   input: { id },
