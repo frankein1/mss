@@ -7,7 +7,10 @@ import { badrequest, forbidden, internal } from '~/utils/api/errors'
 import { prismaClient } from '~/server/prisma'
 import type { RuntimeConfig } from 'nuxt/schema'
 import { downloadWithEncryption } from '~/server/lib/s3/file'
-import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import {
+  fetchUserContext,
+  type UserContext
+} from '~/server/utils/fetchUserContext'
 import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 
 export default defineEventHandler(async event => {
@@ -64,10 +67,7 @@ export default defineEventHandler(async event => {
   return documentContent
 })
 
-async function getDocumentMetadata(
-  key: string,
-  user: Awaited<ReturnType<typeof fetchUserContext>>
-) {
+async function getDocumentMetadata(key: string, user: UserContext) {
   return await DocumentRepo.findUniqueOrThrow(user, {
     where: { key },
     select: {
