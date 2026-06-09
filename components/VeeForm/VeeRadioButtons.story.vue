@@ -63,6 +63,13 @@
       :label
       :name
     />
+    <h4>With hint</h4>
+    <VeeRadioButtons
+      :options
+      :label
+      :name
+      :hint
+    />
   </form>
 </template>
 
@@ -76,6 +83,7 @@
   ]
   const label = 'Choisiez une option :'
   const name = 'option'
+  const hint = 'Texte additionnel sous la légende'
   const archivePictos = {
     optionOne: '/pictograms/supprimer.svg',
     optionTwo: '/pictograms/archive.svg',

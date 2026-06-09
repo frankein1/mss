@@ -30,6 +30,7 @@
           v-model="hasAttendeeLimit"
           type="checkbox"
           class="fr-toggle__input"
+          :disabled="keepParticipants"
           aria-describedby="attendee-limit-toggle-hint attendee-limit-toggle-messages"
         />
         <label
@@ -56,7 +57,7 @@
         hint="Saisisez un nombre entier"
         :label="workshopLabels.attendeeLimit"
         name="attendeeLimit"
-        :disabled="!hasAttendeeLimit"
+        :disabled="!hasAttendeeLimit || keepParticipants"
       />
     </div>
     <div class="fr-col-12 fr-col-sm-8 flex-end">
@@ -87,9 +88,17 @@
   }>()
 
   const { value: ageLimitCondition } = useField('ageLimitCondition')
-  const { value: attendeeLimit } = useField('attendeeLimit')
+  const { value: attendeeLimit, resetField: resetAttendeeLimit } =
+    useField('attendeeLimit')
   const { value: ageLimit } = useField('ageLimit')
   const chargeable = useField<boolean>('chargeable')
+  const { value: duplicateParticipantsOption } = useField<string>(
+    'duplicateParticipantsOption'
+  )
+
+  const keepParticipants = computed(
+    () => duplicateParticipantsOption.value === 'keepParticipants'
+  )
 
   const hasAttendeeLimit = ref(Boolean(attendeeLimit.value))
 
@@ -101,6 +110,12 @@
   watch(ageLimitCondition, () => {
     if (ageLimitCondition.value === '') {
       ageLimit.value = null
+    }
+  })
+  watch(duplicateParticipantsOption, val => {
+    if (val === 'keepParticipants') {
+      resetAttendeeLimit()
+      hasAttendeeLimit.value = attendeeLimit.value != null
     }
   })
 </script>

@@ -25,6 +25,9 @@ export type AppContextPermissions = {
     budget: boolean
     rdv: boolean
   }
+  workshop: {
+    duplicateParticipants: boolean
+  }
 }
 
 export function getAppContextPermissions({
@@ -63,6 +66,9 @@ function getAdminContextPermissions(): AppContextPermissions {
       vulnerablePerson: false,
       budget: false,
       rdv: false
+    },
+    workshop: {
+      duplicateParticipants: false
     }
   }
 }
@@ -110,6 +116,9 @@ function getUserContextPermissions(
       vulnerablePerson: !ngo && !ministryAgent,
       budget: !receptionAgent,
       rdv: hasRdvAccess
+    },
+    workshop: {
+      duplicateParticipants: !referent
     }
   }
 }

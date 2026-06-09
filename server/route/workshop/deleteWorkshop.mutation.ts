@@ -2,10 +2,17 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import type { SecurityRuleContext } from '~/server/security'
+import { validateOneBelongsToStructure } from '~/server/security'
+import type { IdInput } from '~/server/schema'
 import { WorkshopNameRepo, WorkshopRepo } from '~/server/database'
 
-const securityCheck = AllowSecurityCheck
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) =>
+  validateOneBelongsToStructure(
+    ctx.user,
+    input.id,
+    WorkshopRepo.findUniqueOrThrow
+  )
 
 const handler = async ({
   input: { id },
@@ -14,25 +21,24 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const { workshopNameId } = await WorkshopRepo.delete(ctx.user, {
-    where: {
-      id,
-      structureId: ctx.structure.id
-    },
+  const res = await WorkshopRepo.delete(ctx.user, {
+    where: { id },
     select: {
       id: true,
       workshopNameId: true
     }
   })
   const workshopCount = await WorkshopRepo.count(ctx.user, {
-    where: { workshopNameId, structureId: ctx.structure.id }
+    where: { workshopNameId: res.workshopNameId, structureId: ctx.structure.id }
   })
   if (workshopCount === 0) {
     await WorkshopNameRepo.delete(ctx.user, {
-      where: { id: workshopNameId },
+      where: { id: res.workshopNameId },
       select: { id: true }
     })
   }
+
+  return res.id
 }
 
 export const deleteWorkshop = createMutation({

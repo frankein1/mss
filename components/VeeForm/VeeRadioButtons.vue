@@ -17,6 +17,11 @@
         class="color-red"
         >*</span
       >
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+        >{{ hint }}</span
+      >
     </legend>
     <div
       v-for="{ value: optionValue, label: optionLabel, disabled } in options"
@@ -102,6 +107,7 @@
       rich?: boolean
       small?: boolean
       required?: boolean
+      hint?: string
     }>(),
     {
       pictos: undefined,
@@ -110,7 +116,8 @@
       noLabel: false,
       rich: false,
       small: false,
-      required: false
+      required: false,
+      hint: undefined
     }
   )
 
