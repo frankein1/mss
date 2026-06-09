@@ -64,7 +64,6 @@ function redirectionsDto<T extends SS['socialSupportRedirections']>(
   return redirections.map(r => ({
     id: r.id,
     type: r.type,
-    motif: r.motif,
     partnerOrganizationId: r.partnerOrganizationId,
     partnerOrganizationContactId: r.partnerOrganizationContactId,
     partnerOrganization: {

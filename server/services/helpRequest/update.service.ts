@@ -94,7 +94,6 @@ export async function update({ input, ctx }: UpdateParams) {
         return {
           id: r.id || randomUUID(),
           type: r.type,
-          motif: r.motif,
           externalStructureName: r.externalStructureName,
           partnerOrganizationId: r.partnerOrganizationId,
           partnerOrganizationContactId: r.partnerOrganizationContactId

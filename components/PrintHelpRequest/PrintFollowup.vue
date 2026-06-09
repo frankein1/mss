@@ -118,12 +118,6 @@
                   >
                   {{ redirection.externalStructureName }}
                 </li>
-                <li v-if="redirection.motif">
-                  <span class="fr-text--bold"
-                    >{{ socialSupportRedirectionLabels.motif }}&nbsp;:</span
-                  >
-                  {{ redirection.motif }}
-                </li>
               </ul>
             </li>
           </ul>

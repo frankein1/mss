@@ -67,7 +67,6 @@ export async function create({ input, ctx }: CreateParams) {
           return {
             id: r.id || randomUUID(),
             type: r.type,
-            motif: r.motif || null,
             externalStructureName: r.externalStructureName || null,
             partnerOrganizationId: r.partnerOrganizationId || null,
             partnerOrganizationContactId: r.partnerOrganizationContactId || null

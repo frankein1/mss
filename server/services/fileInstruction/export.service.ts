@@ -80,7 +80,6 @@ const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
 
 const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
   'type',
-  'motif',
   'partnerOrganizationId',
   'partnerOrganizationContactId',
   'externalStructureName'
@@ -213,10 +212,6 @@ export async function exportFileInstructions({
           type: redirections
             .map(r => socialSupportRedirectionTypeKeys.value(r.type))
             .filter((type): type is string => type != null)
-            .join(', '),
-          motif: redirections
-            .map(r => r.motif)
-            .filter((motif): motif is string => motif != null)
             .join(', '),
           partnerOrganizationId: redirections
             .map(r => r.partnerOrganization.name)

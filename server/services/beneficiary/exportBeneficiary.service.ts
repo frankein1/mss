@@ -311,7 +311,6 @@ type SocialSupportForFollowupData = FieldLabels<
 
 type RedirectionData = {
   type: string | null
-  motif: string | null
   partnerOrganizationName: string | null
   partnerOrganizationContactName: string | null
   externalStructureName: string | null
@@ -345,7 +344,6 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
   const redirections =
     socialSupport.socialSupportRedirections?.map(r => ({
       type: socialSupportRedirectionTypeKeys.value(r.type) || null,
-      motif: r.motif || null,
       partnerOrganizationName: r.partnerOrganization?.name || null,
       partnerOrganizationContactName:
         r.partnerOrganizationContact?.name || null,
@@ -485,7 +483,6 @@ const getHelpRequestData = (
   const redirections =
     socialSupport.socialSupportRedirections?.map(r => ({
       type: socialSupportRedirectionTypeKeys.value(r.type) || null,
-      motif: r.motif || null,
       partnerOrganizationName: r.partnerOrganization?.name || null,
       partnerOrganizationContactName:
         r.partnerOrganizationContact?.name || null,
@@ -1071,7 +1068,6 @@ const getSocialSupports = async (
       socialSupportRedirections: {
         select: {
           type: true,
-          motif: true,
           externalStructureName: true,
           partnerOrganization: { select: { name: true } },
           partnerOrganizationContact: { select: { name: true } }

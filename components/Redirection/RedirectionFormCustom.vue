@@ -31,14 +31,6 @@
         </p>
       </div>
       <VeeInput
-        v-if="selectedType != null"
-        disabled
-        :name="`socialSupportRedirections[${index}].motif`"
-        label="Motif"
-        hint="Fonctionnalité à venir"
-        aria-describedby="motif-tooltip"
-      />
-      <VeeInput
         v-if="selectedType === SocialSupportRedirectionType.Other"
         :name="`socialSupportRedirections[${index}].externalStructureName`"
         label="Nom structure / personne"

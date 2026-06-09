@@ -32,10 +32,6 @@
           <dd>{{ redirection.externalStructureName }}</dd>
         </template>
         <div></div>
-        <template v-if="redirection.motif">
-          <dt>{{ socialSupportRedirectionLabels.motif }}&nbsp;:</dt>
-          <dd>{{ redirection.motif }}</dd>
-        </template>
       </dl>
     </li>
   </ul>

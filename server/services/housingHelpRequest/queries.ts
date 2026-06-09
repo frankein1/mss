@@ -110,7 +110,6 @@ export const select = {
             select: {
               id: true,
               type: true,
-              motif: true,
               externalStructureName: true,
               partnerOrganizationId: true,
               partnerOrganizationContactId: true,

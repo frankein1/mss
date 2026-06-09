@@ -53,7 +53,6 @@ function findMany(
             select: {
               id: true,
               type: true,
-              motif: true,
               externalStructureName: true,
               partnerOrganizationId: true,
               partnerOrganizationContactId: true,

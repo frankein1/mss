@@ -722,7 +722,6 @@ const configRedirection: Record<
 > = {
   id: true,
   type: true,
-  motif: true,
   created_at: true,
   social_support_id: true,
   external_structure_name: true,

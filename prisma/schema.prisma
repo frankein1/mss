@@ -401,7 +401,6 @@ model SocialSupport {
 model SocialSupportRedirection {
   id                    String                       @id @default(uuid()) @db.Uuid
   type                  SocialSupportRedirectionType
-  motif                 String?
   externalStructureName String?                      @map("external_structure_name")
 
   partnerOrganizationId String?              @map("partner_organization_id") @db.Uuid

@@ -205,9 +205,6 @@ async function main() {
         redirectionData.push({
           socialSupportId: id,
           type,
-          motif: faker.helpers.maybe(() => faker.word.words(3), {
-            probability: 0.5
-          }),
           ...(type === 'PartnerOrganization' && {
             partnerOrganizationId: equiRandomEnum(PARTNER_ORG_IDS)
           })
