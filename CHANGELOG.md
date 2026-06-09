@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.59.4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.3...v1.59.4) (2026-06-09)
+
+
+### Bug Fixes
+
+* **foyer:** navigation entre membres du foyer ([8551875](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8551875331025152cd16e3b3915fafa2dc462d07)), closes [#1120](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1120)
+
 ## [1.59.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.1...v1.59.3) (2026-06-01)
 
 
