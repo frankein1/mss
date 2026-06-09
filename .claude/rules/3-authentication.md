@@ -19,10 +19,12 @@ paths:
 
 ### JWT Token Structure
 
-- Payload includes: firstName, lastName, id, email, role, status, structureId, CGUHistoryVersion, structureType
+- Payload contains only `{ id }` (user UUID) — no PII, no role/status data
 - HS256 signature verified server-side
 - 60-minute default expiration (configurable)
 - Secure HttpOnly cookie prevents XSS token theft
+- User context (role, status, structure) is always fetched from DB via `fetchUserContext()` utility
+- Frontend gets user profile from `get-session` API (called on app init), not from the JWT
 
 ### Data Isolation
 

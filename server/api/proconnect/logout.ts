@@ -4,7 +4,7 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import type { H3Event } from 'h3'
 import { unauthorized } from '~/utils/api/errors'
-import type { JwtUser } from '~/server/lib/jwt'
+import { fetchUserContext } from '~/server/utils/fetchUserContext'
 
 export default defineEventHandler(async event => {
   const { inactive } = getQuery(event)
@@ -16,17 +16,22 @@ export default defineEventHandler(async event => {
     }
   } = useRuntimeConfig()
 
-  const jwtUser = deleteMSSToken(event, cookieKey)
+  const userId = deleteMSSToken(event, cookieKey)
 
-  await addUserActivity({
-    key: 'auth.logout',
-    user: jwtUser,
-    activity: UserActivityType.LOGOUT,
-    object: 'User',
-    objectId: jwtUser.id
-  })
+  try {
+    const user = await fetchUserContext(userId)
+    addUserActivity({
+      key: 'auth.logout',
+      user,
+      activity: UserActivityType.LOGOUT,
+      object: 'User',
+      objectId: user.id
+    }).catch(error => console.error(error))
+  } catch (error) {
+    console.error('logout: failed to log user activity', error)
+  }
 
-  const account = await cleanAccountData(jwtUser.id, proconnectProvider)
+  const account = await cleanAccountData(userId, proconnectProvider)
 
   const client = getProConnectClient()
   const logoutUrl = client.getLogoutUrl({
@@ -40,14 +45,14 @@ export default defineEventHandler(async event => {
 })
 
 function deleteMSSToken(event: H3Event, cookieKey: string) {
-  const jwtUser = event.context.auth?.user
-  if (!jwtUser) {
+  const userId = event.context.auth?.userId
+  if (!userId) {
     throw unauthorized('[ProConnect] Logout failure: missing data')
   }
 
   deleteCookie(event, cookieKey)
 
-  return jwtUser as JwtUser
+  return userId
 }
 
 async function cleanAccountData(userId: string, proconnectProvider: string) {
@@ -79,7 +84,8 @@ async function cleanAccountData(userId: string, proconnectProvider: string) {
   await prismaClient.account.update({
     where: { id: accounts[0].id },
     data: {
-      idToken: null
+      idToken: null,
+      sessionState: null
     }
   })
 

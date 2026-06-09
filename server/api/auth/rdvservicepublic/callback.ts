@@ -6,6 +6,7 @@ import { routes } from '~/utils/routes'
 import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import { fetchUserContext } from '~/server/utils/fetchUserContext'
 
 /** RDVSP Oauth callback endpoint
  * Register rdvsp auth token in database and redirect to page
@@ -22,11 +23,13 @@ export default defineEventHandler(async event => {
     )
   }
 
-  const user = event.context.auth?.user
+  const userId = event.context.auth?.userId
 
-  if (!user) {
+  if (!userId) {
     throw unauthorized('rdvsp-auth-callback: No user found from RDVSP OAuth')
   }
+
+  const user = await fetchUserContext(userId)
 
   checkUserIsAuthenticated(user)
 
@@ -91,7 +94,6 @@ async function createOrUpdateToken(
   // FIXME nonce verification could be implemented here
 
   const agent = await client.getAgentInfo(cfg, token.access_token)
-  console.log(`rdvsp: connected as ${agent.first_name} ${agent.last_name}`)
 
   if ('error' in agent || !agent) {
     throw badrequest('rdvsp-auth-callback: Could not retrieve agent info')

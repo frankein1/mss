@@ -3,7 +3,6 @@ import type { Document } from '@prisma/client'
 import { NotificationType, UserActivityType } from '@prisma/client'
 import type { AddDocumentInput } from '~/server/schema'
 import { addDocumentSchema } from '~/server/schema'
-import type { JwtUser } from '~/server/lib/jwt'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import type { FamilyFileSecurityTarget } from '~/server/services'
 import { BeneficiaryService, FamilyFileService } from '~/server/services'
@@ -21,6 +20,9 @@ import {
   generateFileRootForDocument
 } from '~/server/lib/s3/helper'
 import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
+import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import type { UserContext } from '~/server/utils/fetchUserContext'
+import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 
 export interface MultiPartData {
   data: Buffer
@@ -30,15 +32,18 @@ export interface MultiPartData {
 }
 
 export default defineEventHandler(async event => {
-  const user = event.context.auth?.user
-  if (
-    !user ||
-    user.status !== 'Active' ||
-    user.role === 'Administrator' ||
-    !user.structureId
-  ) {
+  const userId = event.context.auth?.userId
+  if (!userId) {
     throw forbidden('upload: not authorized')
   }
+
+  const user = await fetchUserContext(userId)
+  checkUserIsAuthenticated(user)
+
+  if (!user.structure) {
+    throw forbidden('upload: not authorized')
+  }
+
   const multipartFormData = await readMultipartFormData(event)
   if (!multipartFormData) {
     throw badrequest('multipart form data non présent')
@@ -63,19 +68,9 @@ export default defineEventHandler(async event => {
       input.beneficiaryId
     )
 
-  const structureType = user.structureType
-
-  if (!structureType) {
-    throw badrequest('upload: No structure type')
-  }
-
   const ctx = {
     user,
-    structure: {
-      id: user.structureId,
-      type: structureType,
-      externalRdvspActive: null
-    }
+    structure: user.structure
   }
 
   const permissions = await FamilyFileService.getEditionPermissions(
@@ -123,7 +118,7 @@ async function createDocument(
   beneficiaryId: string,
   familyFileId: string,
   input: Omit<AddDocumentInput, 'beneficiaryId'>,
-  user: JwtUser,
+  user: UserContext,
   file: MultiPartData
 ) {
   const config = useRuntimeConfig()
@@ -183,7 +178,7 @@ interface UploadDbArgs {
   beneficiaryId: string
   familyFileId: string
   input: Omit<AddDocumentInput, 'beneficiaryId'>
-  user: JwtUser
+  user: UserContext
   file: MultiPartData
 }
 async function uploadToDb({
@@ -232,7 +227,7 @@ interface UploadEncryptedS3Args {
   familyFileId: string
   config: Pick<RuntimeConfig, 'document' | 's3' | 'kms' | 'public'>
   input: Omit<AddDocumentInput, 'beneficiaryId'>
-  user: JwtUser
+  user: UserContext
   file: MultiPartData
 }
 async function uploadEncryptedToS3({
