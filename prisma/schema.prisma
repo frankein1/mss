@@ -115,10 +115,11 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  CGUHistory     CGUHistory[]
-  userActivities UserActivity[]
-  WorkshopName   WorkshopName[]
-  Workshop       Workshop[]
+  CGUHistory        CGUHistory[]
+  userActivities    UserActivity[]
+  WorkshopName      WorkshopName[]
+  Workshop          Workshop[]
+  RedirectionReason RedirectionReason[]
 
   @@map("user")
 }
@@ -170,6 +171,7 @@ model Structure {
   archivedBeneficiaries ArchivedBeneficiary[]
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
+  RedirectionReason     RedirectionReason[]
 
   @@map("structure")
 }
@@ -408,6 +410,9 @@ model SocialSupportRedirection {
   partnerOrganizationContactId String?                     @map("partner_organization_contact_id") @db.Uuid
   partnerOrganizationContact   PartnerOrganizationContact? @relation(fields: [partnerOrganizationContactId], references: [id])
 
+  redirectionReason   RedirectionReason? @relation(fields: [redirectionReasonId], references: [id])
+  redirectionReasonId String?            @map("redirection_reason_id") @db.Uuid
+
   socialSupportId String        @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
@@ -421,6 +426,21 @@ enum SocialSupportRedirectionType {
   PartnerOrganization
   Intern
   Other
+}
+
+model RedirectionReason {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdById String    @map("created_by_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  socialSupportRedirections SocialSupportRedirection[]
+
+  @@unique([structureId, name])
+  @@map("redirection_reason")
 }
 
 enum FollowupMedium {
@@ -2063,6 +2083,7 @@ enum UserActivityObject {
   Workshop
   WorkshopName
   Minister
+  RedirectionReason
 }
 
 model UserActivity {

@@ -727,7 +727,19 @@ const configRedirection: Record<
   social_support_id: true,
   external_structure_name: true,
   partner_organization_id: true,
-  partner_organization_contact_id: true
+  partner_organization_contact_id: true,
+  redirection_reason_id: true
+}
+
+const configRedirectionReason: Record<
+  SnakeCase<keyof typeof Prisma.RedirectionReasonScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  name: true,
+  structure_id: true,
+  created_by_id: true,
+  created_at: true
 }
 
 const configMinister: Record<
@@ -780,6 +792,7 @@ export const CONFIG = {
   budget_expenses_custom: configBudgetExpensesCustom,
   external_account: configExternalAccount,
   social_support_redirection: configRedirection,
+  redirection_reason: configRedirectionReason,
   minister: configMinister
 }
 

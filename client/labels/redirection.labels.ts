@@ -5,6 +5,7 @@ type SocialSupportRedirectionLabels = Pick<
   SocialSupportRedirection,
   | 'type'
   | 'motif'
+  | 'redirectionReasonId'
   | 'partnerOrganizationId'
   | 'partnerOrganizationContactId'
   | 'externalStructureName'
@@ -14,6 +15,7 @@ export const socialSupportRedirectionLabels: FieldLabels<SocialSupportRedirectio
   {
     type: 'Type',
     motif: 'Motif',
+    redirectionReasonId: 'Motif',
     partnerOrganizationId: 'Organisme partenaire',
     partnerOrganizationContactId: "Contact de l'organisme partenaire",
     externalStructureName: 'Nom structure/personne'
@@ -23,6 +25,7 @@ export const redirectionExportLabels: FieldLabels<SocialSupportRedirectionLabels
   {
     type: 'Types de redirection',
     motif: 'Motifs de redirection',
+    redirectionReasonId: 'Motifs de redirection',
     partnerOrganizationId: 'Redirection vers organisme partenaire',
     partnerOrganizationContactId: 'Contact des partenaires de redirection',
     externalStructureName: 'Structures/Personnes associée aux redirections'
