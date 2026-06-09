@@ -1,6 +1,7 @@
 import { createBeneficiaryAttendee } from './create-beneficiary-attendee.mutation'
 import { createExternalAttendee } from './create-external-attendee.mutation'
 import { createWorkshop } from './create.mutation'
+import { duplicateWorkshop } from './duplicate.mutation'
 import { getPageQuery } from './getPage.query'
 import { getQuery } from './get.query'
 import { getWorkshopNameList } from './get-workshop-name-list.query'
@@ -15,6 +16,7 @@ import { updateAttendee } from './update-attendee.mutation'
 
 export const workshopRoutes = {
   createWorkshop,
+  duplicateWorkshop,
   getWorkshopNameList,
   getPageQuery,
   getQuery,

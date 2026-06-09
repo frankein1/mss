@@ -12,7 +12,11 @@
         :options="options"
         :with-creation="true"
       />
-      <WorkshopFormNameHelper />
+      <WorkshopFormNameHelper v-if="mode != 'duplicate'" />
+      <AtomCallout v-else
+        >Tous les ateliers avec le même nom seront regroupés dans les
+        statistiques.</AtomCallout
+      >
     </div>
   </section>
 </template>
@@ -32,5 +36,6 @@
 
   defineProps<{
     isSubmitting: boolean
+    mode: 'update' | 'create' | 'duplicate'
   }>()
 </script>

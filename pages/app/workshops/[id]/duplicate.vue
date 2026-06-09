@@ -26,23 +26,23 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import type { CreateWorkshopInput } from '~/server/schema'
-  import { createWorkshopSchema } from '~/server/schema'
+  import type { DuplicateWorkshopInput } from '~/server/schema'
+  import { duplicateWorkshopSchema } from '~/server/schema'
   import { EventCategory, WorkshopAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
-  const workshopId = route.params.id as string
+  const workshopId = computed(() => route.params.id as string)
   const matomo = useMatomo()
   const router = useRouter()
   const { mutate, error, status } =
-    trpcClient.workshop.createWorkshop.useMutation()
+    trpcClient.workshop.duplicateWorkshop.useMutation()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
     await trpcClient.workshop.getOne.useQuery({
-      id: workshopId
+      id: workshopId.value
     })
 
   const fetchError = computed(() => {
@@ -56,9 +56,10 @@
   })
 
   // Form
-  const { handleSubmit } = useForm<CreateWorkshopInput>({
-    validationSchema: toTypedSchema(createWorkshopSchema),
+  const { handleSubmit } = useForm<DuplicateWorkshopInput>({
+    validationSchema: toTypedSchema(duplicateWorkshopSchema),
     initialValues: {
+      sourceWorkshopId: workshop.value?.id,
       name: workshop.value?.workshopName.name,
       startTime: workshop.value?.startTime,
       endTime: workshop.value?.endTime,
@@ -74,31 +75,52 @@
     }
   })
 
-  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
-    const workshopCreated = await mutate(input)
-
-    if (error.value || !workshopCreated) {
-      snackbar.error(
-        "La création de l'atelier a échoué.",
-        snackbar.focus('form', 'select')
-      )
-      return
-    }
-    matomo.trackEvent(EventCategory.Workshop, WorkshopAction.DuplicateWorkshop)
-    if (input.startTime !== workshop.value?.startTime) {
-      matomo.trackEvent(
-        EventCategory.Workshop,
-        WorkshopAction.DuplicateWorkshopAndChangeDateTime
-      )
-    }
-    const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)
-    navigateTo(workshopRoute)
-  }
+  const { value: duplicateParticipantsOption } = useField<
+    'keepParticipants' | 'removeParticipants'
+  >('duplicateParticipantsOption', undefined, {
+    initialValue: 'removeParticipants'
+  })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
-    values => {
-      onCreateWorkshop(values)
+    async values => {
+      const workshopCreated = await mutate({
+        ...values,
+        sourceWorkshopId: workshopId.value,
+        duplicateParticipants:
+          duplicateParticipantsOption.value === 'keepParticipants'
+      })
+
+      if (error.value || !workshopCreated) {
+        snackbar.error(
+          "La duplication de l'atelier a échoué.",
+          snackbar.focus('form', 'select')
+        )
+        return
+      }
+      matomo.trackEvent(
+        EventCategory.Workshop,
+        WorkshopAction.DuplicateWorkshop
+      )
+      if (values.startTime !== workshop.value?.startTime) {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopAndChangeDateTime
+        )
+      }
+      if (duplicateParticipantsOption.value === 'keepParticipants') {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopAndParticipants
+        )
+      } else {
+        matomo.trackEvent(
+          EventCategory.Workshop,
+          WorkshopAction.DuplicateWorkshopWithoutParticipants
+        )
+      }
+      snackbar.success("La duplication de l'atelier a réussi.")
+      navigateTo(routes.workshop.AppWorkshop.path(workshopCreated.id))
     }
   )
 

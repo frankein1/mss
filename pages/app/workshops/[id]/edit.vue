@@ -37,14 +37,14 @@
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const snackbar = useSnackbar()
-  const workshopId = route.params.id as string
+  const workshopId = computed(() => route.params.id as string)
   const modal = useModal()
   const matomo = useMatomo()
 
   // Get initial workshop
   const { data: workshop, error: errorInitialWorkshop } =
     await trpcClient.workshop.getOne.useQuery({
-      id: workshopId
+      id: workshopId.value
     })
 
   const fetchError = computed(() => {
@@ -88,6 +88,8 @@
 
   const router = trpcClient.workshop
   const { mutate, error, status } = router.updateWorkshop.useMutation()
+  const { mutate: deleteWorkshopMutate, error: deleteWorkshopError } =
+    trpcClient.workshop.delete.useMutation()
   const onUpdateWorkshop = async (input: UpdateWorkShopInput) => {
     const workshopUpdated = await mutate(input)
     if (error.value || !workshopUpdated) {
@@ -96,7 +98,7 @@
         MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
       ) {
         snackbar.error(
-          `L‘atelier a déjà ${workshop.value?._count.mainAttendees} participants. Supprimez-en si vous souhaitez réduire le nombre de participants maximum.`,
+          `L’atelier a déjà ${workshop.value?._count.mainAttendees} participants. Supprimez-en si vous souhaitez réduire le nombre de participants maximum.`,
           () => snackbar.focus('form', 'select')
         )
       } else {
@@ -127,9 +129,8 @@
   }
 
   const deleteWorkshop = async () => {
-    const { mutate, error } = trpcClient.workshop.delete.useMutation()
-    const workshopCreated = await mutate({ id: workshopId })
-    if (error.value || !workshopCreated) {
+    const workshopDeleted = await deleteWorkshopMutate({ id: workshopId.value })
+    if (deleteWorkshopError.value || !workshopDeleted) {
       snackbar.error("La suppression de l'atelier a échoué.")
       return
     }

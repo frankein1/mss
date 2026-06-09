@@ -23,6 +23,9 @@ export function usePermissions() {
         vulnerablePerson: false,
         budget: false,
         rdv: false
+      },
+      workshop: {
+        duplicateParticipants: false
       }
     })
   )
@@ -48,6 +51,9 @@ export function usePermissions() {
         vulnerablePerson: false,
         budget: false,
         rdv: false
+      },
+      workshop: {
+        duplicateParticipants: false
       }
     }
   }
