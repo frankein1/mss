@@ -7,7 +7,7 @@ import type { RuntimeConfig } from 'nuxt/schema'
 
 export async function decrypt(
   config: Pick<RuntimeConfig, 'kms' | 'document'>,
-  encryptedContent: Buffer,
+  encryptedContent: Uint8Array,
   encryptedDataKey: string,
   ivBase64: string,
   metadata: {
