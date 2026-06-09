@@ -46,7 +46,10 @@
               :model-value="beneficiaryId"
               @update:model-value="openBeneficiary"
             />
-            <BeneficiaryInfo :beneficiary-id>
+            <BeneficiaryInfo
+              v-if="selectedBeneficiary"
+              :beneficiary="selectedBeneficiary"
+            >
               <template #actions>
                 <BeneficiaryDetailsActions
                   :beneficiary-id
@@ -107,7 +110,7 @@
   import type { TRPCClientErrorLike } from '@trpc/client'
   import { apiRoutes, routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
-  import type { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import type { BeneficiaryDetailsOutput } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
@@ -181,7 +184,7 @@
   ]
 
   // states
-  const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
+  const selectedBeneficiary = ref<BeneficiaryDetailsOutput | null>(null)
   const selectedPending = ref(true)
   const selectedError = ref<TRPCClientErrorLike<any> | null>(null)
 
