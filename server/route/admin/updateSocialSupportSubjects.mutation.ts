@@ -4,7 +4,7 @@ import type { UpdateAdminStructureSubjectsInput } from '~/server/schema'
 import { updateAdminStructureSubjectsSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { StructureService } from '~/server/services'
-import { structureContextQuery } from '~/server/trpc/createContext'
+import { structureContextSelect } from '~/server/utils/fetchUserContext'
 import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({
@@ -18,7 +18,7 @@ const adminHandler = async ({
     where: {
       id: input.structureId
     },
-    select: structureContextQuery().select
+    select: structureContextSelect
   })
   return StructureService.updateSocialSupportSubjects({
     input,

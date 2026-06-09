@@ -5,20 +5,27 @@ import { addUserActivity } from '~/server/query'
 import { DocumentService } from '~/server/services'
 import { badrequest, forbidden, internal } from '~/utils/api/errors'
 import { prismaClient } from '~/server/prisma'
-import type { JwtUser } from '~/server/lib/jwt'
 import type { RuntimeConfig } from 'nuxt/schema'
 import { downloadWithEncryption } from '~/server/lib/s3/file'
+import {
+  fetchUserContext,
+  type UserContext
+} from '~/server/utils/fetchUserContext'
+import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
 
 export default defineEventHandler(async event => {
-  const user = event.context.auth?.user
-  if (
-    !user ||
-    user.status !== 'Active' ||
-    user.role === 'Administrator' ||
-    !user.structureId
-  ) {
+  const userId = event.context.auth?.userId
+  if (!userId) {
     throw forbidden('download: not authorized')
   }
+
+  const user = await fetchUserContext(userId)
+  checkUserIsAuthenticated(user)
+
+  if (!user.structure) {
+    throw forbidden('download: not authorized')
+  }
+
   const query = getQuery(event)
 
   const key = query.key?.toString()
@@ -27,17 +34,9 @@ export default defineEventHandler(async event => {
     throw badrequest('download: missing document id')
   }
 
-  if (!user.structureType) {
-    throw badrequest('download: missing structure type')
-  }
-
   const ctx = {
     user,
-    structure: {
-      id: user.structureId,
-      type: user.structureType,
-      externalRdvspActive: null
-    }
+    structure: user.structure
   }
 
   const { permissions } = await DocumentService.getEditionPermissions(ctx, key)
@@ -68,7 +67,7 @@ export default defineEventHandler(async event => {
   return documentContent
 })
 
-async function getDocumentMetadata(key: string, user: JwtUser) {
+async function getDocumentMetadata(key: string, user: UserContext) {
   return await DocumentRepo.findUniqueOrThrow(user, {
     where: { key },
     select: {

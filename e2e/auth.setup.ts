@@ -1,29 +1,12 @@
 import { test as setup } from '@playwright/test'
 import type { BrowserContext } from '@playwright/test'
-import type { StructureType, UserRole, UserStatus } from '@prisma/client'
-import {
-  fixturesCGUHistory,
-  FixtureStructure,
-  fixtureStructures,
-  fixturesUsers,
-  FixtureUserRole
-} from '~/prisma/fixtures'
+import { fixturesUsers, FixtureUserRole } from '~/prisma/fixtures'
 import { signJwt } from '~/server/lib/jwt'
 import { minutesToMillis } from '~/utils/time'
 
 async function setAuthenticationToken(
   context: BrowserContext,
-  user: {
-    firstName: string
-    lastName: string
-    email: string
-    id: string
-    role: UserRole
-    status: UserStatus
-    CGUHistoryVersion: string | null
-    structureId: string
-    structureType: StructureType
-  }
+  user: { id: string }
 ) {
   if (!process.env.NUXT_AUTH_JWT_KEY) {
     throw new Error('Missing NUXT_AUTH_JWT_KEY')
@@ -46,31 +29,8 @@ async function setAuthenticationToken(
   ])
 }
 
-function setPayloadUser(
-  role: FixtureUserRole,
-  struct: FixtureStructure,
-  withCGUValidated = true
-) {
-  const user = fixturesUsers[role]
-  const structure = fixtureStructures[struct]
-  const CGUHistoryVersion =
-    role === FixtureUserRole.StructureManagerNew ||
-    role === FixtureUserRole.SocialWorkerNew
-      ? null
-      : fixturesCGUHistory[
-          role === FixtureUserRole.StructureManagerMinistere ? 6 : role
-        ]?.version || null
-
-  if (withCGUValidated && !CGUHistoryVersion) {
-    throw new Error('cgu: missing data')
-  }
-
-  return {
-    ...user,
-    structureId: structure.id,
-    structureType: structure.type,
-    CGUHistoryVersion
-  }
+function setPayloadUser(role: FixtureUserRole) {
+  return { id: fixturesUsers[role].id }
 }
 
 setup('authenticate as Structure Manager Jeanne', async ({ context }) => {
@@ -78,7 +38,7 @@ setup('authenticate as Structure Manager Jeanne', async ({ context }) => {
 
   await setAuthenticationToken(
     context,
-    setPayloadUser(FixtureUserRole.StructureManager, FixtureStructure.Test)
+    setPayloadUser(FixtureUserRole.StructureManager)
   )
   await context.storageState({ path: managerFile })
 })
@@ -88,7 +48,7 @@ setup('authenticate as Social Worker Jean', async ({ context }) => {
 
   await setAuthenticationToken(
     context,
-    setPayloadUser(FixtureUserRole.SocialWorker, FixtureStructure.Test)
+    setPayloadUser(FixtureUserRole.SocialWorker)
   )
   await context.storageState({ path: workerFile })
 })
@@ -98,7 +58,7 @@ setup('authenticate as Reception Agent Jean', async ({ context }) => {
 
   await setAuthenticationToken(
     context,
-    setPayloadUser(FixtureUserRole.ReceptionAgent, FixtureStructure.Test)
+    setPayloadUser(FixtureUserRole.ReceptionAgent)
   )
   await context.storageState({ path: agentFile })
 })
@@ -108,11 +68,7 @@ setup('authenticate as Structure Manager Anita', async ({ context }) => {
 
   await setAuthenticationToken(
     context,
-    setPayloadUser(
-      FixtureUserRole.StructureManagerNew,
-      FixtureStructure.Autun,
-      false
-    )
+    setPayloadUser(FixtureUserRole.StructureManagerNew)
   )
   await context.storageState({ path: managerFile })
 })
@@ -122,11 +78,7 @@ setup('authenticate as Social Worker Mehdi', async ({ context }) => {
 
   await setAuthenticationToken(
     context,
-    setPayloadUser(
-      FixtureUserRole.SocialWorkerNew,
-      FixtureStructure.Autun,
-      false
-    )
+    setPayloadUser(FixtureUserRole.SocialWorkerNew)
   )
   await context.storageState({ path: workerFile })
 })
@@ -138,10 +90,7 @@ setup(
 
     await setAuthenticationToken(
       context,
-      setPayloadUser(
-        FixtureUserRole.StructureManagerMinistere,
-        FixtureStructure.Ministère
-      )
+      setPayloadUser(FixtureUserRole.StructureManagerMinistere)
     )
     await context.storageState({ path: managerFile })
   }

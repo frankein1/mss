@@ -19,6 +19,8 @@ const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
       }
     }
   })
+
+  return { cguVersion }
 }
 
 export const acceptCGUMutation = createMutation({

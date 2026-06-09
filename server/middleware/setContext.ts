@@ -1,11 +1,10 @@
 import { verifyJwt } from '~/server/lib/jwt'
-import type { JwtUser } from '~/server/lib/jwt'
 import { setUser } from '@sentry/node'
 
 declare module 'h3' {
   interface H3EventContext {
     auth?: {
-      user: JwtUser
+      userId: string
     }
   }
 }
@@ -38,6 +37,6 @@ export default defineEventHandler(event => {
 
   const { user } = payload
 
-  event.context.auth = { user }
+  event.context.auth = { userId: user.id }
   setUser({ id: user.id })
 })

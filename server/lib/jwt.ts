@@ -1,32 +1,16 @@
 import pkg from 'jsonwebtoken'
 import { minutesToSeconds } from '~/utils/time'
 import { z } from 'zod'
-import { requiredNativeEnum } from '~/server/schema'
-import { StructureType, UserRole, UserStatus } from '@prisma/client'
 
 const { sign, verify } = pkg
 
 export const MSS_SIGNING_ALGORITHM = 'HS256'
 
 const jwtUserSchema = z.object({
-  id: z.string().uuid(),
-  lastName: z.string(),
-  firstName: z.string(),
-  email: z.string().email(),
-  role: requiredNativeEnum(UserRole),
-  status: requiredNativeEnum(UserStatus),
-  structureId: z.string().uuid().nullable(),
-  structureType: requiredNativeEnum(StructureType).nullable(),
-  CGUHistoryVersion: z.string().nullable()
+  id: z.string().uuid()
 })
 
-export type JwtUser = z.infer<typeof jwtUserSchema>
-
-export type JwtData = {
-  user: JwtUser
-  iat: number
-  exp: number
-}
+type JwtUser = z.infer<typeof jwtUserSchema>
 
 export function verifyJwt(token: string, jwtKey: string) {
   const payload = verify(token, jwtKey, {
