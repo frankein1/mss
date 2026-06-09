@@ -160,3 +160,6 @@ export type GetBeneficiaryOutput = Pick<
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined
     history: BeneficiaryHistory | undefined
   }
+
+export type BeneficiaryDetailsOutput =
+  RouterOutput['beneficiary']['getBeneficiaryDetails']['beneficiary']

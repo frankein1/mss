@@ -21,7 +21,7 @@
     </div>
 
     <BeneficiaryInfoGeneral
-      :beneficiary-id="beneficiaryId"
+      :beneficiary-id="beneficiary.id"
       :general="beneficiary.general"
     />
 
@@ -59,27 +59,25 @@
 </template>
 
 <script lang="ts" setup>
-  const props = defineProps<{
-    beneficiaryId: string
-  }>()
+  import type { BeneficiaryDetailsOutput } from '~/types/beneficiary'
 
-  const { beneficiary } = await useBeneficiaryDetails(
-    toRef(props, 'beneficiaryId')
-  )
+  const { beneficiary } = defineProps<{
+    beneficiary: BeneficiaryDetailsOutput
+  }>()
 
   const beneficiaryTitle = computed(() => {
     let title = 'Informations'
-    if (beneficiary.value?.general?.firstName) {
-      title = title + ' ' + beneficiary.value.general.firstName
+    if (beneficiary.general?.firstName) {
+      title = title + ' ' + beneficiary.general.firstName
     }
-    if (beneficiary.value?.general?.usualName) {
-      title = title + ' ' + beneficiary.value.general.usualName
+    if (beneficiary.general?.usualName) {
+      title = title + ' ' + beneficiary.general.usualName
     }
     return title
   })
 
   const hasTaxHouseholds = computed(() => {
-    const taxHouseholds = beneficiary.value?.taxHouseholds
+    const taxHouseholds = beneficiary.taxHouseholds
     return !(
       !taxHouseholds?.caregiver &&
       !taxHouseholds?.divorceDate &&

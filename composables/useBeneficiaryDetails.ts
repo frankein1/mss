@@ -1,9 +1,9 @@
 export const useBeneficiaryDetails = async (
-  beneficiaryId: MaybeRef<string>,
+  beneficiaryId: MaybeRefOrGetter<string>,
   options?: { accommodation?: boolean }
 ) => {
   const trpcClient = useTrpcClient()
-  const idRef = isRef(beneficiaryId) ? beneficiaryId : ref(beneficiaryId)
+  const idRef = toRef(beneficiaryId)
 
   const queryInput = computed(() => ({
     id: idRef.value,
