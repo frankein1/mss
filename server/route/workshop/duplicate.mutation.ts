@@ -13,6 +13,7 @@ import {
   type SecurityRuleContext
 } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
+import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -47,6 +48,7 @@ const handler = async ({
     name,
     sourceWorkshopId,
     duplicateParticipants,
+    attendeeLimit,
     ...workshopInput
   },
   ctx
@@ -57,6 +59,24 @@ const handler = async ({
   const canDuplicateParticipants =
     duplicateParticipants &&
     getAppContextPermissions(ctx).workshop.duplicateParticipants
+
+  const initialWorkshop = await WorkshopRepo.findUniqueOrThrow(ctx.user, {
+    where: {
+      id: sourceWorkshopId
+    },
+    select: {
+      id: true,
+      attendeeLimit: true
+    }
+  })
+
+  // duplication with participants cannot change attendeeMimit
+  if (duplicateParticipants && initialWorkshop.attendeeLimit != attendeeLimit) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Can not change the attendee limit'
+    })
+  }
 
   const sourceAttendees = canDuplicateParticipants
     ? await WorkshopAttendeeRepo.findMany(ctx.user, {
@@ -84,8 +104,8 @@ const handler = async ({
       })
     : []
 
-  return prismaClient.$transaction(async () => {
-    const newWorkshop = await WorkshopRepo.create(ctx.user, {
+  return prismaClient.$transaction(async tx => {
+    const newWorkshop = await tx.workshop.create({
       select: { id: true },
       data: {
         ...workshopInput,
@@ -121,7 +141,7 @@ const handler = async ({
     )
 
     if (beneficiariesToDuplicate.length > 0) {
-      await prismaClient.workshopAttendee.createMany({
+      await tx.workshopAttendee.createMany({
         data: beneficiariesToDuplicate.map(beneficiary => ({
           workshopId: newWorkshop.id,
           type: WorkshopAttendeeType.Beneficiary,
@@ -141,18 +161,12 @@ const handler = async ({
         !a.workshopExternalAttendee.isAnonymized
     )
 
-    for (const attendee of externalAttendees) {
-      const ext = attendee.workshopExternalAttendee!
-      await prismaClient.workshopAttendee.create({
-        data: {
-          workshop: { connect: { id: newWorkshop.id } },
-          type: WorkshopAttendeeType.External,
-          listType: attendee.listType,
-          comment: attendee.comment,
-          paymentReceived: attendee.paymentReceived,
-          paymentAmount: attendee.paymentAmount,
-          workshopExternalAttendee: {
-            create: {
+    if (externalAttendees.length > 0) {
+      const createdExternals =
+        await tx.workshopExternalAttendee.createManyAndReturn({
+          data: externalAttendees.map(a => {
+            const ext = a.workshopExternalAttendee!
+            return {
               firstName: ext.firstName,
               lastName: ext.lastName,
               gender: ext.gender,
@@ -161,8 +175,19 @@ const handler = async ({
               phone: ext.phone,
               city: ext.city
             }
-          }
-        }
+          })
+        })
+
+      await tx.workshopAttendee.createMany({
+        data: externalAttendees.map((attendee, i) => ({
+          workshopId: newWorkshop.id,
+          type: WorkshopAttendeeType.External,
+          listType: attendee.listType,
+          comment: attendee.comment,
+          paymentReceived: attendee.paymentReceived,
+          paymentAmount: attendee.paymentAmount,
+          workshopExternalAttendeeId: createdExternals[i]?.id
+        }))
       })
     }
 
