@@ -164,7 +164,7 @@ export async function downloadWithEncryption({
 
   const { fileContent } = await decrypt(
     config,
-    Buffer.from(encryptedContent),
+    encryptedContent,
     encryptedDataKey,
     iv,
     {
