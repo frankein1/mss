@@ -115,11 +115,11 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  CGUHistory        CGUHistory[]
-  userActivities    UserActivity[]
-  WorkshopName      WorkshopName[]
-  Workshop          Workshop[]
-  RedirectionReason RedirectionReason[]
+  CGUHistory         CGUHistory[]
+  userActivities     UserActivity[]
+  WorkshopName       WorkshopName[]
+  Workshop           Workshop[]
+  RedirectionReasons RedirectionReason[]
 
   @@map("user")
 }
@@ -171,7 +171,7 @@ model Structure {
   archivedBeneficiaries ArchivedBeneficiary[]
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
-  RedirectionReason     RedirectionReason[]
+  RedirectionReasons    RedirectionReason[]
 
   @@map("structure")
 }
@@ -430,7 +430,7 @@ enum SocialSupportRedirectionType {
 model RedirectionReason {
   id          String    @id @default(uuid()) @db.Uuid
   name        String
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
   createdBy   User      @relation(fields: [createdById], references: [id])
   createdById String    @map("created_by_id") @db.Uuid

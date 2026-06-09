@@ -22,7 +22,7 @@ CREATE UNIQUE INDEX "redirection_reason_structure_id_name_key" ON "redirection_r
 ALTER TABLE "social_support_redirection" ADD CONSTRAINT "social_support_redirection_redirection_reason_id_fkey" FOREIGN KEY ("redirection_reason_id") REFERENCES "redirection_reason"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "redirection_reason" ADD CONSTRAINT "redirection_reason_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "redirection_reason" ADD CONSTRAINT "redirection_reason_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "redirection_reason" ADD CONSTRAINT "redirection_reason_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
