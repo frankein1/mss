@@ -19,6 +19,39 @@ import {
   fixturesPartnerOrganizationContacts
 } from './'
 
+export const fixturesRedirectionReasons = [
+  {
+    id: 'a1f3e2d4-0b5c-4a7e-9f8d-1c2b3a4e5f60',
+    name: 'Accès aux droits',
+    structureId: fixtureStructures[0].id,
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id
+  },
+  {
+    id: 'b2e4f3c5-1c6d-4b8f-a09e-2d3c4b5f6a71',
+    name: "Aide alimentaire d'urgence",
+    structureId: fixtureStructures[0].id,
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id
+  },
+  {
+    id: 'c3d5a4b6-2d7e-4c9a-b10f-3e4d5c6a7b82',
+    name: 'Insertion professionnelle',
+    structureId: fixtureStructures[0].id,
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id
+  },
+  {
+    id: 'd4c6b5a7-3e8f-4d0b-c21a-4f5e6d7b8c93',
+    name: 'Prévention expulsion locative',
+    structureId: fixtureStructures[0].id,
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id
+  },
+  {
+    id: 'e5b7c6a8-4f9a-4e1c-d32b-5a6f7e8c9d04',
+    name: 'Soutien à la parentalité',
+    structureId: fixtureStructures[0].id,
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id
+  }
+] satisfies Prisma.RedirectionReasonCreateManyInput[]
+
 const fixturesFollowupSocialSupports = [
   {
     id: 'e20b26f8-52fd-4620-8959-4cbb4623fb05',
@@ -48,10 +81,12 @@ const fixturesFollowupSocialSupports = [
           partnerOrganizationId:
             fixturesPartnerOrganizations[
               FixturePartnerOrganization.MairieValence
-            ].id
+            ].id,
+          redirectionReasonId: fixturesRedirectionReasons[0]!.id
         },
         {
-          type: 'Intern'
+          type: 'Intern',
+          redirectionReasonId: fixturesRedirectionReasons[1]!.id
         }
       ]
     }
@@ -77,7 +112,8 @@ const fixturesFollowupSocialSupports = [
     socialSupportRedirections: {
       create: [
         {
-          type: 'Other'
+          type: 'Other',
+          redirectionReasonId: fixturesRedirectionReasons[2]!.id
         }
       ]
     }
@@ -110,7 +146,8 @@ const fixturesFollowupSocialSupports = [
           partnerOrganizationId:
             fixturesPartnerOrganizations[
               FixturePartnerOrganization.FranceTravail
-            ].id
+            ].id,
+          redirectionReasonId: fixturesRedirectionReasons[0]!.id
         }
       ]
     }
@@ -138,7 +175,8 @@ const fixturesFollowupSocialSupports = [
         {
           type: 'PartnerOrganization',
           partnerOrganizationId:
-            fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
+            fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id,
+          redirectionReasonId: fixturesRedirectionReasons[1]!.id
         }
       ]
     }
@@ -229,7 +267,8 @@ const fixturesFollowupSocialSupports = [
     socialSupportRedirections: {
       create: [
         {
-          type: 'Intern'
+          type: 'Intern',
+          redirectionReasonId: fixturesRedirectionReasons[3]!.id
         }
       ]
     }
@@ -270,7 +309,8 @@ const fixturesHelpRequestSocialSupports = [
           partnerOrganizationId:
             fixturesPartnerOrganizations[
               FixturePartnerOrganization.FranceTravail
-            ].id
+            ].id,
+          redirectionReasonId: fixturesRedirectionReasons[2]!.id
         }
       ]
     }
@@ -301,10 +341,12 @@ const fixturesHelpRequestSocialSupports = [
     socialSupportRedirections: {
       create: [
         {
-          type: 'Intern'
+          type: 'Intern',
+          redirectionReasonId: fixturesRedirectionReasons[3]!.id
         },
         {
-          type: 'Other'
+          type: 'Other',
+          redirectionReasonId: fixturesRedirectionReasons[4]!.id
         }
       ]
     }
@@ -343,7 +385,8 @@ const fixturesHelpRequestSocialSupports = [
           partnerOrganizationId:
             fixturesPartnerOrganizations[
               FixturePartnerOrganization.MairieValence
-            ].id
+            ].id,
+          redirectionReasonId: fixturesRedirectionReasons[0]!.id
         }
       ]
     }
@@ -474,7 +517,8 @@ const fixturesHousingHelpRequestSocialSupports = [
     socialSupportRedirections: {
       create: [
         {
-          type: 'Other'
+          type: 'Other',
+          redirectionReasonId: fixturesRedirectionReasons[4]!.id
         }
       ]
     }
