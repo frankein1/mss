@@ -61,7 +61,8 @@ const followupExportSelect = {
           type: true,
           externalStructureName: true,
           partnerOrganizationId: true,
-          partnerOrganizationContactId: true
+          partnerOrganizationContactId: true,
+          redirectionReason: { select: { name: true } }
         }
       }
     }

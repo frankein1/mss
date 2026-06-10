@@ -64,6 +64,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
 ]
 const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
   'type',
+  'redirectionReasonId',
   'partnerOrganizationId',
   'partnerOrganizationContactId',
   'externalStructureName'
@@ -229,6 +230,10 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
     type: redirections
       .map(r => socialSupportRedirectionTypeKeys.value(r.type))
       .filter((type): type is string => type != null)
+      .join(', '),
+    redirectionReasonId: redirections
+      .map(r => r.redirectionReasonName)
+      .filter((name): name is string => name != null)
       .join(', '),
     partnerOrganizationId: redirections
       .map(r =>

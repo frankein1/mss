@@ -132,7 +132,10 @@ type SS = SocialSupport & {
   comments?: (Comment & { createdBy: User })[]
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
-    'createdAt' | 'socialSupportId' | 'redirectionReasonId'
+    | 'createdAt'
+    | 'socialSupportId'
+    | 'redirectionReasonId'
+    | 'redirectionReason'
   > & {
     partnerOrganization: { name: string } | null
     partnerOrganizationContact: { name: string } | null
@@ -207,7 +210,9 @@ export function filterSocialSupportForExport<
   } & {
     beneficiary: Partial<Beneficiary>
   } & {
-    socialSupportRedirections: Partial<SocialSupportRedirection>[]
+    socialSupportRedirections: (Partial<SocialSupportRedirection> & {
+      redirectionReason?: { name: string } | null
+    })[]
   }
 >({
   socialSupport,
@@ -237,7 +242,14 @@ export function filterSocialSupportForExport<
     },
     beneficiary: socialSupport.beneficiary,
     socialSupportRedirections: show(
-      socialSupport.socialSupportRedirections || [],
+      (socialSupport.socialSupportRedirections || []).map(r => ({
+        id: r.id,
+        type: r.type,
+        redirectionReasonName: r.redirectionReason?.name ?? null,
+        partnerOrganizationId: r.partnerOrganizationId,
+        partnerOrganizationContactId: r.partnerOrganizationContactId,
+        externalStructureName: r.externalStructureName
+      })),
       conditions.details
     )
   }
