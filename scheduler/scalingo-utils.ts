@@ -1,8 +1,9 @@
 import { ofetch } from 'ofetch'
-import { SCHEDULER_ENV } from '../env'
+import { SCHEDULER_ENV } from './env'
+import type { JobName } from './jobs'
 
 const SCALINGO_AUTH_URL = 'https://auth.scalingo.com'
-const SCALINGO_API_URL = `https://${SCHEDULER_ENV.scalingo.region}.scalingo.com`
+const SCALINGO_API_URL = `https://${SCHEDULER_ENV.scalingo.regionName}.scalingo.com`
 
 async function scalingoApiLogin() {
   const res = await ofetch<{ token: string }>(
@@ -20,20 +21,23 @@ async function scalingoApiLogin() {
   return { token: res.token, expiresAt: new Date(Date.now() + 3600 * 1000) }
 }
 
-export async function scalingoRun(command: string) {
+/** Run in detached one-off container */
+export async function scalingoRun(jobName: JobName) {
   if (SCHEDULER_ENV.public.mssEnvironment === 'local') {
     throw new Error(
-      'This command cannot be launched locally, consider using directly the terminal with `tsx --env-file .env`'
+      'This job cannot be launched locally, consider using `_caller <jobName>` directly'
     )
   }
-  if (!SCHEDULER_ENV.scalingo.apiToken || !SCHEDULER_ENV.scalingo.appName) {
-    throw new Error('scheduler-document: missing Scalingo configuration')
+  if (!SCHEDULER_ENV.scalingo.apiToken || !SCHEDULER_ENV.scalingo.app) {
+    throw new Error('scheduler: missing Scalingo configuration')
   }
 
   const authed = await scalingoApiLogin()
 
+  const command = `pnpm start:caller ${jobName}`
+
   const res = await ofetch<{ operation_url: string }>(
-    `${SCALINGO_API_URL}/v1/apps/${SCHEDULER_ENV.scalingo.appName}/run`,
+    `${SCALINGO_API_URL}/v1/apps/${SCHEDULER_ENV.scalingo.app}/run`,
     {
       method: 'POST',
       headers: {
@@ -45,6 +49,6 @@ export async function scalingoRun(command: string) {
   )
 
   console.log(
-    `scheduler-document: scalingo one-off container has been launched and operation is viewable at ${res.operation_url}`
+    `scheduler: scalingo one-off container has been launched and operation is viewable at ${res.operation_url}`
   )
 }

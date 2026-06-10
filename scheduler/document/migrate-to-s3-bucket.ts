@@ -1,6 +1,5 @@
 import { SCHEDULER_ENV } from '../env'
 import { performance } from 'node:perf_hooks'
-import { initSentry, terminateSentry } from '../utils'
 import { prismaClient } from '~/server/prisma'
 import * as Sentry from '@sentry/node'
 import { uploadWithEncryption } from '~/server/lib/s3/file'
@@ -9,20 +8,12 @@ import {
   generateFileRootForDocument
 } from '~/server/lib/s3/helper'
 
-/** WARNING!
- * This migration must be launched in a detached one-off container using
- * the Scalingo CLI or the Scalingo API.
- * As a result importing this function is equivalent to launching the migration.
- */
-async function main() {
+export default async function migrateDocumentsToS3() {
   if (!SCHEDULER_ENV.document.migration.activate) {
     throw new Error('migrate-to-s3-bucket: document migration is not activated')
   }
 
-  const sentryActivated = initSentry()
-  if (sentryActivated) {
-    Sentry.setTag('scheduler', 'migrate-to-s3-bucket')
-  }
+  Sentry.setTag('scheduler', 'migrate-to-s3-bucket')
 
   const maxDuration = SCHEDULER_ENV.document.migration.maxDurationHours
   const logEvery = 100
@@ -54,10 +45,7 @@ async function main() {
         e
       )
       failedIds.push(document.key)
-
-      if (sentryActivated) {
-        Sentry.captureException(e)
-      }
+      Sentry.captureException(e)
       continue
     }
 
@@ -76,47 +64,37 @@ async function main() {
   )
 }
 
-async function getDocumentToMigrate(notIn: string[], nRetries = 5) {
-  let retry = 0
-  while (true) {
-    try {
-      return await prismaClient.document.findMany({
-        // a temporary index should be added on migrated
-        // otherwise the request will become slower as the migration progresses
-        where: { migrated: false, key: { notIn } },
+async function getDocumentToMigrate(notIn: string[]) {
+  return await prismaClient.document.findMany({
+    // a temporary index should be added on migrated
+    // otherwise the request will become slower as the migration progresses
+    where: { migrated: false, key: { notIn } },
+    select: {
+      key: true,
+      name: true,
+      mimeType: true,
+      size: true,
+      filenameDisk: true,
+      beneficiary: {
         select: {
-          key: true,
-          name: true,
-          mimeType: true,
-          size: true,
-          filenameDisk: true,
-          beneficiary: {
-            select: {
-              id: true,
-              structureId: true
-            }
-          },
-          documentContent: {
-            select: {
-              content: true
-            }
-          }
-        },
-        take: 1
-      })
-    } catch (e: unknown) {
-      retry++
-      if (retry >= nRetries) {
-        throw e
+          id: true,
+          structureId: true
+        }
+      },
+      documentContent: {
+        select: {
+          content: true
+        }
       }
-    }
-  }
+    },
+    take: 1
+  })
 }
 
 type DocumentToMigrate = Awaited<ReturnType<typeof getDocumentToMigrate>>[0]
 
 /** Document content is migrated to S3 bucket and filepath is updated in table
- * Document content cleaunup will be performed when the whole migration has been finalized
+ * Document content cleanup will be performed when the whole migration has been finalized
  */
 async function migrateDocument(document: DocumentToMigrate) {
   const filename = generateFilenameForDocument(document.name)
@@ -154,22 +132,3 @@ async function migrateDocument(document: DocumentToMigrate) {
     }
   })
 }
-
-/** Job Execution in one-off container.
- * The container will be stopped at the end of the job or upon error.
- * Cleanup allows to close sentry and prisma connections
- */
-
-async function cleanup() {
-  await terminateSentry()
-  await prismaClient.$disconnect()
-}
-
-;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
-  process.on(signal, async () => {
-    await cleanup()
-    process.exit(1)
-  })
-)
-
-main().finally(cleanup)

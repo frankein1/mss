@@ -10,7 +10,7 @@ import documentNotifications from './notification/create-document-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 import importDataEducationSchools from './data-education/import-schools'
-import launchBatchDocumentMigration from './document/launch-batch-migration'
+import migrateDocumentsToS3 from './document/migrate-to-s3-bucket'
 
 export const jobs = {
   /** Sends emails from the queue.
@@ -55,7 +55,7 @@ export const jobs = {
    * Runs daily at 05:00 */
   metabaseAnonymization: exportAnonymizedDatabase,
 
-      /** Imports structure data from the data.education API.
+  /** Imports structure data from the data.education API.
    * Runs every Sunday at 03:00 */
   dataEducationSchoolImport: importDataEducationSchools,
 
@@ -63,10 +63,9 @@ export const jobs = {
    * Runs every Sunday at 06:00 */
   dataInclusionStructureImport: importDataInclusionStructures,
 
-
   /** Batch job for document migration.
    * Runs daily at 20:00 */
-  documentS3Migration: launchBatchDocumentMigration
+  documentS3Migration: migrateDocumentsToS3
 } satisfies Record<string, () => Promise<unknown>>
 
 export type JobName = keyof typeof jobs

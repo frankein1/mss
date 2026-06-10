@@ -3,7 +3,14 @@ export const SCHEDULER_ENV = {
     useS3Storage:
       (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
     encryptionVersion: '1',
-    encryptionAlgorithm: 'aes_256_gcm'
+    encryptionAlgorithm: 'aes_256_gcm',
+    migration: {
+      activate:
+        (process.env.NUXT_DOCUMENT_MIGRATION_ACTIVATE || 'false') === 'true',
+      maxDurationHours: parseFloat(
+        process.env.NUXT_DOCUMENT_MIGRATION_MAX_DURATION_HOURS || '3'
+      )
+    }
   },
   s3: {
     accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID || '',
@@ -54,39 +61,9 @@ export const SCHEDULER_ENV = {
       process.env.NUXT_PUBLIC_LANDING_PAGE_URL ||
       'https://monsuivisocial.incubateur.anct.gouv.fr'
   },
-  // Specific to document migration in scheduler
   scalingo: {
-    apiToken: process.env.SCALINGO_API_TOKEN || '',
-    appName: process.env.SCALINGO_APP_NAME || '',
-    region: process.env.SCALINGO_REGION || 'osc-fr1'
-  },
-  document: {
-    useS3Storage:
-      (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
-    encryptionVersion: '1',
-    encryptionAlgorithm: 'aes_256_gcm',
-    // Specific to document migration in scheduler
-    migration: {
-      activate: (process.env.DOCUMENT_MIGRATION_ACTIVATE || 'false') === 'true',
-      maxDurationHours: parseFloat(
-        process.env.DOCUMENT_MIGRATION_MAX_DURATION_HOURS || '3'
-      )
-    }
-  },
-  s3: {
-    accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.NUXT_S3_SECRET_ACCESS_KEY || '',
-    region: process.env.NUXT_S3_REGION || '',
-    bucket: process.env.NUXT_S3_BUCKET || '',
-    endpoint: process.env.NUXT_S3_ENDPOINT || ''
-  },
-  kms: {
-    accessKeyId: process.env.NUXT_KMS_ACCESS_KEY_ID || '',
-    secretKey: process.env.NUXT_KMS_SECRET_KEY || '',
-    organizationId: process.env.NUXT_KMS_ORGANIZATION_ID || '',
-    projectId: process.env.NUXT_KMS_PROJECT_ID || '',
-    region: process.env.NUXT_KMS_REGION || '',
-    apiUrl: process.env.NUXT_KMS_API_URL || '',
-    keyId: process.env.NUXT_KMS_KEY_ID || ''
+    apiToken: process.env.NUXT_SCALINGO_API_TOKEN || '',
+    app: process.env.APP || '',
+    regionName: process.env.REGION_NAME || 'osc-fr1'
   }
 }
