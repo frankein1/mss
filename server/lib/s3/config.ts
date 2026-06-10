@@ -15,7 +15,9 @@ export function getS3Client(config: Pick<AppConfig, 's3' | 'public'>) {
     },
     region: config.s3.region,
     endpoint: config.s3.endpoint,
-    forcePathStyle: config.public.mssEnvironment === 'local' // for compatibility with rustfs
+    forcePathStyle: config.s3.forcePathStyle,
+    retryMode: 'standard',
+    maxAttempts: 5
   })
 
   return instance

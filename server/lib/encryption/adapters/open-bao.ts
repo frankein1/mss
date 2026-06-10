@@ -16,13 +16,18 @@ interface AppRoleLoginResponse {
   }
 }
 
+const getDefaultHeaders = (config: Pick<RuntimeConfig, 'kms'>) => ({
+  'Content-Type': 'application/json',
+  ...(config.kms.projectId && { 'X-Vault-Namespace': config.kms.projectId })
+})
+
 /** Get KMS access token from access/secret key */
 const appRoleLogin = async (config: Pick<RuntimeConfig, 'kms'>) => {
   const res = await ofetch<AppRoleLoginResponse>(
     `${config.kms.apiUrl}/v1/auth/approle/login`,
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getDefaultHeaders(config),
       body: JSON.stringify({
         role_id: config.kms.accessKeyId,
         secret_id: config.kms.secretKey
@@ -47,14 +52,14 @@ async function getOpenBaoClient(config: Pick<RuntimeConfig, 'kms'>) {
     ...authed,
     client: ofetch.create({
       baseURL: `${config.kms.apiUrl}/v1`,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getDefaultHeaders(config),
       retryStatusCodes: [401, 408, 409, 425, 429, 500, 502, 503, 504],
       async onRequest({ options }) {
         if (instance) {
           // Refresh auth when about to expire or if retried from error
           if (
             options.retry ||
-            instance.expiresAt.getTime() + 5000 <= Date.now()
+            instance.expiresAt.getTime() + 240 * 1000 <= Date.now()
           ) {
             authed = await appRoleLogin(config)
             instance.token = authed.token
