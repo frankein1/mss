@@ -7,6 +7,9 @@ export const SocialSupportRedirectionSchema = z
   .object({
     id: z.string().uuid().nullish(),
     type: requiredNativeEnum(SocialSupportRedirectionType).nullish(),
+    redirectionReasonName: stringConstraint
+      .max(300, maxStringLengthMessage(300))
+      .nullish(),
     externalStructureName: stringConstraint
       .max(300, maxStringLengthMessage(300))
       .nullish(),

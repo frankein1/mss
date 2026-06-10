@@ -86,7 +86,9 @@
       isMinistry: application.value.module.ministere,
       date: socialSupport.value.date,
       documents: initialDocumentIds.value,
-      socialSupportRedirections: socialSupport.value.socialSupportRedirections,
+      socialSupportRedirections: toRedirectionFormValues(
+        socialSupport.value.socialSupportRedirections
+      ),
       externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',

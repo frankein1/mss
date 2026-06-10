@@ -23,16 +23,51 @@ function findMany(
 ) {
   return FileInstructionRepo.findMany(user, {
     where: args.where,
-    include: {
-      instructorOrganization: true,
-      instructorOrganizationContact: true,
+    select: {
+      id: true,
+      type: true,
+      fullFile: true,
+      decisionDate: true,
+      dispatchDate: true,
+      examinationDate: true,
+      externalStructure: true,
+      instructorOrganizationId: true,
+      instructorOrganizationContactId: true,
+      refusalReason: true,
+      refusalReasonOther: true,
+      instructorOrganization: { select: { id: true, name: true } },
+      instructorOrganizationContact: { select: { id: true, name: true } },
       socialSupport: {
-        include: {
-          lastUpdatedBy: true,
+        select: {
+          id: true,
+          socialSupportType: true,
+          subtype: true,
+          date: true,
+          structureId: true,
+          created: true,
+          createdById: true,
+          lastUpdatedById: true,
+          updated: true,
+          status: true,
+          familyFileId: true,
+          beneficiaryId: true,
+          dueDate: true,
+          privateSynthesis: true,
+          privateSynthesisRichText: true,
+          synthesis: true,
+          synthesisRichText: true,
+          ministerId: true,
+          numeroPegase: true,
+          lastUpdatedBy: {
+            select: { id: true, firstName: true, lastName: true }
+          },
+          createdBy: { select: { id: true, firstName: true, lastName: true } },
           subjects: true,
-          documents: true,
+          documents: { select: { key: true, name: true } },
           familyFile: {
-            include: {
+            select: {
+              id: true,
+              structureId: true,
               referents: true
             }
           },
@@ -48,7 +83,6 @@ function findMany(
             }
           },
           minister: true,
-          createdBy: true,
           socialSupportRedirections: {
             select: {
               id: true,
@@ -57,21 +91,48 @@ function findMany(
               partnerOrganizationId: true,
               partnerOrganizationContactId: true,
               partnerOrganization: { select: { name: true } },
-              partnerOrganizationContact: { select: { name: true } }
+              partnerOrganizationContact: { select: { name: true } },
+              redirectionReason: { select: { name: true } }
             }
           }
         }
       },
       helpRequest: {
-        include: {
-          prescribingOrganization: true,
-          prescribingOrganizationContact: true
+        select: {
+          id: true,
+          financialSupport: true,
+          allocatedAmount: true,
+          askedAmount: true,
+          isRefundable: true,
+          handlingDate: true,
+          paymentDate: true,
+          paymentMethod: true,
+          prescribingOrganizationId: true,
+          prescribingOrganizationContactId: true,
+          prescribingOrganization: { select: { id: true, name: true } },
+          prescribingOrganizationContact: { select: { id: true, name: true } }
         }
       },
       housingHelpRequest: {
-        include: {
-          prescribingOrganization: true,
-          prescribingOrganizationContact: true
+        select: {
+          id: true,
+          reason: true,
+          isFirst: true,
+          firstOpeningDate: true,
+          askedHousing: true,
+          uniqueId: true,
+          taxHouseholdAdditionalInformation: true,
+          maxRent: true,
+          maxCharges: true,
+          handlingDate: true,
+          housingType: true,
+          roomCount: true,
+          isPmr: true,
+          lowIncomeHousingType: true,
+          prescribingOrganizationId: true,
+          prescribingOrganizationContactId: true,
+          prescribingOrganization: { select: { id: true, name: true } },
+          prescribingOrganizationContact: { select: { id: true, name: true } }
         }
       }
     },

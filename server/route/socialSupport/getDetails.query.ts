@@ -83,7 +83,8 @@ async function getSocialSupportDetail({
           socialSupportId: true,
           createdAt: true,
           partnerOrganization: true,
-          partnerOrganizationContact: true
+          partnerOrganizationContact: true,
+          redirectionReason: { select: { name: true } }
         }
       },
       comments: {

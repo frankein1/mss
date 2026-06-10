@@ -32,6 +32,13 @@
           <dd>{{ redirection.externalStructureName }}</dd>
         </template>
         <div></div>
+        <template v-if="redirection.redirectionReasonName">
+          <dt>
+            {{ socialSupportRedirectionLabels.redirectionReasonId }}&nbsp;:
+          </dt>
+          <dd>{{ redirection.redirectionReasonName }}</dd>
+        </template>
+        <div></div>
       </dl>
     </li>
   </ul>

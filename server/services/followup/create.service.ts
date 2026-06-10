@@ -10,6 +10,10 @@ import type { AddFollowupInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { randomUUID } from 'node:crypto'
+import {
+  resolveRedirectionReasonIds,
+  resolveReasonId
+} from '../redirection/helper'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -65,6 +69,10 @@ export const create = async ({ ctx, input }: CreateParams) => {
       }
     }
   })
+  const reasonIds = await resolveRedirectionReasonIds(
+    ctx,
+    socialSupportRedirections
+  )
   const redirectionData =
     socialSupportRedirections
       ?.map(r => {
@@ -72,6 +80,10 @@ export const create = async ({ ctx, input }: CreateParams) => {
           return {
             id: r.id || randomUUID(),
             type: r.type,
+            redirectionReasonId: resolveReasonId(
+              reasonIds,
+              r.redirectionReasonName
+            ),
             externalStructureName: r.externalStructureName || null,
             partnerOrganizationId: r.partnerOrganizationId || null,
             partnerOrganizationContactId: r.partnerOrganizationContactId || null

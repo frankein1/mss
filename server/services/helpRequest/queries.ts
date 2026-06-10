@@ -108,7 +108,8 @@ export const select = {
               partnerOrganizationId: true,
               partnerOrganizationContactId: true,
               partnerOrganization: { select: { name: true } },
-              partnerOrganizationContact: { select: { name: true } }
+              partnerOrganizationContact: { select: { name: true } },
+              redirectionReason: { select: { name: true } }
             }
           }
         }

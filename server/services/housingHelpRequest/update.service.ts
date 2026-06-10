@@ -18,6 +18,10 @@ import { prismaClient } from '~/server/prisma'
 import { getSocialSupportWithRedirections } from '../socialSupport/helper'
 import { filterOutEmptyElements } from '../helper'
 import { randomUUID } from 'node:crypto'
+import {
+  resolveRedirectionReasonIds,
+  resolveReasonId
+} from '../redirection/helper'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -88,12 +92,21 @@ export async function update({ input, ctx }: UpdateParams) {
   const { socialSupportRedirections: previousRedirectionIds } =
     await getSocialSupportWithRedirections(ctx.user, input.socialSupportId)
 
+  const reasonIds = await resolveRedirectionReasonIds(
+    ctx,
+    socialSupportRedirections
+  )
+
   const prepareRedirections = socialSupportRedirections
     ?.map(r => {
       if (r.type) {
         return {
           id: r.id || randomUUID(),
           type: r.type,
+          redirectionReasonId: resolveReasonId(
+            reasonIds,
+            r.redirectionReasonName
+          ),
           externalStructureName: r.externalStructureName,
           partnerOrganizationId: r.partnerOrganizationId,
           partnerOrganizationContactId: r.partnerOrganizationContactId,

@@ -64,6 +64,7 @@ function redirectionsDto<T extends SS['socialSupportRedirections']>(
   return redirections.map(r => ({
     id: r.id,
     type: r.type,
+    redirectionReasonName: r.redirectionReason?.name ?? null,
     partnerOrganizationId: r.partnerOrganizationId,
     partnerOrganizationContactId: r.partnerOrganizationContactId,
     partnerOrganization: {
@@ -131,10 +132,11 @@ type SS = SocialSupport & {
   comments?: (Comment & { createdBy: User })[]
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
-    'createdAt' | 'socialSupportId'
+    'createdAt' | 'socialSupportId' | 'redirectionReasonId'
   > & {
     partnerOrganization: { name: string } | null
     partnerOrganizationContact: { name: string } | null
+    redirectionReason: { name: string } | null
   })[]
 }
 
