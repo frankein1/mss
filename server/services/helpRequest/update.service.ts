@@ -21,7 +21,8 @@ import { getSocialSupportWithRedirections } from '../socialSupport/helper'
 import { randomUUID } from 'node:crypto'
 import {
   resolveRedirectionReasonIds,
-  resolveReasonId
+  resolveReasonId,
+  deleteOrphanedRedirectionReasons
 } from '../redirection/helper'
 
 type UpdateParams = {
@@ -115,6 +116,12 @@ export async function update({ input, ctx }: UpdateParams) {
     })
     .filter(r => r != null)
     .filter(filterOutEmptyElements)
+
+  const removedReasonIds = prepareRedirections
+    ? previousRedirectionIds
+        .filter(r => !prepareRedirections.some(p => p.id === r.id))
+        .map(r => r.redirectionReasonId)
+    : []
 
   const updateSocialSupport = () =>
     SocialSupportRepo.update(ctx.user, {
@@ -224,6 +231,8 @@ export async function update({ input, ctx }: UpdateParams) {
   const [socialSupportResult] = await prismaClient.$transaction(
     transactions.map(transaction => transaction())
   )
+
+  await deleteOrphanedRedirectionReasons(removedReasonIds)
 
   return { id: socialSupportResult.id }
 }

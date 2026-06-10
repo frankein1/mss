@@ -52,3 +52,22 @@ export function resolveReasonId(
   const name = redirectionReasonName?.trim()
   return name ? (reasonIds.get(name) ?? null) : null
 }
+
+/**
+ * Deletes RedirectionReason records that are no longer referenced by any
+ * SocialSupportRedirection. Call this after deleting redirections.
+ */
+export async function deleteOrphanedRedirectionReasons(
+  reasonIds: (string | null | undefined)[]
+): Promise<void> {
+  const ids = [...new Set(reasonIds.filter((id): id is string => !!id))]
+  if (ids.length === 0) {
+    return
+  }
+  await prismaClient.redirectionReason.deleteMany({
+    where: {
+      id: { in: ids },
+      socialSupportRedirections: { none: {} }
+    }
+  })
+}

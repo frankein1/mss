@@ -9,7 +9,9 @@ export const getSocialSupportWithRedirections = async (
     where: { id },
     select: {
       id: true,
-      socialSupportRedirections: { select: { id: true } }
+      socialSupportRedirections: {
+        select: { id: true, redirectionReasonId: true }
+      }
     }
   })
 }
