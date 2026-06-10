@@ -196,6 +196,155 @@ describe('resolveRedirectionReasonIds', () => {
   })
 })
 
+describe('update - nettoyage lors du changement de motif', () => {
+  test("supprime l'ancien motif quand une réorientation change de motif", async ({
+    trpc
+  }) => {
+    const oldName = `Motif avant changement ${Date.now()}`
+    const newName = `Motif après changement ${Date.now()}`
+
+    const { id: socialSupportId } = await trpc.socialWorker.followup.add({
+      isMinistry: false,
+      familyFileId,
+      beneficiaryId,
+      subjects: [subjectId],
+      medium: 'PlannedInPerson',
+      date: new Date(),
+      status: 'InProgress',
+      socialSupportRedirections: [
+        {
+          type: 'Other',
+          redirectionReasonName: oldName,
+          externalStructureName: 'Structure test'
+        }
+      ]
+    })
+    socialSupportIds.push(socialSupportId)
+
+    const oldReason = await prismaClient.redirectionReason.findFirst({
+      where: { name: oldName, structureId },
+      select: { id: true }
+    })
+    expect(oldReason).not.toBeNull()
+    if (oldReason) {
+      reasonIds.push(oldReason.id)
+    }
+
+    const redirection = await prismaClient.socialSupportRedirection.findFirst({
+      where: { socialSupportId },
+      select: { id: true }
+    })
+    expect(redirection).not.toBeNull()
+
+    const followup = await prismaClient.followup.findFirst({
+      where: { socialSupportId },
+      select: { id: true }
+    })
+    expect(followup).not.toBeNull()
+
+    await trpc.socialWorker.followup.update({
+      id: followup!.id,
+      socialSupportId,
+      isMinistry: false,
+      familyFileId,
+      beneficiaryId,
+      subjects: [subjectId],
+      medium: 'PlannedInPerson',
+      date: new Date(),
+      status: 'InProgress',
+      socialSupportRedirections: [
+        {
+          id: redirection!.id,
+          type: 'Other',
+          redirectionReasonName: newName,
+          externalStructureName: 'Structure test'
+        }
+      ]
+    })
+
+    const newReason = await prismaClient.redirectionReason.findFirst({
+      where: { name: newName, structureId },
+      select: { id: true }
+    })
+    expect(newReason).not.toBeNull()
+    if (newReason) {
+      reasonIds.push(newReason.id)
+    }
+
+    const deletedReason = await prismaClient.redirectionReason.findFirst({
+      where: { name: oldName, structureId }
+    })
+    expect(deletedReason).toBeNull()
+  })
+
+  test('conserve le motif quand la même réorientation garde le même motif', async ({
+    trpc
+  }) => {
+    const reasonName = `Motif inchangé ${Date.now()}`
+
+    const { id: socialSupportId } = await trpc.socialWorker.followup.add({
+      isMinistry: false,
+      familyFileId,
+      beneficiaryId,
+      subjects: [subjectId],
+      medium: 'PlannedInPerson',
+      date: new Date(),
+      status: 'InProgress',
+      socialSupportRedirections: [
+        {
+          type: 'Other',
+          redirectionReasonName: reasonName,
+          externalStructureName: 'Structure test'
+        }
+      ]
+    })
+    socialSupportIds.push(socialSupportId)
+
+    const reason = await prismaClient.redirectionReason.findFirst({
+      where: { name: reasonName, structureId },
+      select: { id: true }
+    })
+    expect(reason).not.toBeNull()
+    if (reason) {
+      reasonIds.push(reason.id)
+    }
+
+    const redirection = await prismaClient.socialSupportRedirection.findFirst({
+      where: { socialSupportId },
+      select: { id: true }
+    })
+    const followup = await prismaClient.followup.findFirst({
+      where: { socialSupportId },
+      select: { id: true }
+    })
+
+    await trpc.socialWorker.followup.update({
+      id: followup!.id,
+      socialSupportId,
+      isMinistry: false,
+      familyFileId,
+      beneficiaryId,
+      subjects: [subjectId],
+      medium: 'PlannedInPerson',
+      date: new Date(),
+      status: 'InProgress',
+      socialSupportRedirections: [
+        {
+          id: redirection!.id,
+          type: 'Other',
+          redirectionReasonName: reasonName,
+          externalStructureName: 'Structure test'
+        }
+      ]
+    })
+
+    const stillExists = await prismaClient.redirectionReason.findUnique({
+      where: { id: reason!.id }
+    })
+    expect(stillExists).not.toBeNull()
+  })
+})
+
 describe('deleteOrphanedRedirectionReasons', () => {
   test("supprime le motif s'il n'est plus référencé par aucune SocialSupportRedirection", async () => {
     const reason = await prismaClient.redirectionReason.create({

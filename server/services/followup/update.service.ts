@@ -100,7 +100,12 @@ export const update = async ({ ctx, input }: UpdateParams) => {
 
   const removedReasonIds = prepareRedirections
     ? previousRedirectionIds
-        .filter(r => !prepareRedirections.some(p => p.id === r.id))
+        .filter(r => {
+          const updated = prepareRedirections.find(p => p.id === r.id)
+          return (
+            !updated || updated.redirectionReasonId !== r.redirectionReasonId
+          )
+        })
         .map(r => r.redirectionReasonId)
     : []
 
