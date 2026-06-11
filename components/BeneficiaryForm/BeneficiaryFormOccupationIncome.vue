@@ -14,31 +14,35 @@
           "
         />
       </div>
-      <!-- Disable until we have validation/autocomplete on the School Name-->
-      <!-- <div
-        v-show="
-          socioProfessionalCategory ===
-          BeneficiarySocioProfessionalCategory.Student
-        "
-        class="fr-col-12"
-      >
-        <VeeInput
-          name="schoolName"
-          :label="beneficiaryFieldLabels.schoolName"
+    </BeneficiaryFormSection>
+
+    <BeneficiaryFormSection
+      v-if="
+        socioProfessionalCategory ===
+        BeneficiarySocioProfessionalCategory.Student
+      "
+      section-title="Informations scolaires"
+    >
+      <div class="fr-col-12">
+        <AtomCallout class>
+          <p>
+            Pour les bénéficiaires en études, vous pouvez maintenant saisir la
+            classe actuellement fréquentée par l’apprenant en plus de son niveau
+            scolaire.
+          </p>
+        </AtomCallout>
+      </div>
+
+      <div class="fr-col-12">
+        <VeeSelectOptionGroup
+          name="schoolClass"
+          :label="beneficiaryFieldLabels.schoolClass"
+          :groups="beneficiarySchoolClassGroups"
         />
       </div>
-      <div
-        v-show="
-          socioProfessionalCategory ===
-          BeneficiarySocioProfessionalCategory.Student
-        "
-        class="fr-col-12"
-      >
-        <VeeCheckbox
-          :label="beneficiaryFieldLabels.isSchoolInQPV"
-          name="isSchoolInQPV"
-        />
-      </div> -->
+    </BeneficiaryFormSection>
+
+    <BeneficiaryFormSection section-title="Informations professionnelles">
       <div class="fr-col-12">
         <VeeInput
           name="occupation"
@@ -117,7 +121,7 @@
         </div>
       </template>
 
-      <AtomCallout class="callout-container">
+      <AtomCallout class="callout-container fr-col-12">
         <div class="budget-redirection">
           <div>
             <p>
@@ -129,7 +133,7 @@
           </div>
 
           <AtomPictogram
-            class="fr-hidden fr-unhidden-sm"
+            class="fr-hidden fr-unhidden-lg"
             path="/pictograms/money.svg"
           ></AtomPictogram>
         </div>
@@ -139,9 +143,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPensionOrganisation } from '@prisma/client'
+  import {
+    BeneficiaryPensionOrganisation,
+    BeneficiarySocioProfessionalCategory
+  } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
+    beneficiarySchoolClassGroups,
     pensionOrganisationKeys,
     ministereDepartmentServiceAcKeys,
     ministereStructureKeys,
@@ -152,6 +160,11 @@
   import { routes } from '~/utils/routes'
 
   const { application } = usePermissions()
+
+  const { value: socioProfessionalCategory } =
+    useField<BeneficiarySocioProfessionalCategory | null>(
+      'socioProfessionalCategory'
+    )
 
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
@@ -164,9 +177,13 @@
   )
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .callout-container {
     margin-top: 2.5rem;
+
+    svg {
+      min-width: 80px;
+    }
   }
 
   .budget-redirection {

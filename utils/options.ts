@@ -3,6 +3,8 @@ export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 
 export type OptionType = { value: string; label: string }
 export type Options = Array<OptionType>
+export type OptionGroup = { label: string; options: Options }
+export type OptionGroups = Array<OptionGroup>
 
 type OptionWithDisabled = OptionType & { disabled?: boolean }
 export type OptionsWithDisabled = Array<OptionWithDisabled>

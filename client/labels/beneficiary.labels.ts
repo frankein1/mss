@@ -103,7 +103,8 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   historyTotal: 'Nombre de suivis',
   subjects: "Objets d'accompagnement",
   vulnerablePerson: 'Registre des personnes vulnérables',
-  relationship: 'Lien de la relation'
+  relationship: 'Lien de la relation',
+  schoolClass: 'Classe fréquentée'
 }
 
 const beneficiaryReferentTransfertLabels = {
