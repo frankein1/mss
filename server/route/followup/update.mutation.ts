@@ -62,7 +62,7 @@ const securityCheck = async (
 
   if (
     (input.numeroPegase || input.ministerId) &&
-    !appPermissions.module.ministere
+    !appPermissions.structure.ministryFields
   ) {
     return false
   }

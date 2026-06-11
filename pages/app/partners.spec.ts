@@ -18,8 +18,8 @@ const fakeModal = { open: vi.fn(), close: vi.fn() }
 mockNuxtImport('useModal', () => () => fakeModal)
 
 const fakeAppPermissions = ref({
-  module: {
-    partner: true
+  partner: {
+    access: true
   }
 })
 
@@ -49,7 +49,7 @@ describe('page partners', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     fakePartners.value = []
-    fakeAppPermissions.value.module.partner = true
+    fakeAppPermissions.value.partner.access = true
     fakeTrpcClient.partner.getAll.useQuery.mockResolvedValue({
       data: fakePartners,
       refresh: fakeRefresh
@@ -148,8 +148,8 @@ describe('page partners', () => {
   })
 
   describe('Authorizations', () => {
-    it('shows "Ajouter" button when module.partner is true', async () => {
-      fakeAppPermissions.value.module.partner = true
+    it('shows "Ajouter" button when partner.access is true', async () => {
+      fakeAppPermissions.value.partner.access = true
 
       const wrapper = await mountPage()
 
@@ -159,8 +159,8 @@ describe('page partners', () => {
       expect(ajouterButton).toBeDefined()
     })
 
-    it('hides "Ajouter" button when module.partner is false', async () => {
-      fakeAppPermissions.value.module.partner = false
+    it('hides "Ajouter" button when partner.access is false', async () => {
+      fakeAppPermissions.value.partner.access = false
 
       const wrapper = await mountPage()
 

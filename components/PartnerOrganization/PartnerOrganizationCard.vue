@@ -73,7 +73,7 @@
         Modifier l'organisme partenaire
       </button>
       <button
-        v-if="application.module.partner"
+        v-if="application.partner.access"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line partner-card__action-bar__delete"
         data-fr-opened="false"
         aria-controls="global-modal"

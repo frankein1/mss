@@ -77,7 +77,7 @@
       firstFollowup: followup.value.firstFollowup || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
-      isMinistry: application.value.module.ministere,
+      isMinistry: application.value.structure.ministryFields,
       duration: followup.value.duration,
       ministerId: followup.value.ministerId,
       socialSupportRedirections: followup.value.socialSupportRedirections

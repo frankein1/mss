@@ -38,7 +38,7 @@
         />
       </div>
       <div
-        v-if="application.edit.health.nir"
+        v-if="application.beneficiary.health.editNir"
         class="fr-col-12"
       >
         <VeeInput

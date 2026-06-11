@@ -80,7 +80,7 @@
         to: routes.workshop.AppWorkshops.path(),
         label: 'Ateliers'
       })
-      if (application.value.module.stats) {
+      if (application.value.stats.view) {
         items.push({
           to: routes.stats.AppStats.path(),
           label: routes.stats.AppStats.title
@@ -94,7 +94,7 @@
         to: routes.structure.AppStructure.path(),
         label: routes.structure.AppStructure.title
       })
-      if (application.value.module.users) {
+      if (application.value.user.manage) {
         items.push({
           to: routes.structure.AppStructureSubjects.path(),
           label: routes.structure.AppStructureSubjects.title

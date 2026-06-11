@@ -30,7 +30,7 @@
     <div
       v-if="full"
       :class="
-        application.module.vulnerablePerson
+        application.beneficiary.viewVulnerablePerson
           ? 'fr-col-12 fr-col-md-6'
           : 'fr-col-12'
       "
@@ -42,9 +42,11 @@
     </div>
 
     <div
-      v-if="application.module.vulnerablePerson && full"
+      v-if="application.beneficiary.viewVulnerablePerson && full"
       :class="
-        application.module.vulnerablePerson ? 'fr-col-12 fr-col-md-6' : ''
+        application.beneficiary.viewVulnerablePerson
+          ? 'fr-col-12 fr-col-md-6'
+          : ''
       "
     >
       <VeeCheckbox

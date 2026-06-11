@@ -18,10 +18,10 @@ const securityCheck = async (
   )
   const appPermission = getAppContextPermissions(ctx)
 
-  if (input.socialSecurityNumber && !appPermission.edit.health.nir) {
+  if (input.socialSecurityNumber && !appPermission.beneficiary.health.editNir) {
     return false
   }
-  return appPermission.module.health && permissions.edit.health
+  return permissions.edit.health
 }
 
 const handler = async ({

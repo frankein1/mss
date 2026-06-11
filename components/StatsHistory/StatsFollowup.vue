@@ -85,7 +85,7 @@
         /></StatsCard>
 
         <StatsCard
-          v-if="application.module.ministere"
+          v-if="application.structure.ministryFields"
           class="fr-col-12 fr-col-md-6"
           :card-id="ministereConfig.minister.id"
           :card-name="ministereConfig.minister.name"
@@ -284,7 +284,8 @@
                 date.toLocaleDateString(),
               {
                 ...followupCardsConfig,
-                ...(application.value.module.ministere && ministereConfig)
+                ...(application.value.structure.ministryFields &&
+                  ministereConfig)
               },
               buttonFilter,
               closeAlert
@@ -294,7 +295,7 @@
       })
     }
 
-    if (followupCount.value != 0 && application.value.export.stats) {
+    if (followupCount.value != 0 && application.value.stats.export) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {

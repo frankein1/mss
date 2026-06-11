@@ -12,7 +12,7 @@ import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import getAgeGroup from '~/utils/getAgeGroup'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+  getAppContextPermissions(ctx).stats.view
 
 const handler = async ({
   input,

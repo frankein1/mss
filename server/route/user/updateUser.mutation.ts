@@ -47,7 +47,7 @@ const handler = async ({
 
 const securityCheck = (ctx: SecurityRuleContext) => {
   const permissions = getAppContextPermissions(ctx)
-  return permissions.module.users
+  return permissions.user.manage
 }
 
 export const updateUserMutation = createMutation({

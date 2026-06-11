@@ -83,7 +83,7 @@
       privateSynthesisRichText: socialSupport.value.privateSynthesisRichText,
       dueDate: socialSupport.value.dueDate,
       isRefundable: toKindOfBoolean(helpRequest.value.isRefundable),
-      isMinistry: application.value.module.ministere,
+      isMinistry: application.value.structure.ministryFields,
       date: socialSupport.value.date,
       documents: initialDocumentIds.value,
       socialSupportRedirections: socialSupport.value.socialSupportRedirections,

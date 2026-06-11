@@ -113,7 +113,7 @@ export function filter(
 
   const conditions = {
     details: permissions.get.details,
-    minister: appPermissions.module.ministere,
+    minister: appPermissions.structure.ministryFields,
     privateSynthesis: permissions.get.privateSynthesis
   }
   const filteredSocialSupport = filterSocialSupport({

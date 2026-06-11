@@ -24,7 +24,7 @@ const securityCheck = (
 ) => {
   const appPermissions = getAppContextPermissions(ctx)
 
-  return appPermissions.module.partner
+  return appPermissions.partner.access
 }
 
 export const create = createMutation({

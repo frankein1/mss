@@ -90,7 +90,7 @@
         </template>
 
         <template #[tabTitles.at(3)?.panelId]>
-          <template v-if="application?.module.budget">
+          <template v-if="application?.budget.access">
             <FamilyFileBudget
               :family-file-id="familyFileId"
               :family-file-identification="familyFileIdentification"
@@ -172,7 +172,7 @@
       title: 'Historique',
       icon: 'fr-icon-history-line'
     },
-    ...((application.value.module.budget && [
+    ...((application.value.budget.access && [
       {
         tabId: FamilyFileTab.Budget,
         panelId: panelId(FamilyFileTab.Budget),

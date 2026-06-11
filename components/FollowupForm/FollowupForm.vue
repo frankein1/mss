@@ -61,7 +61,7 @@
           />
         </div>
 
-        <template v-if="application.module.ministere">
+        <template v-if="application.structure.ministryFields">
           <div class="fr-col-12">
             <VeeInput
               name="numeroPegase"
@@ -112,7 +112,7 @@
 
         <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
-            v-if="application.edit.structure"
+            v-if="application.structure.edit"
             :to="routes.structure.AppStructure.path()"
             class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             @click="
@@ -271,7 +271,7 @@
               </div>
             </div>
             <div
-              v-if="application.module.ministere"
+              v-if="application.structure.ministryFields"
               class="fr-fieldset__element fr-fieldset__element--inline"
             >
               <div class="fr-checkbox-group">
@@ -282,7 +282,7 @@
               </div>
             </div>
             <div
-              v-if="application.module.ministere"
+              v-if="application.structure.ministryFields"
               class="fr-fieldset__element fr-fieldset__element--inline"
             >
               <div class="fr-checkbox-group">

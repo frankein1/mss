@@ -149,7 +149,7 @@
       </StatsCard>
 
       <StatsCard
-        v-if="application.module.ministere"
+        v-if="application.structure.ministryFields"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
         :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
@@ -189,7 +189,7 @@
           :filters="filters"
       /></StatsCard>
 
-      <template v-if="application.module.ministere">
+      <template v-if="application.structure.ministryFields">
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
           :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
@@ -392,7 +392,7 @@
               'Statistiques - Bénéficiaires - ' + date.toLocaleDateString(),
               {
                 ...beneficiariesCardConfig,
-                ...(application.value.module.ministere &&
+                ...(application.value.structure.ministryFields &&
                   beneficiariesCardMinistereConfig)
               },
               buttonFilter,
@@ -403,7 +403,7 @@
       })
     }
 
-    if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
+    if (beneficiaryCount.value?.count != 0 && application.value.stats.export) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {

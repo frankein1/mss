@@ -57,7 +57,7 @@
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { fileInstructionStatusOptions } = useSocialSupportStatus()
-  const isMinistry = computed(() => application.value.module.ministere)
+  const isMinistry = computed(() => application.value.structure.ministryFields)
 
   const emit = defineEmits<{
     'update:filters': [filters: FileInstructionFilterInput]
@@ -239,7 +239,7 @@
     )
 
     if (
-      application.value.module.helpRequest &&
+      application.value.helpRequest.access &&
       examinationDateOptions.value.length
     ) {
       fileInstructionsFilters.push({
@@ -255,7 +255,7 @@
       })
     }
 
-    if (application.value.module.ministere) {
+    if (application.value.structure.ministryFields) {
       if (ministerOptions.value != null) {
         fileInstructionsFilters.push({
           name: 'ministerId',
@@ -304,7 +304,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!application.value.module.helpRequest) {
+    if (!application.value.helpRequest.access) {
       return []
     }
 

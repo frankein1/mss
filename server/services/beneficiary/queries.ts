@@ -120,10 +120,9 @@ const filter = (
   const externalOrganisations = view.externalOrganisations
     ? getExternalOrganisations(beneficiary)
     : undefined
-  const health =
-    appPermissions.module.health && view.health
-      ? getHealth(beneficiary, appPermissions.edit.health.nir)
-      : undefined
+  const health = view.health
+    ? getHealth(beneficiary, appPermissions.beneficiary.health.editNir)
+    : undefined
   const occupationIncome = view.occupationIncome
     ? getOccupationIncome(beneficiary, appPermissions)
     : undefined
@@ -204,7 +203,7 @@ function getGeneral(
   beneficiary: BeneficiaryOutput,
   permissions: AppContextPermissions
 ) {
-  const { module } = permissions
+  const { structure } = permissions
   const general = {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
@@ -215,10 +214,12 @@ function getGeneral(
     deathDate: beneficiary.deathDate,
     gender: beneficiary.gender,
     nationality: beneficiary.nationality,
-    numeroPegase: module.ministere ? beneficiary.numeroPegase : null,
+    numeroPegase: structure.ministryFields ? beneficiary.numeroPegase : null,
     accommodationMode: beneficiary.accommodationMode,
     accommodationName: beneficiary.accommodationName,
-    accommodationZone: module.ministere ? beneficiary.accommodationZone : null,
+    accommodationZone: structure.ministryFields
+      ? beneficiary.accommodationZone
+      : null,
     accommodationAdditionalInformation:
       beneficiary.accommodationAdditionalInformation,
     street: beneficiary.street,
@@ -274,7 +275,7 @@ function getOccupationIncome(
   beneficiary: BeneficiaryOutput,
   permissions: AppContextPermissions
 ) {
-  const { module } = permissions
+  const { structure } = permissions
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
@@ -290,13 +291,15 @@ function getOccupationIncome(
     isSchoolInQPV: beneficiary.isSchoolInQPV,
     // bank: beneficiary.bank,
     // funeralContract: beneficiary.funeralContract,
-    ministereCategorie: module.ministere
+    ministereCategorie: structure.ministryFields
       ? beneficiary.ministereCategorie
       : null,
-    ministereDepartementServiceAc: module.ministere
+    ministereDepartementServiceAc: structure.ministryFields
       ? beneficiary.ministereDepartementServiceAc
       : null,
-    ministereStructure: module.ministere ? beneficiary.ministereStructure : null
+    ministereStructure: structure.ministryFields
+      ? beneficiary.ministereStructure
+      : null
   }
 }
 

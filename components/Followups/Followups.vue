@@ -22,7 +22,7 @@
           {{ followupsCount }} synthèse(s) d'entretien
         </p>
         <ExportDataButton
-          v-if="application.export.history"
+          v-if="application.history.export"
           :is-downloading="isDownloading"
           :has-filters="true"
           :export="exportFollowups"

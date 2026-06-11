@@ -61,9 +61,9 @@ function filterInput({
   input: UpdateBeneficiaryOccupationInput
   appPermissions: AppContextPermissions
 }) {
-  const { module } = appPermissions
+  const { structure } = appPermissions
   const { id: _id, ...data } = input
-  if (!module.ministere) {
+  if (!structure.ministryFields) {
     delete data.ministereCategorie
     delete data.ministereDepartementServiceAc
     delete data.ministereStructure

@@ -19,8 +19,7 @@
 
 <script setup lang="ts">
   const { application } = usePermissions()
-  const canDuplicateParticipants =
-    application.value.workshop.duplicateParticipants
+  const canDuplicateParticipants = application.value.workshop.duplicateAttendees
 
   const { value: duplicateParticipantsOption } = useField<string>(
     'duplicateParticipantsOption'

@@ -233,7 +233,7 @@
         label: 'Ateliers',
         icon: 'fr-icon-calendar-event-line'
       })
-      if (application.value.module.stats) {
+      if (application.value.stats.view) {
         items.push({
           to: routes.stats.AppStats.path(),
           label: 'Statistiques',

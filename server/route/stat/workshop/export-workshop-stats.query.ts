@@ -77,7 +77,7 @@ function addWorkshopNamesWorksheet(
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+  getAppContextPermissions(ctx).stats.export
 
 const handler = async ({
   input,

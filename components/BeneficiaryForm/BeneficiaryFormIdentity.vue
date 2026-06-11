@@ -63,7 +63,7 @@
       />
     </div>
     <div
-      v-if="application.module.ministere"
+      v-if="application.structure.ministryFields"
       class="fr-col-12"
     >
       <VeeInput

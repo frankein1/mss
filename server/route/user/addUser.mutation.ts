@@ -13,7 +13,7 @@ import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { UserActivityObject, UserActivityType } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.users
+  getAppContextPermissions(ctx).user.manage
 
 const handler = async ({
   ctx: { user },

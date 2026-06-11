@@ -146,7 +146,7 @@
       matomoEventAction: BeneficiaryFilterEventAction.QPV
     })
 
-    if (application.value.module.vulnerablePerson) {
+    if (application.value.beneficiary.viewVulnerablePerson) {
       filters.push({
         name: 'vulnerablePerson',
         label: beneficiaryFieldLabels.vulnerablePerson,
@@ -158,7 +158,7 @@
       })
     }
 
-    if (application.value.module.ministere) {
+    if (application.value.structure.ministryFields) {
       filters.push({
         name: 'ministereDepartementServiceAc',
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,

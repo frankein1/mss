@@ -28,7 +28,7 @@ const handler = ({
 const securityCheck = (ctx: SecurityRuleContext, _input: IdInput) => {
   const appPermissions = getAppContextPermissions(ctx)
 
-  return appPermissions.module.partner
+  return appPermissions.partner.access
 }
 
 export const remove = createMutation({

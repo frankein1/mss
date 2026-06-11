@@ -7,7 +7,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { getHelpRequestBeneficiaryNumberQuery } from '~/server/query/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+  getAppContextPermissions(ctx).stats.view
 
 const handler = async ({
   input,

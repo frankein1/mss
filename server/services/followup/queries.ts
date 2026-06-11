@@ -154,8 +154,8 @@ export function filter(
   const { socialSupport } = followup
   const conditions = {
     details: permissions.get.details,
-    minister: appPermissions.module.ministere,
-    ministerId: appPermissions.module.ministere,
+    minister: appPermissions.structure.ministryFields,
+    ministerId: appPermissions.structure.ministryFields,
     privateSynthesis: permissions.get.privateSynthesis
   }
   const filteredSocialSupport = filterSocialSupport({

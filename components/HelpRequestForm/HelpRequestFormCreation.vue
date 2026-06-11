@@ -44,7 +44,7 @@
   const { handleSubmit, meta } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
-      isMinistry: application.value.module.ministere,
+      isMinistry: application.value.structure.ministryFields,
       beneficiaryId: props.beneficiaryId,
       familyFileId: props.familyFileId,
       date: new Date(),

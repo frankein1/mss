@@ -15,7 +15,7 @@ const securityCheck = (
     user: ctx.user,
     structure: ctx.structure
   })
-  return permissions.module.rdv
+  return permissions.rdv.access
 }
 
 const handler = ({

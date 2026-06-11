@@ -114,7 +114,7 @@ export async function exportFollowups({
 
     const conditions = {
       details: permissions.get.details,
-      minister: appPermissions.module.ministere
+      minister: appPermissions.structure.ministryFields
     }
 
     const filtered = {

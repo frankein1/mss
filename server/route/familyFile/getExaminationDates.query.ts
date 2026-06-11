@@ -31,7 +31,7 @@ const securityCheck = (ctx: SecurityRuleContext, _input: IdInput) => {
     user: ctx.user,
     structure: ctx.structure
   })
-  return permissions.module.helpRequest
+  return permissions.helpRequest.access
 }
 
 export const getExaminationDatesQuery = createQuery({

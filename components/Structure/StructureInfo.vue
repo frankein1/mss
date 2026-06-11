@@ -69,7 +69,7 @@
     </div>
 
     <div class="fr-grid-row fr-grid-row--right">
-      <div v-if="application.edit.structure">
+      <div v-if="application.structure.edit">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
           data-fr-opened="false"

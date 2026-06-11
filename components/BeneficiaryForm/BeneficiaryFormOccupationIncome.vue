@@ -97,7 +97,7 @@
         />
       </div>
 
-      <template v-if="application.module.ministere">
+      <template v-if="application.structure.ministryFields">
         <div class="fr-col-12">
           <VeeSelect
             name="ministereCategorie"

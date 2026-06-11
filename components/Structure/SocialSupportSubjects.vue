@@ -41,7 +41,7 @@
     </div>
 
     <div
-      v-if="application.edit.structure"
+      v-if="application.structure.edit"
       class="fr-grid-row fr-grid-row--right"
     >
       <NuxtLink

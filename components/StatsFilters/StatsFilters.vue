@@ -47,7 +47,7 @@
 
   const { application } = usePermissions()
   const trpcClient = useTrpcClient()
-  const isMinistry = computed(() => application.value.module.ministere)
+  const isMinistry = computed(() => application.value.structure.ministryFields)
 
   const props = withDefaults(
     defineProps<{
@@ -154,7 +154,7 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
-    if (application.value.module.statsByReferent && !props.isHistory) {
+    if (application.value.stats.viewByReferent && !props.isHistory) {
       statsFilters.push({
         name: 'referent',
         label: 'Référent',
@@ -179,7 +179,10 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
-    if (application.value.module.ministere && ministerOptions.value != null) {
+    if (
+      application.value.structure.ministryFields &&
+      ministerOptions.value != null
+    ) {
       if (ministerOptions.value != null) {
         statsFilters.push({
           name: 'ministerId',

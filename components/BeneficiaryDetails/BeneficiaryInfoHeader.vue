@@ -19,7 +19,8 @@
         </div>
         <div
           v-if="
-            application.module.vulnerablePerson && beneficiary.vulnerablePerson
+            application.beneficiary.viewVulnerablePerson &&
+            beneficiary.vulnerablePerson
           "
           :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
         >
