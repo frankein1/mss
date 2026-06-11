@@ -208,6 +208,7 @@ export const disableStructure = async ({
     insurance: null,
     socioProfessionalCategory: null,
     studyLevel: null,
+    schoolClass: null,
     occupation: null,
     employer: null,
     employerSiret: null,

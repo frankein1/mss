@@ -56,6 +56,10 @@
         <VeeRadioButtonsStory />
       </div>
 
+      <div class="fr-col-12">
+        <VeeSelectOptionGroupStory />
+      </div>
+
       <h2 class="fr-col-12">Statistiques</h2>
 
       <div class="fr-col-12">
@@ -89,6 +93,7 @@
   import AtomFiltersStory from '~/components/AtomFilters/AtomFilters.story.vue'
   import VeeInputStory from '~/components/VeeForm/VeeInput.story.vue'
   import VeeRadioButtonsStory from '~/components/VeeForm/VeeRadioButtons.story.vue'
+  import VeeSelectOptionGroupStory from '~/components/VeeForm/VeeSelectOptionGroup.story.vue'
   import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
   import StatsListStory from '~/components/StatsList/StatsList.story.vue'
   import FamilyFileSegmentedControlStory from '~/components/FamilyFileSegmentedControl/FamilyFileSegmentedControl.story.vue'

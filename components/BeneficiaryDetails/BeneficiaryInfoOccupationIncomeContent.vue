@@ -44,6 +44,11 @@
       :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
       class="fr-col-12 fr-col-md-6"
     />
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.schoolClass"
+      :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
+      class="fr-col-12 fr-col-md-6"
+    />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
@@ -111,7 +116,8 @@
     ministereStructureKeys,
     ministereCategorieKeys,
     ministereDepartmentServiceAcKeys,
-    beneficiaryStudyLevelKeys
+    beneficiaryStudyLevelKeys,
+    beneficiarySchoolClassKeys
   } from '~/client/options'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'

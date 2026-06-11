@@ -41,6 +41,7 @@ import {
   beneficiaryStatusKeys,
   beneficiaryTitleKeys,
   beneficiaryGenderKeys,
+  beneficiarySchoolClassKeys,
   beneficiaryStudyLevelKeys,
   pensionOrganisationKeys,
   fileInstructionStatusKeys,
@@ -751,6 +752,9 @@ const getBeneficiaryInfoData = (
       : null,
     studyLevel: beneficiary.studyLevel
       ? beneficiaryStudyLevelKeys.value(beneficiary.studyLevel)
+      : null,
+    schoolClass: beneficiary.schoolClass
+      ? beneficiarySchoolClassKeys.value(beneficiary.schoolClass)
       : null
   }
 }
@@ -857,6 +861,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       insurance: true,
       socioProfessionalCategory: true,
       schoolName: true,
+      schoolClass: true,
       isSchoolInQPV: true,
       studyLevel: true,
       occupation: true,

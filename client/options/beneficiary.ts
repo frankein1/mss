@@ -5,6 +5,7 @@ import {
   BeneficiaryMobility,
   BeneficiaryOrientationType,
   BeneficiaryProtectionMeasure,
+  BeneficiarySchoolClass,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
   BeneficiaryTitle,
@@ -125,6 +126,100 @@ export const beneficiaryStudyLevelKeys = buildKeys({
   [BeneficiaryStudyLevel.Master]: 'Master',
   [BeneficiaryStudyLevel.Doctorat]: 'Doctorat'
 })
+
+export const beneficiarySchoolClassGroups = [
+  {
+    label: 'Maternelle',
+    options: [
+      {
+        value: BeneficiarySchoolClass.ToutesPetiteSection,
+        label: 'Toute Petite Section'
+      },
+      { value: BeneficiarySchoolClass.PetiteSection, label: 'Petite Section' },
+      {
+        value: BeneficiarySchoolClass.MoyenneSection,
+        label: 'Moyenne Section'
+      },
+      { value: BeneficiarySchoolClass.GrandeSection, label: 'Grande Section' }
+    ]
+  },
+  {
+    label: 'Élémentaire',
+    options: [
+      { value: BeneficiarySchoolClass.CP, label: 'CP' },
+      { value: BeneficiarySchoolClass.CE1, label: 'CE1' },
+      { value: BeneficiarySchoolClass.CE2, label: 'CE2' },
+      { value: BeneficiarySchoolClass.CM1, label: 'CM1' },
+      { value: BeneficiarySchoolClass.CM2, label: 'CM2' }
+    ]
+  },
+  {
+    label: 'Collège',
+    options: [
+      { value: BeneficiarySchoolClass.Sixieme, label: '6ème' },
+      { value: BeneficiarySchoolClass.Cinquieme, label: '5ème' },
+      { value: BeneficiarySchoolClass.Quatrieme, label: '4ème' },
+      { value: BeneficiarySchoolClass.Troisieme, label: '3ème' }
+    ]
+  },
+  {
+    label: 'Lycée général et technologique',
+    options: [
+      {
+        value: BeneficiarySchoolClass.SecondeGenerale,
+        label: '2nde générale et technologique'
+      },
+      {
+        value: BeneficiarySchoolClass.PremiereGenerale,
+        label: '1ère générale'
+      },
+      {
+        value: BeneficiarySchoolClass.PremiereTechno,
+        label: '1ère technologique'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminaleGenerale,
+        label: 'Terminale générale'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminaleTechno,
+        label: 'Terminale technologique'
+      }
+    ]
+  },
+  {
+    label: 'Lycée professionnel',
+    options: [
+      {
+        value: BeneficiarySchoolClass.SecondePro,
+        label: 'Seconde professionnelle'
+      },
+      {
+        value: BeneficiarySchoolClass.PremierePro,
+        label: 'Première professionnelle'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminalePro,
+        label: 'Terminale professionnelle'
+      },
+      { value: BeneficiarySchoolClass.CAP1, label: 'CAP 1ère année' },
+      { value: BeneficiarySchoolClass.CAP2, label: 'CAP 2ème année' },
+      { value: BeneficiarySchoolClass.BMA1, label: 'BMA 1re année' },
+      { value: BeneficiarySchoolClass.BMA2, label: 'BMA 2e année' },
+      { value: BeneficiarySchoolClass.BNMA1, label: 'BNMA 1re année' },
+      { value: BeneficiarySchoolClass.BNMA2, label: 'BNMA 2e année' },
+      { value: BeneficiarySchoolClass.BNMA3, label: 'BNMA 3e année' }
+    ]
+  }
+]
+
+export const beneficiarySchoolClassKeys = buildKeys(
+  Object.fromEntries(
+    beneficiarySchoolClassGroups.flatMap(g =>
+      g.options.map(o => [o.value, o.label])
+    )
+  )
+)
 
 export const incomeSourceKeys = buildKeys({
   Aah: 'AAH',
