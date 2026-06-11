@@ -7,7 +7,7 @@ import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { getAppContextPermissions } from '~/server/security/permissions'
 
 const securityCheck = async (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.budget
+  getAppContextPermissions(ctx).budget.access
 
 const handler = async ({
   input: { id },

@@ -134,7 +134,7 @@
     await trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
       queryKey: 'getFamilyFile.history'
     })
-  const { data: rdvspAuthStatus } = application.value.module.rdv
+  const { data: rdvspAuthStatus } = application.value.rdv.access
     ? await trpcClient.rdvsp.getAuthStatus.useQuery()
     : { data: ref(null) }
   const isRdvspAlertHidden = ref(false)

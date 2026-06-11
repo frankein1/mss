@@ -37,7 +37,7 @@
   const { handleSubmit, values, meta, errors } = useForm<AddFollowupInput>({
     validationSchema: toTypedSchema(addFollowupSchema),
     initialValues: {
-      isMinistry: application.value.module.ministere,
+      isMinistry: application.value.structure.ministryFields,
       beneficiaryId: props.beneficiaryId,
       familyFileId: props.familyFileId,
       date: new Date(),

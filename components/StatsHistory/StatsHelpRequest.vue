@@ -239,7 +239,7 @@
     financial:
       !filters.value.helpRequestSubject ||
       filters.value.helpRequestSubject === FileInstructionType.Financial,
-    ministere: application.value.module.ministere
+    ministere: application.value.structure.ministryFields
   }))
 
   const baseConfig = {
@@ -337,7 +337,7 @@
       })
     }
 
-    if (helpRequestCount.value !== 0 && application.value.export.stats) {
+    if (helpRequestCount.value !== 0 && application.value.stats.export) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {

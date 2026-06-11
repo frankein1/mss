@@ -10,7 +10,7 @@ export function useSocialSupportStatus() {
   const { application } = usePermissions()
 
   const _fileInstructionStatusKeys = computed(() =>
-    application.value.module.ministere
+    application.value.structure.ministryFields
       ? ministryFileInstructionStatusKeys
       : fileInstructionStatusKeys
   )
@@ -20,7 +20,7 @@ export function useSocialSupportStatus() {
   )
 
   const _socialSupportStatusKeys = computed(() =>
-    application.value.module.ministere
+    application.value.structure.ministryFields
       ? ministrySocialSupportStatusKeys
       : socialSupportStatusKeys
   )

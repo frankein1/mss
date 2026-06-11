@@ -302,7 +302,7 @@
             <td></td>
             <td>* les dossiers dont il est référent</td>
           </tr>
-          <template v-if="permissions.module.ministere">
+          <template v-if="permissions.structure.ministryFields">
             <tr>
               <td>Visualiser les statistiques</td>
               <td class="fr-icon-check-line allowed-action-bg"></td>

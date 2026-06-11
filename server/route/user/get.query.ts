@@ -8,7 +8,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { UserRole, type Prisma } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.users
+  getAppContextPermissions(ctx).user.manage
 
 const handler = async ({
   ctx,

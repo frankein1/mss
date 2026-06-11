@@ -21,7 +21,7 @@ const handler = async ({
   })
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).edit.structure
+  getAppContextPermissions(ctx).structure.edit
 
 export const makeInactiveSocialSupportSubject = createMutation({
   handler,

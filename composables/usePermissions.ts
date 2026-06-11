@@ -4,56 +4,84 @@ export function usePermissions() {
   const application = useState<AppContextPermissions>(
     'permissions:app',
     () => ({
-      export: {
-        stats: false,
-        history: false
+      structure: {
+        edit: false,
+        ministryFields: false
       },
-      edit: {
-        structure: false,
-        health: { nir: false }
+      user: {
+        manage: false
       },
-      module: {
-        users: false,
-        stats: false,
-        statsByReferent: false,
-        health: false,
-        ministere: false,
-        helpRequest: false,
-        partner: false,
-        vulnerablePerson: false,
-        budget: false,
-        rdv: false
+      stats: {
+        view: false,
+        viewByReferent: false,
+        export: false
+      },
+      history: {
+        export: false
+      },
+      beneficiary: {
+        archiveBeforeDelay: false,
+        viewVulnerablePerson: false,
+        health: {
+          editNir: false
+        }
+      },
+      helpRequest: {
+        access: false
+      },
+      budget: {
+        access: false
+      },
+      partner: {
+        access: false
+      },
+      rdv: {
+        access: false
       },
       workshop: {
-        duplicateParticipants: false
+        duplicateAttendees: false
       }
     })
   )
 
   function reset() {
     application.value = {
-      export: {
-        stats: false,
-        history: false
+      structure: {
+        edit: false,
+        ministryFields: false
       },
-      edit: {
-        structure: false,
-        health: { nir: false }
+      user: {
+        manage: false
       },
-      module: {
-        users: false,
-        stats: false,
-        statsByReferent: false,
-        health: false,
-        ministere: false,
-        helpRequest: false,
-        partner: false,
-        vulnerablePerson: false,
-        budget: false,
-        rdv: false
+      stats: {
+        view: false,
+        viewByReferent: false,
+        export: false
+      },
+      history: {
+        export: false
+      },
+      beneficiary: {
+        archiveBeforeDelay: false,
+        viewVulnerablePerson: false,
+        health: {
+          editNir: false
+        }
+      },
+      helpRequest: {
+        access: false
+      },
+      budget: {
+        access: false
+      },
+      partner: {
+        access: false
+      },
+      rdv: {
+        access: false
       },
       workshop: {
-        duplicateParticipants: false
+        duplicateAttendees: false
       }
     }
   }

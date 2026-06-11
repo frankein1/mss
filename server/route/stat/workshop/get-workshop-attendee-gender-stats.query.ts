@@ -10,7 +10,7 @@ import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+  getAppContextPermissions(ctx).stats.view
 
 const handler = async ({
   input,

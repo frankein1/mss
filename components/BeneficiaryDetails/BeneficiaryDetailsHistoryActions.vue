@@ -40,7 +40,7 @@
         </button>
       </li>
       <li
-        v-if="application.module.rdv"
+        v-if="application.rdv.access"
         id="action-rdv"
       >
         <button

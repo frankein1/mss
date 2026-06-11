@@ -55,7 +55,7 @@
       beneficiaryId: socialSupport.value.beneficiary.id,
       familyFileId: socialSupport.value.familyFileId,
       date: socialSupport.value.date,
-      isMinistry: application.value.module.ministere,
+      isMinistry: application.value.structure.ministryFields,
       synthesis: socialSupport.value.synthesis,
       synthesisRichText: socialSupport.value.synthesisRichText,
       privateSynthesis: socialSupport.value.privateSynthesis,

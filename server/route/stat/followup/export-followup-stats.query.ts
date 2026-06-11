@@ -77,7 +77,7 @@ function addDurationWorksheet(workbook: Workbook, rows: DurationRow[]) {
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+  getAppContextPermissions(ctx).stats.export
 
 const handler = async ({
   input,

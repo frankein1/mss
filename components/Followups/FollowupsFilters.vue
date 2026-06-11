@@ -45,7 +45,7 @@
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { application } = usePermissions()
-  const isMinistry = computed(() => application.value.module.ministere)
+  const isMinistry = computed(() => application.value.structure.ministryFields)
 
   const emit = defineEmits<{
     'update:filters': [filters: FollowupFilterInput]
@@ -173,7 +173,7 @@
       )
     }
 
-    if (application.value.module.ministere) {
+    if (application.value.structure.ministryFields) {
       if (ministerOptions.value != null) {
         filters.push({
           name: 'ministerId',

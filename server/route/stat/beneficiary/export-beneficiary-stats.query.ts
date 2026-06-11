@@ -69,7 +69,7 @@ function addStatsWorksheet(workbook: Workbook, name: string, rows: StatsRow[]) {
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+  getAppContextPermissions(ctx).stats.export
 
 const handler = async ({
   input,

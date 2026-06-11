@@ -21,7 +21,7 @@ const securityCheck = async (
 ) => {
   if (
     input.duplicateParticipants &&
-    !getAppContextPermissions(ctx).workshop.duplicateParticipants
+    !getAppContextPermissions(ctx).workshop.duplicateAttendees
   ) {
     return false
   }
@@ -58,7 +58,7 @@ const handler = async ({
 }) => {
   const canDuplicateParticipants =
     duplicateParticipants &&
-    getAppContextPermissions(ctx).workshop.duplicateParticipants
+    getAppContextPermissions(ctx).workshop.duplicateAttendees
 
   const initialWorkshop = await WorkshopRepo.findUniqueOrThrow(ctx.user, {
     where: {

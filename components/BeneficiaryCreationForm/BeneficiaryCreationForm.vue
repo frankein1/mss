@@ -122,7 +122,7 @@
           </div>
           <!-- masqué -->
           <div
-            v-if="application.module.ministere"
+            v-if="application.structure.ministryFields"
             class="fr-col-12 fr-col-lg-6"
           >
             <VeeInput

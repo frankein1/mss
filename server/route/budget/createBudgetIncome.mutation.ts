@@ -16,7 +16,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateBudgetIncomeInput
 ) => {
-  if (!getAppContextPermissions(ctx).module.budget) {
+  if (!getAppContextPermissions(ctx).budget.access) {
     return false
   }
 

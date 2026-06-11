@@ -9,7 +9,7 @@ import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
 import { WorkshopAttendeeListType } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+  getAppContextPermissions(ctx).stats.view
 
 const handler = async ({
   input,

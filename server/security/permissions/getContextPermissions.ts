@@ -3,30 +3,43 @@ import type { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
 
 export type AppContextPermissions = {
-  export: {
-    stats: boolean
-    history: boolean
+  structure: {
+    edit: boolean
+    ministryFields: boolean
   }
-  edit: {
-    structure: boolean
+  user: {
+    manage: boolean
+  }
+  stats: {
+    view: boolean
+    viewByReferent: boolean
+    export: boolean
+  }
+  history: {
+    export: boolean
+  }
+  beneficiary: {
+    /** Can archive regardless of beneficiary inactivity status */
+    archiveBeforeDelay: boolean
+    viewVulnerablePerson: boolean
     health: {
-      nir: boolean
+      editNir: boolean
     }
   }
-  module: {
-    users: boolean
-    stats: boolean
-    statsByReferent: boolean
-    health: boolean
-    ministere: boolean
-    helpRequest: boolean
-    partner: boolean
-    vulnerablePerson: boolean
-    budget: boolean
-    rdv: boolean
+  helpRequest: {
+    access: boolean
+  }
+  budget: {
+    access: boolean
+  }
+  partner: {
+    access: boolean
+  }
+  rdv: {
+    access: boolean
   }
   workshop: {
-    duplicateParticipants: boolean
+    duplicateAttendees: boolean
   }
 }
 
@@ -45,30 +58,42 @@ export function getAppContextPermissions({
 
 function getAdminContextPermissions(): AppContextPermissions {
   return {
-    export: {
-      history: false,
-      stats: false
+    structure: {
+      edit: true,
+      ministryFields: false
     },
-    edit: {
-      structure: true,
+    user: {
+      manage: false
+    },
+    stats: {
+      view: false,
+      viewByReferent: false,
+      export: false
+    },
+    history: {
+      export: false
+    },
+    beneficiary: {
+      archiveBeforeDelay: false,
+      viewVulnerablePerson: false,
       health: {
-        nir: false
+        editNir: false
       }
     },
-    module: {
-      users: false,
-      stats: false,
-      statsByReferent: false,
-      health: false,
-      ministere: false,
-      helpRequest: false,
-      partner: false,
-      vulnerablePerson: false,
-      budget: false,
-      rdv: false
+    helpRequest: {
+      access: false
+    },
+    budget: {
+      access: false
+    },
+    partner: {
+      access: false
+    },
+    rdv: {
+      access: false
     },
     workshop: {
-      duplicateParticipants: false
+      duplicateAttendees: false
     }
   }
 }
@@ -91,34 +116,46 @@ function getUserContextPermissions(
   const hasRdvAccess = ctx.structure.externalRdvspActive || false
 
   return {
-    export: {
-      history: manager || socialWorker || referent || instructor,
-      stats: ministryAgent
+    structure: {
+      edit: manager,
+      ministryFields: ministryAgent
+    },
+    user: {
+      manage: manager
+    },
+    stats: {
+      view: ministryAgent
+        ? manager || referent
+        : manager || socialWorker || instructor || referent,
+      viewByReferent: socialWorker || manager,
+      export: ministryAgent
         ? manager || referent
         : manager || socialWorker || instructor || referent
     },
-    edit: {
-      structure: manager,
+    history: {
+      export: manager || socialWorker || referent || instructor
+    },
+    beneficiary: {
+      archiveBeforeDelay: manager,
+      viewVulnerablePerson: !ngo && !ministryAgent,
       health: {
-        nir: cias || ccas || city
+        editNir: cias || ccas || city
       }
     },
-    module: {
-      users: manager,
-      stats: ministryAgent
-        ? manager || referent
-        : manager || socialWorker || instructor || referent,
-      statsByReferent: socialWorker || manager,
-      health: true,
-      ministere: ministryAgent,
-      helpRequest: manager || socialWorker || instructor || referent,
-      partner: manager || socialWorker,
-      vulnerablePerson: !ngo && !ministryAgent,
-      budget: !receptionAgent,
-      rdv: hasRdvAccess
+    helpRequest: {
+      access: manager || socialWorker || instructor || referent
+    },
+    budget: {
+      access: !receptionAgent
+    },
+    partner: {
+      access: manager || socialWorker
+    },
+    rdv: {
+      access: hasRdvAccess
     },
     workshop: {
-      duplicateParticipants: !referent
+      duplicateAttendees: !referent
     }
   }
 }

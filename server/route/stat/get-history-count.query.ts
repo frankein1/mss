@@ -14,7 +14,7 @@ import { getAppContextPermissions } from '~/server/security'
 import { FollowupRepo } from '~/server/database'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+  getAppContextPermissions(ctx).stats.view
 
 /* This could be splitted into two routes to avoid overfetching */
 const handler = async ({

@@ -28,7 +28,7 @@
             />
           </form>
         </div>
-        <template v-if="application.module.partner">
+        <template v-if="application.partner.access">
           <div class="partner-search-bar__action">
             <button
               data-fr-opened="false"

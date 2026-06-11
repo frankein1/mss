@@ -9,7 +9,7 @@ import { exportBudgetWorkbook } from '~/server/services/budget/exportBudgetSprea
 import { getAppContextPermissions } from '~/server/security/permissions'
 
 const securityCheck = async (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.budget
+  getAppContextPermissions(ctx).budget.access
 
 const handler = async ({
   input: { familyFileId },

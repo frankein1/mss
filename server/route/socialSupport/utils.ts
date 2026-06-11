@@ -34,7 +34,7 @@ export function formatSocialSupportDetail(
     socialSupport
 
   const conditions = {
-    minister: appPermissions.module.ministere,
+    minister: appPermissions.structure.ministryFields,
     details: socialSupportPermissions.get.details,
     privateSynthesis: socialSupportPermissions.get.privateSynthesis
   }

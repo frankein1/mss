@@ -3,7 +3,7 @@
     <div>{{ label }}</div>
 
     <div
-      v-if="application.edit.structure"
+      v-if="application.structure.edit"
       class="sss-item__actions"
     >
       <button

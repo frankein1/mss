@@ -22,7 +22,7 @@
           {{ fileInstructionCount }} instruction(s) de dossier
         </p>
         <ExportDataButton
-          v-if="application.export.history"
+          v-if="application.history.export"
           :is-downloading="isDownloading"
           :has-filters="true"
           :export="exportFileInstructions"
