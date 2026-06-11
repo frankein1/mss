@@ -68,7 +68,7 @@
               </li>
             </NuxtLink>
             <li
-              v-if="application.view.admin === false"
+              v-if="!application.view.admin"
               class="fr-mt-3w"
             >
               <NuxtLink
@@ -93,7 +93,7 @@
         <footer>
           <ul class="fr-footer__bottom-list">
             <li
-              v-if="application.view.admin === false"
+              v-if="!application.view.admin"
               class="fr-footer__bottom-item"
             >
               <NuxtLink

@@ -6,6 +6,7 @@ import { flushPromises } from '@vue/test-utils'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import type { ZodSchema } from 'zod'
+import merge from 'lodash.merge'
 import type { AppContextPermissions } from '~/server/security'
 import { defaultPermissions } from '~/composables/usePermissions'
 
@@ -18,23 +19,7 @@ export function setPermissions(overrides: DeepPartial<AppContextPermissions>) {
     'permissions:app',
     defaultPermissions
   )
-  const base = defaultPermissions()
-  state.value = {
-    view: {
-      ...base.view,
-      ...overrides.view,
-      cgu: { ...base.view.cgu, ...overrides.view?.cgu }
-    },
-    export: { ...base.export, ...overrides.export },
-    edit: {
-      ...base.edit,
-      ...overrides.edit,
-      health: { ...base.edit.health, ...overrides.edit?.health },
-      beneficiary: { ...base.edit.beneficiary, ...overrides.edit?.beneficiary }
-    },
-    archive: { ...base.archive, ...overrides.archive },
-    module: { ...base.module, ...overrides.module }
-  }
+  state.value = merge(defaultPermissions(), overrides)
 }
 
 export function withForm(
