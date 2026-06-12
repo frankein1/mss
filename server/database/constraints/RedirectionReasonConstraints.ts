@@ -24,8 +24,5 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const RedirectionReasonConstraints = {
-  get,
-  create: get,
-  update: get,
-  delete: get
+  get
 }
