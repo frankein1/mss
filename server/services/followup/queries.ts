@@ -85,12 +85,12 @@ const select = {
         select: {
           id: true,
           type: true,
-          motif: true,
           externalStructureName: true,
           partnerOrganizationId: true,
           partnerOrganizationContactId: true,
           partnerOrganization: { select: { name: true } },
-          partnerOrganizationContact: { select: { name: true } }
+          partnerOrganizationContact: { select: { name: true } },
+          redirectionReason: { select: { name: true } }
         }
       }
     }

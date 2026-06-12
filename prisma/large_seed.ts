@@ -277,7 +277,6 @@ async function main() {
             return {
               socialSupportId: id,
               type,
-              motif: faker.word.words(3),
               ...(type === 'PartnerOrganization' && {
                 partnerOrganizationId: partner.id
               })

@@ -6,6 +6,7 @@ import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import { SocialSupportRepo } from '~/server/database'
 import { SocialSupportService } from '~/server/services'
+import { deleteOrphanedRedirectionReasons } from '~/server/services/redirection/helper'
 
 const handler = async ({
   ctx: { user },
@@ -14,7 +15,18 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
+  const { socialSupportRedirections } =
+    await SocialSupportRepo.findUniqueOrThrow(user, {
+      where: { id },
+      select: {
+        id: true,
+        socialSupportRedirections: { select: { redirectionReasonId: true } }
+      }
+    })
   await SocialSupportRepo.delete(user, { where: { id } })
+  await deleteOrphanedRedirectionReasons(
+    socialSupportRedirections.map(r => r.redirectionReasonId)
+  )
 }
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {

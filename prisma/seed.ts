@@ -13,6 +13,7 @@ import {
   fixturesBeneficiaries,
   fixturesBeneficiaryRelatives,
   fixturesSocialSupports,
+  fixturesRedirectionReasons,
   fixturesBudgets,
   fixturesBudgetIncomes,
   fixturesBudgetExpenses,
@@ -84,6 +85,15 @@ function loadFixturesBeneficiaries() {
       where: { id },
       update: {}
     })
+  })
+}
+
+function loadFixturesRedirectionReasons() {
+  console.log('🔀 Redirection reasons...')
+
+  return prismaClient.redirectionReason.createMany({
+    data: fixturesRedirectionReasons,
+    skipDuplicates: true
   })
 }
 
@@ -238,6 +248,7 @@ function loadFixtures() {
     loadFixturesDataInclusionStructuresV1(),
     loadFixturesPartnerOrganizations(),
     loadFixturesPartnerOrganizationContacts(),
+    loadFixturesRedirectionReasons(),
     ...loadFixturesSocialSupports(),
     loadFixturesBeneficiaryRelatives(),
     loadFixturesBudgets(),

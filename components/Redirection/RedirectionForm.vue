@@ -5,6 +5,7 @@
     :index="idx"
     :partner-organization-options
     :partner-organizations
+    :redirection-reason-options="redirectionReasonOptions"
     @remove="remove(idx)"
   />
   <ul
@@ -30,6 +31,25 @@
     partnerOrganizations: Array<PartnerOrganizationIdName>
   }>()
 
+  // useFieldArray relies on Vue's inject and must run before any `await` in
+  // this setup, otherwise the active component instance context is lost.
+  const { fields, push, remove } =
+    useFieldArray<SocialSupportRedirectionsInput>('socialSupportRedirections')
+  if (fields.value.length === 0) {
+    fields.value.push({ id: crypto.randomUUID() } as any) // push first entry
+  }
+
+  const { data: redirectionReasons } =
+    await useTrpcClient().redirection.getRedirectionReasonList.useQuery()
+
+  const redirectionReasonOptions: Ref<Options> = computed(
+    () =>
+      redirectionReasons.value?.map(({ name }) => ({
+        label: name,
+        value: name
+      })) ?? []
+  )
+
   const addRedirectionAndReplaceFocus = async () => {
     push({ id: crypto.randomUUID() } as any)
     await nextTick()
@@ -40,11 +60,5 @@
         'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
       )
       ?.focus()
-  }
-
-  const { fields, push, remove } =
-    useFieldArray<SocialSupportRedirectionsInput>('socialSupportRedirections')
-  if (fields.value.length === 0) {
-    fields.value.push({ id: crypto.randomUUID() } as any) // push first entry
   }
 </script>
