@@ -17,7 +17,10 @@ export {
   FixturePartnerOrganization
 } from './partnerOrganizations'
 export { fixturesPartnerOrganizationContacts } from './partnerOrganizationContacts'
-export { fixturesSocialSupports } from './socialSupports'
+export {
+  fixturesSocialSupports,
+  fixturesRedirectionReasons
+} from './socialSupports'
 export { fixturesBudgets } from './budgets'
 export { fixturesBudgetIncomes } from './budgetIncomes'
 export { fixturesBudgetExpenses } from './budgetExpenses'

@@ -19,6 +19,11 @@ import { prismaClient } from '~/server/prisma'
 import { filterOutEmptyElements } from '../helper'
 import { getSocialSupportWithRedirections } from '../socialSupport/helper'
 import { randomUUID } from 'node:crypto'
+import {
+  resolveRedirectionReasonIds,
+  resolveReasonId,
+  deleteOrphanedRedirectionReasons
+} from '../redirection/helper'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -88,13 +93,21 @@ export async function update({ input, ctx }: UpdateParams) {
   const { socialSupportRedirections: previousRedirectionIds } =
     await getSocialSupportWithRedirections(ctx.user, input.socialSupportId)
 
+  const reasonIds = await resolveRedirectionReasonIds(
+    ctx,
+    socialSupportRedirections
+  )
+
   const prepareRedirections = socialSupportRedirections
     ?.map(r => {
       if (r.type) {
         return {
           id: r.id || randomUUID(),
           type: r.type,
-          motif: r.motif,
+          redirectionReasonId: resolveReasonId(
+            reasonIds,
+            r.redirectionReasonName
+          ),
           externalStructureName: r.externalStructureName,
           partnerOrganizationId: r.partnerOrganizationId,
           partnerOrganizationContactId: r.partnerOrganizationContactId
@@ -103,6 +116,17 @@ export async function update({ input, ctx }: UpdateParams) {
     })
     .filter(r => r != null)
     .filter(filterOutEmptyElements)
+
+  const removedReasonIds = prepareRedirections
+    ? previousRedirectionIds
+        .filter(r => {
+          const updated = prepareRedirections.find(p => p.id === r.id)
+          return (
+            !updated || updated.redirectionReasonId !== r.redirectionReasonId
+          )
+        })
+        .map(r => r.redirectionReasonId)
+    : []
 
   const updateSocialSupport = () =>
     SocialSupportRepo.update(ctx.user, {
@@ -212,6 +236,8 @@ export async function update({ input, ctx }: UpdateParams) {
   const [socialSupportResult] = await prismaClient.$transaction(
     transactions.map(transaction => transaction())
   )
+
+  await deleteOrphanedRedirectionReasons(removedReasonIds)
 
   return { id: socialSupportResult.id }
 }

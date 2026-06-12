@@ -77,14 +77,14 @@ async function getSocialSupportDetail({
         select: {
           id: true,
           type: true,
-          motif: true,
           externalStructureName: true,
           partnerOrganizationId: true,
           partnerOrganizationContactId: true,
           socialSupportId: true,
           createdAt: true,
           partnerOrganization: true,
-          partnerOrganizationContact: true
+          partnerOrganizationContact: true,
+          redirectionReason: { select: { name: true } }
         }
       },
       comments: {

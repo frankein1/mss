@@ -64,7 +64,7 @@ function redirectionsDto<T extends SS['socialSupportRedirections']>(
   return redirections.map(r => ({
     id: r.id,
     type: r.type,
-    motif: r.motif,
+    redirectionReasonName: r.redirectionReason?.name ?? null,
     partnerOrganizationId: r.partnerOrganizationId,
     partnerOrganizationContactId: r.partnerOrganizationContactId,
     partnerOrganization: {
@@ -132,10 +132,14 @@ type SS = SocialSupport & {
   comments?: (Comment & { createdBy: User })[]
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
-    'createdAt' | 'socialSupportId'
+    | 'createdAt'
+    | 'socialSupportId'
+    | 'redirectionReasonId'
+    | 'redirectionReason'
   > & {
     partnerOrganization: { name: string } | null
     partnerOrganizationContact: { name: string } | null
+    redirectionReason: { name: string } | null
   })[]
 }
 
@@ -206,7 +210,9 @@ export function filterSocialSupportForExport<
   } & {
     beneficiary: Partial<Beneficiary>
   } & {
-    socialSupportRedirections: Partial<SocialSupportRedirection>[]
+    socialSupportRedirections: (Partial<SocialSupportRedirection> & {
+      redirectionReason?: { name: string } | null
+    })[]
   }
 >({
   socialSupport,
@@ -236,7 +242,14 @@ export function filterSocialSupportForExport<
     },
     beneficiary: socialSupport.beneficiary,
     socialSupportRedirections: show(
-      socialSupport.socialSupportRedirections || [],
+      (socialSupport.socialSupportRedirections || []).map(r => ({
+        id: r.id,
+        type: r.type,
+        redirectionReasonName: r.redirectionReason?.name ?? null,
+        partnerOrganizationId: r.partnerOrganizationId,
+        partnerOrganizationContactId: r.partnerOrganizationContactId,
+        externalStructureName: r.externalStructureName
+      })),
       conditions.details
     )
   }

@@ -9,6 +9,10 @@ import type { CreateHousingHelpRequestInput } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { randomUUID } from 'node:crypto'
+import {
+  resolveRedirectionReasonIds,
+  resolveReasonId
+} from '../redirection/helper'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -60,6 +64,10 @@ export async function create({ input, ctx }: CreateParams) {
     askedHousing
   } = cleanCreateInput(input)
 
+  const reasonIds = await resolveRedirectionReasonIds(
+    ctx,
+    input.socialSupportRedirections
+  )
   const redirectionData =
     input.socialSupportRedirections
       ?.map(r => {
@@ -67,7 +75,10 @@ export async function create({ input, ctx }: CreateParams) {
           return {
             id: r.id || randomUUID(),
             type: r.type,
-            motif: r.motif || null,
+            redirectionReasonId: resolveReasonId(
+              reasonIds,
+              r.redirectionReasonName
+            ),
             externalStructureName: r.externalStructureName || null,
             partnerOrganizationId: r.partnerOrganizationId || null,
             partnerOrganizationContactId: r.partnerOrganizationContactId || null

@@ -30,13 +30,13 @@
           >
         </p>
       </div>
-      <VeeInput
+      <VeeCombobox
         v-if="selectedType != null"
-        disabled
-        :name="`socialSupportRedirections[${index}].motif`"
+        :name="`socialSupportRedirections[${index}].redirectionReasonName`"
         label="Motif"
-        hint="Fonctionnalité à venir"
-        aria-describedby="motif-tooltip"
+        hint="Sélectionnez un motif existant ou saisissez-en un nouveau"
+        :options="redirectionReasonOptions"
+        :with-creation="true"
       />
       <VeeInput
         v-if="selectedType === SocialSupportRedirectionType.Other"
@@ -92,6 +92,7 @@
   const props = defineProps<{
     partnerOrganizationOptions: Options
     partnerOrganizations: Array<PartnerOrganizationIdName>
+    redirectionReasonOptions: Options
     index: number
   }>()
   defineEmits<{ remove: [] }>()

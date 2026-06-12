@@ -25,6 +25,7 @@ import { rdvspRouter } from './rdvspRouter'
 import { router } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
 import { ministerRouter } from './minister/router'
+import { redirectionRouter } from './redirection/router'
 
 export const appRouter = router({
   admin: adminRouter,
@@ -48,7 +49,8 @@ export const appRouter = router({
   file: fileRouter,
   rdvsp: rdvspRouter,
   workshop: workshopRouter,
-  minister: ministerRouter
+  minister: ministerRouter,
+  redirection: redirectionRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter
