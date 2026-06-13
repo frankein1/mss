@@ -233,7 +233,8 @@ export default defineNuxtConfig({
     document: {
       useS3Storage:
         (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
-      encryptionVersion: '1',
+      encryptionVersion: '2',
+      // TODO: NO! NOT TRUE AT ALL !! remove encryptionAlgorithm after v1 encryption support cleanup
       encryptionAlgorithm: 'aes_256_gcm'
     },
     public: {

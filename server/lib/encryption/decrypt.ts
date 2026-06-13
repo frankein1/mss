@@ -5,70 +5,46 @@ import { createCanonicalAuthenticatedData } from './generate-encryption-context'
 import { webcrypto } from 'node:crypto'
 import type { RuntimeConfig } from 'nuxt/schema'
 
+const V2_ALGORITHM = 'aes_256_gcm' as const
+
+interface DecryptMetadata {
+  encryptionVersion: string
+  // TODO: remove v1 fields after local dev migration
+  encryptionAlgorithm?: string
+  kmsKeyId?: string
+}
+
 export async function decrypt(
   config: Pick<RuntimeConfig, 'kms' | 'document'>,
   encryptedContent: Uint8Array,
   encryptedDataKey: string,
   ivBase64: string,
-  metadata: {
-    encryptionVersion: string
-    encryptionAlgorithm: string
-    kmsKeyId: string
-  },
+  metadata: DecryptMetadata,
   dataForEncryptionContext: DataForEncryptionContext
 ) {
   const kms = await getKeyManagerClient(config)
 
-  if (metadata.encryptionAlgorithm !== 'aes_256_gcm') {
-    throw internal('decrypt: improper algorithm')
-  }
+  const { algorithmName, kmsKeyId, additionalData } =
+    resolveDecryptionParams(config, metadata, encryptedDataKey, dataForEncryptionContext)
 
-  /** The encrypted data key (DEK) derived from the main key KEK (stored in the Key Manager)
-   * is decrypted by the Key Management Service
-   *
-   * WARNING! The plaintext DEK MUST NEVER be logged.
-   * WARNING! The plaintext DEK MUST NEVER be transmitted or stored outside of the server.
-   */
   const dataKey = await kms.decrypt({
-    keyId: metadata.kmsKeyId,
+    keyId: kmsKeyId,
     ciphertext: encryptedDataKey
   })
 
-  /** The webcrypto API needs to import the DEK in a specific format */
-  const algorithm = ALGORITHMS[metadata.encryptionAlgorithm]
   const extractable = false
   const encryptionKey = await webcrypto.subtle.importKey(
     'raw',
     Buffer.from(dataKey.plaintext, 'base64'),
-    algorithm,
+    algorithmName,
     extractable,
     ['decrypt']
   )
 
-  /** Associated Authenticated Data (AAD) binary data is recreated for decryption from
-   * the S3 Metadata and file metadata coming from the database.
-   *
-   * In order to decrypt the content, it must be *byte-for-byte* identical to the AAD
-   * used to encrypt the content.
-   */
-  const additionalData = createCanonicalAuthenticatedData({
-    encryptionVersion: metadata.encryptionVersion,
-    encryptionAlgorithm: metadata.encryptionAlgorithm,
-    kmsKeyId: metadata.kmsKeyId,
-    encryptedDataKey,
-    documentKeyInDB: dataForEncryptionContext.documentKey,
-    contentType: dataForEncryptionContext.contentType,
-    contentLength: dataForEncryptionContext.contentLength
-  })
-
   const params: AesGcmParams = {
-    name: algorithm,
-    /** The Initialization vector is retrieved from the file metadata */
+    name: algorithmName,
     iv: Buffer.from(ivBase64, 'base64'),
     additionalData,
-    // size in bits of the authentication tag generated in the encryption operation and used for authentication in the corresponding decryption.
-    // the AES-GCM specification recommends that it should be 96, 104, 112, 120, or 128
-    // see https://developer.mozilla.org/en-US/docs/Web/API/AesGcmParams
     tagLength: 128
   }
 
@@ -79,4 +55,45 @@ export async function decrypt(
   )
 
   return { fileContent }
+}
+
+function resolveDecryptionParams(
+  config: Pick<RuntimeConfig, 'kms'>,
+  metadata: DecryptMetadata,
+  encryptedDataKey: string,
+  dataForEncryptionContext: DataForEncryptionContext
+) {
+  // TODO: remove v1 encryption support after local dev migration
+  if (metadata.encryptionVersion === '1') {
+    if (!metadata.encryptionAlgorithm || !metadata.kmsKeyId) {
+      throw internal('decrypt: missing v1 metadata fields')
+    }
+
+    return {
+      algorithmName: ALGORITHMS[metadata.encryptionAlgorithm as keyof typeof ALGORITHMS],
+      kmsKeyId: metadata.kmsKeyId,
+      additionalData: createCanonicalAuthenticatedData({
+        encryptionVersion: '1',
+        encryptionAlgorithm: metadata.encryptionAlgorithm,
+        kmsKeyId: metadata.kmsKeyId,
+        encryptedDataKey,
+        documentKeyInDB: dataForEncryptionContext.documentKey,
+        contentType: dataForEncryptionContext.contentType,
+        contentLength: dataForEncryptionContext.contentLength
+      })
+    }
+  }
+
+  if (metadata.encryptionVersion === '2') {
+    return {
+      algorithmName: ALGORITHMS[V2_ALGORITHM],
+      kmsKeyId: config.kms.keyId,
+      additionalData: createCanonicalAuthenticatedData({
+        encryptionVersion: '2',
+        documentKeyInDB: dataForEncryptionContext.documentKey
+      })
+    }
+  }
+
+  throw internal('decrypt: unsupported encryption version')
 }

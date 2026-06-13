@@ -208,11 +208,13 @@ model Document {
   socialSupports SocialSupport[] @relation("document_to_social_support")
   notifications  Notification[]
 
-  migrated Boolean @default(false)
+  migrated         Boolean  @default(false)
+  encryptedDataKey String?  @map("encrypted_data_key")
 
   documentContent DocumentContent?
 
   @@index([familyFileId])
+  @@index([migrated])
   @@map("document")
 }
 

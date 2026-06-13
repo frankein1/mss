@@ -15,7 +15,7 @@ const CONFIG = {
   },
   document: {
     useS3Storage: true,
-    encryptionVersion: '1',
+    encryptionVersion: '2',
     encryptionAlgorithm: 'aes_256_gcm'
   }
 }
@@ -30,13 +30,11 @@ async function encryptAndDecrypt(
   plain: Buffer,
   decryptContext = ENCRYPTION_CONTEXT
 ) {
-  const { encryptedContent, encryptedDataKey, ivBase64, kmsKeyId } =
+  const { encryptedContent, encryptedDataKey, ivBase64 } =
     await encrypt(CONFIG, plain, ENCRYPTION_CONTEXT)
 
   const metadata = {
-    encryptionVersion: '1',
-    encryptionAlgorithm: 'aes_256_gcm',
-    kmsKeyId
+    encryptionVersion: '2'
   }
 
   return decrypt(
@@ -49,24 +47,19 @@ async function encryptAndDecrypt(
   )
 }
 
-describe('encryption - Algorithm execution', () => {
-  test('succeed: round-trip returns original content', async () => {
+describe('Encryption - Algorithm execution', () => {
+  test('Encryption - Round trip - returns original content', async () => {
     const original = Buffer.from('plain content to encrypt')
     const { fileContent } = await encryptAndDecrypt(original)
     expect(Buffer.from(fileContent)).toEqual(original)
   })
 
-  test('fails when ciphertext is tampered', async () => {
-    const { encryptedContent, encryptedDataKey, ivBase64, kmsKeyId } =
+  test('Encryption - Tampered ciphertext - fails to decrypt', async () => {
+    const { encryptedContent, encryptedDataKey, ivBase64 } =
       await encrypt(CONFIG, Buffer.from('content'), ENCRYPTION_CONTEXT)
 
     const tampered = Buffer.from(encryptedContent)
     tampered[0]! ^= 0xff
-    const metadata = {
-      encryptionVersion: '1',
-      encryptionAlgorithm: 'aes_256_gcm',
-      kmsKeyId
-    }
 
     await expect(
       decrypt(
@@ -74,24 +67,19 @@ describe('encryption - Algorithm execution', () => {
         tampered,
         encryptedDataKey,
         ivBase64,
-        metadata,
+        { encryptionVersion: '2' },
         ENCRYPTION_CONTEXT
       )
     ).rejects.toThrow(/failed for an operation-specific reason/i)
   })
 
-  test('fails when IV is wrong', async () => {
-    const { encryptedContent, encryptedDataKey, kmsKeyId } = await encrypt(
+  test('Encryption - Wrong IV - fails to decrypt', async () => {
+    const { encryptedContent, encryptedDataKey } = await encrypt(
       CONFIG,
       Buffer.from('content'),
       ENCRYPTION_CONTEXT
     )
     const wrongIv = randomBytes(12).toString('base64')
-    const metadata = {
-      encryptionVersion: '1',
-      encryptionAlgorithm: 'aes_256_gcm',
-      kmsKeyId
-    }
 
     await expect(
       decrypt(
@@ -99,15 +87,15 @@ describe('encryption - Algorithm execution', () => {
         Buffer.from(encryptedContent),
         encryptedDataKey,
         wrongIv,
-        metadata,
+        { encryptionVersion: '2' },
         ENCRYPTION_CONTEXT
       )
     ).rejects.toThrow(/failed for an operation-specific reason/i)
   })
 })
 
-describe('encryption - Encryption Context validation', () => {
-  test('fails when documentKey differs', async () => {
+describe('Encryption - AAD validation', () => {
+  test('Encryption - AAD - fails when documentKey differs', async () => {
     await expect(
       encryptAndDecrypt(Buffer.from('content'), {
         ...ENCRYPTION_CONTEXT,
@@ -116,21 +104,19 @@ describe('encryption - Encryption Context validation', () => {
     ).rejects.toThrow()
   })
 
-  test('fails when contentLength differs', async () => {
-    await expect(
-      encryptAndDecrypt(Buffer.from('content'), {
-        ...ENCRYPTION_CONTEXT,
-        contentLength: 1489
-      })
-    ).rejects.toThrow(/failed for an operation-specific reason/i)
+  test('Encryption - AAD - does not bind contentLength', async () => {
+    const { fileContent } = await encryptAndDecrypt(Buffer.from('content'), {
+      ...ENCRYPTION_CONTEXT,
+      contentLength: 9999
+    })
+    expect(Buffer.from(fileContent)).toEqual(Buffer.from('content'))
   })
 
-  test('fails when contentType differs', async () => {
-    await expect(
-      encryptAndDecrypt(Buffer.from('content'), {
-        ...ENCRYPTION_CONTEXT,
-        contentType: 'image/png'
-      })
-    ).rejects.toThrow(/failed for an operation-specific reason/i)
+  test('Encryption - AAD - does not bind contentType', async () => {
+    const { fileContent } = await encryptAndDecrypt(Buffer.from('content'), {
+      ...ENCRYPTION_CONTEXT,
+      contentType: 'image/png'
+    })
+    expect(Buffer.from(fileContent)).toEqual(Buffer.from('content'))
   })
 })

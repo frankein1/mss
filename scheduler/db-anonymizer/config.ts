@@ -201,7 +201,8 @@ const configDocument: Record<
   // -- BEGIN ANONYMIZED
   name: false,
   filename_disk: false,
-  filename_download: false
+  filename_download: false,
+  encrypted_data_key: false
 }
 
 const configFamilyFileToReferent = {

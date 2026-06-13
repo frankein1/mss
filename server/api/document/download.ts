@@ -75,7 +75,8 @@ async function getDocumentMetadata(key: string, user: UserContext) {
       name: true,
       size: true,
       migrated: true,
-      filenameDisk: true
+      filenameDisk: true,
+      encryptedDataKey: true
     }
   })
 }
@@ -133,7 +134,8 @@ async function downloadAndDecryptFromS3(
       documentKey: key,
       contentType: document.mimeType,
       contentLength: document.size
-    }
+    },
+    encryptedDataKey: document.encryptedDataKey
   })
 
   if (!res.success) {

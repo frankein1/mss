@@ -1,8 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
-  DeleteObjectsCommand,
-  ListObjectsV2Command
+  DeleteObjectsCommand
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { getS3Client } from './config'
@@ -27,50 +26,37 @@ export async function deleteFile(
   return key
 }
 
-/** Delete all S3 objects under a given prefix (simulates folder deletion).
- *  Handles pagination for prefixes with >1000 objects.
- */
-export async function deleteAllFilesWithPrefix(
-  config: Pick<AppConfig, 'document' | 's3' | 'public'>,
-  prefix: string
-) {
-  const client = getS3Client(config)
-  let continuationToken: string | undefined
+const S3_DELETE_BATCH_SIZE = 1000
 
-  do {
-    const listed = await client.send(
-      new ListObjectsV2Command({
+export async function deleteFilesByKeys(
+  config: Pick<AppConfig, 'document' | 's3' | 'public'>,
+  keys: string[]
+) {
+  if (keys.length === 0) {
+    return
+  }
+
+  const client = getS3Client(config)
+
+  for (let i = 0; i < keys.length; i += S3_DELETE_BATCH_SIZE) {
+    const batch = keys.slice(i, i + S3_DELETE_BATCH_SIZE)
+    await client.send(
+      new DeleteObjectsCommand({
         Bucket: config.s3.bucket,
-        Prefix: prefix,
-        ContinuationToken: continuationToken
+        Delete: {
+          Objects: batch.map(key => ({ Key: key }))
+        }
       })
     )
-
-    if (listed.Contents?.length) {
-      await client.send(
-        new DeleteObjectsCommand({
-          Bucket: config.s3.bucket,
-          Delete: {
-            Objects: listed.Contents.map(obj => ({ Key: obj.Key }))
-          }
-        })
-      )
-    }
-
-    continuationToken = listed.IsTruncated
-      ? listed.NextContinuationToken
-      : undefined
-  } while (continuationToken)
+  }
 }
 
-interface S3Metadata {
+interface S3MetadataV2 {
   'encrypted': string
   'encryption-version': string
-  'encryption-algorithm': string
-  'kms-key-id': string
-  'encrypted-data-key': string
   'iv': string
 }
+
 interface UploadWithEncryptionInput {
   config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
@@ -85,19 +71,17 @@ export async function uploadWithEncryption({
 }: UploadWithEncryptionInput) {
   const client = getS3Client(config)
 
-  const { encryptedContent, encryptedDataKey, ivBase64, kmsKeyId } =
-    await encrypt(config, plainData, dataForEncryptionContext)
+  const { encryptedContent, encryptedDataKey, ivBase64 } = await encrypt(
+    config,
+    plainData,
+    dataForEncryptionContext
+  )
 
-  // Encrypted DEK and iv are stored in S3 metadata
-  // The other metadata variables are used to regenerate the Associated Authenticated Data
   const s3Metadata = {
     'encrypted': 'true',
     'encryption-version': config.document.encryptionVersion,
-    'encryption-algorithm': config.document.encryptionAlgorithm,
-    'kms-key-id': kmsKeyId,
-    'encrypted-data-key': encryptedDataKey,
     'iv': ivBase64
-  } satisfies S3Metadata
+  } satisfies S3MetadataV2
 
   const upload = new Upload({
     client,
@@ -105,25 +89,27 @@ export async function uploadWithEncryption({
       Bucket: config.s3.bucket,
       Body: Buffer.from(encryptedContent),
       Key: bucketKey,
-      ContentType: 'application/octet-stream', // default content-type
+      ContentType: 'application/octet-stream',
       Metadata: s3Metadata
     }
   })
 
   const res = await upload.done()
 
-  return { key: res.Key, metadata: s3Metadata }
+  return { key: res.Key, encryptedDataKey, metadata: s3Metadata }
 }
 
 interface DownloadWithEncryptionInput {
   config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
   dataForEncryptionContext: DataForEncryptionContext
+  encryptedDataKey?: string | null
 }
 export async function downloadWithEncryption({
   config,
   bucketKey,
-  dataForEncryptionContext
+  dataForEncryptionContext,
+  encryptedDataKey: dbEncryptedDataKey
 }: DownloadWithEncryptionInput) {
   const client = getS3Client(config)
 
@@ -142,9 +128,9 @@ export async function downloadWithEncryption({
     return { success: false, reason: 'missing file metadata' } as const
   }
 
-  const encryptedDataKey = download.Metadata['encrypted-data-key']
-  if (!encryptedDataKey) {
-    return { success: false, reason: 'missing DEK' } as const
+  const encryptionVersion = download.Metadata['encryption-version']
+  if (!encryptionVersion) {
+    return { success: false, reason: 'missing encryption version' } as const
   }
 
   const iv = download.Metadata['iv']
@@ -152,12 +138,13 @@ export async function downloadWithEncryption({
     return { success: false, reason: 'missing iv' } as const
   }
 
-  if (
-    !download.Metadata['encryption-version'] ||
-    !download.Metadata['encryption-algorithm'] ||
-    !download.Metadata['kms-key-id']
-  ) {
-    return { success: false, reason: 'missing metadata content' } as const
+  const encryptedDataKey = resolveEncryptedDataKey(
+    encryptionVersion,
+    dbEncryptedDataKey,
+    download.Metadata
+  )
+  if (!encryptedDataKey) {
+    return { success: false, reason: 'missing DEK' } as const
   }
 
   const encryptedContent = await download.Body.transformToByteArray()
@@ -168,7 +155,8 @@ export async function downloadWithEncryption({
     encryptedDataKey,
     iv,
     {
-      encryptionVersion: download.Metadata['encryption-version'],
+      encryptionVersion,
+      // TODO: remove v1 fields after local dev migration
       encryptionAlgorithm: download.Metadata['encryption-algorithm'],
       kmsKeyId: download.Metadata['kms-key-id']
     },
@@ -176,4 +164,17 @@ export async function downloadWithEncryption({
   )
 
   return { success: true, fileContent } as const
+}
+
+function resolveEncryptedDataKey(
+  encryptionVersion: string,
+  dbEncryptedDataKey: string | null | undefined,
+  s3Metadata: Record<string, string>
+): string | undefined {
+  if (encryptionVersion === '2') {
+    return dbEncryptedDataKey ?? undefined
+  }
+
+  // TODO: remove v1 fallback after local dev migration
+  return s3Metadata['encrypted-data-key']
 }

@@ -17,7 +17,7 @@ import {
   UserRepo
 } from '~/server/database'
 import { customAlphabet } from 'nanoid'
-import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
+import { deleteStructureS3Files } from '~/server/services/document/s3-cleanup.service'
 import { createEmail } from '~/server/query/email'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { canBeDisabled } from '~/utils/structure'
@@ -283,7 +283,7 @@ export const disableStructure = async ({
   ])
 
   if (config.document.useS3Storage) {
-    deleteAllFilesWithPrefix(config, `${id}/`).catch(e =>
+    deleteStructureS3Files(config, id).catch(e =>
       console.error(
         `disable-structure: failure to delete from S3 for structure ${id}`,
         e

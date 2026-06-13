@@ -5,9 +5,8 @@ import type { IdInput } from '~/server/schema'
 import { idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryService, DocumentService } from '~/server/services'
 import { prismaClient } from '~/server/prisma'
-import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
@@ -51,9 +50,9 @@ const handler = async ({
 
   const config = useRuntimeConfig()
   if (config.document.useS3Storage) {
-    deleteAllFilesWithPrefix(config, `${ctx.structure.id}/${id}/`).catch(e =>
+    DocumentService.deleteBeneficiaryS3Files(config, id).catch(e =>
       console.error(
-        `delete-beneficiary: failure to delete from S3 for beneficiary ${id} and structure id ${ctx.structure.id}`,
+        `delete-beneficiary: failure to delete from S3 for beneficiary ${id}`,
         e
       )
     )
