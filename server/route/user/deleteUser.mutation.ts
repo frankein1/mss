@@ -5,7 +5,12 @@ import type { DeleteUserInput } from '~/server/schema'
 import { deleteUserShema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { StructureRepo, UserRepo } from '~/server/database'
+import {
+  StructureRepo,
+  UserRepo,
+  WorkshopNameRepo,
+  WorkshopRepo
+} from '~/server/database'
 import { TRPCError } from '@trpc/server'
 
 const handler = async ({
@@ -29,38 +34,57 @@ const throwIfUserIsNotAuthorized = async (
   ctx: ProtectedAppContext,
   id: string
 ) => {
-  // user is referent
-  const user = await UserRepo.findUnique(ctx.user, {
-    select: { id: true, referentFor: true },
-    where: {
-      id
-    }
-  })
-  if (user && user.referentFor && user?.referentFor.length > 0) {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'User his referent'
-    })
-  }
-
   if (ctx.user.id === id) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Userannot delete his own account'
+      message: 'Vous ne pouvez pas supprimer votre propre compte'
     })
   }
 
-  // user is the last one
-  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
-    select: { id: true, users: { select: { id: true, role: true } } },
-    where: {
-      id: ctx.structure.id
-    }
-  })
+  const [user, structure, workshopCount, workshopNameCount] = await Promise.all(
+    [
+      UserRepo.findUnique(ctx.user, {
+        select: {
+          id: true,
+          _count: {
+            select: {
+              referentFor: true,
+              createdDocuments: true,
+              createdSocialSupports: true,
+              createdComments: true
+            }
+          }
+        },
+        where: { id }
+      }),
+      StructureRepo.findUniqueOrThrow(ctx.user, {
+        select: { id: true, users: { select: { id: true, role: true } } },
+        where: { id: ctx.structure.id }
+      }),
+      WorkshopRepo.count(ctx.user, { where: { createdById: id } }),
+      WorkshopNameRepo.count(ctx.user, { where: { createdById: id } })
+    ]
+  )
+
+  if (
+    (user?._count.referentFor ?? 0) > 0 ||
+    (user?._count.createdDocuments ?? 0) > 0 ||
+    (user?._count.createdSocialSupports ?? 0) > 0 ||
+    (user?._count.createdComments ?? 0) > 0 ||
+    workshopCount > 0 ||
+    workshopNameCount > 0
+  ) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message:
+        'Cet utilisateur à des données liées et ne peut pas être supprimé'
+    })
+  }
+
   if (structure.users.length === 1) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Must be at least one user in structure'
+      message: 'La structure doit avoir au moins un utilisateur'
     })
   }
 
@@ -70,7 +94,7 @@ const throwIfUserIsNotAuthorized = async (
   if (structureManagers.length === 1 && structureManagers[0]?.id === id) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Cannot delete last structure manager'
+      message: 'Impossible de supprimer le dernier responsable de structure'
     })
   }
 }
