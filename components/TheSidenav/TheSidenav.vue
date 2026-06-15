@@ -224,7 +224,7 @@
         icon: 'fr-icon-user-line'
       })
       items.push({
-        to: routes.file.AppHistory.path(),
+        to: routes.file.AppHistoryFollowups.path(),
         label: 'Accompagnements',
         icon: 'fr-icon-folder-2-line'
       })
@@ -235,7 +235,7 @@
       })
       if (application.value.module.stats) {
         items.push({
-          to: routes.stats.AppStats.path(),
+          to: routes.stats.AppStatsBeneficiaries.path(),
           label: 'Statistiques',
           icon: 'fr-icon-line-chart-line'
         })
