@@ -10,6 +10,7 @@ export type AppConfig = {
     region: string
     bucket: string
     endpoint: string
+    forcePathStyle: boolean
   }
   kms: {
     accessKeyId: string
