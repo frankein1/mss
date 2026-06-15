@@ -31,6 +31,8 @@ import {
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
+import type { Column } from 'exceljs'
+import type { RowType } from '~/types/export'
 
 const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels)[] =
   [
@@ -138,7 +140,19 @@ export const exportWorkbook = async ({
   const { Workbook: WorkbookConstructor } = ExcelPkg
   const workbook = new WorkbookConstructor()
   const worksheet = workbook.addWorksheet('Bénéficiaires')
-  worksheet.columns = getColumns(ctx.user.role)
+
+  const fullColumns = getColumns(ctx.user.role).filter(column => {
+    return (formatedBeneficiaries as RowType[]).some(
+      row =>
+        column.key &&
+        !Array.isArray(row) &&
+        row[column.key] !== undefined &&
+        row[column.key] !== null &&
+        row[column.key] !== ''
+    )
+  }) as Partial<Column>[]
+  const includedKeys = new Set(fullColumns.map(c => c.key))
+  worksheet.columns = fullColumns
   worksheet.getRow(1).font = { bold: true }
   worksheet.views = [{ state: 'frozen', ySplit: 1 }]
   worksheet.autoFilter = {
@@ -149,10 +163,15 @@ export const exportWorkbook = async ({
   formatedBeneficiaries.forEach((beneficiary, index) => {
     const row = worksheet.getRow(index + 2) // header row is 1!
     row.values = beneficiary
-    // format numbers
-    row.getCell('minorChildren').numFmt = '0'
-    row.getCell('majorChildren').numFmt = '0'
-    row.getCell('zipcode').numFmt = '00000'
+    if (includedKeys.has('minorChildren')) {
+      row.getCell('minorChildren').numFmt = '0'
+    }
+    if (includedKeys.has('majorChildren')) {
+      row.getCell('majorChildren').numFmt = '0'
+    }
+    if (includedKeys.has('zipcode')) {
+      row.getCell('zipcode').numFmt = '00000'
+    }
   })
 
   return workbook
