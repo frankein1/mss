@@ -224,7 +224,7 @@
         icon: 'fr-icon-user-line'
       })
       items.push({
-        to: routes.file.AppHistory.path(),
+        to: routes.file.AppHistoryFollowups.path(),
         label: 'Accompagnements',
         icon: 'fr-icon-folder-2-line'
       })
