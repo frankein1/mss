@@ -235,7 +235,7 @@
       })
       if (application.value.module.stats) {
         items.push({
-          to: routes.stats.AppStats.path(),
+          to: routes.stats.AppStatsBeneficiaries.path(),
           label: 'Statistiques',
           icon: 'fr-icon-line-chart-line'
         })
