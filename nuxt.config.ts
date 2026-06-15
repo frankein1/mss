@@ -219,7 +219,9 @@ export default defineNuxtConfig({
       secretAccessKey: process.env.NUXT_S3_SECRET_ACCESS_KEY || '',
       region: process.env.NUXT_S3_REGION || '',
       bucket: process.env.NUXT_S3_BUCKET || '',
-      endpoint: process.env.NUXT_S3_ENDPOINT || ''
+      endpoint: process.env.NUXT_S3_ENDPOINT || '',
+      forcePathStyle:
+        (process.env.NUXT_S3_FORCE_PATH_STYLE || 'false') === 'true'
     },
     kms: {
       accessKeyId: process.env.NUXT_KMS_ACCESS_KEY_ID || '',

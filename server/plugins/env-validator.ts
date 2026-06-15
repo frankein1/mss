@@ -23,7 +23,7 @@ export default defineNitroPlugin(() => {
     }
 
     const missingKmsKeys = Object.keys(config.kms).filter(
-      k => !config.kms[k as keyof RuntimeConfig['kms']]
+      k => k !== 'projectId' && !config.kms[k as keyof RuntimeConfig['kms']]
     )
     if (missingKmsKeys.length > 0) {
       errors.push(`missing kms configuration: ${missingKmsKeys.join(', ')}`)
