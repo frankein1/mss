@@ -396,7 +396,7 @@
 
   const trpcClient = useTrpcClient()
   const { data: supportProgramsData } =
-    await trpcClient.beneficiary.getSupportProgramsForBeneficiary.useQuery(
+    await trpcClient.supportProgram.getForBeneficiary.useQuery(
       toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
     )
   const supportProgramOptions = computed(() =>

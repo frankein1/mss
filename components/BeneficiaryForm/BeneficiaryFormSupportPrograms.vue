@@ -38,7 +38,7 @@
   const modal = useModal()
 
   const { data: supportProgramNames } =
-    await trpcClient.beneficiary.getSupportProgramNameList.useQuery()
+    await trpcClient.supportProgram.getNameList.useQuery()
 
   const supportProgramNameOptions: Ref<Options> = computed(
     () =>
@@ -85,10 +85,9 @@
       return
     }
 
-    const isLinked =
-      await trpcClient.beneficiary.checkSupportProgramHasFollowup.query({
-        supportProgramId
-      })
+    const isLinked = await trpcClient.supportProgram.checkHasFollowup.query({
+      supportProgramId
+    })
 
     if (!isLinked) {
       remove(idx)

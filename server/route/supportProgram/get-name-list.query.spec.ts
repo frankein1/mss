@@ -94,8 +94,7 @@ describe('Comportement', () => {
   test('Retourne uniquement les noms de dispositifs liés à au moins un bénéficiaire', async ({
     trpc
   }) => {
-    const result =
-      await trpc.structureManager.beneficiary.getSupportProgramNameList()
+    const result = await trpc.structureManager.supportProgram.getNameList()
 
     const ids = result.map(d => d.id)
     expect(ids).toContain(supportProgramNameWithBeneficiaryId)
@@ -106,7 +105,7 @@ describe('Comportement', () => {
     trpc
   }) => {
     const result =
-      await trpc.structureManagerMinistere.beneficiary.getSupportProgramNameList()
+      await trpc.structureManagerMinistere.supportProgram.getNameList()
 
     const ids = result.map(d => d.id)
     expect(ids).not.toContain(supportProgramNameWithBeneficiaryId)

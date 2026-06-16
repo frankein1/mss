@@ -22,8 +22,5 @@ export const fileRouter = router({
     .mutation(routes.addReferentToFamilyFileMutation.execute),
   deleteReferent: protectedProcedure
     .input(routes.deleteReferentFromFamilyFileMutation.inputValidation)
-    .mutation(routes.deleteReferentFromFamilyFileMutation.execute),
-  getSupportProgramNamesForFamilyFile: protectedProcedure
-    .input(routes.getSupportProgramNamesForFamilyFileQuery.inputValidation)
-    .query(routes.getSupportProgramNamesForFamilyFileQuery.execute)
+    .mutation(routes.deleteReferentFromFamilyFileMutation.execute)
 })

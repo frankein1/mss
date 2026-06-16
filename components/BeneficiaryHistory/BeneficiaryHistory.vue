@@ -128,7 +128,7 @@
   const socialSupportsFilters = ref<SocialSupportFilterInput>({})
 
   const { data: supportProgramNames } =
-    await trpcClient.file.getSupportProgramNamesForFamilyFile.useQuery(
+    await trpcClient.supportProgram.getNamesForFamilyFile.useQuery(
       computed(() => ({ familyFileId }))
     )
 

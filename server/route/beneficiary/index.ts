@@ -7,10 +7,6 @@ import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
 import { updateEntourageMutation } from './update-entourage.mutation'
 import { updateExternalOrganisationsMutation } from './update-external-organisations.mutation'
-import { updateSupportProgramsMutation } from './update-support-programs.mutation'
-import { getSupportProgramNameListQuery } from './get-support-program-name-list.query'
-import { getSupportProgramsForBeneficiaryQuery } from './get-support-programs-for-beneficiary.query'
-import { checkSupportProgramHasFollowupQuery } from './check-support-program-has-followup.query'
 import { updateGeneralInformationMutation } from './update-general-information.mutation'
 import { updateHealthMutation } from './update-health.mutation'
 import { updateOccupationIncomeMutation } from './update-occupation-income.mutation'
@@ -37,10 +33,6 @@ export const beneficiaryRoutes = {
   getBeneficiaryArchivePermissionsQuery,
   updateEntourageMutation,
   updateExternalOrganisationsMutation,
-  updateSupportProgramsMutation,
-  getSupportProgramNameListQuery,
-  getSupportProgramsForBeneficiaryQuery,
-  checkSupportProgramHasFollowupQuery,
   updateGeneralInformationMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,
