@@ -16,5 +16,14 @@ export const supportProgramRouter = router({
     .query(routes.checkSupportProgramHasFollowupQuery.execute),
   getNamesForFamilyFile: protectedProcedure
     .input(routes.getSupportProgramNamesForFamilyFileQuery.inputValidation)
-    .query(routes.getSupportProgramNamesForFamilyFileQuery.execute)
+    .query(routes.getSupportProgramNamesForFamilyFileQuery.execute),
+  upsertName: protectedProcedure
+    .input(routes.upsertNameMutation.inputValidation)
+    .mutation(routes.upsertNameMutation.execute),
+  deleteName: protectedProcedure
+    .input(routes.deleteNameMutation.inputValidation)
+    .mutation(routes.deleteNameMutation.execute),
+  countNameUsage: protectedProcedure
+    .input(routes.countNameUsageQuery.inputValidation)
+    .query(routes.countNameUsageQuery.execute)
 })
