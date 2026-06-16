@@ -30,3 +30,4 @@ export {
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees
 } from './workshops'
+export { fixturesSupportProgramNames } from './supportProgramNames'
