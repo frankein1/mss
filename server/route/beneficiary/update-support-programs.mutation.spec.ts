@@ -16,7 +16,7 @@ const structureId = fixtureStructures[FixtureStructure.Test].id
 const referentId = fixturesUsers[FixtureUserRole.Referent].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
 
-const DEVICE_NAMES_USED = [
+const SUPPORT_PROGRAM_NAMES_USED = [
   'UDT-Portage de repas',
   'UDT-Ancien dispositif',
   'UDT-Nouveau dispositif',
@@ -39,7 +39,7 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: 'TEST-DEVICE-001',
+      fileNumber: 'TEST-SUPPORT-PROGRAM-001',
       status: 'Active'
     }
   })
@@ -47,9 +47,11 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  await prismaClient.beneficiaryDevice.deleteMany({ where: { beneficiaryId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
-    where: { structureId, name: { in: DEVICE_NAMES_USED } }
+  await prismaClient.supportProgram.deleteMany({
+    where: { beneficiaryId }
+  })
+  await prismaClient.supportProgramName.deleteMany({
+    where: { structureId, name: { in: SUPPORT_PROGRAM_NAMES_USED } }
   })
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
@@ -60,9 +62,9 @@ describe('Authorizations', () => {
     trpc
   }) => {
     await expect(
-      trpc.receptionAgent.beneficiary.updateDevices({
+      trpc.receptionAgent.beneficiary.updateSupportPrograms({
         id: beneficiaryId,
-        devices: []
+        supportPrograms: []
       })
     ).rejects.toMatchObject({ code: 'FORBIDDEN' })
   })
@@ -71,9 +73,9 @@ describe('Authorizations', () => {
     trpc
   }) => {
     await expect(
-      trpc.structureManagerMinistere.beneficiary.updateDevices({
+      trpc.structureManagerMinistere.beneficiary.updateSupportPrograms({
         id: beneficiaryId,
-        devices: []
+        supportPrograms: []
       })
     ).rejects.toThrowError(/no record/i)
   })
@@ -81,65 +83,74 @@ describe('Authorizations', () => {
 
 describe('Comportement', () => {
   test('Un StructureManager peut ajouter des dispositifs', async ({ trpc }) => {
-    const deviceId = v4()
-    const result = await trpc.structureManager.beneficiary.updateDevices({
-      id: beneficiaryId,
-      devices: [{ id: deviceId, name: 'UDT-Portage de repas' }]
-    })
+    const supportProgramId = v4()
+    const result =
+      await trpc.structureManager.beneficiary.updateSupportPrograms({
+        id: beneficiaryId,
+        supportPrograms: [
+          { id: supportProgramId, name: 'UDT-Portage de repas' }
+        ]
+      })
 
     expect(result.id).toBe(beneficiaryId)
 
-    const devices = await prismaClient.beneficiaryDevice.findMany({
+    const supportPrograms = await prismaClient.supportProgram.findMany({
       where: { beneficiaryId },
-      include: { deviceName: true }
+      include: { supportProgramName: true }
     })
-    expect(devices).toHaveLength(1)
-    expect(devices[0].deviceName.name).toBe('UDT-Portage de repas')
+    expect(supportPrograms).toHaveLength(1)
+    expect(supportPrograms[0]!.supportProgramName.name).toBe(
+      'UDT-Portage de repas'
+    )
   })
 
   test('La mise à jour remplace tous les dispositifs existants', async ({
     trpc
   }) => {
-    await trpc.structureManager.beneficiary.updateDevices({
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
       id: beneficiaryId,
-      devices: [{ id: v4(), name: 'UDT-Ancien dispositif' }]
+      supportPrograms: [{ id: v4(), name: 'UDT-Ancien dispositif' }]
     })
 
-    await trpc.structureManager.beneficiary.updateDevices({
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
       id: beneficiaryId,
-      devices: [{ id: v4(), name: 'UDT-Nouveau dispositif' }]
+      supportPrograms: [{ id: v4(), name: 'UDT-Nouveau dispositif' }]
     })
 
-    const devices = await prismaClient.beneficiaryDevice.findMany({
+    const supportPrograms = await prismaClient.supportProgram.findMany({
       where: { beneficiaryId },
-      include: { deviceName: true }
+      include: { supportProgramName: true }
     })
-    expect(devices).toHaveLength(1)
-    expect(devices[0].deviceName.name).toBe('UDT-Nouveau dispositif')
+    expect(supportPrograms).toHaveLength(1)
+    expect(supportPrograms[0]!.supportProgramName.name).toBe(
+      'UDT-Nouveau dispositif'
+    )
   })
 
   test('Le nom de dispositif est créé sil nexiste pas encore', async ({
     trpc
   }) => {
-    await trpc.structureManager.beneficiary.updateDevices({
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
       id: beneficiaryId,
-      devices: [{ id: v4(), name: 'UDT-Nouveau nom' }]
+      supportPrograms: [{ id: v4(), name: 'UDT-Nouveau nom' }]
     })
 
-    const deviceName = await prismaClient.beneficiaryDeviceName.findUnique({
-      where: {
-        structureId_name: { structureId, name: 'UDT-Nouveau nom' }
+    const supportProgramName = await prismaClient.supportProgramName.findUnique(
+      {
+        where: {
+          structureId_name: { structureId, name: 'UDT-Nouveau nom' }
+        }
       }
-    })
-    expect(deviceName).not.toBeNull()
+    )
+    expect(supportProgramName).not.toBeNull()
   })
 
   test('Un Referent peut modifier les dispositifs dun bénéficiaire dont il est référent', async ({
     trpc
   }) => {
-    const result = await trpc.referent.beneficiary.updateDevices({
+    const result = await trpc.referent.beneficiary.updateSupportPrograms({
       id: beneficiaryId,
-      devices: [{ id: v4(), name: 'UDT-Dispositif référent' }]
+      supportPrograms: [{ id: v4(), name: 'UDT-Dispositif référent' }]
     })
     expect(result.id).toBe(beneficiaryId)
   })
@@ -147,32 +158,41 @@ describe('Comportement', () => {
   test('Les champs optionnels sont correctement enregistrés', async ({
     trpc
   }) => {
-    const deviceId = v4()
+    const supportProgramId = v4()
     const startDate = new Date('2024-01-01')
     const endDate = new Date('2024-06-30')
 
-    await trpc.structureManager.beneficiary.updateDevices({
+    const partnerOrganisation = await prismaClient.partnerOrganization.create({
+      data: { structureId, name: 'CCAS-UDT' },
+      select: { id: true }
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
       id: beneficiaryId,
-      devices: [
+      supportPrograms: [
         {
-          id: deviceId,
+          id: supportProgramId,
           name: 'UDT-Dispositif complet',
           startDate,
           endDate,
           exitReason: 'Fin de prise en charge',
-          partnerOrganisationName: 'CCAS',
+          partnerOrganisationId: partnerOrganisation.id,
           precisions: 'Intervenant : M. Dupont'
         }
       ]
     })
 
-    const device = await prismaClient.beneficiaryDevice.findUnique({
-      where: { id: deviceId }
+    const supportProgram = await prismaClient.supportProgram.findUnique({
+      where: { id: supportProgramId }
     })
-    expect(device?.startDate).toEqual(startDate)
-    expect(device?.endDate).toEqual(endDate)
-    expect(device?.exitReason).toBe('Fin de prise en charge')
-    expect(device?.partnerOrganisationName).toBe('CCAS')
-    expect(device?.precisions).toBe('Intervenant : M. Dupont')
+    expect(supportProgram?.startDate).toEqual(startDate)
+    expect(supportProgram?.endDate).toEqual(endDate)
+    expect(supportProgram?.exitReason).toBe('Fin de prise en charge')
+    expect(supportProgram?.partnerOrganisationId).toBe(partnerOrganisation.id)
+    expect(supportProgram?.precisions).toBe('Intervenant : M. Dupont')
+
+    await prismaClient.partnerOrganization.deleteMany({
+      where: { id: partnerOrganisation.id }
+    })
   })
 })

@@ -94,12 +94,12 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <VeeSelect
-          name="beneficiaryDeviceId"
-          :label="helpRequestFieldLabels.beneficiaryDeviceId"
-          :options="withEmptyValue(deviceOptions)"
-          :disabled="deviceOptionsDisabled"
+          name="supportProgramId"
+          :label="helpRequestFieldLabels.supportProgramId"
+          :options="withEmptyValue(supportProgramOptions)"
+          :disabled="supportProgramOptionsDisabled"
           :description="
-            deviceOptionsDisabled
+            supportProgramOptionsDisabled
               ? 'Aucun dispositif renseigné pour ce bénéficiaire.'
               : undefined
           "
@@ -129,12 +129,16 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <VeeSelect
-          name="beneficiaryDeviceId"
-          :label="helpRequestFieldLabels.beneficiaryDeviceId"
-          :options="deviceOptions.length ? withEmptyValue(deviceOptions) : []"
-          :disabled="deviceOptionsDisabled"
+          name="supportProgramId"
+          :label="helpRequestFieldLabels.supportProgramId"
+          :options="
+            supportProgramOptions.length
+              ? withEmptyValue(supportProgramOptions)
+              : []
+          "
+          :disabled="supportProgramOptionsDisabled"
           :description="
-            deviceOptionsDisabled
+            supportProgramOptionsDisabled
               ? 'Aucun dispositif renseigné pour ce bénéficiaire'
               : undefined
           "
@@ -260,11 +264,9 @@
       name: string
       message: string
     }
-    deviceOptions: { value: string; label: string }[]
-    deviceOptionsDisabled: boolean
+    supportProgramOptions: { value: string; label: string }[]
+    supportProgramOptionsDisabled: boolean
   }>()
-
-  console.log(props.deviceOptions)
 
   const { value: isFirst } =
     useField<CreateHousingHelpRequestInput['isFirst']>('isFirst')

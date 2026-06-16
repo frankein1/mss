@@ -14,8 +14,12 @@ export async function getHelpRequestAmountsAllocatedQuery(
   input: StatFilterInput
 ) {
   const socialSupport = { where: prepareSocialSupportStatFilters(input) }
-  const deviceFilter = input.deviceNameIds?.length
-    ? { beneficiaryDevice: { deviceNameId: { in: input.deviceNameIds } } }
+  const supportProgramFilter = input.supportProgramNameIds?.length
+    ? {
+        supportProgram: {
+          supportProgramNameId: { in: input.supportProgramNameIds }
+        }
+      }
     : {}
 
   const [
@@ -30,7 +34,7 @@ export async function getHelpRequestAmountsAllocatedQuery(
         status: SocialSupportStatus.Accepted,
         fileInstruction: {
           type: FileInstructionType.Financial,
-          helpRequest: { ...deviceFilter }
+          helpRequest: { ...supportProgramFilter }
         }
       }
     }),
@@ -38,7 +42,7 @@ export async function getHelpRequestAmountsAllocatedQuery(
       where: {
         financialSupport: true,
         allocatedAmount: { gt: 0 },
-        ...deviceFilter,
+        ...supportProgramFilter,
         fileInstruction: {
           externalStructure: false,
           socialSupport: {
@@ -53,7 +57,7 @@ export async function getHelpRequestAmountsAllocatedQuery(
       where: {
         financialSupport: true,
         allocatedAmount: { gt: 0 },
-        ...deviceFilter,
+        ...supportProgramFilter,
         fileInstruction: {
           socialSupport: {
             status: SocialSupportStatus.Accepted,

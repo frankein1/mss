@@ -83,7 +83,7 @@
       socialSupportRedirections: toRedirectionFormValues(
         followup.value.socialSupportRedirections
       ),
-      beneficiaryDeviceId: followup.value.beneficiaryDeviceId
+      supportProgramId: followup.value.supportProgramId
     }
   })
 

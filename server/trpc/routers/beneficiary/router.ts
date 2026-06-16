@@ -50,18 +50,18 @@ export const beneficiaryRouter = router({
   updateExternalOrganisations: protectedProcedure
     .input(routes.updateExternalOrganisationsMutation.inputValidation)
     .mutation(routes.updateExternalOrganisationsMutation.execute),
-  updateDevices: protectedProcedure
-    .input(routes.updateDevicesMutation.inputValidation)
-    .mutation(routes.updateDevicesMutation.execute),
-  getDeviceNameList: protectedProcedure
-    .input(routes.getDeviceNameListQuery.inputValidation)
-    .query(routes.getDeviceNameListQuery.execute),
-  getDevicesForBeneficiary: protectedProcedure
-    .input(routes.getDevicesForBeneficiaryQuery.inputValidation)
-    .query(routes.getDevicesForBeneficiaryQuery.execute),
-  checkDeviceHasFollowup: protectedProcedure
-    .input(routes.checkDeviceHasFollowupQuery.inputValidation)
-    .query(routes.checkDeviceHasFollowupQuery.execute),
+  updateSupportPrograms: protectedProcedure
+    .input(routes.updateSupportProgramsMutation.inputValidation)
+    .mutation(routes.updateSupportProgramsMutation.execute),
+  getSupportProgramNameList: protectedProcedure
+    .input(routes.getSupportProgramNameListQuery.inputValidation)
+    .query(routes.getSupportProgramNameListQuery.execute),
+  getSupportProgramsForBeneficiary: protectedProcedure
+    .input(routes.getSupportProgramsForBeneficiaryQuery.inputValidation)
+    .query(routes.getSupportProgramsForBeneficiaryQuery.execute),
+  checkSupportProgramHasFollowup: protectedProcedure
+    .input(routes.checkSupportProgramHasFollowupQuery.inputValidation)
+    .query(routes.checkSupportProgramHasFollowupQuery.execute),
   updateArchiveDate: protectedProcedure
     .input(routes.updateArchiveDateMutation.inputValidation)
     .mutation(routes.updateArchiveDateMutation.execute),

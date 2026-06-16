@@ -9,18 +9,22 @@ export async function getFileInstructionTypeStatsQuery(
   input: StatFilterInput
 ) {
   const filters = prepareSocialSupportStatFilters(input)
-  const deviceNameIds = input.deviceNameIds?.length ? input.deviceNameIds : null
+  const supportProgramNameIds = input.supportProgramNameIds?.length
+    ? input.supportProgramNameIds
+    : null
 
   const [housingCount, financialCount, otherCount] = await Promise.all([
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequestHousing',
-        ...(deviceNameIds
+        ...(supportProgramNameIds
           ? {
               fileInstruction: {
                 housingHelpRequest: {
-                  beneficiaryDevice: { deviceNameId: { in: deviceNameIds } }
+                  supportProgram: {
+                    supportProgramNameId: { in: supportProgramNameIds }
+                  }
                 }
               }
             }
@@ -34,9 +38,11 @@ export async function getFileInstructionTypeStatsQuery(
         fileInstruction: {
           helpRequest: {
             financialSupport: true,
-            ...(deviceNameIds
+            ...(supportProgramNameIds
               ? {
-                  beneficiaryDevice: { deviceNameId: { in: deviceNameIds } }
+                  supportProgram: {
+                    supportProgramNameId: { in: supportProgramNameIds }
+                  }
                 }
               : {})
           }
@@ -50,9 +56,11 @@ export async function getFileInstructionTypeStatsQuery(
         fileInstruction: {
           helpRequest: {
             financialSupport: false,
-            ...(deviceNameIds
+            ...(supportProgramNameIds
               ? {
-                  beneficiaryDevice: { deviceNameId: { in: deviceNameIds } }
+                  supportProgram: {
+                    supportProgramNameId: { in: supportProgramNameIds }
+                  }
                 }
               : {})
           }

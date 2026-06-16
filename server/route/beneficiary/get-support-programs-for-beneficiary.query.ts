@@ -22,12 +22,12 @@ const handler = async ({
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.beneficiaryId },
     select: {
-      devices: {
+      supportPrograms: {
         select: {
           id: true,
           startDate: true,
           endDate: true,
-          deviceName: {
+          supportProgramName: {
             select: { id: true, name: true }
           }
         },
@@ -35,10 +35,10 @@ const handler = async ({
       }
     }
   })
-  return beneficiary.devices
+  return beneficiary.supportPrograms
 }
 
-export const getDevicesForBeneficiaryQuery = createQuery({
+export const getSupportProgramsForBeneficiaryQuery = createQuery({
   inputValidation,
   securityCheck: async (ctx, input) => {
     // BeneficiaryRepo.findUniqueOrThrow already enforces structure scoping via constraints

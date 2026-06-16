@@ -40,7 +40,7 @@
       </div>
     </BeneficiaryFormSection>
 
-    <BeneficiaryFormDevices />
+    <BeneficiaryFormSupportPrograms />
   </section>
 </template>
 

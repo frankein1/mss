@@ -12,7 +12,7 @@ import { v4 } from 'uuid'
 import { StatPeriodFilter } from '~/types/stat'
 import type { AppRouter } from '~/server/trpc/routers'
 
-type Input = inferProcedureInput<AppRouter['stat']['getBeneficiaryDeviceStats']>
+type Input = inferProcedureInput<AppRouter['stat']['getSupportProgramStats']>
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
@@ -21,8 +21,8 @@ const referentId = fixturesUsers[FixtureUserRole.Referent].id
 let familyFileId: string
 let beneficiary1Id: string
 let beneficiary2Id: string
-let deviceNameAId: string
-let deviceNameBId: string
+let supportProgramNameAId: string
+let supportProgramNameBId: string
 
 const PERIOD_IN = new Date('2024-06-01')
 const PERIOD_OUT = new Date('2023-01-15')
@@ -61,47 +61,47 @@ beforeEach(async () => {
   beneficiary1Id = b1.id
   beneficiary2Id = b2.id
 
-  const [dnA, dnB] = await Promise.all([
-    prismaClient.beneficiaryDeviceName.create({
+  const [spnA, spnB] = await Promise.all([
+    prismaClient.supportProgramName.create({
       data: {
-        name: `DS-DeviceA-${suffix}`,
+        name: `DS-SupportProgramA-${suffix}`,
         structureId,
         createdById: socialWorkerId
       }
     }),
-    prismaClient.beneficiaryDeviceName.create({
+    prismaClient.supportProgramName.create({
       data: {
-        name: `DS-DeviceB-${suffix}`,
+        name: `DS-SupportProgramB-${suffix}`,
         structureId,
         createdById: socialWorkerId
       }
     })
   ])
-  deviceNameAId = dnA.id
-  deviceNameBId = dnB.id
+  supportProgramNameAId = spnA.id
+  supportProgramNameBId = spnB.id
 
-  // beneficiary1 → deviceA with startDate in 2024, endDate in 2023
-  // beneficiary2 → deviceA with no dates
-  // beneficiary2 → deviceB with startDate in 2023
+  // beneficiary1 → supportProgramA with startDate in 2024, endDate in 2023
+  // beneficiary2 → supportProgramA with no dates
+  // beneficiary2 → supportProgramB with startDate in 2023
   await Promise.all([
-    prismaClient.beneficiaryDevice.create({
+    prismaClient.supportProgram.create({
       data: {
         beneficiary: { connect: { id: beneficiary1Id } },
-        deviceName: { connect: { id: deviceNameAId } },
+        supportProgramName: { connect: { id: supportProgramNameAId } },
         startDate: new Date('2024-06-15'),
         endDate: new Date('2023-12-01')
       }
     }),
-    prismaClient.beneficiaryDevice.create({
+    prismaClient.supportProgram.create({
       data: {
         beneficiary: { connect: { id: beneficiary2Id } },
-        deviceName: { connect: { id: deviceNameAId } }
+        supportProgramName: { connect: { id: supportProgramNameAId } }
       }
     }),
-    prismaClient.beneficiaryDevice.create({
+    prismaClient.supportProgram.create({
       data: {
         beneficiary: { connect: { id: beneficiary2Id } },
-        deviceName: { connect: { id: deviceNameBId } },
+        supportProgramName: { connect: { id: supportProgramNameBId } },
         startDate: new Date('2023-03-10')
       }
     })
@@ -109,25 +109,25 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  await prismaClient.beneficiaryDevice.deleteMany({
+  await prismaClient.supportProgram.deleteMany({
     where: { beneficiaryId: { in: [beneficiary1Id, beneficiary2Id] } }
   })
   await prismaClient.beneficiary.deleteMany({
     where: { id: { in: [beneficiary1Id, beneficiary2Id] } }
   })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
-    where: { id: { in: [deviceNameAId, deviceNameBId] } }
+  await prismaClient.supportProgramName.deleteMany({
+    where: { id: { in: [supportProgramNameAId, supportProgramNameBId] } }
   })
 })
 
-describe('Statistics - Beneficiary - Device Stats', () => {
+describe('Statistics - Beneficiary - Support Program Stats', () => {
   describe('Authorizations', () => {
     test('should not allow stats computation as a reception agent', async ({
       trpc
     }) => {
       await expect(() =>
-        trpc.receptionAgent.stat.getBeneficiaryDeviceStats({})
+        trpc.receptionAgent.stat.getSupportProgramStats({})
       ).rejects.toThrowError(/not allowed to access route/)
     })
   })
@@ -136,15 +136,19 @@ describe('Statistics - Beneficiary - Device Stats', () => {
     test('retourne le total sans filtre période', async ({ trpc }) => {
       const input: Input = {}
       const stats =
-        await trpc.structureManager.stat.getBeneficiaryDeviceStats(input)
+        await trpc.structureManager.stat.getSupportProgramStats(input)
 
-      const deviceA = stats.find(s => s.name.includes('DeviceA'))
-      const deviceB = stats.find(s => s.name.includes('DeviceB'))
+      const supportProgramA = stats.find(s =>
+        s.name.includes('SupportProgramA')
+      )
+      const supportProgramB = stats.find(s =>
+        s.name.includes('SupportProgramB')
+      )
 
-      expect(deviceA?.count).toBe(2)
-      expect(deviceA?.entryCount).toBe(0)
-      expect(deviceA?.exitCount).toBe(0)
-      expect(deviceB?.count).toBe(1)
+      expect(supportProgramA?.count).toBe(2)
+      expect(supportProgramA?.entryCount).toBe(0)
+      expect(supportProgramA?.exitCount).toBe(0)
+      expect(supportProgramB?.count).toBe(1)
     })
 
     test('le total ignore le filtre période (compte tous les bénéficiaires avec ce dispositif)', async ({
@@ -156,11 +160,13 @@ describe('Statistics - Beneficiary - Device Stats', () => {
         toDate: new Date('2024-12-31')
       }
       const stats =
-        await trpc.structureManager.stat.getBeneficiaryDeviceStats(input)
+        await trpc.structureManager.stat.getSupportProgramStats(input)
 
-      const deviceA = stats.find(s => s.name.includes('DeviceA'))
+      const supportProgramA = stats.find(s =>
+        s.name.includes('SupportProgramA')
+      )
       // total count ignores period — both beneficiaries are included
-      expect(deviceA?.count).toBe(2)
+      expect(supportProgramA?.count).toBe(2)
     })
 
     test('entryCount filtre sur startDate dans la période', async ({
@@ -172,15 +178,19 @@ describe('Statistics - Beneficiary - Device Stats', () => {
         toDate: new Date('2024-12-31')
       }
       const stats =
-        await trpc.structureManager.stat.getBeneficiaryDeviceStats(input)
+        await trpc.structureManager.stat.getSupportProgramStats(input)
 
-      const deviceA = stats.find(s => s.name.includes('DeviceA'))
-      const deviceB = stats.find(s => s.name.includes('DeviceB'))
+      const supportProgramA = stats.find(s =>
+        s.name.includes('SupportProgramA')
+      )
+      const supportProgramB = stats.find(s =>
+        s.name.includes('SupportProgramB')
+      )
 
-      // Only beneficiary1's deviceA has startDate=2024-06-15 (in period)
-      expect(deviceA?.entryCount).toBe(1)
-      // beneficiary2's deviceB has startDate=2023-03-10 (not in period)
-      expect(deviceB?.entryCount).toBe(0)
+      // Only beneficiary1's supportProgramA has startDate=2024-06-15 (in period)
+      expect(supportProgramA?.entryCount).toBe(1)
+      // beneficiary2's supportProgramB has startDate=2023-03-10 (not in period)
+      expect(supportProgramB?.entryCount).toBe(0)
     })
 
     test('exitCount filtre sur endDate dans la période', async ({ trpc }) => {
@@ -190,11 +200,13 @@ describe('Statistics - Beneficiary - Device Stats', () => {
         toDate: new Date('2023-12-31')
       }
       const stats =
-        await trpc.structureManager.stat.getBeneficiaryDeviceStats(input)
+        await trpc.structureManager.stat.getSupportProgramStats(input)
 
-      const deviceA = stats.find(s => s.name.includes('DeviceA'))
-      // beneficiary1's deviceA has endDate=2023-12-01 (in period)
-      expect(deviceA?.exitCount).toBe(1)
+      const supportProgramA = stats.find(s =>
+        s.name.includes('SupportProgramA')
+      )
+      // beneficiary1's supportProgramA has endDate=2023-12-01 (in period)
+      expect(supportProgramA?.exitCount).toBe(1)
     })
 
     test('entryCount et exitCount sont 0 sans filtre période', async ({
@@ -202,7 +214,7 @@ describe('Statistics - Beneficiary - Device Stats', () => {
     }) => {
       const input: Input = {}
       const stats =
-        await trpc.structureManager.stat.getBeneficiaryDeviceStats(input)
+        await trpc.structureManager.stat.getSupportProgramStats(input)
 
       for (const stat of stats) {
         expect(stat.entryCount).toBe(0)

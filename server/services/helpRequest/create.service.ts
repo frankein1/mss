@@ -58,7 +58,7 @@ export async function create({ input, ctx }: CreateParams) {
     financialSupport,
     isRefundable,
     date,
-    beneficiaryDeviceId
+    supportProgramId
   } = cleanCreateInput(input)
 
   const reasonIds = await resolveRedirectionReasonIds(
@@ -99,9 +99,7 @@ export async function create({ input, ctx }: CreateParams) {
         ? connect(prescribingOrganizationContactId)
         : undefined,
       isRefundable,
-      beneficiaryDevice: beneficiaryDeviceId
-        ? connect(beneficiaryDeviceId)
-        : undefined,
+      supportProgram: supportProgramId ? connect(supportProgramId) : undefined,
       subject: connect(subjectId),
       fileInstruction: {
         create: {

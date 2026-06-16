@@ -48,7 +48,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     forwardedToJustice,
     duration,
     socialSupportRedirections,
-    beneficiaryDeviceId
+    supportProgramId
   } = input
 
   const familyFile = await FamilyFileRepo.findUniqueOrThrow(user, {
@@ -132,8 +132,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
           classified,
           forwardedToJustice,
           duration,
-          beneficiaryDevice: beneficiaryDeviceId
-            ? connect(beneficiaryDeviceId)
+          supportProgram: supportProgramId
+            ? connect(supportProgramId)
             : undefined
         }
       },

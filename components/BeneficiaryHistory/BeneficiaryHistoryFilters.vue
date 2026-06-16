@@ -34,13 +34,17 @@
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const { familyFileIdentification, values, resultsLabel, deviceNameOptions } =
-    defineProps<{
-      resultsLabel: string
-      values: FamilyFileHistoryFilterInput
-      familyFileIdentification: BeneficiaryFileIdentification[]
-      deviceNameOptions: string[]
-    }>()
+  const {
+    familyFileIdentification,
+    values,
+    resultsLabel,
+    supportProgramNameOptions
+  } = defineProps<{
+    resultsLabel: string
+    values: FamilyFileHistoryFilterInput
+    familyFileIdentification: BeneficiaryFileIdentification[]
+    supportProgramNameOptions: string[]
+  }>()
 
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
@@ -146,11 +150,14 @@
       })
     }
 
-    if (deviceNameOptions.length > 0) {
+    if (supportProgramNameOptions.length > 0) {
       filters.push({
-        name: 'beneficiaryDeviceNames',
+        name: 'supportProgramNames',
         label: 'Dispositif concerné',
-        options: deviceNameOptions.map(name => ({ label: name, value: name })),
+        options: supportProgramNameOptions.map(name => ({
+          label: name,
+          value: name
+        })),
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction:
