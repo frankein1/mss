@@ -43,7 +43,7 @@
       >
     </li>
     <!-- Allows archiving before inactivity threshold -->
-    <li v-if="application.archive.beneficiary">
+    <li v-if="application.archiveBeforeDelay.beneficiary">
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-mb-0 edit-btn"
         data-fr-opened="false"

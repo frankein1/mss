@@ -22,7 +22,7 @@ export type AppContextPermissions = {
       referent: boolean
     }
   }
-  archive: {
+  archiveBeforeDelay: {
     // Allows to archive before inactivity threshold
     // The per beneficiary authorization is available in permissions.service.ts/getArchivePermissions
     beneficiary: boolean
@@ -78,7 +78,7 @@ function getAdminContextPermissions(): AppContextPermissions {
         referent: false
       }
     },
-    archive: {
+    archiveBeforeDelay: {
       beneficiary: false
     },
     module: {
@@ -139,7 +139,7 @@ function getUserContextPermissions(
         referent: manager || socialWorker || referent || instructor
       }
     },
-    archive: {
+    archiveBeforeDelay: {
       beneficiary: manager
     },
     module: {
