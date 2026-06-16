@@ -9,16 +9,7 @@ export async function getFollowupMediumStatsQuery(
   input: StatFilterInput
 ) {
   const where = {
-    where: {
-      socialSupport: prepareSocialSupportStatFilters(input),
-      ...(input.supportProgramNameIds?.length
-        ? {
-            supportProgram: {
-              supportProgramNameId: { in: input.supportProgramNameIds }
-            }
-          }
-        : {})
-    }
+    where: { socialSupport: prepareSocialSupportStatFilters(input) }
   }
   appendConstraints(user, where, FollowupConstraints.get)
 
