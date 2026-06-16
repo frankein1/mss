@@ -1,6 +1,8 @@
 # Mon Suivi Social
 
-![Coverage](https://gitlab.com//incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/badges/main/coverage.svg?job=pnpm:test)
+![Coverage](https://gitlab.com//incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/badges/show-coverage/coverage.svg?job=pnpm:test)
+
+![Coverage](https://gitlab.com//incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/badges/show-coverage/coverage.svg)
 
 [Mon Suivi Social](https://monsuivisocial.incubateur.anct.gouv.fr/) est une startup d'État portée par [beta.gouv.fr](beta.gouv.fr) et l'[Incubateur des Territoires](https://incubateur.anct.gouv.fr/).
 
