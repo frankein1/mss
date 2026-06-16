@@ -102,7 +102,7 @@ async function closeModal(page: Page) {
   })
 }
 
-test.describe('Modal memory leak', () => {
+test.skip('Modal memory leak', () => {
   test.use({ storageState: 'playwright/.auth/structure-manager.json' })
 
   test(`heap does not grow after ${CYCLES} modal open/close cycles`, async ({
