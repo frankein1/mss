@@ -192,11 +192,13 @@ export function prepareHelpRequestStatFilters(
       break
   }
 
-  if (filters.deviceNameIds?.length) {
-    const deviceFilter = { deviceNameId: { in: filters.deviceNameIds } }
+  if (filters.supportProgramNameIds?.length) {
+    const supportProgramFilter = {
+      supportProgramNameId: { in: filters.supportProgramNameIds }
+    }
     if (filters.helpRequestSubject === FileInstructionType.Housing) {
       socialSupport.fileInstruction!.housingHelpRequest = {
-        beneficiaryDevice: deviceFilter
+        supportProgram: supportProgramFilter
       }
     } else if (
       filters.helpRequestSubject === FileInstructionType.Financial ||
@@ -205,15 +207,19 @@ export function prepareHelpRequestStatFilters(
       socialSupport.fileInstruction!.helpRequest = {
         financialSupport:
           filters.helpRequestSubject === FileInstructionType.Financial,
-        beneficiaryDevice: deviceFilter
+        supportProgram: supportProgramFilter
       }
     } else {
       const base = externalStructure ? { externalStructure: true as const } : {}
       socialSupport.fileInstruction = {
         ...base,
         OR: [
-          { helpRequest: { beneficiaryDevice: deviceFilter } },
-          { housingHelpRequest: { beneficiaryDevice: deviceFilter } }
+          { helpRequest: { supportProgram: supportProgramFilter } },
+          {
+            housingHelpRequest: {
+              supportProgram: supportProgramFilter
+            }
+          }
         ]
       }
     }
@@ -229,9 +235,11 @@ export function prepareFollowupStatFilters(
     ...prepareSocialSupportStatFilters(filters),
     socialSupportType: SocialSupportType.Followup
   }
-  if (filters.deviceNameIds?.length) {
+  if (filters.supportProgramNameIds?.length) {
     result.followup = {
-      beneficiaryDevice: { deviceNameId: { in: filters.deviceNameIds } }
+      supportProgram: {
+        supportProgramNameId: { in: filters.supportProgramNameIds }
+      }
     }
   }
   return result
@@ -331,9 +339,9 @@ export function prepareBeneficiaryStatFilters(
       filters.ministereDepartementServiceAc
   }
 
-  if (filters.deviceNameIds?.length) {
-    formattedFilters.devices = {
-      some: { deviceNameId: { in: filters.deviceNameIds } }
+  if (filters.supportProgramNameIds?.length) {
+    formattedFilters.supportPrograms = {
+      some: { supportProgramNameId: { in: filters.supportProgramNameIds } }
     }
   }
 

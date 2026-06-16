@@ -11,8 +11,8 @@ import { v4 } from 'uuid'
 
 let familyFileId: string
 let beneficiaryId: string
-let deviceId: string
-let deviceNameId: string
+let supportProgramId: string
+let supportProgramNameId: string
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const referentId = fixturesUsers[FixtureUserRole.Referent].id
@@ -32,36 +32,36 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: 'TEST-CHK-DEVICE-001',
+      fileNumber: 'TEST-CHK-SUPPORT-PROGRAM-001',
       status: 'Active'
     }
   })
   beneficiaryId = beneficiary.id
 
-  const deviceName = await prismaClient.beneficiaryDeviceName.create({
+  const supportProgramName = await prismaClient.supportProgramName.create({
     data: {
-      name: `CDHF-Dispositif-${v4()}`,
+      name: `CSPHF-Dispositif-${v4()}`,
       structureId,
       createdById: socialWorkerId
     }
   })
-  deviceNameId = deviceName.id
+  supportProgramNameId = supportProgramName.id
 
-  const device = await prismaClient.beneficiaryDevice.create({
+  const supportProgram = await prismaClient.supportProgram.create({
     data: {
       id: v4(),
       beneficiary: { connect: { id: beneficiaryId } },
-      deviceName: { connect: { id: deviceNameId } }
+      supportProgramName: { connect: { id: supportProgramNameId } }
     }
   })
-  deviceId = device.id
+  supportProgramId = supportProgram.id
 })
 
 afterEach(async () => {
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
-    where: { id: deviceNameId }
+  await prismaClient.supportProgramName.deleteMany({
+    where: { id: supportProgramNameId }
   })
 })
 
@@ -70,8 +70,8 @@ describe('Comportement', () => {
     trpc
   }) => {
     const result =
-      await trpc.structureManager.beneficiary.checkDeviceHasFollowup({
-        deviceId
+      await trpc.structureManager.beneficiary.checkSupportProgramHasFollowup({
+        supportProgramId
       })
     expect(result).toBe(false)
   })
@@ -92,15 +92,15 @@ describe('Comportement', () => {
         followup: {
           create: {
             medium: 'PlannedInPerson',
-            beneficiaryDevice: { connect: { id: deviceId } }
+            supportProgram: { connect: { id: supportProgramId } }
           }
         }
       }
     })
 
     const result =
-      await trpc.structureManager.beneficiary.checkDeviceHasFollowup({
-        deviceId
+      await trpc.structureManager.beneficiary.checkSupportProgramHasFollowup({
+        supportProgramId
       })
     expect(result).toBe(true)
   })

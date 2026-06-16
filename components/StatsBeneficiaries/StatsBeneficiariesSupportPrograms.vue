@@ -9,9 +9,9 @@
     message="Les statistiques des dispositifs n'ont pas pu être chargées."
   />
 
-  <template v-else-if="deviceStatsList.length">
+  <template v-else-if="supportProgramStatsList.length">
     <StatsList
-      :stats="deviceStatsList"
+      :stats="supportProgramStatsList"
       :stats-percentage="false"
       :display-total="false"
     />
@@ -32,7 +32,7 @@
 
   const trpcClient = useTrpcClient()
   const { data, error, status } =
-    await trpcClient.stat.getBeneficiaryDeviceStats.useQuery(
+    await trpcClient.stat.getSupportProgramStats.useQuery(
       toRef(() => props.filters)
     )
 
@@ -44,8 +44,10 @@
     )
   })
 
-  const deviceStatsList = computed(() => {
-    if (!data.value?.length) {return []}
+  const supportProgramStatsList = computed(() => {
+    if (!data.value?.length) {
+      return []
+    }
 
     const list: Array<{
       key: string

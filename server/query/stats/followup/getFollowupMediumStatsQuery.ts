@@ -11,8 +11,12 @@ export async function getFollowupMediumStatsQuery(
   const where = {
     where: {
       socialSupport: prepareSocialSupportStatFilters(input),
-      ...(input.deviceNameIds?.length
-        ? { beneficiaryDevice: { deviceNameId: { in: input.deviceNameIds } } }
+      ...(input.supportProgramNameIds?.length
+        ? {
+            supportProgram: {
+              supportProgramNameId: { in: input.supportProgramNameIds }
+            }
+          }
         : {})
     }
   }

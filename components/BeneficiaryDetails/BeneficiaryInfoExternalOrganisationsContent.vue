@@ -39,46 +39,54 @@
     />
   </div>
 
-  <template v-if="externalOrganisations.devices.length">
+  <template v-if="externalOrganisations.supportPrograms.length">
     <div class="fr-mt-3w fr-mb-1w">
       <p class="fr-text--bold fr-text--uppercase">
         Prestations / Dispositifs d'accompagnement
       </p>
     </div>
     <div
-      v-for="device in externalOrganisations.devices"
-      :key="device.id"
+      v-for="supportProgram in externalOrganisations.supportPrograms"
+      :key="supportProgram.id"
       class="fr-grid-row fr-mb-2w"
     >
       <BeneficiaryInfoLabel
         label="Nom dispositif"
-        :value="device.deviceName.name"
+        :value="supportProgram.supportProgramName.name"
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         label="Organisme partenaire"
-        :value="device.partnerOrganisationName"
+        :value="supportProgram.partnerOrganisation?.name"
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         label="Date d'entrée"
-        :value="device.startDate ? formatDate(device.startDate) : undefined"
+        :value="
+          supportProgram.startDate
+            ? formatDate(supportProgram.startDate)
+            : undefined
+        "
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
         label="Date de sortie"
-        :value="device.endDate ? formatDate(device.endDate) : undefined"
+        :value="
+          supportProgram.endDate
+            ? formatDate(supportProgram.endDate)
+            : undefined
+        "
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
-        v-if="device.endDate"
+        v-if="supportProgram.endDate"
         label="Motif de sortie"
-        :value="device.exitReason ?? undefined"
+        :value="supportProgram.exitReason ?? undefined"
         class="fr-col-12"
       />
       <BeneficiaryInfoLabel
         label="Précisions"
-        :value="device.precisions"
+        :value="supportProgram.precisions"
         class="fr-col-12"
       />
     </div>

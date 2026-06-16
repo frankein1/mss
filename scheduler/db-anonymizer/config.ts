@@ -289,7 +289,7 @@ const configFollowup: Record<
   updated: true,
   prescribing_organization_id: true,
   prescribing_organization_contact_id: true,
-  beneficiary_device_id: true,
+  support_program_id: true,
   medium: true,
   help_requested: true,
   place: true,
@@ -334,7 +334,7 @@ const configHelpRequest: Record<HelpRequestColumnName, boolean> = {
   type_id: true,
   prescribing_organization_id: true,
   prescribing_organization_contact_id: true,
-  beneficiary_device_id: true,
+  support_program_id: true,
   file_instruction_id: true,
   financial_support: true,
   is_refundable: true,
@@ -365,7 +365,8 @@ const configHousingHelpRequest: Record<
   reason: true,
   low_income_housing_type: true,
   file_instruction_id: true,
-  handling_date: true
+  handling_date: true,
+  support_program_id: true
 }
 
 const configAccount: Record<

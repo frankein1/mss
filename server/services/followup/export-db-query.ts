@@ -67,9 +67,9 @@ const followupExportSelect = {
       }
     }
   },
-  beneficiaryDevice: {
+  supportProgram: {
     select: {
-      deviceName: {
+      supportProgramName: {
         select: { name: true }
       }
     }

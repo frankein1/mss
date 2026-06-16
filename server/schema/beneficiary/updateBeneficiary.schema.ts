@@ -201,25 +201,23 @@ export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >
 
-export const beneficiaryDeviceSchema = z.object({
+export const supportProgramSchema = z.object({
   id: z.string().uuid(),
   name: stringConstraint.max(200, maxStringLengthMessage(200)),
   startDate: dateOrEmpty,
   endDate: dateOrEmpty,
-  partnerOrganisationName: stringConstraint
-    .max(200, maxStringLengthMessage(200))
-    .nullish(),
+  partnerOrganisationId: z.string().uuid().nullish(),
   precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish(),
   exitReason: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
 })
 
-export const updateBeneficiaryDevicesSchema = z.object({
+export const updateSupportProgramsSchema = z.object({
   id: z.string().uuid(),
-  devices: z.array(beneficiaryDeviceSchema)
+  supportPrograms: z.array(supportProgramSchema)
 })
 
-export type UpdateBeneficiaryDevicesInput = z.infer<
-  typeof updateBeneficiaryDevicesSchema
+export type UpdateSupportProgramsInput = z.infer<
+  typeof updateSupportProgramsSchema
 >
 
 export const updateBeneficiaryArchiveDate = z.object({

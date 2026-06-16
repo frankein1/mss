@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
-import { getBeneficiaryDeviceStatsQuery } from '~/server/query/stats'
+import { getSupportProgramStatsQuery } from '~/server/query/stats'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
 
@@ -16,10 +16,10 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getBeneficiaryDeviceStatsQuery(user, input)
+  return await getSupportProgramStatsQuery(user, input)
 }
 
-export const getBeneficiaryDeviceStatsQ = createQuery({
+export const getSupportProgramStatsQ = createQuery({
   inputValidation: statFilterSchema,
   securityCheck,
   handler

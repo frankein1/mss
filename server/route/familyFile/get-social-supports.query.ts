@@ -55,11 +55,11 @@ function prepareSocialSupportFilters(
     }
   }
 
-  if (filters.beneficiaryDeviceNames?.length) {
+  if (filters.supportProgramNames?.length) {
     formattedFilters.beneficiary = {
-      devices: {
+      supportPrograms: {
         some: {
-          deviceName: { name: { in: filters.beneficiaryDeviceNames } }
+          supportProgramName: { name: { in: filters.supportProgramNames } }
         }
       }
     }

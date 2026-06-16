@@ -4,7 +4,7 @@
     :social-support-subject-options="socialSupportSubjectOptions"
     :beneficiaries-cities-options="beneficiariesCitiesOptions"
     :agent-options="agentOptions"
-    :device-name-options="deviceNameOptions"
+    :support-program-name-options="supportProgramNameOptions"
   />
 </template>
 
@@ -15,7 +15,7 @@
     socialSupportSubjectOptions?: Options
     beneficiariesCitiesOptions?: Options
     agentOptions?: Options
-    deviceNameOptions?: Options
+    supportProgramNameOptions?: Options
   }>()
 </script>
 

@@ -1,9 +1,9 @@
 <template>
-  <li v-if="helpRequest.beneficiaryDevice">
+  <li v-if="helpRequest.supportProgram">
     <span class="information-label"
-      >{{ helpRequestFieldLabels.beneficiaryDeviceId }} :</span
+      >{{ helpRequestFieldLabels.supportProgramId }} :</span
     >
-    {{ formatDeviceOption(helpRequest.beneficiaryDevice).label }}
+    {{ formatSupportProgramOption(helpRequest.supportProgram).label }}
   </li>
   <li v-if="helpRequest.prescribingOrganization?.name">
     <span class="information-label"
@@ -95,7 +95,7 @@
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
 
   const props = defineProps<{
     fileInstruction: FileInstructionData

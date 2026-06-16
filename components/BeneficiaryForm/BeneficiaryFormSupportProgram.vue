@@ -7,10 +7,10 @@
 
   <div class="fr-col-12">
     <VeeCombobox
-      :name="`devices[${index}].name`"
+      :name="`supportPrograms[${index}].name`"
       label="Nom dispositif"
       required
-      :options="deviceNameOptions"
+      :options="supportProgramNameOptions"
       :with-creation="true"
     />
     <AtomAlert
@@ -25,7 +25,7 @@
 
   <div class="fr-col-12 fr-col-lg-6">
     <VeeInput
-      :name="`devices[${index}].startDate`"
+      :name="`supportPrograms[${index}].startDate`"
       label="Date d'entrée"
       type="date"
     />
@@ -33,7 +33,7 @@
 
   <div class="fr-col-12 fr-col-lg-6">
     <VeeInput
-      :name="`devices[${index}].endDate`"
+      :name="`supportPrograms[${index}].endDate`"
       label="Date de sortie"
       type="date"
     />
@@ -44,16 +44,16 @@
     class="fr-col-12"
   >
     <VeeInput
-      :name="`devices[${index}].exitReason`"
+      :name="`supportPrograms[${index}].exitReason`"
       label="Motif de sortie"
     />
   </div>
 
   <div class="fr-col-12">
     <VeeCombobox
-      :name="`devices[${index}].partnerOrganisationName`"
+      :name="`supportPrograms[${index}].partnerOrganisationId`"
       label="Organisme partenaire"
-      placeholder="Saisir le nom de l'organisme"
+      placeholder="Sélectionner l'organisme"
       :options="withEmptyValue(partnerOrganisationOptions)"
     />
     <NuxtLink
@@ -66,7 +66,7 @@
 
   <div class="fr-col-12">
     <VeeInput
-      :name="`devices[${index}].precisions`"
+      :name="`supportPrograms[${index}].precisions`"
       label="Précisions"
       hint="Personne intervenante, horaires..."
     />
@@ -76,7 +76,7 @@
     <button
       type="button"
       class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-delete-line btn-delete-action fr-ml-auto"
-      @click="emit('removeDevice')"
+      @click="emit('removeSupportProgram')"
     >
       Supprimer ce dispositif
     </button>
@@ -94,12 +94,12 @@
   const props = defineProps<{
     index: number
     isDuplicate: boolean
-    deviceNameOptions: Options
+    supportProgramNameOptions: Options
     partnerOrganisationOptions: Options
   }>()
 
   const endDate = useFieldValue<string | null | undefined>(
-    () => `devices[${props.index}].endDate`
+    () => `supportPrograms[${props.index}].endDate`
   )
 
   const dismissed = ref(false)
@@ -123,6 +123,6 @@
   }
 
   const emit = defineEmits<{
-    removeDevice: []
+    removeSupportProgram: []
   }>()
 </script>

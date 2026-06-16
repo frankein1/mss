@@ -122,12 +122,12 @@
 
         <div class="fr-col-12 fr-col-md-6">
           <VeeSelect
-            name="beneficiaryDeviceId"
-            :label="followupFieldLabels.beneficiaryDeviceId"
-            :options="withEmptyValue(deviceOptions)"
-            :disabled="deviceOptions.length === 0"
+            name="supportProgramId"
+            :label="followupFieldLabels.supportProgramId"
+            :options="withEmptyValue(supportProgramOptions)"
+            :disabled="supportProgramOptions.length === 0"
             :hint="
-              deviceOptions.length === 0
+              supportProgramOptions.length === 0
                 ? 'Aucun dispositif renseigné pour ce bénéficiaire'
                 : undefined
             "
@@ -353,7 +353,7 @@
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
-  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -382,22 +382,22 @@
   const form = useTemplateRef('form')
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
-  const { setValue: setBeneficiaryDeviceId } = useField<string | null>(
-    'beneficiaryDeviceId'
+  const { setValue: setSupportProgramId } = useField<string | null>(
+    'supportProgramId'
   )
   const { value: familyFileId } = useField<string | null>('familyFileId')
 
   const trpcClient = useTrpcClient()
-  const { data: beneficiaryDevicesData } =
-    await trpcClient.beneficiary.getDevicesForBeneficiary.useQuery(
+  const { data: supportProgramsData } =
+    await trpcClient.beneficiary.getSupportProgramsForBeneficiary.useQuery(
       toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
     )
-  const deviceOptions = computed(() =>
-    (beneficiaryDevicesData.value ?? []).map(formatDeviceOption)
+  const supportProgramOptions = computed(() =>
+    (supportProgramsData.value ?? []).map(formatSupportProgramOption)
   )
 
   watch(beneficiaryId, () => {
-    setBeneficiaryDeviceId(null)
+    setSupportProgramId(null)
   })
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'

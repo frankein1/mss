@@ -71,17 +71,23 @@
     queryKey: 'config.getAgents.options'
   })
 
-  const { data: deviceNameList } =
-    await trpcClient.beneficiary.getDeviceNameList.useQuery()
-
-  const deviceNameOptions = computed(
-    () =>
-      deviceNameList.value?.map(({ name }) => ({ label: name, value: name })) ??
-      []
+  const {
+    data: supportProgramNameOptions,
+    pending: supportProgramNameOptionsPending,
+    error: supportProgramNameOptionsError
+  } = await trpcClient.beneficiary.getSupportProgramNameList.useQuery(
+    undefined,
+    {
+      transform: programNames => toOptions(programNames, 'id', 'name'),
+      queryKey: 'config.getSupportProgramNameList.options'
+    }
   )
 
   const pending = computed(
-    () => socialSupportSubjectOptionsPending.value || agentOptionsPending.value
+    () =>
+      socialSupportSubjectOptionsPending.value ||
+      agentOptionsPending.value ||
+      supportProgramNameOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -90,6 +96,9 @@
     }
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
+    }
+    if (supportProgramNameOptionsError.value) {
+      return "La liste des dispositif n'a pas pu être chargée."
     }
     return ''
   })
@@ -119,18 +128,14 @@
         matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
       }
     ]
-
-    if (deviceNameOptions.value.length > 0) {
-      filters.push({
-        name: 'deviceNames',
-        label: 'Dispositif',
-        options: deviceNameOptions.value,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: true,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
-      })
-    }
+    filters.push({
+      name: 'supportProgramNames',
+      label: 'Dispositif',
+      options: supportProgramNameOptions.value || [],
+      type: FilterType.SelectMultiple,
+      alwaysExpanded: true
+      // TODO: ajout d'une action Matomo
+    })
 
     if (hasReferentsFilters) {
       filters.push({

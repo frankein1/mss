@@ -7,7 +7,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
-      :device-name-options="deviceNameOptions"
+      :support-program-name-options="supportProgramNameOptions"
       :validation-schema="statFilterSchema"
     />
 
@@ -240,10 +240,10 @@
 
       <StatsCard
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.devices.id"
-        :card-name="beneficiariesCardConfig.devices.name"
+        :card-id="beneficiariesCardConfig.supportPrograms.id"
+        :card-name="beneficiariesCardConfig.supportPrograms.name"
       >
-        <StatsBeneficiariesDevices :filters="filters" />
+        <StatsBeneficiariesSupportPrograms :filters="filters" />
       </StatsCard>
     </section>
   </div>
@@ -268,13 +268,13 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
-      deviceNameOptions?: Options
+      supportProgramNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
       agentOptions: () => [],
-      deviceNameOptions: () => []
+      supportProgramNameOptions: () => []
     }
   )
 
@@ -324,8 +324,8 @@
   }
 
   const beneficiariesCardConfig = {
-    devices: {
-      id: 'stats-beneficiaries-devices',
+    supportPrograms: {
+      id: 'stats-beneficiaries-support-programs',
       name: 'Dispositifs'
     },
     gender: {

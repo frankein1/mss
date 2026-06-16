@@ -35,7 +35,9 @@
     thirdPersonName: null,
     place: null,
     duration: null,
-    documents: [] as { key: string; name: string }[]
+    documents: [] as { key: string; name: string }[],
+    supportProgramId: null,
+    supportProgram: null
   }
 
   const pageItems: FollowupPageItems = [

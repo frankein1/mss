@@ -117,13 +117,13 @@ export const beneficiaryExportFieldLabels = {
   beneficiaryFirstName: 'Prénom bénéficiaire'
 }
 
-export const beneficiaryDeviceExportFieldLabels = {
-  deviceName: 'Nom dispositif',
-  deviceStartDate: "Date d'entrée",
-  deviceEndDate: 'Date de sortie',
-  deviceExitReason: 'Motif de sortie',
-  devicePartnerOrganisationName: 'Organisme partenaire',
-  devicePrecisions: 'Précisions'
+export const supportProgramExportFieldLabels = {
+  supportProgramName: 'Nom dispositif',
+  supportProgramStartDate: "Date d'entrée",
+  supportProgramEndDate: 'Date de sortie',
+  supportProgramExitReason: 'Motif de sortie',
+  supportProgramPartnerOrganisationName: 'Organisme partenaire',
+  supportProgramPrecisions: 'Précisions'
 }
 
 export { beneficiaryFieldLabels, beneficiaryReferentTransfertLabels }
