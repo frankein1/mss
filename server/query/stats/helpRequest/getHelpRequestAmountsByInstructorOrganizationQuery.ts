@@ -20,21 +20,12 @@ export async function getHelpRequestAmountsByInstructorOrganizationQuery(
 
   // Cannot retrieve organization name from this query so perform in 2 steps
   // https://github.com/prisma/prisma/issues/16243#issue-1445823500
-  const supportProgramFilter = input.supportProgramNameIds?.length
-    ? {
-        supportProgram: {
-          supportProgramNameId: { in: input.supportProgramNameIds }
-        }
-      }
-    : {}
-
   const [amountsByOrganizationId, orgs] = await Promise.all([
     HelpRequestRepo.prisma.groupBy({
       by: ['prescribingOrganizationId'],
       where: {
         financialSupport: true,
         askedAmount: { gt: 0 },
-        ...supportProgramFilter,
         fileInstruction: {
           externalStructure: true,
           socialSupport: {

@@ -55,18 +55,12 @@
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
-      supportProgramNameOptions?: Options
       filters: StatFilterInput
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    {
-      isHelpRequest: false,
-      isHistory: false,
-      validationSchema: undefined,
-      supportProgramNameOptions: () => []
-    }
+    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
   )
 
   const emit = defineEmits<{
@@ -150,15 +144,6 @@
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
         disabled: props.filters.helpRequestSubject === 'Housing'
-      })
-    }
-    if (props.supportProgramNameOptions?.length) {
-      statsFilters.push({
-        name: 'supportProgramNameIds',
-        label: 'Dispositif',
-        options: props.supportProgramNameOptions,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     if (props.beneficiariesCitiesOptions.length) {

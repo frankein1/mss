@@ -7,7 +7,6 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
-      :support-program-name-options="supportProgramNameOptions"
       :validation-schema="statFilterSchema"
     />
 
@@ -237,14 +236,6 @@
             :filters="filters"
         /></StatsCard>
       </template>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.supportPrograms.id"
-        :card-name="beneficiariesCardConfig.supportPrograms.name"
-      >
-        <StatsBeneficiariesSupportPrograms :filters="filters" />
-      </StatsCard>
     </section>
   </div>
 </template>
@@ -268,13 +259,11 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
-      supportProgramNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
-      agentOptions: () => [],
-      supportProgramNameOptions: () => []
+      agentOptions: () => []
     }
   )
 
@@ -324,10 +313,6 @@
   }
 
   const beneficiariesCardConfig = {
-    supportPrograms: {
-      id: 'stats-beneficiaries-support-programs',
-      name: 'Dispositifs'
-    },
     gender: {
       id: 'stats-beneficiaries-gender',
       name: 'Genres'

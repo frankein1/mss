@@ -65,8 +65,7 @@ const statFilterSchema = z
       .number()
       .int(validIntNumber)
       .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-      .nullish(),
-    supportProgramNameIds: z.array(z.string().uuid()).nullish()
+      .nullish()
   })
   .superRefine((data, ctx) => {
     if (

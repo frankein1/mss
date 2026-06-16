@@ -9,62 +9,26 @@ export async function getFileInstructionTypeStatsQuery(
   input: StatFilterInput
 ) {
   const filters = prepareSocialSupportStatFilters(input)
-  const supportProgramNameIds = input.supportProgramNameIds?.length
-    ? input.supportProgramNameIds
-    : null
 
   const [housingCount, financialCount, otherCount] = await Promise.all([
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
-        socialSupportType: 'HelpRequestHousing',
-        ...(supportProgramNameIds
-          ? {
-              fileInstruction: {
-                housingHelpRequest: {
-                  supportProgram: {
-                    supportProgramNameId: { in: supportProgramNameIds }
-                  }
-                }
-              }
-            }
-          : {})
+        socialSupportType: 'HelpRequestHousing'
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        fileInstruction: {
-          helpRequest: {
-            financialSupport: true,
-            ...(supportProgramNameIds
-              ? {
-                  supportProgram: {
-                    supportProgramNameId: { in: supportProgramNameIds }
-                  }
-                }
-              : {})
-          }
-        }
+        fileInstruction: { helpRequest: { financialSupport: true } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        fileInstruction: {
-          helpRequest: {
-            financialSupport: false,
-            ...(supportProgramNameIds
-              ? {
-                  supportProgram: {
-                    supportProgramNameId: { in: supportProgramNameIds }
-                  }
-                }
-              : {})
-          }
-        }
+        fileInstruction: { helpRequest: { financialSupport: false } }
       }
     })
   ])

@@ -14,13 +14,6 @@ export async function getHelpRequestAmountsAllocatedQuery(
   input: StatFilterInput
 ) {
   const socialSupport = { where: prepareSocialSupportStatFilters(input) }
-  const supportProgramFilter = input.supportProgramNameIds?.length
-    ? {
-        supportProgram: {
-          supportProgramNameId: { in: input.supportProgramNameIds }
-        }
-      }
-    : {}
 
   const [
     acceptedFinancialRequestCount,
@@ -33,8 +26,7 @@ export async function getHelpRequestAmountsAllocatedQuery(
         socialSupportType: SocialSupportType.HelpRequest,
         status: SocialSupportStatus.Accepted,
         fileInstruction: {
-          type: FileInstructionType.Financial,
-          helpRequest: { ...supportProgramFilter }
+          type: FileInstructionType.Financial
         }
       }
     }),
@@ -42,7 +34,6 @@ export async function getHelpRequestAmountsAllocatedQuery(
       where: {
         financialSupport: true,
         allocatedAmount: { gt: 0 },
-        ...supportProgramFilter,
         fileInstruction: {
           externalStructure: false,
           socialSupport: {
@@ -57,7 +48,6 @@ export async function getHelpRequestAmountsAllocatedQuery(
       where: {
         financialSupport: true,
         allocatedAmount: { gt: 0 },
-        ...supportProgramFilter,
         fileInstruction: {
           socialSupport: {
             status: SocialSupportStatus.Accepted,

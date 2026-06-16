@@ -201,57 +201,16 @@ export function prepareHelpRequestStatFilters(
       break
   }
 
-  if (filters.supportProgramNameIds?.length) {
-    const supportProgramFilter = {
-      supportProgramNameId: { in: filters.supportProgramNameIds }
-    }
-    if (filters.helpRequestSubject === FileInstructionType.Housing) {
-      socialSupport.fileInstruction!.housingHelpRequest = {
-        supportProgram: supportProgramFilter
-      }
-    } else if (
-      filters.helpRequestSubject === FileInstructionType.Financial ||
-      filters.helpRequestSubject === FileInstructionType.Other
-    ) {
-      socialSupport.fileInstruction!.helpRequest = {
-        financialSupport:
-          filters.helpRequestSubject === FileInstructionType.Financial,
-        supportProgram: supportProgramFilter
-      }
-    } else {
-      const base = externalStructure ? { externalStructure: true as const } : {}
-      socialSupport.fileInstruction = {
-        ...base,
-        OR: [
-          { helpRequest: { supportProgram: supportProgramFilter } },
-          {
-            housingHelpRequest: {
-              supportProgram: supportProgramFilter
-            }
-          }
-        ]
-      }
-    }
-  }
-
   return socialSupport
 }
 
 export function prepareFollowupStatFilters(
   filters: StatFilterInput
 ): Prisma.SocialSupportWhereInput {
-  const result: Prisma.SocialSupportWhereInput = {
+  return {
     ...prepareSocialSupportStatFilters(filters),
     socialSupportType: SocialSupportType.Followup
   }
-  if (filters.supportProgramNameIds?.length) {
-    result.followup = {
-      supportProgram: {
-        supportProgramNameId: { in: filters.supportProgramNameIds }
-      }
-    }
-  }
-  return result
 }
 
 /** filterOnBeneficiaryCreated: if true, when filtering on period,
@@ -350,12 +309,6 @@ export function prepareBeneficiaryStatFilters(
   if (filters.ministereDepartementServiceAc) {
     formattedFilters.ministereDepartementServiceAc =
       filters.ministereDepartementServiceAc
-  }
-
-  if (filters.supportProgramNameIds?.length) {
-    formattedFilters.supportPrograms = {
-      some: { supportProgramNameId: { in: filters.supportProgramNameIds } }
-    }
   }
 
   return formattedFilters
