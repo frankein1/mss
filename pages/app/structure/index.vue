@@ -13,7 +13,12 @@
         tab-list-name="Statistiques de la structure"
         :tab-titles="
           application.module.users
-            ? [userTabTitle, structureTabTitle, socialSupportSubjectsTabTitle]
+            ? [
+                userTabTitle,
+                structureTabTitle,
+                socialSupportSubjectsTabTitle,
+                supportProgramNamesTabTitle
+              ]
             : [structureTabTitle, socialSupportSubjectsTabTitle]
         "
         :heading-level="2"
@@ -41,6 +46,12 @@
             @refresh="refresh"
           />
         </template>
+        <template #[supportProgramNamesTabTitle.panelId]>
+          <SupportProgramNames
+            v-if="supportProgramNames"
+            :support-program-names="supportProgramNames"
+          />
+        </template>
       </AtomTabs>
     </AtomLazyComponent>
   </PageContainer>
@@ -65,6 +76,9 @@
   const { data, error, status, refresh } =
     await trpcClient.structure.getStructure.useQuery()
 
+  const { data: supportProgramNames } =
+    await trpcClient.supportProgram.getNameList.useQuery()
+
   const userTabTitle = {
     tabId: 'Utilisateurs',
     panelId: panelId('Utilisateurs'),
@@ -82,6 +96,12 @@
     panelId: panelId('Objets d’accompagnement'),
     title: 'Objets d’accompagnement',
     icon: 'fr-icon-checkbox-circle-line'
+  }
+  const supportProgramNamesTabTitle = {
+    tabId: 'Dispositifs',
+    panelId: panelId('Dispositifs'),
+    title: 'Dispositifs',
+    icon: 'fr-icon-survey-line'
   }
 
   // Structure info
