@@ -11,7 +11,6 @@ import { v4 } from 'uuid'
 
 let familyFileId: string
 let beneficiaryId: string
-let supportProgramId: string
 let supportProgramNameId: string
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
@@ -32,7 +31,7 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: 'TEST-CHK-SUPPORT-PROGRAM-001',
+      fileNumber: 'TEST-GET-SUPPORT-PROGRAMS-001',
       status: 'Active'
     }
   })
@@ -40,21 +39,22 @@ beforeEach(async () => {
 
   const supportProgramName = await prismaClient.supportProgramName.create({
     data: {
-      name: `CSPHF-Dispositif-${v4()}`,
+      name: `GSPFB-SAVS-${v4()}`,
       structureId,
       createdById: socialWorkerId
     }
   })
   supportProgramNameId = supportProgramName.id
 
-  const supportProgram = await prismaClient.supportProgram.create({
+  await prismaClient.supportProgram.create({
     data: {
       id: v4(),
       beneficiary: { connect: { id: beneficiaryId } },
-      supportProgramName: { connect: { id: supportProgramNameId } }
+      supportProgramName: { connect: { id: supportProgramNameId } },
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-12-31')
     }
   })
-  supportProgramId = supportProgram.id
 })
 
 afterEach(async () => {
@@ -66,42 +66,37 @@ afterEach(async () => {
 })
 
 describe('Comportement', () => {
-  test('Retourne false si le dispositif nest lié à aucun suivi', async ({
-    trpc
-  }) => {
-    const result =
-      await trpc.structureManager.beneficiary.checkSupportProgramHasFollowup({
-        supportProgramId
-      })
-    expect(result).toBe(false)
+  test('Retourne les dispositifs dun bénéficiaire', async ({ trpc }) => {
+    const result = await trpc.structureManager.supportProgram.getForBeneficiary(
+      {
+        beneficiaryId
+      }
+    )
+
+    expect(result).toHaveLength(1)
+    expect(result[0]!.startDate).toEqual(new Date('2024-01-01'))
+    expect(result[0]!.endDate).toEqual(new Date('2024-12-31'))
+    expect(result[0]!.supportProgramName.id).toBe(supportProgramNameId)
   })
 
-  test('Retourne true si le dispositif est lié à un suivi', async ({
+  test('Retourne un tableau vide si beneficiaryId est vide', async ({
     trpc
   }) => {
-    await prismaClient.socialSupport.create({
-      data: {
-        date: new Date(),
-        structure: { connect: { id: structureId } },
-        familyFile: { connect: { id: familyFileId } },
-        beneficiary: { connect: { id: beneficiaryId } },
-        createdBy: { connect: { id: referentId } },
-        lastUpdatedBy: { connect: { id: referentId } },
-        status: 'InProgress',
-        socialSupportType: 'Followup',
-        followup: {
-          create: {
-            medium: 'PlannedInPerson',
-            supportProgram: { connect: { id: supportProgramId } }
-          }
-        }
+    const result = await trpc.structureManager.supportProgram.getForBeneficiary(
+      {
+        beneficiaryId: ''
       }
-    })
+    )
+    expect(result).toEqual([])
+  })
 
-    const result =
-      await trpc.structureManager.beneficiary.checkSupportProgramHasFollowup({
-        supportProgramId
+  test('Ne peut pas accéder aux dispositifs dun bénéficiaire dune autre structure', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.structureManagerMinistere.supportProgram.getForBeneficiary({
+        beneficiaryId
       })
-    expect(result).toBe(true)
+    ).rejects.toThrowError(/no record/i)
   })
 })

@@ -75,13 +75,10 @@
     data: supportProgramNameOptions,
     pending: supportProgramNameOptionsPending,
     error: supportProgramNameOptionsError
-  } = await trpcClient.beneficiary.getSupportProgramNameList.useQuery(
-    undefined,
-    {
-      transform: programNames => toOptions(programNames, 'id', 'name'),
-      queryKey: 'config.getSupportProgramNameList.options'
-    }
-  )
+  } = await trpcClient.supportProgram.getNameList.useQuery(undefined, {
+    transform: programNames => toOptions(programNames, 'id', 'name'),
+    queryKey: 'config.getSupportProgramNameList.options'
+  })
 
   const pending = computed(
     () =>

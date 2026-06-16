@@ -3,7 +3,6 @@ import { getSocialSupports } from './get-social-supports.query'
 import { getDocumentsQuery } from './get-documents.query'
 import { getExaminationDatesQuery } from './getExaminationDates.query'
 import { split } from './split.mutation'
-import { getSupportProgramNamesForFamilyFileQuery } from './get-support-program-names.query'
 
 import { addReferentToFamilyFileMutation } from './add-referent.mutation'
 import { deleteReferentFromFamilyFileMutation } from './delete-referent.mutation'
@@ -15,6 +14,5 @@ export const familyFileRoutes = {
   getExaminationDatesQuery,
   split,
   addReferentToFamilyFileMutation,
-  deleteReferentFromFamilyFileMutation,
-  getSupportProgramNamesForFamilyFileQuery
+  deleteReferentFromFamilyFileMutation
 }

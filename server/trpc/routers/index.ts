@@ -21,6 +21,7 @@ import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
+import { supportProgramRouter } from './supportProgram/router'
 import { rdvspRouter } from './rdvspRouter'
 import { router } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
@@ -47,6 +48,7 @@ export const appRouter = router({
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter,
   file: fileRouter,
+  supportProgram: supportProgramRouter,
   rdvsp: rdvspRouter,
   workshop: workshopRouter,
   minister: ministerRouter,

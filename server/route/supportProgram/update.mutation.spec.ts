@@ -62,7 +62,7 @@ describe('Authorizations', () => {
     trpc
   }) => {
     await expect(
-      trpc.receptionAgent.beneficiary.updateSupportPrograms({
+      trpc.receptionAgent.supportProgram.update({
         id: beneficiaryId,
         supportPrograms: []
       })
@@ -73,7 +73,7 @@ describe('Authorizations', () => {
     trpc
   }) => {
     await expect(
-      trpc.structureManagerMinistere.beneficiary.updateSupportPrograms({
+      trpc.structureManagerMinistere.supportProgram.update({
         id: beneficiaryId,
         supportPrograms: []
       })
@@ -84,13 +84,10 @@ describe('Authorizations', () => {
 describe('Comportement', () => {
   test('Un StructureManager peut ajouter des dispositifs', async ({ trpc }) => {
     const supportProgramId = v4()
-    const result =
-      await trpc.structureManager.beneficiary.updateSupportPrograms({
-        id: beneficiaryId,
-        supportPrograms: [
-          { id: supportProgramId, name: 'UDT-Portage de repas' }
-        ]
-      })
+    const result = await trpc.structureManager.supportProgram.update({
+      id: beneficiaryId,
+      supportPrograms: [{ id: supportProgramId, name: 'UDT-Portage de repas' }]
+    })
 
     expect(result.id).toBe(beneficiaryId)
 
@@ -107,12 +104,12 @@ describe('Comportement', () => {
   test('La mise à jour remplace tous les dispositifs existants', async ({
     trpc
   }) => {
-    await trpc.structureManager.beneficiary.updateSupportPrograms({
+    await trpc.structureManager.supportProgram.update({
       id: beneficiaryId,
       supportPrograms: [{ id: v4(), name: 'UDT-Ancien dispositif' }]
     })
 
-    await trpc.structureManager.beneficiary.updateSupportPrograms({
+    await trpc.structureManager.supportProgram.update({
       id: beneficiaryId,
       supportPrograms: [{ id: v4(), name: 'UDT-Nouveau dispositif' }]
     })
@@ -130,7 +127,7 @@ describe('Comportement', () => {
   test('Le nom de dispositif est créé sil nexiste pas encore', async ({
     trpc
   }) => {
-    await trpc.structureManager.beneficiary.updateSupportPrograms({
+    await trpc.structureManager.supportProgram.update({
       id: beneficiaryId,
       supportPrograms: [{ id: v4(), name: 'UDT-Nouveau nom' }]
     })
@@ -148,7 +145,7 @@ describe('Comportement', () => {
   test('Un Referent peut modifier les dispositifs dun bénéficiaire dont il est référent', async ({
     trpc
   }) => {
-    const result = await trpc.referent.beneficiary.updateSupportPrograms({
+    const result = await trpc.referent.supportProgram.update({
       id: beneficiaryId,
       supportPrograms: [{ id: v4(), name: 'UDT-Dispositif référent' }]
     })
@@ -167,7 +164,7 @@ describe('Comportement', () => {
       select: { id: true }
     })
 
-    await trpc.structureManager.beneficiary.updateSupportPrograms({
+    await trpc.structureManager.supportProgram.update({
       id: beneficiaryId,
       supportPrograms: [
         {

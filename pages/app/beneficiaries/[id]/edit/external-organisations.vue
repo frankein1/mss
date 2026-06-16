@@ -80,14 +80,13 @@
     }
   })
 
-  const router = trpcClient.beneficiary
   const {
     mutate: mutateExternalOrganisations,
     error,
     status
-  } = router.updateExternalOrganisations.useMutation()
+  } = trpcClient.beneficiary.updateExternalOrganisations.useMutation()
   const { mutate: mutateSupportPrograms, error: supportProgramsError } =
-    router.updateSupportPrograms.useMutation()
+    trpcClient.supportProgram.update.useMutation()
 
   async function onSaveBeneficiary(
     values: CombinedInput,
