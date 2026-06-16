@@ -21,7 +21,8 @@ import {
   fixturesWorkshops,
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees,
-  fixturesDataEducationSchools
+  fixturesDataEducationSchools,
+  fixturesSupportProgramNames
 } from './fixtures'
 import { ministers } from './ministers'
 
@@ -236,6 +237,15 @@ function loadFixturesDataEducationSchools() {
   })
 }
 
+function loadFixturesSupportProgramNames() {
+  console.log('📋 Support program names...')
+
+  return prismaClient.supportProgramName.createMany({
+    data: fixturesSupportProgramNames,
+    skipDuplicates: true
+  })
+}
+
 function createMinister() {
   console.log('👑 Ministers...')
 
@@ -269,7 +279,8 @@ function loadFixtures() {
     loadWorkshopExternalAttendees(),
     loadWorkshopAttendees(),
     createMinister(),
-    loadFixturesDataEducationSchools()
+    loadFixturesDataEducationSchools(),
+    loadFixturesSupportProgramNames()
   ]
 }
 
