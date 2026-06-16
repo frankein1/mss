@@ -1835,7 +1835,7 @@ model SupportProgram {
   workshopId String?   @map("workshop_id") @db.Uuid
   workshop   Workshop? @relation(fields: [workshopId], references: [id], onDelete: Cascade)
 
-  supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id])
+  supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id], onDelete: Cascade)
   supportProgramNameId String             @map("support_program_name_id") @db.Uuid
 
   partnerOrganisationId String?              @map("partner_organisation_id") @db.Uuid
@@ -2151,6 +2151,7 @@ enum UserActivityObject {
   WorkshopName
   Minister
   RedirectionReason
+  SupportProgramName
 }
 
 model UserActivity {
