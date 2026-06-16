@@ -1,9 +1,9 @@
 <template>
   <PageContainer no-max-width>
     <AtomAlert
-      v-if="isReceptionAgent()"
+      v-if="!application.edit.beneficiary.referent"
       :alert-type="AlertType.Error"
-      message="Le rôle “Agent d'accueil” n'est pas authorisé à voir cette page."
+      message="La modification des agents référents n'est pas autorisée."
     />
     <template v-else>
       <AtomBreadcrumb
@@ -98,7 +98,7 @@
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
-  const { isReceptionAgent } = useAuthState()
+  const { application } = usePermissions()
 
   // Filters
   const filters = ref<BeneficiaryFilterInput>(

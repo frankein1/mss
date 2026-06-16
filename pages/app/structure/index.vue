@@ -12,14 +12,14 @@
         class="stats-tabs"
         tab-list-name="Statistiques de la structure"
         :tab-titles="
-          authState.isStructureManager()
+          application.module.users
             ? [userTabTitle, structureTabTitle, socialSupportSubjectsTabTitle]
             : [structureTabTitle, socialSupportSubjectsTabTitle]
         "
         :heading-level="2"
       >
         <template
-          v-if="authState.isStructureManager()"
+          v-if="application.module.users"
           #[userTabTitle.panelId]
         >
           <StructureUsers />
@@ -55,11 +55,11 @@
   const title = routes.structure.AppStructure.title
   useHead({ title })
 
-  const authState = useAuthState()
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
   const route = useRoute()
+  const { application } = usePermissions()
   const isSubmitting = ref(false)
 
   const { data, error, status, refresh } =

@@ -1,6 +1,6 @@
 import { defineNuxtModule } from '@nuxt/kit'
 
-const PLUGINS_TO_STRIP = /auth|sentry|matomo|chart|refresh-app|autofocus/
+const PLUGINS_TO_STRIP = /auth|sentry|matomo|chart|refresh-app/
 
 export default defineNuxtModule({
   meta: { name: 'test-strip-plugins' },

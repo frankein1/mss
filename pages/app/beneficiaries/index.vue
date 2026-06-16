@@ -98,6 +98,7 @@
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
   const modal = useModal()
+  const { application } = usePermissions()
 
   const notFilled = route.query['not-filled'] as FilterBeneficiaryNotFilled
   if (notFilled) {
@@ -117,7 +118,6 @@
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage, filters)
-  const { isReceptionAgent } = useAuthState()
 
   const queryInput = computed(() => ({
     page: page.value,
@@ -187,7 +187,7 @@
       }
     }
   ]
-  if (!isReceptionAgent()) {
+  if (application.value.edit.beneficiary.referent) {
     optionMenu.push({
       label: 'Modifier agent référent',
       icon: 'fr-icon-user-line',
