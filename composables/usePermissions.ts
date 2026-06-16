@@ -14,7 +14,7 @@ export const defaultPermissions = (): AppContextPermissions => ({
     health: { nir: false },
     beneficiary: { referent: false }
   },
-  archive: {
+  archiveBeforeDelay: {
     beneficiary: false
   },
   module: {

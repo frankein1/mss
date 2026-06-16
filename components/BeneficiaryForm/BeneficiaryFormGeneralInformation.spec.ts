@@ -67,6 +67,10 @@ describe('BeneficiaryFormGeneralInformation - module.vulnerablePerson', () => {
 })
 
 describe('BeneficiaryFormGeneralInformation - permissions.changeReferent', () => {
+  beforeEach(() => {
+    setPermissions({})
+  })
+
   it('referents select is disabled when changeReferent is false', async () => {
     const wrapper = await mountGeneralInfo({ changeReferent: false })
     expect(
