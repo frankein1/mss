@@ -1,11 +1,16 @@
 import type { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.SupportProgramNameWhereInput = {}
   if (isAdmin(user)) {
-    return where
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message:
+        'support-program-name-constraints: create not implemented for admin'
+    })
   }
 
   if (!user.structureId) {
@@ -19,9 +24,33 @@ const get = (user: SecurityRuleGrantee) => {
   return where
 }
 
+const create = (user: SecurityRuleGrantee) => {
+  const data: Partial<Prisma.SupportProgramNameCreateInput> = {}
+  if (isAdmin(user)) {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message:
+        'support-program-name-constraints: create not implemented for admin'
+    })
+  }
+
+  if (!user.structureId) {
+    throw new Error('support-program-name-constraints: missing structure id')
+  }
+
+  Object.assign<
+    Partial<Prisma.SupportProgramNameCreateInput>,
+    Partial<Prisma.SupportProgramNameCreateInput>
+  >(data, {
+    createdBy: { connect: { id: user.id } },
+    structure: { connect: { id: user.structureId } }
+  })
+  return data
+}
+
 export const SupportProgramNameConstraints = {
   get,
-  create: get,
+  create,
   update: get,
   delete: get
 }
