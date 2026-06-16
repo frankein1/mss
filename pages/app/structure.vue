@@ -57,6 +57,13 @@
         title: 'Objets d’accompagnement',
         icon: 'fr-icon-checkbox-circle-line',
         to: routes.structure.AppStructureCustomObjects.path()
+      },
+      {
+        tabId: 'Accompagnements et Dispositifs',
+        panelId: panelId('Accompagnements et Dispositifs'),
+        title: 'Accompagnements et Dispositifs',
+        icon: 'fr-icon-checkbox-circle-line',
+        to: routes.structure.AppStructureCustomObjects.path()
       }
     )
     return tabs
