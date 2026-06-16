@@ -18,7 +18,6 @@
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
 
-  const authState = useAuthState()
   const { application } = usePermissions()
 
   useHead({
@@ -31,8 +30,7 @@
 
   const siteMapItems = computed(() => {
     const items = []
-    const isManager = authState.isStructureManager()
-    if (authState.isAdmin()) {
+    if (application.value.view.admin) {
       // Admin only
       items.push({
         to: routes.admin.AdminOverview.path(),
@@ -100,7 +98,7 @@
           label: routes.structure.AppStructureSubjects.title
         })
       }
-      if (isManager) {
+      if (application.value.view.cgu.asManager) {
         items.push({
           to: routes.cgu.CGUManager.path(),
           label: routes.cgu.CGUManager.title
