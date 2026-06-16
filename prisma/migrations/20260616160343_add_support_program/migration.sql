@@ -1,3 +1,6 @@
+-- AlterEnum
+ALTER TYPE "UserActivityObject" ADD VALUE 'SupportProgramName';
+
 -- AlterTable
 ALTER TABLE "followup" ADD COLUMN     "support_program_id" UUID;
 
@@ -68,7 +71,7 @@ ALTER TABLE "support_program" ADD CONSTRAINT "support_program_beneficiary_id_fke
 ALTER TABLE "support_program" ADD CONSTRAINT "support_program_workshop_id_fkey" FOREIGN KEY ("workshop_id") REFERENCES "workshop"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "support_program" ADD CONSTRAINT "support_program_support_program_name_id_fkey" FOREIGN KEY ("support_program_name_id") REFERENCES "support_program_name"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "support_program" ADD CONSTRAINT "support_program_support_program_name_id_fkey" FOREIGN KEY ("support_program_name_id") REFERENCES "support_program_name"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "support_program" ADD CONSTRAINT "support_program_partner_organisation_id_fkey" FOREIGN KEY ("partner_organisation_id") REFERENCES "partner_organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
