@@ -101,6 +101,7 @@ pnpm:test:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
     - pnpm run --if-present test --coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   cache:
     policy: pull
   artifacts:
