@@ -421,7 +421,7 @@ async function updateHelpRequests(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
-    beneficiaryDeviceId: null,
+    supportProgramId: null,
     askedAmount: null,
     allocatedAmount: null,
     paymentMethod: null,
@@ -458,7 +458,8 @@ async function updateHousingHelpRequests(structureId: string) {
     isPmr: null,
     reason: null,
     lowIncomeHousingType: { set: [] },
-    handlingDate: null
+    handlingDate: null,
+    supportProgramId: null
   }
   await HousingHelpRequestRepo.prisma.updateMany({
     where: {
@@ -479,7 +480,7 @@ async function updateFollowups(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
-    beneficiaryDeviceId: null,
+    supportProgramId: null,
     helpRequested: null,
     place: null,
     thirdPersonName: null,

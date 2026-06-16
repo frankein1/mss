@@ -55,7 +55,7 @@
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
-      deviceNameOptions?: Options
+      supportProgramNameOptions?: Options
       filters: StatFilterInput
       validationSchema?: any
       isHelpRequest?: boolean
@@ -65,7 +65,7 @@
       isHelpRequest: false,
       isHistory: false,
       validationSchema: undefined,
-      deviceNameOptions: () => []
+      supportProgramNameOptions: () => []
     }
   )
 
@@ -152,11 +152,11 @@
         disabled: props.filters.helpRequestSubject === 'Housing'
       })
     }
-    if (props.deviceNameOptions?.length) {
+    if (props.supportProgramNameOptions?.length) {
       statsFilters.push({
-        name: 'deviceNameIds',
+        name: 'supportProgramNameIds',
         label: 'Dispositif',
-        options: props.deviceNameOptions,
+        options: props.supportProgramNameOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })

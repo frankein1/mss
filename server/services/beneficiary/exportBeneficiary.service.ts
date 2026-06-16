@@ -324,7 +324,7 @@ type FollowupData = FieldLabels<
     | 'socialSupportId'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
-    | 'beneficiaryDeviceId'
+    | 'supportProgramId'
   >
 > &
   SocialSupportForFollowupData & {
@@ -426,7 +426,7 @@ type HelpRequestData = FieldLabels<
       | 'socialSupportId'
       | 'prescribingOrganizationId'
       | 'prescribingOrganizationContactId'
-      | 'beneficiaryDeviceId'
+      | 'supportProgramId'
       | 'subjectId'
       | 'fileInstructionId'
       | 'financialSupport'
@@ -452,6 +452,7 @@ type HousingHelpRequestData = FieldLabels<
       | 'prescribingOrganizationId'
       | 'prescribingOrganizationContactId'
       | 'fileInstructionId'
+      | 'supportProgramId'
     > & {
       prescribingOrganization: string | null
       prescribingOrganizationContact: string | null

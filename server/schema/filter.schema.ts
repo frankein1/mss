@@ -66,7 +66,7 @@ const statFilterSchema = z
       .int(validIntNumber)
       .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
       .nullish(),
-    deviceNameIds: z.array(z.string().uuid()).nullish()
+    supportProgramNameIds: z.array(z.string().uuid()).nullish()
   })
   .superRefine((data, ctx) => {
     if (
@@ -157,7 +157,7 @@ const beneficiaryFilterSchema = z
       .nullish()
       .transform(val => (val ? val === 'true' : undefined)),
     notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish(),
-    deviceNames: z.array(z.string()).nullish()
+    supportProgramNames: z.array(z.string()).nullish()
   })
   .superRefine((data, ctx) => {
     if (
@@ -248,7 +248,7 @@ const socialSupportFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).optional(),
   typeSuivi: z.nativeEnum(TypeSuivi).optional(),
   beneficiaryId: z.string().uuid().optional(),
-  beneficiaryDeviceNames: z.array(z.string()).optional()
+  supportProgramNames: z.array(z.string()).optional()
 })
 
 type SocialSupportFilterInput = z.infer<typeof socialSupportFilterSchema>

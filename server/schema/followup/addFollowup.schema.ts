@@ -56,7 +56,7 @@ export const addFollowupSchemaBase = z.object({
   forwardedToJustice: z.boolean().default(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration),
   socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish(),
-  beneficiaryDeviceId: z.string().nullish()
+  supportProgramId: z.string().nullish()
 })
 
 export const addFollowupSchema = z.discriminatedUnion('isMinistry', [

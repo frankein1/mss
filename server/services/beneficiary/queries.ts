@@ -161,15 +161,15 @@ const select = {
   _count: {
     select: { socialSupports: true }
   },
-  devices: {
+  supportPrograms: {
     select: {
       id: true,
       startDate: true,
       endDate: true,
       exitReason: true,
-      partnerOrganisationName: true,
       precisions: true,
-      deviceName: { select: { id: true, name: true } }
+      supportProgramName: { select: { id: true, name: true } },
+      partnerOrganisation: { select: { id: true, name: true } }
     }
   }
 } satisfies Prisma.BeneficiarySelect
@@ -420,14 +420,14 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     orientationType: beneficiary.orientationType,
     orientationStructure: beneficiary.orientationStructure,
     additionalInformation: beneficiary.additionalInformation,
-    devices: beneficiary.devices.map(d => ({
+    supportPrograms: beneficiary.supportPrograms.map(d => ({
       id: d.id,
       startDate: d.startDate,
       endDate: d.endDate,
       exitReason: d.exitReason,
-      partnerOrganisationName: d.partnerOrganisationName,
       precisions: d.precisions,
-      deviceName: d.deviceName
+      supportProgramName: d.supportProgramName,
+      partnerOrganisation: d.partnerOrganisation
     }))
   }
 }

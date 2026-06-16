@@ -11,7 +11,7 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import {
   beneficiaryFieldLabels,
-  beneficiaryDeviceExportFieldLabels
+  supportProgramExportFieldLabels
 } from '~/client/labels'
 import type {
   GetBeneficiaryOutput,
@@ -185,9 +185,9 @@ export const exportWorkbook = async ({
   return workbook
 }
 
-const DEVICE_EXPORTED_FIELDS = Object.keys(
-  beneficiaryDeviceExportFieldLabels
-) as (keyof typeof beneficiaryDeviceExportFieldLabels)[]
+const SUPPORT_PROGRAM_EXPORTED_FIELDS = Object.keys(
+  supportProgramExportFieldLabels
+) as (keyof typeof supportProgramExportFieldLabels)[]
 
 function getColumns(userRole: UserRole) {
   const baseFields =
@@ -200,35 +200,38 @@ function getColumns(userRole: UserRole) {
       header: beneficiaryFieldLabels[key],
       width: 32
     })),
-    ...DEVICE_EXPORTED_FIELDS.map(key => ({
+    ...SUPPORT_PROGRAM_EXPORTED_FIELDS.map(key => ({
       key,
-      header: beneficiaryDeviceExportFieldLabels[key],
+      header: supportProgramExportFieldLabels[key],
       width: 32
     }))
   ]
 }
 
-function formatDeviceFields(beneficiary: GetBeneficiaryOutput) {
-  const devices = beneficiary.externalOrganisations?.devices ?? []
+function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
+  const supportPrograms =
+    beneficiary.externalOrganisations?.supportPrograms ?? []
   const join = (values: (string | null | undefined)[]) =>
     values.filter(Boolean).join(' / ')
   return {
-    deviceName: join(devices.map(d => d.deviceName?.name)),
-    deviceStartDate: join(
-      devices.map(d =>
+    supportProgramName: join(
+      supportPrograms.map(d => d.supportProgramName?.name)
+    ),
+    supportProgramStartDate: join(
+      supportPrograms.map(d =>
         d.startDate ? new Date(d.startDate).toLocaleDateString('fr-FR') : null
       )
     ),
-    deviceEndDate: join(
-      devices.map(d =>
+    supportProgramEndDate: join(
+      supportPrograms.map(d =>
         d.endDate ? new Date(d.endDate).toLocaleDateString('fr-FR') : null
       )
     ),
-    deviceExitReason: join(devices.map(d => d.exitReason)),
-    devicePartnerOrganisationName: join(
-      devices.map(d => d.partnerOrganisationName)
+    supportProgramExitReason: join(supportPrograms.map(d => d.exitReason)),
+    supportProgramPartnerOrganisationName: join(
+      supportPrograms.map(d => d.partnerOrganisation?.name)
     ),
-    devicePrecisions: join(devices.map(d => d.precisions))
+    supportProgramPrecisions: join(supportPrograms.map(d => d.precisions))
   }
 }
 
@@ -268,7 +271,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
   }
 
   if (userRole !== UserRole.StructureManager) {
-    return { ...exported, ...formatDeviceFields(beneficiary) }
+    return { ...exported, ...formatSupportProgramFields(beneficiary) }
   }
 
   return {
@@ -344,7 +347,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
     lastActivity: beneficiary.lastActivity,
-    ...formatDeviceFields(beneficiary)
+    ...formatSupportProgramFields(beneficiary)
   }
 }
 

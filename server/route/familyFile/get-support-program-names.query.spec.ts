@@ -13,7 +13,7 @@ const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
 
 let familyFileId: string
 let beneficiaryId: string
-let deviceNameId: string
+let supportProgramNameId: string
 
 beforeEach(async () => {
   const familyFile = await prismaClient.familyFile.create({
@@ -26,70 +26,76 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: 'TEST-DEVICE-NAMES-FF',
+      fileNumber: 'TEST-SUPPORT-PROGRAM-NAMES-FF',
       status: 'Active'
     }
   })
   beneficiaryId = beneficiary.id
 
-  const deviceName = await prismaClient.beneficiaryDeviceName.create({
+  const supportProgramName = await prismaClient.supportProgramName.create({
     data: {
       name: 'Aide alimentaire-GETNAMES',
       structureId,
       createdById: socialWorkerId
     }
   })
-  deviceNameId = deviceName.id
+  supportProgramNameId = supportProgramName.id
 
-  await prismaClient.beneficiaryDevice.create({
+  await prismaClient.supportProgram.create({
     data: {
       beneficiary: { connect: { id: beneficiaryId } },
-      deviceName: { connect: { id: deviceNameId } }
+      supportProgramName: { connect: { id: supportProgramNameId } }
     }
   })
 })
 
 afterEach(async () => {
-  await prismaClient.beneficiaryDevice.deleteMany({ where: { beneficiaryId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
-    where: { id: deviceNameId }
+  await prismaClient.supportProgram.deleteMany({
+    where: { beneficiaryId }
+  })
+  await prismaClient.supportProgramName.deleteMany({
+    where: { id: supportProgramNameId }
   })
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
 })
 
-describe('FamilyFile - getDeviceNames', () => {
-  test('returns device names of all beneficiaries in the family file', async ({
+describe('FamilyFile - getSupportProgramNames', () => {
+  test('returns support program names of all beneficiaries in the family file', async ({
     trpc
   }) => {
-    const names = await trpc.structureManager.file.getDeviceNamesForFamilyFile({
-      familyFileId
-    })
+    const names =
+      await trpc.structureManager.file.getSupportProgramNamesForFamilyFile({
+        familyFileId
+      })
     expect(names).toContain('Aide alimentaire-GETNAMES')
   })
 
   test('returns unique names sorted alphabetically', async ({ trpc }) => {
-    const names = await trpc.structureManager.file.getDeviceNamesForFamilyFile({
-      familyFileId
-    })
+    const names =
+      await trpc.structureManager.file.getSupportProgramNamesForFamilyFile({
+        familyFileId
+      })
     expect(names).toEqual([...new Set(names)].sort())
   })
 })
 
-describe('FamilyFile - getDeviceNames - Authorizations', () => {
-  test('a user from another structure cannot get device names', async ({
+describe('FamilyFile - getSupportProgramNames - Authorizations', () => {
+  test('a user from another structure cannot get support program names', async ({
     trpc
   }) => {
     await expect(
-      trpc.structureManagerMinistere.file.getDeviceNamesForFamilyFile({
+      trpc.structureManagerMinistere.file.getSupportProgramNamesForFamilyFile({
         familyFileId
       })
     ).rejects.toThrow()
   })
 
-  test('a SocialWorker can get device names', async ({ trpc }) => {
+  test('a SocialWorker can get support program names', async ({ trpc }) => {
     await expect(
-      trpc.socialWorker.file.getDeviceNamesForFamilyFile({ familyFileId })
+      trpc.socialWorker.file.getSupportProgramNamesForFamilyFile({
+        familyFileId
+      })
     ).resolves.toBeDefined()
   })
 })

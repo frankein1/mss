@@ -28,7 +28,7 @@
   import type { z } from 'zod'
   import {
     updateBeneficiaryExternalOrganisationsSchema,
-    updateBeneficiaryDevicesSchema
+    updateSupportProgramsSchema
   } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
@@ -36,7 +36,7 @@
   // et résoudre le schema dans server/schema/beneficiary/updateBeneficiary.schema.ts
   // lorsque les mutations seront mergée en une seule (mutateExternalOrganisations)
   const combinedSchema = updateBeneficiaryExternalOrganisationsSchema.merge(
-    updateBeneficiaryDevicesSchema.omit({ id: true })
+    updateSupportProgramsSchema.omit({ id: true })
   )
   type CombinedInput = z.infer<typeof combinedSchema>
 
@@ -66,15 +66,17 @@
       id,
       structureId,
       ...externalOrganisations,
-      devices: (externalOrganisations?.devices ?? []).map(d => ({
-        id: d.id,
-        name: d.deviceName.name,
-        startDate: d.startDate,
-        endDate: d.endDate,
-        partnerOrganisationName: d.partnerOrganisationName,
-        precisions: d.precisions,
-        exitReason: d.exitReason
-      }))
+      supportPrograms: (externalOrganisations?.supportPrograms ?? []).map(
+        d => ({
+          id: d.id,
+          name: d.supportProgramName.name,
+          startDate: d.startDate,
+          endDate: d.endDate,
+          partnerOrganisationId: d.partnerOrganisation?.id ?? null,
+          precisions: d.precisions,
+          exitReason: d.exitReason
+        })
+      )
     }
   })
 
@@ -84,8 +86,8 @@
     error,
     status
   } = router.updateExternalOrganisations.useMutation()
-  const { mutate: mutateDevices, error: devicesError } =
-    router.updateDevices.useMutation()
+  const { mutate: mutateSupportPrograms, error: supportProgramsError } =
+    router.updateSupportPrograms.useMutation()
 
   async function onSaveBeneficiary(
     values: CombinedInput,
@@ -95,18 +97,21 @@
       return
     }
 
-    const { devices, ...externalOrganisations } = values
+    const { supportPrograms, ...externalOrganisations } = values
 
-    const [updatedExternal, updatedDevices] = await Promise.all([
+    const [updatedExternal, updatedSupportPrograms] = await Promise.all([
       mutateExternalOrganisations(externalOrganisations),
-      mutateDevices({ id: externalOrganisations.id, devices })
+      mutateSupportPrograms({
+        id: externalOrganisations.id,
+        supportPrograms
+      })
     ])
 
     if (
       error.value ||
-      devicesError.value ||
+      supportProgramsError.value ||
       !updatedExternal ||
-      !updatedDevices
+      !updatedSupportPrograms
     ) {
       snackbar.error(
         'La mise à jour de la fiche bénéficiaire a échoué.',

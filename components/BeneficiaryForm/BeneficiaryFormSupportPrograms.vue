@@ -9,21 +9,21 @@
       </p>
     </div>
 
-    <BeneficiaryFormDevice
+    <BeneficiaryFormSupportProgram
       v-for="(field, idx) in fields"
       :key="field.key"
       :index="idx"
       :is-duplicate="duplicateFlags[idx] ?? false"
-      :device-name-options="deviceNameOptions"
+      :support-program-name-options="supportProgramNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
-      @remove-device="handleRemoveDevice(idx)"
+      @remove-support-program="handleRemoveSupportProgram(idx)"
     />
 
     <div class="fr-col-12">
       <button
         class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-circle-line"
         type="button"
-        @click="addDevice"
+        @click="addSupportProgram"
       >
         Ajouter un dispositif
       </button>
@@ -32,17 +32,20 @@
 </template>
 
 <script setup lang="ts">
-  import BeneficiaryFormDeviceDeleteModal from './BeneficiaryFormDeviceDeleteModal.vue'
+  import BeneficiaryFormSupportProgramDeleteModal from './BeneficiaryFormSupportProgramDeleteModal.vue'
 
   const trpcClient = useTrpcClient()
   const modal = useModal()
 
-  const { data: deviceNames } =
-    await trpcClient.beneficiary.getDeviceNameList.useQuery()
+  const { data: supportProgramNames } =
+    await trpcClient.beneficiary.getSupportProgramNameList.useQuery()
 
-  const deviceNameOptions: Ref<Options> = computed(
+  const supportProgramNameOptions: Ref<Options> = computed(
     () =>
-      deviceNames.value?.map(({ name }) => ({ label: name, value: name })) ?? []
+      supportProgramNames.value?.map(({ name }) => ({
+        label: name,
+        value: name
+      })) ?? []
   )
 
   const { data: partnerOrganisations } =
@@ -50,13 +53,13 @@
 
   const partnerOrganisationOptions: Ref<Options> = computed(
     () =>
-      partnerOrganisations.value?.map(({ name }) => ({
+      partnerOrganisations.value?.map(({ id, name }) => ({
         label: name,
-        value: name
+        value: id
       })) ?? []
   )
 
-  const { remove, fields, push } = useFieldArray('devices')
+  const { remove, fields, push } = useFieldArray('supportPrograms')
 
   const duplicateFlags = computed(() => {
     const names = fields.value.map(
@@ -68,29 +71,31 @@
     )
   })
 
-  function addDevice() {
+  function addSupportProgram() {
     push({ id: crypto.randomUUID(), name: '' })
   }
 
-  async function handleRemoveDevice(idx: number) {
-    const deviceId = (fields.value[idx]?.value as { id?: string } | undefined)
-      ?.id
+  async function handleRemoveSupportProgram(idx: number) {
+    const supportProgramId = (
+      fields.value[idx]?.value as { id?: string } | undefined
+    )?.id
 
-    if (!deviceId) {
+    if (!supportProgramId) {
       remove(idx)
       return
     }
 
-    const isLinked = await trpcClient.beneficiary.checkDeviceHasFollowup.query({
-      deviceId
-    })
+    const isLinked =
+      await trpcClient.beneficiary.checkSupportProgramHasFollowup.query({
+        supportProgramId
+      })
 
     if (!isLinked) {
       remove(idx)
       return
     }
 
-    modal.open(BeneficiaryFormDeviceDeleteModal, {
+    modal.open(BeneficiaryFormSupportProgramDeleteModal, {
       title: 'Attention : ce dispositif est déjà lié à un accompagnement',
       triggerOpen: true,
       onConfirm: () => {

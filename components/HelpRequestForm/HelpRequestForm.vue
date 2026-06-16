@@ -31,8 +31,8 @@
         :has-set-external-structure="hasSetExternalStructure"
         :is-housing-support="isHousingSupport"
         :minister-id-error="ministerIdError"
-        :device-options="deviceOptions"
-        :device-options-disabled="deviceOptionsDisabled"
+        :support-program-options="supportProgramOptions"
+        :support-program-options-disabled="supportProgramOptionsDisabled"
       />
     </section>
 
@@ -132,7 +132,7 @@
   import type { PartnerOrganizationIdName } from '~/types/partner'
   import type { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
-  import { formatDeviceOption } from '~/utils/beneficiary/formatDeviceOption'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { routes } from '~/utils/routes'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
@@ -176,23 +176,25 @@
   }>()
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
-  const { setValue: setBeneficiaryDeviceId } = useField<string | null>(
-    'beneficiaryDeviceId'
+  const { setValue: setSupportProgramId } = useField<string | null>(
+    'supportProgramId'
   )
   const { value: familyFileId } = useField<string | null>('familyFileId')
 
   const trpcClient = useTrpcClient()
-  const { data: beneficiaryDevicesData } =
-    await trpcClient.beneficiary.getDevicesForBeneficiary.useQuery(
+  const { data: supportProgramsData } =
+    await trpcClient.beneficiary.getSupportProgramsForBeneficiary.useQuery(
       toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
     )
-  const deviceOptions = computed(() =>
-    (beneficiaryDevicesData.value ?? []).map(formatDeviceOption)
+  const supportProgramOptions = computed(() =>
+    (supportProgramsData.value ?? []).map(formatSupportProgramOption)
   )
-  const deviceOptionsDisabled = computed(() => deviceOptions.value.length === 0)
+  const supportProgramOptionsDisabled = computed(
+    () => supportProgramOptions.value.length === 0
+  )
 
   watch(beneficiaryId, () => {
-    setBeneficiaryDeviceId(null)
+    setSupportProgramId(null)
   })
   const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(

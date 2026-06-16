@@ -6,7 +6,7 @@
         v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
         :family-file-identification="familyFileIdentification"
-        :device-name-options="deviceNames ?? []"
+        :support-program-name-options="supportProgramNames ?? []"
       />
     </section>
     <AtomAlert
@@ -127,8 +127,8 @@
     }>()
   const socialSupportsFilters = ref<SocialSupportFilterInput>({})
 
-  const { data: deviceNames } =
-    await trpcClient.file.getDeviceNamesForFamilyFile.useQuery(
+  const { data: supportProgramNames } =
+    await trpcClient.file.getSupportProgramNamesForFamilyFile.useQuery(
       computed(() => ({ familyFileId }))
     )
 

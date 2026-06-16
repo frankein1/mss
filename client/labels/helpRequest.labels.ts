@@ -35,5 +35,5 @@ export const helpRequestFieldLabels = {
   financialSupport: 'Aide financière',
   isRefundable: 'Cette aide est-elle remboursable ?',
   endOfSocialSupport: "Fin d'accompagnement",
-  beneficiaryDeviceId: 'Dispositif concerné'
+  supportProgramId: 'Dispositif concerné'
 }

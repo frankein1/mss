@@ -115,12 +115,12 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  CGUHistory            CGUHistory[]
-  userActivities        UserActivity[]
-  WorkshopName          WorkshopName[]
-  Workshop              Workshop[]
-  RedirectionReasons    RedirectionReason[]
-  BeneficiaryDeviceName BeneficiaryDeviceName[]
+  CGUHistory         CGUHistory[]
+  userActivities     UserActivity[]
+  WorkshopName       WorkshopName[]
+  Workshop           Workshop[]
+  RedirectionReasons RedirectionReason[]
+  SupportProgramName SupportProgramName[]
 
   @@map("user")
 }
@@ -173,7 +173,7 @@ model Structure {
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
   RedirectionReasons    RedirectionReason[]
-  BeneficiaryDeviceName BeneficiaryDeviceName[]
+  SupportProgramName    SupportProgramName[]
 
   @@map("structure")
 }
@@ -490,8 +490,8 @@ model Followup {
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("followup_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
 
-  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
-  beneficiaryDevice   BeneficiaryDevice? @relation("followup_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
+  supportProgramId String?         @map("support_program_id") @db.Uuid
+  supportProgram   SupportProgram? @relation("followup_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
 
   medium FollowupMedium
 
@@ -585,8 +585,8 @@ model HelpRequest {
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("help_request_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
 
-  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
-  beneficiaryDevice   BeneficiaryDevice? @relation("help_request_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
+  supportProgramId String?         @map("support_program_id") @db.Uuid
+  supportProgram   SupportProgram? @relation("help_request_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -685,8 +685,8 @@ model HousingHelpRequest {
   lowIncomeHousingType              LowIncomeHousingType[] @map("low_income_housing_type")
   handlingDate                      DateTime?              @map("handling_date") @db.Date
 
-  beneficiaryDeviceId String?            @map("beneficiary_device_id") @db.Uuid
-  beneficiaryDevice   BeneficiaryDevice? @relation("housing_help_request_beneficiary_device", fields: [beneficiaryDeviceId], references: [id], onDelete: SetNull)
+  supportProgramId String?         @map("support_program_id") @db.Uuid
+  supportProgram   SupportProgram? @relation("housing_help_request_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
@@ -1827,12 +1827,12 @@ model Beneficiary {
   archiveDueDateHistory DateTime[] @map("archive_due_date_history") @db.Date
   lastActivity          DateTime?  @map("last_activity")
 
-  relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
+  relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  socialSupports SocialSupport[]
-  devices        BeneficiaryDevice[]
-  documents      Document[]
-  notifications  Notification[]
+  socialSupports  SocialSupport[]
+  supportPrograms SupportProgram[]
+  documents       Document[]
+  notifications   Notification[]
 
   income BudgetIncome?
 
@@ -1850,45 +1850,59 @@ model Beneficiary {
   @@map("beneficiary")
 }
 
-model BeneficiaryDeviceName {
-  id          String              @id @default(uuid()) @db.Uuid
-  name        String              @db.VarChar(200)
-  structure   Structure           @relation(fields: [structureId], references: [id])
-  structureId String              @map("structure_id") @db.Uuid
-  createdBy   User                @relation(fields: [createdById], references: [id])
-  createdById String              @map("created_by_id") @db.Uuid
-  createdAt   DateTime            @default(now()) @map("created_at")
-  devices     BeneficiaryDevice[]
+model SupportProgramName {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String   @map("created_by_id") @db.Uuid
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  supportPrograms SupportProgram[]
 
   @@unique([structureId, name])
-  @@map("beneficiary_device_name")
+  @@map("support_program_name")
 }
 
-model BeneficiaryDevice {
-  id            String      @id @default(uuid()) @db.Uuid
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+model SupportProgram {
+  id String @id @default(uuid()) @db.Uuid
 
-  deviceName   BeneficiaryDeviceName @relation(fields: [deviceNameId], references: [id])
-  deviceNameId String                @map("device_name_id") @db.Uuid
+  /// beneficiaryId is defined when not linked to a workshop, and null otherwise. Enforced by 'check_support_program_beneficiary_or_workshop'
+  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
 
-  partnerOrganisationName String? @map("partner_organisation_name") @db.VarChar(200)
-  precisions              String? @db.VarChar(500)
+  /// workshopId is defined when not linked to a beneficiary, and null otherwise. Enforced by 'check_support_program_beneficiary_or_workshop'
+  workshopId String?   @map("workshop_id") @db.Uuid
+  workshop   Workshop? @relation(fields: [workshopId], references: [id], onDelete: Cascade)
 
-  startDate  DateTime? @map("start_date") @db.Date
-  endDate    DateTime? @map("end_date") @db.Date
-  exitReason String?   @map("exit_reason") @db.VarChar(500)
+  supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id])
+  supportProgramNameId String             @map("support_program_name_id") @db.Uuid
+
+  partnerOrganisationId String?              @map("partner_organisation_id") @db.Uuid
+  partnerOrganisation   PartnerOrganization? @relation(fields: [partnerOrganisationId], references: [id])
+
+  precisions String?
+
+  startDate DateTime? @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  exitReason String? @map("exit_reason")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  followups           Followup[]           @relation("followup_beneficiary_device")
-  helpRequests        HelpRequest[]        @relation("help_request_beneficiary_device")
-  housingHelpRequests HousingHelpRequest[] @relation("housing_help_request_beneficiary_device")
+  // lier à un socialsupport au lieu de folloup et helpRequest et housingHelpRequests
+  followups           Followup[]           @relation("followup_support_program")
+  helpRequests        HelpRequest[]        @relation("help_request_support_program")
+  housingHelpRequests HousingHelpRequest[] @relation("housing_help_request_support_program")
 
-  @@index(fields: [beneficiaryId], map: "beneficiary_device_beneficiary_id_idx")
-  @@index(fields: [deviceNameId], map: "beneficiary_device_device_name_id_idx")
-  @@map("beneficiary_device")
+  @@index(fields: [beneficiaryId], map: "support_program_beneficiary_id_idx")
+  // vérifier l'utilité de cet index
+  @@index(fields: [supportProgramNameId], map: "support_program_support_program_name_id_idx")
+  @@map("support_program")
 }
 
 enum RelativeRelationship {
@@ -2105,6 +2119,7 @@ model PartnerOrganization {
   housingHelpRequestsPrescribed HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
   workshops                     Workshop[]
   socialSupportRedirections     SocialSupportRedirection[]
+  supportPrograms               SupportProgram[]
 
   @@unique([structureId, siret])
   @@map("partner_organization")
@@ -2390,6 +2405,7 @@ model Workshop {
   createdAt             DateTime             @default(now()) @map("created_at")
 
   workshopAttendees WorkshopAttendee[]
+  supportPrograms   SupportProgram[]
 
   @@map("workshop")
 }

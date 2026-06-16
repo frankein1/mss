@@ -59,8 +59,8 @@
             :content="followup.subjects.map(({ name }) => name).join(', ')"
           />
           <PrintDetailItem
-            :title="followupFieldLabels.beneficiaryDeviceId"
-            :content="followup.beneficiaryDevice?.deviceName?.name"
+            :title="followupFieldLabels.supportProgramId"
+            :content="followup.supportProgram?.supportProgramName?.name"
           />
           <PrintDetailItem
             :title="followupFieldLabels.prescribingOrganizationId"

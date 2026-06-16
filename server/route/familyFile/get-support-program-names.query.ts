@@ -22,9 +22,9 @@ const handler = async ({
     select: {
       beneficiaries: {
         select: {
-          devices: {
+          supportPrograms: {
             select: {
-              deviceName: { select: { name: true } }
+              supportProgramName: { select: { name: true } }
             }
           }
         }
@@ -34,15 +34,15 @@ const handler = async ({
 
   const names = new Set<string>()
   for (const beneficiary of familyFile.beneficiaries) {
-    for (const device of beneficiary.devices) {
-      names.add(device.deviceName.name)
+    for (const supportProgram of beneficiary.supportPrograms) {
+      names.add(supportProgram.supportProgramName.name)
     }
   }
 
   return Array.from(names).sort()
 }
 
-export const getDeviceNamesForFamilyFileQuery = createQuery({
+export const getSupportProgramNamesForFamilyFileQuery = createQuery({
   inputValidation,
   securityCheck: async (ctx, input) => {
     const permissions = await FamilyFileService.getEditionPermissions(

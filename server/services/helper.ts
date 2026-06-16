@@ -265,11 +265,11 @@ export function filterFollowup({
   followup: Followup & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
-    beneficiaryDevice: {
+    supportProgram: {
       id: string
       startDate: Date | null
       endDate: Date | null
-      deviceName: { id: string; name: string }
+      supportProgramName: { id: string; name: string }
     } | null
   }
   conditions: {
@@ -299,8 +299,8 @@ export function filterFollowup({
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
     duration: show(followup.duration, conditions.details),
-    beneficiaryDeviceId: followup.beneficiaryDeviceId,
-    beneficiaryDevice: followup.beneficiaryDevice
+    supportProgramId: followup.supportProgramId,
+    supportProgram: followup.supportProgram
   }
 }
 export function filterFollowupForExport<T extends Partial<Followup>>({
@@ -423,18 +423,18 @@ export function filterHousingHelpRequest({
     | 'lowIncomeHousingType'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
-    | 'beneficiaryDeviceId'
+    | 'supportProgramId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
-    beneficiaryDevice: {
+    supportProgram: {
       id: string
       startDate: Date | null
       endDate: Date | null
-      deviceName: { id: string; name: string }
+      supportProgramName: { id: string; name: string }
     } | null
   }
   conditions: {
@@ -486,8 +486,8 @@ export function filterHousingHelpRequest({
         ),
       details
     ),
-    beneficiaryDeviceId: housingHelpRequest.beneficiaryDeviceId,
-    beneficiaryDevice: housingHelpRequest.beneficiaryDevice
+    supportProgramId: housingHelpRequest.supportProgramId,
+    supportProgram: housingHelpRequest.supportProgram
   }
 }
 
@@ -507,18 +507,18 @@ export function filterHelpRequest({
     | 'paymentMethod'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
-    | 'beneficiaryDeviceId'
+    | 'supportProgramId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
-    beneficiaryDevice: {
+    supportProgram: {
       id: string
       startDate: Date | null
       endDate: Date | null
-      deviceName: { id: string; name: string }
+      supportProgramName: { id: string; name: string }
     } | null
   }
   conditions: {
@@ -561,8 +561,8 @@ export function filterHelpRequest({
         ),
       details
     ),
-    beneficiaryDeviceId: helpRequest.beneficiaryDeviceId,
-    beneficiaryDevice: helpRequest.beneficiaryDevice
+    supportProgramId: helpRequest.supportProgramId,
+    supportProgram: helpRequest.supportProgram
   }
 }
 

@@ -23,13 +23,13 @@
               socialSupportSubjectOptions &&
               beneficiariesCitiesOptions &&
               agentsOptions &&
-              deviceNameOptions
+              supportProgramNameOptions
             "
             :key="route.path"
             :social-support-subject-options="socialSupportSubjectOptions"
             :beneficiaries-cities-options="beneficiariesCitiesOptions"
             :agent-options="agentsOptions"
-            :device-name-options="deviceNameOptions"
+            :support-program-name-options="supportProgramNameOptions"
           />
         </AtomRouteTabs>
       </div>
@@ -127,10 +127,16 @@
       queryKey: 'config.getAgents.options'
     })
 
-  const { data: deviceNameOptions, error: deviceNameOptionsError } =
-    await trpcClient.beneficiary.getDeviceNameList.useQuery(undefined, {
-      transform: deviceNames => toOptions(deviceNames, 'id', 'name')
-    })
+  const {
+    data: supportProgramNameOptions,
+    error: supportProgramNameOptionsError
+  } = await trpcClient.beneficiary.getSupportProgramNameList.useQuery(
+    undefined,
+    {
+      transform: supportProgramNames =>
+        toOptions(supportProgramNames, 'id', 'name')
+    }
+  )
 
   const fetchError = computed(() => {
     if (socialSupportSubjectOptionsError.value) {
@@ -142,7 +148,7 @@
     if (agentsOptionsError.value) {
       return "La liste des référents n'a pas pu être chargée."
     }
-    if (deviceNameOptionsError.value) {
+    if (supportProgramNameOptionsError.value) {
       return "La liste des dispositifs n'a pas pu être chargée."
     }
     return ''

@@ -20,8 +20,12 @@ export async function getHelpRequestAmountsByInstructorOrganizationQuery(
 
   // Cannot retrieve organization name from this query so perform in 2 steps
   // https://github.com/prisma/prisma/issues/16243#issue-1445823500
-  const deviceFilter = input.deviceNameIds?.length
-    ? { beneficiaryDevice: { deviceNameId: { in: input.deviceNameIds } } }
+  const supportProgramFilter = input.supportProgramNameIds?.length
+    ? {
+        supportProgram: {
+          supportProgramNameId: { in: input.supportProgramNameIds }
+        }
+      }
     : {}
 
   const [amountsByOrganizationId, orgs] = await Promise.all([
@@ -30,7 +34,7 @@ export async function getHelpRequestAmountsByInstructorOrganizationQuery(
       where: {
         financialSupport: true,
         askedAmount: { gt: 0 },
-        ...deviceFilter,
+        ...supportProgramFilter,
         fileInstruction: {
           externalStructure: true,
           socialSupport: {

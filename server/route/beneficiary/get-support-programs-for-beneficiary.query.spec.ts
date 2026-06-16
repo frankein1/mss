@@ -11,7 +11,7 @@ import { v4 } from 'uuid'
 
 let familyFileId: string
 let beneficiaryId: string
-let deviceNameId: string
+let supportProgramNameId: string
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const referentId = fixturesUsers[FixtureUserRole.Referent].id
@@ -31,26 +31,26 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: 'TEST-GET-DEVICES-001',
+      fileNumber: 'TEST-GET-SUPPORT-PROGRAMS-001',
       status: 'Active'
     }
   })
   beneficiaryId = beneficiary.id
 
-  const deviceName = await prismaClient.beneficiaryDeviceName.create({
+  const supportProgramName = await prismaClient.supportProgramName.create({
     data: {
-      name: `GDFB-SAVS-${v4()}`,
+      name: `GSPFB-SAVS-${v4()}`,
       structureId,
       createdById: socialWorkerId
     }
   })
-  deviceNameId = deviceName.id
+  supportProgramNameId = supportProgramName.id
 
-  await prismaClient.beneficiaryDevice.create({
+  await prismaClient.supportProgram.create({
     data: {
       id: v4(),
       beneficiary: { connect: { id: beneficiaryId } },
-      deviceName: { connect: { id: deviceNameId } },
+      supportProgramName: { connect: { id: supportProgramNameId } },
       startDate: new Date('2024-01-01'),
       endDate: new Date('2024-12-31')
     }
@@ -60,29 +60,29 @@ beforeEach(async () => {
 afterEach(async () => {
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
-    where: { id: deviceNameId }
+  await prismaClient.supportProgramName.deleteMany({
+    where: { id: supportProgramNameId }
   })
 })
 
 describe('Comportement', () => {
   test('Retourne les dispositifs dun bénéficiaire', async ({ trpc }) => {
     const result =
-      await trpc.structureManager.beneficiary.getDevicesForBeneficiary({
+      await trpc.structureManager.beneficiary.getSupportProgramsForBeneficiary({
         beneficiaryId
       })
 
     expect(result).toHaveLength(1)
-    expect(result[0].startDate).toEqual(new Date('2024-01-01'))
-    expect(result[0].endDate).toEqual(new Date('2024-12-31'))
-    expect(result[0].deviceName.id).toBe(deviceNameId)
+    expect(result[0]!.startDate).toEqual(new Date('2024-01-01'))
+    expect(result[0]!.endDate).toEqual(new Date('2024-12-31'))
+    expect(result[0]!.supportProgramName.id).toBe(supportProgramNameId)
   })
 
   test('Retourne un tableau vide si beneficiaryId est vide', async ({
     trpc
   }) => {
     const result =
-      await trpc.structureManager.beneficiary.getDevicesForBeneficiary({
+      await trpc.structureManager.beneficiary.getSupportProgramsForBeneficiary({
         beneficiaryId: ''
       })
     expect(result).toEqual([])
@@ -92,9 +92,9 @@ describe('Comportement', () => {
     trpc
   }) => {
     await expect(
-      trpc.structureManagerMinistere.beneficiary.getDevicesForBeneficiary({
-        beneficiaryId
-      })
+      trpc.structureManagerMinistere.beneficiary.getSupportProgramsForBeneficiary(
+        { beneficiaryId }
+      )
     ).rejects.toThrowError(/no record/i)
   })
 })

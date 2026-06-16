@@ -153,9 +153,11 @@ export function prepareBeneficiaryFilters(
     formattedFilters[filters.notFilled] = null
   }
 
-  if (filters.deviceNames?.length) {
-    formattedFilters.devices = {
-      some: { deviceName: { name: { in: filters.deviceNames } } }
+  if (filters.supportProgramNames?.length) {
+    formattedFilters.supportPrograms = {
+      some: {
+        supportProgramName: { name: { in: filters.supportProgramNames } }
+      }
     }
   }
 

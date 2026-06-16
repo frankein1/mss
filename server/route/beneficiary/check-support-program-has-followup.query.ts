@@ -4,7 +4,7 @@ import { FollowupRepo } from '~/server/database'
 import type { ProtectedAppContext } from '~/server/trpc'
 
 const inputValidation = z.object({
-  deviceId: z.string().uuid()
+  supportProgramId: z.string().uuid()
 })
 
 type Input = z.infer<typeof inputValidation>
@@ -17,12 +17,12 @@ const handler = async ({
   input: Input
 }) => {
   const count = await FollowupRepo.count(ctx.user, {
-    where: { beneficiaryDeviceId: input.deviceId }
+    where: { supportProgramId: input.supportProgramId }
   })
   return count > 0
 }
 
-export const checkDeviceHasFollowupQuery = createQuery({
+export const checkSupportProgramHasFollowupQuery = createQuery({
   inputValidation,
   securityCheck: async () => true,
   handler

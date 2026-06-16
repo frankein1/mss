@@ -112,12 +112,13 @@ function findMany(
           prescribingOrganizationContactId: true,
           prescribingOrganization: { select: { id: true, name: true } },
           prescribingOrganizationContact: { select: { id: true, name: true } },
-          beneficiaryDevice: {
+          supportProgramId: true,
+          supportProgram: {
             select: {
               id: true,
               startDate: true,
               endDate: true,
-              deviceName: { select: { id: true, name: true } }
+              supportProgramName: { select: { id: true, name: true } }
             }
           }
         }
@@ -141,7 +142,16 @@ function findMany(
           prescribingOrganizationId: true,
           prescribingOrganizationContactId: true,
           prescribingOrganization: { select: { id: true, name: true } },
-          prescribingOrganizationContact: { select: { id: true, name: true } }
+          prescribingOrganizationContact: { select: { id: true, name: true } },
+          supportProgramId: true,
+          supportProgram: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              supportProgramName: { select: { id: true, name: true } }
+            }
+          }
         }
       }
     },

@@ -15,8 +15,8 @@ const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
 
 let familyFileId: string
 let beneficiaryId: string
-let deviceNameWithBeneficiaryId: string
-let deviceNameWithoutBeneficiaryId: string
+let supportProgramNameWithBeneficiaryId: string
+let supportProgramNameWithoutBeneficiaryId: string
 
 beforeEach(async () => {
   const suffix = v4()
@@ -34,48 +34,58 @@ beforeEach(async () => {
       familyFile: { connect: { id: familyFileId } },
       structure: { connect: { id: structureId } },
       createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: `TEST-GDNL-${suffix}`,
+      fileNumber: `TEST-GSPNL-${suffix}`,
       status: 'Active'
     }
   })
   beneficiaryId = beneficiary.id
 
-  const deviceNameWithBeneficiary =
-    await prismaClient.beneficiaryDeviceName.create({
+  const supportProgramNameWithBeneficiary =
+    await prismaClient.supportProgramName.create({
       data: {
-        name: `GDNL-Avec-beneficiaire-${suffix}`,
+        name: `GSPNL-Avec-beneficiaire-${suffix}`,
         structureId,
         createdById: socialWorkerId
       }
     })
-  deviceNameWithBeneficiaryId = deviceNameWithBeneficiary.id
+  supportProgramNameWithBeneficiaryId = supportProgramNameWithBeneficiary.id
 
-  const deviceNameWithoutBeneficiary =
-    await prismaClient.beneficiaryDeviceName.create({
+  const supportProgramNameWithoutBeneficiary =
+    await prismaClient.supportProgramName.create({
       data: {
-        name: `GDNL-Sans-beneficiaire-${suffix}`,
+        name: `GSPNL-Sans-beneficiaire-${suffix}`,
         structureId,
         createdById: socialWorkerId
       }
     })
-  deviceNameWithoutBeneficiaryId = deviceNameWithoutBeneficiary.id
+  supportProgramNameWithoutBeneficiaryId =
+    supportProgramNameWithoutBeneficiary.id
 
-  await prismaClient.beneficiaryDevice.create({
+  await prismaClient.supportProgram.create({
     data: {
       id: v4(),
       beneficiary: { connect: { id: beneficiaryId } },
-      deviceName: { connect: { id: deviceNameWithBeneficiaryId } }
+      supportProgramName: {
+        connect: { id: supportProgramNameWithBeneficiaryId }
+      }
     }
   })
 })
 
 afterEach(async () => {
-  await prismaClient.beneficiaryDevice.deleteMany({ where: { beneficiaryId } })
+  await prismaClient.supportProgram.deleteMany({
+    where: { beneficiaryId }
+  })
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  await prismaClient.beneficiaryDeviceName.deleteMany({
+  await prismaClient.supportProgramName.deleteMany({
     where: {
-      id: { in: [deviceNameWithBeneficiaryId, deviceNameWithoutBeneficiaryId] }
+      id: {
+        in: [
+          supportProgramNameWithBeneficiaryId,
+          supportProgramNameWithoutBeneficiaryId
+        ]
+      }
     }
   })
 })
@@ -84,20 +94,21 @@ describe('Comportement', () => {
   test('Retourne uniquement les noms de dispositifs liés à au moins un bénéficiaire', async ({
     trpc
   }) => {
-    const result = await trpc.structureManager.beneficiary.getDeviceNameList()
+    const result =
+      await trpc.structureManager.beneficiary.getSupportProgramNameList()
 
     const ids = result.map(d => d.id)
-    expect(ids).toContain(deviceNameWithBeneficiaryId)
-    expect(ids).not.toContain(deviceNameWithoutBeneficiaryId)
+    expect(ids).toContain(supportProgramNameWithBeneficiaryId)
+    expect(ids).not.toContain(supportProgramNameWithoutBeneficiaryId)
   })
 
   test('Ne retourne pas les noms de dispositifs dune autre structure', async ({
     trpc
   }) => {
     const result =
-      await trpc.structureManagerMinistere.beneficiary.getDeviceNameList()
+      await trpc.structureManagerMinistere.beneficiary.getSupportProgramNameList()
 
     const ids = result.map(d => d.id)
-    expect(ids).not.toContain(deviceNameWithBeneficiaryId)
+    expect(ids).not.toContain(supportProgramNameWithBeneficiaryId)
   })
 })
