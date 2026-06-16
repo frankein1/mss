@@ -145,16 +145,12 @@
   const userHasFiles = computed(() => {
     return (
       user?.value &&
-      ((user.value._count.referentFor && user.value._count.referentFor > 0) ||
-        (user.value._count.createdDocuments &&
-          user.value._count.createdDocuments > 0) ||
-        (user.value._count.createdSocialSupports &&
-          user.value._count.createdSocialSupports > 0) ||
-        (user.value._count.createdComments &&
-          user.value._count.createdComments > 0) ||
-        (user.value._count.workshops && user.value._count.workshops > 0) ||
-        (user.value._count.workshopNames &&
-          user.value._count.workshopNames > 0))
+      ((user.value._count.referentFor ?? 0) > 0 ||
+        (user.value._count.createdDocuments ?? 0) > 0 ||
+        (user.value._count.createdSocialSupports ?? 0) > 0 ||
+        (user.value._count.createdComments ?? 0) > 0 ||
+        (user.value._count.workshops ?? 0) > 0 ||
+        (user.value._count.workshopNames ?? 0) > 0)
     )
   })
 
