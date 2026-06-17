@@ -112,6 +112,7 @@ describe('External Organisations - Update - Support programs', () => {
 
     const supportPrograms = await prismaClient.supportProgram.findMany({
       where: { beneficiaryId },
+      // eslint-disable-next-line no-restricted-syntax
       include: { supportProgramName: true }
     })
     expect(supportPrograms).toHaveLength(1)
@@ -142,6 +143,7 @@ describe('External Organisations - Update - Support programs', () => {
 
     const supportPrograms = await prismaClient.supportProgram.findMany({
       where: { beneficiaryId },
+      // eslint-disable-next-line no-restricted-syntax
       include: { supportProgramName: true }
     })
     expect(supportPrograms).toHaveLength(2)
@@ -175,6 +177,7 @@ describe('External Organisations - Update - Support programs', () => {
 
     const program = await prismaClient.supportProgram.findUnique({
       where: { id: programId },
+      // eslint-disable-next-line no-restricted-syntax
       include: { supportProgramName: true }
     })
     expect(program).not.toBeNull()

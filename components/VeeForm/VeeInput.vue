@@ -3,6 +3,7 @@
     class="fr-input-group"
     :class="{
       'fr-input-group--error': error,
+      'fr-input-group--valid': !error && successMessage,
       'fr-input-group--disabled': disabled
     }"
   >
@@ -56,6 +57,12 @@
       >
         {{ error }}
       </p>
+      <p
+        v-else-if="successMessage"
+        class="fr-message fr-message--valid"
+      >
+        {{ successMessage }}
+      </p>
     </div>
   </div>
 </template>
@@ -82,6 +89,7 @@
       noHint?: boolean
       disabled?: boolean
       readonly?: boolean
+      successMessage?: string
     }>(),
     {
       type: 'text',
@@ -92,7 +100,8 @@
       required: false,
       noHint: false,
       disabled: false,
-      readonly: false
+      readonly: false,
+      successMessage: undefined
     }
   )
 

@@ -9,8 +9,10 @@
         name="name"
         :label="supportProgramFieldLabels.name"
         :disabled="isSubmitting"
-        no-hint
+        :success-message="successMessage"
+        hint="Ajouter ou modifier un nom de dispositif puis valider"
         class="spn-item__field"
+        @change-input="onInput($event)"
       />
 
       <div
@@ -20,7 +22,9 @@
         <button
           class="fr-btn fr-btn--secondary"
           type="submit"
-          :disabled="isSubmitting"
+          :disabled="
+            isSubmitting || !currentName.trim() || currentName === props.name
+          "
         >
           Valider
         </button>
@@ -49,11 +53,13 @@
     name: string
     canEdit: boolean
     isSubmitting: boolean
+    successMessage?: string
   }>()
 
   const emit = defineEmits<{
     update: [name: string]
     remove: []
+    clearSuccess: []
   }>()
 
   const { handleSubmit, setValues } = useForm({
@@ -63,10 +69,22 @@
       : { name: props.name }
   })
 
+  const currentName = ref(props.name)
+
   watch(
     () => props.name,
-    value => setValues({ name: value })
+    value => {
+      setValues({ name: value })
+      currentName.value = value
+    }
   )
+
+  function onInput(value: string) {
+    currentName.value = value
+    if (props.successMessage) {
+      emit('clearSuccess')
+    }
+  }
 
   const onSubmit = handleSubmit(values => {
     emit('update', values.name)
@@ -76,7 +94,7 @@
 <style scoped lang="scss">
   .spn-item__form {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 1rem;
     padding: 1rem 0;
   }
@@ -90,5 +108,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin-top: 3.5rem;
   }
 </style>

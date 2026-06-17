@@ -27,8 +27,10 @@
         :name="item.name"
         :can-edit="application.edit.structure"
         :is-submitting="upsertStatus === 'pending'"
+        :success-message="successMessageByItemId[item.id]"
         @update="onUpdate(item, $event)"
         @remove="onClickRemove(item)"
+        @clear-success="clearSuccess(item)"
       />
     </ul>
 
@@ -68,18 +70,33 @@
     status: upsertStatus
   } = trpcClient.supportProgram.upsertName.useMutation()
 
+  /** The success message after mutation is shown under the corresponding field */
+  const successMessageByItemId = ref<Record<string, string>>({})
+
   const { mutate: deleteName, error: deleteError } =
     trpcClient.supportProgram.deleteName.useMutation()
 
   async function onUpdate(item: SupportProgramNameItem, name: string) {
     const focusBack = snackbar.focus('form', 'button[type="submit"]')
     await upsertName({ id: item.id || undefined, name })
+
     if (upsertError.value) {
       snackbar.error('La modification du dispositif a échoué.', focusBack)
       return
     }
-    snackbar.success(`Le dispositif a été ${item.id ? 'modifié' : 'ajouté'}.`)
-    refresh()
+
+    const isCreation = !item.id
+    await refresh()
+    const refreshedItem = supportProgramNames.value?.find(i => i.name === name)
+    if (refreshedItem) {
+      successMessageByItemId.value[refreshedItem.id] =
+        `Le dispositif a été ${isCreation ? 'ajouté' : 'modifié'}.`
+    }
+  }
+
+  function clearSuccess(item: SupportProgramNameItem) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete successMessageByItemId.value[item.id]
   }
 
   const isAdding = computed(() =>
