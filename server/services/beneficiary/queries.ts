@@ -318,6 +318,8 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     prescribingStructure: beneficiary.prescribingStructure,
     orientationType: beneficiary.orientationType,
     orientationStructure: beneficiary.orientationStructure,
+    serviceProviders: beneficiary.serviceProviders,
+    involvedPartners: beneficiary.involvedPartners,
     additionalInformation: beneficiary.additionalInformation,
     supportPrograms: beneficiary.supportPrograms.map(d => ({
       id: d.id,

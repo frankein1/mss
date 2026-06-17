@@ -83,6 +83,8 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'prescribingStructure'
   | 'orientationType'
   | 'orientationStructure'
+  | 'serviceProviders'
+  | 'involvedPartners'
   | 'additionalInformation'
 > & {
   supportPrograms: GetSupportProgramItem[]

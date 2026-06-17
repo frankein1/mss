@@ -38,6 +38,19 @@
           :label="beneficiaryFieldLabels.orientationStructure"
         />
       </div>
+      <div class="fr-col-12">
+        <VeeInput
+          name="serviceProviders"
+          :label="beneficiaryFieldLabels.serviceProviders"
+          placeholder="Repas à domicile, aide à domicile..."
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeInput
+          name="involvedPartners"
+          :label="beneficiaryFieldLabels.involvedPartners"
+        />
+      </div>
     </BeneficiaryFormSection>
 
     <BeneficiaryFormSupportPrograms />
