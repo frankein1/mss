@@ -19,7 +19,8 @@
           >
             <template #detailedMessage>
               <p>
-                Ce dispositif est utilisé <strong>{{ count }}</strong> fois au
+                Ce nom de dispositif est utilisé par
+                <strong>{{ count }}</strong> bénéficiaire(s) ou atelier(s) au
                 sein de la structure. Les bénéficiaires, suivis, demandes d'aide
                 et ateliers associés perdront cette référence.
               </p>
