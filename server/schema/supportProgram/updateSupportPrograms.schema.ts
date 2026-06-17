@@ -1,13 +1,16 @@
 import { z } from 'zod'
-import { maxStringLengthMessage } from '~/utils/zod'
-import { stringConstraint, dateOrEmpty } from '../helpers.schema'
+import {
+  dateOrEmpty,
+  limitedStringConstraint,
+  requiredLimitedStringConstraint
+} from '../helpers.schema'
 
 export const supportProgramSchema = z.object({
   id: z.string().uuid(),
-  name: stringConstraint.max(200, maxStringLengthMessage(200)),
+  name: requiredLimitedStringConstraint(50),
   startDate: dateOrEmpty,
   endDate: dateOrEmpty,
   partnerOrganisationId: z.string().uuid().nullish(),
-  precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish(),
-  exitReason: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
+  precisions: limitedStringConstraint(2, 500).nullish(),
+  exitReason: limitedStringConstraint(2, 500).nullish()
 })
