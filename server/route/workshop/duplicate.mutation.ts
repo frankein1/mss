@@ -109,6 +109,7 @@ const handler = async ({
       select: { id: true },
       data: {
         ...workshopInput,
+        attendeeLimit,
         partnerOrganization: partnerOrganizationId
           ? { connect: { id: partnerOrganizationId } }
           : {},
