@@ -11,12 +11,3 @@ export const supportProgramSchema = z.object({
   precisions: stringConstraint.max(500, maxStringLengthMessage(500)).nullish(),
   exitReason: stringConstraint.max(500, maxStringLengthMessage(500)).nullish()
 })
-
-export const updateSupportProgramsSchema = z.object({
-  id: z.string().uuid(),
-  supportPrograms: z.array(supportProgramSchema)
-})
-
-export type UpdateSupportProgramsInput = z.infer<
-  typeof updateSupportProgramsSchema
->

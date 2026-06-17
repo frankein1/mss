@@ -20,10 +20,13 @@ const SUPPORT_PROGRAM_NAMES_USED = [
   'UDT-Portage de repas',
   'UDT-Ancien dispositif',
   'UDT-Nouveau dispositif',
-  'UDT-Nouveau nom',
   'UDT-Dispositif référent',
-  'UDT-Dispositif complet'
+  'UDT-Dispositif complet',
+  'UDT-Dispositif existant',
+  'UDT-Dispositif modifié'
 ]
+
+let supportProgramNameIds: string[] = []
 
 beforeEach(async () => {
   const familyFile = await prismaClient.familyFile.create({
@@ -44,6 +47,18 @@ beforeEach(async () => {
     }
   })
   beneficiaryId = beneficiary.id
+
+  supportProgramNameIds = []
+  for (const name of SUPPORT_PROGRAM_NAMES_USED) {
+    const spn = await prismaClient.supportProgramName.create({
+      data: {
+        name,
+        structure: { connect: { id: structureId } },
+        createdBy: { connect: { id: socialWorkerId } }
+      }
+    })
+    supportProgramNameIds.push(spn.id)
+  }
 })
 
 afterEach(async () => {
@@ -57,37 +72,41 @@ afterEach(async () => {
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
 })
 
-describe('Authorizations', () => {
-  test('Un ReceptionAgent ne peut pas modifier les dispositifs', async ({
+const baseInput = () => ({
+  id: beneficiaryId,
+  supportPrograms: []
+})
+
+describe('External Organisations - Update - Authorizations', () => {
+  test('A ReceptionAgent cannot update external organisations', async ({
     trpc
   }) => {
     await expect(
-      trpc.receptionAgent.supportProgram.update({
-        id: beneficiaryId,
-        supportPrograms: []
-      })
+      trpc.receptionAgent.beneficiary.updateExternalOrganisations(baseInput())
     ).rejects.toMatchObject({ code: 'FORBIDDEN' })
   })
 
-  test('Un utilisateur dune autre structure ne peut pas modifier les dispositifs', async ({
+  test('A user from another structure cannot update external organisations', async ({
     trpc
   }) => {
     await expect(
-      trpc.structureManagerMinistere.supportProgram.update({
-        id: beneficiaryId,
-        supportPrograms: []
-      })
+      trpc.structureManagerMinistere.beneficiary.updateExternalOrganisations(
+        baseInput()
+      )
     ).rejects.toThrowError(/no record/i)
   })
 })
 
-describe('Comportement', () => {
-  test('Un StructureManager peut ajouter des dispositifs', async ({ trpc }) => {
+describe('External Organisations - Update - Support programs', () => {
+  test('A StructureManager can add support programs', async ({ trpc }) => {
     const supportProgramId = v4()
-    const result = await trpc.structureManager.supportProgram.update({
-      id: beneficiaryId,
-      supportPrograms: [{ id: supportProgramId, name: 'UDT-Portage de repas' }]
-    })
+    const result =
+      await trpc.structureManager.beneficiary.updateExternalOrganisations({
+        ...baseInput(),
+        supportPrograms: [
+          { id: supportProgramId, name: 'UDT-Portage de repas' }
+        ]
+      })
 
     expect(result.id).toBe(beneficiaryId)
 
@@ -101,60 +120,80 @@ describe('Comportement', () => {
     )
   })
 
-  test('La mise à jour remplace tous les dispositifs existants', async ({
+  test('Updating preserves existing programs and removes deleted ones', async ({
     trpc
   }) => {
-    await trpc.structureManager.supportProgram.update({
-      id: beneficiaryId,
-      supportPrograms: [{ id: v4(), name: 'UDT-Ancien dispositif' }]
+    const existingId = v4()
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      supportPrograms: [
+        { id: existingId, name: 'UDT-Ancien dispositif' },
+        { id: v4(), name: 'UDT-Dispositif existant' }
+      ]
     })
 
-    await trpc.structureManager.supportProgram.update({
-      id: beneficiaryId,
-      supportPrograms: [{ id: v4(), name: 'UDT-Nouveau dispositif' }]
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      supportPrograms: [
+        { id: existingId, name: 'UDT-Ancien dispositif' },
+        { id: v4(), name: 'UDT-Nouveau dispositif' }
+      ]
     })
 
     const supportPrograms = await prismaClient.supportProgram.findMany({
       where: { beneficiaryId },
       include: { supportProgramName: true }
     })
-    expect(supportPrograms).toHaveLength(1)
-    expect(supportPrograms[0]!.supportProgramName.name).toBe(
-      'UDT-Nouveau dispositif'
-    )
+    expect(supportPrograms).toHaveLength(2)
+
+    const existing = supportPrograms.find(sp => sp.id === existingId)
+    expect(existing).toBeDefined()
+    expect(existing!.supportProgramName.name).toBe('UDT-Ancien dispositif')
+
+    const names = supportPrograms.map(sp => sp.supportProgramName.name)
+    expect(names).toContain('UDT-Nouveau dispositif')
+    expect(names).not.toContain('UDT-Dispositif existant')
   })
 
-  test('Le nom de dispositif est créé sil nexiste pas encore', async ({
-    trpc
-  }) => {
-    await trpc.structureManager.supportProgram.update({
-      id: beneficiaryId,
-      supportPrograms: [{ id: v4(), name: 'UDT-Nouveau nom' }]
+  test('Existing program fields can be updated in place', async ({ trpc }) => {
+    const programId = v4()
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      supportPrograms: [{ id: programId, name: 'UDT-Dispositif existant' }]
     })
 
-    const supportProgramName = await prismaClient.supportProgramName.findUnique(
-      {
-        where: {
-          structureId_name: { structureId, name: 'UDT-Nouveau nom' }
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: programId,
+          name: 'UDT-Dispositif modifié',
+          precisions: 'Updated precisions'
         }
-      }
-    )
-    expect(supportProgramName).not.toBeNull()
+      ]
+    })
+
+    const program = await prismaClient.supportProgram.findUnique({
+      where: { id: programId },
+      include: { supportProgramName: true }
+    })
+    expect(program).not.toBeNull()
+    expect(program!.id).toBe(programId)
+    expect(program!.supportProgramName.name).toBe('UDT-Dispositif modifié')
+    expect(program!.precisions).toBe('Updated precisions')
   })
 
-  test('Un Referent peut modifier les dispositifs dun bénéficiaire dont il est référent', async ({
+  test('A Referent can update support programs for a beneficiary they are referent of', async ({
     trpc
   }) => {
-    const result = await trpc.referent.supportProgram.update({
-      id: beneficiaryId,
+    const result = await trpc.referent.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
       supportPrograms: [{ id: v4(), name: 'UDT-Dispositif référent' }]
     })
     expect(result.id).toBe(beneficiaryId)
   })
 
-  test('Les champs optionnels sont correctement enregistrés', async ({
-    trpc
-  }) => {
+  test('Optional fields are correctly saved', async ({ trpc }) => {
     const supportProgramId = v4()
     const startDate = new Date('2024-01-01')
     const endDate = new Date('2024-06-30')
@@ -164,8 +203,8 @@ describe('Comportement', () => {
       select: { id: true }
     })
 
-    await trpc.structureManager.supportProgram.update({
-      id: beneficiaryId,
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
       supportPrograms: [
         {
           id: supportProgramId,
