@@ -37,6 +37,18 @@
       :value="externalOrganisations.orientationStructure"
       class="fr-col-12 fr-col-lg-6"
     />
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.serviceProviders"
+      :value="externalOrganisations.serviceProviders"
+      class="fr-col-12 fr-col-md-6"
+    />
+  </div>
+  <div class="fr-grid-row">
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.involvedPartners"
+      :value="externalOrganisations.involvedPartners"
+      class="fr-col-12 fr-col-md-6"
+    />
   </div>
 
   <template v-if="externalOrganisations.supportPrograms.length">

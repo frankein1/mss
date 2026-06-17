@@ -222,6 +222,12 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   orientationStructure: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
+  serviceProviders: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
+  involvedPartners: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
   supportPrograms: z.array(supportProgramSchema)
 })
 
