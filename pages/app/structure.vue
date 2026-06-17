@@ -62,7 +62,7 @@
         tabId: 'Accompagnements et Dispositifs',
         panelId: panelId('Accompagnements et Dispositifs'),
         title: 'Accompagnements et Dispositifs',
-        icon: 'fr-icon-checkbox-circle-line',
+        icon: 'fr-icon-survey-line',
         to: routes.structure.AppStructureCustomObjects.path()
       }
     )
