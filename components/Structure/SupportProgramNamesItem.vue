@@ -7,7 +7,7 @@
     >
       <VeeInput
         name="name"
-        :label="supportProgramExportFieldLabels.supportProgramName"
+        :label="supportProgramFieldLabels.name"
         :disabled="isSubmitting"
         no-hint
         class="spn-item__field"
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-  import { supportProgramExportFieldLabels } from '~/client/labels'
+  import { supportProgramFieldLabels } from '~/client/labels'
   import { upsertSupportProgramNameSchema } from '~/server/schema'
 
   const props = defineProps<{
