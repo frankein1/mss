@@ -8,9 +8,6 @@ export const supportProgramRouter = router({
   getForBeneficiary: protectedProcedure
     .input(routes.getSupportProgramsForBeneficiaryQuery.inputValidation)
     .query(routes.getSupportProgramsForBeneficiaryQuery.execute),
-  checkHasFollowup: protectedProcedure
-    .input(routes.checkSupportProgramHasFollowupQuery.inputValidation)
-    .query(routes.checkSupportProgramHasFollowupQuery.execute),
   getNamesForFamilyFile: protectedProcedure
     .input(routes.getSupportProgramNamesForFamilyFileQuery.inputValidation)
     .query(routes.getSupportProgramNamesForFamilyFileQuery.execute),

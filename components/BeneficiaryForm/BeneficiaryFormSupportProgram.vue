@@ -80,15 +80,6 @@
   </div>
 
   <div class="fr-col-12">
-    <button
-      type="button"
-      class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-delete-line btn-delete-action fr-ml-auto"
-      @click="emit('removeSupportProgram')"
-    >
-      Supprimer ce dispositif
-    </button>
-  </div>
-  <div class="fr-col-12">
     <hr class="fr-mt-3w" />
   </div>
 </template>
@@ -129,8 +120,4 @@
     showDuplicateAlert.value = false
     dismissed.value = true
   }
-
-  const emit = defineEmits<{
-    removeSupportProgram: []
-  }>()
 </script>
