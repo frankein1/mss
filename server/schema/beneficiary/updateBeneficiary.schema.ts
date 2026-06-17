@@ -20,6 +20,7 @@ import {
 } from '@prisma/client'
 import { z } from 'zod'
 import { createOrUpdateEntourageSchema } from '../relative.schema'
+import { supportProgramSchema } from '../supportProgram/updateSupportPrograms.schema'
 import {
   requiredNativeEnum,
   stringOrEmpty,
@@ -194,7 +195,8 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   orientationType: withEmptyValueOptionalNativeEnum(BeneficiaryOrientationType),
   orientationStructure: stringConstraint
     .max(100, maxStringLengthMessage(100))
-    .nullish()
+    .nullish(),
+  supportPrograms: z.array(supportProgramSchema)
 })
 
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<

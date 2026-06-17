@@ -5,7 +5,7 @@
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :permissions="permissions"
-    :schema="combinedSchema"
+    :schema="updateBeneficiaryExternalOrganisationsSchema"
     :is-submitting="status === 'pending'"
     :current-route="
       routes.beneficiary.AppBeneficiaryEditExternalOrganisations.name
@@ -25,20 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-  import type { z } from 'zod'
-  import {
-    updateBeneficiaryExternalOrganisationsSchema,
-    updateSupportProgramsSchema
-  } from '~/server/schema'
+  import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
+  import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
-
-  // TODO: supprimer combinedSchema et CombinedInput
-  // et résoudre le schema dans server/schema/beneficiary/updateBeneficiary.schema.ts
-  // lorsque les mutations seront mergée en une seule (mutateExternalOrganisations)
-  const combinedSchema = updateBeneficiaryExternalOrganisationsSchema.merge(
-    updateSupportProgramsSchema.omit({ id: true })
-  )
-  type CombinedInput = z.infer<typeof combinedSchema>
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -85,33 +74,18 @@
     error,
     status
   } = trpcClient.beneficiary.updateExternalOrganisations.useMutation()
-  const { mutate: mutateSupportPrograms, error: supportProgramsError } =
-    trpcClient.supportProgram.update.useMutation()
 
   async function onSaveBeneficiary(
-    values: CombinedInput,
+    values: UpdateBeneficiaryExternalOrganisationsInput,
     target: string | undefined
   ) {
     if (!beneficiary.value) {
       return
     }
 
-    const { supportPrograms, ...externalOrganisations } = values
+    const result = await mutateExternalOrganisations(values)
 
-    const [updatedExternal, updatedSupportPrograms] = await Promise.all([
-      mutateExternalOrganisations(externalOrganisations),
-      mutateSupportPrograms({
-        id: externalOrganisations.id,
-        supportPrograms
-      })
-    ])
-
-    if (
-      error.value ||
-      supportProgramsError.value ||
-      !updatedExternal ||
-      !updatedSupportPrograms
-    ) {
+    if (error.value || !result) {
       snackbar.error(
         'La mise à jour de la fiche bénéficiaire a échoué.',
         snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)
