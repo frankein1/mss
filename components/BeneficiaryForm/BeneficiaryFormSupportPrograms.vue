@@ -16,7 +16,6 @@
       :is-duplicate="duplicateFlags[idx] ?? false"
       :support-program-name-options="supportProgramNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
-      @remove-support-program="handleRemoveSupportProgram(idx)"
     />
 
     <div class="fr-col-12">
@@ -32,10 +31,7 @@
 </template>
 
 <script setup lang="ts">
-  import BeneficiaryFormSupportProgramDeleteModal from './BeneficiaryFormSupportProgramDeleteModal.vue'
-
   const trpcClient = useTrpcClient()
-  const modal = useModal()
 
   const { data: supportProgramNames } =
     await trpcClient.supportProgram.getNameList.useQuery()
@@ -59,7 +55,7 @@
       })) ?? []
   )
 
-  const { remove, fields, push } = useFieldArray('supportPrograms')
+  const { fields, push } = useFieldArray('supportPrograms')
 
   const duplicateFlags = computed(() => {
     const names = fields.value.map(
@@ -73,34 +69,5 @@
 
   function addSupportProgram() {
     push({ id: crypto.randomUUID(), name: '' })
-  }
-
-  async function handleRemoveSupportProgram(idx: number) {
-    const supportProgramId = (
-      fields.value[idx]?.value as { id?: string } | undefined
-    )?.id
-
-    if (!supportProgramId) {
-      remove(idx)
-      return
-    }
-
-    const isLinked = await trpcClient.supportProgram.checkHasFollowup.query({
-      supportProgramId
-    })
-
-    if (!isLinked) {
-      remove(idx)
-      return
-    }
-
-    modal.open(BeneficiaryFormSupportProgramDeleteModal, {
-      title: 'Attention : ce dispositif est déjà lié à un accompagnement',
-      triggerOpen: true,
-      onConfirm: () => {
-        remove(idx)
-        modal.close()
-      }
-    })
   }
 </script>
