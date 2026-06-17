@@ -6,13 +6,20 @@
   </div>
 
   <div class="fr-col-12">
-    <VeeCombobox
+    <VeeSelect
       :name="`supportPrograms[${index}].name`"
       :label="supportProgramFieldLabels.name"
       required
-      :options="supportProgramNameOptions"
-      :with-creation="true"
+      :options="
+        withEmptyValue(supportProgramNameOptions, 'Sélectionner un dispositif')
+      "
     />
+    <NuxtLink
+      :to="routes.structure.AppStructure.path()"
+      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm fr-mt-1w"
+    >
+      Je personnalise les dispositifs de ma structure
+    </NuxtLink>
     <AtomAlert
       v-if="showDuplicateAlert"
       :alert-type="AlertType.Info"
