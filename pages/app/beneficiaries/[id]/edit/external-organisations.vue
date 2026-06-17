@@ -69,23 +69,21 @@
     }
   })
 
-  const {
-    mutate: mutateExternalOrganisations,
-    error,
-    status
-  } = trpcClient.beneficiary.updateExternalOrganisations.useMutation()
+  const router = trpcClient.beneficiary
+  const { mutate, error, status } =
+    router.updateExternalOrganisations.useMutation()
 
   async function onSaveBeneficiary(
-    values: UpdateBeneficiaryExternalOrganisationsInput,
+    ben: UpdateBeneficiaryExternalOrganisationsInput,
     target: string | undefined
   ) {
     if (!beneficiary.value) {
       return
     }
 
-    const result = await mutateExternalOrganisations(values)
+    const updated = await mutate(ben)
 
-    if (error.value || !result) {
+    if (error.value || !updated) {
       snackbar.error(
         'La mise à jour de la fiche bénéficiaire a échoué.',
         snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)

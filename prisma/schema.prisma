@@ -115,12 +115,12 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  CGUHistory         CGUHistory[]
-  userActivities     UserActivity[]
-  WorkshopName       WorkshopName[]
-  Workshop           Workshop[]
-  RedirectionReasons RedirectionReason[]
-  SupportProgramName SupportProgramName[]
+  CGUHistory          CGUHistory[]
+  userActivities      UserActivity[]
+  WorkshopName        WorkshopName[]
+  Workshop            Workshop[]
+  RedirectionReasons  RedirectionReason[]
+  supportProgramNames SupportProgramName[]
 
   @@map("user")
 }
@@ -173,7 +173,7 @@ model Structure {
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
   RedirectionReasons    RedirectionReason[]
-  SupportProgramName    SupportProgramName[]
+  supportProgramNames   SupportProgramName[]
 
   @@map("structure")
 }
