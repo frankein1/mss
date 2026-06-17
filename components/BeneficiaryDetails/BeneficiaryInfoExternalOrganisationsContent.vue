@@ -51,17 +51,17 @@
       class="fr-grid-row fr-mb-2w"
     >
       <BeneficiaryInfoLabel
-        label="Nom dispositif"
+        :label="supportProgramFieldLabels.name"
         :value="supportProgram.supportProgramName.name"
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
-        label="Organisme partenaire"
+        :label="supportProgramFieldLabels.partnerOrganisationId"
         :value="supportProgram.partnerOrganisation?.name"
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
-        label="Date d'entrée"
+        :label="supportProgramFieldLabels.startDate"
         :value="
           supportProgram.startDate
             ? formatDate(supportProgram.startDate)
@@ -70,7 +70,7 @@
         class="fr-col-12 fr-col-md-6"
       />
       <BeneficiaryInfoLabel
-        label="Date de sortie"
+        :label="supportProgramFieldLabels.endDate"
         :value="
           supportProgram.endDate
             ? formatDate(supportProgram.endDate)
@@ -80,12 +80,12 @@
       />
       <BeneficiaryInfoLabel
         v-if="supportProgram.endDate"
-        label="Motif de sortie"
+        :label="supportProgramFieldLabels.exitReason"
         :value="supportProgram.exitReason ?? undefined"
         class="fr-col-12"
       />
       <BeneficiaryInfoLabel
-        label="Précisions"
+        :label="supportProgramFieldLabels.precisions"
         :value="supportProgram.precisions"
         class="fr-col-12"
       />
@@ -100,6 +100,7 @@
     beneficiaryProtectionMeasureKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { supportProgramFieldLabels } from '~/client/labels'
 
   defineProps<{
     externalOrganisations: GetBeneficiaryExternalOrganisations

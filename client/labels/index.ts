@@ -1,10 +1,13 @@
 export {
   beneficiaryFieldLabels,
-  beneficiaryExportFieldLabels,
-  supportProgramExportFieldLabels
+  beneficiaryExportFieldLabels
 } from './beneficiary.labels'
 export { userFieldLabels } from './user.labels'
 export { socialSupportSubjectFieldLabels } from './social-support-subject.labels'
+export {
+  supportProgramFieldLabels,
+  supportProgramExportFieldLabels
+} from './support-program.labels'
 export { followupFieldLabels } from './followup.labels'
 export { structureFieldLabels } from './structure.labels'
 export { helpRequestFieldLabels } from './helpRequest.labels'

@@ -8,7 +8,7 @@
   <div class="fr-col-12">
     <VeeCombobox
       :name="`supportPrograms[${index}].name`"
-      label="Nom dispositif"
+      :label="supportProgramFieldLabels.name"
       required
       :options="supportProgramNameOptions"
       :with-creation="true"
@@ -26,7 +26,7 @@
   <div class="fr-col-12 fr-col-lg-6">
     <VeeInput
       :name="`supportPrograms[${index}].startDate`"
-      label="Date d'entrée"
+      :label="supportProgramFieldLabels.startDate"
       type="date"
     />
   </div>
@@ -34,7 +34,7 @@
   <div class="fr-col-12 fr-col-lg-6">
     <VeeInput
       :name="`supportPrograms[${index}].endDate`"
-      label="Date de sortie"
+      :label="supportProgramFieldLabels.endDate"
       type="date"
     />
   </div>
@@ -45,14 +45,14 @@
   >
     <VeeInput
       :name="`supportPrograms[${index}].exitReason`"
-      label="Motif de sortie"
+      :label="supportProgramFieldLabels.exitReason"
     />
   </div>
 
   <div class="fr-col-12">
     <VeeCombobox
       :name="`supportPrograms[${index}].partnerOrganisationId`"
-      label="Organisme partenaire"
+      :label="supportProgramFieldLabels.partnerOrganisationId"
       placeholder="Sélectionner l'organisme"
       :options="withEmptyValue(partnerOrganisationOptions)"
     />
@@ -67,7 +67,7 @@
   <div class="fr-col-12">
     <VeeInput
       :name="`supportPrograms[${index}].precisions`"
-      label="Précisions"
+      :label="supportProgramFieldLabels.precisions"
       hint="Personne intervenante, horaires..."
     />
   </div>
@@ -90,6 +90,7 @@
   import { useFieldValue } from 'vee-validate'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
+  import { supportProgramFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     index: number
