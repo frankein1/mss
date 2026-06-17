@@ -96,15 +96,19 @@
   function onClickRemove(item: SupportProgramNameItem) {
     modal.open(SupportProgramNameDeletionModal, {
       title: 'Suppression du dispositif',
-      name: item.name,
+      id: item.id,
       isSubmitting: false,
       delete: () => onRemove(item)
     })
   }
 
   async function onRemove(item: SupportProgramNameItem) {
+    modal.patch<typeof SupportProgramNameDeletionModal>({ isSubmitting: true })
     await deleteName({ id: item.id })
     if (deleteError.value) {
+      modal.patch<typeof SupportProgramNameDeletionModal>({
+        isSubmitting: false
+      })
       snackbar.error(
         'La suppression du dispositif a échoué.',
         snackbar.focus('form', 'button[type="submit"]')

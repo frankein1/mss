@@ -1,13 +1,47 @@
 <template>
   <form
-    ref="form"
     novalidate
     @submit.prevent="onSubmit"
   >
     <div class="fr-grid-row fr-grid-row--gutters">
-      <p class="fr-col-12">
-        Voulez-vous vraiment supprimer le dispositif « {{ name }} » ?
-      </p>
+      <div class="fr-col-12">
+        <p v-if="countStatus === 'pending'">Chargement…</p>
+
+        <template v-else-if="count === 0">
+          <p>Ce dispositif n'est pas utilisé et peut être supprimé.</p>
+        </template>
+
+        <template v-else>
+          <AtomAlert
+            class="fr-mb-2w"
+            :alert-type="AlertType.Warning"
+            message="Suppression irréversible"
+          >
+            <template #detailedMessage>
+              <p>
+                Ce dispositif est utilisé <strong>{{ count }}</strong> fois au
+                sein de la structure. Les bénéficiaires, suivis, demandes d'aide
+                et ateliers associés perdront cette référence.
+              </p>
+            </template>
+          </AtomAlert>
+
+          <div class="fr-checkbox-group">
+            <input
+              id="confirm-deletion"
+              v-model="confirmed"
+              type="checkbox"
+              name="confirm-deletion"
+            />
+            <label
+              class="fr-label"
+              for="confirm-deletion"
+            >
+              Je comprends que cette action est irréversible
+            </label>
+          </div>
+        </template>
+      </div>
 
       <div class="fr-col-12">
         <ul
@@ -26,10 +60,9 @@
             <button
               class="fr-btn"
               type="submit"
-              :disabled="isSubmitting"
-              :data-submitting="isSubmitting"
+              :disabled="(count !== 0 && !confirmed) || isSubmitting"
             >
-              Valider
+              Supprimer
             </button>
           </li>
         </ul>
@@ -39,13 +72,21 @@
 </template>
 
 <script setup lang="ts">
+  import { AlertType } from '~/utils/constants/alert'
+
   const modal = useModal()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    name: string
+    id: string
     isSubmitting: boolean
     delete: () => void
   }>()
+
+  const confirmed = ref(false)
+
+  const { data: count, status: countStatus } =
+    await trpcClient.supportProgram.countNameUsage.useQuery({ id: props.id })
 
   function onSubmit() {
     props.delete()
