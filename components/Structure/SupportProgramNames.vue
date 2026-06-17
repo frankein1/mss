@@ -9,12 +9,24 @@
       </p>
     </AtomCallout>
 
+    <p
+      v-if="
+        supportProgramNames && supportProgramNames.length === 0 && !isAdding
+      "
+      class="fr-text--sm fr-mb-0"
+    >
+      Aucun dispositif configuré. Ajoutez un dispositif pour pouvoir l'associer
+      aux accompagnements.
+    </p>
+
     <ul class="spn__items">
       <SupportProgramNamesItem
         v-for="item in supportProgramNames"
-        :key="item.id"
+        :id="item.id"
+        :key="item.id || 'new'"
         :name="item.name"
         :can-edit="application.edit.structure"
+        :is-submitting="upsertStatus === 'pending'"
         @update="onUpdate(item, $event)"
         @remove="onClickRemove(item)"
       />
@@ -27,6 +39,7 @@
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
         type="button"
+        :disabled="isAdding"
         @click="onAdd"
       >
         Ajouter un dispositif
@@ -41,59 +54,66 @@
 
   type SupportProgramNameItem = { id: string; name: string }
 
-  const props = defineProps<{
-    supportProgramNames: SupportProgramNameItem[]
-  }>()
-
-  const emit = defineEmits<{
-    update: [item: SupportProgramNameItem]
-    remove: [item: SupportProgramNameItem]
-    add: [item: SupportProgramNameItem]
-  }>()
-
   const { application } = usePermissions()
   const modal = useModal()
-  const isSubmittingDeletion = ref(false)
+  const snackbar = useSnackbar()
+  const trpcClient = useTrpcClient()
 
-  const supportProgramNames = ref<SupportProgramNameItem[]>(
-    props.supportProgramNames.map(item => ({ ...item }))
-  )
+  const { data: supportProgramNames, refresh } =
+    await trpcClient.supportProgram.getNameList.useQuery()
 
-  watch(
-    () => props.supportProgramNames,
-    names => {
-      supportProgramNames.value = names.map(item => ({ ...item }))
+  const {
+    mutate: upsertName,
+    error: upsertError,
+    status: upsertStatus
+  } = trpcClient.supportProgram.upsertName.useMutation()
+
+  const { mutate: deleteName, error: deleteError } =
+    trpcClient.supportProgram.deleteName.useMutation()
+
+  async function onUpdate(item: SupportProgramNameItem, name: string) {
+    const focusBack = snackbar.focus('form', 'button[type="submit"]')
+    await upsertName({ id: item.id || undefined, name })
+    if (upsertError.value) {
+      snackbar.error('La modification du dispositif a échoué.', focusBack)
+      return
     }
+    snackbar.success(`Le dispositif a été ${item.id ? 'modifié' : 'ajouté'}.`)
+    refresh()
+  }
+
+  const isAdding = computed(() =>
+    supportProgramNames.value?.some(item => !item.id)
   )
+
+  function onAdd() {
+    if (isAdding.value) {
+      return
+    }
+    supportProgramNames.value?.push({ id: '', name: '' })
+  }
 
   function onClickRemove(item: SupportProgramNameItem) {
     modal.open(SupportProgramNameDeletionModal, {
       title: 'Suppression du dispositif',
       name: item.name,
-      isSubmitting: isSubmittingDeletion.value,
+      isSubmitting: false,
       delete: () => onRemove(item)
     })
   }
 
-  // TODO: en attente du enpoint
-
-  function onUpdate(item: SupportProgramNameItem, name: string) {
-    item.name = name
-    emit('update', { id: item.id, name })
-  }
-
-  function onRemove(item: SupportProgramNameItem) {
-    supportProgramNames.value = supportProgramNames.value.filter(
-      i => i.id !== item.id
-    )
-    emit('remove', item)
+  async function onRemove(item: SupportProgramNameItem) {
+    await deleteName({ id: item.id })
+    if (deleteError.value) {
+      snackbar.error(
+        'La suppression du dispositif a échoué.',
+        snackbar.focus('form', 'button[type="submit"]')
+      )
+      return
+    }
+    snackbar.success('Le dispositif a été supprimé.')
     modal.close()
-  }
-
-  function onAdd() {
-    const item = { id: crypto.randomUUID(), name: '' }
-    supportProgramNames.value.push(item)
-    emit('add', item)
+    refresh()
   }
 </script>
 

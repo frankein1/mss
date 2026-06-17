@@ -47,10 +47,7 @@
           />
         </template>
         <template #[supportProgramNamesTabTitle.panelId]>
-          <SupportProgramNames
-            v-if="supportProgramNames"
-            :support-program-names="supportProgramNames"
-          />
+          <SupportProgramNames />
         </template>
       </AtomTabs>
     </AtomLazyComponent>
@@ -75,9 +72,6 @@
 
   const { data, error, status, refresh } =
     await trpcClient.structure.getStructure.useQuery()
-
-  const { data: supportProgramNames } =
-    await trpcClient.supportProgram.getNameList.useQuery()
 
   const userTabTitle = {
     tabId: 'Utilisateurs',

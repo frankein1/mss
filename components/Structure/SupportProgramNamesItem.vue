@@ -8,6 +8,7 @@
       <VeeInput
         name="name"
         :label="supportProgramExportFieldLabels.supportProgramName"
+        :disabled="isSubmitting"
         no-hint
         class="spn-item__field"
       />
@@ -19,6 +20,7 @@
         <button
           class="fr-btn fr-btn--secondary"
           type="submit"
+          :disabled="isSubmitting"
         >
           Valider
         </button>
@@ -28,6 +30,7 @@
           data-fr-opened="false"
           aria-controls="global-modal"
           type="button"
+          :disabled="!id"
           @click="emit('remove')"
         >
           Supprimer
@@ -38,14 +41,14 @@
 </template>
 
 <script setup lang="ts">
-  import { z } from 'zod'
   import { supportProgramExportFieldLabels } from '~/client/labels'
-  import { requiredStringConstraint } from '~/server/schema'
-  import { maxStringLengthMessage } from '~/utils/zod'
+  import { upsertSupportProgramNameSchema } from '~/server/schema'
 
   const props = defineProps<{
+    id?: string
     name: string
     canEdit: boolean
+    isSubmitting: boolean
   }>()
 
   const emit = defineEmits<{
@@ -53,14 +56,11 @@
     remove: []
   }>()
 
-  // TODO: schema à créer avec routes backend
   const { handleSubmit, setValues } = useForm({
-    validationSchema: toTypedSchema(
-      z.object({
-        name: requiredStringConstraint.max(200, maxStringLengthMessage(200))
-      })
-    ),
-    initialValues: { name: props.name }
+    validationSchema: toTypedSchema(upsertSupportProgramNameSchema),
+    initialValues: props.id
+      ? { id: props.id, name: props.name }
+      : { name: props.name }
   })
 
   watch(
