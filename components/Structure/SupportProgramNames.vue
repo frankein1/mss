@@ -1,7 +1,5 @@
 <template>
-  <section class="feature-section bg-color-white spn">
-    <h3 class="fr-h4 spn__title">Dispositifs proposés par votre structure</h3>
-
+  <section class="spn">
     <AtomCallout>
       <p>
         Les dispositifs renseignés ci-dessous sont proposés lors de l’ajout d’un
@@ -139,6 +137,8 @@
 </script>
 
 <style scoped lang="scss">
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
   .spn > *:not(:last-of-type) {
     margin-bottom: 1.5rem;
   }
@@ -149,7 +149,10 @@
 
   .spn__items {
     list-style: none;
-    margin: 0;
-    padding: 0;
+
+    @include dsfr-media-query.respond-from('lg') {
+      columns: 2;
+      column-gap: 3rem;
+    }
   }
 </style>
