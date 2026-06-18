@@ -1,0 +1,579 @@
+<!doctype html>
+<html
+  lang="fr"
+  data-fr-scheme="light"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Recherche d'établissement – Académie de Créteil</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@gouvfr/dsfr@1.14.0/dist/dsfr.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@gouvfr/dsfr@1.14.0/dist/utility/utility.min.css"
+    />
+    <style>
+      .combobox-wrapper {
+        position: relative;
+      }
+
+      .combobox-listbox {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background: var(--background-default-grey);
+        border: 1px solid var(--border-default-grey);
+        border-top: none;
+        max-height: 20rem;
+        overflow-y: auto;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .combobox-listbox li[role='option'] {
+        padding: 0.5rem 0.75rem;
+        cursor: default;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .combobox-listbox li[role='option'][aria-selected='true'] {
+        background: var(--background-active-blue-france);
+        color: var(--text-inverted-blue-france);
+      }
+
+      .combobox-listbox li[role='option']:hover:not([aria-selected='true']) {
+        background: var(--background-default-grey-hover);
+      }
+
+      .combobox-listbox li[role='option'] small {
+        color: var(--text-mention-grey);
+      }
+
+      .combobox-listbox li[role='option'][aria-selected='true'] small {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fr-container fr-my-4w">
+      <h1 class="fr-h3 fr-mb-3w">
+        Recherche d'établissement – Académie de Créteil
+      </h1>
+
+      <!-- Combobox Commune -->
+      <div class="fr-input-group fr-mb-3w">
+        <label
+          class="fr-label"
+          id="commune-label"
+          for="commune-input"
+          >Commune</label
+        >
+        <div class="combobox-wrapper">
+          <input
+            id="commune-input"
+            class="fr-input"
+            role="combobox"
+            type="text"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="commune-listbox"
+            aria-labelledby="commune-label"
+            aria-activedescendant=""
+            autocomplete="off"
+            placeholder="Tapez pour rechercher une commune…"
+          />
+          <ul
+            id="commune-listbox"
+            role="listbox"
+            aria-labelledby="commune-label"
+            class="combobox-listbox hidden"
+          ></ul>
+        </div>
+        <p
+          id="commune-status"
+          class="fr-hint-text"
+          aria-live="polite"
+        ></p>
+        <div
+          id="commune-announce"
+          class="fr-sr-only"
+          role="status"
+          aria-live="assertive"
+        ></div>
+      </div>
+
+      <!-- Combobox Établissement -->
+      <div
+        class="fr-input-group fr-mb-3w"
+        id="etab-group"
+      >
+        <label
+          class="fr-label"
+          id="etab-label"
+          for="etab-input"
+          >Nom de l'établissement</label
+        >
+        <div class="combobox-wrapper">
+          <input
+            id="etab-input"
+            class="fr-input"
+            role="combobox"
+            type="text"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="etab-listbox"
+            aria-labelledby="etab-label"
+            aria-activedescendant=""
+            autocomplete="off"
+            placeholder="Choisissez d'abord une commune"
+            disabled
+          />
+          <ul
+            id="etab-listbox"
+            role="listbox"
+            aria-labelledby="etab-label"
+            class="combobox-listbox hidden"
+          ></ul>
+        </div>
+        <p
+          id="etab-status"
+          class="fr-hint-text"
+          aria-live="polite"
+        ></p>
+        <div
+          id="etab-announce"
+          class="fr-sr-only"
+          role="status"
+          aria-live="assertive"
+        ></div>
+      </div>
+
+      <!-- Carte résultat -->
+      <div
+        id="etablissement-card"
+        class="fr-callout fr-callout--blue-ecume fr-mt-3w hidden"
+      >
+        <h2
+          id="card-name"
+          class="fr-callout__title"
+        ></h2>
+        <dl class="fr-my-0">
+          <div class="fr-grid-row fr-mb-1v">
+            <dt class="fr-col-3 fr-text--bold">Adresse</dt>
+            <dd
+              class="fr-col-9 fr-m-0"
+              id="card-address"
+            ></dd>
+          </div>
+          <div class="fr-grid-row fr-mb-1v">
+            <dt class="fr-col-3 fr-text--bold">Type</dt>
+            <dd
+              class="fr-col-9 fr-m-0"
+              id="card-nature"
+            ></dd>
+          </div>
+          <div class="fr-grid-row fr-mb-1v">
+            <dt class="fr-col-3 fr-text--bold">Position</dt>
+            <dd
+              class="fr-col-9 fr-m-0"
+              id="card-position"
+            ></dd>
+          </div>
+          <div class="fr-grid-row">
+            <dt class="fr-col-3 fr-text--bold">QPV</dt>
+            <dd
+              class="fr-col-9 fr-m-0"
+              id="card-qpv"
+            ></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <script>
+      function normalize(str) {
+        return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      }
+
+      function createCombobox({ inputId, listboxId, statusId, announceId }) {
+        const input = document.getElementById(inputId)
+        const listbox = document.getElementById(listboxId)
+        const statusEl = document.getElementById(statusId)
+        const announceEl = document.getElementById(announceId)
+
+        let items = []
+        let filtered = []
+        let activeIndex = -1
+        let isOpen = false
+        let onSelect = null
+
+        function filter(query) {
+          if (!query.trim()) {
+            filtered = []
+            return
+          }
+          const q = normalize(query)
+          filtered = items
+            .filter(
+              item =>
+                normalize(item.label).includes(q) ||
+                (item.detail && normalize(item.detail).includes(q))
+            )
+            .slice(0, 80)
+        }
+
+        function render() {
+          listbox.innerHTML = ''
+          filtered.forEach((item, i) => {
+            const li = document.createElement('li')
+            li.id = `${inputId}-opt-${i}`
+            li.role = 'option'
+            li.setAttribute('aria-selected', 'false')
+            li.textContent = item.label
+            if (item.detail) {
+              const small = document.createElement('small')
+              small.textContent = ' — ' + item.detail
+              li.appendChild(small)
+            }
+            listbox.appendChild(li)
+          })
+        }
+
+        function open() {
+          if (!filtered.length) {
+            close()
+            return
+          }
+          isOpen = true
+          listbox.classList.remove('hidden')
+          input.setAttribute('aria-expanded', 'true')
+          statusEl.textContent = `${filtered.length} résultat${filtered.length > 1 ? 's' : ''}`
+          announceEl.textContent = `${filtered.length} suggestion${filtered.length > 1 ? 's' : ''} disponible${filtered.length > 1 ? 's' : ''}`
+        }
+
+        function close() {
+          isOpen = false
+          listbox.classList.add('hidden')
+          input.setAttribute('aria-expanded', 'false')
+          input.setAttribute('aria-activedescendant', '')
+          activeIndex = -1
+          clearActive()
+        }
+
+        function clearActive() {
+          listbox
+            .querySelectorAll('[aria-selected="true"]')
+            .forEach(el => el.setAttribute('aria-selected', 'false'))
+        }
+
+        function setActive(index) {
+          clearActive()
+          activeIndex = index
+          if (index < 0 || index >= filtered.length) {
+            input.setAttribute('aria-activedescendant', '')
+            return
+          }
+          const opt = document.getElementById(`${inputId}-opt-${index}`)
+          if (!opt) return
+          opt.setAttribute('aria-selected', 'true')
+          input.setAttribute('aria-activedescendant', opt.id)
+          opt.scrollIntoView({ block: 'nearest' })
+          announceEl.textContent = opt.textContent
+        }
+
+        function select(index) {
+          const selected = filtered[index]
+          if (!selected) return
+          input.value = selected.label
+          close()
+          statusEl.textContent = ''
+          if (onSelect) onSelect(selected)
+        }
+
+        input.addEventListener('input', () => {
+          filter(input.value)
+          render()
+          activeIndex = -1
+          input.value.trim() ? open() : close()
+        })
+
+        input.addEventListener('keydown', e => {
+          switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault()
+              if (!isOpen) {
+                filter(input.value)
+                render()
+                open()
+              }
+              setActive(Math.min(activeIndex + 1, filtered.length - 1))
+              break
+            case 'ArrowUp':
+              e.preventDefault()
+              if (!isOpen) {
+                filter(input.value)
+                render()
+                open()
+              }
+              setActive(Math.max(activeIndex - 1, 0))
+              break
+            case 'Enter':
+              if (isOpen && activeIndex >= 0) {
+                e.preventDefault()
+                select(activeIndex)
+              }
+              break
+            case 'Escape':
+              if (isOpen) {
+                e.preventDefault()
+                close()
+              }
+              break
+            case 'Home':
+              if (isOpen && filtered.length) {
+                e.preventDefault()
+                setActive(0)
+              }
+              break
+            case 'End':
+              if (isOpen && filtered.length) {
+                e.preventDefault()
+                setActive(filtered.length - 1)
+              }
+              break
+          }
+        })
+
+        input.addEventListener('blur', () => {
+          setTimeout(() => {
+            if (!listbox.contains(document.activeElement)) close()
+          }, 200)
+        })
+
+        listbox.addEventListener('mousedown', e => e.preventDefault())
+
+        listbox.addEventListener('click', e => {
+          const opt = e.target.closest('[role="option"]')
+          if (!opt) return
+          select(parseInt(opt.id.replace(`${inputId}-opt-`, ''), 10))
+          input.focus()
+        })
+
+        listbox.addEventListener('mouseover', e => {
+          const opt = e.target.closest('[role="option"]')
+          if (!opt) return
+          setActive(parseInt(opt.id.replace(`${inputId}-opt-`, ''), 10))
+        })
+
+        return {
+          setItems(newItems) {
+            items = newItems
+          },
+          setOnSelect(fn) {
+            onSelect = fn
+          },
+          reset() {
+            input.value = ''
+            close()
+            statusEl.textContent = ''
+            filtered = []
+          },
+          enable() {
+            input.disabled = false
+            input.placeholder = 'Tapez pour rechercher…'
+            input
+              .closest('.fr-input-group')
+              .classList.remove('fr-input-group--disabled')
+          },
+          disable(placeholder) {
+            input.disabled = true
+            input.placeholder = placeholder || ''
+            close()
+            input.value = ''
+            statusEl.textContent = ''
+            input
+              .closest('.fr-input-group')
+              .classList.add('fr-input-group--disabled')
+          }
+        }
+      }
+
+      // --- Init ---
+
+      const communeCb = createCombobox({
+        inputId: 'commune-input',
+        listboxId: 'commune-listbox',
+        statusId: 'commune-status',
+        announceId: 'commune-announce'
+      })
+
+      const etabCb = createCombobox({
+        inputId: 'etab-input',
+        listboxId: 'etab-listbox',
+        statusId: 'etab-status',
+        announceId: 'etab-announce'
+      })
+
+      const card = document.getElementById('etablissement-card')
+      const cardName = document.getElementById('card-name')
+      const cardAddress = document.getElementById('card-address')
+      const cardNature = document.getElementById('card-nature')
+      const cardQpv = document.getElementById('card-qpv')
+
+      let allData = []
+      let communeIndex = {}
+      let qpvFeatures = []
+
+      fetch('./qpv-2024.json')
+        .then(r => r.json())
+        .then(geojson => {
+          qpvFeatures = geojson.features
+        })
+
+      function pointInRing(lon, lat, ring) {
+        let inside = false
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const xi = ring[i][0],
+            yi = ring[i][1]
+          const xj = ring[j][0],
+            yj = ring[j][1]
+          if (
+            yi > lat !== yj > lat &&
+            lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi
+          ) {
+            inside = !inside
+          }
+        }
+        return inside
+      }
+
+      function pointInPolygon(lon, lat, coords) {
+        if (!pointInRing(lon, lat, coords[0])) return false
+        for (let i = 1; i < coords.length; i++) {
+          if (pointInRing(lon, lat, coords[i])) return false
+        }
+        return true
+      }
+
+      function findQpv(lon, lat) {
+        for (const feature of qpvFeatures) {
+          const geom = feature.geometry
+          if (geom.type === 'Polygon') {
+            if (pointInPolygon(lon, lat, geom.coordinates))
+              return feature.properties
+          } else if (geom.type === 'MultiPolygon') {
+            for (const poly of geom.coordinates) {
+              if (pointInPolygon(lon, lat, poly)) return feature.properties
+            }
+          }
+        }
+        return null
+      }
+
+      fetch(
+        './fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre – CRETEIL.json'
+      )
+        .then(r => r.json())
+        .then(data => {
+          allData = data
+
+          const communeSet = new Set()
+          data.forEach(e => {
+            if (e.libelle_commune) communeSet.add(e.libelle_commune)
+          })
+          const communes = [...communeSet].sort((a, b) =>
+            a.localeCompare(b, 'fr')
+          )
+
+          communeIndex = {}
+          data.forEach(e => {
+            if (!e.libelle_commune) return
+            if (!communeIndex[e.libelle_commune])
+              communeIndex[e.libelle_commune] = []
+            communeIndex[e.libelle_commune].push(e)
+          })
+
+          communeCb.setItems(communes.map(c => ({ label: c, value: c })))
+          document.getElementById('commune-status').textContent =
+            `${communes.length} communes disponibles.`
+        })
+
+      communeCb.setOnSelect(selected => {
+        const commune = selected.value
+        const etabs = communeIndex[commune] || []
+
+        etabCb.reset()
+        card.classList.add('hidden')
+        etabCb.setItems(
+          etabs.map(e => ({
+            label: e.appellation_officielle,
+            detail: [e.adresse_uai, e.localite_acheminement_uai]
+              .filter(Boolean)
+              .join(', '),
+            value: e
+          }))
+        )
+        etabCb.enable()
+
+        document.getElementById('etab-status').textContent =
+          `${etabs.length} établissement${etabs.length > 1 ? 's' : ''} dans ${commune}.`
+        document.getElementById('etab-input').focus()
+      })
+
+      etabCb.setOnSelect(selected => {
+        const e = selected.value
+        const fullAddress = [
+          e.adresse_uai,
+          e.code_postal_uai,
+          e.localite_acheminement_uai
+        ]
+          .filter(Boolean)
+          .join(', ')
+        cardName.textContent = e.appellation_officielle
+        cardAddress.textContent = fullAddress
+        cardNature.textContent = e.nature_uai_libe
+        document.getElementById('card-position').textContent = e.position
+          ? `${e.position.lat}, ${e.position.lon}`
+          : 'Non renseignée'
+
+        const qpv = e.position ? findQpv(e.position.lon, e.position.lat) : null
+        if (qpv) {
+          cardQpv.innerHTML = `<span class="fr-badge fr-badge--info fr-badge--no-icon">${qpv.id} — ${qpv.nom}, ${qpv.commune_nom}</span>`
+        } else {
+          cardQpv.innerHTML =
+            '<span class="fr-badge fr-badge--no-icon">Hors QPV</span>'
+        }
+
+        card.classList.remove('hidden')
+      })
+
+      document.getElementById('commune-input').addEventListener('input', () => {
+        etabCb.disable('Choisissez d’abord une commune')
+        card.classList.add('hidden')
+      })
+    </script>
+    <script
+      nomodule
+      src="https://unpkg.com/@gouvfr/dsfr@1.14.0/dist/dsfr.nomodule.min.js"
+    ></script>
+    <script
+      type="module"
+      src="https://unpkg.com/@gouvfr/dsfr@1.14.0/dist/dsfr.module.min.js"
+    ></script>
+  </body>
+</html>
