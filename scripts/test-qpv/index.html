@@ -228,12 +228,12 @@
       <!-- Carte résultat -->
       <div
         id="etablissement-card"
-        class="fr-callout fr-callout--blue-ecume fr-mt-3w hidden"
+        class="fr-callout fr-mt-3w hidden"
       >
-        <h2
+        <p
           id="card-name"
           class="fr-callout__title"
-        ></h2>
+        ></p>
         <dl class="fr-my-0">
           <div class="fr-grid-row fr-mb-1v">
             <dt class="fr-col-3 fr-text--bold">Adresse</dt>
@@ -254,6 +254,13 @@
             <dd
               class="fr-col-9 fr-m-0"
               id="card-position"
+            ></dd>
+          </div>
+          <div class="fr-grid-row fr-mb-1v">
+            <dt class="fr-col-3 fr-text--bold">REP</dt>
+            <dd
+              class="fr-col-9 fr-m-0"
+              id="card-rep"
             ></dd>
           </div>
           <div class="fr-grid-row">
@@ -575,24 +582,22 @@
         return null
       }
 
-      fetch(
-        './fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.json'
-      )
+      fetch('./fr-en-annuaire-education.json')
         .then(r => r.json())
         .then(data => {
           allData = data
 
           const communeMap = {}
           data.forEach(e => {
-            if (!e.libelle_commune) return
-            if (!communeMap[e.libelle_commune]) {
-              communeMap[e.libelle_commune] = {
-                codePostal: e.code_postal_uai || '',
+            if (!e.nom_commune) return
+            if (!communeMap[e.nom_commune]) {
+              communeMap[e.nom_commune] = {
+                codePostal: e.code_postal || '',
                 departement: e.libelle_departement || '',
                 etabs: []
               }
             }
-            communeMap[e.libelle_commune].etabs.push(e)
+            communeMap[e.nom_commune].etabs.push(e)
           })
 
           communeIndex = {}
@@ -627,10 +632,8 @@
         card.classList.add('hidden')
         etabCb.setItems(
           etabs.map(e => ({
-            label: e.appellation_officielle,
-            detail: [e.adresse_uai, e.localite_acheminement_uai]
-              .filter(Boolean)
-              .join(', '),
+            label: e.nom_etablissement,
+            detail: e.adresse_1 || '',
             value: e
           }))
         )
@@ -643,16 +646,19 @@
 
       etabCb.setOnSelect(selected => {
         const e = selected.value
-        const fullAddress = [
-          e.adresse_uai,
-          e.code_postal_uai,
-          e.localite_acheminement_uai
-        ]
-          .filter(Boolean)
-          .join(', ')
-        cardName.textContent = e.appellation_officielle
+        const fullAddress =
+          e.adresse_3 ||
+          [e.adresse_1, e.code_postal, e.nom_commune].filter(Boolean).join(', ')
+        cardName.textContent = e.nom_etablissement
         cardAddress.textContent = fullAddress
-        cardNature.textContent = e.nature_uai_libe
+        cardNature.textContent = e.libelle_nature
+        const rep = e.appartenance_education_prioritaire
+        const cardRep = document.getElementById('card-rep')
+        if (rep) {
+          cardRep.innerHTML = `<span class="fr-badge fr-badge--warning fr-badge--no-icon">${rep}</span>`
+        } else {
+          cardRep.textContent = 'Non'
+        }
         document.getElementById('card-position').textContent = e.position
           ? `${e.position.lat}, ${e.position.lon}`
           : 'Non renseignée'
