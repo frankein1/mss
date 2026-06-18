@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.60.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.3...v1.60.0) (2026-06-18)
+
+
+### Features
+
+* **ateliers:** dupliquer les participant.es ([b2e3adc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b2e3adc3cf2e3b2a604b01747ec59b81fbfde5c7)), closes [#1061](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1061)
+* **bénéficiaires:** ajout de la classe scolaire ([3732b75](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3732b75e6844533d10166495cdc206be0a059da8))
+* **document:** adaptations Open Bao incub ([c210191](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c2101919acb10603c513753172b11e0d0c5d72a7)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **redirection:** ajout d'un motif ([eebeb4b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eebeb4b76b8647b79430450f4ac259063532c26b)), closes [#1071](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1071)
+
+
+### Bug Fixes
+
+* **ateliers:** dupliquer la limite de participants ([4ea3550](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4ea355092ee76b72ee3f24c25b5599f294fd6ee8)), closes [#1061](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1061)
+* **auth:** suppression des pii dans le jwt ([0adf290](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0adf290d6e4a5fe1b0c216ee0b726ae3d1a59788)), closes [#605](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/605)
+* backend autorisations de suppression d'utilisateur ([9bfbe5b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9bfbe5b50060c6daa1979e1c4cefde5bc8a8ba34)), closes [#1118](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1118)
+* **bénéficiaires:** ne pas exporter les colonnes vides ([68cc754](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/68cc75418f3994fe073edec0c7949b48df98379c))
+* bug de redirection modale formulaire ([a879712](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a879712a53f2c405c16857c9a91f165876e19ea5))
+* **documents:** date d'expiration des documents sur S3 ([4eef849](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4eef849e27cb7d14fd2ad10477818610283002c6))
+* **foyer:** navigation entre membres du foyer ([ac5610a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ac5610a9ecce37d9d1945b1629c9f2f2449e71b9)), closes [#1120](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1120)
+
 ## [1.59.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.1...v1.59.3) (2026-06-01)
 
 
