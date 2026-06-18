@@ -9,7 +9,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <title>Recherche d'établissement – Académie de Créteil</title>
+    <title>Recherche d'établissement</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/@gouvfr/dsfr@1.14.0/dist/dsfr.min.css"
@@ -67,13 +67,51 @@
       .combobox-listbox li[role='option'][aria-selected='true'] small {
         color: inherit;
       }
+
+      .combobox-input-row {
+        display: flex;
+        align-items: stretch;
+      }
+
+      .combobox-input-row .fr-input {
+        border-right: none;
+        border-radius: 0.25rem 0 0 0.25rem;
+      }
+
+      .combobox-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        flex-shrink: 0;
+        border: 1px solid var(--border-default-grey);
+        border-left: none;
+        border-radius: 0 0.25rem 0.25rem 0;
+        background: var(--background-default-grey);
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .combobox-toggle:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .combobox-toggle svg {
+        width: 1rem;
+        height: 1rem;
+        fill: var(--text-default-grey);
+        transition: transform 0.15s;
+      }
+
+      .combobox-toggle[aria-expanded='true'] svg {
+        transform: rotate(180deg);
+      }
     </style>
   </head>
   <body>
     <div class="fr-container fr-my-4w">
-      <h1 class="fr-h3 fr-mb-3w">
-        Recherche d'établissement – Académie de Créteil
-      </h1>
+      <h1 class="fr-h3 fr-mb-3w">Recherche d'établissement – France entière</h1>
 
       <!-- Combobox Commune -->
       <div class="fr-input-group fr-mb-3w">
@@ -129,20 +167,44 @@
           >Nom de l'établissement</label
         >
         <div class="combobox-wrapper">
-          <input
-            id="etab-input"
-            class="fr-input"
-            role="combobox"
-            type="text"
-            aria-autocomplete="list"
-            aria-expanded="false"
-            aria-controls="etab-listbox"
-            aria-labelledby="etab-label"
-            aria-activedescendant=""
-            autocomplete="off"
-            placeholder="Choisissez d'abord une commune"
-            disabled
-          />
+          <div class="combobox-input-row">
+            <input
+              id="etab-input"
+              class="fr-input"
+              role="combobox"
+              type="text"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="etab-listbox"
+              aria-labelledby="etab-label"
+              aria-activedescendant=""
+              autocomplete="off"
+              placeholder="Choisissez d'abord une commune"
+              disabled
+            />
+            <button
+              id="etab-toggle"
+              type="button"
+              tabindex="-1"
+              class="combobox-toggle"
+              aria-label="Afficher les établissements"
+              aria-expanded="false"
+              aria-controls="etab-listbox"
+              disabled
+            >
+              <svg
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 6l4 4 4-4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  fill="none"
+                />
+              </svg>
+            </button>
+          </div>
           <ul
             id="etab-listbox"
             role="listbox"
@@ -210,8 +272,15 @@
         return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
       }
 
-      function createCombobox({ inputId, listboxId, statusId, announceId }) {
+      function createCombobox({
+        inputId,
+        toggleId,
+        listboxId,
+        statusId,
+        announceId
+      }) {
         const input = document.getElementById(inputId)
+        const toggleBtn = toggleId ? document.getElementById(toggleId) : null
         const listbox = document.getElementById(listboxId)
         const statusEl = document.getElementById(statusId)
         const announceEl = document.getElementById(announceId)
@@ -262,6 +331,7 @@
           isOpen = true
           listbox.classList.remove('hidden')
           input.setAttribute('aria-expanded', 'true')
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true')
           statusEl.textContent = `${filtered.length} résultat${filtered.length > 1 ? 's' : ''}`
           announceEl.textContent = `${filtered.length} suggestion${filtered.length > 1 ? 's' : ''} disponible${filtered.length > 1 ? 's' : ''}`
         }
@@ -270,6 +340,7 @@
           isOpen = false
           listbox.classList.add('hidden')
           input.setAttribute('aria-expanded', 'false')
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false')
           input.setAttribute('aria-activedescendant', '')
           activeIndex = -1
           clearActive()
@@ -365,6 +436,22 @@
           }, 200)
         })
 
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            if (input.disabled) return
+            if (isOpen) {
+              close()
+              input.focus()
+              return
+            }
+            filter(input.value || '')
+            if (!input.value.trim()) filtered = items.slice(0, 80)
+            render()
+            open()
+            input.focus()
+          })
+        }
+
         listbox.addEventListener('mousedown', e => e.preventDefault())
 
         listbox.addEventListener('click', e => {
@@ -395,6 +482,7 @@
           },
           enable() {
             input.disabled = false
+            if (toggleBtn) toggleBtn.disabled = false
             input.placeholder = 'Tapez pour rechercher…'
             input
               .closest('.fr-input-group')
@@ -402,6 +490,7 @@
           },
           disable(placeholder) {
             input.disabled = true
+            if (toggleBtn) toggleBtn.disabled = true
             input.placeholder = placeholder || ''
             close()
             input.value = ''
@@ -424,6 +513,7 @@
 
       const etabCb = createCombobox({
         inputId: 'etab-input',
+        toggleId: 'etab-toggle',
         listboxId: 'etab-listbox',
         statusId: 'etab-status',
         announceId: 'etab-announce'
@@ -486,29 +576,45 @@
       }
 
       fetch(
-        './fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre – CRETEIL.json'
+        './fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.json'
       )
         .then(r => r.json())
         .then(data => {
           allData = data
 
-          const communeSet = new Set()
+          const communeMap = {}
           data.forEach(e => {
-            if (e.libelle_commune) communeSet.add(e.libelle_commune)
+            if (!e.libelle_commune) return
+            if (!communeMap[e.libelle_commune]) {
+              communeMap[e.libelle_commune] = {
+                codePostal: e.code_postal_uai || '',
+                departement: e.libelle_departement || '',
+                etabs: []
+              }
+            }
+            communeMap[e.libelle_commune].etabs.push(e)
           })
-          const communes = [...communeSet].sort((a, b) =>
+
+          communeIndex = {}
+          Object.entries(communeMap).forEach(([nom, info]) => {
+            communeIndex[nom] = info.etabs
+          })
+
+          const communes = Object.keys(communeMap).sort((a, b) =>
             a.localeCompare(b, 'fr')
           )
 
-          communeIndex = {}
-          data.forEach(e => {
-            if (!e.libelle_commune) return
-            if (!communeIndex[e.libelle_commune])
-              communeIndex[e.libelle_commune] = []
-            communeIndex[e.libelle_commune].push(e)
-          })
-
-          communeCb.setItems(communes.map(c => ({ label: c, value: c })))
+          communeCb.setItems(
+            communes.map(c => {
+              const info = communeMap[c]
+              const cp = info.codePostal ? ` (${info.codePostal})` : ''
+              return {
+                label: `${c}${cp}`,
+                detail: info.departement,
+                value: c
+              }
+            })
+          )
           document.getElementById('commune-status').textContent =
             `${communes.length} communes disponibles.`
         })
