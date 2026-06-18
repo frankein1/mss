@@ -153,11 +153,9 @@ export function prepareBeneficiaryFilters(
     formattedFilters[filters.notFilled] = null
   }
 
-  if (filters.supportProgramNames?.length) {
+  if (filters.supportProgramNameIds?.length) {
     formattedFilters.supportPrograms = {
-      some: {
-        supportProgramName: { name: { in: filters.supportProgramNames } }
-      }
+      some: { supportProgramNameId: { in: filters.supportProgramNameIds } }
     }
   }
 
