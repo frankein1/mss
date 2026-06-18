@@ -95,7 +95,7 @@
       return "La liste des agents n'a pas pu être chargée."
     }
     if (supportProgramNameOptionsError.value) {
-      return "La liste des dispositif n'a pas pu être chargée."
+      return "La liste des dispositifs n'a pas pu être chargée."
     }
     return ''
   })
@@ -126,7 +126,7 @@
       }
     ]
     filters.push({
-      name: 'supportProgramNames',
+      name: 'supportProgramNameIds',
       label: 'Dispositif',
       options: supportProgramNameOptions.value || [],
       type: FilterType.SelectMultiple,

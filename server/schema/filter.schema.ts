@@ -155,7 +155,7 @@ const beneficiaryFilterSchema = z
       .nullish()
       .transform(val => (val ? val === 'true' : undefined)),
     notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish(),
-    supportProgramNames: z.array(z.string()).nullish()
+    supportProgramNameIds: z.array(z.string().uuid()).nullish()
   })
   .superRefine((data, ctx) => {
     if (
