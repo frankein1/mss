@@ -8,9 +8,13 @@
       <VeeInput
         name="name"
         :label="supportProgramFieldLabels.name"
-        :disabled="isSubmitting"
+        :disabled="!canEdit || isSubmitting"
         :success-message="successMessage"
-        hint="Ajouter ou modifier un nom de dispositif puis valider"
+        :hint="
+          canEdit
+            ? 'Ajouter ou modifier un nom de dispositif puis valider'
+            : undefined
+        "
         class="spn-item__field"
         @change-input="onInput($event)"
       />

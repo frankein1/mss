@@ -13,13 +13,8 @@
         tab-list-name="Statistiques de la structure"
         :tab-titles="
           application.module.users
-            ? [
-                userTabTitle,
-                structureTabTitle,
-                socialSupportSubjectsTabTitle,
-                supportProgramNamesTabTitle
-              ]
-            : [structureTabTitle, socialSupportSubjectsTabTitle]
+            ? [userTabTitle, structureTabTitle, supportTabTitle]
+            : [structureTabTitle, supportTabTitle]
         "
         :heading-level="2"
       >
@@ -38,16 +33,48 @@
             @edit="onEdit"
           />
         </template>
-        <template #[socialSupportSubjectsTabTitle.panelId]>
-          <SocialSupportSubjects
-            v-if="data"
-            :subjects="data.socialSupportSubjects"
-            :edit-path="routes.structure.AppStructureSubjects.path()"
-            @refresh="refresh"
-          />
-        </template>
-        <template #[supportProgramNamesTabTitle.panelId]>
-          <SupportProgramNames />
+        <template #[supportTabTitle.panelId]>
+          <section class="fr-accordion big-accordion feature-section">
+            <h3 class="fr-accordion__title">
+              <button
+                type="button"
+                class="fr-accordion__btn big-accordion__btn"
+                aria-expanded="true"
+                aria-controls="accordion-dispositifs"
+              >
+                Dispositifs proposés par votre structure
+              </button>
+            </h3>
+            <div
+              id="accordion-dispositifs"
+              class="fr-collapse fr-collapse--expanded"
+            >
+              <SupportProgramNames />
+            </div>
+          </section>
+          <section class="fr-accordion big-accordion feature-section fr-mt-4v">
+            <h3 class="fr-accordion__title">
+              <button
+                type="button"
+                class="fr-accordion__btn big-accordion__btn"
+                aria-expanded="true"
+                aria-controls="accordion-objets-accompagnement"
+              >
+                Objets d’accompagnements proposés par votre structure
+              </button>
+            </h3>
+            <div
+              id="accordion-objets-accompagnement"
+              class="fr-collapse fr-collapse--expanded"
+            >
+              <SocialSupportSubjects
+                v-if="data"
+                :subjects="data.socialSupportSubjects"
+                :edit-path="routes.structure.AppStructureSubjects.path()"
+                @refresh="refresh"
+              />
+            </div>
+          </section>
         </template>
       </AtomTabs>
     </AtomLazyComponent>
@@ -85,17 +112,11 @@
     title: 'Infos structure',
     icon: 'fr-icon-home-4-line'
   }
-  const socialSupportSubjectsTabTitle = {
-    tabId: 'Objets d’accompagnement',
-    panelId: panelId('Objets d’accompagnement'),
-    title: 'Objets d’accompagnement',
+  const supportTabTitle = {
+    tabId: 'Accompagnements et Dispositifs',
+    panelId: panelId('Accompagnements et Dispositifs'),
+    title: 'Accompagnements et Dispositifs',
     icon: 'fr-icon-checkbox-circle-line'
-  }
-  const supportProgramNamesTabTitle = {
-    tabId: 'Dispositifs',
-    panelId: panelId('Dispositifs'),
-    title: 'Dispositifs',
-    icon: 'fr-icon-survey-line'
   }
 
   // Structure info
@@ -144,5 +165,24 @@
 <style lang="scss" scoped>
   :deep(.fr-tabs__panel) {
     padding-top: 2rem !important;
+  }
+
+  .big-accordion {
+    --default-padding: 2.5rem;
+
+    .big-accordion__btn {
+      padding: var(--default-padding);
+      font-size: 1.5rem;
+      font-weight: 700;
+
+      &[aria-expanded='true'] {
+        background: none;
+        border-bottom: 1px solid var(--border-default-grey);
+      }
+    }
+
+    .fr-collapse--expanded {
+      padding: var(--default-padding);
+    }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="sss-item">
+  <li class="sss-item">
     <div>{{ label }}</div>
 
     <div
@@ -41,7 +41,7 @@
         >
       </button>
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup lang="ts">
