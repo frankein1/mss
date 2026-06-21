@@ -66,6 +66,8 @@
     'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
 
+  const trpcClient = useTrpcClient()
+
   function isSimilarInputValid(input: {
     usualName?: string | null | undefined
     birthName?: string | null | undefined
@@ -94,9 +96,13 @@
         emit('update:similarBeneficiary', undefined)
         return
       }
-      const similarBeneficiary =
-        await useTrpcClient().beneficiary.getSimilar.query(input)
-      emit('update:similarBeneficiary', similarBeneficiary)
+      const { data, error } =
+        await trpcClient.beneficiary.getSimilar.useQuery(input)
+
+      if (!data.value || error.value) {
+        return
+      }
+      emit('update:similarBeneficiary', data.value)
     }
   )
 

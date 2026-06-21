@@ -11,6 +11,7 @@
 1. [External Integrations](.claude/rules/7-external-integrations.md)
 1. [Accessibility](.claude/rules/8-accessibility.md)
 1. [Testing](.claude/rules/9-testing.md)
+1. [Input & Output Sanitization](.claude/rules/12-input-output-sanitization.md)
 
 ---
 
