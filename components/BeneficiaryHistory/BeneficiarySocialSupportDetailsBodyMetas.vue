@@ -1,4 +1,10 @@
 <template>
+  <li v-if="socialSupport.supportProgram">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.supportProgramId }} :</span
+    >
+    {{ formatSupportProgramOption(socialSupport.supportProgram).label }}
+  </li>
   <li v-if="socialSupport.numeroPegase">
     <span class="information-label"
       >{{ helpRequestFieldLabels.numeroPegase }} :</span
@@ -24,6 +30,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { formatMinisterName } from '~/utils/minister'
   import { helpRequestFieldLabels } from '~/client/labels'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
 
   defineProps<{
     socialSupport: SocialSupportDetailData

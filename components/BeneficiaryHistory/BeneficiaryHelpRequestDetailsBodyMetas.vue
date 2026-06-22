@@ -1,10 +1,4 @@
 <template>
-  <li v-if="helpRequest.supportProgram">
-    <span class="information-label"
-      >{{ helpRequestFieldLabels.supportProgramId }} :</span
-    >
-    {{ formatSupportProgramOption(helpRequest.supportProgram).label }}
-  </li>
   <li v-if="helpRequest.prescribingOrganization?.name">
     <span class="information-label"
       >{{ helpRequestFieldLabels.prescribingOrganizationId }} :</span
@@ -95,7 +89,6 @@
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
 
   const props = defineProps<{
     fileInstruction: FileInstructionData

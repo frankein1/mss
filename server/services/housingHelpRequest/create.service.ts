@@ -106,7 +106,6 @@ export async function create({ input, ctx }: CreateParams) {
       prescribingOrganizationContact: prescribingOrganizationContactId
         ? connect(prescribingOrganizationContactId)
         : undefined,
-      supportProgram: supportProgramId ? connect(supportProgramId) : undefined,
       fileInstruction: {
         create: {
           type: FileInstructionType.Housing,
@@ -125,6 +124,9 @@ export async function create({ input, ctx }: CreateParams) {
           socialSupport: {
             create: {
               status,
+              supportProgram: supportProgramId
+                ? connect(supportProgramId)
+                : undefined,
               socialSupportType: SocialSupportType.HelpRequestHousing,
               subtype: FileInstructionType.Housing,
               createdById: ctx.user.id,

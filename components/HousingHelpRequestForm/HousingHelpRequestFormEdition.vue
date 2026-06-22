@@ -106,7 +106,8 @@
       uniqueId: housingHelpRequest.value.uniqueId,
       taxHouseholdAdditionalInformation:
         housingHelpRequest.value.taxHouseholdAdditionalInformation,
-      handlingDate: housingHelpRequest.value.handlingDate
+      handlingDate: housingHelpRequest.value.handlingDate,
+      supportProgramId: socialSupport.value.supportProgramId
     }
   })
 

@@ -29,12 +29,6 @@
     >
     {{ housingHelpRequest.prescribingOrganizationContact.name }}
   </li>
-  <li v-if="housingHelpRequest.supportProgram">
-    <span class="information-label"
-      >{{ helpRequestFieldLabels.supportProgramId }}&nbsp;:</span
-    >
-    {{ formatSupportProgramOption(housingHelpRequest.supportProgram).label }}
-  </li>
   <li v-if="instructorOrganization">
     <span class="information-label">Instruction&nbsp;:</span>
     {{ instructorOrganization }}
@@ -159,7 +153,6 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import { euros } from '~/utils/euros'
-  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
 
   const props = defineProps<{
     fileInstruction: FileInstructionData

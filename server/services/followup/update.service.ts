@@ -137,6 +137,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         status,
         numeroPegase,
         dueDate,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : undefined,
         socialSupportRedirections: prepareRedirections
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
           : undefined
@@ -161,8 +164,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         firstFollowup,
         classified,
         forwardedToJustice,
-        duration,
-        supportProgramId: supportProgramId || null
+        duration
       },
       select: {
         id: true

@@ -95,7 +95,7 @@
       askedAmount: prismaDecimalToNumber(helpRequest.value.askedAmount),
       allocatedAmount: prismaDecimalToNumber(helpRequest.value.allocatedAmount),
       fullFile: fileInstruction.value.fullFile || false,
-      supportProgramId: helpRequest.value.supportProgramId
+      supportProgramId: socialSupport.value.supportProgramId
     }
   })
 

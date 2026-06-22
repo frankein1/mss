@@ -64,13 +64,13 @@ const followupExportSelect = {
           partnerOrganizationContactId: true,
           redirectionReason: { select: { name: true } }
         }
-      }
-    }
-  },
-  supportProgram: {
-    select: {
-      supportProgramName: {
-        select: { name: true }
+      },
+      supportProgram: {
+        select: {
+          supportProgramName: {
+            select: { name: true }
+          }
+        }
       }
     }
   }

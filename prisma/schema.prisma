@@ -391,6 +391,9 @@ model SocialSupport {
   // depending on the type of SocialSupport
   subtype           String?
 
+  supportProgramId String?         @map("support_program_id") @db.Uuid
+  supportProgram   SupportProgram? @relation(fields: [supportProgramId], references: [id], onDelete: SetNull)
+
   followup                  Followup?
   fileInstruction           FileInstruction?
   socialSupportRedirections SocialSupportRedirection[]
@@ -483,9 +486,6 @@ model Followup {
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("followup_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
 
-  supportProgramId String?         @map("support_program_id") @db.Uuid
-  supportProgram   SupportProgram? @relation("followup_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
-
   medium FollowupMedium
 
   helpRequested      Boolean?          @map("help_requested")
@@ -577,9 +577,6 @@ model HelpRequest {
 
   prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
   prescribingOrganizationContact   PartnerOrganizationContact? @relation("help_request_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
-
-  supportProgramId String?         @map("support_program_id") @db.Uuid
-  supportProgram   SupportProgram? @relation("help_request_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -677,9 +674,6 @@ model HousingHelpRequest {
   reason                            HousingReason?
   lowIncomeHousingType              LowIncomeHousingType[] @map("low_income_housing_type")
   handlingDate                      DateTime?              @map("handling_date") @db.Date
-
-  supportProgramId String?         @map("support_program_id") @db.Uuid
-  supportProgram   SupportProgram? @relation("housing_help_request_support_program", fields: [supportProgramId], references: [id], onDelete: SetNull)
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
@@ -1851,10 +1845,7 @@ model SupportProgram {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // lier à un socialsupport au lieu de folloup et helpRequest et housingHelpRequests
-  followups           Followup[]           @relation("followup_support_program")
-  helpRequests        HelpRequest[]        @relation("help_request_support_program")
-  housingHelpRequests HousingHelpRequest[] @relation("housing_help_request_support_program")
+  socialSupports SocialSupport[]
 
   @@index(fields: [beneficiaryId], map: "support_program_beneficiary_id_idx")
   // vérifier l'utilité de cet index

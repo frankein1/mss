@@ -129,7 +129,7 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
     expect(program).toBeNull()
   })
 
-  test('Deleting a name sets supportProgramId to null on linked followups', async ({
+  test('Deleting a name sets supportProgramId to null on linked followup social supports', async ({
     trpc
   }) => {
     const familyFile = await prismaClient.familyFile.create({
@@ -180,10 +180,10 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
         lastUpdatedBy: { connect: { id: managerId } },
         status: 'InProgress',
         socialSupportType: 'Followup',
+        supportProgram: { connect: { id: programId } },
         followup: {
           create: {
-            medium: 'PlannedInPerson',
-            supportProgram: { connect: { id: programId } }
+            medium: 'PlannedInPerson'
           }
         }
       }
@@ -191,10 +191,93 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
 
     await trpc.structureManager.supportProgram.deleteName({ id: nameId })
 
-    const followup = await prismaClient.followup.findUnique({
-      where: { socialSupportId: socialSupport.id }
+    const updatedSocialSupport = await prismaClient.socialSupport.findUnique({
+      where: { id: socialSupport.id }
     })
-    expect(followup).not.toBeNull()
-    expect(followup?.supportProgramId).toBeNull()
+    expect(updatedSocialSupport).not.toBeNull()
+    expect(updatedSocialSupport?.supportProgramId).toBeNull()
+  })
+
+  test('Deleting a name sets supportProgramId to null on linked help request social supports', async ({
+    trpc
+  }) => {
+    const familyFile = await prismaClient.familyFile.create({
+      data: {
+        structure: { connect: { id: structureId } },
+        referents: { connect: [{ id: referentId }] }
+      }
+    })
+    familyFileIds.push(familyFile.id)
+
+    const beneficiary = await prismaClient.beneficiary.create({
+      data: {
+        familyFile: { connect: { id: familyFile.id } },
+        structure: { connect: { id: structureId } },
+        createdBy: { connect: { id: managerId } },
+        fileNumber: `UDN-HELPREQ-${v4()}`,
+        status: 'Active'
+      }
+    })
+    beneficiaryIds.push(beneficiary.id)
+
+    const { id: nameId } = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UDN-HelpReqName-${v4()}`,
+        structureId,
+        createdById: managerId
+      },
+      select: { id: true }
+    })
+    nameIds.push(nameId)
+
+    const { id: programId } = await prismaClient.supportProgram.create({
+      data: {
+        id: v4(),
+        beneficiary: { connect: { id: beneficiary.id } },
+        supportProgramName: { connect: { id: nameId } }
+      },
+      select: { id: true }
+    })
+
+    const socialSupport = await prismaClient.socialSupport.create({
+      data: {
+        date: new Date(),
+        structure: { connect: { id: structureId } },
+        familyFile: { connect: { id: familyFile.id } },
+        beneficiary: { connect: { id: beneficiary.id } },
+        createdBy: { connect: { id: managerId } },
+        lastUpdatedBy: { connect: { id: managerId } },
+        status: 'InProgress',
+        socialSupportType: 'HelpRequest',
+        supportProgram: { connect: { id: programId } },
+        fileInstruction: {
+          create: {
+            type: 'Financial',
+            externalStructure: false,
+            helpRequest: {
+              create: {
+                id: crypto.randomUUID(),
+                financialSupport: true,
+                subject: {
+                  create: {
+                    id: crypto.randomUUID(),
+                    name: 'Test subject',
+                    ownedByStructureId: structureId
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    await trpc.structureManager.supportProgram.deleteName({ id: nameId })
+
+    const updatedSocialSupport = await prismaClient.socialSupport.findUnique({
+      where: { id: socialSupport.id }
+    })
+    expect(updatedSocialSupport).not.toBeNull()
+    expect(updatedSocialSupport?.supportProgramId).toBeNull()
   })
 })

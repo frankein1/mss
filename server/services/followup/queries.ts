@@ -32,15 +32,6 @@ const select = {
   prescribingOrganizationContact: {
     select: { id: true, name: true }
   },
-  supportProgramId: true,
-  supportProgram: {
-    select: {
-      id: true,
-      startDate: true,
-      endDate: true,
-      supportProgramName: { select: { id: true, name: true } }
-    }
-  },
   socialSupport: {
     select: {
       id: true,
@@ -62,6 +53,15 @@ const select = {
       synthesisRichText: true,
       ministerId: true,
       numeroPegase: true,
+      supportProgramId: true,
+      supportProgram: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          supportProgramName: { select: { id: true, name: true } }
+        }
+      },
       createdBy: {
         select: { id: true, firstName: true, lastName: true }
       },
