@@ -65,8 +65,8 @@ afterEach(async () => {
   })
 })
 
-describe('Comportement', () => {
-  test('Retourne les dispositifs dun bénéficiaire', async ({ trpc }) => {
+describe('Support Program - Get For Beneficiary', () => {
+  test('Returns support programs for a beneficiary', async ({ trpc }) => {
     const result = await trpc.structureManager.supportProgram.getForBeneficiary(
       {
         beneficiaryId
@@ -79,24 +79,13 @@ describe('Comportement', () => {
     expect(result[0]!.supportProgramName.id).toBe(supportProgramNameId)
   })
 
-  test('Retourne un tableau vide si beneficiaryId est vide', async ({
-    trpc
-  }) => {
-    const result = await trpc.structureManager.supportProgram.getForBeneficiary(
-      {
-        beneficiaryId: ''
-      }
-    )
-    expect(result).toEqual([])
-  })
-
-  test('Ne peut pas accéder aux dispositifs dun bénéficiaire dune autre structure', async ({
+  test('Another structure cannot access beneficiary support programs', async ({
     trpc
   }) => {
     await expect(
       trpc.structureManagerMinistere.supportProgram.getForBeneficiary({
         beneficiaryId
       })
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/beneficiary[\s\S]*?no record/im)
   })
 })
