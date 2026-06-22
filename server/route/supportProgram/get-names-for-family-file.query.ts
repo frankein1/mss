@@ -24,7 +24,7 @@ const handler = async ({
         select: {
           supportPrograms: {
             select: {
-              supportProgramName: { select: { name: true } }
+              supportProgramName: { select: { id: true, name: true } }
             }
           }
         }
@@ -32,14 +32,16 @@ const handler = async ({
     }
   })
 
-  const names = new Set<string>()
+  const byId = new Map<string, string>()
   for (const beneficiary of familyFile.beneficiaries) {
-    for (const supportProgram of beneficiary.supportPrograms) {
-      names.add(supportProgram.supportProgramName.name)
+    for (const sp of beneficiary.supportPrograms) {
+      byId.set(sp.supportProgramName.id, sp.supportProgramName.name)
     }
   }
 
-  return Array.from(names).sort()
+  return Array.from(byId, ([id, name]) => ({ id, name })).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
 }
 
 export const getSupportProgramNamesForFamilyFileQuery = createQuery({

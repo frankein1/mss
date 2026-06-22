@@ -55,11 +55,11 @@ function prepareSocialSupportFilters(
     }
   }
 
-  if (filters.supportProgramNames?.length) {
+  if (filters.supportProgramNameIds?.length) {
     formattedFilters.beneficiary = {
       supportPrograms: {
         some: {
-          supportProgramName: { name: { in: filters.supportProgramNames } }
+          supportProgramNameId: { in: filters.supportProgramNameIds }
         }
       }
     }

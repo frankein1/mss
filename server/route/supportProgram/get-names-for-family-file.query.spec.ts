@@ -64,18 +64,24 @@ describe('FamilyFile - getSupportProgramNames', () => {
   test('returns support program names of all beneficiaries in the family file', async ({
     trpc
   }) => {
-    const names =
+    const result =
       await trpc.structureManager.supportProgram.getNamesForFamilyFile({
         familyFileId
       })
-    expect(names).toContain('Aide alimentaire-GETNAMES')
+    expect(result).toContainEqual(
+      expect.objectContaining({
+        id: supportProgramNameId,
+        name: 'Aide alimentaire-GETNAMES'
+      })
+    )
   })
 
   test('returns unique names sorted alphabetically', async ({ trpc }) => {
-    const names =
+    const result =
       await trpc.structureManager.supportProgram.getNamesForFamilyFile({
         familyFileId
       })
+    const names = result.map(r => r.name)
     expect(names).toEqual([...new Set(names)].sort())
   })
 })
@@ -88,14 +94,20 @@ describe('FamilyFile - getSupportProgramNames - Authorizations', () => {
       trpc.structureManagerMinistere.supportProgram.getNamesForFamilyFile({
         familyFileId
       })
-    ).rejects.toThrow()
+    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
   })
 
   test('a SocialWorker can get support program names', async ({ trpc }) => {
-    await expect(
-      trpc.socialWorker.supportProgram.getNamesForFamilyFile({
+    const result = await trpc.socialWorker.supportProgram.getNamesForFamilyFile(
+      {
         familyFileId
+      }
+    )
+    expect(result).toContainEqual(
+      expect.objectContaining({
+        id: supportProgramNameId,
+        name: 'Aide alimentaire-GETNAMES'
       })
-    ).resolves.toBeDefined()
+    )
   })
 })
