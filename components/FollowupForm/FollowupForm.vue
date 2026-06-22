@@ -3,6 +3,11 @@
     v-if="errors.length > 1"
     :errors="errors"
   />
+  <AtomAlert
+    v-if="fetchProgramsError"
+    message="Les dispositifs associés au bénéficiaire n'ont pas pu être chargés."
+    :alert-type="AlertType.Warning"
+  ></AtomAlert>
   <form
     ref="form"
     novalidate
@@ -357,6 +362,7 @@
   import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
   import { EventCategory, FollowupFormAction } from '~/types/matomo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { AlertType } from '~/utils/constants/alert'
 
   const props = withDefaults(
     defineProps<{
@@ -374,6 +380,7 @@
 
   const { application } = usePermissions()
   const matomo = useMatomo()
+  const trpcClient = useTrpcClient()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -387,8 +394,7 @@
   )
   const { value: familyFileId } = useField<string | null>('familyFileId')
 
-  const trpcClient = useTrpcClient()
-  const { data: supportProgramsData } =
+  const { data: supportProgramsData, error: fetchProgramsError } =
     await trpcClient.supportProgram.getForBeneficiary.useQuery(
       toRef(() => ({ beneficiaryId: beneficiaryId.value ?? '' }))
     )

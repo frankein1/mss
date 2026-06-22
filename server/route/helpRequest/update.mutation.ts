@@ -8,7 +8,10 @@ import {
   type SecurityRuleContext
 } from '~/server/security'
 import { HelpRequestService } from '~/server/services'
-import { validateSocialSupportPartnerOrganisations } from '../helpers'
+import {
+  validateSocialSupportPartnerOrganisations,
+  validateSupportProgramId
+} from '../helpers'
 
 const handler = ({
   input,
@@ -42,6 +45,10 @@ const securityCheck = async (
     (input.numeroPegase || input.ministerId) &&
     !appPermissions.module.ministere
   ) {
+    return false
+  }
+
+  if (!(await validateSupportProgramId(ctx.user, input.supportProgramId))) {
     return false
   }
 

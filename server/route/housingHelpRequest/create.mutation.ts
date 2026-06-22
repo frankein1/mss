@@ -5,7 +5,10 @@ import type { CreateHousingHelpRequestInput } from '~/server/schema'
 import { createHousingHelpRequestSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { HousingHelpRequestService, FamilyFileService } from '~/server/services'
-import { validateSocialSupportPartnerOrganisations } from '../helpers'
+import {
+  validateSocialSupportPartnerOrganisations,
+  validateSupportProgramId
+} from '../helpers'
 
 const handler = ({
   input,
@@ -27,6 +30,10 @@ const securityCheck = async (
   )
   // Check permissions
   if (!permissions.create.helpRequest) {
+    return false
+  }
+
+  if (!(await validateSupportProgramId(ctx.user, input.supportProgramId))) {
     return false
   }
 
