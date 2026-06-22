@@ -69,8 +69,6 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   socioProfessionalCategory: 'Catégorie socio-professionnelle',
   occupation: 'Profession(s)',
   studyLevel: "Niveau scolaire / d'étude",
-  schoolName: "Nom de l'établissement",
-  isSchoolInQPV: "L'établissement est en Quartier Prioritaire de la Ville",
   employer: 'Employeur',
   employerSiret: "SIRET de l'employeur",
   unemploymentNumber: 'N° France Travail',
@@ -104,7 +102,8 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   subjects: "Objets d'accompagnement",
   vulnerablePerson: 'Registre des personnes vulnérables',
   relationship: 'Lien de la relation',
-  schoolClass: 'Classe fréquentée'
+  schoolClass: 'Classe fréquentée',
+  schoolId: 'Établissement scolaire fréquenté'
 }
 
 const beneficiaryReferentTransfertLabels = {

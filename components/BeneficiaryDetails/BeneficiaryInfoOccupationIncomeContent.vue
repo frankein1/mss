@@ -17,29 +17,6 @@
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
-      v-if="
-        occupationIncome.socioProfessionalCategory ===
-        BeneficiarySocioProfessionalCategory.Student
-      "
-      :label="beneficiaryFieldLabels.schoolName"
-      :value="occupationIncome.schoolName"
-      class="fr-col-12"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      v-if="
-        occupationIncome.socioProfessionalCategory ===
-          BeneficiarySocioProfessionalCategory.Student &&
-        occupationIncome.isSchoolInQPV === true
-      "
-      :label="beneficiaryFieldLabels.isSchoolInQPV"
-      :value="occupationIncome.isSchoolInQPV ? 'Oui' : 'Non'"
-      class="fr-col-12"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.studyLevel"
       :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
       class="fr-col-12 fr-col-md-6"

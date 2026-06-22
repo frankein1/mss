@@ -155,6 +155,7 @@ export const disableStructure = async ({
       | 'created'
       | 'updated'
       | 'externalRdvspId'
+      | 'schoolId'
       | 'fileNumber'
       | 'birthDate'
       | 'firstNameNormalized'
@@ -226,9 +227,7 @@ export const disableStructure = async ({
     involvedPartners: null,
     additionalInformation: null,
     numeroPegase: null,
-    accommodationZone: null,
-    schoolName: null,
-    isSchoolInQPV: false
+    accommodationZone: null
   }
   const updateBeneficiaries = () =>
     BeneficiaryRepo.prisma.updateMany({

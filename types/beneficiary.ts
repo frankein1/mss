@@ -82,9 +82,7 @@ export type GetBeneficiaryExternalOrganisations = Pick<
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,
   | 'socioProfessionalCategory'
-  | 'schoolName'
   | 'schoolClass'
-  | 'isSchoolInQPV'
   | 'occupation'
   | 'studyLevel'
   | 'employer'
