@@ -1,24 +1,16 @@
-import { z } from 'zod'
 import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { BeneficiaryRepo } from '~/server/database'
-
-const inputValidation = z.object({
-  beneficiaryId: z.string().uuid().or(z.literal(''))
-})
-
-type Input = z.infer<typeof inputValidation>
+import { beneficiaryIdSchema, type BeneficiaryIdInput } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   ctx,
   input
 }: {
   ctx: ProtectedAppContext
-  input: Input
+  input: BeneficiaryIdInput
 }) => {
-  if (!input.beneficiaryId) {
-    return []
-  }
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.beneficiaryId },
     select: {
@@ -35,14 +27,12 @@ const handler = async ({
       }
     }
   })
+
   return beneficiary.supportPrograms
 }
 
 export const getSupportProgramsForBeneficiaryQuery = createQuery({
-  inputValidation,
-  securityCheck: async (ctx, input) => {
-    // BeneficiaryRepo.findUniqueOrThrow already enforces structure scoping via constraints
-    return true
-  },
+  inputValidation: beneficiaryIdSchema,
+  securityCheck: AllowSecurityCheck,
   handler
 })
