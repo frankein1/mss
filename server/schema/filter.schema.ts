@@ -247,7 +247,7 @@ const socialSupportFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).optional(),
   typeSuivi: z.nativeEnum(TypeSuivi).optional(),
   beneficiaryId: z.string().uuid().optional(),
-  supportProgramNames: z.array(z.string()).optional()
+  supportProgramNameIds: z.array(z.string().uuid()).optional()
 })
 
 type SocialSupportFilterInput = z.infer<typeof socialSupportFilterSchema>

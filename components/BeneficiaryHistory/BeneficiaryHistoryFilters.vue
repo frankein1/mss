@@ -43,7 +43,7 @@
     resultsLabel: string
     values: FamilyFileHistoryFilterInput
     familyFileIdentification: BeneficiaryFileIdentification[]
-    supportProgramNameOptions: string[]
+    supportProgramNameOptions: { id: string; name: string }[]
   }>()
 
   const { socialSupportStatusOptions } = useSocialSupportStatus()
@@ -83,10 +83,6 @@
   })
 
   const typeSuiviValue = computed(() => values.typeSuivi)
-
-  // const isFilteringHelpRequests = computed(
-  //   () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
-  // )
 
   const isFilteringHousingHelpRequests = computed(
     () => typeSuiviValue.value === TypeSuivi.HousingHelpRequest
@@ -152,11 +148,11 @@
 
     if (supportProgramNameOptions.length > 0) {
       filters.push({
-        name: 'supportProgramNames',
+        name: 'supportProgramNameIds',
         label: 'Dispositif concerné',
-        options: supportProgramNameOptions.map(name => ({
+        options: supportProgramNameOptions.map(({ id, name }) => ({
           label: name,
-          value: name
+          value: id
         })),
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
@@ -165,18 +161,6 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }
-
-    // if (!isFilteringHelpRequests.value) {
-    //   filters.push({
-    //     name: 'medium',
-    //     label: followupFieldLabels.medium,
-    //     options: followupMediumKeys.options,
-    //     type: FilterType.SelectMultiple,
-    //     alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-    //     matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-    //     matomoEventAction: FollowupFilterEventAction.Medium
-    //   })
-    // }
 
     if (familyFileIdentification.length > 1) {
       filters.push({
