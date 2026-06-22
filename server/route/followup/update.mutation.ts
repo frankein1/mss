@@ -11,7 +11,8 @@ import {
 import { FollowupService } from '~/server/services'
 import {
   validateRichTextSchema,
-  validateSocialSupportPartnerOrganisations
+  validateSocialSupportPartnerOrganisations,
+  validateSupportProgramId
 } from '../helpers'
 import { TRPCError } from '@trpc/server'
 
@@ -67,6 +68,10 @@ const securityCheck = async (
     (input.numeroPegase || input.ministerId) &&
     !appPermissions.module.ministere
   ) {
+    return false
+  }
+
+  if (!(await validateSupportProgramId(ctx.user, input.supportProgramId))) {
     return false
   }
 

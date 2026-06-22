@@ -8,7 +8,8 @@ import type { SecurityRuleContext } from '~/server/security'
 import { HousingHelpRequestService, FamilyFileService } from '~/server/services'
 import {
   validateRichTextSchema,
-  validateSocialSupportPartnerOrganisations
+  validateSocialSupportPartnerOrganisations,
+  validateSupportProgramId
 } from '../helpers'
 
 const handler = ({
@@ -49,6 +50,10 @@ const securityCheck = async (
   )
   // Check permissions
   if (!permissions.create.helpRequest) {
+    return false
+  }
+
+  if (!(await validateSupportProgramId(ctx.user, input.supportProgramId))) {
     return false
   }
 

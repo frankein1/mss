@@ -50,7 +50,7 @@
     () => followup.value.documents?.map(d => d.key) || []
   )
 
-  const { handleSubmit, values, meta, errors } = useForm<EditFollowupInput>({
+  const { handleSubmit, values, meta } = useForm<EditFollowupInput>({
     validationSchema: toTypedSchema(editFollowupSchema),
     initialValues: {
       id: followup.value.id,

@@ -4,8 +4,10 @@ import { getSchema } from '@tiptap/core'
 import { tiptapExtensions } from '~/utils/richTextEditor'
 import {
   validatePartnerOrganizationIds,
+  validateManyBelongToStructure,
   type SecurityRuleGrantee
 } from '../security'
+import { SupportProgramRepo } from '../database'
 
 export const validateRichTextSchema = (richText: string): boolean => {
   try {
@@ -55,4 +57,18 @@ export function validateSocialSupportPartnerOrganisations<
   }
 
   return validatePartnerOrganizationIds(user, partnerOrgIds, contactIds)
+}
+
+export function validateSupportProgramId(
+  user: SecurityRuleGrantee,
+  supportProgramId: string | null | undefined
+) {
+  if (!supportProgramId) {
+    return Promise.resolve(true)
+  }
+  return validateManyBelongToStructure(
+    user,
+    [supportProgramId],
+    SupportProgramRepo.count
+  )
 }
