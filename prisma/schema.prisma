@@ -1733,12 +1733,16 @@ model Beneficiary {
   socialSecurityNumber        String?         @map("social_security_number")
   insurance                   String?
 
+  // School
+  schoolClass BeneficiarySchoolClass? @map("school_class")
+  school      DataEducationSchool?    @relation(fields: [schoolId], references: [id])
+  schoolId    String?                 @map("school_id") @db.Uuid
+
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
   schoolName                String?                               @map("school_name")
   isSchoolInQPV             Boolean                               @default(false) @map("is_school_in_qpv")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
-  schoolClass               BeneficiarySchoolClass?               @map("school_class")
   occupation                String?
   employer                  String?
   employerSiret             String?                               @map("employer_siret")
@@ -1886,6 +1890,59 @@ enum ArchiveReason {
   Transfer
   NotPresent
   Other
+}
+
+enum RepClassification {
+  Rep
+  RepPlus
+}
+
+enum SchoolType {
+  Ecole
+  College // Collège
+  Lycee // Lycée
+  EREA
+  MedicoSocial // Médico-social
+  ServiceAdministratif // Service Administratif
+  InformationOrientation // Information et orientation
+  Autre
+}
+
+enum SchoolStatus {
+  OUVERT
+  FERME
+}
+
+model DataEducationSchool {
+  id  String @id @default(uuid()) @db.Uuid
+  uai String @unique //identifiant_de_l_etablissement
+
+  name       String // nom_etablissement
+  type       SchoolType // type_etablissement
+  nature     String // libelle_nature
+  address    String? // adresse_1
+  zipcode    String // code_postal
+  city       String // nom_commune
+  department String // libelle_departement
+  region     String // libelle_region
+  academy    String // libelle_academie
+  status     SchoolStatus // etat
+  latitude   Float?
+  longitude  Float?
+
+  repClassification RepClassification? @map("rep_classification") // appartenance_education_prioritaire
+
+  qpvCode    String? @map("qpv_code")
+  qpvName    String? @map("qpv_name")
+  qpvRevised Boolean @default(false) @map("qpv_revised")
+
+  created        DateTime @default(now())
+  updated        DateTime @updatedAt
+  lastImportedAt DateTime @map("last_imported_at")
+
+  beneficiaries Beneficiary[]
+
+  @@map("data_education_school")
 }
 
 model Comment {
