@@ -117,6 +117,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       privateSynthesis,
       privateSynthesisRichText,
       dueDate,
+      supportProgram: supportProgramId ? connect(supportProgramId) : undefined,
       followup: {
         create: {
           prescribingOrganization: prescribingOrganizationId
@@ -133,10 +134,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
           firstFollowup,
           classified,
           forwardedToJustice,
-          duration,
-          supportProgram: supportProgramId
-            ? connect(supportProgramId)
-            : undefined
+          duration
         }
       },
       socialSupportRedirections: {

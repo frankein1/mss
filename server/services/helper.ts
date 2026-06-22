@@ -130,6 +130,12 @@ type SS = SocialSupport & {
   subjects: SocialSupportSubject[]
   documents?: Pick<Document, 'key' | 'name'>[]
   comments?: (Comment & { createdBy: User })[]
+  supportProgram?: {
+    id: string
+    startDate: Date | null
+    endDate: Date | null
+    supportProgramName: { id: string; name: string }
+  } | null
   socialSupportRedirections: (Omit<
     SocialSupportRedirection,
     | 'createdAt'
@@ -199,7 +205,12 @@ export function filterSocialSupport<T extends SS>({
       conditions.details
     ),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister),
-    endOfSocialSupport: socialSupport.endOfSocialSupport
+    endOfSocialSupport: socialSupport.endOfSocialSupport,
+    supportProgramId: show(socialSupport.supportProgramId, conditions.details),
+    supportProgram: show(
+      socialSupport.supportProgram ?? null,
+      conditions.details
+    )
   }
 }
 
@@ -265,12 +276,6 @@ export function filterFollowup({
   followup: Followup & {
     prescribingOrganization: Partial<PartnerOrganization> | null
     prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
-    supportProgram: {
-      id: string
-      startDate: Date | null
-      endDate: Date | null
-      supportProgramName: { id: string; name: string }
-    } | null
   }
   conditions: {
     details: boolean
@@ -298,9 +303,7 @@ export function filterFollowup({
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
-    duration: show(followup.duration, conditions.details),
-    supportProgramId: followup.supportProgramId,
-    supportProgram: followup.supportProgram
+    duration: show(followup.duration, conditions.details)
   }
 }
 export function filterFollowupForExport<T extends Partial<Followup>>({
@@ -423,19 +426,12 @@ export function filterHousingHelpRequest({
     | 'lowIncomeHousingType'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
-    | 'supportProgramId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
-    supportProgram: {
-      id: string
-      startDate: Date | null
-      endDate: Date | null
-      supportProgramName: { id: string; name: string }
-    } | null
   }
   conditions: {
     details: boolean
@@ -485,9 +481,7 @@ export function filterHousingHelpRequest({
           housingHelpRequest.prescribingOrganizationContact
         ),
       details
-    ),
-    supportProgramId: housingHelpRequest.supportProgramId,
-    supportProgram: housingHelpRequest.supportProgram
+    )
   }
 }
 
@@ -507,19 +501,12 @@ export function filterHelpRequest({
     | 'paymentMethod'
     | 'prescribingOrganizationId'
     | 'prescribingOrganizationContactId'
-    | 'supportProgramId'
   > & {
     prescribingOrganization: Pick<PartnerOrganization, 'id' | 'name'> | null
     prescribingOrganizationContact: Pick<
       PartnerOrganizationContact,
       'id' | 'name'
     > | null
-    supportProgram: {
-      id: string
-      startDate: Date | null
-      endDate: Date | null
-      supportProgramName: { id: string; name: string }
-    } | null
   }
   conditions: {
     details: boolean
@@ -560,9 +547,7 @@ export function filterHelpRequest({
           helpRequest.prescribingOrganizationContact
         ),
       details
-    ),
-    supportProgramId: helpRequest.supportProgramId,
-    supportProgram: helpRequest.supportProgram
+    )
   }
 }
 

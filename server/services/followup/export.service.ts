@@ -128,7 +128,8 @@ export async function exportFollowups({
 
     rows.push({
       ...formatRow(filtered, { userMap, partnerMap, contactMap, ministerMap }),
-      supportProgramId: followup.supportProgram?.supportProgramName?.name || ''
+      supportProgramId:
+        socialSupport.supportProgram?.supportProgramName?.name || ''
     })
   }
 

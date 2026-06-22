@@ -100,7 +100,6 @@ export async function create({ input, ctx }: CreateParams) {
         ? connect(prescribingOrganizationContactId)
         : undefined,
       isRefundable,
-      supportProgram: supportProgramId ? connect(supportProgramId) : undefined,
       subject: connect(subjectId),
       fileInstruction: {
         create: {
@@ -123,6 +122,9 @@ export async function create({ input, ctx }: CreateParams) {
             create: {
               date,
               status,
+              supportProgram: supportProgramId
+                ? connect(supportProgramId)
+                : undefined,
               socialSupportType: SocialSupportType.HelpRequest,
               subtype: financialSupport
                 ? FileInstructionType.Financial

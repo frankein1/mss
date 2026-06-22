@@ -2,13 +2,7 @@
 ALTER TYPE "UserActivityObject" ADD VALUE 'SupportProgramName';
 
 -- AlterTable
-ALTER TABLE "followup" ADD COLUMN     "support_program_id" UUID;
-
--- AlterTable
-ALTER TABLE "help_request" ADD COLUMN     "support_program_id" UUID;
-
--- AlterTable
-ALTER TABLE "housing_help_request" ADD COLUMN     "support_program_id" UUID;
+ALTER TABLE "social_support" ADD COLUMN     "support_program_id" UUID;
 
 -- CreateTable
 CREATE TABLE "support_program_name" (
@@ -50,13 +44,7 @@ CREATE INDEX "support_program_beneficiary_id_idx" ON "support_program"("benefici
 CREATE INDEX "support_program_support_program_name_id_idx" ON "support_program"("support_program_name_id");
 
 -- AddForeignKey
-ALTER TABLE "followup" ADD CONSTRAINT "followup_support_program_id_fkey" FOREIGN KEY ("support_program_id") REFERENCES "support_program"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "help_request" ADD CONSTRAINT "help_request_support_program_id_fkey" FOREIGN KEY ("support_program_id") REFERENCES "support_program"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "housing_help_request" ADD CONSTRAINT "housing_help_request_support_program_id_fkey" FOREIGN KEY ("support_program_id") REFERENCES "support_program"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "social_support" ADD CONSTRAINT "social_support_support_program_id_fkey" FOREIGN KEY ("support_program_id") REFERENCES "support_program"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "support_program_name" ADD CONSTRAINT "support_program_name_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -153,6 +153,9 @@ export async function update({ input, ctx }: UpdateParams) {
         endOfSocialSupport,
         dueDate,
         date,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : undefined,
         subjects: {
           ...connect(subjectId),
           disconnect: disconnectSubject
@@ -203,8 +206,7 @@ export async function update({ input, ctx }: UpdateParams) {
         subjectId,
         prescribingOrganizationId: prescribingOrganizationId || null,
         prescribingOrganizationContactId:
-          prescribingOrganizationContactId || null,
-        supportProgramId: supportProgramId || null
+          prescribingOrganizationContactId || null
       },
       select: {
         id: true

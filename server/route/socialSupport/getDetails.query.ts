@@ -38,6 +38,15 @@ async function getSocialSupportDetail({
       updated: true,
       socialSupportType: true,
       subtype: true,
+      supportProgramId: true,
+      supportProgram: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          supportProgramName: { select: { id: true, name: true } }
+        }
+      },
       createdBy: {
         select: {
           id: true,
@@ -132,16 +141,7 @@ async function getSocialSupportDetail({
               handlingDate: true,
               fileInstructionId: true,
               prescribingOrganization: true,
-              prescribingOrganizationContact: true,
-              supportProgramId: true,
-              supportProgram: {
-                select: {
-                  id: true,
-                  startDate: true,
-                  endDate: true,
-                  supportProgramName: { select: { id: true, name: true } }
-                }
-              }
+              prescribingOrganizationContact: true
             }
           },
           housingHelpRequest: {
@@ -164,16 +164,7 @@ async function getSocialSupportDetail({
               handlingDate: true,
               fileInstructionId: true,
               prescribingOrganization: true,
-              prescribingOrganizationContact: true,
-              supportProgramId: true,
-              supportProgram: {
-                select: {
-                  id: true,
-                  startDate: true,
-                  endDate: true,
-                  supportProgramName: { select: { id: true, name: true } }
-                }
-              }
+              prescribingOrganizationContact: true
             }
           }
         }
@@ -194,16 +185,7 @@ async function getSocialSupportDetail({
           duration: true,
           socialSupportId: true,
           prescribingOrganization: true,
-          prescribingOrganizationContact: true,
-          supportProgramId: true,
-          supportProgram: {
-            select: {
-              id: true,
-              startDate: true,
-              endDate: true,
-              supportProgramName: { select: { id: true, name: true } }
-            }
-          }
+          prescribingOrganizationContact: true
         }
       },
       _count: {

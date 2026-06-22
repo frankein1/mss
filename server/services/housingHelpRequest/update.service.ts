@@ -154,6 +154,9 @@ export async function update({ input, ctx }: UpdateParams) {
         endOfSocialSupport,
         dueDate,
         date,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : undefined,
         documents: prepareDocumentsMutations(
           documents,
           target.fileInstruction.socialSupport.documents
@@ -212,8 +215,7 @@ export async function update({ input, ctx }: UpdateParams) {
         isPmr,
         prescribingOrganizationId: prescribingOrganizationId || null,
         prescribingOrganizationContactId:
-          prescribingOrganizationContactId || null,
-        supportProgramId: supportProgramId || null
+          prescribingOrganizationContactId || null
       },
       select: {
         id: true

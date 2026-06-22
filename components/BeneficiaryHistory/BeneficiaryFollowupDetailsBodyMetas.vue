@@ -8,12 +8,6 @@
     Oui
   </li>
   <li><span class="information-label">Type :</span> {{ medium }}</li>
-  <li v-if="followup.supportProgram">
-    <span class="information-label"
-      >{{ followupFieldLabels.supportProgramId }} :</span
-    >
-    {{ formatSupportProgramOption(followup.supportProgram).label }}
-  </li>
   <li v-if="followup.prescribingOrganization?.name">
     <span class="information-label"
       >{{ followupFieldLabels.prescribingOrganizationId }} :</span
@@ -55,7 +49,6 @@
   import type { FollowupData } from './types'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'
   import { followupFieldLabels } from '~/client/labels'
-  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
 
   const props = defineProps<{
     followup: FollowupData
