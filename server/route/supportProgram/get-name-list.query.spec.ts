@@ -10,104 +10,48 @@ import { prismaClient } from '~/server/prisma'
 import { v4 } from 'uuid'
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
-const referentId = fixturesUsers[FixtureUserRole.Referent].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
 
-let familyFileId: string
-let beneficiaryId: string
-let supportProgramNameWithBeneficiaryId: string
-let supportProgramNameWithoutBeneficiaryId: string
+let supportProgramNameId: string
 
 beforeEach(async () => {
   const suffix = v4()
 
-  const familyFile = await prismaClient.familyFile.create({
+  const supportProgramName = await prismaClient.supportProgramName.create({
     data: {
-      structure: { connect: { id: structureId } },
-      referents: { connect: [{ id: referentId }] }
+      name: `GSPNL-${suffix}`,
+      structureId,
+      createdById: socialWorkerId
     }
   })
-  familyFileId = familyFile.id
-
-  const beneficiary = await prismaClient.beneficiary.create({
-    data: {
-      familyFile: { connect: { id: familyFileId } },
-      structure: { connect: { id: structureId } },
-      createdBy: { connect: { id: socialWorkerId } },
-      fileNumber: `TEST-GSPNL-${suffix}`,
-      status: 'Active'
-    }
-  })
-  beneficiaryId = beneficiary.id
-
-  const supportProgramNameWithBeneficiary =
-    await prismaClient.supportProgramName.create({
-      data: {
-        name: `GSPNL-Avec-beneficiaire-${suffix}`,
-        structureId,
-        createdById: socialWorkerId
-      }
-    })
-  supportProgramNameWithBeneficiaryId = supportProgramNameWithBeneficiary.id
-
-  const supportProgramNameWithoutBeneficiary =
-    await prismaClient.supportProgramName.create({
-      data: {
-        name: `GSPNL-Sans-beneficiaire-${suffix}`,
-        structureId,
-        createdById: socialWorkerId
-      }
-    })
-  supportProgramNameWithoutBeneficiaryId =
-    supportProgramNameWithoutBeneficiary.id
-
-  await prismaClient.supportProgram.create({
-    data: {
-      id: v4(),
-      beneficiary: { connect: { id: beneficiaryId } },
-      supportProgramName: {
-        connect: { id: supportProgramNameWithBeneficiaryId }
-      }
-    }
-  })
+  supportProgramNameId = supportProgramName.id
 })
 
 afterEach(async () => {
-  await prismaClient.supportProgram.deleteMany({
-    where: { beneficiaryId }
-  })
-  await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-  await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
   await prismaClient.supportProgramName.deleteMany({
-    where: {
-      id: {
-        in: [
-          supportProgramNameWithBeneficiaryId,
-          supportProgramNameWithoutBeneficiaryId
-        ]
-      }
-    }
+    where: { id: supportProgramNameId }
   })
 })
 
-describe('Comportement', () => {
-  test('Retourne uniquement les noms de dispositifs liés à au moins un bénéficiaire', async ({
+describe('Support Program - Get Name List - Filtering', () => {
+  test('Returns all names for the structure including ones without enrollments', async ({
     trpc
   }) => {
     const result = await trpc.structureManager.supportProgram.getNameList()
 
     const ids = result.map(d => d.id)
-    expect(ids).toContain(supportProgramNameWithBeneficiaryId)
-    expect(ids).not.toContain(supportProgramNameWithoutBeneficiaryId)
+    expect(ids).toContain(supportProgramNameId)
   })
+})
 
-  test('Ne retourne pas les noms de dispositifs dune autre structure', async ({
+describe('Support Program - Get Name List - Authorizations', () => {
+  test('Another structure cannot see names from this structure', async ({
     trpc
   }) => {
     const result =
       await trpc.structureManagerMinistere.supportProgram.getNameList()
 
     const ids = result.map(d => d.id)
-    expect(ids).not.toContain(supportProgramNameWithBeneficiaryId)
+    expect(ids).not.toContain(supportProgramNameId)
   })
 })

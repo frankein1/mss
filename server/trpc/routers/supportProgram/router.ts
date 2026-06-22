@@ -5,6 +5,9 @@ export const supportProgramRouter = router({
   getNameList: protectedProcedure
     .input(routes.getSupportProgramNameListQuery.inputValidation)
     .query(routes.getSupportProgramNameListQuery.execute),
+  getActiveNameList: protectedProcedure
+    .input(routes.getActiveSupportProgramNameListQuery.inputValidation)
+    .query(routes.getActiveSupportProgramNameListQuery.execute),
   getForBeneficiary: protectedProcedure
     .input(routes.getSupportProgramsForBeneficiaryQuery.inputValidation)
     .query(routes.getSupportProgramsForBeneficiaryQuery.execute),
