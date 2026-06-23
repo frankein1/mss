@@ -155,7 +155,6 @@ export const disableStructure = async ({
       | 'created'
       | 'updated'
       | 'externalRdvspId'
-      | 'schoolUai'
       | 'fileNumber'
       | 'birthDate'
       | 'firstNameNormalized'
@@ -210,6 +209,7 @@ export const disableStructure = async ({
     socioProfessionalCategory: null,
     studyLevel: null,
     schoolClass: null,
+    schoolUai: null,
     occupation: null,
     employer: null,
     employerSiret: null,
