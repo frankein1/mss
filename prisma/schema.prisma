@@ -1913,22 +1913,22 @@ enum SchoolStatus {
 
 model DataEducationSchool {
   id  String @id @default(uuid()) @db.Uuid
-  uai String @unique //identifiant_de_l_etablissement
+  uai String @unique
 
-  name       String // nom_etablissement
-  type       SchoolType // type_etablissement
-  nature     String // libelle_nature
-  address    String? // adresse_1
-  zipcode    String // code_postal
-  city       String // nom_commune
-  department String // libelle_departement
-  region     String // libelle_region
-  academy    String // libelle_academie
-  status     SchoolStatus // etat
+  name       String
+  type       SchoolType
+  nature     String
+  address    String?
+  zipcode    String
+  city       String
+  department String
+  region     String
+  academy    String
+  status     SchoolStatus
   latitude   Float?
   longitude  Float?
 
-  repClassification RepClassification? @map("rep_classification") // appartenance_education_prioritaire
+  repClassification RepClassification? @map("rep_classification")
 
   qpvCode    String? @map("qpv_code")
   qpvName    String? @map("qpv_name")
@@ -1936,7 +1936,7 @@ model DataEducationSchool {
 
   created        DateTime @default(now())
   updated        DateTime @updatedAt
-  lastImportedAt DateTime @map("last_imported_at")
+  lastImportedAt DateTime @map("last_imported_at") // only updated programaticaly with school-import.service.ts
 
   beneficiaries Beneficiary[]
 
