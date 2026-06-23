@@ -13,7 +13,8 @@ import {
   dateOrEmpty,
   openText,
   stringOrEmpty,
-  openRichText
+  openRichText,
+  uuidOrEmpty
 } from '../helpers.schema'
 import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 import { SocialSupportRedirectionSchema } from '../redirection'
@@ -57,7 +58,7 @@ export const createHelpRequestSchemaBase = z.object({
   financialSupport: z.boolean(),
   isRefundable: kindOfBooleanSchema(),
   socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish(),
-  supportProgramId: z.string().nullish()
+  supportProgramId: uuidOrEmpty
 })
 
 export const createHelpRequestSchema = z.discriminatedUnion('isMinistry', [
