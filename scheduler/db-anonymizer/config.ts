@@ -756,6 +756,36 @@ const configMinister: Record<
   updated: true
 }
 
+const configSupportProgramName: Record<
+  SnakeCase<keyof typeof Prisma.SupportProgramNameScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  name: true,
+  structure_id: true,
+  created_by_id: true,
+  updated_at: true,
+  created_at: true
+}
+
+const configSupportProgram: Record<
+  SnakeCase<keyof typeof Prisma.SupportProgramScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  beneficiary_id: true,
+  workshop_id: true,
+  support_program_name_id: true,
+  partner_organisation_id: true,
+  start_date: true,
+  end_date: true,
+  exit_reason: true,
+  created_at: true,
+  updated_at: true,
+  // -- BEGIN ANONYMIZED
+  precisions: false
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -793,7 +823,9 @@ export const CONFIG = {
   external_account: configExternalAccount,
   social_support_redirection: configRedirection,
   redirection_reason: configRedirectionReason,
-  minister: configMinister
+  minister: configMinister,
+  support_program_name: configSupportProgramName,
+  support_program: configSupportProgram
 }
 
 export type TableName = keyof typeof CONFIG
