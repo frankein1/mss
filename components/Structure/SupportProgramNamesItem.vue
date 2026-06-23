@@ -96,6 +96,10 @@
 </script>
 
 <style scoped lang="scss">
+  .spn-item {
+    break-inside: avoid;
+  }
+
   .spn-item__form {
     display: flex;
     align-items: flex-start;

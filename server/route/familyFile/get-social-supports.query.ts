@@ -56,12 +56,8 @@ function prepareSocialSupportFilters(
   }
 
   if (filters.supportProgramNameIds?.length) {
-    formattedFilters.beneficiary = {
-      supportPrograms: {
-        some: {
-          supportProgramNameId: { in: filters.supportProgramNameIds }
-        }
-      }
+    formattedFilters.supportProgram = {
+      supportProgramNameId: { in: filters.supportProgramNameIds }
     }
   }
 
