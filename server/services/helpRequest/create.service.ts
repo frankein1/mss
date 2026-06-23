@@ -122,9 +122,7 @@ export async function create({ input, ctx }: CreateParams) {
             create: {
               date,
               status,
-              supportProgram: supportProgramId
-                ? connect(supportProgramId)
-                : undefined,
+              supportProgramId: supportProgramId,
               socialSupportType: SocialSupportType.HelpRequest,
               subtype: financialSupport
                 ? FileInstructionType.Financial

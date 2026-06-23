@@ -95,6 +95,15 @@ function findMany(
               partnerOrganizationContact: { select: { name: true } },
               redirectionReason: { select: { name: true } }
             }
+          },
+          supportProgramId: true,
+          supportProgram: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              supportProgramName: { select: { id: true, name: true } }
+            }
           }
         }
       },
@@ -111,16 +120,7 @@ function findMany(
           prescribingOrganizationId: true,
           prescribingOrganizationContactId: true,
           prescribingOrganization: { select: { id: true, name: true } },
-          prescribingOrganizationContact: { select: { id: true, name: true } },
-          supportProgramId: true,
-          supportProgram: {
-            select: {
-              id: true,
-              startDate: true,
-              endDate: true,
-              supportProgramName: { select: { id: true, name: true } }
-            }
-          }
+          prescribingOrganizationContact: { select: { id: true, name: true } }
         }
       },
       housingHelpRequest: {
@@ -142,16 +142,7 @@ function findMany(
           prescribingOrganizationId: true,
           prescribingOrganizationContactId: true,
           prescribingOrganization: { select: { id: true, name: true } },
-          prescribingOrganizationContact: { select: { id: true, name: true } },
-          supportProgramId: true,
-          supportProgram: {
-            select: {
-              id: true,
-              startDate: true,
-              endDate: true,
-              supportProgramName: { select: { id: true, name: true } }
-            }
-          }
+          prescribingOrganizationContact: { select: { id: true, name: true } }
         }
       }
     },

@@ -16,6 +16,7 @@ const referentId = fixturesUsers[FixtureUserRole.Referent].id
 const nameIds: string[] = []
 const beneficiaryIds: string[] = []
 const familyFileIds: string[] = []
+const subjectIds: string[] = []
 
 afterEach(async () => {
   await prismaClient.beneficiary.deleteMany({
@@ -27,9 +28,13 @@ afterEach(async () => {
   await prismaClient.supportProgramName.deleteMany({
     where: { id: { in: nameIds } }
   })
+  await prismaClient.socialSupportSubject.deleteMany({
+    where: { id: { in: subjectIds } }
+  })
   nameIds.length = 0
   beneficiaryIds.length = 0
   familyFileIds.length = 0
+  subjectIds.length = 0
 })
 
 describe('SupportProgram - Delete Name - Authorizations', () => {
@@ -239,6 +244,9 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
       select: { id: true }
     })
 
+    const subjectId = crypto.randomUUID()
+    subjectIds.push(subjectId)
+
     const socialSupport = await prismaClient.socialSupport.create({
       data: {
         date: new Date(),
@@ -260,7 +268,7 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
                 financialSupport: true,
                 subject: {
                   create: {
-                    id: crypto.randomUUID(),
+                    id: subjectId,
                     name: 'Test subject',
                     ownedByStructureId: structureId
                   }

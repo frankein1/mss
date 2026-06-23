@@ -141,6 +141,7 @@ export const disableStructure = async ({
       | 'updated'
       | 'socialSupportType'
       | 'subtype'
+      | 'supportProgramId'
     >
   > = {
     synthesis: null,
@@ -291,7 +292,13 @@ export const disableStructure = async ({
       data: structureUpdate
     })
 
+  const deleteSupportProgramNames = () =>
+    prismaClient.supportProgramName.deleteMany({
+      where: { structureId: id }
+    })
+
   await prismaClient.$transaction([
+    deleteSupportProgramNames(),
     deleteNotifications(),
     deleteComments(),
     deleteDocuments(),
@@ -421,7 +428,6 @@ async function updateHelpRequests(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
-    supportProgramId: null,
     askedAmount: null,
     allocatedAmount: null,
     paymentMethod: null,
@@ -458,8 +464,7 @@ async function updateHousingHelpRequests(structureId: string) {
     isPmr: null,
     reason: null,
     lowIncomeHousingType: { set: [] },
-    handlingDate: null,
-    supportProgramId: null
+    handlingDate: null
   }
   await HousingHelpRequestRepo.prisma.updateMany({
     where: {
@@ -480,7 +485,6 @@ async function updateFollowups(structureId: string) {
   > = {
     prescribingOrganizationId: null,
     prescribingOrganizationContactId: null,
-    supportProgramId: null,
     helpRequested: null,
     place: null,
     thirdPersonName: null,
