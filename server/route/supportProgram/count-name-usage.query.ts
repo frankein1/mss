@@ -2,7 +2,6 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { SecurityRuleContext } from '~/server/security'
 import { getAppContextPermissions } from '~/server/security'
-import { prismaClient } from '~/server/prisma'
 import { idSchema, type IdInput } from '~/server/schema'
 import { SupportProgramNameRepo } from '~/server/database'
 
