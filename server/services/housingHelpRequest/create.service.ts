@@ -124,9 +124,7 @@ export async function create({ input, ctx }: CreateParams) {
           socialSupport: {
             create: {
               status,
-              supportProgram: supportProgramId
-                ? connect(supportProgramId)
-                : undefined,
+              supportProgramId: supportProgramId,
               socialSupportType: SocialSupportType.HelpRequestHousing,
               subtype: FileInstructionType.Housing,
               createdById: ctx.user.id,
