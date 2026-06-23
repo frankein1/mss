@@ -29,7 +29,11 @@ const jobErrorSchema = z.object({
     'structure-import-create',
     'structure-import-update',
     'structure-import-other',
-    'brevo-export'
+    'brevo-export',
+    'school-import-fetch',
+    'school-import-format',
+    'school-import-upsert',
+    'school-import-other'
   ]),
   status: z.number().nullable(),
   error: z.string()
@@ -43,7 +47,8 @@ const createJobResultSchema = z.object({
     'data-inclusion-structure-import-cron',
     'data-inclusion-structure-import-cron-all',
     'data-inclusion-structure-import',
-    'brevo-export'
+    'brevo-export',
+    'data-education-school-import'
   ]),
   errors: z.array(jobErrorSchema),
   result: jobInternalResultSchema

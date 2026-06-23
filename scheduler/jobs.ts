@@ -9,6 +9,7 @@ import socialSupportNotifications from './notification/create-social-support-not
 import documentNotifications from './notification/create-document-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
+import importDataEducationSchools from './data-education/import-schools'
 
 export const jobs = {
   /** Sends emails from the queue.
@@ -55,7 +56,9 @@ export const jobs = {
 
   /** Imports structure data from the data.inclusion API.
    * Runs every Sunday at 06:00 */
-  dataInclusionStructureImport: importDataInclusionStructures
+  dataInclusionStructureImport: importDataInclusionStructures,
+
+  dataEducationSchoolImport: importDataEducationSchools
 } satisfies Record<string, () => Promise<unknown>>
 
 export type JobName = keyof typeof jobs

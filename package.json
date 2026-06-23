@@ -25,7 +25,8 @@
     "release": "commit-and-tag-version",
     "prepare": "husky",
     "scheduler:archive-notifications": "tsx server/scheduler/notifications/archive-notifications.ts",
-    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts"
+    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts",
+    "scheduler:import-schools": "tsx scheduler/_caller.ts dataEducationSchoolImport"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1019.0",
@@ -43,6 +44,8 @@
     "@tiptap/vue-3": "^3.21.0",
     "@trpc/client": "^11.12.0",
     "@trpc/server": "^11.12.0",
+    "@turf/helpers": "^7.3.5",
+    "@turf/turf": "^7.3.5",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/zod": "^4.15.0",
     "@zip.js/zip.js": "^2.7.72",
@@ -51,6 +54,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^17.3.1",
     "exceljs": "^4.4.0",
+    "geojson": "^0.5.0",
     "handlebars": "^4.7.9",
     "html-to-image": "1.11.11",
     "jsonwebtoken": "^9.0.3",
