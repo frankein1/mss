@@ -97,6 +97,7 @@ async function importSchools(job: JobResult) {
       0,
       refines
     )
+    job.result.nTotal = (job.result.nTotal ?? 0) + total_count
     console.log(`school-import: [${academy}] ${total_count} schools to process`)
 
     job.status = 'Ongoing'
