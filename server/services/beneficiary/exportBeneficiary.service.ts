@@ -860,7 +860,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       socialSecurityNumber: true,
       insurance: true,
       socioProfessionalCategory: true,
-      schoolId: true,
+      schoolUai: true,
       schoolClass: true,
       studyLevel: true,
       occupation: true,

@@ -8,11 +8,10 @@ CREATE TYPE "SchoolType" AS ENUM ('Ecole', 'College', 'Lycee', 'EREA', 'MedicoSo
 CREATE TYPE "SchoolStatus" AS ENUM ('OUVERT', 'FERME');
 
 -- AlterTable
-ALTER TABLE "beneficiary" ADD COLUMN "school_id" UUID;
+ALTER TABLE "beneficiary" ADD COLUMN "school_uai" TEXT;
 
 -- CreateTable
 CREATE TABLE "data_education_school" (
-    "id" UUID NOT NULL,
     "uai" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" "SchoolType" NOT NULL,
@@ -34,11 +33,8 @@ CREATE TABLE "data_education_school" (
     "updated" TIMESTAMP(3) NOT NULL,
     "last_imported_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "data_education_school_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "data_education_school_pkey" PRIMARY KEY ("uai")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "data_education_school_uai_key" ON "data_education_school"("uai");
-
 -- AddForeignKey
-ALTER TABLE "beneficiary" ADD CONSTRAINT "beneficiary_school_id_fkey" FOREIGN KEY ("school_id") REFERENCES "data_education_school"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "beneficiary" ADD CONSTRAINT "beneficiary_school_uai_fkey" FOREIGN KEY ("school_uai") REFERENCES "data_education_school"("uai") ON DELETE SET NULL ON UPDATE CASCADE;

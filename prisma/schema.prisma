@@ -1735,8 +1735,8 @@ model Beneficiary {
 
   // School
   schoolClass BeneficiarySchoolClass? @map("school_class")
-  school      DataEducationSchool?    @relation(fields: [schoolId], references: [id])
-  schoolId    String?                 @map("school_id") @db.Uuid
+  school      DataEducationSchool?    @relation(fields: [schoolUai], references: [uai])
+  schoolUai   String?                 @map("school_uai")
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
@@ -1912,8 +1912,7 @@ enum SchoolStatus {
 }
 
 model DataEducationSchool {
-  id  String @id @default(uuid()) @db.Uuid
-  uai String @unique
+  uai String @id
 
   name       String
   type       SchoolType
