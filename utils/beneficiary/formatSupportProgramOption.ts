@@ -1,4 +1,7 @@
-import { formatDate } from '~/utils/formatDate'
+import {
+  supportProgramStatus,
+  formatSupportProgramDateRange
+} from '~/utils/beneficiary/supportProgramStatus'
 
 type SupportProgramOption = {
   id: string
@@ -10,21 +13,8 @@ type SupportProgramOption = {
 export function formatSupportProgramOption(
   supportProgram: SupportProgramOption
 ) {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const status =
-    supportProgram.startDate && new Date(supportProgram.startDate) > today
-      ? 'À venir'
-      : !supportProgram.endDate || new Date(supportProgram.endDate) >= today
-        ? 'En cours'
-        : 'Terminé'
-  const start = supportProgram.startDate
-    ? formatDate(supportProgram.startDate)
-    : ''
-  const end = supportProgram.endDate
-    ? ` → ${formatDate(supportProgram.endDate)}`
-    : ' →'
-  const datePart = start ? `${start}${end}` : ''
+  const status = supportProgramStatus(supportProgram)
+  const datePart = formatSupportProgramDateRange(supportProgram)
   const label = datePart
     ? `${supportProgram.supportProgramName.name} — ${status} — ${datePart}`
     : `${supportProgram.supportProgramName.name} — ${status}`
