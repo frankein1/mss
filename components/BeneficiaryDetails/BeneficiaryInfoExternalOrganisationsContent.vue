@@ -53,54 +53,51 @@
 
   <template v-if="externalOrganisations.supportPrograms.length">
     <div class="fr-mt-3w fr-mb-1w">
-      <p class="fr-text--bold fr-text--uppercase">
-        Prestations / Dispositifs d'accompagnement
-      </p>
+      <h5 class="fr-text--md">Prestations / Dispositifs d'accompagnement</h5>
     </div>
     <div
-      v-for="supportProgram in externalOrganisations.supportPrograms"
+      v-for="(supportProgram, index) in externalOrganisations.supportPrograms"
       :key="supportProgram.id"
-      class="fr-grid-row fr-mb-2w"
     >
-      <BeneficiaryInfoLabel
-        :label="supportProgramFieldLabels.name"
-        :value="supportProgram.supportProgramName.name"
-        class="fr-col-12 fr-col-md-6"
+      <hr
+        v-if="index > 0"
+        class="fr-mt-3w"
       />
-      <BeneficiaryInfoLabel
-        :label="supportProgramFieldLabels.partnerOrganisationId"
-        :value="supportProgram.partnerOrganisation?.name"
-        class="fr-col-12 fr-col-md-6"
-      />
-      <BeneficiaryInfoLabel
-        :label="supportProgramFieldLabels.startDate"
-        :value="
-          supportProgram.startDate
-            ? formatDate(supportProgram.startDate)
-            : undefined
-        "
-        class="fr-col-12 fr-col-md-6"
-      />
-      <BeneficiaryInfoLabel
-        :label="supportProgramFieldLabels.endDate"
-        :value="
-          supportProgram.endDate
-            ? formatDate(supportProgram.endDate)
-            : undefined
-        "
-        class="fr-col-12 fr-col-md-6"
-      />
-      <BeneficiaryInfoLabel
-        v-if="supportProgram.endDate"
-        :label="supportProgramFieldLabels.exitReason"
-        :value="supportProgram.exitReason ?? undefined"
-        class="fr-col-12"
-      />
-      <BeneficiaryInfoLabel
-        :label="supportProgramFieldLabels.precisions"
-        :value="supportProgram.precisions"
-        class="fr-col-12"
-      />
+      <h6 class="fr-mb-2w fr-text--md">
+        {{ supportProgram.supportProgramName.name }}
+      </h6>
+      <div class="fr-mb-2w">
+        <p
+          class="fr-badge fr-badge--sm"
+          :class="supportProgramStatusBadgeClass(supportProgram)"
+        >
+          {{ supportProgramStatus(supportProgram) }}
+        </p>
+        <span
+          v-if="supportProgram.startDate"
+          class="fr-ml-1w"
+        >
+          {{ formatSupportProgramDateRange(supportProgram) }}
+        </span>
+      </div>
+      <div class="fr-grid-row">
+        <BeneficiaryInfoLabel
+          :label="supportProgramFieldLabels.partnerOrganisationId"
+          :value="supportProgram.partnerOrganisation?.name"
+          class="fr-col-12"
+        />
+        <BeneficiaryInfoLabel
+          v-if="supportProgram.endDate"
+          :label="supportProgramFieldLabels.exitReason"
+          :value="supportProgram.exitReason ?? undefined"
+          class="fr-col-12"
+        />
+        <BeneficiaryInfoLabel
+          :label="supportProgramFieldLabels.precisions"
+          :value="supportProgram.precisions"
+          class="fr-col-12"
+        />
+      </div>
     </div>
   </template>
 </template>
@@ -113,8 +110,26 @@
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { supportProgramFieldLabels } from '~/client/labels'
+  import {
+    supportProgramStatus,
+    formatSupportProgramDateRange
+  } from '~/utils/beneficiary/supportProgramStatus'
 
   defineProps<{
     externalOrganisations: GetBeneficiaryExternalOrganisations
   }>()
+
+  type SupportProgram =
+    GetBeneficiaryExternalOrganisations['supportPrograms'][number]
+
+  function supportProgramStatusBadgeClass(program: SupportProgram) {
+    const status = supportProgramStatus(program)
+    if (status === 'En cours') {
+      return 'fr-badge--success'
+    }
+    if (status === 'À venir') {
+      return 'fr-badge--info'
+    }
+    return ''
+  }
 </script>
