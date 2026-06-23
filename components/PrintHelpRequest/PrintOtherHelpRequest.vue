@@ -31,6 +31,7 @@
           v-if="
             helpRequest.fileInstruction.socialSupport.numeroPegase ||
             helpRequest.fileInstruction.socialSupport.minister ||
+            helpRequest.fileInstruction.socialSupport.supportProgram ||
             helpRequest.subject?.name ||
             helpRequest.prescribingOrganization?.name ||
             helpRequest.prescribingOrganizationContact?.name ||
@@ -49,6 +50,15 @@
           <PrintDetailItem
             :title="helpRequestFieldLabels.minister"
             :content="ministerName"
+          />
+          <PrintDetailItem
+            v-if="helpRequest.fileInstruction.socialSupport.supportProgram"
+            :title="helpRequestFieldLabels.supportProgramId"
+            :content="
+              formatSupportProgramOption(
+                helpRequest.fileInstruction.socialSupport.supportProgram
+              ).label
+            "
           />
           <PrintDetailItem
             :title="helpRequestFieldLabels.subjectId"
@@ -222,6 +232,7 @@
   import type { HelpRequestOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { baseRefusalReasonKeys } from '~/client/options'
   import { socialSupportRedirectionTypeKeys } from '~/client/options/redirection'

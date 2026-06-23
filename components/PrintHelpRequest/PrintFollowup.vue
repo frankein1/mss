@@ -59,8 +59,9 @@
             :content="followup.subjects.map(({ name }) => name).join(', ')"
           />
           <PrintDetailItem
+            v-if="followup.supportProgram"
             :title="followupFieldLabels.supportProgramId"
-            :content="followup.supportProgram?.supportProgramName?.name"
+            :content="formatSupportProgramOption(followup.supportProgram).label"
           />
           <PrintDetailItem
             :title="followupFieldLabels.prescribingOrganizationId"
@@ -143,6 +144,7 @@
   import { FollowupMedium } from '@prisma/client'
   import type { FollowupOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import { followupFieldLabels } from '~/client/labels'
   import { socialSupportRedirectionLabels } from '~/client/labels/redirection.labels'
   import { followupMediumKeys, followupDurationKeys } from '~/client/options'

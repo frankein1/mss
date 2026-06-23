@@ -36,6 +36,7 @@
           v-if="
             housingHelpRequest.fileInstruction.socialSupport.numeroPegase ||
             housingHelpRequest.fileInstruction.socialSupport.minister ||
+            housingHelpRequest.fileInstruction.socialSupport.supportProgram ||
             housingHelpRequest.isFirst ||
             housingHelpRequest.firstOpeningDate ||
             askedHousing ||
@@ -58,6 +59,17 @@
           <PrintDetailItem
             :title="helpRequestFieldLabels.minister"
             :content="ministerName"
+          />
+          <PrintDetailItem
+            v-if="
+              housingHelpRequest.fileInstruction.socialSupport.supportProgram
+            "
+            :title="helpRequestFieldLabels.supportProgramId"
+            :content="
+              formatSupportProgramOption(
+                housingHelpRequest.fileInstruction.socialSupport.supportProgram
+              ).label
+            "
           />
           <PrintDetailItem
             v-if="housingHelpRequest.isFirst != null"
@@ -315,6 +327,7 @@
   import type { HousingHelpRequestOutput } from './types'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { formatDate } from '~/utils/formatDate'
+  import { formatSupportProgramOption } from '~/utils/beneficiary/formatSupportProgramOption'
   import {
     askedHousingKeys,
     housingReasonKeys,
