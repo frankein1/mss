@@ -1,9 +1,8 @@
 <template>
-  <BeneficiaryFormSection>
+  <BeneficiaryFormSection
+    section-title="Prestations / Dispositifs d'accompagnement"
+  >
     <div class="fr-col-12">
-      <p class="fr-text--bold fr-text--uppercase fr-mb-1w">
-        Prestations / Dispositifs d'accompagnement
-      </p>
       <p class="fr-hint-text fr-mb-0">
         Exemple : portage de repas, dispositif de retour à l'emploi...
       </p>
