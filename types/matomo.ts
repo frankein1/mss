@@ -38,7 +38,8 @@ export enum BeneficiaryFilterEventAction {
   NotFilled = 'Champ non renseigné',
   QPV = 'Quartier prioritaire de la politique de la ville',
   MinistereDepartementServiceAc = "Département ou service de l'Administration Centrale",
-  MinistereStructure = 'Structure de rattachement'
+  MinistereStructure = 'Structure de rattachement',
+  SupportProgram = 'Dispositifs concernés'
 }
 
 export enum BeneficiaryHistoryAction {

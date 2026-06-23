@@ -127,11 +127,12 @@
     ]
     filters.push({
       name: 'supportProgramNameIds',
-      label: 'Dispositif',
+      label: 'Dispositifs concernés',
       options: supportProgramNameOptions.value || [],
       type: FilterType.SelectMultiple,
-      alwaysExpanded: true
-      // TODO: ajout d'une action Matomo
+      alwaysExpanded: true,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.SupportProgram
     })
 
     if (hasReferentsFilters) {
