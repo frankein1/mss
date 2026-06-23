@@ -3,20 +3,32 @@ import {
   formatSupportProgramDateRange
 } from '~/utils/beneficiary/supportProgramStatus'
 
-type SupportProgramOption = {
-  id: string
+type SupportProgramForLabel = {
   startDate: Date | null
   endDate: Date | null
-  supportProgramName: { id: string; name: string }
+  supportProgramName: { name: string }
 }
+
+export function formatSupportProgramLabel(
+  supportProgram: SupportProgramForLabel
+): string {
+  const status = supportProgramStatus(supportProgram)
+  const datePart = formatSupportProgramDateRange(supportProgram)
+  return datePart
+    ? `${supportProgram.supportProgramName.name} — ${status} — ${datePart}`
+    : `${supportProgram.supportProgramName.name} — ${status}`
+}
+
+type SupportProgramOption = {
+  id: string
+  supportProgramName: { id: string; name: string }
+} & SupportProgramForLabel
 
 export function formatSupportProgramOption(
   supportProgram: SupportProgramOption
 ) {
-  const status = supportProgramStatus(supportProgram)
-  const datePart = formatSupportProgramDateRange(supportProgram)
-  const label = datePart
-    ? `${supportProgram.supportProgramName.name} — ${status} — ${datePart}`
-    : `${supportProgram.supportProgramName.name} — ${status}`
-  return { value: supportProgram.id, label }
+  return {
+    value: supportProgram.id,
+    label: formatSupportProgramLabel(supportProgram)
+  }
 }

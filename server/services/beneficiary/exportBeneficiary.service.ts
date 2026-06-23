@@ -61,6 +61,7 @@ import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
 import { formatMinisterName } from '~/utils/minister'
+import { formatSupportProgramLabel } from '~/utils/beneficiary/formatSupportProgramOption'
 
 type FieldLabels<T> = Record<keyof T, any>
 
@@ -330,6 +331,7 @@ type FollowupData = FieldLabels<
   SocialSupportForFollowupData & {
     prescribingOrganizationName: string | null
     prescribingOrganizationContact: string | null
+    supportProgramName: string | null
     actions: boolean
     documents: DocumentData[] | null
     subjectsNames: string
@@ -369,6 +371,9 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     thirdPersonName: socialSupport.followup?.thirdPersonName,
     place: socialSupport.followup?.place,
     subjectsNames: subjectsNames.join(', '),
+    supportProgramName: socialSupport.supportProgram
+      ? formatSupportProgramLabel(socialSupport.supportProgram)
+      : null,
     status: socialSupport.status
       ? followupStatusKeys.value(socialSupport.status)
       : null,
@@ -457,6 +462,7 @@ type HousingHelpRequestData = FieldLabels<
 >
 
 type FileInstructionData = SocialSupportForFileInstructionData & {
+  supportProgramName: string | null
   helpRequest?: HelpRequestData
   housingHelpRequest?: HousingHelpRequestData
   documents: DocumentData[] | null
@@ -523,6 +529,9 @@ const getHelpRequestData = (
       : null,
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
+    supportProgramName: socialSupport.supportProgram
+      ? formatSupportProgramLabel(socialSupport.supportProgram)
+      : null,
     documents: documents || null,
     redirections: redirections || null,
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
@@ -652,10 +661,20 @@ type FamilyFileBeneficiaryData = {
   relationship: string | null
 }
 
+type SupportProgramData = {
+  name: string
+  startDate: string | null
+  endDate: string | null
+  exitReason: string | null
+  precisions: string | null
+  partnerOrganisation: string | null
+}
+
 type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
   beneficiaries: FamilyFileBeneficiaryData[]
   referents: string | null
   relatives: BeneficiaryRelativeData[] | null
+  supportPrograms: SupportProgramData[]
 }
 
 const getBeneficiaryInfoData = (
@@ -697,10 +716,22 @@ const getBeneficiaryInfoData = (
       )
     : null
 
+  const supportPrograms: SupportProgramData[] = beneficiary.supportPrograms.map(
+    sp => ({
+      name: sp.supportProgramName.name,
+      startDate: sp.startDate?.toLocaleDateString('fr-FR') || null,
+      endDate: sp.endDate?.toLocaleDateString('fr-FR') || null,
+      exitReason: sp.exitReason,
+      precisions: sp.precisions,
+      partnerOrganisation: sp.partnerOrganisation?.name || null
+    })
+  )
+
   return {
     ...beneficiary,
     beneficiaries,
     relatives,
+    supportPrograms,
     referents: referents ? referents.join(', ') : null,
     birthDate: beneficiary.birthDate
       ? beneficiary.birthDate.toLocaleDateString('fr-FR')
@@ -920,6 +951,17 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
             }
           }
         }
+      },
+      supportPrograms: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          exitReason: true,
+          precisions: true,
+          supportProgramName: { select: { name: true } },
+          partnerOrganisation: { select: { name: true } }
+        }
       }
     }
   })
@@ -1038,6 +1080,13 @@ const getSocialSupports = async (
               handlingDate: true
             }
           }
+        }
+      },
+      supportProgram: {
+        select: {
+          startDate: true,
+          endDate: true,
+          supportProgramName: { select: { name: true } }
         }
       },
       minister: {
