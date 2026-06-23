@@ -20,4 +20,8 @@ allowBuilds:
   unrs-resolver: false
 shamefullyHoist: true
 minimumReleaseAgeExclude:
-  - tmp@0.2.7
+  - nuxt@3.21.8
+  - '@nuxt/kit@3.21.8'
+  - '@nuxt/nitro-server@3.21.8'
+  - '@nuxt/schema@3.21.8'
+  - '@nuxt/vite-builder@3.21.8'
