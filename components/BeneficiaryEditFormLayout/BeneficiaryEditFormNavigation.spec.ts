@@ -94,17 +94,17 @@ describe('BeneficiaryEditFormNavigation - edit.occupationIncome', () => {
 })
 
 describe('BeneficiaryEditFormNavigation - edit.externalOrganisations', () => {
-  it('hides Structures et Dispositifs tab when edit.externalOrganisations is false', async () => {
+  it('hides Structures et dispositifs tab when edit.externalOrganisations is false', async () => {
     const wrapper = await mountNavigation({
       edit: { externalOrganisations: false }
     })
-    expect(wrapper.text()).not.toContain('Structures et Dispositifs')
+    expect(wrapper.text()).not.toContain('Structures et dispositifs')
   })
 
-  it('shows Structures et Dispositifs tab when edit.externalOrganisations is true', async () => {
+  it('shows Structures et dispositifs tab when edit.externalOrganisations is true', async () => {
     const wrapper = await mountNavigation({
       edit: { externalOrganisations: true }
     })
-    expect(wrapper.text()).toContain('Structures et Dispositifs')
+    expect(wrapper.text()).toContain('Structures et dispositifs')
   })
 })
