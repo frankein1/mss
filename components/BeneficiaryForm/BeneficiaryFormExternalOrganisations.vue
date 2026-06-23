@@ -19,10 +19,9 @@
         />
       </div>
       <div class="fr-col-12">
-        <VeeAutocomplete
+        <VeeInput
           name="prescribingStructure"
           :label="beneficiaryFieldLabels.prescribingStructure"
-          :search-fn="searchPrescribingStructure"
         />
       </div>
       <div class="fr-col-12">
@@ -64,25 +63,4 @@
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { routes } from '~/utils/routes'
-  import { SEARCH_NUMBER_CHARACTERS } from '~/utils/constants'
-  import type { OptionsWithDisabled } from '~/utils/options'
-
-  const trpcClient = useTrpcClient()
-
-  async function searchPrescribingStructure(
-    search: string
-  ): Promise<OptionsWithDisabled> {
-    if (search.length < SEARCH_NUMBER_CHARACTERS) {
-      return []
-    }
-
-    const { results } = await trpcClient.dataInclusion.searchStructures.query({
-      query: search.toLocaleLowerCase()
-    })
-
-    return results.map(({ name, city }) => ({
-      value: name,
-      label: `${name}${city ? ' - ' + city : ''}`
-    }))
-  }
 </script>
