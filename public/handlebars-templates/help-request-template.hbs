@@ -49,6 +49,9 @@
       {{/if}}
       {{#if endOfSocialSupport}}
         <li><span class='bold'>Fin d'accompagnement : </span>Oui</li>
+      {{#if supportProgramName}}
+        <li><span class='bold'>Dispositif :
+          </span>{{{supportProgramName}}}</li>
       {{/if}}
     </ul>
     {{#if helpRequest}}
