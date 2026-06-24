@@ -11,6 +11,9 @@
 1. [External Integrations](.claude/rules/7-external-integrations.md)
 1. [Accessibility](.claude/rules/8-accessibility.md)
 1. [Testing](.claude/rules/9-testing.md)
+1. [Testing: Frontend](.claude/rules/10-testing-frontend.md)
+1. [Testing: Backend](.claude/rules/11-testing-backend.md)
+1. [Scheduled Jobs](.claude/rules/12-scheduled-jobs.md)
 
 ---
 
