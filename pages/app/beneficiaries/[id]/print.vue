@@ -21,11 +21,6 @@
           class="fr-col-12"
         >
           <h1>{{ formatBeneficiaryDisplayName(beneficiary.general) }}</h1>
-          <BeneficiaryDetailsMetas
-            :beneficiary-id="beneficiary.id"
-            :general="beneficiary.general"
-          />
-          <BeneficiaryStatusBadge :status="beneficiary.status" />
           <BeneficiaryInfoHeader :beneficiary="beneficiary" />
           <template v-if="socialSupportSubjects.length">
             <hr />
