@@ -28,7 +28,6 @@ import {
   familySituationKeys,
   nationalityKeys
 } from '~/client/options'
-import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
 import type { Column } from 'exceljs'
@@ -223,7 +222,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     majorChildren: Number(taxHouseholds?.majorChildren) || '',
     subjects: beneficiary.history?.subjects.map(s => s.name).join(', ') || '',
     created: beneficiary.created || '',
-    fileNumber: readableFileNumber(beneficiary.id)
+    fileNumber: beneficiary.fileNumber
   }
 
   if (userRole !== UserRole.StructureManager) {
