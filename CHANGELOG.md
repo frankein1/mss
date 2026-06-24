@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.60.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.60.0...v1.60.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* **bénéficiaire:** utilisation du numéro de dossier dans l'export bénéficiaire ([fa1c56b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fa1c56b47027820d4ef86235c07f9274c4e297b3)), closes [#1128](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1128)
+* désactivation temporaire de la désindexation de l'app ([f2385a7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f2385a7e6997486e9ed5a67e432260c03a96bd2a)), closes [#1131](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1131)
+
 ## [1.60.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.59.3...v1.60.0) (2026-06-18)
 
 
