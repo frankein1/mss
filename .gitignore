@@ -21,3 +21,14 @@ coverage
 .vscode
 .output-scheduler
 .output-scheduler_caller
+.agents
+skills-lock.json
+.claude/*
+!.claude/settings.json
+!.claude/rules/
+!.claude/rules/*
+docs/*
+!docs/adr/
+!docs/adr/*
+!docs/database-model.svg
+scripts/custom-pre-commit.sh

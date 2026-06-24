@@ -113,6 +113,23 @@ pnpm prisma db seed
 pnpm test:e2e
 ```
 
+### Validations locales
+
+Un hook de precommit est mis en place avec husky.
+
+Par défaut il exécute l'étape `lint-staged` puis la vérification
+de secret présent dans le nouveau code avec [talisman](https://github.com/thoughtworks/talisman).
+
+Ce hook est surchargeable par un script à intégrer dans `scripts/custom-pre-commit.sh` ce qui permet de gérer des exécutions
+dans des microVMs par exemple comme [agent-vm](https://github.com/sylvinus/agent-vm/tree/main) ou [docker sandbox](https://docs.docker.com/ai/sandboxes/).
+
+Exemple de script pour exécuter le hook dans une sandbox docker :
+
+```sh
+SANDBOX_NAME=monsuivisocial-sbx
+sbx exec $SANDBOX_NAME bash -lc "pnpm lint-staged && talisman --githook pre-commit" || exit 1
+```
+
 ## Déploiement
 
 Mon Suivi Social est hébergé sur Scalingo. Le déploiement d'effectue en local depuis la branche main à jour.

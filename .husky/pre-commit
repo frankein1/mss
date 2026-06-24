@@ -1,33 +1,16 @@
-precommit() {
-    pnpm lint-staged
-
-    # talisman
-    if ! command -v talisman 2>&1 >/dev/null
-    then
-        echo "Secret detection could not be performed because talisman could not be found"
-        echo "Install with the following commands"
-        echo "> mkdir -p \$HOME/.talisman"
-        echo "> INSTALL_LOCATION=\$HOME/.talisman bash -c \"\$(curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/main/install.sh)\""
-        echo "Then add talisman to your path in your shell config file"
-        echo "> export PATH=\"\$HOME/.talisman:\$PATH\""
-        exit 1
-    fi
-
-    talisman --githook pre-commit
-}
-
-# When re-invoked inside the VM by agent-vm, run precommit directly
-# PATH is not sourced from profile in non-interactive limactl shells
-if [ "$1" = "--vm" ]; then
-    PATH="$HOME/.talisman:$PATH"
-    precommit
-    exit 0
+PRECOMMIT_SCRIPT=scripts/custom-pre-commit.sh
+if [ -e "$PRECOMMIT_SCRIPT" ]; then
+    . "$PRECOMMIT_SCRIPT"
+    exit $?
 fi
 
-# Allows to run the hook inside a VM (agent-vm)
-if [ -n "$AGENT_VM_PATH" ] && [ -f "$AGENT_VM_PATH/agent-vm.sh" ]; then
-    echo "Load agent vm"
-    exec bash -c ". \"$AGENT_VM_PATH/agent-vm.sh\" && agent-vm run sh \"$0\" --vm"
+pnpm lint-staged || exit $?
+
+if ! command -v talisman >/dev/null 2>&1; then
+    echo "talisman is not installed"
+    echo "Install: mkdir -p \$HOME/.talisman && INSTALL_LOCATION=\$HOME/.talisman bash -c \"\$(curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/main/install.sh)\""
+    echo "Then: export PATH=\"\$HOME/.talisman:\$PATH\""
+    exit 1
 fi
 
-precommit
+talisman --githook pre-commit
