@@ -102,7 +102,7 @@ async function importSchools(job: JobResult) {
 
     job.status = 'Ongoing'
 
-    let academyImported = 0
+    let schoolsImported = 0
     for (let offset = 0; offset < total_count; offset += PAGE_SIZE) {
       try {
         const { results } = await fetchDataEducationSchools(
@@ -112,73 +112,66 @@ async function importSchools(job: JobResult) {
           refines
         )
 
-        await Promise.all(
-          results.map(async item => {
-            const validated = dataEducationSchoolServerSchema.safeParse(item)
+        for (const item of results) {
+          const validated = dataEducationSchoolServerSchema.safeParse(item)
 
-            if (!validated.success) {
-              const uai =
-                (item as Record<string, unknown>)
-                  ?.identifiant_de_l_etablissement ?? 'unknown'
-              job.errors.push({
-                category: 'school-import-format',
-                status: null,
-                error: `school ${uai}: ${validated.error.toString()}`
-              })
-              return
+          if (!validated.success) {
+            const uai =
+              (item as Record<string, unknown>)
+                ?.identifiant_de_l_etablissement ?? 'unknown'
+            job.errors.push({
+              category: 'school-import-format',
+              status: null,
+              error: `school ${uai}: ${validated.error.toString()}`
+            })
+            continue
+          }
+
+          const school = validated.data
+          let qpvCode = school.qpvCode
+          let qpvName = school.qpvName
+
+          if (school.latitude != null && school.longitude != null) {
+            const qpv = findQpv(school.latitude, school.longitude, qpvFeatures)
+            if (qpv) {
+              qpvCode = qpv.id
+              qpvName = qpv.nom
             }
+          }
 
-            const school = validated.data
-            let qpvCode = school.qpvCode
-            let qpvName = school.qpvName
+          const data = {
+            ...school,
+            qpvCode,
+            qpvName,
+            lastImportedAt: now
+          }
 
-            if (school.latitude != null && school.longitude != null) {
-              const qpv = findQpv(
-                school.latitude,
-                school.longitude,
-                qpvFeatures
-              )
-              if (qpv) {
-                qpvCode = qpv.id
-                qpvName = qpv.nom
-              }
-            }
-
-            const data = {
-              ...school,
-              qpvCode,
-              qpvName,
-              lastImportedAt: now
-            }
-
-            try {
-              await DataEducationSchoolRepo.prisma.upsert({
-                where: { uai: data.uai },
-                create: data,
-                update: data
-              })
-              job.result.nImported!++
-              academyImported++
-            } catch (err) {
-              job.errors.push({
-                category: 'school-import-upsert',
-                status: null,
-                error: `upsert ${data.uai}: ${err}`
-              })
-            }
-          })
-        )
+          try {
+            await DataEducationSchoolRepo.prisma.upsert({
+              where: { uai: data.uai },
+              create: data,
+              update: data
+            })
+            job.result.nImported!++
+            schoolsImported++
+          } catch (err) {
+            job.errors.push({
+              category: 'school-import-upsert',
+              status: null,
+              error: `upsert ${data.uai}: ${err}`
+            })
+          }
+        }
       } catch (err) {
         job.errors.push({
           category: 'school-import-fetch',
           status: null,
           error: `[${academy}] offset ${offset}: ${err}`
         })
-        break
       }
     }
     console.log(
-      `school-import: [${academy}] done — ${academyImported} imported`
+      `school-import: [${academy}] done — ${schoolsImported} imported`
     )
   }
 
