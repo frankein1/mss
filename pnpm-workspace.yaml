@@ -1,8 +1,6 @@
 overrides:
   uuid: '14.0.0'
   tmp: '0.2.7'
-  flatted: '^3.4.2'
-  rollup: '^4.59.0'
 
 engineStrict: true
 #  Only packages released at least 15 days ago can be installed
@@ -18,7 +16,6 @@ allowBuilds:
   esbuild: false
   prisma: false
   unrs-resolver: false
-shamefullyHoist: true
 minimumReleaseAgeExclude:
   - nuxt@3.21.8
   - '@nuxt/kit@3.21.8'

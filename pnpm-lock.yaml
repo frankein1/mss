@@ -7,253 +7,251 @@ settings:
 overrides:
   uuid: 14.0.0
   tmp: 0.2.7
-  flatted: ^3.4.2
-  rollup: ^4.59.0
 
 importers:
 
   .:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.1019.0
+        specifier: 3.1019.0
         version: 3.1019.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.1019.0
+        specifier: 3.1019.0
         version: 3.1019.0(@aws-sdk/client-s3@3.1019.0)
       '@braintree/sanitize-url':
-        specifier: ^7.1.2
+        specifier: 7.1.2
         version: 7.1.2
       '@gouvfr/dsfr':
-        specifier: ~1.14.1
+        specifier: 1.14.1
         version: 1.14.1
       '@gouvminint/vue-dsfr':
-        specifier: ^8.8.0
+        specifier: 8.8.0
         version: 8.8.0(@iconify/vue@4.3.0(vue@3.5.34(typescript@5.9.2)))(vue-router@4.6.4(vue@3.5.34(typescript@5.9.2)))(vue@3.5.34(typescript@5.9.2))
       '@prisma/client':
-        specifier: ^6.19.3
+        specifier: 6.19.3
         version: 6.19.3(prisma@6.19.3(magicast@0.5.3)(typescript@5.9.2))(typescript@5.9.2)
       '@scaleway/sdk':
-        specifier: ^3.2.1
+        specifier: 3.2.1
         version: 3.2.1(@scaleway/sdk-client@2.1.0)
       '@sentry/node':
-        specifier: ^10.46.0
+        specifier: 10.46.0
         version: 10.46.0
       '@sentry/vue':
-        specifier: ^10.46.0
+        specifier: 10.46.0
         version: 10.46.0(vue@3.5.34(typescript@5.9.2))
       '@tiptap/core':
-        specifier: ^3.21.0
+        specifier: 3.21.0
         version: 3.21.0(@tiptap/pm@3.21.0)
       '@tiptap/pm':
-        specifier: ^3.21.0
+        specifier: 3.21.0
         version: 3.21.0
       '@tiptap/starter-kit':
-        specifier: ^3.21.0
+        specifier: 3.21.0
         version: 3.21.0
       '@tiptap/vue-3':
-        specifier: ^3.21.0
+        specifier: 3.21.0
         version: 3.21.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.21.0(@tiptap/pm@3.21.0))(@tiptap/pm@3.21.0)(vue@3.5.34(typescript@5.9.2))
       '@trpc/client':
-        specifier: ^11.12.0
+        specifier: 11.12.0
         version: 11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)
       '@trpc/server':
-        specifier: ^11.12.0
+        specifier: 11.12.0
         version: 11.12.0(typescript@5.9.2)
       '@vee-validate/nuxt':
-        specifier: ^4.15.0
+        specifier: 4.15.0
         version: 4.15.0(magicast@0.5.3)(vue@3.5.34(typescript@5.9.2))
       '@vee-validate/zod':
-        specifier: ^4.15.0
+        specifier: 4.15.0
         version: 4.15.0(vue@3.5.34(typescript@5.9.2))(zod@3.25.76)
       '@zip.js/zip.js':
-        specifier: ^2.7.72
+        specifier: 2.7.72
         version: 2.7.72
       chart.js:
-        specifier: ^4.5.0
+        specifier: 4.5.0
         version: 4.5.0
       croner:
-        specifier: ^9.0.0
+        specifier: 9.0.0
         version: 9.0.0
       dayjs:
-        specifier: ^1.11.13
+        specifier: 1.11.13
         version: 1.11.13
       dotenv:
-        specifier: ^17.3.1
+        specifier: 17.3.1
         version: 17.3.1
       exceljs:
-        specifier: ^4.4.0
+        specifier: 4.4.0
         version: 4.4.0
       handlebars:
-        specifier: ^4.7.9
+        specifier: 4.7.9
         version: 4.7.9
       html-to-image:
         specifier: 1.11.11
         version: 1.11.11
       jsonwebtoken:
-        specifier: ^9.0.3
+        specifier: 9.0.3
         version: 9.0.3
       jszip:
-        specifier: ^3.10.1
+        specifier: 3.10.1
         version: 3.10.1
       jwks-rsa:
-        specifier: ^3.2.2
+        specifier: 3.2.2
         version: 3.2.2
       lodash.merge:
-        specifier: ^4.6.2
+        specifier: 4.6.2
         version: 4.6.2
       magic-bytes.js:
-        specifier: ^1.12.1
+        specifier: 1.12.1
         version: 1.12.1
       mitt:
-        specifier: ^3.0.1
+        specifier: 3.0.1
         version: 3.0.1
       nanoid:
-        specifier: ^5.1.11
+        specifier: 5.1.11
         version: 5.1.11
       node-fetch-native:
-        specifier: ^1.6.7
+        specifier: 1.6.7
         version: 1.6.7
       nodemailer:
-        specifier: ^8.0.10
+        specifier: 8.0.10
         version: 8.0.10
       nuxt-security:
         specifier: 2.3.0
         version: 2.3.0(magicast@0.5.3)(rollup@4.61.1)
       pg:
-        specifier: ^8.16.3
+        specifier: 8.16.3
         version: 8.16.3
       picocolors:
-        specifier: ^1.1.1
+        specifier: 1.1.1
         version: 1.1.1
       postcss-html:
-        specifier: ^1.8.0
+        specifier: 1.8.0
         version: 1.8.0
       prisma:
-        specifier: ^6.19.3
+        specifier: 6.19.3
         version: 6.19.3(magicast@0.5.3)(typescript@5.9.2)
       prosemirror-model:
-        specifier: ^1.25.4
+        specifier: 1.25.4
         version: 1.25.4
       remove-accents:
-        specifier: ^0.5.0
+        specifier: 0.5.0
         version: 0.5.0
       superjson:
-        specifier: ^2.2.2
+        specifier: 2.2.2
         version: 2.2.2
       trpc-nuxt:
-        specifier: ^2.0.1
+        specifier: 2.0.1
         version: 2.0.1(@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.12.0(typescript@5.9.2))
       tsdown:
-        specifier: ^0.20.3
+        specifier: 0.20.3
         version: 0.20.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(typescript@5.9.2)(vue-tsc@3.2.6(typescript@5.9.2))
       tsx:
-        specifier: ^4.21.0
+        specifier: 4.21.0
         version: 4.21.0
       vee-validate:
-        specifier: ^4.15.0
+        specifier: 4.15.0
         version: 4.15.0(vue@3.5.34(typescript@5.9.2))
       vue-matomo:
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       vue-scrollto:
-        specifier: ^2.20.0
+        specifier: 2.20.0
         version: 2.20.0
       zod:
-        specifier: ^3.25.76
+        specifier: 3.25.76
         version: 3.25.76
     devDependencies:
       '@axe-core/playwright':
-        specifier: ^4.11.3
+        specifier: 4.11.3
         version: 4.11.3(playwright-core@1.60.0)
       '@faker-js/faker':
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0
       '@nuxt/eslint':
-        specifier: ^1.15.2
+        specifier: 1.15.2
         version: 1.15.2(@typescript-eslint/utils@8.60.1(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.2))(@vue/compiler-sfc@3.5.35)(eslint@9.39.4(jiti@2.7.0))(magicast@0.5.3)(typescript@5.9.2)(vite@7.3.5(@types/node@22.17.2)(jiti@2.7.0)(sass@1.99.0)(terser@5.48.0)(tsx@4.21.0)(yaml@2.8.4))
       '@nuxt/kit':
-        specifier: ^4.4.7
+        specifier: 4.4.7
         version: 4.4.7(magicast@0.5.3)
       '@nuxt/test-utils':
-        specifier: ^4.0.3
+        specifier: 4.0.3
         version: 4.0.3(@playwright/test@1.60.0)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@5.9.2)))(vue@3.5.34(typescript@5.9.2)))(crossws@0.4.5(srvx@0.11.16))(happy-dom@20.8.9)(magicast@0.5.3)(playwright-core@1.60.0)(typescript@5.9.2)(vite@7.3.5(@types/node@22.17.2)(jiti@2.7.0)(sass@1.99.0)(terser@5.48.0)(tsx@4.21.0)(yaml@2.8.4))(vitest@4.1.5)
       '@playwright/test':
-        specifier: ^1.60.0
+        specifier: 1.60.0
         version: 1.60.0
       '@types/jsonwebtoken':
-        specifier: ^9.0.10
+        specifier: 9.0.10
         version: 9.0.10
       '@types/lodash.merge':
-        specifier: ^4.6.9
+        specifier: 4.6.9
         version: 4.6.9
       '@types/node':
-        specifier: ^22.17.2
+        specifier: 22.17.2
         version: 22.17.2
       '@types/nodemailer':
-        specifier: ^7.0.11
+        specifier: 7.0.11
         version: 7.0.11
       '@types/pg':
-        specifier: ^8.20.0
+        specifier: 8.20.0
         version: 8.20.0
       '@vitest/coverage-v8':
-        specifier: ^4.1.5
+        specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
       '@vue/test-utils':
-        specifier: ^2.4.10
+        specifier: 2.4.10
         version: 2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@5.9.2)))(vue@3.5.34(typescript@5.9.2))
       '@vueuse/core':
-        specifier: ^13.7.0
+        specifier: 13.7.0
         version: 13.7.0(vue@3.5.34(typescript@5.9.2))
       commit-and-tag-version:
-        specifier: ^12.5.2
+        specifier: 12.5.2
         version: 12.5.2
       eslint:
-        specifier: ^9.39.4
+        specifier: 9.39.4
         version: 9.39.4(jiti@2.7.0)
       happy-dom:
-        specifier: ^20.8.9
+        specifier: 20.8.9
         version: 20.8.9
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^16.1.5
+        specifier: 16.1.5
         version: 16.1.5
       nuxt:
-        specifier: ^3.21.8
+        specifier: 3.21.8
         version: 3.21.8(@parcel/watcher@2.5.6)(@types/node@22.17.2)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@9.39.4(jiti@2.7.0))(ioredis@5.11.1)(magicast@0.5.3)(meow@14.1.0)(optionator@0.9.4)(rolldown@1.0.0-rc.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup-plugin-visualizer@7.0.1(rolldown@1.0.0-rc.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup@4.61.1))(rollup@4.61.1)(sass@1.99.0)(srvx@0.11.16)(stylelint@17.11.0(typescript@5.9.2))(terser@5.48.0)(tsx@4.21.0)(typescript@5.9.2)(vite@7.3.5(@types/node@22.17.2)(jiti@2.7.0)(sass@1.99.0)(terser@5.48.0)(tsx@4.21.0)(yaml@2.8.4))(vue-tsc@3.2.6(typescript@5.9.2))(yaml@2.8.4)
       prettier:
         specifier: 3.6.2
         version: 3.6.2
       prettier-plugin-prisma:
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0(prettier@3.6.2)
       sass:
-        specifier: ^1.99.0
+        specifier: 1.99.0
         version: 1.99.0
       stylelint:
-        specifier: ^17.11.0
+        specifier: 17.11.0
         version: 17.11.0(typescript@5.9.2)
       stylelint-config-recommended-vue:
-        specifier: ^1.6.1
+        specifier: 1.6.1
         version: 1.6.1(postcss-html@1.8.0)(stylelint@17.11.0(typescript@5.9.2))
       stylelint-config-standard-scss:
-        specifier: ^15.0.1
+        specifier: 15.0.1
         version: 15.0.1(postcss@8.5.15)(stylelint@17.11.0(typescript@5.9.2))
       ts-node:
-        specifier: ^10.9.2
+        specifier: 10.9.2
         version: 10.9.2(@types/node@22.17.2)(typescript@5.9.2)
       typescript:
-        specifier: ~5.9.2
+        specifier: 5.9.2
         version: 5.9.2
       vitest:
-        specifier: ^4.1.5
+        specifier: 4.1.5
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.17.2)(@vitest/coverage-v8@4.1.5)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.17.2)(jiti@2.7.0)(sass@1.99.0)(terser@5.48.0)(tsx@4.21.0)(yaml@2.8.4))
       vue-dsfr-nuxt-module:
-        specifier: ^2.0.0
+        specifier: 2.0.0
         version: 2.0.0(@gouvfr/dsfr@1.14.1)(@gouvminint/vue-dsfr@8.8.0(@iconify/vue@4.3.0(vue@3.5.34(typescript@5.9.2)))(vue-router@4.6.4(vue@3.5.34(typescript@5.9.2)))(vue@3.5.34(typescript@5.9.2)))(magicast@0.5.3)
       vue-tsc:
-        specifier: ^3.2.6
+        specifier: 3.2.6
         version: 3.2.6(typescript@5.9.2)
 
 packages:
@@ -2343,7 +2341,7 @@ packages:
     resolution: {integrity: sha512-tPCzJOtS7uuVZd+xPhoy5W4vThe6KWXNmsFCNktaAh5RTqcLiSfT4huPQIXkgJ6YCOjJHvecOAzQxLFhPxKr+g==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: '>=4.0.0'
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2352,7 +2350,7 @@ packages:
     resolution: {integrity: sha512-ZaOxZceP7SOUW7Lqw5IRVweSQYWaeIPnXIGLiB690EBA3FGJTO40EEr2L5yZplJWsgTCogILRSpcAe7+U0Otdg==}
     engines: {node: '>=16.0.0 || 14 >= 14.17'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^2.68.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2361,7 +2359,7 @@ packages:
     resolution: {integrity: sha512-2+DEJbNBoPROPkgTDNe8/1YXWcqxbN5DTjASVIOx8HS+pITXushyNiBV56RB08zuptzz8gT3YfkqriTBVycepg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2370,7 +2368,7 @@ packages:
     resolution: {integrity: sha512-EGI2te5ENk1coGeADSIwZ7G2Q8CJS2sF120T7jLw4xFw9n7wIOXHo+kIYRAoVpJAN+kmqZSoO3Fp4JtoNF4ReA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2379,7 +2377,7 @@ packages:
     resolution: {integrity: sha512-lUYM3UBGuM93CnMPG1YocWu7X802BrNF3jW2zny5gQyLQgRFJhV1Sq0Zi74+dh/6NBx1DxFC4b4GXg9wUCG5Qg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^2.78.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2388,7 +2386,7 @@ packages:
     resolution: {integrity: sha512-J4RZarRvQAm5IF0/LwUUg+obsm+xZhYnbMXmXROyoSE1ATJe3oXSb9L5MMppdxP2ylNSjv6zFBwKYjcKMucVfA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2397,7 +2395,7 @@ packages:
     resolution: {integrity: sha512-FnCxhTBx6bMOYQrar6C8h3scPt8/JwIzw3+AJ2K++6guogH5fYaIFia+zZuhqv0eo1RN7W1Pz630SyvLbDjhtQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -2406,7 +2404,7 @@ packages:
     resolution: {integrity: sha512-MfPp06CjRLfXQ3wY0R8vJDYBy/MvVcc9OulEfR0B8Iv9ko+GCNaRZ+EpJYFl27LhKsZK0o420sYCRHCjfCgeUg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.59.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -7050,7 +7048,7 @@ packages:
     hasBin: true
     peerDependencies:
       rolldown: 1.x || ^1.0.0-beta || ^1.0.0-rc
-      rollup: ^4.59.0
+      rollup: 2.x || 3.x || 4.x
     peerDependenciesMeta:
       rolldown:
         optional: true
