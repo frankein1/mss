@@ -17,5 +17,5 @@ fileignoreconfig:
   - filename: .gitlab/issue_templates/procedure-tests.md
     checksum: 4d6af92bc03d4684b297f8cbe9709f5a5e014d3c9f47acb95a37dc457c1348b9
   - filename: .gitlab-ci.yml
-    checksum: 367eba56b5e38ca542d5e60baef8f1a5b69b209b179380e159df1e2b4b5b21fa
+    checksum: 7952e6cf8405a6f269e5fd8aba97ebba24db70828b1d358e5c04973a84a4f303
 version: ''
