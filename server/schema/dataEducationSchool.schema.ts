@@ -18,11 +18,13 @@ function parseSchoolType(value: string): SchoolType {
 
 const schoolStatusMap: Record<string, SchoolStatus> = {
   'OUVERT': SchoolStatus.OUVERT,
-  '2': SchoolStatus.FERME
+  'FERME': SchoolStatus.FERME,
+  'A OUVRIR': SchoolStatus.AOUVRIR,
+  'A FERMER': SchoolStatus.AFERMER
 }
 
 function parseSchoolStatus(value: string): SchoolStatus {
-  return schoolStatusMap[value] ?? SchoolStatus.FERME
+  return schoolStatusMap[value] ?? SchoolStatus.OUVERT
 }
 
 const repClassificationMap: Record<string, RepClassification> = {

@@ -5,7 +5,7 @@ CREATE TYPE "RepClassification" AS ENUM ('Rep', 'RepPlus');
 CREATE TYPE "SchoolType" AS ENUM ('Ecole', 'College', 'Lycee', 'EREA', 'MedicoSocial', 'ServiceAdministratif', 'InformationOrientation', 'Autre');
 
 -- CreateEnum
-CREATE TYPE "SchoolStatus" AS ENUM ('OUVERT', 'FERME');
+CREATE TYPE "SchoolStatus" AS ENUM ('OUVERT', 'FERME', 'AFERMER', 'AOUVRIR');
 
 -- AlterTable
 ALTER TABLE "beneficiary" ADD COLUMN "school_uai" TEXT;

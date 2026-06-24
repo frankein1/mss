@@ -1909,6 +1909,8 @@ enum SchoolType {
 enum SchoolStatus {
   OUVERT
   FERME
+  AFERMER
+  AOUVRIR
 }
 
 model DataEducationSchool {
