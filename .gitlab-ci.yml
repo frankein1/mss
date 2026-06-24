@@ -9,13 +9,15 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 
 variables:
+  # To be synced with engines.node constraint in package.json
   NODE_VERSION: 24.17.0
+  NODE_SHA: ab343a1b747c7cbf3630dfd7dbf818c5423fab2eb4f5ad1afc896f6bd121a917
   # NODE_DOCKER_VERSION: 24.17.0-alpine
   NODE_DOCKER_SHA: sha256:156b55f92e98ccd5ef49578a8cea0df4679826564bad1c9d4ef04462b9f0ded6
-  # A synchroniser avec la version présente dans package.json
+  # To be synced with version in package.json
   # PLAYWRIGHT_VERSION: v1.60.0-noble
   PLAYWRIGHT_SHA: sha256:9bd26ad900bb5e0f4dee75839e957a89ae89c2b7ab1e76050e559790e946b948
-  #A synchroniser avec la version présente en production
+  # A synchroniser avec la version présente en production
   # POSTGRES_VERSION: 16.11-alpine
   POSTGRES_SHA: sha256:4327b9fd295502f326f44153a1045a7170ddbfffed1c3829798328556cfd09e
   # UBUNTU_VERSION: ubuntu:noble # 24.04.4 LTS (Noble Numbat)
@@ -147,10 +149,10 @@ sonarcloud-check:
         POSTGRES_PASSWORD: password
         POSTGRES_PORT: 5432
   before_script:
-    - curl -fsSL https://fnm.vercel.app/install | bash
-    - export PATH="$HOME/.local/share/fnm:$PATH"
-    - eval "$(fnm env)"
-    - fnm install ${NODE_VERSION}
+    - curl -fsSL -o /tmp/node.tar.xz https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
+    - echo "${NODE_SHA}  /tmp/node.tar.xz" | sha256sum -c -
+    - tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1
+    - rm -f /tmp/node.tar.xz
     - node -v
     - corepack enable
     - corepack prepare pnpm --activate
