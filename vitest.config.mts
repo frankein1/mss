@@ -23,7 +23,7 @@ export default defineVitestConfig({
     },
     exclude: [...configDefaults.exclude, 'e2e/**', 'scripts/**'],
     coverage: {
-      reporter: 'lcov',
+      reporter: ['text', 'lcov'],
       exclude: [
         ...coverageConfigDefaults.exclude,
         'e2e/**',
