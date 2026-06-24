@@ -5,15 +5,14 @@
       "Edit(**/.env*)",
       "Write(**/.env*)",
       "Bash(*.env*)",
-      "Read(./secrets/**)",
-      "Read(./**/*.pem)",
-      "Read(./**/*.key)",
-      "Read(./**/credentials*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/credentials*)",
       "Bash(git push *)",
       "Bash(pnpm install *)",
       "Bash(pnpm add *)",
       "Bash(pnpm i *)"
-    ],
-    "defaultMode": "plan"
+    ]
   }
 }
