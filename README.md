@@ -127,7 +127,7 @@ Exemple de script pour exécuter le hook dans une sandbox docker :
 
 ```sh
 SANDBOX_NAME=monsuivisocial-sbx
-sbx exec -it $SANDBOX_NAME bash -lc "pnpm lint-staged && talisman --githook pre-commit 2>&1" || exit 1
+sbx exec $SANDBOX_NAME bash -lc "pnpm lint-staged && talisman --githook pre-commit" || exit 1
 ```
 
 ## Déploiement
