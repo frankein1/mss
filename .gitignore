@@ -29,3 +29,4 @@ skills-lock.json
 docs/*
 !docs/adr/*
 !docs/database-model.svg
+scripts/custom-pre-commit.sh
