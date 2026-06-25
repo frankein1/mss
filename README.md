@@ -90,6 +90,11 @@ identifiants utilisateurs fournis par mailtrap.
 
 **Gestionnaire de clés de chiffrements** : OpenBao met à disposition une console d'administration à `http://localhost:9110/ui` (login: admin - mot de passe: admin)
 
+### Configuration ProConnect en local
+
+Sur le site https://partenaires.proconnect.gouv.fr/ pour « URL de la page de redirection » `http://localhost:3000/api/proconnect/login-callback` et pour « URL de la page de déconnexion : » `http://localhost:3000/auth/logout`.
+Les infos de client ID et secret sont à mettre dans l'environnement `NUXT_AUTH_PROCONNECT_CLIENT_*`.
+
 ## Tests
 
 La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
