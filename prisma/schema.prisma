@@ -1922,6 +1922,7 @@ model DataEducationSchool {
   address    String?
   zipcode    String
   city       String
+  citycode   String
   department String
   region     String
   academy    String
