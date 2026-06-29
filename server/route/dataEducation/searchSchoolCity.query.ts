@@ -6,7 +6,7 @@ import {
   searchDataEducationSchoolCitySchema,
   type SearchDataEducationSchoolCityInput
 } from '~/server/schema'
-import { SEARCH_RESULTS_LIMIT } from '~/utils/constants'
+import { SCHOOL_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 
 const securityCheck = AllowSecurityCheck
 
@@ -28,7 +28,7 @@ const handler = async ({
       zipcode: 'asc'
     },
     distinct: ['citycode'],
-    take: SEARCH_RESULTS_LIMIT + 1,
+    take: SCHOOL_REQUEST_LIMIT_DEFAULT + 1,
     select: {
       city: true,
       zipcode: true,

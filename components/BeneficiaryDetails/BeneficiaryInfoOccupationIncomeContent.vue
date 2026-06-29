@@ -1,94 +1,115 @@
 <template>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.socioProfessionalCategory"
-      :value="
-        beneficiarySocioProfessionalCategoryKeys.value(
-          occupationIncome.socioProfessionalCategory
-        )
-      "
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.occupation"
-      :value="occupationIncome.occupation"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.studyLevel"
-      :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.schoolClass"
-      :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-
-  <div
-    v-if="occupationIncome.school"
-    class="fr-grid-row"
-  >
+  <div class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-12">
-      <BeneficiarySchoolInfo :school="occupationIncome.school" />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.socioProfessionalCategory"
+        :value="
+          beneficiarySocioProfessionalCategoryKeys.value(
+            occupationIncome.socioProfessionalCategory
+          )
+        "
+      />
     </div>
-  </div>
 
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.employer"
-      :value="occupationIncome.employer"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.employerSiret"
-      :value="occupationIncome.employerSiret"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.unemploymentNumber"
-      :value="occupationIncome.unemploymentNumber"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.cafNumber"
-      :value="occupationIncome.cafNumber"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.pensionOrganisations"
-      :value="pensionOrganisations"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
+    <!-- ECOLE -->
+    <template v-if="occupationIncome.schoolClass || occupationIncome.school">
+      <div class="fr-col-12">
+        <hr class="" />
+        <h5 class="fr-text--md fr-mb-0">Informations scolaires</h5>
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.schoolClass"
+          :value="
+            beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)
+          "
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiarySchoolInfo
+          v-if="occupationIncome.school"
+          :school="occupationIncome.school"
+        />
+      </div>
+    </template>
 
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereCategorie"
-      :value="ministereCategorieKeys.value(occupationIncome.ministereCategorie)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereStructure"
-      :value="ministereStructureKeys.value(occupationIncome.ministereStructure)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-      :value="
-        ministereDepartmentServiceAcKeys.value(
-          occupationIncome.ministereDepartementServiceAc
-        )
-      "
-      class="fr-col-12 fr-col-md-6"
-    />
+    <!-- PRO -->
+    <template v-if="hasProfessionnalInfo">
+      <div class="fr-col-12">
+        <hr class="" />
+        <h5 class="fr-text--md fr-mb-0">Informations professionnelles</h5>
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.occupation"
+          :value="occupationIncome.occupation"
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.studyLevel"
+          :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.employer"
+          :value="occupationIncome.employer"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.employerSiret"
+          :value="occupationIncome.employerSiret"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.unemploymentNumber"
+          :value="occupationIncome.unemploymentNumber"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.cafNumber"
+          :value="occupationIncome.cafNumber"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.pensionOrganisations"
+          :value="pensionOrganisations"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.ministereCategorie"
+          :value="
+            ministereCategorieKeys.value(occupationIncome.ministereCategorie)
+          "
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.ministereStructure"
+          :value="
+            ministereStructureKeys.value(occupationIncome.ministereStructure)
+          "
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+          :value="
+            ministereDepartmentServiceAcKeys.value(
+              occupationIncome.ministereDepartementServiceAc
+            )
+          "
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -106,13 +127,27 @@
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
-  const props = defineProps<{
+  const { occupationIncome } = defineProps<{
     occupationIncome: GetBeneficiaryOccupationIncome
   }>()
 
+  const hasProfessionnalInfo = computed(
+    () =>
+      occupationIncome.occupation ||
+      occupationIncome.studyLevel ||
+      occupationIncome.employer ||
+      occupationIncome.employerSiret ||
+      occupationIncome.unemploymentNumber ||
+      occupationIncome.cafNumber ||
+      pensionOrganisations.value ||
+      occupationIncome.ministereCategorie ||
+      occupationIncome.ministereStructure ||
+      occupationIncome.ministereDepartementServiceAc
+  )
+
   const pensionOrganisations = computed(() =>
     arrayToString(
-      props.occupationIncome.pensionOrganisations?.filter(
+      occupationIncome.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
       pensionOrganisationKeys.byKey

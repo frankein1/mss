@@ -6,7 +6,7 @@ import {
   searchDataEducationSchoolSchema,
   type SearchDataEducationSchoolInput
 } from '~/server/schema'
-import { SEARCH_RESULTS_LIMIT } from '~/utils/constants'
+import { SCHOOL_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 
 const securityCheck = AllowSecurityCheck
 
@@ -25,7 +25,8 @@ const handler = async ({
         mode: 'insensitive'
       }
     },
-    take: SEARCH_RESULTS_LIMIT + 1,
+    orderBy: [{ name: 'asc' }, { uai: 'asc' }],
+    take: SCHOOL_REQUEST_LIMIT_DEFAULT + 1,
     select: {
       uai: true,
       name: true,

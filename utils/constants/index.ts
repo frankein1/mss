@@ -19,6 +19,7 @@ export const REQUEST_LIMIT_DEFAULT = 20
 export const BENEFICIARIES_REQUEST_LIMIT_DEFAULT = 60
 export const NOTIFICATIONS_REQUEST_LIMIT_DEFAULT = 10
 export const WORKSHOPS_REQUEST_LIMIT_DEFAULT = 20
+export const SCHOOL_REQUEST_LIMIT_DEFAULT = 25
 
 export const INPUT_DEFER_DURATION = 400
 
@@ -28,7 +29,6 @@ export const EMPTY_TABLE_CELL = '-'
 export const MAX_UPLOAD_SIZE_BYTES = 20971520
 
 export const SEARCH_NUMBER_CHARACTERS = 2
-export const SEARCH_RESULTS_LIMIT = 30
 export const SEARCH_DEFER_MS = 100
 
 export const APP_NAME = 'Mon Suivi Social'

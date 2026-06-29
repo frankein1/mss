@@ -1,23 +1,24 @@
 <template>
   <div class="fr-pb-2w">
     <div class="field-label">{{ beneficiaryFieldLabels.schoolUai }}&nbsp;:</div>
-    <div class="field-value">{{ school.name }}</div>
-    <ul class="fr-mt-1v school-details">
+    <p class="fr-mb-0">{{ school.name }}</p>
+    <ul class="school-details">
       <li v-if="school.address">
-        {{ school.address }}, {{ school.zipcode }} {{ school.city }}
+        Adresse : {{ school.address }}, {{ school.zipcode }} {{ school.city }}
       </li>
-      <li>{{ schoolTypeLabels[school.type] }}</li>
-      <li>Académie de {{ school.academy }}</li>
+      <li>Type : {{ schoolTypeLabels[school.type] }}</li>
+      <li>Académie : {{ school.academy }}</li>
       <li v-if="school.status !== SchoolStatus.OUVERT">
         {{ schoolStatusLabels[school.status] }}
       </li>
       <li v-if="school.repClassification">
+        Classification REP :
         <span class="fr-badge fr-badge--new fr-badge--no-icon">{{
           repClassificationLabels[school.repClassification]
         }}</span>
       </li>
       <li v-if="school.qpvCode && school.qpvName">
-        QPV {{ school.qpvCode }} – {{ school.qpvName }}
+        QPV : {{ school.qpvCode }} – {{ school.qpvName }}
       </li>
     </ul>
   </div>
@@ -71,7 +72,11 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    color: var(--text-mention-grey);
-    font-size: 0.875rem;
+
+    dd,
+    dt,
+    li {
+      padding-bottom: 0;
+    }
   }
 </style>
