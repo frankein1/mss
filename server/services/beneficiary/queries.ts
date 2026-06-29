@@ -55,6 +55,17 @@ export const include = {
       birthDate: true
     }
   },
+  school: {
+    select: {
+      uai: true,
+      name: true,
+      address: true,
+      zipcode: true,
+      citycode: true,
+      city: true,
+      status: true
+    }
+  },
   _count: {
     select: { socialSupports: true }
   }
@@ -286,7 +297,17 @@ function getOccupationIncome(
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,
     cafNumber: beneficiary.cafNumber,
     schoolClass: beneficiary.schoolClass,
-    // bank: beneficiary.bank,
+    school: beneficiary.school
+      ? {
+          uai: beneficiary.school.uai,
+          name: beneficiary.school.name,
+          address: beneficiary.school.address,
+          city: beneficiary.school.city,
+          zipcode: beneficiary.school.zipcode,
+          citycode: beneficiary.school.citycode,
+          status: beneficiary.school.status
+        }
+      : null,
     // funeralContract: beneficiary.funeralContract,
     ministereCategorie: module.ministere
       ? beneficiary.ministereCategorie

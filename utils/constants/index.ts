@@ -28,6 +28,7 @@ export const EMPTY_TABLE_CELL = '-'
 export const MAX_UPLOAD_SIZE_BYTES = 20971520
 
 export const SEARCH_NUMBER_CHARACTERS = 2
+export const SEARCH_RESULTS_LIMIT = 30
 export const SEARCH_DEFER_MS = 100
 
 export const APP_NAME = 'Mon Suivi Social'

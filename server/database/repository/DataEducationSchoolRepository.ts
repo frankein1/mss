@@ -1,7 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
+import type { SecurityRuleGrantee } from '~/server/security'
 
 function findMany<T extends Prisma.DataEducationSchoolFindManyArgs>(
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DataEducationSchoolFindManyArgs>
 ) {
   return prismaClient.dataEducationSchool.findMany(params)

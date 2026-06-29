@@ -17,7 +17,10 @@
       :error="Boolean(errorFetch)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <BeneficiaryFormOccupationIncome v-if="bindedValues && permissions" />
+      <BeneficiaryFormOccupationIncome
+        v-if="bindedValues && permissions"
+        :initial-school="initialSchool"
+      />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -46,6 +49,22 @@
     pending,
     error: errorFetch
   } = await useBeneficiaryDetails(beneficiaryId)
+
+  const initialSchool = computed(() => {
+    const occ = beneficiary.value?.occupationIncome
+    if (!occ?.school || !occ?.school.uai) {
+      return null
+    }
+    return {
+      uai: occ.school.uai,
+      name: occ.school.name,
+      address: occ.school.address,
+      city: occ.school.city,
+      zipcode: occ.school.zipcode,
+      citycode: occ.school.citycode,
+      status: occ.school.status
+    }
+  })
 
   const bindedValues = computed(() => {
     if (!beneficiary.value) {

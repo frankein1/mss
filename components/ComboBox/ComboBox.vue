@@ -256,10 +256,22 @@
     }
   })
 
+  let isModelUpdate = false
+  watch(model, newVal => {
+    isModelUpdate = true
+    displayedValue.value = newVal ? formatDisplayValue(newVal) : ''
+    nextTick(() => {
+      isModelUpdate = false
+    })
+  })
+
   // Necessary because the input control that appears on ":hover" is managed
   // by the browser directly, so we can't listen to its click event.
   // This watcher is a substitute to track when this input control is used.
   watch(displayedValue, newVal => {
+    if (isModelUpdate) {
+      return
+    }
     if (newVal === '' && model.value !== null) {
       reset()
     }

@@ -40,6 +40,43 @@
           :groups="beneficiarySchoolClassGroups"
         />
       </div>
+
+      <div class="fr-col-12">
+        <ComboBox
+          ref="city-combobox"
+          v-slot="{ option }"
+          v-model="selectedCity"
+          label="Commune de l'établissement"
+          :options="cityResults"
+          :format-display-value="(opt: SchoolCityOption) => opt.label"
+          @input="onSchoolCitySearch"
+          @select="onCitySelect"
+        >
+          <span>
+            {{ option.label }}
+          </span>
+        </ComboBox>
+      </div>
+
+      <div
+        v-if="selectedCity"
+        class="fr-col-12"
+      >
+        <ComboBox
+          ref="school-combobox"
+          v-slot="{ option }"
+          v-model="selectedSchool"
+          :label="beneficiaryFieldLabels.schoolUai"
+          :options="schoolResults"
+          :format-display-value="(opt: SchoolOption) => opt.label"
+          @input="onSchoolSearch"
+          @select="onSchoolSelect"
+        >
+          <span>
+            {{ option.label }}
+          </span>
+        </ComboBox>
+      </div>
     </BeneficiaryFormSection>
 
     <BeneficiaryFormSection section-title="Informations professionnelles">
@@ -145,7 +182,8 @@
 <script lang="ts" setup>
   import {
     BeneficiaryPensionOrganisation,
-    BeneficiarySocioProfessionalCategory
+    BeneficiarySocioProfessionalCategory,
+    SchoolStatus
   } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
@@ -158,8 +196,18 @@
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { routes } from '~/utils/routes'
+  import {
+    SEARCH_NUMBER_CHARACTERS,
+    SEARCH_RESULTS_LIMIT
+  } from '~/utils/constants'
+  import type { DataEducationSchool } from './types'
+
+  const props = defineProps<{
+    initialSchool: DataEducationSchool | null
+  }>()
 
   const { application } = usePermissions()
+  const trpcClient = useTrpcClient()
 
   const { value: socioProfessionalCategory } =
     useField<BeneficiarySocioProfessionalCategory | null>(
@@ -175,6 +223,114 @@
       BeneficiaryPensionOrganisation.Other
     )
   )
+
+  // School fields
+  type SchoolCityOption = {
+    label: string
+    value: string
+  }
+  type SchoolOption = {
+    label: string
+    value: string
+  }
+  const getSchoolNameWithInfo = (school: DataEducationSchool) => {
+    return `${school.name} – ${school.address}, ${school.zipcode} ${school.city} ${school.status === SchoolStatus.FERME ? '(établissement fermé)' : ''}`
+  }
+
+  const selectedCity = ref<(SchoolCityOption & { disabled: boolean }) | null>(
+    props.initialSchool
+      ? {
+          disabled: false,
+          value: props.initialSchool.citycode,
+          label: `${props.initialSchool.city} (${props.initialSchool.zipcode})`
+        }
+      : null
+  )
+  const cityResults = ref<(SchoolCityOption & { disabled: boolean })[]>([])
+
+  const selectedSchool = ref<(SchoolOption & { disabled: boolean }) | null>(
+    props.initialSchool
+      ? {
+          disabled: false,
+          value: props.initialSchool.uai,
+          label: getSchoolNameWithInfo(props.initialSchool)
+        }
+      : null
+  )
+  const schoolResults = ref<(SchoolOption & { disabled: boolean })[]>([])
+  const { value: schoolUai } = useField<string | null>('schoolUai')
+  schoolUai.value = props.initialSchool?.uai ?? null
+
+  const tooManyResultsOption = {
+    disabled: true,
+    value: '',
+    label: 'Plus de 20 résultats, veuillez affiner votre recherche.'
+  }
+
+  const onSchoolCitySearch = async (value: string) => {
+    if (value.length < SEARCH_NUMBER_CHARACTERS) {
+      cityResults.value = []
+      return
+    }
+    const schools = await trpcClient.dataEducation.searchSchoolCities.query({
+      query: value.toLocaleLowerCase()
+    })
+    const options = schools.slice(0, SEARCH_RESULTS_LIMIT).map(school => ({
+      disabled: false,
+      value: school.citycode,
+      label: `${school.city} (${school.zipcode})`
+    }))
+    if (schools.length > SEARCH_RESULTS_LIMIT) {
+      options.push(tooManyResultsOption)
+    }
+    cityResults.value = options
+  }
+
+  const onCitySelect = (_option: SchoolCityOption) => {
+    cityResults.value = []
+    selectedSchool.value = null
+    schoolUai.value = null
+    schoolResults.value = []
+  }
+
+  const onSchoolSearch = async (value: string) => {
+    if (!selectedCity.value || value.length < SEARCH_NUMBER_CHARACTERS) {
+      schoolResults.value = []
+      return
+    }
+    const schools = await trpcClient.dataEducation.searchSchools.query({
+      query: value.toLocaleLowerCase(),
+      citycode: selectedCity.value.value
+    })
+    const options = schools.slice(0, SEARCH_RESULTS_LIMIT).map(school => ({
+      disabled: false,
+      value: school.uai,
+      label: getSchoolNameWithInfo(school)
+    }))
+    if (schools.length > SEARCH_RESULTS_LIMIT) {
+      options.push(tooManyResultsOption)
+    }
+    schoolResults.value = options
+  }
+
+  const onSchoolSelect = (option: SchoolOption) => {
+    schoolUai.value = option.value
+    schoolResults.value = []
+  }
+
+  watch(selectedSchool, newVal => {
+    if (newVal === null) {
+      schoolUai.value = null
+      schoolResults.value = []
+    }
+  })
+  watch(selectedCity, newVal => {
+    if (newVal === null) {
+      selectedSchool.value = null
+      schoolUai.value = null
+      schoolResults.value = []
+    }
+  })
 </script>
 
 <style scoped lang="scss">
