@@ -209,6 +209,7 @@ export const disableStructure = async ({
     socioProfessionalCategory: null,
     studyLevel: null,
     schoolClass: null,
+    schoolUai: null,
     occupation: null,
     employer: null,
     employerSiret: null,
@@ -226,9 +227,7 @@ export const disableStructure = async ({
     involvedPartners: null,
     additionalInformation: null,
     numeroPegase: null,
-    accommodationZone: null,
-    schoolName: null,
-    isSchoolInQPV: false
+    accommodationZone: null
   }
   const updateBeneficiaries = () =>
     BeneficiaryRepo.prisma.updateMany({

@@ -285,9 +285,7 @@ function getOccupationIncome(
     pensionOrganisations: beneficiary.pensionOrganisations,
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,
     cafNumber: beneficiary.cafNumber,
-    schoolName: beneficiary.schoolName,
     schoolClass: beneficiary.schoolClass,
-    isSchoolInQPV: beneficiary.isSchoolInQPV,
     // bank: beneficiary.bank,
     // funeralContract: beneficiary.funeralContract,
     ministereCategorie: module.ministere

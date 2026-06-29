@@ -146,8 +146,6 @@ export const updateBeneficiaryOccupationSchema = z.object({
   socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
     BeneficiarySocioProfessionalCategory
   ),
-  schoolName: stringConstraint.max(200, maxStringLengthMessage(200)).nullish(),
-  isSchoolInQPV: z.boolean().default(false),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   schoolClass: withEmptyValueOptionalNativeEnum(BeneficiarySchoolClass),

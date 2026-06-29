@@ -88,12 +88,9 @@ const configFamilyFile: Record<
   structure_id: true
 }
 
-type BeneficiaryColumnName =
-  | Exclude<
-      SnakeCase<keyof typeof Prisma.BeneficiaryScalarFieldEnum>,
-      'is_school_in_q_p_v'
-    >
-  | 'is_school_in_qpv'
+type BeneficiaryColumnName = SnakeCase<
+  keyof typeof Prisma.BeneficiaryScalarFieldEnum
+>
 
 const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   id: true,
@@ -139,7 +136,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   socio_professional_category: true,
   study_level: true,
   school_class: true,
-  is_school_in_qpv: true,
+  school_uai: true,
   family_situation: true,
   ministere_structure: true,
   ministere_departement_service_ac: true,
@@ -178,8 +175,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   caf_number: false,
   health_additional_information: false,
   numero_pegase: false,
-  representative: false,
-  school_name: false
+  representative: false
 }
 
 const configDocument: Record<

@@ -47,6 +47,12 @@ function startScheduler() {
     name: 'metabaseAnonymization'
   })
 
+  const everySundayAt3am = '0 3 * * 0'
+  new Cron(everySundayAt3am, jobs.dataEducationSchoolImport, {
+    timezone,
+    name: 'dataEducationSchoolImport'
+  })
+
   const everySundayAt6am = '0 6 * * 0'
   new Cron(everySundayAt6am, jobs.dataInclusionStructureImport, {
     timezone,
