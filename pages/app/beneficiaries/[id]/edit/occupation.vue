@@ -82,6 +82,7 @@
       id,
       structureId,
       ...occupationIncome,
+      schoolUai: occupationIncome?.schoolUai ?? null,
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     }
   })
