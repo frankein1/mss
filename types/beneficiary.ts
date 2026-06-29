@@ -1,7 +1,9 @@
 import type {
   Beneficiary,
   BeneficiaryRelative,
+  RepClassification,
   SchoolStatus,
+  SchoolType,
   User,
   UserStatus
 } from '@prisma/client'
@@ -100,11 +102,16 @@ export type GetBeneficiaryOccupationIncome = Pick<
   school: {
     uai: string
     name: string
+    type: SchoolType
     address: string | null
     city: string
     zipcode: string
     citycode: string
+    academy: string
     status: SchoolStatus
+    repClassification: RepClassification | null
+    qpvCode: string | null
+    qpvName: string | null
   } | null
 }
 

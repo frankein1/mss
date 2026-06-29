@@ -58,11 +58,16 @@
     return {
       uai: occ.school.uai,
       name: occ.school.name,
+      type: occ.school.type,
       address: occ.school.address,
       city: occ.school.city,
       zipcode: occ.school.zipcode,
       citycode: occ.school.citycode,
-      status: occ.school.status
+      academy: occ.school.academy,
+      status: occ.school.status,
+      repClassification: occ.school.repClassification,
+      qpvCode: occ.school.qpvCode,
+      qpvName: occ.school.qpvName
     }
   })
 

@@ -27,6 +27,16 @@
       class="fr-col-12 fr-col-md-6"
     />
   </div>
+
+  <div
+    v-if="occupationIncome.school"
+    class="fr-grid-row"
+  >
+    <div class="fr-col-12">
+      <BeneficiarySchoolInfo :school="occupationIncome.school" />
+    </div>
+  </div>
+
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employer"
@@ -83,10 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    BeneficiaryPensionOrganisation,
-    BeneficiarySocioProfessionalCategory
-  } from '@prisma/client'
+  import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,

@@ -27,7 +27,7 @@
         <AtomCallout class>
           <p>
             Pour les bénéficiaires en études, vous pouvez maintenant saisir la
-            classe actuellement fréquentée par l’apprenant en plus de son niveau
+            classe actuellement fréquentée par l'apprenant en plus de son niveau
             scolaire.
           </p>
         </AtomCallout>
@@ -76,6 +76,49 @@
             {{ option.label }}
           </span>
         </ComboBox>
+      </div>
+
+      <div
+        v-if="selectedSchool?.data"
+        class="fr-col-12"
+      >
+        <AtomCallout>
+          <p class="fr-text--bold">{{ selectedSchool.data.name }}</p>
+          <ul>
+            <li v-if="selectedSchool.data.address">
+              <span class="fr-text--bold">Adresse :</span>
+              {{ selectedSchool.data.address }},
+              {{ selectedSchool.data.zipcode }} {{ selectedSchool.data.city }}
+            </li>
+            <li>
+              <span class="fr-text--bold">Type :</span>
+              {{ schoolTypeLabels[selectedSchool.data.type] }}
+            </li>
+            <li>
+              <span class="fr-text--bold">Académie :</span>
+              {{ selectedSchool.data.academy }}
+            </li>
+            <li v-if="selectedSchool.data.status !== SchoolStatus.OUVERT">
+              <span class="fr-text--bold">Statut :</span>
+              {{ schoolStatusLabels[selectedSchool.data.status] }}
+            </li>
+            <li v-if="selectedSchool.data.repClassification">
+              <span class="fr-text--bold">REP :</span>
+              <span class="fr-badge fr-badge--new fr-badge--no-icon fr-ml-1v">
+                {{
+                  repClassificationLabels[selectedSchool.data.repClassification]
+                }}</span
+              >
+            </li>
+            <li
+              v-if="selectedSchool.data.qpvCode && selectedSchool.data.qpvName"
+            >
+              <span class="fr-text--bold">QPV :</span>
+              {{ selectedSchool.data.qpvCode }} –
+              {{ selectedSchool.data.qpvName }}
+            </li>
+          </ul>
+        </AtomCallout>
       </div>
     </BeneficiaryFormSection>
 
@@ -165,7 +208,7 @@
               Pour détailler les
               <strong
                 >ressources du bénéficiaire et des membres de son foyer</strong
-              >, rendez-vous dans l’onglet “Budget” du dossier bénéficiaire.
+              >, rendez-vous dans l'onglet "Budget" du dossier bénéficiaire.
             </p>
           </div>
 
@@ -183,7 +226,9 @@
   import {
     BeneficiaryPensionOrganisation,
     BeneficiarySocioProfessionalCategory,
-    SchoolStatus
+    RepClassification,
+    SchoolStatus,
+    SchoolType
   } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
@@ -232,7 +277,33 @@
   type SchoolOption = {
     label: string
     value: string
+    disabled: boolean
+    data?: DataEducationSchool
   }
+
+  const schoolTypeLabels: Record<SchoolType, string> = {
+    [SchoolType.Ecole]: 'École',
+    [SchoolType.College]: 'Collège',
+    [SchoolType.Lycee]: 'Lycée',
+    [SchoolType.EREA]: 'EREA',
+    [SchoolType.MedicoSocial]: 'Médico-social',
+    [SchoolType.ServiceAdministratif]: 'Service administratif',
+    [SchoolType.InformationOrientation]: 'Information et orientation',
+    [SchoolType.Autre]: 'Autre'
+  }
+
+  const schoolStatusLabels: Record<SchoolStatus, string> = {
+    [SchoolStatus.OUVERT]: 'Ouvert',
+    [SchoolStatus.FERME]: 'Fermé',
+    [SchoolStatus.AFERMER]: 'À fermer',
+    [SchoolStatus.AOUVRIR]: 'À ouvrir'
+  }
+
+  const repClassificationLabels: Record<RepClassification, string> = {
+    [RepClassification.Rep]: 'REP',
+    [RepClassification.RepPlus]: 'REP+'
+  }
+
   const getSchoolNameWithInfo = (school: DataEducationSchool) => {
     return `${school.name} – ${school.address}, ${school.zipcode} ${school.city} ${school.status === SchoolStatus.FERME ? '(établissement fermé)' : ''}`
   }
@@ -253,7 +324,8 @@
       ? {
           disabled: false,
           value: props.initialSchool.uai,
-          label: getSchoolNameWithInfo(props.initialSchool)
+          label: getSchoolNameWithInfo(props.initialSchool),
+          data: props.initialSchool
         }
       : null
   )
@@ -264,7 +336,8 @@
   const tooManyResultsOption = {
     disabled: true,
     value: '',
-    label: 'Plus de 20 résultats, veuillez affiner votre recherche.'
+    label: 'Plus de 20 résultats, veuillez affiner votre recherche.',
+    data: undefined
   }
 
   const onSchoolCitySearch = async (value: string) => {
@@ -302,11 +375,14 @@
       query: value.toLocaleLowerCase(),
       citycode: selectedCity.value.value
     })
-    const options = schools.slice(0, SEARCH_RESULTS_LIMIT).map(school => ({
-      disabled: false,
-      value: school.uai,
-      label: getSchoolNameWithInfo(school)
-    }))
+    const options: SchoolOption[] = schools
+      .slice(0, SEARCH_RESULTS_LIMIT)
+      .map(school => ({
+        disabled: false,
+        value: school.uai,
+        label: getSchoolNameWithInfo(school),
+        data: school
+      }))
     if (schools.length > SEARCH_RESULTS_LIMIT) {
       options.push(tooManyResultsOption)
     }

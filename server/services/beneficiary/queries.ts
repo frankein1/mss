@@ -12,7 +12,92 @@ import {
 } from '~/server/security'
 import { isObjectEmpty } from '~/server/utils/isObjectEmpty'
 
-export const include = {
+const select = {
+  id: true,
+  familyFileId: true,
+  fileNumber: true,
+  status: true,
+  structureId: true,
+  createdById: true,
+  created: true,
+  updated: true,
+  lastActivity: true,
+  archiveDueDate: true,
+  archiveDueDateHistory: true,
+  aidantConnectAuthorized: true,
+  vulnerablePerson: true,
+  additionalInformation: true,
+  qpv: true,
+  relationship: true,
+
+  // general
+  title: true,
+  usualName: true,
+  birthName: true,
+  firstName: true,
+  birthDate: true,
+  birthPlace: true,
+  deathDate: true,
+  gender: true,
+  nationality: true,
+  numeroPegase: true,
+  accommodationMode: true,
+  accommodationName: true,
+  accommodationZone: true,
+  accommodationAdditionalInformation: true,
+  street: true,
+  addressComplement: true,
+  zipcode: true,
+  city: true,
+  region: true,
+  department: true,
+  noPhone: true,
+  phone1: true,
+  phone2: true,
+  email: true,
+  mobility: true,
+
+  // tax households
+  divorceDate: true,
+  weddingDate: true,
+  familySituation: true,
+  minorChildren: true,
+  majorChildren: true,
+  caregiver: true,
+
+  // health
+  gir: true,
+  doctor: true,
+  healthAdditionalInformation: true,
+  socialSecurityNumber: true,
+  insurance: true,
+
+  // occupation & income
+  socioProfessionalCategory: true,
+  occupation: true,
+  studyLevel: true,
+  employer: true,
+  employerSiret: true,
+  unemploymentNumber: true,
+  pensionOrganisations: true,
+  otherPensionOrganisations: true,
+  cafNumber: true,
+  schoolClass: true,
+  schoolUai: true,
+  ministereCategorie: true,
+  ministereDepartementServiceAc: true,
+  ministereStructure: true,
+
+  // external organisations
+  protectionMeasure: true,
+  representative: true,
+  prescribingStructure: true,
+  orientationType: true,
+  orientationStructure: true,
+  serviceProviders: true,
+  involvedPartners: true,
+
+  // relations
   socialSupports: {
     select: {
       subjects: {
@@ -38,7 +123,6 @@ export const include = {
       }
     }
   },
-
   relatives: {
     select: {
       id: true,
@@ -59,24 +143,27 @@ export const include = {
     select: {
       uai: true,
       name: true,
+      type: true,
       address: true,
       zipcode: true,
       citycode: true,
       city: true,
-      status: true
+      academy: true,
+      status: true,
+      repClassification: true,
+      qpvCode: true,
+      qpvName: true
     }
   },
   _count: {
     select: { socialSupports: true }
   }
-}
+} satisfies Prisma.BeneficiarySelect
 
 function findOne(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
-    include
+    where: { id },
+    select
   })
 }
 
@@ -101,7 +188,7 @@ export async function getPage(
 ) {
   const beneficiaries = await BeneficiaryRepo.findMany(ctx.user, {
     where: args.where,
-    include,
+    select,
     take: args.take,
     skip: args.skip,
     orderBy: args.orderBy
@@ -216,7 +303,7 @@ function getGeneral(
   permissions: AppContextPermissions
 ) {
   const { module } = permissions
-  const general = {
+  return {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
     birthName: beneficiary.birthName,
@@ -247,8 +334,6 @@ function getGeneral(
     status: beneficiary.status,
     additionalInformation: beneficiary.additionalInformation
   }
-
-  return general
 }
 
 function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
@@ -298,17 +383,7 @@ function getOccupationIncome(
     cafNumber: beneficiary.cafNumber,
     schoolClass: beneficiary.schoolClass,
     schoolUai: beneficiary.schoolUai,
-    school: beneficiary.school
-      ? {
-          uai: beneficiary.school.uai,
-          name: beneficiary.school.name,
-          address: beneficiary.school.address,
-          city: beneficiary.school.city,
-          zipcode: beneficiary.school.zipcode,
-          citycode: beneficiary.school.citycode,
-          status: beneficiary.school.status
-        }
-      : null,
+    school: beneficiary.school,
     // funeralContract: beneficiary.funeralContract,
     ministereCategorie: module.ministere
       ? beneficiary.ministereCategorie

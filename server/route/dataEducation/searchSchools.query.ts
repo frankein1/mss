@@ -29,11 +29,16 @@ const handler = async ({
     select: {
       uai: true,
       name: true,
+      type: true,
       address: true,
       zipcode: true,
       citycode: true,
       city: true,
-      status: true
+      academy: true,
+      status: true,
+      repClassification: true,
+      qpvCode: true,
+      qpvName: true
     }
   })
 }
