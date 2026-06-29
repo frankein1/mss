@@ -297,6 +297,7 @@ function getOccupationIncome(
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,
     cafNumber: beneficiary.cafNumber,
     schoolClass: beneficiary.schoolClass,
+    schoolUai: beneficiary.schoolUai,
     school: beneficiary.school
       ? {
           uai: beneficiary.school.uai,

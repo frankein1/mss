@@ -100,9 +100,10 @@ export type GetBeneficiaryOccupationIncome = Pick<
   school: {
     uai: string
     name: string
-    address: string
+    address: string | null
     city: string
     zipcode: string
+    citycode: string
     status: SchoolStatus
   } | null
 }
