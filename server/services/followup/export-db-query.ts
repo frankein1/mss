@@ -9,6 +9,7 @@ const followupExportSelect = {
   classified: true,
   forwardedToJustice: true,
   helpRequested: true,
+  isThirdPartyInterview: true,
   thirdPersonName: true,
   place: true,
   duration: true,

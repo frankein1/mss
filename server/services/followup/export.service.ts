@@ -203,6 +203,7 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
   return {
     date: filtered.date || '',
     firstFollowup: getBooleanOrEmpty(filtered.firstFollowup),
+    isThirdPartyInterview: getBooleanOrEmpty(filtered.isThirdPartyInterview),
     status: socialSupportStatusKeys.value(filtered.status) || '',
     subjects: filtered.subjects.map(s => s.name).join(', '),
     beneficiaryFileNumber: filtered.beneficiary.fileNumber || '',
