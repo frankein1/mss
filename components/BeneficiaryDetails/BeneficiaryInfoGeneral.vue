@@ -3,9 +3,7 @@
     title="Informations générales"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoGeneralContent :general="general" />
-    </div>
+    <BeneficiaryInfoGeneralContent :general="general" />
   </BeneficiaryInfoSection>
 </template>
 

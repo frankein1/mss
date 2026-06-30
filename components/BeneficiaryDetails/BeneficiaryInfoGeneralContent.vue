@@ -1,44 +1,44 @@
 <template>
-  <div v-if="hasIdentityInformations(general)">
-    <div class="fr-grid-row">
+  <template v-if="hasIdentityInformations(general)">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-pb-1w">
-        <h5 class="fr-text--md">Identité du bénéficiaire</h5>
+        <h5 class="fr-text--md fr-mb-0">Identité du bénéficiaire</h5>
       </div>
     </div>
-    <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-md-6 fr-pb-2w">
-        <div class="field-value">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-lg-6 fr-pb-2w">
+        <p class="field-value fr-mb-0">
           {{ formatBeneficiaryName(general) }}
-        </div>
-        <div class="field-value">
+        </p>
+        <p class="field-value fr-mb-0">
           {{ formatBeneficiaryBirthInfo(general) }}
-        </div>
-        <div
+        </p>
+        <p
           v-if="isDeceased && !!general.deathDate"
-          class="field-value"
+          class="field-value fr-mb-0"
         >
           Décédé(e) le {{ formatDate(general.deathDate) }}
-        </div>
+        </p>
       </div>
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.gender"
         :value="beneficiaryGenderKeys.value(general.gender)"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
     </div>
-    <div class="fr-grid-row">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.birthName"
         :value="general.birthName"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.nationality"
         :value="nationalityKeys.value(general.nationality)"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
     </div>
-    <div class="fr-grid-row">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.numeroPegase"
         :value="general.numeroPegase"
@@ -46,18 +46,18 @@
         hint="Format attendu : A-00-000000"
       />
     </div>
-  </div>
+  </template>
 
-  <div v-if="hasAddressInformations(general)">
+  <template v-if="hasAddressInformations(general)">
     <hr class="fr-col-12 fr-mt-5v" />
 
-    <div class="fr-grid-row">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-pb-1w">
-        <h5 class="fr-text--md">Adresse/Hébergement</h5>
+        <h5 class="fr-text--md fr-mb-0">Adresse/Hébergement</h5>
       </div>
     </div>
 
-    <div class="fr-grid-row">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.accommodationMode"
         :value="
@@ -77,39 +77,39 @@
       />
     </div>
 
-    <div class="fr-grid-row">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.street"
         :value="formatAddress(general)"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.addressComplement"
         :value="general.addressComplement"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.department"
         :value="general.department"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
         v-if="general.qpv != null"
         :label="beneficiaryFieldLabels.qpv"
         :value="general.qpv ? 'Oui' : 'Non'"
-        class="fr-col-12 fr-col-md-6"
+        class="fr-col-12 fr-col-lg-6"
       />
     </div>
-  </div>
+  </template>
 
   <div
     v-if="general.mobility"
-    class="fr-grid-row"
+    class="fr-grid-row fr-grid-row--gutters"
   >
     <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-col-12 fr-pb-1w">
-      <h5 class="fr-text--md">Mobilité</h5>
+      <h5 class="fr-text--md fr-mb-0">Mobilité</h5>
     </div>
 
     <BeneficiaryInfoLabel
@@ -120,14 +120,16 @@
 
   <div
     v-if="general.additionalInformation"
-    class="fr-grid-row"
+    class="fr-grid-row fr-grid-row--gutters"
   >
     <hr class="fr-col-12 fr-mt-5v" />
     <div class="fr-col-12 fr-pb-1w">
-      <h5 class="fr-text--md">Informations complémentaires</h5>
+      <h5 class="fr-text--md fr-mb-0">Informations complémentaires</h5>
     </div>
-    <div class="field-value fr-col-12">
-      {{ general.additionalInformation }}
+    <div class="fr-col-12 fr-pb-1w">
+      <p class="field-value fr-mb-0">
+        {{ general.additionalInformation }}
+      </p>
     </div>
   </div>
 </template>

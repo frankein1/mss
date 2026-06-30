@@ -3,11 +3,9 @@
     title="Structures extérieures"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoExternalOrganisationsContent
-        :external-organisations="externalOrganisations"
-      />
-    </div>
+    <BeneficiaryInfoExternalOrganisationsContent
+      :external-organisations="externalOrganisations"
+    />
   </BeneficiaryInfoSection>
 </template>
 
