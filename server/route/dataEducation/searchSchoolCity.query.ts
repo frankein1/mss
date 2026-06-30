@@ -17,13 +17,19 @@ const handler = async ({
   input: SearchDataEducationSchoolCityInput
   ctx: ProtectedAppContext
 }) => {
+  const hasDigits = /\d/.test(input.query)
+
   return await DataEducationSchoolRepo.findMany(ctx.user, {
-    where: {
-      city: {
-        contains: input.query,
-        mode: 'insensitive'
-      }
-    },
+    where: hasDigits
+      ? {
+          OR: [
+            { city: { contains: input.query, mode: 'insensitive' } },
+            { zipcode: { contains: input.query } }
+          ]
+        }
+      : {
+          city: { contains: input.query, mode: 'insensitive' }
+        },
     orderBy: {
       zipcode: 'asc'
     },
