@@ -62,6 +62,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     helpRequested,
     dueDate,
     firstFollowup,
+    isDuringShift,
     numeroPegase,
     classified,
     forwardedToJustice,
@@ -163,6 +164,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         helpRequested,
         firstFollowup,
         isThirdPartyInterview,
+        isDuringShift,
         classified,
         forwardedToJustice,
         duration

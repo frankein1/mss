@@ -470,6 +470,7 @@ async function updateFollowups(structureId: string) {
     classified: null,
     firstFollowup: null,
     isThirdPartyInterview: null,
+    isDuringShift: null,
     forwardedToJustice: null,
     duration: null
   }

@@ -359,6 +359,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     firstFollowup: socialSupport.followup?.firstFollowup || null,
     isThirdPartyInterview:
       socialSupport.followup?.isThirdPartyInterview || null,
+    isDuringShift: socialSupport.followup?.isDuringShift || null,
     date: socialSupport.date.toLocaleDateString('fr-FR'),
     minister: socialSupport.minister
       ? formatMinisterName(socialSupport.minister)
@@ -992,6 +993,7 @@ const getSocialSupports = async (
         select: {
           firstFollowup: true,
           isThirdPartyInterview: true,
+          isDuringShift: true,
           duration: true,
           medium: true,
           thirdPersonName: true,

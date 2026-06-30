@@ -10,6 +10,7 @@ const followupExportSelect = {
   forwardedToJustice: true,
   helpRequested: true,
   isThirdPartyInterview: true,
+  isDuringShift: true,
   thirdPersonName: true,
   place: true,
   duration: true,

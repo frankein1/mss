@@ -50,6 +50,7 @@ export const addFollowupSchemaBase = z.object({
     .nullish(),
   firstFollowup: z.boolean().default(false),
   isThirdPartyInterview: z.boolean().default(false),
+  isDuringShift: z.boolean().default(false),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
   prescribingOrganizationContactId: z.string().nullish(),

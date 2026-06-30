@@ -44,6 +44,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     dueDate,
     firstFollowup,
     isThirdPartyInterview,
+    isDuringShift,
     numeroPegase,
     classified,
     forwardedToJustice,
@@ -131,6 +132,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
           helpRequested,
           firstFollowup,
           isThirdPartyInterview,
+          isDuringShift,
           classified,
           forwardedToJustice,
           duration

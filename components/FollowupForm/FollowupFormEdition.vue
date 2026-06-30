@@ -76,6 +76,7 @@
       documents: initialDocumentIds.value,
       firstFollowup: followup.value.firstFollowup || false,
       isThirdPartyInterview: followup.value.isThirdPartyInterview || false,
+      isDuringShift: followup.value.isDuringShift || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
       isMinistry: application.value.module.ministere,

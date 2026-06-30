@@ -181,6 +181,7 @@ async function getSocialSupportDetail({
           classified: true,
           firstFollowup: true,
           isThirdPartyInterview: true,
+          isDuringShift: true,
           forwardedToJustice: true,
           duration: true,
           socialSupportId: true,

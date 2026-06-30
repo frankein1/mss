@@ -301,6 +301,7 @@ export function filterFollowup({
       followup.isThirdPartyInterview,
       conditions.details
     ),
+    isDuringShift: show(followup.isDuringShift, conditions.details),
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
@@ -331,6 +332,11 @@ export function filterFollowupForExport<T extends Partial<Followup>>({
       conditions.details
     ),
     firstFollowup: show(followup.firstFollowup, conditions.details),
+    isThirdPartyInterview: show(
+      followup.isThirdPartyInterview,
+      conditions.details
+    ),
+    isDuringShift: show(followup.isDuringShift, conditions.details),
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),

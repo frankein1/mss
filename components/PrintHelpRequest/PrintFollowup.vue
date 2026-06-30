@@ -40,6 +40,10 @@
             content="Oui"
           />
           <PrintDetailItem
+            :title="followupFieldLabels.isDuringShift"
+            :content="followup.isDuringShift ? 'OUI' : null"
+          />
+          <PrintDetailItem
             :title="followupFieldLabels.thirdPersonName"
             :content="followup.thirdPersonName"
           />

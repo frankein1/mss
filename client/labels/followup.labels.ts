@@ -16,6 +16,7 @@ export const followupFieldLabels = {
   classified: 'Classé',
   firstFollowup: '1er entretien',
   isThirdPartyInterview: 'Entretien avec une tierce personne',
+  isDuringShift: 'Entretien en permanence',
   forwardedToJustice: 'Transmis à la justice',
   minister: 'Ministre',
   ministerId: 'Ministre',

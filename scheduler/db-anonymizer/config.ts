@@ -296,6 +296,7 @@ const configFollowup: Record<
   classified: true,
   first_followup: true,
   is_third_party_interview: true,
+  is_during_shift: true,
   forwarded_to_justice: true,
   duration: true,
   social_support_id: true,

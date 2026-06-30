@@ -31,16 +31,22 @@
     <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
       <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
       <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--top">
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-md-4">
           <VeeCheckbox
             :label="followupFieldLabels.firstFollowup"
             name="firstFollowup"
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-md-4">
           <VeeCheckbox
             :label="followupFieldLabels.isThirdPartyInterview"
             name="isThirdPartyInterview"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-4">
+          <VeeCheckbox
+            :label="followupFieldLabels.isDuringShift"
+            name="isDuringShift"
           />
         </div>
         <div

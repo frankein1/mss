@@ -21,6 +21,7 @@ const select = {
   forwardedToJustice: true,
   firstFollowup: true,
   isThirdPartyInterview: true,
+  isDuringShift: true,
   helpRequested: true,
   thirdPersonName: true,
   place: true,

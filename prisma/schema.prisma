@@ -497,6 +497,7 @@ model Followup {
   classified            Boolean?
   firstFollowup         Boolean?          @map("first_followup")
   isThirdPartyInterview Boolean?          @default(false) @map("is_third_party_interview")
+  isDuringShift         Boolean?          @map("is_during_shift")
   forwardedToJustice    Boolean?          @map("forwarded_to_justice")
   duration              FollowupDuration?
 

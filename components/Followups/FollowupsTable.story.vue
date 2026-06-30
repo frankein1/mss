@@ -31,6 +31,8 @@
     prescribingOrganization: null,
     prescribingOrganizationContact: null,
     firstFollowup: null,
+    isThirdPartyInterview: null,
+    isDuringShift: null,
     helpRequested: null,
     thirdPersonName: null,
     place: null,
