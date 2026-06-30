@@ -24,23 +24,21 @@
       :id="title ? infoSectionId : undefined"
       :class="{ 'fr-collapse': title }"
     >
-      <div>
-        <slot></slot>
-        <ul
-          v-if="editLink"
-          class="fr-btns-group fr-btns-group--inline fr-btns-group--right"
-        >
-          <li>
-            <NuxtLink
-              :to="`${editLink}`"
-              class="fr-btn fr-btn--secondary"
-              title="Modifier"
-            >
-              Modifier
-            </NuxtLink>
-          </li>
-        </ul>
-      </div>
+      <slot></slot>
+      <ul
+        v-if="editLink"
+        class="fr-btns-group fr-btns-group--inline fr-btns-group--right"
+      >
+        <li>
+          <NuxtLink
+            :to="`${editLink}`"
+            class="fr-btn fr-btn--secondary"
+            title="Modifier"
+          >
+            Modifier
+          </NuxtLink>
+        </li>
+      </ul>
     </div>
   </section>
 </template>

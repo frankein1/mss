@@ -3,9 +3,7 @@
     title="Entourage"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoEntouragesContent :entourages="entourages" />
-    </div>
+    <BeneficiaryInfoEntouragesContent :entourages="entourages" />
   </BeneficiaryInfoSection>
 </template>
 

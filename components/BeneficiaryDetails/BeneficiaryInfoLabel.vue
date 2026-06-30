@@ -3,13 +3,13 @@
     v-if="displayedValue"
     class="fr-pb-2w"
   >
-    <div
+    <p
       v-if="label"
-      class="field-label"
+      class="field-label fr-mb-0"
     >
       {{ label }}&nbsp;:
-    </div>
-    <div class="field-value">{{ displayedValue }}</div>
+    </p>
+    <p class="field-value fr-mb-0">{{ displayedValue }}</p>
   </div>
 </template>
 

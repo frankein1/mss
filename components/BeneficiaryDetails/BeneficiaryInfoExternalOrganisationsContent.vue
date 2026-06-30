@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.protectionMeasure"
       :value="
@@ -7,19 +7,19 @@
           externalOrganisations.protectionMeasure
         )
       "
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.representative"
       :value="externalOrganisations.representative"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.prescribingStructure"
       :value="externalOrganisations.prescribingStructure"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.orientationType"
@@ -28,26 +28,26 @@
           externalOrganisations.orientationType
         )
       "
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.orientationStructure"
       :value="externalOrganisations.orientationStructure"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.serviceProviders"
       :value="externalOrganisations.serviceProviders"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.involvedPartners"
       :value="externalOrganisations.involvedPartners"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
 </template>

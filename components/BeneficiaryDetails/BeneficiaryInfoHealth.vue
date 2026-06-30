@@ -3,9 +3,7 @@
     title="Santé"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoHealthContent :health="health" />
-    </div>
+    <BeneficiaryInfoHealthContent :health="health" />
   </BeneficiaryInfoSection>
 </template>
 

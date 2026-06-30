@@ -1,78 +1,83 @@
 <template>
-  <div class="fr-container">
-    <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          label="Agent(s) référent(s)"
-          :value="referentNames"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <p class="fr-mb-1w">Dossier N°&nbsp;{{ beneficiary.fileNumber }}</p>
-        <div class="fr-mb-1w">
-          <BeneficiaryStatusBadge :status="beneficiary.status" />
-        </div>
-        <div v-if="beneficiary.aidantConnectAuthorized">
-          <div class="fr-icon-success-line field-value">
-            Mandat Aidants Connect
-          </div>
-        </div>
-        <div
-          v-if="
-            application.module.vulnerablePerson && beneficiary.vulnerablePerson
-          "
-          :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
-        >
-          <div class="fr-icon-success-line field-value">
-            {{ beneficiaryFieldLabels.vulnerablePerson }}
-          </div>
-        </div>
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-col-12 fr-col-lg-6">
+      <BeneficiaryInfoLabel
+        label="Agent(s) référent(s)"
+        :value="referentNames"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
+      <p class="fr-mb-1w">Dossier N°&nbsp;{{ beneficiary.fileNumber }}</p>
+      <p class="fr-mb-1w">
+        <BeneficiaryStatusBadge :status="beneficiary.status" />
+      </p>
+      <p
+        v-if="beneficiary.aidantConnectAuthorized"
+        class="fr-mb-2v"
+      >
+        <span
+          class="fr-icon-success-line"
+          aria-hidden="true"
+        ></span>
+        Mandat Aidants Connect
+      </p>
+      <p
+        v-if="
+          application.module.vulnerablePerson && beneficiary.vulnerablePerson
+        "
+        class="fr-mb-2v"
+      >
+        <span
+          class="fr-icon-success-line"
+          aria-hidden="true"
+        ></span>
+        {{ beneficiaryFieldLabels.vulnerablePerson }}
+      </p>
+    </div>
+  </div>
+
+  <template v-if="hasCoordinatesInformations(beneficiary.general)">
+    <hr class="fr-col-12 fr-mt-5v fr-no-print" />
+
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12">
+        <h5 class="fr-text--md fr-mb-0">Coordonnées du bénéficiaire</h5>
       </div>
     </div>
-
-    <template v-if="hasCoordinatesInformations(beneficiary.general)">
-      <hr class="fr-col-12 fr-mt-5v fr-no-print" />
-
-      <div class="fr-grid-row">
-        <div class="fr-col-12">
-          <h5 class="fr-text--md">Coordonnées du bénéficiaire</h5>
-        </div>
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div
+        v-if="hasPhoneOrAddress(beneficiary.general)"
+        class="fr-col-12 fr-col-lg-6"
+      >
+        <BeneficiaryInfoLabel
+          label="Numéro de téléphone"
+          :value="phoneLabel"
+        />
+        <BeneficiaryInfoLabel
+          label="Adresse"
+          :value="formatAddress(beneficiary.general)"
+        />
+        <BeneficiaryInfoLabel
+          v-if="beneficiary.general.qpv != null"
+          :label="beneficiaryFieldLabels.qpv"
+          :value="beneficiary.general.qpv ? 'Oui' : 'Non'"
+        />
       </div>
-      <div class="fr-grid-row">
-        <div
-          v-if="hasPhoneOrAddress(beneficiary.general)"
-          class="fr-col-12 fr-col-md-6"
-        >
-          <BeneficiaryInfoLabel
-            label="Numéro de téléphone"
-            :value="phoneLabel"
-          />
-          <BeneficiaryInfoLabel
-            label="Adresse"
-            :value="formatAddress(beneficiary.general)"
-          />
-          <BeneficiaryInfoLabel
-            v-if="beneficiary.general.qpv != null"
-            :label="beneficiaryFieldLabels.qpv"
-            :value="beneficiary.general.qpv ? 'Oui' : 'Non'"
-          />
-        </div>
-        <div
-          v-if="hasEmailOrAddressComplement(beneficiary.general)"
-          class="fr-col-12 fr-col-md-6"
-        >
-          <BeneficiaryInfoLabel
-            label="Email"
-            :value="beneficiary.general.email"
-          />
-          <BeneficiaryInfoLabel
-            label="Complément d'adresse"
-            :value="beneficiary.general.addressComplement"
-          />
-        </div>
+      <div
+        v-if="hasEmailOrAddressComplement(beneficiary.general)"
+        class="fr-col-12 fr-col-lg-6"
+      >
+        <BeneficiaryInfoLabel
+          label="Email"
+          :value="beneficiary.general.email"
+        />
+        <BeneficiaryInfoLabel
+          label="Complément d'adresse"
+          :value="beneficiary.general.addressComplement"
+        />
       </div>
-    </template>
-  </div>
+    </div>
+  </template>
 </template>
 
 <script lang="ts" setup>
