@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <div
       v-for="(entourage, index) in entourages"
       :key="entourage?.id"

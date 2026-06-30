@@ -3,9 +3,7 @@
     title="Situation Familiale"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoTaxHouseholdsContent :tax-households="taxHouseholds" />
-    </div>
+    <BeneficiaryInfoTaxHouseholdsContent :tax-households="taxHouseholds" />
   </BeneficiaryInfoSection>
 </template>
 

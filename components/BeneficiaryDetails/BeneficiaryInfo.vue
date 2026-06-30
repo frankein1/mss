@@ -11,14 +11,14 @@
       </div>
     </div>
 
-    <div class="feature-section fr-mt-1w">
+    <section class="feature-section fr-mt-1w fr-p-10v">
       <h4 class="fr-sr-only">Résumé</h4>
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
       <hr />
       <BeneficiaryInfoSocialSupportSubjects
         :social-support-subjects="beneficiary.history.subjects"
       />
-    </div>
+    </section>
 
     <BeneficiaryInfoGeneral
       :beneficiary-id="beneficiary.id"

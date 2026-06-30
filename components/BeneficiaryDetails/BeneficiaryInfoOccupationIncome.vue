@@ -3,11 +3,9 @@
     title="Activité"
     :edit-link="editLink"
   >
-    <div class="fr-container">
-      <BeneficiaryInfoOccupationIncomeContent
-        :occupation-income="occupationIncome"
-      />
-    </div>
+    <BeneficiaryInfoOccupationIncomeContent
+      :occupation-income="occupationIncome"
+    />
   </BeneficiaryInfoSection>
 </template>
 
