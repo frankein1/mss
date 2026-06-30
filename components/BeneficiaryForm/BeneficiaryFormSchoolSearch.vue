@@ -105,7 +105,12 @@
   }
 
   const getSchoolNameWithInfo = (school: DataEducationSchool) => {
-    return `${school.name} – ${school.address}, ${school.zipcode} ${school.city}${school.status === SchoolStatus.FERME ? ' (établissement fermé)' : ''}`
+    const location = [school.address, `${school.zipcode} ${school.city}`]
+      .filter(Boolean)
+      .join(', ')
+    const closed =
+      school.status === SchoolStatus.FERME ? ' (établissement fermé)' : ''
+    return `${school.name} – ${location}${closed}`
   }
 
   const selectedCity = ref<(SchoolCityOption & { disabled: boolean }) | null>(

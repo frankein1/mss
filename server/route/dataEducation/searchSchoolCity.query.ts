@@ -24,7 +24,7 @@ const handler = async ({
       ? {
           OR: [
             { city: { contains: input.query, mode: 'insensitive' } },
-            { zipcode: { contains: input.query } }
+            { zipcode: { startsWith: input.query } }
           ]
         }
       : {
