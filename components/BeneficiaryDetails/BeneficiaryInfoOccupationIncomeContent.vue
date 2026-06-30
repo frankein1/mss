@@ -1,15 +1,14 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div class="fr-col-12">
-      <BeneficiaryInfoLabel
-        :label="beneficiaryFieldLabels.socioProfessionalCategory"
-        :value="
-          beneficiarySocioProfessionalCategoryKeys.value(
-            occupationIncome.socioProfessionalCategory
-          )
-        "
-      />
-    </div>
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.socioProfessionalCategory"
+      :value="
+        beneficiarySocioProfessionalCategoryKeys.value(
+          occupationIncome.socioProfessionalCategory
+        )
+      "
+      class="fr-col-12"
+    />
 
     <!-- ECOLE -->
     <template v-if="occupationIncome.schoolClass || occupationIncome.school">
@@ -17,20 +16,16 @@
         <hr class="" />
         <h5 class="fr-text--md fr-mb-0">Informations scolaires</h5>
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.schoolClass"
-          :value="
-            beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)
-          "
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiarySchoolInfo
-          v-if="occupationIncome.school"
-          :school="occupationIncome.school"
-        />
-      </div>
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.schoolClass"
+        :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiarySchoolInfo
+        v-if="occupationIncome.school"
+        :school="occupationIncome.school"
+        class="fr-col-12 fr-col-lg-6"
+      />
     </template>
 
     <!-- PRO -->
@@ -40,75 +35,65 @@
         <h5 class="fr-text--md fr-mb-0">Informations professionnelles</h5>
       </div>
 
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.occupation"
-          :value="occupationIncome.occupation"
-        />
-      </div>
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.occupation"
+        :value="occupationIncome.occupation"
+        class="fr-col-12 fr-col-lg-6"
+      />
 
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.studyLevel"
-          :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.employer"
-          :value="occupationIncome.employer"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.employerSiret"
-          :value="occupationIncome.employerSiret"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.unemploymentNumber"
-          :value="occupationIncome.unemploymentNumber"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.cafNumber"
-          :value="occupationIncome.cafNumber"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.pensionOrganisations"
-          :value="pensionOrganisations"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.ministereCategorie"
-          :value="
-            ministereCategorieKeys.value(occupationIncome.ministereCategorie)
-          "
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.ministereStructure"
-          :value="
-            ministereStructureKeys.value(occupationIncome.ministereStructure)
-          "
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <BeneficiaryInfoLabel
-          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-          :value="
-            ministereDepartmentServiceAcKeys.value(
-              occupationIncome.ministereDepartementServiceAc
-            )
-          "
-        />
-      </div>
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.studyLevel"
+        :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.employer"
+        :value="occupationIncome.employer"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.employerSiret"
+        :value="occupationIncome.employerSiret"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.unemploymentNumber"
+        :value="occupationIncome.unemploymentNumber"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.cafNumber"
+        :value="occupationIncome.cafNumber"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.pensionOrganisations"
+        :value="pensionOrganisations"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereCategorie"
+        :value="
+          ministereCategorieKeys.value(occupationIncome.ministereCategorie)
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereStructure"
+        :value="
+          ministereStructureKeys.value(occupationIncome.ministereStructure)
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+        :value="
+          ministereDepartmentServiceAcKeys.value(
+            occupationIncome.ministereDepartementServiceAc
+          )
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
     </template>
   </div>
 </template>
