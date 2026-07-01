@@ -26,7 +26,6 @@
         <OngoingFollowups class="fr-mb-3w" />
       </div>
     </div>
-    <OpenModalHack />
   </PageContainer>
 </template>
 

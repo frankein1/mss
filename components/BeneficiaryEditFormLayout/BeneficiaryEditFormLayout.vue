@@ -1,5 +1,4 @@
 <template>
-  <OpenModalHack />
   <form
     v-if="beneficiaryIdentification"
     ref="form"

@@ -1,6 +1,3 @@
-<template>
-  <OpenModalHack />
-</template>
 <script setup lang="ts">
   // Inactivity management:
   // - Store in local storage an inactivity countdown
