@@ -93,9 +93,17 @@ export type DataEducationSchoolServerInput = z.infer<
 >
 
 export const searchDataEducationSchoolSchema = z.object({
-  query: stringConstraint
+  query: stringConstraint,
+  citycode: z.string().min(5)
 })
 
 export type SearchDataEducationSchoolInput = z.infer<
   typeof searchDataEducationSchoolSchema
+>
+
+export const searchDataEducationSchoolCitySchema = z.object({
+  query: stringConstraint
+})
+export type SearchDataEducationSchoolCityInput = z.infer<
+  typeof searchDataEducationSchoolCitySchema
 >

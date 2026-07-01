@@ -26,11 +26,13 @@ import { router } from '~/server/trpc'
 import { workshopRouter } from './workshop/router'
 import { ministerRouter } from './minister/router'
 import { redirectionRouter } from './redirection/router'
+import { dataEducationRouter } from './dataEducationRouter'
 
 export const appRouter = router({
   admin: adminRouter,
   beneficiary: beneficiaryRouter,
   budget: budgetRouter,
+  dataEducation: dataEducationRouter,
   dataInclusion: dataInclusionRouter,
   notification: notificationRouter,
   archiveNotification: archiveNotificationRouter,

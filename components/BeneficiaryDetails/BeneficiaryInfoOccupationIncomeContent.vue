@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.socioProfessionalCategory"
       :value="
@@ -7,86 +7,99 @@
           occupationIncome.socioProfessionalCategory
         )
       "
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12"
     />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.occupation"
-      :value="occupationIncome.occupation"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.studyLevel"
-      :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.schoolClass"
-      :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.employer"
-      :value="occupationIncome.employer"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.employerSiret"
-      :value="occupationIncome.employerSiret"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.unemploymentNumber"
-      :value="occupationIncome.unemploymentNumber"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.cafNumber"
-      :value="occupationIncome.cafNumber"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.pensionOrganisations"
-      :value="pensionOrganisations"
-      class="fr-col-12 fr-col-md-6"
-    />
-  </div>
 
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereCategorie"
-      :value="ministereCategorieKeys.value(occupationIncome.ministereCategorie)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereStructure"
-      :value="ministereStructureKeys.value(occupationIncome.ministereStructure)"
-      class="fr-col-12 fr-col-md-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-      :value="
-        ministereDepartmentServiceAcKeys.value(
-          occupationIncome.ministereDepartementServiceAc
-        )
-      "
-      class="fr-col-12 fr-col-md-6"
-    />
+    <!-- ECOLE -->
+    <template v-if="occupationIncome.schoolClass || occupationIncome.school">
+      <div class="fr-col-12">
+        <hr class="" />
+        <h5 class="fr-text--md fr-mb-0">Informations scolaires</h5>
+      </div>
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.schoolClass"
+        :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiarySchoolInfo
+        v-if="occupationIncome.school"
+        :school="occupationIncome.school"
+        class="fr-col-12 fr-col-lg-6"
+      />
+    </template>
+
+    <!-- PRO -->
+    <template v-if="hasProfessionnalInfo">
+      <div class="fr-col-12">
+        <hr class="" />
+        <h5 class="fr-text--md fr-mb-0">Informations professionnelles</h5>
+      </div>
+
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.occupation"
+        :value="occupationIncome.occupation"
+        class="fr-col-12 fr-col-lg-6"
+      />
+
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.studyLevel"
+        :value="beneficiaryStudyLevelKeys.value(occupationIncome.studyLevel)"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.employer"
+        :value="occupationIncome.employer"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.employerSiret"
+        :value="occupationIncome.employerSiret"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.unemploymentNumber"
+        :value="occupationIncome.unemploymentNumber"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.cafNumber"
+        :value="occupationIncome.cafNumber"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.pensionOrganisations"
+        :value="pensionOrganisations"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereCategorie"
+        :value="
+          ministereCategorieKeys.value(occupationIncome.ministereCategorie)
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereStructure"
+        :value="
+          ministereStructureKeys.value(occupationIncome.ministereStructure)
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+        :value="
+          ministereDepartmentServiceAcKeys.value(
+            occupationIncome.ministereDepartementServiceAc
+          )
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+    </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import {
-    BeneficiaryPensionOrganisation,
-    BeneficiarySocioProfessionalCategory
-  } from '@prisma/client'
+  import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
     pensionOrganisationKeys,
@@ -99,13 +112,27 @@
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
-  const props = defineProps<{
+  const { occupationIncome } = defineProps<{
     occupationIncome: GetBeneficiaryOccupationIncome
   }>()
 
+  const hasProfessionnalInfo = computed(
+    () =>
+      occupationIncome.occupation ||
+      occupationIncome.studyLevel ||
+      occupationIncome.employer ||
+      occupationIncome.employerSiret ||
+      occupationIncome.unemploymentNumber ||
+      occupationIncome.cafNumber ||
+      pensionOrganisations.value ||
+      occupationIncome.ministereCategorie ||
+      occupationIncome.ministereStructure ||
+      occupationIncome.ministereDepartementServiceAc
+  )
+
   const pensionOrganisations = computed(() =>
     arrayToString(
-      props.occupationIncome.pensionOrganisations?.filter(
+      occupationIncome.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
       pensionOrganisationKeys.byKey

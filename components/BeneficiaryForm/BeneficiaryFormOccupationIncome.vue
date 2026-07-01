@@ -27,11 +27,13 @@
         <AtomCallout class>
           <p>
             Pour les bénéficiaires en études, vous pouvez maintenant saisir la
-            classe actuellement fréquentée par l’apprenant en plus de son niveau
+            classe actuellement fréquentée par l'apprenant en plus de son niveau
             scolaire.
           </p>
         </AtomCallout>
       </div>
+
+      <BeneficiaryFormSchoolSearch :initial-school="localInitialSchool" />
 
       <div class="fr-col-12">
         <VeeSelectOptionGroup
@@ -128,7 +130,7 @@
               Pour détailler les
               <strong
                 >ressources du bénéficiaire et des membres de son foyer</strong
-              >, rendez-vous dans l’onglet “Budget” du dossier bénéficiaire.
+              >, rendez-vous dans l'onglet "Budget" du dossier bénéficiaire.
             </p>
           </div>
 
@@ -158,6 +160,12 @@
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { routes } from '~/utils/routes'
+  import type { DataEducationSchool } from './types'
+
+  const { initialSchool } = defineProps<{
+    initialSchool: DataEducationSchool | null
+  }>()
+  const localInitialSchool = ref<DataEducationSchool | null>(initialSchool)
 
   const { application } = usePermissions()
 
@@ -165,16 +173,26 @@
     useField<BeneficiarySocioProfessionalCategory | null>(
       'socioProfessionalCategory'
     )
-
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')
+
+  const { setValue: setSchoolUai } = useField<string | null>('schoolUai')
+  const { setValue: setSchoolClass } = useField<string | null>('schoolClass')
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
       BeneficiaryPensionOrganisation.Other
     )
   )
+
+  watch(socioProfessionalCategory, value => {
+    if (value !== BeneficiarySocioProfessionalCategory.Student) {
+      localInitialSchool.value = null
+      setSchoolUai(null)
+      setSchoolClass(null)
+    }
+  })
 </script>
 
 <style scoped lang="scss">
@@ -191,5 +209,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  :deep {
+    .combobox-wrapper.fr-input-group:not(:last-child),
+    .fr-select-group:not(:last-child) {
+      margin-bottom: 0;
+    }
   }
 </style>
