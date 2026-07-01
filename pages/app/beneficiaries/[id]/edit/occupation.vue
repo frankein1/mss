@@ -17,7 +17,10 @@
       :error="Boolean(errorFetch)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <BeneficiaryFormOccupationIncome v-if="bindedValues && permissions" />
+      <BeneficiaryFormOccupationIncome
+        v-if="bindedValues && permissions"
+        :initial-school="bindedValues.school"
+      />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -58,6 +61,8 @@
       id,
       structureId,
       ...occupationIncome,
+      schoolUai: occupationIncome?.schoolUai ?? null,
+      school: occupationIncome?.school ?? null,
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     }
   })
