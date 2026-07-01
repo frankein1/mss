@@ -19,7 +19,7 @@
     >
       <BeneficiaryFormOccupationIncome
         v-if="bindedValues && permissions"
-        :initial-school="initialSchool"
+        :initial-school="bindedValues.school"
       />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
@@ -50,27 +50,6 @@
     error: errorFetch
   } = await useBeneficiaryDetails(beneficiaryId)
 
-  const initialSchool = computed(() => {
-    const occ = beneficiary.value?.occupationIncome
-    if (!occ?.school || !occ?.school.uai) {
-      return null
-    }
-    return {
-      uai: occ.school.uai,
-      name: occ.school.name,
-      type: occ.school.type,
-      address: occ.school.address,
-      city: occ.school.city,
-      zipcode: occ.school.zipcode,
-      citycode: occ.school.citycode,
-      academy: occ.school.academy,
-      status: occ.school.status,
-      repClassification: occ.school.repClassification,
-      qpvCode: occ.school.qpvCode,
-      qpvName: occ.school.qpvName
-    }
-  })
-
   const bindedValues = computed(() => {
     if (!beneficiary.value) {
       return null
@@ -83,6 +62,7 @@
       structureId,
       ...occupationIncome,
       schoolUai: occupationIncome?.schoolUai ?? null,
+      school: occupationIncome?.school ?? null,
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     }
   })

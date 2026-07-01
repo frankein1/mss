@@ -33,7 +33,7 @@
         </AtomCallout>
       </div>
 
-      <BeneficiaryFormSchoolSearch :initial-school="initialSchool" />
+      <BeneficiaryFormSchoolSearch :initial-school="localInitialSchool" />
 
       <div class="fr-col-12">
         <VeeSelectOptionGroup
@@ -162,9 +162,10 @@
   import { routes } from '~/utils/routes'
   import type { DataEducationSchool } from './types'
 
-  defineProps<{
+  const { initialSchool } = defineProps<{
     initialSchool: DataEducationSchool | null
   }>()
+  const localInitialSchool = ref<DataEducationSchool | null>(initialSchool)
 
   const { application } = usePermissions()
 
@@ -172,16 +173,26 @@
     useField<BeneficiarySocioProfessionalCategory | null>(
       'socioProfessionalCategory'
     )
-
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')
+
+  const { setValue: setSchoolUai } = useField<string | null>('schoolUai')
+  const { setValue: setSchoolClass } = useField<string | null>('schoolClass')
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
       BeneficiaryPensionOrganisation.Other
     )
   )
+
+  watch(socioProfessionalCategory, value => {
+    if (value !== BeneficiarySocioProfessionalCategory.Student) {
+      localInitialSchool.value = null
+      setSchoolUai(null)
+      setSchoolClass(null)
+    }
+  })
 </script>
 
 <style scoped lang="scss">

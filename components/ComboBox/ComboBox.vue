@@ -270,6 +270,7 @@
     }
   })
 
+  // Prevents the displayedValue watcher from calling reset() when the model is updated externally.
   let isModelUpdate = false
   watch(model, newVal => {
     isModelUpdate = true
