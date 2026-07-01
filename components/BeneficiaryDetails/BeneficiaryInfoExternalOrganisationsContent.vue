@@ -40,14 +40,14 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.serviceProviders"
       :value="externalOrganisations.serviceProviders"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.involvedPartners"
       :value="externalOrganisations.involvedPartners"
-      class="fr-col-12 fr-col-md-6"
+      class="fr-col-12 fr-col-lg-6"
     />
   </div>
 
@@ -80,22 +80,22 @@
           {{ formatSupportProgramDateRange(supportProgram) }}
         </span>
       </div>
-      <div class="fr-grid-row">
+      <div class="fr-grid-row fr-grid-row--gutters">
         <BeneficiaryInfoLabel
           :label="supportProgramFieldLabels.partnerOrganisationId"
           :value="supportProgram.partnerOrganisation?.name"
-          class="fr-col-12"
+          class="fr-col-12 fr-col-lg-6"
         />
         <BeneficiaryInfoLabel
           v-if="supportProgram.endDate"
           :label="supportProgramFieldLabels.exitReason"
           :value="supportProgram.exitReason ?? undefined"
-          class="fr-col-12"
+          class="fr-col-12 fr-col-lg-6"
         />
         <BeneficiaryInfoLabel
           :label="supportProgramFieldLabels.precisions"
           :value="supportProgram.precisions"
-          class="fr-col-12"
+          class="fr-col-12 fr-col-lg-6"
         />
       </div>
     </div>
