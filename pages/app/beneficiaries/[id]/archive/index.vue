@@ -97,7 +97,6 @@
         />
       </div>
     </template>
-    <OpenModalHack />
   </PageContainer>
 </template>
 

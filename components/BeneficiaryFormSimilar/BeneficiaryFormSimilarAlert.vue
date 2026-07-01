@@ -39,7 +39,6 @@
         </template>
       </AtomAlert>
     </div>
-    <OpenModalHack />
   </template>
 </template>
 
