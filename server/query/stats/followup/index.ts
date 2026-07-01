@@ -9,3 +9,4 @@ export { getFollowupRedirectionsStatsQuery } from './getFollowupRedirectionsStat
 export { getFollowupBeneficiaryNumberQuery } from './getFollowupBeneficiaryNumberQuery'
 export { getFollowupDurationStatsQuery } from './getFollowupDurationStatsQuery'
 export { getFollowupMeanTimeStatsQuery } from './getFollowupMeanTimeStatsQuery'
+export { getFollowupRedirectionReasonsStatsQuery } from './getFollowupRedirectionReasonsStatsQuery'
