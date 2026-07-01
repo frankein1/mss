@@ -46,13 +46,12 @@
     />
   </div>
 
-  <div
-    v-if="endDate"
-    class="fr-col-12"
-  >
+  <div class="fr-col-12">
     <VeeInput
       :name="`supportPrograms[${index}].exitReason`"
       :label="supportProgramFieldLabels.exitReason"
+      disabled
+      hint="Bientôt disponible"
     />
   </div>
 
