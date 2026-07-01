@@ -149,15 +149,14 @@
     if (supportProgramNameOptions.length > 0) {
       filters.push({
         name: 'supportProgramNameIds',
-        label: 'Dispositif concerné',
+        label: 'Dispositifs concernés',
         options: supportProgramNameOptions.map(({ id, name }) => ({
           label: name,
           value: id
         })),
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction:
-          BeneficiaryHistoryFilterEventAction.SocialSupportSubject,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.SupportProgram,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }

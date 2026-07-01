@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { SupportProgramConstraints } from '../constraints'
+import { SupportProgramConstraints } from '~/server/database/constraints'
 import { appendConstraints } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'

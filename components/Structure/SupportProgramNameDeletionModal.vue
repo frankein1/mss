@@ -5,7 +5,13 @@
   >
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <p v-if="countStatus === 'pending'">Chargement…</p>
+        <p v-if="status === 'pending'">Chargement…</p>
+
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="Les données permettant la suppression n'ont pas pu être chargées."
+        />
 
         <template v-else-if="count === 0">
           <p>Ce dispositif n'est pas utilisé et peut être supprimé.</p>
@@ -61,7 +67,7 @@
             <button
               class="fr-btn"
               type="submit"
-              :disabled="(count !== 0 && !confirmed) || isSubmitting"
+              :disabled="!!error || (count !== 0 && !confirmed) || isSubmitting"
             >
               Supprimer
             </button>
@@ -86,8 +92,11 @@
 
   const confirmed = ref(false)
 
-  const { data: count, status: countStatus } =
-    await trpcClient.supportProgram.countNameUsage.useQuery({ id: props.id })
+  const {
+    data: count,
+    status,
+    error
+  } = await trpcClient.supportProgram.countNameUsage.useQuery({ id: props.id })
 
   function onSubmit() {
     props.delete()

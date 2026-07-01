@@ -1,6 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security'
+import { validatePartnerOrganizationIds } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
 import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
@@ -16,7 +17,14 @@ const securityCheck = async (
     ctx,
     input.id
   )
-  return permissions.edit.externalOrganisations
+  if (!permissions.edit.externalOrganisations) {
+    return false
+  }
+
+  const partnerOrgIds = input.supportPrograms.map(
+    sp => sp.partnerOrganisationId
+  )
+  return validatePartnerOrganizationIds(ctx.user, partnerOrgIds, [])
 }
 
 /** Diffs incoming support programs against existing ones to produce Prisma nested create/delete/update operations. */

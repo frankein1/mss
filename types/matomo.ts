@@ -68,7 +68,8 @@ export enum BeneficiaryHistoryFilterEventAction {
   TypeSuivi = 'Type de suivi',
   SocialSupportSubject = "Type d'accompagnement",
   Referent = 'Référent',
-  InvolvedBeneficiary = 'Bénéficiaire concerné'
+  InvolvedBeneficiary = 'Bénéficiaire concerné',
+  SupportProgram = 'Dispositifs concernés'
 }
 
 export enum BeneficiaryArchiveAction {

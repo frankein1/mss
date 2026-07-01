@@ -15,6 +15,7 @@ let beneficiaryId: string
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const referentId = fixturesUsers[FixtureUserRole.Referent].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
+const otherStructureId = fixtureStructures[FixtureStructure.Ministère].id
 
 const SUPPORT_PROGRAM_NAMES_USED = [
   'UDT-Portage de repas',
@@ -70,6 +71,9 @@ afterEach(async () => {
   })
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
+  await prismaClient.partnerOrganization.deleteMany({
+    where: { name: { startsWith: 'UDT-' } }
+  })
 })
 
 const baseInput = () => ({
@@ -94,6 +98,56 @@ describe('External Organisations - Update - Authorizations', () => {
         baseInput()
       )
     ).rejects.toThrowError(/no record/i)
+  })
+
+  test('A StructureManager cannot create a support program with a partner organisation from another structure', async ({
+    trpc
+  }) => {
+    const foreignPartnerOrg = await prismaClient.partnerOrganization.create({
+      data: { structureId: otherStructureId, name: 'UDT-Foreign' },
+      select: { id: true }
+    })
+
+    await expect(
+      trpc.structureManager.beneficiary.updateExternalOrganisations({
+        ...baseInput(),
+        supportPrograms: [
+          {
+            id: v4(),
+            name: 'UDT-Portage de repas',
+            partnerOrganisationId: foreignPartnerOrg.id
+          }
+        ]
+      })
+    ).rejects.toThrowError(/not allowed to access route/i)
+  })
+
+  test('A StructureManager cannot update a support program with a partner organisation from another structure', async ({
+    trpc
+  }) => {
+    const programId = v4()
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      supportPrograms: [{ id: programId, name: 'UDT-Portage de repas' }]
+    })
+
+    const foreignPartnerOrg = await prismaClient.partnerOrganization.create({
+      data: { structureId: otherStructureId, name: 'UDT-Foreign-2' },
+      select: { id: true }
+    })
+
+    await expect(
+      trpc.structureManager.beneficiary.updateExternalOrganisations({
+        ...baseInput(),
+        supportPrograms: [
+          {
+            id: programId,
+            name: 'UDT-Portage de repas',
+            partnerOrganisationId: foreignPartnerOrg.id
+          }
+        ]
+      })
+    ).rejects.toThrowError(/not allowed to access route/i)
   })
 })
 
@@ -202,7 +256,7 @@ describe('External Organisations - Update - Support programs', () => {
     const endDate = new Date('2024-06-30')
 
     const partnerOrganisation = await prismaClient.partnerOrganization.create({
-      data: { structureId, name: 'CCAS-UDT' },
+      data: { structureId, name: 'UDT-CCAS' },
       select: { id: true }
     })
 
@@ -229,9 +283,5 @@ describe('External Organisations - Update - Support programs', () => {
     expect(supportProgram?.exitReason).toBe('Fin de prise en charge')
     expect(supportProgram?.partnerOrganisationId).toBe(partnerOrganisation.id)
     expect(supportProgram?.precisions).toBe('Intervenant : M. Dupont')
-
-    await prismaClient.partnerOrganization.deleteMany({
-      where: { id: partnerOrganisation.id }
-    })
   })
 })
