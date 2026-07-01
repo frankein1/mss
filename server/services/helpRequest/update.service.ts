@@ -155,7 +155,7 @@ export async function update({ input, ctx }: UpdateParams) {
         date,
         supportProgram: supportProgramId
           ? connect(supportProgramId)
-          : undefined,
+          : { disconnect: true },
         subjects: {
           ...connect(subjectId),
           disconnect: disconnectSubject

@@ -156,7 +156,7 @@ export async function update({ input, ctx }: UpdateParams) {
         date,
         supportProgram: supportProgramId
           ? connect(supportProgramId)
-          : undefined,
+          : { disconnect: true },
         documents: prepareDocumentsMutations(
           documents,
           target.fileInstruction.socialSupport.documents

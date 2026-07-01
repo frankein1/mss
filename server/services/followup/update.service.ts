@@ -141,7 +141,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         dueDate,
         supportProgram: supportProgramId
           ? connect(supportProgramId)
-          : undefined,
+          : { disconnect: true },
         socialSupportRedirections: prepareRedirections
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
           : undefined
