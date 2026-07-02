@@ -67,7 +67,7 @@ afterEach(async () => {
     where: { beneficiaryId }
   })
   await prismaClient.supportProgramName.deleteMany({
-    where: { structureId, name: { in: SUPPORT_PROGRAM_NAMES_USED } }
+    where: { name: { startsWith: 'UDT-' } }
   })
   await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
@@ -114,7 +114,7 @@ describe('External Organisations - Update - Authorizations', () => {
         supportPrograms: [
           {
             id: v4(),
-            name: 'UDT-Portage de repas',
+            supportProgramNameId: supportProgramNameIds[0]!,
             partnerOrganisationId: foreignPartnerOrg.id
           }
         ]
@@ -128,7 +128,9 @@ describe('External Organisations - Update - Authorizations', () => {
     const programId = v4()
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
       ...baseInput(),
-      supportPrograms: [{ id: programId, name: 'UDT-Portage de repas' }]
+      supportPrograms: [
+        { id: programId, supportProgramNameId: supportProgramNameIds[0]! }
+      ]
     })
 
     const foreignPartnerOrg = await prismaClient.partnerOrganization.create({
@@ -142,8 +144,33 @@ describe('External Organisations - Update - Authorizations', () => {
         supportPrograms: [
           {
             id: programId,
-            name: 'UDT-Portage de repas',
+            supportProgramNameId: supportProgramNameIds[0]!,
             partnerOrganisationId: foreignPartnerOrg.id
+          }
+        ]
+      })
+    ).rejects.toThrowError(/not allowed to access route/i)
+  })
+
+  test('A StructureManager cannot create a support program with a supportProgramNameId from another structure', async ({
+    trpc
+  }) => {
+    const foreignName = await prismaClient.supportProgramName.create({
+      data: {
+        name: 'UDT-Foreign-Name',
+        structureId: otherStructureId,
+        createdById: socialWorkerId
+      },
+      select: { id: true }
+    })
+
+    await expect(
+      trpc.structureManager.beneficiary.updateExternalOrganisations({
+        ...baseInput(),
+        supportPrograms: [
+          {
+            id: v4(),
+            supportProgramNameId: foreignName.id
           }
         ]
       })
@@ -158,7 +185,10 @@ describe('External Organisations - Update - Support programs', () => {
       await trpc.structureManager.beneficiary.updateExternalOrganisations({
         ...baseInput(),
         supportPrograms: [
-          { id: supportProgramId, name: 'UDT-Portage de repas' }
+          {
+            id: supportProgramId,
+            supportProgramNameId: supportProgramNameIds[0]!
+          }
         ]
       })
 
@@ -182,16 +212,22 @@ describe('External Organisations - Update - Support programs', () => {
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
       ...baseInput(),
       supportPrograms: [
-        { id: existingId, name: 'UDT-Ancien dispositif' },
-        { id: v4(), name: 'UDT-Dispositif existant' }
+        {
+          id: existingId,
+          supportProgramNameId: supportProgramNameIds[1]!
+        },
+        { id: v4(), supportProgramNameId: supportProgramNameIds[5]! }
       ]
     })
 
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
       ...baseInput(),
       supportPrograms: [
-        { id: existingId, name: 'UDT-Ancien dispositif' },
-        { id: v4(), name: 'UDT-Nouveau dispositif' }
+        {
+          id: existingId,
+          supportProgramNameId: supportProgramNameIds[1]!
+        },
+        { id: v4(), supportProgramNameId: supportProgramNameIds[2]! }
       ]
     })
 
@@ -215,7 +251,9 @@ describe('External Organisations - Update - Support programs', () => {
     const programId = v4()
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
       ...baseInput(),
-      supportPrograms: [{ id: programId, name: 'UDT-Dispositif existant' }]
+      supportPrograms: [
+        { id: programId, supportProgramNameId: supportProgramNameIds[5]! }
+      ]
     })
 
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
@@ -223,7 +261,7 @@ describe('External Organisations - Update - Support programs', () => {
       supportPrograms: [
         {
           id: programId,
-          name: 'UDT-Dispositif modifié',
+          supportProgramNameId: supportProgramNameIds[6]!,
           precisions: 'Updated precisions'
         }
       ]
@@ -232,12 +270,13 @@ describe('External Organisations - Update - Support programs', () => {
     const program = await prismaClient.supportProgram.findUnique({
       where: { id: programId },
       // eslint-disable-next-line no-restricted-syntax
-      include: { supportProgramName: true }
+      include: { supportProgramName: { select: { name: true } } }
     })
-    expect(program).not.toBeNull()
-    expect(program!.id).toBe(programId)
-    expect(program!.supportProgramName.name).toBe('UDT-Dispositif modifié')
-    expect(program!.precisions).toBe('Updated precisions')
+    expect(program).toMatchObject({
+      id: programId,
+      supportProgramName: { name: 'UDT-Dispositif modifié' },
+      precisions: 'Updated precisions'
+    })
   })
 
   test('A Referent can update support programs for a beneficiary they are referent of', async ({
@@ -245,7 +284,9 @@ describe('External Organisations - Update - Support programs', () => {
   }) => {
     const result = await trpc.referent.beneficiary.updateExternalOrganisations({
       ...baseInput(),
-      supportPrograms: [{ id: v4(), name: 'UDT-Dispositif référent' }]
+      supportPrograms: [
+        { id: v4(), supportProgramNameId: supportProgramNameIds[3]! }
+      ]
     })
     expect(result.id).toBe(beneficiaryId)
   })
@@ -265,7 +306,7 @@ describe('External Organisations - Update - Support programs', () => {
       supportPrograms: [
         {
           id: supportProgramId,
-          name: 'UDT-Dispositif complet',
+          supportProgramNameId: supportProgramNameIds[4]!,
           startDate,
           endDate,
           exitReason: 'Fin de prise en charge',
