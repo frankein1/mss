@@ -1,5 +1,6 @@
 import {
   BeneficiaryAccommodationMode,
+  BeneficiaryActivityStatus,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -33,6 +34,16 @@ export const pensionOrganisationKeys = buildKeys({
   ProBtp: 'ProBTP',
   RetraiteDesMines: 'Retraite des mines',
   Other: 'Autre(s)'
+})
+
+export const beneficiaryActivityStatusKeys = buildKeys({
+  Rsa: 'Bénéficiaire RSA',
+  Aah: 'Bénéficiaire AAH',
+  FranceTravail: 'Inscrit France Travail',
+  MissionLocale: 'Inscrit mission locale',
+  Rqth: 'RQTH',
+  CongeMaternite: 'Congé maternité',
+  Disponibilite: 'En disponibilité'
 })
 
 export const beneficiaryStatusKeys = buildKeys({

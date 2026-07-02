@@ -63,7 +63,8 @@
       ...occupationIncome,
       schoolUai: occupationIncome?.schoolUai ?? null,
       school: occupationIncome?.school ?? null,
-      pensionOrganisations: occupationIncome?.pensionOrganisations || []
+      pensionOrganisations: occupationIncome?.pensionOrganisations || [],
+      activityStatus: occupationIncome?.activityStatus || []
     }
   })
 
