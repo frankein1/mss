@@ -995,6 +995,16 @@ enum BeneficiarySocioProfessionalCategory {
   Student
 }
 
+enum BeneficiaryActivityStatus {
+  Rsa
+  Aah
+  FranceTravail
+  MissionLocale
+  Rqth
+  CongeMaternite
+  Disponibilite
+}
+
 enum BeneficiaryStudyLevel {
   Maternelle
   Primaire
@@ -1740,6 +1750,7 @@ model Beneficiary {
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
+  activityStatus            BeneficiaryActivityStatus[]           @map("activity_status")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
   occupation                String?
   employer                  String?

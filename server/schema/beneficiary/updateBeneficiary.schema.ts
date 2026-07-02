@@ -1,6 +1,7 @@
 import {
   BeneficiaryAccommodationMode,
   BeneficiaryAccommodationZone,
+  BeneficiaryActivityStatus,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMinistereCategorie,
@@ -145,6 +146,9 @@ export const updateBeneficiaryOccupationSchema = z.object({
   id: z.string().uuid(),
   socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
     BeneficiarySocioProfessionalCategory
+  ),
+  activityStatus: z.array(
+    z.nativeEnum(BeneficiaryActivityStatus, errorMessages)
   ),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
