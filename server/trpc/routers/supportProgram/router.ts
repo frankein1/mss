@@ -22,5 +22,8 @@ export const supportProgramRouter = router({
     .mutation(routes.deleteNameMutation.execute),
   countNameUsage: protectedProcedure
     .input(routes.countNameUsageQuery.inputValidation)
-    .query(routes.countNameUsageQuery.execute)
+    .query(routes.countNameUsageQuery.execute),
+  countLinkedSocialSupports: protectedProcedure
+    .input(routes.countLinkedSocialSupportsQuery.inputValidation)
+    .query(routes.countLinkedSocialSupportsQuery.execute)
 })

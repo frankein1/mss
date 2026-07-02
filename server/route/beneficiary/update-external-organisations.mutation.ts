@@ -1,13 +1,16 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security'
-import { validatePartnerOrganizationIds } from '~/server/security'
+import {
+  validateManyBelongToStructure,
+  validatePartnerOrganizationIds
+} from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
 import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo, SupportProgramNameRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
-import { connect } from '~/utils/prisma'
+import { prepareRelationUpdates } from '~/utils/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -24,68 +27,34 @@ const securityCheck = async (
   const partnerOrgIds = input.supportPrograms.map(
     sp => sp.partnerOrganisationId
   )
-  return validatePartnerOrganizationIds(ctx.user, partnerOrgIds, [])
+  const supportProgramNameIds = input.supportPrograms.map(
+    sp => sp.supportProgramNameId
+  )
+
+  const [partnerOrgValid, supportProgramNameValid] = await Promise.all([
+    validatePartnerOrganizationIds(ctx.user, partnerOrgIds, []),
+    validateManyBelongToStructure(
+      ctx.user,
+      supportProgramNameIds,
+      SupportProgramNameRepo.count
+    )
+  ])
+
+  return partnerOrgValid && supportProgramNameValid
 }
 
-/** Diffs incoming support programs against existing ones to produce Prisma nested create/delete/update operations. */
-async function prepareSupportProgramUpdates(
-  user: ProtectedAppContext['user'],
-  beneficiaryId: string,
-  supportPrograms: UpdateBeneficiaryExternalOrganisationsInput['supportPrograms'],
-  structureId: string
+function toSupportProgramData(
+  sp: UpdateBeneficiaryExternalOrganisationsInput['supportPrograms'][number]
 ) {
-  const previousSupportPrograms = await BeneficiaryRepo.findUniqueOrThrow(
-    user,
-    {
-      where: { id: beneficiaryId },
-      select: {
-        supportPrograms: { select: { id: true } }
-      }
-    }
-  ).then(b => b.supportPrograms)
-
-  const previousIds = previousSupportPrograms.map(sp => sp.id)
-  const incomingIds = supportPrograms.map(sp => sp.id)
-
-  const toCreate = supportPrograms
-    .filter(sp => !previousIds.includes(sp.id))
-    .map(sp => ({
-      id: sp.id,
-      startDate: sp.startDate ?? null,
-      endDate: sp.endDate ?? null,
-      precisions: sp.precisions ?? null,
-      exitReason: sp.exitReason ?? null,
-      partnerOrganisation: sp.partnerOrganisationId
-        ? connect(sp.partnerOrganisationId)
-        : undefined,
-      supportProgramName: {
-        connect: { structureId_name: { structureId, name: sp.name } }
-      }
-    }))
-
-  const toDelete = previousSupportPrograms
-    .filter(sp => !incomingIds.includes(sp.id))
-    .map(sp => ({ id: sp.id }))
-
-  const toUpdate = supportPrograms
-    .filter(sp => previousIds.includes(sp.id))
-    .map(sp => ({
-      where: { id: sp.id },
-      data: {
-        startDate: sp.startDate ?? null,
-        endDate: sp.endDate ?? null,
-        precisions: sp.precisions ?? null,
-        exitReason: sp.exitReason ?? null,
-        partnerOrganisation: sp.partnerOrganisationId
-          ? connect(sp.partnerOrganisationId)
-          : { disconnect: true },
-        supportProgramName: {
-          connect: { structureId_name: { structureId, name: sp.name } }
-        }
-      }
-    }))
-
-  return { create: toCreate, delete: toDelete, update: toUpdate }
+  return {
+    id: sp.id,
+    startDate: sp.startDate ?? null,
+    endDate: sp.endDate ?? null,
+    precisions: sp.precisions ?? null,
+    exitReason: sp.exitReason ?? null,
+    supportProgramNameId: sp.supportProgramNameId,
+    partnerOrganisationId: sp.partnerOrganisationId ?? null
+  }
 }
 
 const handler = async ({
@@ -97,19 +66,23 @@ const handler = async ({
 }) => {
   const { id, supportPrograms, ...externalOrganisations } = input
 
-  const supportProgramUpdates = await prepareSupportProgramUpdates(
+  const previousSupportPrograms = await BeneficiaryRepo.findUniqueOrThrow(
     ctx.user,
-    id,
-    supportPrograms,
-    ctx.structure.id
-  )
+    {
+      where: { id },
+      select: { supportPrograms: { select: { id: true } } }
+    }
+  ).then(b => b.supportPrograms)
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     select: { id: true },
     where: { id },
     data: {
       ...externalOrganisations,
-      supportPrograms: supportProgramUpdates
+      supportPrograms: prepareRelationUpdates(
+        supportPrograms.map(toSupportProgramData),
+        previousSupportPrograms
+      )
     }
   })
 

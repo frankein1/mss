@@ -58,7 +58,7 @@
       supportPrograms: (externalOrganisations?.supportPrograms ?? []).map(
         d => ({
           id: d.id,
-          name: d.supportProgramName.name,
+          supportProgramNameId: d.supportProgramName.id,
           startDate: d.startDate,
           endDate: d.endDate,
           partnerOrganisationId: d.partnerOrganisation?.id ?? null,

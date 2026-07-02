@@ -1,13 +1,21 @@
 <template>
-  <div class="fr-col-12">
+  <div class="fr-col-12 support-program-header">
     <h3 class="fr-h4 title-blue">
       {{ `Dispositif ${index + 1}` }}
     </h3>
+    <button
+      class="fr-btn fr-btn--secondary fr-btn--icon-only fr-icon-delete-line btn-delete-action fr-mb-0"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      type="button"
+      aria-label="Supprimer ce dispositif"
+      @click="$emit('removeSupportProgram')"
+    />
   </div>
 
   <div class="fr-col-12">
     <VeeSelect
-      :name="`supportPrograms[${index}].name`"
+      :name="`supportPrograms[${index}].supportProgramNameId`"
       :label="supportProgramFieldLabels.name"
       required
       :options="
@@ -89,6 +97,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import { supportProgramFieldLabels } from '~/client/labels'
 
+  defineEmits<{
+    removeSupportProgram: []
+  }>()
+
   const props = defineProps<{
     index: number
     isDuplicate: boolean
@@ -120,3 +132,11 @@
     dismissed.value = true
   }
 </script>
+
+<style scoped>
+  .support-program-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>

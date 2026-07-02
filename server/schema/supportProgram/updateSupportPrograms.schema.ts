@@ -1,16 +1,14 @@
 import { z } from 'zod'
-import {
-  dateOrEmpty,
-  limitedStringConstraint,
-  requiredLimitedStringConstraint
-} from '../helpers.schema'
+import { dateOrEmpty, limitedStringConstraint } from '../helpers.schema'
 
 export const supportProgramSchema = z.object({
   id: z.string().uuid(),
-  name: requiredLimitedStringConstraint(50),
+  supportProgramNameId: z.string().uuid(),
   startDate: dateOrEmpty,
   endDate: dateOrEmpty,
   partnerOrganisationId: z.string().uuid().nullish(),
   precisions: limitedStringConstraint(2, 500).nullish(),
   exitReason: limitedStringConstraint(2, 500).nullish()
 })
+
+export type SupportProgramInput = z.infer<typeof supportProgramSchema>

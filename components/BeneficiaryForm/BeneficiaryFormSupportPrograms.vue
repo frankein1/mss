@@ -12,9 +12,10 @@
       v-for="(field, idx) in fields"
       :key="field.key"
       :index="idx"
-      :is-duplicate="duplicateFlags[idx] ?? false"
+      :is-duplicate="duplicatedProgramIds[idx] ?? false"
       :support-program-name-options="supportProgramNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
+      @remove-support-program="onClickRemove(field, idx)"
     />
 
     <div class="fr-col-12">
@@ -30,16 +31,20 @@
 </template>
 
 <script setup lang="ts">
+  import type { SupportProgramInput } from '~/server/schema'
+  import BeneficiaryFormSupportProgramDeletionModal from './BeneficiaryFormSupportProgramDeletionModal.vue'
+
   const trpcClient = useTrpcClient()
+  const modal = useModal()
 
   const { data: supportProgramNames } =
     await trpcClient.supportProgram.getNameList.useQuery()
 
   const supportProgramNameOptions: Ref<Options> = computed(
     () =>
-      supportProgramNames.value?.map(({ name }) => ({
+      supportProgramNames.value?.map(({ id, name }) => ({
         label: name,
-        value: name
+        value: id
       })) ?? []
   )
 
@@ -54,19 +59,29 @@
       })) ?? []
   )
 
-  const { fields, push } = useFieldArray('supportPrograms')
+  const { fields, push, remove } =
+    useFieldArray<SupportProgramInput>('supportPrograms')
 
-  const duplicateFlags = computed(() => {
-    const names = fields.value.map(
-      f => (f.value as { name?: string }).name ?? ''
+  const duplicatedProgramIds = computed(() => {
+    const ids = fields.value.map(f => f.value.supportProgramNameId ?? '')
+    const duplicated = new Set(
+      ids.filter((id, i) => id && ids.indexOf(id) !== i)
     )
-    return names.map(
-      (name, idx) =>
-        Boolean(name) && names.some((n, i) => i !== idx && n === name)
-    )
+    return ids.map(id => duplicated.has(id))
   })
 
+  function onClickRemove(field: (typeof fields)['value'][number], idx: number) {
+    const id = field.value.id
+
+    // Confirm program deletion when social supports are associated to it
+    modal.open(BeneficiaryFormSupportProgramDeletionModal, {
+      title: 'Suppression du dispositif',
+      supportProgramId: id!,
+      remove: () => remove(idx)
+    })
+  }
+
   function addSupportProgram() {
-    push({ id: crypto.randomUUID(), name: '' })
+    push({ id: crypto.randomUUID(), supportProgramNameId: '' })
   }
 </script>
