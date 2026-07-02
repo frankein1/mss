@@ -63,18 +63,20 @@
             {{ supportProgram.supportProgramName.name }}
           </h6>
           <div class="fr-mb-2w">
-            <p
-              class="fr-badge fr-badge--sm"
-              :class="supportProgramStatusBadgeClass(supportProgram)"
-            >
-              {{ supportProgramStatus(supportProgram) }}
+            <p>
+              <span
+                class="fr-badge fr-badge--sm"
+                :class="supportProgramStatusBadgeClass(supportProgram)"
+              >
+                {{ supportProgramStatus(supportProgram) }}
+              </span>
+              <span
+                v-if="supportProgram.startDate"
+                class="fr-ml-1w"
+              >
+                {{ formatSupportProgramDateRange(supportProgram) }}
+              </span>
             </p>
-            <span
-              v-if="supportProgram.startDate"
-              class="fr-ml-1w"
-            >
-              {{ formatSupportProgramDateRange(supportProgram) }}
-            </span>
           </div>
           <BeneficiaryInfoLabel
             :label="supportProgramFieldLabels.partnerOrganisationId"
