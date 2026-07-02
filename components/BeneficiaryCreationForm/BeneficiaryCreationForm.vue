@@ -88,7 +88,7 @@
               :label="beneficiaryFieldLabels.street"
               :zip-code="zipcode"
               hint="Numéro et voie"
-              @address-selected="onAddressSelected"
+              @address-selected="onSelected"
             />
           </div>
           <div class="fr-col-12 fr-col-md-3">
@@ -105,6 +105,26 @@
               :zip-code="zipcode"
               @city-selected="onCitySelected"
             />
+          </div>
+
+          <div
+            v-if="qpv && qpvAlertVisible"
+            class="fr-col-12"
+          >
+            <AtomAlert
+              :alert-type="AlertType.Info"
+              message="Quartier Prioritaire de la Ville"
+              closeable
+              @close="qpvAlertVisible = false"
+            >
+              <template #detailedMessage>
+                <p>
+                  Un QPV a été détecté à cette adresse : {{ qpv.nom }} ({{
+                    qpv.id
+                  }})
+                </p>
+              </template>
+            </AtomAlert>
           </div>
           <!-- masqué -->
 
@@ -180,11 +200,14 @@
   import { BeneficiaryStatus, BeneficiaryTitle, Gender } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { BeneficiaryReferent } from '~/types/beneficiary'
+  import type { AddressSelected } from '~/components/VeeForm/types'
   import type { CreateBeneficiaryInput } from '~/server/schema'
   import { createBeneficiarySchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { beneficiaryGenderKeys, beneficiaryTitleKeys } from '~/client/options'
+  import type { QpvFeatureProperties } from '~/composables/useQpvResolution'
+  import { AlertType } from '~/utils/constants/alert'
 
   defineProps<{
     isSubmitting: boolean
@@ -268,6 +291,19 @@
     setRegionValue: (value: string) => setFieldValue('region', value),
     setDepartmentValue: (value: string) => setFieldValue('department', value)
   })
+
+  const { resolveQpv } = useQpvResolution()
+
+  const coordinates = ref<[number, number]>()
+  const qpv = ref<QpvFeatureProperties | null>(null)
+  const qpvAlertVisible = ref(false)
+
+  async function onSelected(address: AddressSelected) {
+    coordinates.value = address.coordinates
+    onAddressSelected(address)
+    qpv.value = await resolveQpv(address.coordinates)
+    qpvAlertVisible.value = qpv.value !== null
+  }
 </script>
 
 <style scoped>

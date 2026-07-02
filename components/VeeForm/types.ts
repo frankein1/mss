@@ -1,9 +1,21 @@
 export type BanAddress = {
   id: string
+  banId: string
   name: string
   postcode: string
+  label: string
+  score: number
+  housenumber?: string
+  citycode: string
+  x: number
+  y: number
   city: string
   context: string
+  type: string
+  importance: number
+  depcode?: string
+  street?: string
+  _type: string
 }
 
 export type BanQueryParams = {
@@ -12,13 +24,27 @@ export type BanQueryParams = {
   postcode?: string
 }
 
-export type BanResponse = { features: Array<{ properties: BanAddress }> }
+export type BanFeature = {
+  type: 'Feature'
+  geometry: {
+    type: 'Point'
+    coordinates: [number, number]
+  }
+  properties: BanAddress
+}
+
+export type BanResponse = {
+  type: 'FeatureCollection'
+  features: BanFeature[]
+  query: string
+}
 
 export type AddressSelected = {
   zipCode: string
   city: string
   region: string
   departement: string
+  coordinates: [number, number]
 }
 
 export type GeoApiGouvFrCommune = {
