@@ -40,7 +40,6 @@
                 align-right
                 :menus="optionMenu"
               />
-              <OpenModalHack />
             </div>
             <div v-if="pending">
               <AtomLoader class="fr-mx-auto" />

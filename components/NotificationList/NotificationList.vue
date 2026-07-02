@@ -46,7 +46,6 @@
       </div>
     </template>
   </section>
-  <OpenModalHack />
 </template>
 
 <script setup lang="ts">
