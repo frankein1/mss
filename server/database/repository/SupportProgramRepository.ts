@@ -13,5 +13,8 @@ function count(
 }
 
 export const SupportProgramRepo = {
-  count
+  count,
+  prisma: {
+    groupBy: prismaClient.supportProgram.groupBy
+  }
 }
