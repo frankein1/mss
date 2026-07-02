@@ -169,6 +169,12 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     }
   }
 
+  if (filters.supportProgramNameIds?.length) {
+    socialSupport.supportProgram = {
+      supportProgramNameId: { in: filters.supportProgramNameIds }
+    }
+  }
+
   return socialSupport
 }
 
@@ -248,6 +254,14 @@ export function prepareBeneficiaryStatFilters(
   }
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+
+  if (filters.supportProgramNameIds?.length) {
+    formattedFilters.supportPrograms = {
+      some: {
+        supportProgramNameId: { in: filters.supportProgramNameIds }
+      }
+    }
+  }
 
   if (
     filterOnSocialSupportDate ||

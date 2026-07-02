@@ -3,6 +3,7 @@
     :social-support-subject-options="socialSupportSubjectOptions"
     :beneficiaries-cities-options="beneficiariesCitiesOptions"
     :agent-options="agentOptions"
+    :support-program-name-options="supportProgramNameOptions"
   />
 </template>
 
@@ -13,5 +14,6 @@
     socialSupportSubjectOptions?: Options
     beneficiariesCitiesOptions?: Options
     agentOptions?: Options
+    supportProgramNameOptions?: Options
   }>()
 </script>

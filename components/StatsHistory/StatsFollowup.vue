@@ -8,6 +8,7 @@
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
       :agent-options="agentOptions"
+      :support-program-name-options="supportProgramNameOptions"
       :is-help-request="false"
       :is-history="true"
     />
@@ -195,11 +196,13 @@
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
+      supportProgramNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
-      agentOptions: () => []
+      agentOptions: () => [],
+      supportProgramNameOptions: () => []
     }
   )
 

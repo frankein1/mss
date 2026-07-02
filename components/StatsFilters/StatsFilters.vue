@@ -55,12 +55,18 @@
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
+      supportProgramNameOptions?: Options
       filters: StatFilterInput
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
+    {
+      isHelpRequest: false,
+      isHistory: false,
+      validationSchema: undefined,
+      supportProgramNameOptions: () => []
+    }
   )
 
   const emit = defineEmits<{
@@ -162,6 +168,15 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
     })
+    if (props.supportProgramNameOptions?.length) {
+      statsFilters.push({
+        name: 'supportProgramNameIds',
+        label: 'Dispositifs',
+        options: props.supportProgramNameOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+    }
     if (application.value.module.statsByReferent && !props.isHistory) {
       statsFilters.push({
         name: 'referent',
