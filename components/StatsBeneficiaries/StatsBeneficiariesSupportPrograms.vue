@@ -10,20 +10,11 @@
   />
 
   <template v-else-if="supportProgramStatsList.length">
-    <p v-if="hasPeriodFilter">
-      <button
-        aria-describedby="tooltip-support-programs-period"
-        type="button"
-        class="fr-btn--tooltip fr-btn"
-      >
-        infobulle
-      </button>
-      <span
-        id="tooltip-support-programs-period"
-        class="fr-tooltip fr-placement"
-        role="tooltip"
-        >Le filtre de période ne s'applique pas à cette carte.
-      </span>
+    <p
+      v-if="hasPeriodFilter"
+      class="fr-text--xs text--muted"
+    >
+      Le filtre période s'applique aux entrées sorties des dispositifs.
     </p>
     <StatsList
       :stats="supportProgramStatsList"
@@ -60,14 +51,24 @@
   })
 
   const supportProgramStatsList = computed(() => {
-    if (!data.value?.length) {
-      return []
+    const list: Array<{
+      key: string
+      label: string
+      count: number
+      emphasis?: boolean
+    }> = []
+
+    for (const { name, count, entryCount, exitCount } of data.value || []) {
+      list.push({ key: name, label: name, count, emphasis: true })
+
+      if (hasPeriodFilter.value) {
+        list.push(
+          { key: `${name}-entry`, label: 'Entrées', count: entryCount },
+          { key: `${name}-exit`, label: 'Sorties', count: exitCount }
+        )
+      }
     }
 
-    return data.value.map(({ name, count }) => ({
-      key: name,
-      label: name,
-      count
-    }))
+    return list
   })
 </script>
