@@ -16,6 +16,7 @@ import {
   beneficiaryAccommodationZoneKeys,
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
+  beneficiaryActivityStatusKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiarySchoolClassKeys,
   beneficiaryStatusKeys,
@@ -68,6 +69,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'ministereDepartementServiceAc',
     'ministereStructure',
     'socioProfessionalCategory',
+    'activityStatus',
     'occupation',
     'studyLevel',
     'schoolClass',
@@ -262,6 +264,11 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? beneficiarySocioProfessionalCategoryKeys.byKey[
           occupationIncome.socioProfessionalCategory
         ]
+      : '',
+    activityStatus: occupationIncome?.activityStatus
+      ? occupationIncome.activityStatus
+          .map(item => beneficiaryActivityStatusKeys.byKey[item])
+          .join(', ')
       : '',
     occupation: occupationIncome?.occupation || '',
     studyLevel: occupationIncome?.studyLevel

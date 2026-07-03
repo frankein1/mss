@@ -7,7 +7,12 @@
           occupationIncome.socioProfessionalCategory
         )
       "
-      class="fr-col-12"
+      class="fr-col-12 fr-col-lg-6"
+    />
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.activityStatus"
+      :value="activityStatus"
+      class="fr-col-12 fr-col-lg-6"
     />
 
     <!-- ECOLE -->
@@ -102,6 +107,7 @@
   import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryKeys,
+    beneficiaryActivityStatusKeys,
     pensionOrganisationKeys,
     ministereStructureKeys,
     ministereCategorieKeys,
@@ -136,6 +142,13 @@
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
       pensionOrganisationKeys.byKey
+    )
+  )
+
+  const activityStatus = computed(() =>
+    arrayToString(
+      occupationIncome.activityStatus || [],
+      beneficiaryActivityStatusKeys.byKey
     )
   )
 

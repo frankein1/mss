@@ -67,6 +67,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   socialSecurityNumber: 'N° de Sécurité Sociale',
   insurance: 'Mutuelle',
   socioProfessionalCategory: 'Catégorie socio-professionnelle',
+  activityStatus: "Statut d'activité",
   occupation: 'Profession(s)',
   studyLevel: "Niveau scolaire / d'étude",
   employer: 'Employeur',

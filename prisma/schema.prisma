@@ -985,6 +985,8 @@ enum BeneficiarySocioProfessionalCategory {
   Employed
   Retired
   JobSeeker
+  // Disability & SickLeave: migrated to BeneficiaryActivityStatus (Invalidite / ArretMaladie).
+  // Kept in the enum for historical data but removed from the CSP dropdown.
   Disability
   SickLeave
   Housewife
@@ -993,6 +995,18 @@ enum BeneficiarySocioProfessionalCategory {
   Freelance
   Entrepreneur
   Student
+}
+
+enum BeneficiaryActivityStatus {
+  Rsa
+  Aah
+  FranceTravail
+  MissionLocale
+  Rqth
+  CongeMaternite
+  Disponibilite
+  Invalidite
+  ArretMaladie
 }
 
 enum BeneficiaryStudyLevel {
@@ -1740,6 +1754,7 @@ model Beneficiary {
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
+  activityStatus            BeneficiaryActivityStatus[]           @map("activity_status")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
   occupation                String?
   employer                  String?

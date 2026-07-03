@@ -1,5 +1,6 @@
 import {
   BeneficiaryAccommodationMode,
+  BeneficiaryActivityStatus,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -33,6 +34,18 @@ export const pensionOrganisationKeys = buildKeys({
   ProBtp: 'ProBTP',
   RetraiteDesMines: 'Retraite des mines',
   Other: 'Autre(s)'
+})
+
+export const beneficiaryActivityStatusKeys = buildKeys({
+  Rsa: 'Bénéficiaire RSA',
+  Aah: 'Bénéficiaire AAH',
+  FranceTravail: 'Inscrit France Travail',
+  MissionLocale: 'Inscrit mission locale',
+  Rqth: 'RQTH',
+  CongeMaternite: 'Congé maternité',
+  Disponibilite: 'En disponibilité',
+  Invalidite: 'Invalidité',
+  ArretMaladie: 'Arrêt maladie'
 })
 
 export const beneficiaryStatusKeys = buildKeys({
@@ -112,6 +125,15 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
     'Sans activité (non inscrit à France Travail)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 })
+
+// Disability & SickLeave were migrated to BeneficiaryActivityStatus: kept in byKey
+// for historical display but no longer selectable in the CSP dropdown.
+export const beneficiarySocioProfessionalCategoryFormOptions =
+  beneficiarySocioProfessionalCategoryKeys.options.filter(
+    option =>
+      option.value !== BeneficiarySocioProfessionalCategory.Disability &&
+      option.value !== BeneficiarySocioProfessionalCategory.SickLeave
+  )
 
 export const beneficiaryStudyLevelKeys = buildKeys({
   [BeneficiaryStudyLevel.Maternelle]: 'Maternelle',

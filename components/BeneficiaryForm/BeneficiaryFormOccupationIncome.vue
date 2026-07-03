@@ -5,13 +5,20 @@
     </h2>
 
     <BeneficiaryFormSection>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="socioProfessionalCategory"
           :label="beneficiaryFieldLabels.socioProfessionalCategory"
           :options="
-            withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
+            withEmptyValue(beneficiarySocioProfessionalCategoryFormOptions)
           "
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <MultiSelect
+          name="activityStatus"
+          :label="beneficiaryFieldLabels.activityStatus"
+          :options="beneficiaryActivityStatusKeys.options"
         />
       </div>
     </BeneficiaryFormSection>
@@ -150,7 +157,8 @@
     BeneficiarySocioProfessionalCategory
   } from '@prisma/client'
   import {
-    beneficiarySocioProfessionalCategoryKeys,
+    beneficiarySocioProfessionalCategoryFormOptions,
+    beneficiaryActivityStatusKeys,
     beneficiarySchoolClassGroups,
     pensionOrganisationKeys,
     ministereDepartmentServiceAcKeys,

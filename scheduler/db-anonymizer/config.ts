@@ -153,6 +153,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   employer: false,
   employer_siret: false,
   // -- BEGIN ANONYMIZED
+  activity_status: false,
   first_name: false,
   usual_name: false,
   birth_name: false,
