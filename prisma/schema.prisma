@@ -985,6 +985,8 @@ enum BeneficiarySocioProfessionalCategory {
   Employed
   Retired
   JobSeeker
+  // Disability & SickLeave: migrated to BeneficiaryActivityStatus (Invalidite / ArretMaladie).
+  // Kept in the enum for historical data but removed from the CSP dropdown.
   Disability
   SickLeave
   Housewife
@@ -1003,6 +1005,8 @@ enum BeneficiaryActivityStatus {
   Rqth
   CongeMaternite
   Disponibilite
+  Invalidite
+  ArretMaladie
 }
 
 enum BeneficiaryStudyLevel {

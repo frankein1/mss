@@ -10,7 +10,7 @@
           name="socioProfessionalCategory"
           :label="beneficiaryFieldLabels.socioProfessionalCategory"
           :options="
-            withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
+            withEmptyValue(beneficiarySocioProfessionalCategoryFormOptions)
           "
         />
       </div>
@@ -157,7 +157,7 @@
     BeneficiarySocioProfessionalCategory
   } from '@prisma/client'
   import {
-    beneficiarySocioProfessionalCategoryKeys,
+    beneficiarySocioProfessionalCategoryFormOptions,
     beneficiaryActivityStatusKeys,
     beneficiarySchoolClassGroups,
     pensionOrganisationKeys,
