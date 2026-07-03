@@ -6,6 +6,12 @@ import {
   FixtureUserRole
 } from '.'
 
+export enum FixtureProgramName {
+  PortageRepas = 0,
+  AideDomicile = 1,
+  Externe = 2
+}
+
 export const fixturesSupportProgramNames = [
   {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',

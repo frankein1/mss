@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server'
 import type { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'
 
+// All users of a structure can see any program name in the same structure.
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.SupportProgramNameWhereInput = {}
   if (isAdmin(user)) {
@@ -51,6 +52,7 @@ const create = (user: SecurityRuleGrantee) => {
 export const SupportProgramNameConstraints = {
   get,
   create,
+  // The edit/deletion authorization management is done in the security check
   update: get,
   delete: get
 }

@@ -2,35 +2,53 @@ import type { Prisma } from '@prisma/client'
 import {
   fixturesBeneficiaries,
   FixtureBeneficiary,
-  fixturesSupportProgramNames
+  fixturesSupportProgramNames,
+  FixtureProgramName
 } from '.'
 
 export const fixturesSupportPrograms: Prisma.SupportProgramCreateManyInput[] = [
-  // "Portage de repas" — 3 distinct beneficiaries (COURSOR, PENSON, WONFAR)
   {
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
-    supportProgramNameId: fixturesSupportProgramNames[0].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.PortageRepas].id,
+    startDate: new Date('2025-03-01'),
+    endDate: null
   },
   {
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENSON].id,
-    supportProgramNameId: fixturesSupportProgramNames[0].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.PortageRepas].id,
+    startDate: new Date('2024-06-01'),
+    endDate: new Date('2025-07-01')
   },
   {
+    // WONFAR has two program enrollments with the same name
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.WONFAR].id,
-    supportProgramNameId: fixturesSupportProgramNames[0].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.PortageRepas].id,
+    startDate: new Date('2025-02-01'),
+    endDate: new Date('2025-04-01')
   },
-  // WONFAR second enrollment in same program — tests deduplication
   {
+    // Statistics should deduplicate this second enrollment to count unique beneficiaries
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.WONFAR].id,
-    supportProgramNameId: fixturesSupportProgramNames[0].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.PortageRepas].id,
+    startDate: new Date('2025-05-01'),
+    endDate: null
   },
-  // "Aide à domicile" — 2 distinct beneficiaries (COURSOR, HEINIG)
   {
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
-    supportProgramNameId: fixturesSupportProgramNames[1].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.AideDomicile].id,
+    startDate: new Date('2025-02-01'),
+    endDate: null
   },
   {
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.HEINIG].id,
-    supportProgramNameId: fixturesSupportProgramNames[1].id
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.AideDomicile].id,
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2025-08-01')
   }
 ]

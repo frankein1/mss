@@ -4,6 +4,14 @@ import { appendConstraints } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import type { SecurityRuleGrantee } from '~/server/security'
 
+function findMany<T extends Prisma.SupportProgramFindManyArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.SupportProgramFindManyArgs>
+) {
+  appendConstraints(user, params, SupportProgramConstraints.get)
+  return prismaClient.supportProgram.findMany(params)
+}
+
 function count(
   user: SecurityRuleGrantee,
   params: Prisma.SupportProgramCountArgs
@@ -13,8 +21,6 @@ function count(
 }
 
 export const SupportProgramRepo = {
-  count,
-  prisma: {
-    groupBy: prismaClient.supportProgram.groupBy
-  }
+  findMany,
+  count
 }
