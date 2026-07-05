@@ -1,121 +1,81 @@
 <template>
   <li class="spn-item">
-    <form
-      class="spn-item__form"
-      novalidate
-      @submit.prevent="onSubmit"
+    <div>{{ label }}</div>
+
+    <div
+      v-if="application.edit.structure"
+      class="spn-item__actions"
     >
-      <VeeInput
-        name="name"
-        :label="supportProgramFieldLabels.name"
-        :disabled="!canEdit || isSubmitting"
-        :success-message="successMessage"
-        :hint="
-          canEdit
-            ? 'Ajouter ou modifier un nom de dispositif puis valider'
-            : undefined
-        "
-        class="spn-item__field"
-        @change-input="onInput($event)"
-      />
-
-      <div
-        v-if="canEdit"
-        class="spn-item__actions"
+      <button
+        :id="`button-edit-spn-${id}`"
+        class="icon fr-icon-pencil-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        :aria-describedby="`tooltip-edit-spn-${id}`"
+        aria-label="Modifier"
+        @click="$emit('edit')"
       >
-        <button
-          class="fr-btn fr-btn--secondary"
-          type="submit"
-          :disabled="
-            isSubmitting || !currentName.trim() || currentName === props.name
-          "
+        <span
+          :id="`tooltip-edit-spn-${id}`"
+          class="fr-tooltip fr-placement"
+          aria-hidden="true"
         >
-          Valider
-        </button>
+          Modifier
+        </span>
+      </button>
 
-        <button
-          class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
-          data-fr-opened="false"
-          aria-controls="global-modal"
-          type="button"
-          :disabled="!id"
-          @click="emit('remove')"
+      <button
+        :id="`button-remove-spn-${id}`"
+        class="icon fr-icon-close-circle-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        :aria-describedby="`tooltip-remove-spn-${id}`"
+        aria-label="Supprimer"
+        @click="$emit('remove')"
+      >
+        <span
+          :id="`tooltip-remove-spn-${id}`"
+          class="fr-tooltip fr-placement"
+          aria-hidden="true"
         >
           Supprimer
-        </button>
-      </div>
-    </form>
+        </span>
+      </button>
+    </div>
   </li>
 </template>
 
 <script setup lang="ts">
-  import { supportProgramFieldLabels } from '~/client/labels'
-  import { upsertSupportProgramNameSchema } from '~/server/schema'
-
-  const props = defineProps<{
-    id?: string
-    name: string
-    canEdit: boolean
-    isSubmitting: boolean
-    successMessage?: string
+  defineProps<{
+    id: string
+    label: string
   }>()
 
-  const emit = defineEmits<{
-    update: [name: string]
+  defineEmits<{
+    edit: []
     remove: []
-    clearSuccess: []
   }>()
 
-  const { handleSubmit, setValues } = useForm({
-    validationSchema: toTypedSchema(upsertSupportProgramNameSchema),
-    initialValues: props.id
-      ? { id: props.id, name: props.name }
-      : { name: props.name }
-  })
-
-  const currentName = ref(props.name)
-
-  watch(
-    () => props.name,
-    value => {
-      setValues({ name: value })
-      currentName.value = value
-    }
-  )
-
-  function onInput(value: string) {
-    currentName.value = value
-    if (props.successMessage) {
-      emit('clearSuccess')
-    }
-  }
-
-  const onSubmit = handleSubmit(values => {
-    emit('update', values.name)
-  })
+  const { application } = usePermissions()
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .spn-item {
-    break-inside: avoid;
-  }
-
-  .spn-item__form {
     display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-
-  .spn-item__field {
-    flex: 1;
-    margin-bottom: 0;
+    align-items: center;
+    justify-content: space-between;
+    max-height: 66px;
+    padding: 20px 0;
+    border-bottom: solid 1px var(--border-default-grey);
   }
 
   .spn-item__actions {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 3.5rem;
+    gap: 0.5rem;
+  }
+
+  .icon {
+    color: var(--primary);
+    cursor: pointer;
   }
 </style>
