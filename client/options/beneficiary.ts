@@ -1,5 +1,6 @@
 import {
   BeneficiaryAccommodationMode,
+  BeneficiaryContractType,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -120,7 +121,25 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.Student]: 'En étude / Élève',
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à France Travail)',
-  [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
+  [BeneficiarySocioProfessionalCategory.Other]: 'Autre',
+  [BeneficiarySocioProfessionalCategory.PublicEmployee]:
+    'Agent de la fonction publique',
+  [BeneficiarySocioProfessionalCategory.Apprentice]: 'Apprenti/Apprentie'
+})
+
+export const beneficiaryContractTypeKeys = buildKeys({
+  [BeneficiaryContractType.CDI]: 'CDI',
+  [BeneficiaryContractType.CDD]: 'CDD',
+  [BeneficiaryContractType.CDDU]: 'CDDU',
+  [BeneficiaryContractType.CUI]: 'CUI',
+  [BeneficiaryContractType.Interim]: 'Intérim',
+  [BeneficiaryContractType.Intermittence]: 'Intermittence',
+  [BeneficiaryContractType.Apprentissage]: 'Apprentissage',
+  [BeneficiaryContractType.Stage]: 'Stage',
+  [BeneficiaryContractType.Volontariat]: 'Volontariat',
+  [BeneficiaryContractType.Titulaire]: 'Titulaire (FP)',
+  [BeneficiaryContractType.Contractuel]: 'Contractuel (FP)',
+  [BeneficiaryContractType.Fonctionnaire]: 'Fonctionnaire'
 })
 
 export const beneficiaryStudyLevelKeys = buildKeys({

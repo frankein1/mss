@@ -53,6 +53,13 @@
 
     <BeneficiaryFormSection section-title="Informations professionnelles">
       <div class="fr-col-12">
+        <VeeSelect
+          name="contractType"
+          :label="beneficiaryFieldLabels.contractType"
+          :options="withEmptyValue(beneficiaryContractTypeKeys.options)"
+        />
+      </div>
+      <div class="fr-col-12">
         <VeeInput
           name="occupation"
           :label="beneficiaryFieldLabels.occupation"
@@ -159,6 +166,7 @@
   import {
     beneficiarySocioProfessionalCategoryKeys,
     beneficiaryActivityStatusKeys,
+    beneficiaryContractTypeKeys,
     beneficiarySchoolClassGroups,
     pensionOrganisationKeys,
     ministereDepartmentServiceAcKeys,

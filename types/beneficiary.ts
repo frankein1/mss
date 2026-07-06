@@ -86,6 +86,7 @@ export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,
   | 'socioProfessionalCategory'
   | 'activityStatus'
+  | 'contractType'
   | 'schoolClass'
   | 'schoolUai'
   | 'occupation'
