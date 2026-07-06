@@ -17,6 +17,7 @@ import type {
 import {
   beneficiaryAccommodationModeKeys,
   beneficiaryAccommodationZoneKeys,
+  beneficiaryContractTypeKeys,
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
   beneficiaryActivityStatusKeys,
@@ -73,6 +74,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'ministereStructure',
     'socioProfessionalCategory',
     'activityStatus',
+    'contractType',
     'occupation',
     'studyLevel',
     'schoolClass',
@@ -272,6 +274,9 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? occupationIncome.activityStatus
           .map(item => beneficiaryActivityStatusKeys.byKey[item])
           .join(', ')
+      : '',
+    contractType: occupationIncome?.contractType
+      ? beneficiaryContractTypeKeys.byKey[occupationIncome.contractType]
       : '',
     occupation: occupationIncome?.occupation || '',
     studyLevel: occupationIncome?.studyLevel

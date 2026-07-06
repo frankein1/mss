@@ -41,6 +41,14 @@
       </div>
 
       <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.contractType"
+        :value="
+          beneficiaryContractTypeKeys.value(occupationIncome.contractType)
+        "
+        class="fr-col-12 fr-col-lg-6"
+      />
+
+      <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.occupation"
         :value="occupationIncome.occupation"
         class="fr-col-12 fr-col-lg-6"
@@ -108,6 +116,7 @@
   import {
     beneficiarySocioProfessionalCategoryKeys,
     beneficiaryActivityStatusKeys,
+    beneficiaryContractTypeKeys,
     pensionOrganisationKeys,
     ministereStructureKeys,
     ministereCategorieKeys,
@@ -124,6 +133,7 @@
 
   const hasProfessionnalInfo = computed(
     () =>
+      occupationIncome.contractType ||
       occupationIncome.occupation ||
       occupationIncome.studyLevel ||
       occupationIncome.employer ||
