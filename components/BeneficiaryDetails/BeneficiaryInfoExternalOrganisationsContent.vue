@@ -71,7 +71,7 @@
                 {{ supportProgramStatus(supportProgram) }}
               </span>
               <span
-                v-if="supportProgram.startDate"
+                v-if="supportProgram.startDate || supportProgram.endDate"
                 class="fr-ml-1w"
               >
                 {{ formatSupportProgramDateRange(supportProgram) }}
@@ -120,10 +120,10 @@
   function supportProgramStatusBadgeClass(program: SupportProgram) {
     const status = supportProgramStatus(program)
     if (status === 'En cours') {
-      return 'fr-badge--success'
+      return 'fr-badge--success fr-badge--no-icon'
     }
     if (status === 'À venir') {
-      return 'fr-badge--info'
+      return 'fr-badge--info fr-badge--no-icon'
     }
     return ''
   }

@@ -25,10 +25,14 @@ export function supportProgramStatus(
 export function formatSupportProgramDateRange(
   program: SupportProgramDates
 ): string {
-  if (!program.startDate) {
+  if (!program.startDate && !program.endDate) {
     return ''
   }
-  const start = formatDate(program.startDate)
-  const end = program.endDate ? ` → ${formatDate(program.endDate)}` : ' →'
+  const start = program.startDate
+    ? formatDate(program.startDate)
+    : '(date non définie)'
+  const end = program.endDate
+    ? ` → ${formatDate(program.endDate)}`
+    : " → (aujourd'hui)"
   return `${start}${end}`
 }
