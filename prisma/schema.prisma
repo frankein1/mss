@@ -995,6 +995,8 @@ enum BeneficiarySocioProfessionalCategory {
   Freelance
   Entrepreneur
   Student
+  PublicEmployee
+  Apprentice
 }
 
 enum BeneficiaryActivityStatus {
@@ -1007,6 +1009,21 @@ enum BeneficiaryActivityStatus {
   Disponibilite
   Invalidite
   ArretMaladie
+}
+
+enum BeneficiaryContractType {
+  CDI
+  CDD
+  CDDU
+  CUI
+  Interim
+  Intermittence
+  Apprentissage
+  Stage
+  Volontariat
+  Titulaire
+  Contractuel
+  Fonctionnaire
 }
 
 enum BeneficiaryStudyLevel {
@@ -1755,6 +1772,7 @@ model Beneficiary {
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
   activityStatus            BeneficiaryActivityStatus[]           @map("activity_status")
+  contractType              BeneficiaryContractType?              @map("contract_type")
   studyLevel                BeneficiaryStudyLevel?                @map("study_level")
   occupation                String?
   employer                  String?

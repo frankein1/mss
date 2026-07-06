@@ -2,6 +2,7 @@ import {
   BeneficiaryAccommodationMode,
   BeneficiaryAccommodationZone,
   BeneficiaryActivityStatus,
+  BeneficiaryContractType,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMinistereCategorie,
@@ -167,6 +168,7 @@ export const updateBeneficiaryOccupationSchema = z.object({
   activityStatus: z.array(
     z.nativeEnum(BeneficiaryActivityStatus, errorMessages)
   ),
+  contractType: withEmptyValueOptionalNativeEnum(BeneficiaryContractType),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   schoolClass: withEmptyValueOptionalNativeEnum(BeneficiarySchoolClass),

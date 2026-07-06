@@ -75,6 +75,7 @@ const select = {
   // occupation & income
   socioProfessionalCategory: true,
   activityStatus: true,
+  contractType: true,
   occupation: true,
   studyLevel: true,
   employer: true,
@@ -375,6 +376,7 @@ function getOccupationIncome(
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     activityStatus: beneficiary.activityStatus,
+    contractType: beneficiary.contractType,
     occupation: beneficiary.occupation,
     studyLevel: beneficiary.studyLevel,
     employer: beneficiary.employer,
