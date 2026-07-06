@@ -2,7 +2,10 @@ import type { Prisma } from '@prisma/client'
 import { UserRole } from '@prisma/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
-import type { ExportBeneficiariesInput } from '~/server/schema'
+import type {
+  ActiveBeneficiarySocioProfessionalCategory,
+  ExportBeneficiariesInput
+} from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
@@ -229,9 +232,6 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     return exported
   }
 
-  // FIXME: temporary scoping of BeneficiaryActivityStatus before migration of Invalidite and ArretMaladie values
-  type TmpKey = keyof (typeof beneficiaryActivityStatusKeys)['byKey']
-
   return {
     ...exported,
     referents: beneficiary.referents
@@ -265,12 +265,12 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       : '',
     socioProfessionalCategory: occupationIncome?.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryKeys.byKey[
-          occupationIncome.socioProfessionalCategory
+          occupationIncome.socioProfessionalCategory as ActiveBeneficiarySocioProfessionalCategory
         ]
       : '',
     activityStatus: occupationIncome?.activityStatus
       ? occupationIncome.activityStatus
-          .map(item => beneficiaryActivityStatusKeys.byKey[item as TmpKey])
+          .map(item => beneficiaryActivityStatusKeys.byKey[item])
           .join(', ')
       : '',
     occupation: occupationIncome?.occupation || '',

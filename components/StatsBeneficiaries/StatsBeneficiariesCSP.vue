@@ -37,7 +37,10 @@
     beneficiarySocioProfessionalCategoryKeys,
     getStatLabel
   } from '~/client/options'
-  import type { StatFilterInput } from '~/server/schema'
+  import type {
+    StatFilterInput,
+    ActiveBeneficiarySocioProfessionalCategory
+  } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
@@ -55,9 +58,9 @@
     () =>
       data.value?.map(({ _count, socioProfessionalCategory }) => ({
         key: socioProfessionalCategory || 'null',
-        label: getStatLabel(
+        label: getStatLabel<ActiveBeneficiarySocioProfessionalCategory>(
           beneficiarySocioProfessionalCategoryKeys.byKey,
-          socioProfessionalCategory
+          socioProfessionalCategory as ActiveBeneficiarySocioProfessionalCategory | null
         ),
         count: _count
       })) || []

@@ -985,7 +985,9 @@ enum BeneficiarySocioProfessionalCategory {
   Employed
   Retired
   JobSeeker
+  /// Obsolete: migrated to BeneficiaryActivityStatus
   Disability
+  /// Obsolete: migrated to BeneficiaryActivityStatus
   SickLeave
   Housewife
   NoActivity

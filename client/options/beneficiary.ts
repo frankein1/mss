@@ -1,6 +1,5 @@
 import {
   BeneficiaryAccommodationMode,
-  BeneficiaryActivityStatus,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -43,9 +42,9 @@ export const beneficiaryActivityStatusKeys = buildKeys({
   MissionLocale: 'Inscrit mission locale',
   Rqth: 'RQTH',
   CongeMaternite: 'Congé maternité',
-  Disponibilite: 'En disponibilité'
-  //   Invalidite: 'Invalidité',
-  // ArretMaladie: 'Arrêt maladie'
+  Disponibilite: 'En disponibilité',
+  Invalidite: 'Invalidité',
+  ArretMaladie: 'Arrêt maladie'
 })
 
 export const beneficiaryStatusKeys = buildKeys({
@@ -111,12 +110,10 @@ export const beneficiaryGirKeys = buildKeys({
 })
 
 export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
-  [BeneficiarySocioProfessionalCategory.SickLeave]: 'Arrêt maladie',
   [BeneficiarySocioProfessionalCategory.Entrepreneur]:
     "Chef ou cheffe d'entreprise",
   [BeneficiarySocioProfessionalCategory.JobSeeker]: "En recherche d'emploi",
   [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant/Indépendante',
-  [BeneficiarySocioProfessionalCategory.Disability]: 'Invalidité',
   [BeneficiarySocioProfessionalCategory.Housewife]: 'Parent au foyer',
   [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité/Retraitée',
   [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié/Salariée',
