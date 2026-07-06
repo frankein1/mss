@@ -149,7 +149,7 @@
     if (supportProgramNameOptions.length > 0) {
       filters.push({
         name: 'supportProgramNameIds',
-        label: 'Dispositifs concernés',
+        label: 'Dispositif',
         options: supportProgramNameOptions.map(({ id, name }) => ({
           label: name,
           value: id
@@ -164,7 +164,7 @@
     if (familyFileIdentification.length > 1) {
       filters.push({
         name: 'beneficiaryId',
-        label: 'Bénéficiaire concerné :',
+        label: 'Bénéficiaire concerné',
         options: withEmptyValue(beneficiaryOptions.value, 'Tous'),
         type: FilterType.Radio,
         asTag: true,

@@ -171,7 +171,7 @@
     if (props.supportProgramNameOptions?.length) {
       statsFilters.push({
         name: 'supportProgramNameIds',
-        label: 'Dispositifs',
+        label: 'Dispositif',
         options: props.supportProgramNameOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb

@@ -127,7 +127,7 @@
     ]
     filters.push({
       name: 'supportProgramNameIds',
-      label: 'Dispositifs concernés',
+      label: 'Dispositif',
       options: supportProgramNameOptions.value || [],
       type: FilterType.SelectMultiple,
       alwaysExpanded: true,
