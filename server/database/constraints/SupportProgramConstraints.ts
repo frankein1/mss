@@ -24,21 +24,14 @@ const get = (user: SecurityRuleGrantee) => {
     supportProgramName: { structureId: user.structureId }
   })
 
-  // Referent role can see all programs linked to a workshop
-  // but only programs linked to families of which he/she is a referent
   if (isReferent(user)) {
     Object.assign<
       Prisma.SupportProgramWhereInput,
       Prisma.SupportProgramWhereInput
     >(where, {
-      OR: [
-        { workshopId: { not: null } },
-        {
-          beneficiary: {
-            familyFile: { referents: { some: { id: user.id } } }
-          }
-        }
-      ]
+      beneficiary: {
+        familyFile: { referents: { some: { id: user.id } } }
+      }
     })
   }
   return where

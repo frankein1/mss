@@ -3,29 +3,42 @@ import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { CreateWorkshopInput } from '~/server/schema'
 import { createWorkshopSchema } from '~/server/schema'
-import { WorkshopRepo, PartnerOrganizationRepo } from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security'
+import {
+  WorkshopRepo,
+  PartnerOrganizationRepo,
+  SupportProgramNameRepo
+} from '~/server/database'
+import {
+  validateOneBelongsToStructure,
+  type SecurityRuleContext
+} from '~/server/security'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateWorkshopInput
 ) => {
-  if (!input.partnerOrganizationId) {
-    return true
-  }
-  try {
-    await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {
-      where: { id: input.partnerOrganizationId },
-      select: { id: true }
-    })
-  } catch {
-    return false
-  }
-  return true
+  const { user } = ctx
+  const { partnerOrganizationId: pid, supportProgramNameId: sid } = input
+  const [pfound, sfound] = await Promise.all([
+    !pid ||
+      validateOneBelongsToStructure(
+        user,
+        pid,
+        PartnerOrganizationRepo.findUniqueOrThrow
+      ),
+    !sid ||
+      validateOneBelongsToStructure(
+        user,
+        sid,
+        SupportProgramNameRepo.findUniqueOrThrow
+      )
+  ])
+
+  return pfound && sfound
 }
 
 const handler = ({
-  input: { partnerOrganizationId, name, ...input },
+  input: { partnerOrganizationId, supportProgramNameId, name, ...input },
   ctx
 }: {
   input: CreateWorkshopInput
@@ -37,7 +50,10 @@ const handler = ({
       ...input,
       partnerOrganization: partnerOrganizationId
         ? { connect: { id: partnerOrganizationId } }
-        : {},
+        : undefined,
+      supportProgramName: supportProgramNameId
+        ? { connect: { id: supportProgramNameId } }
+        : undefined,
       workshopName: {
         connectOrCreate: {
           where: {

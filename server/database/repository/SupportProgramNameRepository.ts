@@ -15,6 +15,14 @@ function findMany<T extends Prisma.SupportProgramNameFindManyArgs>(
   return prismaClient.supportProgramName.findMany(params)
 }
 
+function findUniqueOrThrow<T extends Prisma.SupportProgramNameFindUniqueArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.SupportProgramNameFindUniqueArgs>
+) {
+  appendConstraints(user, params, SupportProgramNameConstraints.get)
+  return prismaClient.supportProgramName.findUniqueOrThrow(params)
+}
+
 function create<T extends Prisma.SupportProgramNameCreateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.SupportProgramNameCreateArgs>
@@ -49,6 +57,7 @@ function count(
 
 export const SupportProgramNameRepo = {
   findMany,
+  findUniqueOrThrow,
   create,
   update,
   delete: deleteOne,

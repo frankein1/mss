@@ -462,6 +462,7 @@ const configWorkshop: Record<
   created_by_id: true,
   structure_id: true,
   partner_organization_id: true,
+  support_program_name_id: true,
   chargeable: true,
   workshop_name_id: true,
   location: true,
@@ -774,7 +775,6 @@ const configSupportProgram: Record<
 > = {
   id: true,
   beneficiary_id: true,
-  workshop_id: true,
   support_program_name_id: true,
   partner_organisation_id: true,
   start_date: true,

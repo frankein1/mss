@@ -16,8 +16,12 @@ const referentId = fixturesUsers[FixtureUserRole.Referent].id
 const nameIds: string[] = []
 const beneficiaryIds: string[] = []
 const familyFileIds: string[] = []
+const workshopIds: string[] = []
 
 afterEach(async () => {
+  await prismaClient.workshop.deleteMany({
+    where: { id: { in: workshopIds } }
+  })
   await prismaClient.beneficiary.deleteMany({
     where: { id: { in: beneficiaryIds } }
   })
@@ -30,6 +34,7 @@ afterEach(async () => {
   nameIds.length = 0
   beneficiaryIds.length = 0
   familyFileIds.length = 0
+  workshopIds.length = 0
 })
 
 async function createBeneficiary(fileNumber: string) {
@@ -131,6 +136,56 @@ describe('SupportProgram - Count Name Usage - Count Scoping', () => {
       id: nameId
     })
     expect(count).toBe(2)
+  })
+
+  test('Returns a blended total of beneficiary enrolments and workshop tags', async ({
+    trpc
+  }) => {
+    const { id: nameId } = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UCN-Blended-${v4()}`,
+        structureId,
+        createdById: managerId
+      },
+      select: { id: true }
+    })
+    nameIds.push(nameId)
+
+    const b1 = await createBeneficiary(`UCN-BL1-${v4()}`)
+    const b2 = await createBeneficiary(`UCN-BL2-${v4()}`)
+
+    await prismaClient.supportProgram.createMany({
+      data: [
+        { id: v4(), beneficiaryId: b1.id, supportProgramNameId: nameId },
+        { id: v4(), beneficiaryId: b2.id, supportProgramNameId: nameId }
+      ]
+    })
+
+    const workshopName = await prismaClient.workshopName.create({
+      data: {
+        name: `UCN-WN-${v4()}`,
+        structureId,
+        createdById: managerId
+      },
+      select: { id: true }
+    })
+
+    const workshop = await prismaClient.workshop.create({
+      data: {
+        date: new Date(),
+        structureId,
+        createdById: managerId,
+        workshopNameId: workshopName.id,
+        supportProgramNameId: nameId
+      },
+      select: { id: true }
+    })
+    workshopIds.push(workshop.id)
+
+    const count = await trpc.structureManager.supportProgram.countNameUsage({
+      id: nameId
+    })
+    expect(count).toBe(3)
   })
 
   test('Does not count programs from another structure', async ({ trpc }) => {

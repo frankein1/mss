@@ -41,7 +41,6 @@ export async function getSupportProgramStatsQuery(
   // COUNT(DISTINCT beneficiaryId) GROUP BY supportProgramNameId).
   const programs = await SupportProgramRepo.findMany(user, {
     where: {
-      beneficiaryId: { not: null },
       beneficiary: baseFilters
     },
     select: {
@@ -66,14 +65,14 @@ export async function getSupportProgramStatsQuery(
         exit: new Set<string>()
       }
 
-      aggregate.totalWithoutPeriodFilter.add(cur.beneficiaryId!)
+      aggregate.totalWithoutPeriodFilter.add(cur.beneficiaryId)
 
       if (hasPeriodFilter && dateRange) {
         if (isWithinRange(cur.startDate, dateRange)) {
-          aggregate.entry.add(cur.beneficiaryId!)
+          aggregate.entry.add(cur.beneficiaryId)
         }
         if (isWithinRange(cur.endDate, dateRange)) {
-          aggregate.exit.add(cur.beneficiaryId!)
+          aggregate.exit.add(cur.beneficiaryId)
         }
       }
 

@@ -1857,21 +1857,18 @@ model SupportProgramName {
   createdAt   DateTime @default(now()) @map("created_at")
 
   supportPrograms SupportProgram[]
+  workshops       Workshop[]
 
   @@unique([structureId, name])
   @@map("support_program_name")
 }
 
+/// Beneficiary Support Program
 model SupportProgram {
   id String @id @default(uuid()) @db.Uuid
 
-  /// beneficiaryId is defined when not linked to a workshop, and null otherwise. Enforced by 'check_support_program_beneficiary_or_workshop'
-  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
-  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-
-  /// workshopId is defined when not linked to a beneficiary, and null otherwise. Enforced by 'check_support_program_beneficiary_or_workshop'
-  workshopId String?   @map("workshop_id") @db.Uuid
-  workshop   Workshop? @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
 
   supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id], onDelete: Cascade)
   supportProgramNameId String             @map("support_program_name_id") @db.Uuid
@@ -2386,6 +2383,8 @@ model Workshop {
   location              String?
   partnerOrganizationId String?              @map("partner_organization_id") @db.Uuid
   partnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
+  supportProgramNameId  String?              @map("support_program_name_id") @db.Uuid
+  supportProgramName    SupportProgramName?  @relation(fields: [supportProgramNameId], references: [id], onDelete: SetNull)
   host                  String?
   sessionName           String?              @map("session_name")
   description           String?
@@ -2398,8 +2397,8 @@ model Workshop {
   createdAt             DateTime             @default(now()) @map("created_at")
 
   workshopAttendees WorkshopAttendee[]
-  supportPrograms   SupportProgram[]
 
+  @@index(fields: [structureId], map: "workshop_structure_id_idx")
   @@map("workshop")
 }
 

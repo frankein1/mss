@@ -4,8 +4,8 @@ import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { SupportProgramNameRepo } from '~/server/database'
 
+// Count only support programs => linked to beneficiaries and not workshops
 const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
-  // Also includes names only linked to workshops (not beneficiaries)
   return await SupportProgramNameRepo.findMany(ctx.user, {
     select: { id: true, name: true },
     where: {
