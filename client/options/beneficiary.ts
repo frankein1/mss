@@ -44,6 +44,8 @@ export const beneficiaryActivityStatusKeys = buildKeys({
   Rqth: 'RQTH',
   CongeMaternite: 'Congé maternité',
   Disponibilite: 'En disponibilité'
+  //   Invalidite: 'Invalidité',
+  // ArretMaladie: 'Arrêt maladie'
 })
 
 export const beneficiaryStatusKeys = buildKeys({

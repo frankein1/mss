@@ -229,6 +229,9 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     return exported
   }
 
+  // FIXME: temporary scoping of BeneficiaryActivityStatus before migration of Invalidite and ArretMaladie values
+  type TmpKey = keyof (typeof beneficiaryActivityStatusKeys)['byKey']
+
   return {
     ...exported,
     referents: beneficiary.referents
@@ -267,7 +270,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       : '',
     activityStatus: occupationIncome?.activityStatus
       ? occupationIncome.activityStatus
-          .map(item => beneficiaryActivityStatusKeys.byKey[item])
+          .map(item => beneficiaryActivityStatusKeys.byKey[item as TmpKey])
           .join(', ')
       : '',
     occupation: occupationIncome?.occupation || '',
