@@ -1,6 +1,7 @@
 import {
   BeneficiaryAccommodationMode,
   BeneficiaryAccommodationZone,
+  BeneficiaryActivityStatus,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMinistereCategorie,
@@ -141,10 +142,30 @@ export type UpdateBeneficiaryHealthInput = z.infer<
   typeof updateBeneficiaryHealthSchema
 >
 
+/**
+ * The `Disability` and `SickLeave` members of BeneficiarySocioProfessionalCategory
+ * were migrated to BeneficiaryActivityStatus (Invalidite / ArretMaladie). They are
+ * kept in the Postgres enum for historical rows only: no beneficiary still stores
+ * them (the data migration nulled them out) and no code path writes or displays
+ * them. App code therefore treats this field as the active subset below, even
+ * though Prisma and zod still surface the full union.
+ */
+export type ActiveBeneficiarySocioProfessionalCategory = Exclude<
+  BeneficiarySocioProfessionalCategory,
+  'Disability' | 'SickLeave'
+>
+
 export const updateBeneficiaryOccupationSchema = z.object({
   id: z.string().uuid(),
+  // Type-only narrowing (runtime still accepts the full native enum): the input
+  // type is the active subset so callers never handle the obsolete members.
   socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
     BeneficiarySocioProfessionalCategory
+  ) as unknown as z.ZodType<
+    ActiveBeneficiarySocioProfessionalCategory | null | undefined
+  >,
+  activityStatus: z.array(
+    z.nativeEnum(BeneficiaryActivityStatus, errorMessages)
   ),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),

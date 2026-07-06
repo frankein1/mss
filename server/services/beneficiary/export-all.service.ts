@@ -2,7 +2,10 @@ import type { Prisma } from '@prisma/client'
 import { UserRole } from '@prisma/client'
 import { getPage } from './queries'
 import { prepareBeneficiaryFilters } from './helper'
-import type { ExportBeneficiariesInput } from '~/server/schema'
+import type {
+  ActiveBeneficiarySocioProfessionalCategory,
+  ExportBeneficiariesInput
+} from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
@@ -16,6 +19,7 @@ import {
   beneficiaryAccommodationZoneKeys,
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
+  beneficiaryActivityStatusKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiarySchoolClassKeys,
   beneficiaryStatusKeys,
@@ -68,6 +72,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'ministereDepartementServiceAc',
     'ministereStructure',
     'socioProfessionalCategory',
+    'activityStatus',
     'occupation',
     'studyLevel',
     'schoolClass',
@@ -260,8 +265,13 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       : '',
     socioProfessionalCategory: occupationIncome?.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryKeys.byKey[
-          occupationIncome.socioProfessionalCategory
+          occupationIncome.socioProfessionalCategory as ActiveBeneficiarySocioProfessionalCategory
         ]
+      : '',
+    activityStatus: occupationIncome?.activityStatus
+      ? occupationIncome.activityStatus
+          .map(item => beneficiaryActivityStatusKeys.byKey[item])
+          .join(', ')
       : '',
     occupation: occupationIncome?.occupation || '',
     studyLevel: occupationIncome?.studyLevel

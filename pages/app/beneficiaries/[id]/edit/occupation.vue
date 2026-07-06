@@ -26,7 +26,10 @@
 </template>
 
 <script lang="ts" setup>
-  import type { UpdateBeneficiaryOccupationInput } from '~/server/schema'
+  import type {
+    ActiveBeneficiarySocioProfessionalCategory,
+    UpdateBeneficiaryOccupationInput
+  } from '~/server/schema'
   import { updateBeneficiaryOccupationSchema } from '~/server/schema'
   import { routes } from '~/utils/routes'
 
@@ -61,9 +64,12 @@
       id,
       structureId,
       ...occupationIncome,
+      socioProfessionalCategory: (occupationIncome?.socioProfessionalCategory ??
+        null) as ActiveBeneficiarySocioProfessionalCategory | null,
       schoolUai: occupationIncome?.schoolUai ?? null,
       school: occupationIncome?.school ?? null,
-      pensionOrganisations: occupationIncome?.pensionOrganisations || []
+      pensionOrganisations: occupationIncome?.pensionOrganisations || [],
+      activityStatus: occupationIncome?.activityStatus || []
     }
   })
 
