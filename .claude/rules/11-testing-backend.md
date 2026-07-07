@@ -45,3 +45,37 @@ Embed full context: `'{Entity} - {Operation} - {Assertion sentence}'`.
 - For securityCheck failures: `.rejects.toThrowError(/not allowed to access route/i)`
 - For admin calling protectedProcedure: `.rejects.toThrowError(/user routes are not available to admins/i)`
 - For not-found / constraint violations: include the Prisma model name before "no record", e.g. `.rejects.toThrowError(/workshop[\s\S]*?no record/im)`
+
+## Test setup / teardown
+
+Always tear down in `afterEach` hook and never in the test itself.
+
+You can use ids as global values and remove specifically the ids. Prefer this approach for structures, beneficiaries, family files, or when creating only a few objects.
+
+```js
+let familyFileId: string
+
+beforeEach(async () => {
+  const familyFile = await prismaClient.familyFile.create({
+    data: {
+      structure: { connect: { id: structureId } },
+      referents: { connect: [{ id: referentId }] }
+    }
+  })
+  familyFileId = familyFile.id
+})
+
+afterEach(async () => {
+  await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
+})
+```
+
+You also can use prefix for naming and delete with matching the corresponding prefix. Prefer this approach when creating several objects.
+
+```js
+afterEach(async () => {
+  await prismaClient.partnerOrganization.deleteMany({
+    where: { name: { startsWith: 'UDT-' } }
+  })
+})
+```
