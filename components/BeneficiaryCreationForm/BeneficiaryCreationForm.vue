@@ -310,15 +310,29 @@
 
   const { resolveQpv } = useQpvResolution()
 
-  const coordinates = ref<[number, number]>()
   const qpv = ref<QpvFeatureProperties | null>(null)
   const isSelectingAddress = ref(false)
 
+  // Guards against out-of-order resolveQpv responses: if the user picks a
+  // new address before a previous lookup resolves, only the response
+  // matching the latest count is allowed to update qpv.
+  let qpvRequestCount = 0
+
   async function onSelected(address: AddressSelected) {
     isSelectingAddress.value = true
-    coordinates.value = address.coordinates
     onAddressSelected(address)
-    qpv.value = await resolveQpv(address.coordinates)
+
+    const requestCount = ++qpvRequestCount
+    try {
+      const result = await resolveQpv(address.coordinates)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    }
   }
 
   // This watcher clears a stale QPV resolution when the user edits the
