@@ -64,7 +64,7 @@ export const jobs = {
   dataInclusionStructureImport: importDataInclusionStructures,
 
   /** Batch job for document migration.
-   * Runs daily at 20:00 */
+   * Will be activiated to run daily at 20:00 */
   documentS3Migration: migrateDocumentsToS3
 } satisfies Record<string, () => Promise<unknown>>
 
