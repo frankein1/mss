@@ -15,10 +15,7 @@ import { addUserActivity } from '~/server/query'
 import type { RuntimeConfig } from 'nuxt/schema'
 import { forbidden, badrequest } from '~/utils/api/errors'
 import { randomUUID } from 'node:crypto'
-import {
-  generateFilenameForDocument,
-  generateFileRootForDocument
-} from '~/server/lib/s3/helper'
+import { generateBucketKeyForDocument } from '~/server/lib/s3/helper'
 import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
 import { fetchUserContext } from '~/server/utils/fetchUserContext'
 import type { UserContext } from '~/server/utils/fetchUserContext'
@@ -189,6 +186,7 @@ async function uploadToDb({
   file
 }: UploadDbArgs) {
   const key = randomUUID()
+  const filename = sanitizeFilename(input.file.name)
   const { type, confidential, tags, expirationDate } = input
   const document = await DocumentRepo.create(user, {
     select: {
@@ -198,7 +196,7 @@ async function uploadToDb({
     },
     data: {
       key,
-      name: sanitizeFilename(input.file.name),
+      name: filename,
       familyFile: { connect: { id: familyFileId } },
       beneficiary: { connect: { id: beneficiaryId } },
       filenameDisk: key,
@@ -208,7 +206,7 @@ async function uploadToDb({
       createdBy: { connect: { id: user.id } },
       type,
       size: input.file.size,
-      filenameDownload: sanitizeFilename(input.file.name),
+      filenameDownload: filename,
       migrated: false, // stored in db
       expirationDate: expirationDate ?? null,
       documentContent: {
@@ -238,9 +236,9 @@ async function uploadEncryptedToS3({
   user,
   file
 }: UploadEncryptedS3Args) {
-  const filename = generateFilenameForDocument(input.file.name)
-  const bucketKey = `${generateFileRootForDocument(user.structureId as string, beneficiaryId)}/${filename}`
   const documentKey = randomUUID()
+  const bucketKey = generateBucketKeyForDocument(documentKey)
+  const filename = sanitizeFilename(input.file.name)
 
   await uploadWithEncryption({
     config,
