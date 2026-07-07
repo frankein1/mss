@@ -140,7 +140,7 @@
             />
           </div>
 
-          <!-- masqué -->
+          <!-- hidden -->
           <div class="fr-col-12 fr-hidden">
             <VeeDepartmentInput
               name="department"
@@ -153,7 +153,8 @@
               :label="beneficiaryFieldLabels.region"
             />
           </div>
-          <!-- masqué -->
+          <!-- hidden -->
+
           <div
             v-if="application.module.ministere"
             class="fr-col-12 fr-col-lg-6"
