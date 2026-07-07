@@ -58,6 +58,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'city',
     'region',
     'department',
+    'district',
     'qpv',
     'accommodationZone',
     'phone1',
@@ -246,6 +247,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     nationality: general.nationality
       ? nationalityKeys.byKey[general.nationality]
       : '',
+    district: general.district || '',
     qpv: getBooleanOrEmpty(general.qpv) || '',
     weddingDate: taxHouseholds?.weddingDate || '',
     divorceDate: taxHouseholds?.divorceDate || '',

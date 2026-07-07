@@ -49,6 +49,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   street: 'Adresse',
   addressComplement: "Complément d'adresse",
   qpv: 'Quartier prioritaire de la Politique de la Ville',
+  district: 'Nom du quartier',
   noPhone: "N'a pas de téléphone",
   phone1: 'Numéro de téléphone',
   phone2: 'Numéro de téléphone 2',

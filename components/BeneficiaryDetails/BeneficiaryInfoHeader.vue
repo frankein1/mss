@@ -58,6 +58,10 @@
           :value="formatAddress(beneficiary.general)"
         />
         <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.district"
+          :value="beneficiary.general.district"
+        />
+        <BeneficiaryInfoLabel
           v-if="beneficiary.general.qpv != null"
           :label="beneficiaryFieldLabels.qpv"
           :value="beneficiary.general.qpv ? 'Oui' : 'Non'"

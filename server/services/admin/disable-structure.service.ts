@@ -203,6 +203,7 @@ export const disableStructure = async ({
     department: null,
     region: null,
     qpv: null,
+    district: null,
     noPhone: false,
     phone1: null,
     phone2: null,

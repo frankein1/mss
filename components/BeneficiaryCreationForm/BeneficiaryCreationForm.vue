@@ -92,14 +92,12 @@
             />
           </div>
           <div
-            v-if="qpv && qpvAlertVisible"
+            v-if="qpv"
             class="fr-col-12"
           >
             <AtomAlert
               :alert-type="AlertType.Info"
               message="Quartier Prioritaire de la Ville"
-              closeable
-              @close="qpvAlertVisible = false"
             >
               <template #detailedMessage>
                 <p>
@@ -111,13 +109,6 @@
                 </p>
               </template>
             </AtomAlert>
-          </div>
-
-          <div class="fr-col-12">
-            <VeeCheckbox
-              name="qpv"
-              :label="beneficiaryFieldLabels.qpv"
-            />
           </div>
 
           <div class="fr-col-12 fr-col-md-3">
@@ -133,6 +124,19 @@
               :label="beneficiaryFieldLabels.city"
               :zip-code="zipcode"
               @city-selected="onCitySelected"
+            />
+          </div>
+
+          <div class="fr-col-12">
+            <VeeInput
+              name="district"
+              :label="beneficiaryFieldLabels.district"
+            />
+          </div>
+          <div class="fr-col-12">
+            <VeeCheckbox
+              name="qpv"
+              :label="beneficiaryFieldLabels.qpv"
             />
           </div>
 
@@ -308,7 +312,6 @@
 
   const coordinates = ref<[number, number]>()
   const qpv = ref<QpvFeatureProperties | null>(null)
-  const qpvAlertVisible = ref(false)
   const isSelectingAddress = ref(false)
 
   async function onSelected(address: AddressSelected) {
@@ -316,7 +319,6 @@
     coordinates.value = address.coordinates
     onAddressSelected(address)
     qpv.value = await resolveQpv(address.coordinates)
-    qpvAlertVisible.value = qpv.value !== null
   }
 
   // This watcher clears a stale QPV resolution when the user edits the
@@ -329,7 +331,6 @@
         return
       }
       qpv.value = null
-      qpvAlertVisible.value = false
     }
   )
 </script>

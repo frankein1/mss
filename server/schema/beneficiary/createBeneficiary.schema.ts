@@ -10,6 +10,7 @@ export const createBeneficiarySchema =
     usualName: true,
     birthName: true,
     firstName: true,
+    birthDate: true,
     phone1: true,
     email: true,
     numeroPegase: true,
@@ -19,7 +20,7 @@ export const createBeneficiarySchema =
     department: true,
     region: true,
     qpv: true,
-    birthDate: true
+    district: true
   })
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
