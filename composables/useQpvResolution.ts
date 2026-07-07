@@ -13,7 +13,12 @@ let qpvFeaturesPromise: Promise<QpvFeature[]> | undefined
 function loadQpvFeatures(): Promise<QpvFeature[]> {
   qpvFeaturesPromise ??= $fetch<
     FeatureCollection<Polygon | MultiPolygon, QpvFeatureProperties>
-  >('/data/qpv-2024.geojson').then(geojson => geojson.features)
+  >('/data/qpv-2024.geojson')
+    .then(geojson => geojson.features)
+    .catch((error: unknown) => {
+      qpvFeaturesPromise = undefined
+      throw error
+    })
   return qpvFeaturesPromise
 }
 

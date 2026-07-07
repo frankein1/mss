@@ -91,6 +91,35 @@
               @address-selected="onSelected"
             />
           </div>
+          <div
+            v-if="qpv && qpvAlertVisible"
+            class="fr-col-12"
+          >
+            <AtomAlert
+              :alert-type="AlertType.Info"
+              message="Quartier Prioritaire de la Ville"
+              closeable
+              @close="qpvAlertVisible = false"
+            >
+              <template #detailedMessage>
+                <p>
+                  Un QPV a été détecté à cette adresse :
+                  <span class="fr-text--bold"
+                    >&laquo;&nbsp;{{ qpv.nom }}&nbsp;&raquo;</span
+                  >. Si nécessaire, vous pouvez reporter ces informations dans
+                  les champs ci-dessous.
+                </p>
+              </template>
+            </AtomAlert>
+          </div>
+
+          <div class="fr-col-12">
+            <VeeCheckbox
+              name="qpv"
+              :label="beneficiaryFieldLabels.qpv"
+            />
+          </div>
+
           <div class="fr-col-12 fr-col-md-3">
             <VeeInput
               name="zipcode"
@@ -107,27 +136,7 @@
             />
           </div>
 
-          <div
-            v-if="qpv && qpvAlertVisible"
-            class="fr-col-12"
-          >
-            <AtomAlert
-              :alert-type="AlertType.Info"
-              message="Quartier Prioritaire de la Ville"
-              closeable
-              @close="qpvAlertVisible = false"
-            >
-              <template #detailedMessage>
-                <p>
-                  Un QPV a été détecté à cette adresse : {{ qpv.nom }} ({{
-                    qpv.id
-                  }})
-                </p>
-              </template>
-            </AtomAlert>
-          </div>
           <!-- masqué -->
-
           <div class="fr-col-12 fr-hidden">
             <VeeDepartmentInput
               name="department"
@@ -206,7 +215,10 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { beneficiaryGenderKeys, beneficiaryTitleKeys } from '~/client/options'
-  import type { QpvFeatureProperties } from '~/composables/useQpvResolution'
+  import {
+    useQpvResolution,
+    type QpvFeatureProperties
+  } from '~/composables/useQpvResolution'
   import { AlertType } from '~/utils/constants/alert'
 
   defineProps<{
@@ -297,13 +309,29 @@
   const coordinates = ref<[number, number]>()
   const qpv = ref<QpvFeatureProperties | null>(null)
   const qpvAlertVisible = ref(false)
+  const isSelectingAddress = ref(false)
 
   async function onSelected(address: AddressSelected) {
+    isSelectingAddress.value = true
     coordinates.value = address.coordinates
     onAddressSelected(address)
     qpv.value = await resolveQpv(address.coordinates)
     qpvAlertVisible.value = qpv.value !== null
   }
+
+  // This watcher clears a stale QPV resolution when the user edits the
+  // address by hand instead of picking a suggestion from the autocomplete.
+  watch(
+    () => controlledValues.value.street,
+    () => {
+      if (isSelectingAddress.value) {
+        isSelectingAddress.value = false
+        return
+      }
+      qpv.value = null
+      qpvAlertVisible.value = false
+    }
+  )
 </script>
 
 <style scoped>

@@ -18,6 +18,7 @@ export const createBeneficiarySchema =
     city: true,
     department: true,
     region: true,
+    qpv: true,
     birthDate: true
   })
 
