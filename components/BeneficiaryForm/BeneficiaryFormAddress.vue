@@ -119,6 +119,12 @@
       />
     </div>
     <div class="fr-col-12">
+      <VeeInput
+        name="district"
+        :label="beneficiaryFieldLabels.district"
+      />
+    </div>
+    <div class="fr-col-12">
       <VeeCheckbox
         name="qpv"
         :label="beneficiaryFieldLabels.qpv"

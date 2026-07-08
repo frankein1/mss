@@ -849,6 +849,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       department: true,
       region: true,
       qpv: true,
+      district: true,
       noPhone: true,
       phone1: true,
       phone2: true,

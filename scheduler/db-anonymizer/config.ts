@@ -113,6 +113,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   department: true,
   region: true,
   qpv: true,
+  district: true,
   status: true,
   insurance: true,
   occupation: true,

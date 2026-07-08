@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
   import type {
-    BanAddress,
+    BanFeature,
     BanQueryParams,
     BanResponse,
     AddressSelected
@@ -35,7 +35,7 @@
     addressSelected: [address: AddressSelected]
   }>()
 
-  const addresses = ref<BanAddress[]>([])
+  const addresses = ref<BanFeature[]>([])
   const selectedValue = ref<string | undefined>(undefined)
 
   async function searchAddressesFn(search: string): Promise<Options> {
@@ -55,19 +55,22 @@
     const geocodageApiUrl = 'https://data.geopf.fr/geocodage/search/'
     const res = await $fetch<BanResponse>(geocodageApiUrl, { params })
 
-    addresses.value = res.features.map(({ properties }) => properties)
-    return addresses.value.map(({ id, name, postcode, city }) => ({
-      value: id,
-      label: `${name}, ${postcode} ${city}`
-    }))
+    addresses.value = res.features
+    return addresses.value.map(
+      ({ properties: { id, name, postcode, city } }) => ({
+        value: id,
+        label: `${name}, ${postcode} ${city}`
+      })
+    )
   }
 
   function onSelectAddress(addressId: string) {
-    const address = addresses.value.find(a => a.id === addressId)
-    if (!address) {
+    const feature = addresses.value.find(a => a.properties.id === addressId)
+    if (!feature) {
       selectedValue.value = undefined
       return
     }
+    const address = feature.properties
     selectedValue.value = address.name
     const addressParts = address.context.split(',')
     const region = addressParts[2]?.trim() || ''
@@ -76,7 +79,8 @@
       zipCode: address.postcode,
       city: address.city,
       region,
-      departement
+      departement,
+      coordinates: feature.geometry.coordinates
     })
   }
 </script>

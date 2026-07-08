@@ -87,6 +87,7 @@ export const updateBeneficiaryGeneralInformationSchema = z.object({
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   qpv: z.boolean().default(false),
+  district: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   noPhone: z.boolean().default(false),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),

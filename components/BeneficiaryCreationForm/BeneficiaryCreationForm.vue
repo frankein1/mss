@@ -88,9 +88,29 @@
               :label="beneficiaryFieldLabels.street"
               :zip-code="zipcode"
               hint="Numéro et voie"
-              @address-selected="onAddressSelected"
+              @address-selected="onSelected"
             />
           </div>
+          <div
+            v-if="qpv"
+            class="fr-col-12"
+          >
+            <AtomAlert
+              :alert-type="AlertType.Info"
+              message="Quartier Prioritaire de la Ville"
+            >
+              <template #detailedMessage>
+                <p>
+                  Un QPV a été détecté à cette adresse :
+                  <span class="fr-text--bold"
+                    >&laquo;&nbsp;{{ qpv.nom }}&nbsp;&raquo;</span
+                  >. Si nécessaire, vous pouvez reporter ces informations dans
+                  les champs ci-dessous.
+                </p>
+              </template>
+            </AtomAlert>
+          </div>
+
           <div class="fr-col-12 fr-col-md-3">
             <VeeInput
               name="zipcode"
@@ -106,8 +126,21 @@
               @city-selected="onCitySelected"
             />
           </div>
-          <!-- masqué -->
 
+          <div class="fr-col-12">
+            <VeeInput
+              name="district"
+              :label="beneficiaryFieldLabels.district"
+            />
+          </div>
+          <div class="fr-col-12">
+            <VeeCheckbox
+              name="qpv"
+              :label="beneficiaryFieldLabels.qpv"
+            />
+          </div>
+
+          <!-- hidden -->
           <div class="fr-col-12 fr-hidden">
             <VeeDepartmentInput
               name="department"
@@ -120,7 +153,8 @@
               :label="beneficiaryFieldLabels.region"
             />
           </div>
-          <!-- masqué -->
+          <!-- hidden -->
+
           <div
             v-if="application.module.ministere"
             class="fr-col-12 fr-col-lg-6"
@@ -180,11 +214,17 @@
   import { BeneficiaryStatus, BeneficiaryTitle, Gender } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import type { BeneficiaryReferent } from '~/types/beneficiary'
+  import type { AddressSelected } from '~/components/VeeForm/types'
   import type { CreateBeneficiaryInput } from '~/server/schema'
   import { createBeneficiarySchema } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { SimilarBeneficiary } from '~/server/trpc/routers'
   import { beneficiaryGenderKeys, beneficiaryTitleKeys } from '~/client/options'
+  import {
+    useQpvResolution,
+    type QpvFeatureProperties
+  } from '~/composables/useQpvResolution'
+  import { AlertType } from '~/utils/constants/alert'
 
   defineProps<{
     isSubmitting: boolean
@@ -268,6 +308,46 @@
     setRegionValue: (value: string) => setFieldValue('region', value),
     setDepartmentValue: (value: string) => setFieldValue('department', value)
   })
+
+  const { resolveQpv } = useQpvResolution()
+
+  const qpv = ref<QpvFeatureProperties | null>(null)
+  const isSelectingAddress = ref(false)
+
+  // Guards against out-of-order resolveQpv responses: if the user picks a
+  // new address before a previous lookup resolves, only the response
+  // matching the latest count is allowed to update qpv.
+  let qpvRequestCount = 0
+
+  async function onSelected(address: AddressSelected) {
+    isSelectingAddress.value = true
+    onAddressSelected(address)
+
+    const requestCount = ++qpvRequestCount
+    try {
+      const result = await resolveQpv(address.coordinates)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    }
+  }
+
+  // This watcher clears a stale QPV resolution when the user edits the
+  // address by hand instead of picking a suggestion from the autocomplete.
+  watch(
+    () => controlledValues.value.street,
+    () => {
+      if (isSelectingAddress.value) {
+        isSelectingAddress.value = false
+        return
+      }
+      qpv.value = null
+    }
+  )
 </script>
 
 <style scoped>
