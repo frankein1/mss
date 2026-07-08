@@ -10,6 +10,11 @@
   />
 
   <template v-else-if="supportProgramStatsList.length">
+    <p class="fr-text--xs text--muted">
+      Nombre de dispositifs liés aux bénéficiaires. Un bénéficiaire pouvant
+      avoir plusieurs dispositifs, le total peut être suppérieur au nombe de
+      bénéficiaires filtrés.
+    </p>
     <p
       v-if="hasPeriodFilter"
       class="fr-text--xs text--muted"
@@ -19,7 +24,7 @@
     <StatsList
       :stats="supportProgramStatsList"
       :stats-percentage="false"
-      :display-total="false"
+      :display-total="true"
     />
   </template>
   <p v-else>
@@ -59,7 +64,12 @@
     }> = []
 
     for (const { name, count, entryCount, exitCount } of data.value || []) {
-      list.push({ key: name, label: name, count, emphasis: true })
+      list.push({
+        key: name,
+        label: name,
+        count,
+        emphasis: !!hasPeriodFilter.value
+      })
 
       if (hasPeriodFilter.value) {
         list.push(

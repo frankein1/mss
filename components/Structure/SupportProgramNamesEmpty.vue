@@ -5,7 +5,7 @@
       class="fr-responsive-img"
       alt=""
     />
-    <div class="text">Vous n'avez aucun dispositif configuré.</div>
+    <p class="text">Vous n'avez aucun dispositif configuré.</p>
   </div>
 </template>
 

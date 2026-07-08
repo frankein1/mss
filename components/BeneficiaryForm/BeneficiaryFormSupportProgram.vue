@@ -1,20 +1,13 @@
 <template>
-  <div class="fr-col-12 support-program-header">
+  <div class="fr-col-12">
     <h3 class="fr-h4 title-blue">
       {{ `Dispositif ${index + 1}` }}
     </h3>
-    <button
-      class="fr-btn fr-btn--secondary fr-btn--icon-only fr-icon-delete-line btn-delete-action fr-mb-0"
-      data-fr-opened="false"
-      aria-controls="global-modal"
-      type="button"
-      aria-label="Supprimer ce dispositif"
-      @click="$emit('removeSupportProgram')"
-    />
   </div>
 
   <div class="fr-col-12">
     <VeeSelect
+      class="fr-mb-2v"
       :name="`supportPrograms[${index}].supportProgramNameId`"
       :label="supportProgramFieldLabels.name"
       required
@@ -24,7 +17,7 @@
     />
     <NuxtLink
       :to="routes.structure.AppStructure.path()"
-      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm fr-mt-1w"
+      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
     >
       Je personnalise les dispositifs de ma structure
     </NuxtLink>
@@ -65,6 +58,7 @@
 
   <div class="fr-col-12">
     <VeeCombobox
+      class="fr-mb-2v"
       :name="`supportPrograms[${index}].partnerOrganisationId`"
       :label="supportProgramFieldLabels.partnerOrganisationId"
       placeholder="Sélectionner l'organisme"
@@ -72,7 +66,7 @@
     />
     <NuxtLink
       :to="routes.structure.AppPartners.path()"
-      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm fr-mt-1w"
+      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
     >
       Données issues de l'annuaire de partenaires
     </NuxtLink>
@@ -87,6 +81,16 @@
   </div>
 
   <div class="fr-col-12">
+    <button
+      class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-delete-line btn-delete-action"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      type="button"
+      aria-label="Supprimer ce dispositif"
+      @click="$emit('removeSupportProgram')"
+    >
+      Supprimer ce dispositif
+    </button>
     <hr class="fr-mt-3w" />
   </div>
 </template>
@@ -132,11 +136,3 @@
     dismissed.value = true
   }
 </script>
-
-<style scoped>
-  .support-program-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-</style>

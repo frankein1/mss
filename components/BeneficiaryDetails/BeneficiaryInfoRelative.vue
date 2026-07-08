@@ -4,7 +4,10 @@
       <h5 class="fr-text--md fr-mb-0">{{ name }}</h5>
     </div>
   </div>
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div
+    v-if="relative.relationship || relative.birthDate || relative.city"
+    class="fr-grid-row fr-grid-row--gutters"
+  >
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.relationship"
       :value="relativeRelationshipKeys.value(relative.relationship)"
@@ -21,7 +24,10 @@
       class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div
+    v-if="relative.email || relative.phone"
+    class="fr-grid-row fr-grid-row--gutters"
+  >
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.email"
       :value="relative.email"
@@ -33,10 +39,13 @@
       class="fr-col-12 fr-col-lg-6"
     />
   </div>
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div
+    v-if="relative.caregiver || relative.hosted"
+    class="fr-grid-row fr-grid-row--gutters"
+  >
     <p
       v-if="relative.caregiver"
-      class="fr-pb-2w fr-col-lg-6 fr-col-12"
+      class="fr-mb-1v fr-col-lg-6 fr-col-12"
     >
       <span
         class="fr-icon-success-line"
@@ -46,7 +55,7 @@
     </p>
     <p
       v-if="relative.hosted"
-      class="fr-pb-2w fr-col-lg-6 fr-col-12"
+      class="fr-mb-1v fr-col-lg-6 fr-col-12"
     >
       <span
         class="fr-icon-success-line"
@@ -55,7 +64,10 @@
       {{ relativeFieldLabels.hosted }}
     </p>
   </div>
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div
+    v-if="relative.additionalInformation"
+    class="fr-grid-row fr-grid-row--gutters"
+  >
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.additionalInformation"
       :value="relative.additionalInformation"

@@ -46,6 +46,8 @@
 
     <template v-if="externalOrganisations.supportPrograms.length">
       <div class="fr-col-12">
+        <hr />
+
         <h5 class="fr-text--md fr-mb-0">
           Prestations / Dispositifs d'accompagnement
         </h5>
@@ -58,26 +60,23 @@
           ) in externalOrganisations.supportPrograms"
           :key="supportProgram.id"
         >
-          <hr v-if="index > 0" />
-          <h6 class="fr-mb-2w fr-text--md">
-            {{ supportProgram.supportProgramName.name }}
+          <h6 class="fr-mb-1w fr-text--md">
+            {{ index + 1 }}. {{ supportProgram.supportProgramName.name }}
           </h6>
-          <div class="fr-mb-2w">
-            <p>
-              <span
-                class="fr-badge fr-badge--sm"
-                :class="supportProgramStatusBadgeClass(supportProgram)"
-              >
-                {{ supportProgramStatus(supportProgram) }}
-              </span>
-              <span
-                v-if="supportProgram.startDate || supportProgram.endDate"
-                class="fr-ml-1w"
-              >
-                {{ formatSupportProgramDateRange(supportProgram) }}
-              </span>
-            </p>
-          </div>
+          <p class="fr-mb-1w">
+            <span
+              class="fr-badge fr-badge--sm"
+              :class="supportProgramStatusBadgeClass(supportProgram)"
+            >
+              {{ supportProgramStatus(supportProgram) }}
+            </span>
+            <span
+              v-if="supportProgram.startDate || supportProgram.endDate"
+              class="fr-ml-1w"
+            >
+              {{ formatSupportProgramDateRange(supportProgram) }}
+            </span>
+          </p>
           <BeneficiaryInfoLabel
             :label="supportProgramFieldLabels.partnerOrganisationId"
             :value="supportProgram.partnerOrganisation?.name"

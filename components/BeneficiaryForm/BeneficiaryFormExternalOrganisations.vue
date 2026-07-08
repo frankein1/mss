@@ -37,19 +37,20 @@
           :label="beneficiaryFieldLabels.orientationStructure"
         />
       </div>
-      <AtomAlertMSS
-        class="fr-col-12 fr-mb-2w"
-        :alert-type="AlertType.Info"
-      >
-        <template #detailedMessage>
-          <p>
-            Vous pouvez maintenant préciser les partenaires et prestataires
-            intervenant dans la partie dispositifs. Rapprochez-vous de votre
-            responsable de structure pour définir les noms de dispositifs.
-          </p>
-          <p><strong>Ces dispositifs alimenteront vos statistiques.</strong></p>
-        </template>
-      </AtomAlertMSS>
+      <div class="fr-col-12">
+        <AtomAlertMSS :alert-type="AlertType.Info">
+          <template #detailedMessage>
+            <p>
+              Vous pouvez maintenant préciser les partenaires et prestataires
+              intervenant dans la partie dispositifs. Rapprochez-vous de votre
+              responsable de structure pour définir les noms de dispositifs.
+            </p>
+            <p>
+              <strong>Ces dispositifs alimenteront vos statistiques.</strong>
+            </p>
+          </template>
+        </AtomAlertMSS>
+      </div>
       <div class="fr-col-12">
         <VeeInput
           disabled

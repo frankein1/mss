@@ -20,7 +20,7 @@
 
     <div class="fr-col-12">
       <button
-        class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-circle-line"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
         type="button"
         @click="addSupportProgram"
       >

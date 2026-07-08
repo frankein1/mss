@@ -1,47 +1,35 @@
 <template>
   <li class="spn-item">
-    <div>{{ label }}</div>
-
-    <div
+    <p class="fr-mb-0">{{ label }}</p>
+    <ul
       v-if="application.edit.structure"
-      class="spn-item__actions"
+      class="fr-btns-group fr-btns-group--inline"
     >
-      <button
-        :id="`button-edit-spn-${id}`"
-        class="icon fr-icon-pencil-line"
-        data-fr-opened="false"
-        aria-controls="global-modal"
-        :aria-describedby="`tooltip-edit-spn-${id}`"
-        aria-label="Modifier"
-        @click="$emit('edit')"
-      >
-        <span
-          :id="`tooltip-edit-spn-${id}`"
-          class="fr-tooltip fr-placement"
-          aria-hidden="true"
+      <li>
+        <button
+          :id="`button-edit-spn-${id}`"
+          type="button"
+          class="fr-btn fr-icon-edit-line fr-btn--tertiary-no-outline fr-m-0"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          @click="$emit('edit')"
         >
           Modifier
-        </span>
-      </button>
-
-      <button
-        :id="`button-remove-spn-${id}`"
-        class="icon fr-icon-close-circle-line"
-        data-fr-opened="false"
-        aria-controls="global-modal"
-        :aria-describedby="`tooltip-remove-spn-${id}`"
-        aria-label="Supprimer"
-        @click="$emit('remove')"
-      >
-        <span
-          :id="`tooltip-remove-spn-${id}`"
-          class="fr-tooltip fr-placement"
-          aria-hidden="true"
+        </button>
+      </li>
+      <li>
+        <button
+          :id="`button-remove-spn-${id}`"
+          type="button"
+          class="fr-btn fr-icon-delete-bin-6-line fr-btn--tertiary-no-outline btn-delete-action fr-m-0"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          @click="$emit('remove')"
         >
           Supprimer
-        </span>
-      </button>
-    </div>
+        </button>
+      </li>
+    </ul>
   </li>
 </template>
 
@@ -67,15 +55,5 @@
     max-height: 66px;
     padding: 20px 0;
     border-bottom: solid 1px var(--border-default-grey);
-  }
-
-  .spn-item__actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .icon {
-    color: var(--primary);
-    cursor: pointer;
   }
 </style>
