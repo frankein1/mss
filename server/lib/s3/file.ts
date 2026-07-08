@@ -40,7 +40,7 @@ export async function deleteFiles(
 
   for (let i = 0; i < keys.length; i += S3_DELETE_BATCH_SIZE) {
     const batchKeys = keys.slice(i, i + S3_DELETE_BATCH_SIZE)
-    await client.send(
+    const response = await client.send(
       new DeleteObjectsCommand({
         Bucket: config.s3.bucket,
         Delete: {
@@ -48,6 +48,15 @@ export async function deleteFiles(
         }
       })
     )
+
+    if (response.Errors?.length) {
+      console.error(`file: S3 deleteFiles ${response.Errors?.length} errors`)
+      for (const error of response.Errors.slice(0, 50)) {
+        console.error(
+          `file: S3 deleteFiles partial failure: key=${error.Key} code=${error.Code} message=${error.Message}`
+        )
+      }
+    }
   }
 }
 
