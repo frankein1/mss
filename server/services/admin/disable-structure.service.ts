@@ -17,7 +17,7 @@ import {
   UserRepo
 } from '~/server/database'
 import { customAlphabet } from 'nanoid'
-import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
+import { deleteFiles } from '~/server/lib/s3/file'
 import { createEmail } from '~/server/query/email'
 import { createEmailSubject } from '~/server/email/createEmailSubject'
 import { canBeDisabled } from '~/utils/structure'
@@ -57,6 +57,23 @@ export const disableStructure = async ({
     throw forbiddenError(
       `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}`
     )
+  }
+
+  let structureDocumentKeys: string[] | undefined
+  if (config.document.useS3Storage) {
+    // All documents from the structure included confidential documents will be deleted
+    // Allow use of prismaClient because it is an admin function with no reading but just deleting
+    structureDocumentKeys = (
+      await prismaClient.document.findMany({
+        where: {
+          migrated: true,
+          beneficiary: {
+            structureId: id
+          }
+        },
+        select: { filenameDisk: true }
+      })
+    ).map(s => s.filenameDisk)
   }
 
   const deleteNotifications = () =>
@@ -283,8 +300,9 @@ export const disableStructure = async ({
     updateStructure()
   ])
 
-  if (config.document.useS3Storage) {
-    deleteAllFilesWithPrefix(config, `${id}/`).catch(e =>
+  // If fails, will result in orphan documents to be cleaned by a scheduled job
+  if (structureDocumentKeys?.length) {
+    deleteFiles(config, structureDocumentKeys).catch(e =>
       console.error(
         `disable-structure: failure to delete from S3 for structure ${id}`,
         e

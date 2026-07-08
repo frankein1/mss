@@ -2,6 +2,7 @@ import type { Prisma, SocialSupportSubject } from '@prisma/client'
 import { UserActivityType } from '@prisma/client'
 import {
   BeneficiaryRepo,
+  DocumentRepo,
   FamilyFileRepo,
   FileInstructionRepo,
   FollowupRepo
@@ -14,7 +15,7 @@ import type { SecurityRuleContext } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { BeneficiaryService } from '~/server/services'
-import { deleteAllFilesWithPrefix } from '~/server/lib/s3/file'
+import { deleteFiles } from '~/server/lib/s3/file'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -117,16 +118,29 @@ const handler = async ({
     transactions.push(deleteFamilyFile)
   }
 
+  const config = useRuntimeConfig()
+  let beneficiaryDocumentKeys: string[] | undefined
+  if (config.document.useS3Storage) {
+    // Safe: only managers/socialWorkers pass securityCheck, their constraints don't filter documents
+    // So all documents included confidential documents will be deleted
+    beneficiaryDocumentKeys = (
+      await DocumentRepo.findMany(ctx.user, {
+        where: {
+          migrated: true,
+          beneficiaryId: beneficiary.id
+        },
+        select: { filenameDisk: true }
+      })
+    ).map(b => b.filenameDisk)
+  }
+
   await prismaClient.$transaction(
     transactions.map(transactions => transactions())
   )
 
-  const config = useRuntimeConfig()
-  if (config.document.useS3Storage) {
-    deleteAllFilesWithPrefix(
-      config,
-      `${beneficiary.structure.id}/${input.beneficiaryId}/`
-    ).catch(err =>
+  // If fails, will result in orphan documents to be cleaned by a scheduled job
+  if (beneficiaryDocumentKeys?.length) {
+    deleteFiles(config, beneficiaryDocumentKeys).catch(err =>
       console.error(
         `archive: failure to delete from S3 for beneficiary ${input.beneficiaryId} and structure id ${beneficiary.structure.id}`,
         err

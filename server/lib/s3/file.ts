@@ -1,8 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
-  DeleteObjectsCommand,
-  ListObjectsV2Command
+  DeleteObjectsCommand
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { getS3Client } from './config'
@@ -10,6 +9,8 @@ import { encrypt } from '~/server/lib/encryption/encrypt'
 import type { DataForEncryptionContext } from '~/server/lib/encryption/helper'
 import { decrypt } from '~/server/lib/encryption/decrypt'
 import type { AppConfig } from '~/types/appConfig'
+
+const S3_DELETE_BATCH_SIZE = 1000
 
 export async function deleteFile(
   config: Pick<AppConfig, 'document' | 's3' | 'public'>,
@@ -27,40 +28,36 @@ export async function deleteFile(
   return key
 }
 
-/** Delete all S3 objects under a given prefix (simulates folder deletion).
- *  Handles pagination for prefixes with >1000 objects.
- */
-export async function deleteAllFilesWithPrefix(
+export async function deleteFiles(
   config: Pick<AppConfig, 'document' | 's3' | 'public'>,
-  prefix: string
+  keys: string[]
 ) {
-  const client = getS3Client(config)
-  let continuationToken: string | undefined
+  if (!keys.length) {
+    return
+  }
 
-  do {
-    const listed = await client.send(
-      new ListObjectsV2Command({
+  const client = getS3Client(config)
+
+  for (let i = 0; i < keys.length; i += S3_DELETE_BATCH_SIZE) {
+    const batchKeys = keys.slice(i, i + S3_DELETE_BATCH_SIZE)
+    const response = await client.send(
+      new DeleteObjectsCommand({
         Bucket: config.s3.bucket,
-        Prefix: prefix,
-        ContinuationToken: continuationToken
+        Delete: {
+          Objects: batchKeys.map(key => ({ Key: key }))
+        }
       })
     )
 
-    if (listed.Contents?.length) {
-      await client.send(
-        new DeleteObjectsCommand({
-          Bucket: config.s3.bucket,
-          Delete: {
-            Objects: listed.Contents.map(obj => ({ Key: obj.Key }))
-          }
-        })
-      )
+    if (response.Errors?.length) {
+      console.error(`file: S3 deleteFiles ${response.Errors?.length} errors`)
+      for (const error of response.Errors.slice(0, 50)) {
+        console.error(
+          `file: S3 deleteFiles partial failure: key=${error.Key} code=${error.Code} message=${error.Message}`
+        )
+      }
     }
-
-    continuationToken = listed.IsTruncated
-      ? listed.NextContinuationToken
-      : undefined
-  } while (continuationToken)
+  }
 }
 
 interface S3Metadata {
