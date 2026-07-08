@@ -1739,6 +1739,7 @@ model Beneficiary {
   department                         String?
   region                             String?
   qpv                                Boolean?                      @default(false)
+  district                           String?
   noPhone                            Boolean                       @default(false) @map("no_phone")
   phone1                             String?
   phone2                             String?
