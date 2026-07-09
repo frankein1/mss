@@ -221,10 +221,10 @@
 
   async function onSelected(address: AddressSelected) {
     isSelectingAddress.value = true
-    onAddressSelected(address)
 
     const requestCount = ++qpvRequestCount
     try {
+      onAddressSelected(address)
       const result = await resolveQpv(address.coordinates)
       if (requestCount === qpvRequestCount) {
         qpv.value = result
@@ -233,16 +233,21 @@
       if (requestCount === qpvRequestCount) {
         qpv.value = null
       }
+    } finally {
+      isSelectingAddress.value = false
     }
   }
 
   // This watcher clears a stale QPV resolution when the user edits the
   // address by hand instead of picking a suggestion from the autocomplete.
+  // isSelectingAddress stays true for the whole onSelected flow above,
+  // because selecting a suggestion triggers several writes to the street
+  // field (VeeAutocomplete syncs its value both directly and via a prop
+  // watcher), and only the last one settles.
   watch(
     () => values.street,
     () => {
       if (isSelectingAddress.value) {
-        isSelectingAddress.value = false
         return
       }
       // Bump the counter so any in-flight resolveInitialQpv/onSelected
