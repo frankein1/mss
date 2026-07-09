@@ -75,7 +75,8 @@ async function getDocumentMetadata(key: string, user: UserContext) {
       name: true,
       size: true,
       migrated: true,
-      filenameDisk: true
+      filenameDisk: true,
+      encryptedDataKey: true
     }
   })
 }
@@ -126,13 +127,16 @@ async function downloadAndDecryptFromS3(
     throw internal('download: missing document metadata')
   }
 
+  if (!document.encryptedDataKey) {
+    throw internal('download: missing data key')
+  }
+
   const res = await downloadWithEncryption({
     config,
     bucketKey: document.filenameDisk,
+    encryptedDataKey: document.encryptedDataKey,
     dataForEncryptionContext: {
-      documentKey: key,
-      contentType: document.mimeType,
-      contentLength: document.size
+      documentKey: key
     }
   })
 

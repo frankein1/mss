@@ -64,8 +64,6 @@ interface S3Metadata {
   'encrypted': string
   'encryption-version': string
   'encryption-algorithm': string
-  'kms-key-id': string
-  'encrypted-data-key': string
   'iv': string
 }
 interface UploadWithEncryptionInput {
@@ -82,8 +80,11 @@ export async function uploadWithEncryption({
 }: UploadWithEncryptionInput) {
   const client = getS3Client(config)
 
-  const { encryptedContent, encryptedDataKey, ivBase64, kmsKeyId } =
-    await encrypt(config, plainData, dataForEncryptionContext)
+  const { encryptedContent, encryptedDataKey, ivBase64 } = await encrypt(
+    config,
+    plainData,
+    dataForEncryptionContext
+  )
 
   // Encrypted DEK and iv are stored in S3 metadata
   // The other metadata variables are used to regenerate the Associated Authenticated Data
@@ -91,8 +92,6 @@ export async function uploadWithEncryption({
     'encrypted': 'true',
     'encryption-version': config.document.encryptionVersion,
     'encryption-algorithm': config.document.encryptionAlgorithm,
-    'kms-key-id': kmsKeyId,
-    'encrypted-data-key': encryptedDataKey,
     'iv': ivBase64
   } satisfies S3Metadata
 
@@ -109,17 +108,20 @@ export async function uploadWithEncryption({
 
   const res = await upload.done()
 
-  return { key: res.Key, metadata: s3Metadata }
+  return { key: res.Key, encryptedDataKey, metadata: s3Metadata }
 }
 
 interface DownloadWithEncryptionInput {
   config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
+  // The encrypted DEK is now stored in the database, not in S3 object metadata
+  encryptedDataKey: string
   dataForEncryptionContext: DataForEncryptionContext
 }
 export async function downloadWithEncryption({
   config,
   bucketKey,
+  encryptedDataKey,
   dataForEncryptionContext
 }: DownloadWithEncryptionInput) {
   const client = getS3Client(config)
@@ -139,11 +141,6 @@ export async function downloadWithEncryption({
     return { success: false, reason: 'missing file metadata' } as const
   }
 
-  const encryptedDataKey = download.Metadata['encrypted-data-key']
-  if (!encryptedDataKey) {
-    return { success: false, reason: 'missing DEK' } as const
-  }
-
   const iv = download.Metadata['iv']
   if (!iv) {
     return { success: false, reason: 'missing iv' } as const
@@ -151,8 +148,7 @@ export async function downloadWithEncryption({
 
   if (
     !download.Metadata['encryption-version'] ||
-    !download.Metadata['encryption-algorithm'] ||
-    !download.Metadata['kms-key-id']
+    !download.Metadata['encryption-algorithm']
   ) {
     return { success: false, reason: 'missing metadata content' } as const
   }
@@ -166,8 +162,7 @@ export async function downloadWithEncryption({
     iv,
     {
       encryptionVersion: download.Metadata['encryption-version'],
-      encryptionAlgorithm: download.Metadata['encryption-algorithm'],
-      kmsKeyId: download.Metadata['kms-key-id']
+      encryptionAlgorithm: download.Metadata['encryption-algorithm']
     },
     dataForEncryptionContext
   )

@@ -26,7 +26,13 @@ export const prismaClient: PrismaClient<
 > =
   global.prismaClient ||
   new PrismaClient({
-    log: prismaLogLevels
+    log: prismaLogLevels,
+    // prevent fields to be included by default in queries
+    omit: {
+      document: {
+        encryptedDataKey: true
+      }
+    }
   })
 
 export * from '@prisma/client'

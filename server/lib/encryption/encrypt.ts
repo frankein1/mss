@@ -66,11 +66,7 @@ export async function encrypt(
   const additionalData = createCanonicalAuthenticatedData({
     encryptionVersion: config.document.encryptionVersion,
     encryptionAlgorithm: config.document.encryptionAlgorithm,
-    kmsKeyId: config.kms.keyId,
-    encryptedDataKey: dataKey.ciphertext,
-    documentKeyInDB: dataForEncryptionContext.documentKey,
-    contentType: dataForEncryptionContext.contentType,
-    contentLength: dataForEncryptionContext.contentLength
+    documentKeyInDB: dataForEncryptionContext.documentKey
   })
 
   const params: AesGcmParams = {
@@ -92,7 +88,6 @@ export async function encrypt(
   return {
     encryptedContent,
     encryptedDataKey: dataKey.ciphertext,
-    ivBase64: Buffer.from(iv).toString('base64'),
-    kmsKeyId: config.kms.keyId
+    ivBase64: Buffer.from(iv).toString('base64')
   }
 }
