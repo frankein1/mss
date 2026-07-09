@@ -79,8 +79,14 @@
         :label="beneficiaryFieldLabels.street"
         :zip-code="zipcode"
         hint="Numéro et voie"
-        @address-selected="onAddressSelected"
+        @address-selected="onSelected"
       />
+    </div>
+    <div
+      v-if="qpv"
+      class="fr-col-12"
+    >
+      <BeneficiaryQpvAlert :qpv="qpv" />
     </div>
     <div class="fr-col-12 fr-col-lg-4">
       <VeeInput
@@ -155,8 +161,13 @@
   } from '~/client/options'
   import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
   import type { MemberAccommodation } from './types'
+  import type { AddressSelected } from '~/components/VeeForm/types'
   import { AlertType } from '~/utils/constants/alert'
   import { EventCategory, FamilyFileAction } from '~/types/matomo.js'
+  import {
+    useQpvResolution,
+    type QpvFeatureProperties
+  } from '~/composables/useQpvResolution'
 
   const { membersAccommodation = [] } = defineProps<{
     membersAccommodation?: MemberAccommodation[]
@@ -196,6 +207,69 @@
     setZipcodeValue,
     setRegionValue,
     setDepartmentValue
+  })
+
+  const { resolveQpv, resolveQpvFromAddress } = useQpvResolution()
+
+  const qpv = ref<QpvFeatureProperties | null>(null)
+  const isSelectingAddress = ref(false)
+
+  // Guards against out-of-order resolveQpv responses: if the user picks a
+  // new address before a previous lookup resolves, only the response
+  // matching the latest count is allowed to update qpv.
+  let qpvRequestCount = 0
+
+  async function onSelected(address: AddressSelected) {
+    isSelectingAddress.value = true
+    onAddressSelected(address)
+
+    const requestCount = ++qpvRequestCount
+    try {
+      const result = await resolveQpv(address.coordinates)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    }
+  }
+
+  // This watcher clears a stale QPV resolution when the user edits the
+  // address by hand instead of picking a suggestion from the autocomplete.
+  watch(
+    () => values.street,
+    () => {
+      if (isSelectingAddress.value) {
+        isSelectingAddress.value = false
+        return
+      }
+      qpv.value = null
+    }
+  )
+
+  // On editing an existing beneficiary, the address fields already have a
+  // value but no coordinates, so the initial QPV state has to be resolved
+  // by geocoding that address instead of relying on the autocomplete result.
+  async function resolveInitialQpv(street: string, zipCode: string) {
+    const requestCount = ++qpvRequestCount
+    try {
+      const result = await resolveQpvFromAddress(street, zipCode)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    }
+  }
+
+  onMounted(() => {
+    if (values.street && values.zipcode && values.city) {
+      resolveInitialQpv(values.street, values.zipcode)
+    }
   })
 
   const sectionIsEmpty = computed(
