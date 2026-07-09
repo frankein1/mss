@@ -104,7 +104,7 @@ function commentWithCreatorDto<
     createdBy: userDto(c.createdBy)
   }
 }
-function documentDto<T extends Document>(d: T) {
+function documentDto<T extends Omit<Document, 'encryptedDataKey'>>(d: T) {
   return {
     key: d.key,
     name: d.name,
@@ -554,7 +554,7 @@ export function filterDocuments({
   ctx,
   familyFile
 }: {
-  documents: Document[]
+  documents: Omit<Document, 'encryptedDataKey'>[]
   conditions: {
     details: boolean
   }
