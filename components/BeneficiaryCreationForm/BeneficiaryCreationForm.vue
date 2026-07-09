@@ -95,20 +95,7 @@
             v-if="qpv"
             class="fr-col-12"
           >
-            <AtomAlert
-              :alert-type="AlertType.Info"
-              message="Quartier Prioritaire de la Ville"
-            >
-              <template #detailedMessage>
-                <p>
-                  Un QPV a été détecté à cette adresse :
-                  <span class="fr-text--bold"
-                    >&laquo;&nbsp;{{ qpv.nom }}&nbsp;&raquo;</span
-                  >. Si nécessaire, vous pouvez reporter ces informations dans
-                  les champs ci-dessous.
-                </p>
-              </template>
-            </AtomAlert>
+            <BeneficiaryQpvAlert :qpv="qpv" />
           </div>
 
           <div class="fr-col-12 fr-col-md-3">
@@ -224,7 +211,6 @@
     useQpvResolution,
     type QpvFeatureProperties
   } from '~/composables/useQpvResolution'
-  import { AlertType } from '~/utils/constants/alert'
 
   defineProps<{
     isSubmitting: boolean
