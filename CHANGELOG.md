@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.61.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.60.3...v1.61.0) (2026-07-09)
+
+
+### Features
+
+* API des établissements scolaires ([f059560](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f0595605dee9d1afcebbf1161512fbed75091d28)), closes [#778](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/778)
+* **bénéficiaire:** ajout champ type de contrat et items CSP (PublicEmployee, Apprentice) ([440b0b4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/440b0b454de87ef37eeb72030a898f3da79668a1)), closes [#973](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/973)
+* **bénéficiaire:** migration de données CSP::Disability/SickLeave vers ActivityStatus ([2f7405c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2f7405c48e4f87d3d38f45b441e785eea068af35))
+* **béneficiaires:** recherche de QPV à partir d'une adresse ([98b3be4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/98b3be4f3af3766667ceff1a3e33e30c9ea43496)), closes [#1116](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1116)
+* **bénéficiaires:** résolution de quartier QPV sur le formulaire complet ([d4f3670](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d4f3670821f6af6a1f8052f7cce853940b7d45c7)), closes [#1116](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1116)
+* **document:** simplification ids S3, impact suppression multiple ([df54dbf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/df54dbfb65b5e7df0f13d5af5a9dd3a34dffee99)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+
+
+### Bug Fixes
+
+* ajout export document S3 à l'archivage ([5663486](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/56634860b338833324cb06389b3b047631aada87)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **bénéficiaire:** fusion migration pour ajouter champs Invalidite/ArretMaladie ([cc66dd9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cc66dd9b3b51c6ddc3ee216d013fd67d7830d78c))
+* corrections de layout sur l'historique bénéficiaire ([63ee0aa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/63ee0aa27b8778b0d28d4ee95cf19dab8c5be31a))
+* resolution de qpv ([e1b6cfa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e1b6cfadd15f8bc01bd2dc4c6af1ebd8bb5aa566))
+
 ## [1.60.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.60.2...v1.60.3) (2026-06-25)
 
 ## [1.60.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.60.1...v1.60.2) (2026-06-24)
