@@ -63,6 +63,8 @@ import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
 import { formatMinisterName } from '~/utils/minister'
+import { prismaClient } from '~/server/prisma'
+import { downloadWithEncryption } from '~/server/lib/s3/file'
 
 type FieldLabels<T> = Record<keyof T, any>
 
@@ -111,17 +113,6 @@ export const exportBeneficiary = async ({
     ctx.user.id,
     budgetWorkbook
   )
-
-  // documents
-  const documents = await DocumentRepo.findMany(user, {
-    where: {
-      familyFileId: beneficiaryDetails.familyFileId
-    },
-    select: {
-      documentContent: true,
-      name: true
-    }
-  })
 
   // workshops
   const workshops = await getWorkshops(beneficiaryDetails.id, user)
@@ -243,14 +234,19 @@ export const exportBeneficiary = async ({
   })
   zip.file('Budget/budget_mensuel.xlsx', budgetBuffer, { binary: true })
 
-  documents.forEach((document, idx) => {
-    if (document.documentContent?.content) {
-      const documentName = idx + 1 + ' - ' + document.name
-      zip.file('Documents/' + documentName, document.documentContent.content, {
-        binary: true
-      })
-    }
-  })
+  const dbDocCount = await exportDocumentsFromDb(
+    zip,
+    beneficiaryDetails.id,
+    ctx.user
+  )
+  await exportDocumentFromS3Bucket(
+    useRuntimeConfig(),
+    zip,
+    beneficiaryDetails.id,
+    ctx.user,
+    dbDocCount
+  )
+
   const generatedArchiveFile = await zip.generateAsync({
     type: 'nodebuffer',
     compression: 'DEFLATE',
@@ -922,7 +918,8 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
             select: {
               firstName: true,
               lastName: true
-            }
+            },
+            orderBy: { created: 'asc' }
           },
           beneficiaries: {
             where: { NOT: { id: id } },
@@ -930,7 +927,8 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
               firstName: true,
               usualName: true,
               relationship: true
-            }
+            },
+            orderBy: [{ created: 'asc' }]
           }
         }
       }
@@ -1139,6 +1137,107 @@ const getWorkshops = async (beneficiaryId: string, user: User) => {
     },
     orderBy: [{ date: 'desc' }, { createdAt: 'desc' }]
   })
+}
+
+function addDocumentToZip(
+  zip: JSZip,
+  indexDoc: number,
+  name: string,
+  content: ArrayBuffer | Uint8Array
+) {
+  const documentName = indexDoc + 1 + ' - ' + name
+  zip.file('Documents/' + documentName, content, {
+    binary: true
+  })
+}
+
+/** Doc download and added to zip in one step to avoid overloading the memory */
+const exportDocumentsFromDb = async (
+  zip: JSZip,
+  beneficiaryId: string,
+  user: SecurityRuleGrantee,
+  startIndex = 0
+) => {
+  const documents = await DocumentRepo.findMany(user, {
+    where: {
+      beneficiaryId,
+      migrated: false
+    },
+    select: {
+      name: true,
+      documentContent: { select: { id: true } }
+    }
+  })
+
+  let count = 0
+  for (const doc of documents) {
+    const contentId = doc.documentContent?.id
+    if (!contentId) {
+      continue
+    }
+
+    // Allow use of direct prisma client exceptionally during the transition to S3
+    const c = await prismaClient.documentContent.findUnique({
+      where: { id: contentId },
+      select: { content: true }
+    })
+
+    if (!c) {
+      continue
+    }
+
+    addDocumentToZip(zip, startIndex + count, doc.name, c.content)
+    count++
+  }
+  return count
+}
+
+const exportDocumentFromS3Bucket = async (
+  config: Parameters<typeof downloadWithEncryption>[number]['config'],
+  zip: JSZip,
+  beneficiaryId: string,
+  user: SecurityRuleGrantee,
+  startIndex = 0
+) => {
+  const documents = await DocumentRepo.findMany(user, {
+    where: {
+      beneficiaryId,
+      migrated: true
+    },
+    select: {
+      key: true,
+      name: true,
+      filenameDisk: true,
+      mimeType: true,
+      size: true
+    }
+  })
+
+  let count = 0
+  for (const doc of documents) {
+    // Do not export empty docs or doc without proper metadata
+    if (!doc.mimeType || !doc.size) {
+      console.error('archive: missing document metadata')
+      continue
+    }
+    const c = await downloadWithEncryption({
+      config,
+      bucketKey: doc.filenameDisk,
+      dataForEncryptionContext: {
+        documentKey: doc.key,
+        contentType: doc.mimeType,
+        contentLength: doc.size
+      }
+    })
+
+    if (!c.success) {
+      console.error(`download: ${c.reason}`)
+      continue
+    }
+
+    addDocumentToZip(zip, startIndex + count, doc.name, c.fileContent)
+    count++
+  }
 }
 
 const getPrettyUserName = (
