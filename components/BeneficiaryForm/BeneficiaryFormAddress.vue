@@ -245,6 +245,9 @@
         isSelectingAddress.value = false
         return
       }
+      // Bump the counter so any in-flight resolveInitialQpv/onSelected
+      // result fails the requestCount guard and cannot overwrite this reset.
+      qpvRequestCount++
       qpv.value = null
     }
   )

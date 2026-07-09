@@ -7,6 +7,8 @@ export interface QpvFeatureProperties {
   nom: string
 }
 
+const GEOCODING_TIMEOUT_MS = 5000
+
 type QpvFeature = Feature<Polygon | MultiPolygon, QpvFeatureProperties>
 
 let qpvFeaturesPromise: Promise<QpvFeature[]> | undefined
@@ -54,7 +56,10 @@ export function useQpvResolution() {
   ): Promise<QpvFeatureProperties | null> {
     const response = await $fetch<BanResponse>(
       'https://data.geopf.fr/geocodage/search/',
-      { params: { q: street, postcode: zipCode, limit: 1 } }
+      {
+        params: { q: street, postcode: zipCode, limit: 1 },
+        timeout: GEOCODING_TIMEOUT_MS
+      }
     )
     const feature = response.features[0]
     if (!feature) {
