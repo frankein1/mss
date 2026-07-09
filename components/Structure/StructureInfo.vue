@@ -1,86 +1,83 @@
 <template>
-  <section class="feature-section bg-color-white structure-info">
+  <section class="feature-section structure-info fr-p-5v fr-p-md-10v">
     <h3 class="fr-h4 structure-info__title">
       Informations sur votre structure
     </h3>
 
-    <div class="fr-grid-row structure-info__content">
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.name }} :
+    <ul class="information-list">
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.name }}&nbsp;:
         </span>
-        <span>{{ structure.name }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.address }} :
+        {{ structure.name }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.address }}&nbsp;:
         </span>
-        <span>{{ structure.address }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.zipcode }} :
+        {{ structure.address }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.zipcode }}&nbsp;:
         </span>
-        <span>{{ structure.zipcode }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.city }} :
+        {{ structure.zipcode }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.city }}&nbsp;:
         </span>
-        <span>{{ structure.city }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.phone }} :
+        {{ structure.city }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.phone }}&nbsp;:
         </span>
-        <span>{{ structure.phone }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.email }} :
+        {{ structure.phone }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
+          {{ structureFieldLabels.email }}&nbsp;:
         </span>
-        <span>{{ structure.email }}</span>
-      </div>
+        {{ structure.email }}
+      </li>
+    </ul>
 
-      <div class="fr-col-12 fr-mt-1w">
-        <h4 class="fr-mb-0 fr-text--lg grey">
-          Personne référente à la protection des données (DPO)&nbsp;:
-        </h4>
-      </div>
+    <h4 class="fr-h6 fr-mt-4v fr-mb-3v">
+      Personne référente à la protection des données (DPO)&nbsp;:
+    </h4>
 
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          Prénom et nom :
-        </span>
-        <span>{{ structure.dpoFirstName }} {{ structure.dpoLastName }}</span>
-      </div>
-
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
+    <ul class="information-list">
+      <li>
+        <span class="fr-text--bold"> Prénom et nom&nbsp;: </span>
+        {{ structure.dpoFirstName }} {{ structure.dpoLastName }}
+      </li>
+      <li>
+        <span class="fr-text--bold"> Prénom et nom&nbsp;: </span>
+        {{ structure.dpoFirstName }} {{ structure.dpoLastName }}
+      </li>
+      <li>
+        <span class="fr-text--bold">
           {{ structureFieldLabels.dpoEmail }} :
         </span>
-        <span>{{ structure.dpoEmail }}</span>
-      </div>
-    </div>
+        {{ structure.dpoEmail }}
+      </li>
+    </ul>
 
-    <div class="fr-grid-row fr-grid-row--right">
-      <div v-if="application.edit.structure">
-        <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
-          data-fr-opened="false"
-          aria-controls="global-modal"
-          title="Modifier"
-          aria-label="Modifier"
-          @click="emit('edit')"
-        >
-          Modifier
-        </button>
-      </div>
+    <div
+      v-if="application.edit.structure"
+      class="fr-grid-row fr-grid-row--right"
+    >
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        title="Modifier"
+        aria-label="Modifier"
+        @click="emit('edit')"
+      >
+        Modifier
+      </button>
     </div>
   </section>
 </template>
@@ -98,24 +95,15 @@
   const { application } = usePermissions()
 </script>
 
-<style scoped lang="css">
-  .structure-info > div:not(:last-of-type) {
-    margin-bottom: 1.5rem;
-  }
+<style scoped lang="scss">
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
 
   .structure-info__title {
     color: var(--primary);
-  }
+    font-size: 1.5rem;
 
-  .structure-info__content {
-    gap: 0.5rem;
-  }
-
-  .structure-info__content__label {
-    font-weight: 700;
-  }
-
-  .grey {
-    color: var(--text-default-grey);
+    @include dsfr-media-query.respond-from('md') {
+      font-size: 2.5rem;
+    }
   }
 </style>

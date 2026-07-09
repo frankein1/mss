@@ -16,7 +16,7 @@
       "
     />
     <NuxtLink
-      :to="routes.structure.AppStructure.path()"
+      :to="routes.structure.AppStructureSupport.path()"
       class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
     >
       Je personnalise les dispositifs de ma structure

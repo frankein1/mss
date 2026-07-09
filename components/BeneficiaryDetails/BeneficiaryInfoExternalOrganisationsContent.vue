@@ -43,11 +43,11 @@
       :value="externalOrganisations.involvedPartners"
       class="fr-col-12 fr-col-lg-6"
     />
-
+    <div class="fr-col-12 divider">
+      <hr />
+    </div>
     <template v-if="externalOrganisations.supportPrograms.length">
       <div class="fr-col-12">
-        <hr />
-
         <h5 class="fr-text--md fr-mb-0">
           Prestations / Dispositifs d'accompagnement
         </h5>
@@ -127,3 +127,13 @@
     return ''
   }
 </script>
+
+<style lang="scss" scoped>
+  .fr-grid-row > .divider:first-of-type {
+    display: none;
+  }
+
+  .home > .red ~ .red {
+    border: none;
+  }
+</style>

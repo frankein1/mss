@@ -1,7 +1,3 @@
-<template>
-  <StructureUsers />
-</template>
-
 <script lang="ts" setup>
   import { routes } from '~/utils/routes'
 

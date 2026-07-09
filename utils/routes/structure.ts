@@ -28,6 +28,21 @@ export const routes = {
     title: 'Objets d’accompagnement',
     path: () => `${StructureRoute}/custom-objects`
   },
+  AppStructureUsers: {
+    name: 'AppStructureUsers',
+    title: 'Utilisateurs',
+    path: () => `${AppRoute}/structure/users`
+  },
+  AppStructureInfo: {
+    name: 'AppStructureInfo',
+    title: 'Infos structure',
+    path: () => `${AppRoute}/structure/info`
+  },
+  AppStructureSupport: {
+    name: 'AppStructureSupport',
+    title: 'Accompagnements et Dispositifs',
+    path: () => `${AppRoute}/structure/accompagnements-dispositifs`
+  },
   AppStructureEdit: {
     name: 'AppStructureEdit',
     title: 'Modifier les informations de votre structure',
