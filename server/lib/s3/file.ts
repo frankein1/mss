@@ -86,7 +86,7 @@ export async function uploadWithEncryption({
     dataForEncryptionContext
   )
 
-  // Encrypted DEK and iv are stored in S3 metadata
+  // iv is stored in S3 metadata for decryption
   // The other metadata variables are used to regenerate the Associated Authenticated Data
   const s3Metadata = {
     'encrypted': 'true',
@@ -114,7 +114,6 @@ export async function uploadWithEncryption({
 interface DownloadWithEncryptionInput {
   config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
   bucketKey: string
-  // The encrypted DEK is now stored in the database, not in S3 object metadata
   encryptedDataKey: string
   dataForEncryptionContext: DataForEncryptionContext
 }
