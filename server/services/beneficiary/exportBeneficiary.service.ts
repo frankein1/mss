@@ -673,29 +673,35 @@ const getBeneficiaryInfoData = (
         relativeRelationshipKeys.value(beneficiary.relationship) || null
     })
   )
-  const referents = beneficiary.familyFile?.referents.map(
-    referent => referent.firstName + ' ' + referent.lastName
-  )
+  const referents = beneficiary.familyFile?.referents
+    .map(referent => referent.firstName + ' ' + referent.lastName)
+    .sort((a, b) => a.localeCompare(b))
   const relatives = beneficiary.relatives
-    ? beneficiary.relatives.map(
-        (relative, idx): BeneficiaryRelativeData => ({
-          index: idx + 1,
-          additionalInformation: relative.additionalInformation,
-          birthDate: relative.birthDate
-            ? relative.birthDate.toLocaleDateString('fr-FR')
-            : null,
-          caregiver: relative.caregiver,
-          city: relative.city,
-          email: relative.email,
-          firstName: relative.firstName,
-          lastName: relative.lastName,
-          hosted: relative.hosted,
-          phone: relative.phone,
-          relationship: relative.relationship
-            ? relativeRelationshipKeys.value(relative.relationship)
-            : null
-        })
-      )
+    ? [...beneficiary.relatives]
+        .sort((a, b) =>
+          `${a.firstName ?? ''} ${a.lastName ?? ''}`.localeCompare(
+            `${b.firstName ?? ''} ${b.lastName ?? ''}`
+          )
+        )
+        .map(
+          (relative, idx): BeneficiaryRelativeData => ({
+            index: idx + 1,
+            additionalInformation: relative.additionalInformation,
+            birthDate: relative.birthDate
+              ? relative.birthDate.toLocaleDateString('fr-FR')
+              : null,
+            caregiver: relative.caregiver,
+            city: relative.city,
+            email: relative.email,
+            firstName: relative.firstName,
+            lastName: relative.lastName,
+            hosted: relative.hosted,
+            phone: relative.phone,
+            relationship: relative.relationship
+              ? relativeRelationshipKeys.value(relative.relationship)
+              : null
+          })
+        )
     : null
 
   return {
