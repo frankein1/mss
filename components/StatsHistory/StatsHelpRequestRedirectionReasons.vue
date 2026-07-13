@@ -17,8 +17,8 @@
     />
 
     <hr />
-    <p class="fr-text--xs text--muted fr-text--bold fr-mb-0">
-      RÉPARTITION DES MOTIFS DE RÉORIENTATION
+    <p class="fr-text--xs text--muted fr-text--bold fr-mb-0 text--uppercase">
+      Répartition des motifs de réorientation
     </p>
     <p class="fr-text--xs text--muted">
       Pourcentage calculé sur le total d'instructions de dossiers. Une demande
