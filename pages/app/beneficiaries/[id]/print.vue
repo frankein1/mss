@@ -28,12 +28,14 @@
             <p>{{ socialSupportSubjects }}</p>
           </template>
           <hr class="fr-mt-2w" />
+          <p class="fr-text--bold">Information générales</p>
           <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
 
           <hr
             v-if="hasTaxHouseholds"
             class="fr-mt-2w"
           />
+          <p class="fr-text--bold">Situation familiale</p>
           <BeneficiaryInfoTaxHouseholdsContent
             v-if="hasTaxHouseholds && beneficiary.taxHouseholds"
             :beneficiary-id="beneficiaryId"
