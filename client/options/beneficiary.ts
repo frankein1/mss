@@ -119,8 +119,7 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité/Retraitée',
   [BeneficiarySocioProfessionalCategory.Employed]: 'Salarié/Salariée',
   [BeneficiarySocioProfessionalCategory.Student]: 'En étude / Élève',
-  [BeneficiarySocioProfessionalCategory.NoActivity]:
-    'Sans activité (non inscrit à France Travail)',
+  [BeneficiarySocioProfessionalCategory.NoActivity]: 'Sans activité',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre',
   [BeneficiarySocioProfessionalCategory.PublicEmployee]:
     'Agent de la fonction publique',
