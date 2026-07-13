@@ -32,6 +32,9 @@ export const statRouter = router({
   getFollowupRedirectionsStats: protectedProcedure
     .input(routes.getRedirectionsStatsQ.inputValidation)
     .query(routes.getRedirectionsStatsQ.execute),
+  getFollowupRedirectionReasonsStats: protectedProcedure
+    .input(routes.getFollowupRedirectionReasonsStatsQ.inputValidation)
+    .query(routes.getFollowupRedirectionReasonsStatsQ.execute),
   getFollowupMediumStats: protectedProcedure
     .input(routes.getFollowupMediumStatsQ.inputValidation)
     .query(routes.getFollowupMediumStatsQ.execute),
@@ -62,6 +65,9 @@ export const statRouter = router({
   getHelpRequestRedirectionsStats: protectedProcedure
     .input(routes.getHelpRequestRedirectionsStatsQ.inputValidation)
     .query(routes.getHelpRequestRedirectionsStatsQ.execute),
+  getHelpRequestRedirectionReasonsStats: protectedProcedure
+    .input(routes.getHelpRequestRedirectionReasonsStatsQ.inputValidation)
+    .query(routes.getHelpRequestRedirectionReasonsStatsQ.execute),
   getHelpRequestStatusStats: protectedProcedure
     .input(routes.getHelpRequestStatusStatsQ.inputValidation)
     .query(routes.getHelpRequestStatusStatsQ.execute),
