@@ -14,10 +14,12 @@
     <section class="feature-section fr-mt-1w fr-p-10v">
       <h4 class="fr-sr-only">Résumé</h4>
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-      <hr />
-      <BeneficiaryInfoSocialSupportSubjects
-        :social-support-subjects="beneficiary.history.subjects"
-      />
+      <template v-if="beneficiary.history.subjects.length">
+        <hr />
+        <BeneficiaryInfoSocialSupportSubjects
+          :social-support-subjects="beneficiary.history.subjects"
+        />
+      </template>
     </section>
 
     <BeneficiaryInfoGeneral

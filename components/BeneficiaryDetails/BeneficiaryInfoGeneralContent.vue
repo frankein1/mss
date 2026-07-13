@@ -94,6 +94,11 @@
         class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.district"
+        :value="general.district"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
         v-if="general.qpv != null"
         :label="beneficiaryFieldLabels.qpv"
         :value="general.qpv ? 'Oui' : 'Non'"
