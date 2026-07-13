@@ -10,3 +10,4 @@ export { getHelpRequestAmountsByInstructorOrganizationQuery } from './getHelpReq
 export { getHelpRequestAmountsAllocatedQuery } from './getHelpRequestAmountsAllocatedQuery'
 export { getHelpRequestAmountsBySubjectQuery } from './getHelpRequestAmountsBySubjectQuery'
 export { getHelpRequestRedirectionsStatsQuery } from './getHelpRequestRedirectionsStatsQuery'
+export { getHelpRequestRedirectionReasonsStatsQuery } from './getHelpRequestRedirectionReasonsStatsQuery'

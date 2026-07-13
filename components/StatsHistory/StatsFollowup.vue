@@ -131,6 +131,17 @@
 
         <StatsCard
           class="fr-col-12 fr-col-md-6"
+          :card-id="followupCardsConfig.redirectionReasons.id"
+          :card-name="followupCardsConfig.redirectionReasons.name"
+        >
+          <StatsFollowupRedirectionReasons
+            :total-count="followupCount"
+            :filters="filters"
+          />
+        </StatsCard>
+
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
           :card-id="followupCardsConfig.prescribingOrganizations.id"
           :card-name="followupCardsConfig.prescribingOrganizations.name"
         >
@@ -239,6 +250,10 @@
     redirections: {
       id: 'stats-followup-redirections',
       name: 'Réorientations'
+    },
+    redirectionReasons: {
+      id: 'stats-followup-redirection-reasons',
+      name: 'Motifs de réorientation'
     },
     actions: {
       id: 'stats-followup-actions',

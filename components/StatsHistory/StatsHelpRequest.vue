@@ -135,6 +135,17 @@
           />
         </StatsCard>
 
+        <StatsCard
+          class="fr-col-12 fr-col-md-6"
+          :card-id="baseConfig.redirectionReasons.id"
+          :card-name="baseConfig.redirectionReasons.name"
+        >
+          <StatsHelpRequestRedirectionReasons
+            :total-count="helpRequestCount"
+            :filters="filters"
+          />
+        </StatsCard>
+
         <template v-if="displayed.financial">
           <StatsCard
             class="fr-col-12 fr-col-md-6"
@@ -258,6 +269,10 @@
     redirections: {
       id: 'stats-helprequest-redirections',
       name: 'Réorientations'
+    },
+    redirectionReasons: {
+      id: 'stats-helprequest-redirection-reasons',
+      name: 'Motifs de réorientation'
     }
   }
 
