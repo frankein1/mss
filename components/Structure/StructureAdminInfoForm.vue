@@ -48,8 +48,9 @@
       </div>
 
       <div class="fr-col-12">
-        <VeeAddressInput
+        <VeeAddressCombobox
           name="address"
+          required
           :label="structureFieldLabels.address"
           @address-selected="onAddressSelected"
         />
