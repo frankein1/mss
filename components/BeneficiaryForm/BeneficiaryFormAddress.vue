@@ -74,11 +74,11 @@
       />
     </div>
     <div class="fr-col-12">
-      <VeeAddressInput
+      <VeeAddressCombobox
         name="street"
         :label="beneficiaryFieldLabels.street"
         :zip-code="zipcode"
-        hint="Numéro et voie"
+        hint="Rechercher par adresse complète (numéro, voie, ville, code postal)"
         @address-selected="onSelected"
       />
     </div>
@@ -96,7 +96,7 @@
       />
     </div>
     <div class="fr-col-12 fr-col-lg-8">
-      <VeeCityInput
+      <VeeCityCombobox
         name="city"
         :label="beneficiaryFieldLabels.city"
         :zip-code="zipcode"

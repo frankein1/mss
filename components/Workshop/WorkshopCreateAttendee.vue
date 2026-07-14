@@ -14,6 +14,7 @@
         v-slot="{ option, input }"
         v-model="selectedBeneficiary"
         label="Rechercher parmi vos bénéficiaires enregistrés"
+        highlight
         :options="results"
         :format-display-value="formatBeneficiarySearchDisplayName"
         @input="searchBeneficiaries"
