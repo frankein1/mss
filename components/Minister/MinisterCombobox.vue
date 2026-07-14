@@ -243,13 +243,4 @@
       }
     }
   }
-
-  .minister-combobox {
-    :deep(.combobox-wrapper) {
-      input.fr-select {
-        box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
-        filter: saturate(0);
-      }
-    }
-  }
 </style>

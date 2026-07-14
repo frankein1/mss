@@ -53,13 +53,14 @@
         type="date"
       />
 
-      <VeeCityInput
-        class="fr-col-12"
-        name="city"
-        :request-limit="null"
-        :label="workshopExternalAttendeeLabels.city"
-        :disabled="values.type === 'Beneficiary'"
-      />
+      <div class="fr-col-12">
+        <VeeCityCombobox
+          name="city"
+          :label="workshopExternalAttendeeLabels.city"
+          :request-limit="30"
+          :disabled="values.type === 'Beneficiary'"
+        />
+      </div>
 
       <VeeInput
         class="fr-col-12"

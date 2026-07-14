@@ -64,12 +64,13 @@
         :birth-date="values.birthDate || null"
       />
 
-      <VeeCityInput
-        class="fr-col-12"
-        name="city"
-        :request-limit="null"
-        :label="workshopExternalAttendeeLabels.city"
-      />
+      <div class="fr-col-12">
+        <VeeCityCombobox
+          name="city"
+          :label="workshopExternalAttendeeLabels.city"
+          :request-limit="30"
+        />
+      </div>
 
       <VeeInput
         class="fr-col-12"

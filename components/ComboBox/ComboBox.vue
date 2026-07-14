@@ -6,7 +6,6 @@
       'fr-input-group--disabled': disabled
     }"
   >
-    {{ error }}
     <label
       :id="LABEL_ID"
       :for="INPUT_ID"
@@ -34,9 +33,14 @@
         :disabled="disabled"
         autocomplete="off"
         class="fr-select"
-        :class="{ 'fr-select--error': error }"
+        :class="{
+          'fr-select--error': error,
+          'fr-select--highlight': highlight
+        }"
         type="search"
         role="combobox"
+        tabindex="0"
+        :aria-labelledby="LABEL_ID"
         :aria-describedby="ariaDescribedby"
         aria-autocomplete="list"
         :aria-expanded="options.length > 0"
@@ -76,10 +80,11 @@
         />
         <li
           v-for="(option, rowIndex) in options"
-          :id="'option-' + rowIndex"
+          :id="`${LISTBOX_ID}-option-${rowIndex}`"
           :key="rowIndex"
           class="option"
           role="option"
+          :aria-selected="isSelected(option)"
           :class="{
             focused: rowIndex === activeRow,
             disabled: option.disabled
@@ -115,6 +120,7 @@
     labelVisible = true,
     disabled = false,
     loading = false,
+    highlight = false,
     options,
     error = undefined,
     hint = undefined,
@@ -127,6 +133,7 @@
     labelVisible?: boolean
     disabled?: boolean
     loading?: boolean
+    highlight?: boolean
     hint?: string
     options: Option[]
     error?: string
@@ -142,11 +149,13 @@
   const emit = defineEmits<{
     select: [option: Option]
     input: [input: string]
+    clear: []
   }>()
   const model = defineModel<Option | null>({ required: true })
   function reset() {
     model.value = null
     displayedValue.value = ''
+    emit('clear')
   }
 
   const input = useTemplateRef('input')
@@ -162,7 +171,7 @@
   const activeRow = ref(-1)
   const activeDescendant = computed(() => {
     if (activeRow.value >= 0) {
-      return `option-${activeRow.value}`
+      return `${LISTBOX_ID.value}-option-${activeRow.value}`
     }
     return ''
   })
@@ -178,6 +187,12 @@
     model.value = option
     emit('select', option)
   }
+
+  // Options are freshly fetched on every search, so they never share
+  // object identity with the selected model: compare by display value instead.
+  const isSelected = (option: Option) =>
+    model.value != null &&
+    formatDisplayValue(option) === formatDisplayValue(model.value)
 
   const onFocus = () => {
     if (displayedValue.value != null) {
@@ -265,7 +280,9 @@
   // is visible.
   watch(activeRow, newIndex => {
     if (newIndex >= 0) {
-      const el = document.getElementById(`option-${newIndex}`)
+      const el = document.getElementById(
+        `${LISTBOX_ID.value}-option-${newIndex}`
+      )
       el?.scrollIntoView({ block: 'nearest' })
     }
   })
@@ -320,9 +337,13 @@
   }
 
   input[type='search'] {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(69,80,229,1)'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z'%3E%3C/path%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(58,58,58,1)'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z'%3E%3C/path%3E%3C/svg%3E");
     background-position: 10px 12px;
     background-repeat: no-repeat;
+
+    &.fr-select--highlight {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(69,80,229,1)'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z'%3E%3C/path%3E%3C/svg%3E");
+    }
 
     &:disabled {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(146,146,146,1)'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z'%3E%3C/path%3E%3C/svg%3E");
@@ -400,7 +421,11 @@
   }
 
   .fr-select {
-    box-shadow: inset 0 -2px 0 0 var(--primary);
+    box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
+
+    &.fr-select--highlight {
+      box-shadow: inset 0 -2px 0 0 var(--primary);
+    }
 
     &:disabled {
       box-shadow: inset 0 -2px 0 0 var(--text-disabled-grey);

@@ -17,6 +17,14 @@
         <MinisterComboboxStory />
       </div>
 
+      <div class="fr-col-12">
+        <VeeCityComboboxStory />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeAddressComboboxStory />
+      </div>
+
       <h2 class="fr-col-12">Multiselect (legacy)</h2>
       <div class="fr-col-12">
         <VeeMultiselectStory />
@@ -102,6 +110,8 @@
   import VeeComboboxStory from '~/components/VeeForm/VeeCombobox.story.vue'
   import ComboboxStory from '~/components/ComboBox/Combobox.story.vue'
   import MinisterComboboxStory from '~/components/Minister/MinisterCombobox.story.vue'
+  import VeeCityComboboxStory from '~/components/VeeForm/VeeCityCombobox.story.vue'
+  import VeeAddressComboboxStory from '~/components/VeeForm/VeeAddressCombobox.story.vue'
   import FollowupsTableStory from '~/components/Followups/FollowupsTable.story.vue'
   import AtomDropdownStory from '~/components/AtomDropdown/AtomDropdown.story.vue'
   import AtomMenuDisclosureStory from '~/components/AtomMenuDisclosure/AtomMenuDisclosure.story.vue'
