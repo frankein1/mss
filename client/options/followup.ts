@@ -14,6 +14,7 @@ export const followupMediumKeys = buildKeys({
   [FollowupMedium.ThirdParty]: 'Entretien avec un tiers',
   [FollowupMedium.PhoneCall]: 'Entretien téléphonique',
   [FollowupMedium.Email]: 'E-mail',
+  [FollowupMedium.AdministrativeManagement]: 'Gestion administrative',
   [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
   [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
   [FollowupMedium.Videoconference]: 'Visioconférence'

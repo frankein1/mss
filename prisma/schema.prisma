@@ -457,6 +457,8 @@ enum FollowupMedium {
   PostalMail
   // E-mail
   Email
+  // Gestion administrative
+  AdministrativeManagement
   // Visioconférence
   Videoconference
   // Entretien avec un tiers
