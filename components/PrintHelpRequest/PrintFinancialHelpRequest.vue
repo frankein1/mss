@@ -15,6 +15,18 @@
               ? formatDate(helpRequest.fileInstruction.socialSupport.date)
               : null
           "
+          :created-by="helpRequest.fileInstruction.socialSupport.createdBy"
+          :last-updated-by="
+            helpRequest.fileInstruction.socialSupport.lastUpdatedBy
+          "
+          :updated="
+            helpRequest.fileInstruction.socialSupport.updated
+              ? formatDate(
+                  helpRequest.fileInstruction.socialSupport.updated,
+                  'DD/MM/YYYY'
+                )
+              : null
+          "
           :status="helpRequest.fileInstruction.socialSupport.status"
         />
       </div>

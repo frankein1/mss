@@ -63,7 +63,8 @@ const FIELDS: (keyof typeof exportLabels)[] = [
   'updated',
   'minister',
   'numeroPegase',
-  'createdById'
+  'createdById',
+  'lastUpdatedById'
 ]
 
 const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
@@ -187,6 +188,9 @@ export async function exportFileInstructions({
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy
             ? formatUserDisplayName(socialSupport.createdBy)
+            : '',
+          lastUpdatedById: socialSupport.lastUpdatedBy
+            ? formatUserDisplayName(socialSupport.lastUpdatedBy)
             : '',
           askedHousing:
             (housingHelpRequest?.askedHousing || [])
