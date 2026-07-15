@@ -31,6 +31,7 @@ export const helpRequestFieldLabels = {
   externalStructure: 'Demande réalisée',
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
+  lastUpdatedById: 'Modifié par',
   financialSupport: 'Aide financière',
   isRefundable: 'Cette aide est-elle remboursable ?'
 }
