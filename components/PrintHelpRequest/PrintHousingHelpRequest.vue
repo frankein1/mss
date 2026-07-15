@@ -19,6 +19,20 @@
                 )
               : null
           "
+          :created-by="
+            housingHelpRequest.fileInstruction.socialSupport.createdBy
+          "
+          :last-updated-by="
+            housingHelpRequest.fileInstruction.socialSupport.lastUpdatedBy
+          "
+          :updated="
+            housingHelpRequest.fileInstruction.socialSupport.updated
+              ? formatDate(
+                  housingHelpRequest.fileInstruction.socialSupport.updated,
+                  'DD/MM/YYYY'
+                )
+              : null
+          "
           :status="housingHelpRequest.fileInstruction.socialSupport.status"
         />
       </div>

@@ -23,6 +23,7 @@ export const followupFieldLabels = {
   prescribingOrganizationContactId: "Contact de l'organisme prescripteur",
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
+  lastUpdatedById: 'Modifié par',
   duration: "Durée de l'entretien",
   partnerOrganizationId: "Nom de l'organisme",
   externalStructureName: 'Nom structure / personne'

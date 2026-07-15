@@ -235,6 +235,7 @@ export function filterSocialSupportForExport<
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister),
     dueDate: show(socialSupport.dueDate, conditions.details),
     createdById: socialSupport.createdById,
+    lastUpdatedById: socialSupport.lastUpdatedById,
     familyFile: {
       id: socialSupport.familyFile.id,
       referents:
