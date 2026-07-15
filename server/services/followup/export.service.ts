@@ -60,6 +60,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'thirdPersonName',
   'updated',
   'createdById',
+  'lastUpdatedById',
   'duration'
 ]
 const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
@@ -191,6 +192,9 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
   const createdBy = filtered.createdById
     ? maps.userMap.get(filtered.createdById)
     : undefined
+  const lastUpdatedBy = filtered.lastUpdatedById
+    ? maps.userMap.get(filtered.lastUpdatedById)
+    : undefined
   const prescribingOrg = filtered.prescribingOrganizationId
     ? maps.partnerMap.get(filtered.prescribingOrganizationId)
     : undefined
@@ -226,6 +230,7 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
     thirdPersonName: filtered.thirdPersonName || '',
     updated: filtered.updated || '',
     createdById: createdBy ? formatUserDisplayName(createdBy) : '',
+    lastUpdatedById: lastUpdatedBy ? formatUserDisplayName(lastUpdatedBy) : '',
     duration: followupDurationKeys.value(filtered.duration) || '',
     type: redirections
       .map(r => socialSupportRedirectionTypeKeys.value(r.type))

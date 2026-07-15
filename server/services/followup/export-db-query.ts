@@ -26,6 +26,7 @@ const followupExportSelect = {
       synthesis: true,
       dueDate: true,
       createdById: true,
+      lastUpdatedById: true,
       subjects: {
         select: {
           id: true,

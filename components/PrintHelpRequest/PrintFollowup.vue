@@ -6,7 +6,12 @@
           title="Entretien"
           :beneficiary-firstname="followup.beneficiary.firstName"
           :beneficiary-usualname="followup.beneficiary.usualName"
+          :created-by="followup.createdBy"
+          :last-updated-by="followup.lastUpdatedBy"
           :date="followup.date ? formatDate(followup.date, 'DD/MM/YYYY') : null"
+          :updated="
+            followup.updated ? formatDate(followup.updated, 'DD/MM/YYYY') : null
+          "
           :status="followup.status"
         />
       </div>
