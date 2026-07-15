@@ -16,7 +16,7 @@
     v-if="lastUpdatedBy && updated"
     class="fr-mb-1w"
   >
-    Modifié le {{ updated }} par par {{ lastUpdatedBy.firstName }}
+    Modifié le {{ updated }} par {{ lastUpdatedBy.firstName }}
     {{ lastUpdatedBy.lastName }}
   </p>
   <SocialSupportBadgesGroup
