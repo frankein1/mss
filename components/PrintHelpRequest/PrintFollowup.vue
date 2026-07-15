@@ -4,8 +4,7 @@
       <div class="fr-col-12">
         <PrintFollowupHeader
           title="Entretien"
-          :beneficiary-firstname="followup.beneficiary.firstName"
-          :beneficiary-usualname="followup.beneficiary.usualName"
+          :beneficiary="followup.beneficiary"
           :created-by="followup.createdBy"
           :last-updated-by="followup.lastUpdatedBy"
           :date="followup.date ? formatDate(followup.date, 'DD/MM/YYYY') : null"

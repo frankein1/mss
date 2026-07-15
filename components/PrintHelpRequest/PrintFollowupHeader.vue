@@ -1,8 +1,9 @@
 <template>
   <h1>{{ title }}</h1>
   <h2 class="fr-mb-1w">
-    Entretien avec {{ beneficiaryFirstname }} {{ beneficiaryUsualname }}
+    Entretien avec {{ formatBeneficiaryDisplayName(beneficiary) }}
   </h2>
+  <p class="fr-mb-1w">Numéro de dossier : {{ beneficiary.fileNumber }}</p>
   <p
     v-if="date"
     class="fr-mb-1w"
@@ -31,8 +32,14 @@
 
   defineProps<{
     title: string
-    beneficiaryFirstname: string | null
-    beneficiaryUsualname: string | null
+    beneficiary: {
+      id: string
+      firstName: string | null
+      usualName: string | null
+      birthName: string | null
+      birthDate: Date | null
+      fileNumber: string | undefined
+    }
     date: string | null
     updated: string | null
     createdBy?: { id: string; firstName: string; lastName: string } | null

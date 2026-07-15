@@ -93,7 +93,8 @@ export const select = {
               usualName: true,
               firstName: true,
               birthName: true,
-              birthDate: true
+              birthDate: true,
+              fileNumber: true
             }
           },
           familyFile: {
