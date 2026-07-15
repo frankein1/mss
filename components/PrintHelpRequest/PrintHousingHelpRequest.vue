@@ -4,13 +4,8 @@
       <div class="fr-col-12">
         <PrintHelpRequestHeader
           title="Demande de logement"
-          :beneficiary-firstname="
+          :beneficiary="
             housingHelpRequest.fileInstruction.socialSupport.beneficiary
-              .firstName
-          "
-          :beneficiary-usualname="
-            housingHelpRequest.fileInstruction.socialSupport.beneficiary
-              .usualName
           "
           :date="
             housingHelpRequest.fileInstruction.socialSupport.date

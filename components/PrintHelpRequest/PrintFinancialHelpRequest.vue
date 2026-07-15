@@ -4,12 +4,7 @@
       <div class="fr-col-12">
         <PrintHelpRequestHeader
           title="Aide Financière"
-          :beneficiary-firstname="
-            helpRequest.fileInstruction.socialSupport.beneficiary.firstName
-          "
-          :beneficiary-usualname="
-            helpRequest.fileInstruction.socialSupport.beneficiary.usualName
-          "
+          :beneficiary="helpRequest.fileInstruction.socialSupport.beneficiary"
           :date="
             helpRequest.fileInstruction.socialSupport.date
               ? formatDate(helpRequest.fileInstruction.socialSupport.date)
