@@ -89,6 +89,7 @@ function randomMedium(): FollowupMedium {
     'UnplannedInPerson',
     'PhoneCall',
     'BeneficiaryHouseAppointment',
+    'AdministrativeManagement',
     'ExternalAppointment',
     'PostalMail',
     'Email',
