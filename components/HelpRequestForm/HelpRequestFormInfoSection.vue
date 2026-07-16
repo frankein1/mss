@@ -11,6 +11,12 @@
         required
       />
     </div>
+    <div class="fr-col-12 fr-mt-2v">
+      <VeeCheckbox
+        name="endOfSocialSupport"
+        :label="helpRequestFieldLabels.endOfSocialSupport"
+      />
+    </div>
 
     <template v-if="isHousingSupport">
       <div class="fr-col-12">

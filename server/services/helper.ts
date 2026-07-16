@@ -198,7 +198,8 @@ export function filterSocialSupport<T extends SS>({
       redirectionsDto(socialSupport.socialSupportRedirections || []),
       conditions.details
     ),
-    numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
+    numeroPegase: show(socialSupport.numeroPegase, conditions.minister),
+    endOfSocialSupport: socialSupport.endOfSocialSupport
   }
 }
 

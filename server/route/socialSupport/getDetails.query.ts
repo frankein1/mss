@@ -31,6 +31,7 @@ async function getSocialSupportDetail({
       privateSynthesisRichText: true,
       ministerId: true,
       numeroPegase: true,
+      endOfSocialSupport: true,
       status: true,
       dueDate: true,
       created: true,

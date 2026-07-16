@@ -26,6 +26,7 @@
     minister: null,
     socialSupportRedirections: null,
     numeroPegase: null,
+    endOfSocialSupport: false,
     classified: null,
     forwardedToJustice: null,
     prescribingOrganization: null,

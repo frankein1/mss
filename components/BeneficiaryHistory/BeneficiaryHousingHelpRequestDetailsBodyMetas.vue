@@ -102,6 +102,12 @@
   >
     Ce dossier est complet
   </li>
+  <li v-if="endOfSocialSupport">
+    <span class="information-label">{{
+      helpRequestFieldLabels.endOfSocialSupport
+    }}</span>
+    : Oui
+  </li>
   <li v-if="housingHelpRequest.handlingDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.handlingDate }} :</span
@@ -157,6 +163,7 @@
     fileInstruction: FileInstructionData
     housingHelpRequest: HousingHelpRequestData
     status: SocialSupportStatus
+    endOfSocialSupport: boolean
   }>()
 
   const askedHousing = computed(() => {

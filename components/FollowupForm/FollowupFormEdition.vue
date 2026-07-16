@@ -75,6 +75,7 @@
       subjects: initialSocialSupportSubjectIds.value,
       documents: initialDocumentIds.value,
       firstFollowup: followup.value.firstFollowup || false,
+      endOfSocialSupport: followup.value.endOfSocialSupport || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
       isMinistry: application.value.module.ministere,
