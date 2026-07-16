@@ -50,6 +50,7 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'medium',
   'prescribingOrganizationId',
   'firstFollowup',
+  'endOfSocialSupport',
   'synthesis',
   'classified',
   'documents',
@@ -203,6 +204,7 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
   return {
     date: filtered.date || '',
     firstFollowup: getBooleanOrEmpty(filtered.firstFollowup),
+    endOfSocialSupport: getBooleanOrEmpty(filtered.endOfSocialSupport),
     status: socialSupportStatusKeys.value(filtered.status) || '',
     subjects: filtered.subjects.map(s => s.name).join(', '),
     beneficiaryFileNumber: filtered.beneficiary.fileNumber || '',
