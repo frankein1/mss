@@ -103,6 +103,7 @@
         </ul>
         <template
           v-if="
+            helpRequest.fileInstruction.socialSupport.endOfSocialSupport ||
             helpRequest.fileInstruction.decisionDate ||
             helpRequest.handlingDate ||
             refusalReason ||
