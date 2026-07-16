@@ -46,6 +46,9 @@
       <li><span class='bold'>1er entretien : </span>{{#if
           firstFollowup
         }}Oui{{else}}Non{{/if}}</li>
+      {{#if endOfSocialSupport}}
+        <li><span class='bold'>Fin d'accompagnement : </span>Oui</li>
+      {{/if}}
       {{#if date}}<li><span class='bold'>Date de saisie
           </span>{{{date}}}</li>{{/if}}
       {{#if minister}}
