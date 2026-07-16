@@ -149,6 +149,12 @@ async function main() {
       beneficiaries.flatMap(b =>
         Array.from({ length: FOLLOWUPS_PER_BENEFICIARY }, () => {
           const medium = randomMedium()
+          const synthesis = faker.helpers.maybe(
+            () => faker.lorem.sentences(2),
+            {
+              probability: 0.6
+            }
+          )
           return {
             createdById: randomCreator(),
             lastUpdatedById: randomCreator(),
@@ -159,13 +165,10 @@ async function main() {
             status: randomStatus(),
             subtype: medium,
             date: faker.date.between({ from: DATE_FROM, to: DATE_TO }),
-            synthesis: faker.helpers.maybe(() => faker.lorem.sentences(2), {
-              probability: 0.6
-            }),
-            synthesisRichText: faker.helpers.maybe(
-              () => `<p>${faker.lorem.sentences(2)}</p>`,
-              { probability: 0.4 }
-            )
+            synthesis: synthesis,
+            synthesisRichText: synthesis
+              ? `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"${synthesis}"}]}]}`
+              : null
           }
         })
       )
