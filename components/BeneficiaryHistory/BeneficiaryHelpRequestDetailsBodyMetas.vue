@@ -59,6 +59,12 @@
     >
     {{ formatDate(fileInstruction.decisionDate) }}
   </li>
+  <li v-if="endOfSocialSupport">
+    <span class="information-label">{{
+      helpRequestFieldLabels.endOfSocialSupport
+    }}</span>
+    : Oui
+  </li>
   <li v-if="helpRequest.handlingDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.handlingDate }} :</span
@@ -94,6 +100,7 @@
     fileInstruction: FileInstructionData
     helpRequest: HelpRequestData
     status: SocialSupportStatus
+    endOfSocialSupport: boolean
   }>()
 
   const instructorOrganization = computed(() => {

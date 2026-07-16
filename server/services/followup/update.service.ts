@@ -62,6 +62,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     helpRequested,
     dueDate,
     firstFollowup,
+    endOfSocialSupport,
     numeroPegase,
     classified,
     forwardedToJustice,
@@ -135,6 +136,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
             : target.privateSynthesisRichText,
         status,
         numeroPegase,
+        endOfSocialSupport,
         dueDate,
         socialSupportRedirections: prepareRedirections
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)

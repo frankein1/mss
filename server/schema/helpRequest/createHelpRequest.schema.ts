@@ -53,6 +53,7 @@ export const createHelpRequestSchemaBase = z.object({
   privateSynthesisRichText: openRichText().nullish(),
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
+  endOfSocialSupport: z.boolean().default(false),
   financialSupport: z.boolean(),
   isRefundable: kindOfBooleanSchema(),
   socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()

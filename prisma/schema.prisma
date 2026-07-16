@@ -363,6 +363,8 @@ model SocialSupport {
 
   date DateTime @default(now())
 
+  endOfSocialSupport Boolean @default(false) @map("end_of_social_support")
+
   documents     Document[]     @relation("document_to_social_support")
   comments      Comment[]
   notifications Notification[]

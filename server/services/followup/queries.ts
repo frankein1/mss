@@ -53,6 +53,7 @@ const select = {
       synthesisRichText: true,
       ministerId: true,
       numeroPegase: true,
+      endOfSocialSupport: true,
       createdBy: {
         select: { id: true, firstName: true, lastName: true }
       },

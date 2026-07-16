@@ -23,6 +23,7 @@ const followupExportSelect = {
       date: true,
       ministerId: true,
       numeroPegase: true,
+      endOfSocialSupport: true,
       synthesis: true,
       dueDate: true,
       createdById: true,

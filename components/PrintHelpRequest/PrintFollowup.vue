@@ -21,6 +21,10 @@
             :content="followup.firstFollowup ? 'OUI' : null"
           />
           <PrintDetailItem
+            :title="followupFieldLabels.endOfSocialSupport"
+            :content="followup.endOfSocialSupport ? 'OUI' : null"
+          />
+          <PrintDetailItem
             :title="followupFieldLabels.duration"
             :content="followupDurationKeys.value(followup.duration)"
           />

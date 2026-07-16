@@ -48,6 +48,7 @@ export const addFollowupSchemaBase = z.object({
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   firstFollowup: z.boolean().default(false),
+  endOfSocialSupport: z.boolean().default(false),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
   prescribingOrganizationContactId: z.string().nullish(),

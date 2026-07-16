@@ -304,6 +304,7 @@ type SocialSupportForFollowupData = FieldLabels<
     | 'status'
     | 'dueDate'
     | 'synthesis'
+    | 'endOfSocialSupport'
   >
 >
 
@@ -376,6 +377,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     prescribingOrganizationContact:
       socialSupport.followup?.prescribingOrganizationContact?.name || null,
     synthesis: socialSupport.synthesis,
+    endOfSocialSupport: socialSupport.endOfSocialSupport || null,
     actions:
       Boolean(socialSupport.followup?.forwardedToJustice) ||
       Boolean(socialSupport.followup?.helpRequested) ||
@@ -459,6 +461,7 @@ type FileInstructionData = SocialSupportForFileInstructionData & {
   housingHelpRequest?: HousingHelpRequestData
   documents: DocumentData[] | null
   redirections: RedirectionData[] | null
+  endOfSocialSupport: boolean | null
 }
 
 function toBooleanLabel(
@@ -521,6 +524,7 @@ const getHelpRequestData = (
       : null,
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
+    endOfSocialSupport: socialSupport.endOfSocialSupport || null,
     documents: documents || null,
     redirections: redirections || null,
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
@@ -958,6 +962,7 @@ const getSocialSupports = async (
       socialSupportType: true,
       date: true,
       numeroPegase: true,
+      endOfSocialSupport: true,
       status: true,
       dueDate: true,
       synthesis: true,
