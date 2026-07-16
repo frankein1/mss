@@ -148,6 +148,7 @@ export const disableStructure = async ({
     synthesisRichText: null,
     privateSynthesisRichText: null,
     numeroPegase: '',
+    endOfSocialSupport: false,
     dueDate: null
   }
   const updateSocialSupports = () =>

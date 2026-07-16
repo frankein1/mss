@@ -58,6 +58,7 @@ function findMany(
           synthesisRichText: true,
           ministerId: true,
           numeroPegase: true,
+          endOfSocialSupport: true,
           lastUpdatedBy: {
             select: { id: true, firstName: true, lastName: true }
           },

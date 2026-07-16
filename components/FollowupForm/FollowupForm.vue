@@ -29,10 +29,16 @@
         class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
       >
         <div class="fr-col-12">
-          <VeeCheckbox
-            :label="followupFieldLabels.firstFollowup"
-            name="firstFollowup"
-          />
+          <div class="btn-container">
+            <VeeCheckbox
+              :label="followupFieldLabels.firstFollowup"
+              name="firstFollowup"
+            />
+            <VeeCheckbox
+              name="endOfSocialSupport"
+              :label="followupFieldLabels.endOfSocialSupport"
+            />
+          </div>
         </div>
 
         <!-- ROW -->

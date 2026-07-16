@@ -83,6 +83,7 @@ export async function update({ input, ctx }: UpdateParams) {
     privateSynthesisRichText,
     dueDate,
     fullFile,
+    endOfSocialSupport,
     date,
     isRefundable
   } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
@@ -148,6 +149,7 @@ export async function update({ input, ctx }: UpdateParams) {
             : target.fileInstruction.socialSupport.privateSynthesisRichText,
         minister: isMinistry && ministerId ? connect(ministerId) : undefined,
         numeroPegase,
+        endOfSocialSupport,
         dueDate,
         date,
         subjects: {

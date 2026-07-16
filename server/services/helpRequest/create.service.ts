@@ -55,6 +55,7 @@ export async function create({ input, ctx }: CreateParams) {
     privateSynthesisRichText,
     dueDate,
     fullFile,
+    endOfSocialSupport,
     financialSupport,
     isRefundable,
     date
@@ -134,6 +135,7 @@ export async function create({ input, ctx }: CreateParams) {
               privateSynthesisRichText,
               ministerId,
               numeroPegase,
+              endOfSocialSupport,
               subjects: connect(subjectId),
               dueDate,
               documents: prepareDocumentsMutations(documents),

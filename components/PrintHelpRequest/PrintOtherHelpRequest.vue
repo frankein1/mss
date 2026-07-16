@@ -103,6 +103,7 @@
         </ul>
         <template
           v-if="
+            helpRequest.fileInstruction.socialSupport.endOfSocialSupport ||
             helpRequest.fileInstruction.decisionDate ||
             helpRequest.handlingDate ||
             refusalReason ||
@@ -112,6 +113,14 @@
           <hr class="fr-mt-4w" />
           <h3>Information sur le dossier</h3>
           <ul>
+            <PrintDetailItem
+              :title="helpRequestFieldLabels.endOfSocialSupport"
+              :content="
+                helpRequest.fileInstruction.socialSupport.endOfSocialSupport
+                  ? 'OUI'
+                  : null
+              "
+            />
             <PrintDetailItem
               :title="helpRequestFieldLabels.decisionDate"
               :content="

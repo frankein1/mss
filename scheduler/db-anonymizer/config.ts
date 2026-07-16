@@ -226,6 +226,7 @@ const configSocialSupport: Record<
   status: true,
   due_date: true,
   subtype: true,
+  end_of_social_support: true,
   // -- BEGIN ANONYMIZED
   synthesis: false,
   synthesis_rich_text: false,

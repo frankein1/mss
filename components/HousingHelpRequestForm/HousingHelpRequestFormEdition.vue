@@ -73,6 +73,7 @@
         : 'false',
       isFirst: toKindOfBoolean(housingHelpRequest.value.isFirst),
       fullFile: fileInstruction.value.fullFile || false,
+      endOfSocialSupport: socialSupport.value.endOfSocialSupport || false,
       isPmr: housingHelpRequest.value.isPmr || false,
       maxRent: prismaDecimalToNumber(housingHelpRequest.value.maxRent),
       maxCharges: prismaDecimalToNumber(housingHelpRequest.value.maxCharges),

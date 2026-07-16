@@ -1,4 +1,12 @@
 <template>
+  <li v-if="endOfSocialSupport">
+    <span
+      v-if="endOfSocialSupport"
+      class="information-label"
+      >{{ followupFieldLabels.endOfSocialSupport }} :</span
+    >
+    Oui
+  </li>
   <li><span class="information-label">Type :</span> {{ medium }}</li>
   <li v-if="followup.prescribingOrganization?.name">
     <span class="information-label"
@@ -44,6 +52,7 @@
 
   const props = defineProps<{
     followup: FollowupData
+    endOfSocialSupport: boolean
   }>()
 
   const medium = computed(() => {

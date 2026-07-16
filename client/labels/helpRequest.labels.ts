@@ -33,5 +33,6 @@ export const helpRequestFieldLabels = {
   createdById: 'Agent',
   lastUpdatedById: 'Modifié par',
   financialSupport: 'Aide financière',
-  isRefundable: 'Cette aide est-elle remboursable ?'
+  isRefundable: 'Cette aide est-elle remboursable ?',
+  endOfSocialSupport: "Fin d'accompagnement"
 }

@@ -49,6 +49,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   dispatchDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
+  endOfSocialSupport: z.boolean().default(false),
   isFirst: kindOfBooleanSchema(),
   firstOpeningDate: dateOrEmpty,
   [AskedHousing.HebergementTemporaire]: z.boolean().default(false),

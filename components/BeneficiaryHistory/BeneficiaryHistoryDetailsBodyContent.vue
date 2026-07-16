@@ -30,18 +30,21 @@
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="socialSupport.followup"
         :followup="socialSupport.followup"
+        :end-of-social-support="socialSupport.endOfSocialSupport"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
         v-else-if="socialSupport.fileInstruction?.helpRequest"
         :file-instruction="socialSupport.fileInstruction"
         :help-request="socialSupport.fileInstruction.helpRequest"
         :status="socialSupport.status"
+        :end-of-social-support="socialSupport.endOfSocialSupport"
       />
       <BeneficiaryHousingHelpRequestDetailsBodyMetas
         v-else-if="socialSupport.fileInstruction?.housingHelpRequest"
         :file-instruction="socialSupport.fileInstruction"
         :housing-help-request="socialSupport.fileInstruction.housingHelpRequest"
         :status="socialSupport.status"
+        :end-of-social-support="socialSupport.endOfSocialSupport"
       />
     </ul>
     <BeneficiaryRedirectionsDetailsBodyMetas

@@ -15,6 +15,7 @@ export const followupFieldLabels = {
   helpRequested: 'Instruction de dossier',
   classified: 'Classé',
   firstFollowup: '1er entretien',
+  endOfSocialSupport: "Fin d'accompagnement",
   forwardedToJustice: 'Transmis à la justice',
   minister: 'Ministre',
   ministerId: 'Ministre',
