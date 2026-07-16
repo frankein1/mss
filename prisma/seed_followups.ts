@@ -69,6 +69,7 @@ function randomStatus(): SocialSupportStatus {
 function randomDuration(): FollowupDuration | null {
   return equiRandomEnum([
     null,
+    'LessThanQuarter',
     'Quarter',
     'Half',
     'ThreeQuarter',

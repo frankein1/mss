@@ -468,6 +468,7 @@ enum FollowupMedium {
 }
 
 enum FollowupDuration {
+  LessThanQuarter
   Quarter
   Half
   ThreeQuarter

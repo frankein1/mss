@@ -28,6 +28,7 @@ export const followupStatusKeys = buildKeys({
 })
 
 export const followupDurationKeys = buildKeys({
+  [FollowupDuration.LessThanQuarter]: '- de 15 min',
   [FollowupDuration.Quarter]: '15 min',
   [FollowupDuration.Half]: '30 min',
   [FollowupDuration.ThreeQuarter]: '45 min',

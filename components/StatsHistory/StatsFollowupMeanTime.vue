@@ -11,7 +11,8 @@
   <template v-else-if="meanTimeStats && meanTimeStats.length && meanTime">
     <p class="fr-text--xs text--muted">
       Seuls les entretiens avec une durée renseignée sont comptabilisés. Les
-      durées “plus de 1 heure” sont comptabilisés comme “1h30”.
+      durées “plus de 1 heure” sont comptabilisés comme “1h30”. Les durées de
+      “moins de 15 minutes” sont comptabilisés comme “8 min”.
       <br />Un entretien pouvant compter plus d'un objet, les durées sont
       additionnées.
     </p>
