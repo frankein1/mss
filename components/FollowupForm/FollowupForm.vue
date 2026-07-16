@@ -143,6 +143,7 @@
           <VeeInput
             name="dueDate"
             :label="followupFieldLabels.dueDate"
+            hint="Notification le jour de l'échéance et à J-30."
             type="date"
           />
         </div>
