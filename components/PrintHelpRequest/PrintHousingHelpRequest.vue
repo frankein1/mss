@@ -157,7 +157,7 @@
               :content="refusalReason"
             />
             <PrintDetailItem
-              title="Date d'échéance"
+              :title="helpRequestFieldLabels.dueDate"
               :content="
                 housingHelpRequest.fileInstruction.socialSupport.dueDate
                   ? formatDate(

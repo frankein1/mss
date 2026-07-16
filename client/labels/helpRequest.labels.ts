@@ -2,7 +2,7 @@ export const helpRequestFieldLabels = {
   id: 'Identifiant',
   isFirst: "Il s'agit",
   status: 'Statut',
-  dueDate: "Date d'échéance",
+  dueDate: "Date d'échéance ou de rappel",
   beneficiaryId: 'Bénéficiaire',
   familyFileId: 'Dossier',
   examinationDate: 'Date de passage en commission',

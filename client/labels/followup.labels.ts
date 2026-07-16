@@ -7,7 +7,7 @@ export const followupFieldLabels = {
   documents: 'Documents',
   status: 'Statut',
   date: 'Date de saisie',
-  dueDate: "Date d'échéance",
+  dueDate: "Date d'échéance ou de rappel",
   place: 'Lieu de rendez-vous',
   thirdPersonName: 'Tierce personne',
   synthesis: 'Compte rendu',
