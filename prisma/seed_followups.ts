@@ -57,7 +57,8 @@ function randomMedium(): FollowupMedium {
     'PostalMail',
     'Email',
     'Videoconference',
-    'ThirdParty'
+    'ThirdParty',
+    'Sms'
   ])
 }
 
