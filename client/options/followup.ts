@@ -17,7 +17,8 @@ export const followupMediumKeys = buildKeys({
   [FollowupMedium.AdministrativeManagement]: 'Gestion administrative',
   [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
   [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
-  [FollowupMedium.Videoconference]: 'Visioconférence'
+  [FollowupMedium.Videoconference]: 'Visioconférence',
+  [FollowupMedium.Sms]: 'SMS'
 })
 
 export const followupStatusKeys = buildKeys({

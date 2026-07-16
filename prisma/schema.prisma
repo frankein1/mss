@@ -459,6 +459,8 @@ enum FollowupMedium {
   Email
   // Gestion administrative
   AdministrativeManagement
+  // SMS
+  Sms
   // Visioconférence
   Videoconference
   // Entretien avec un tiers
