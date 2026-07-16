@@ -61,6 +61,9 @@
   )
 
   function getColor(duration: FollowupDuration | null) {
+    if (duration === FollowupDuration.LessThanQuarter) {
+      return ChartColor.DeepBlue
+    }
     if (duration === FollowupDuration.Half) {
       return ChartColor.Peach
     }
