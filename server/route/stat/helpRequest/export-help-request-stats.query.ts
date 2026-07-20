@@ -22,8 +22,7 @@ import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { getHelpRequestInstructionsStats } from '~/server/query/stats/helpRequest/getHelpRequestInstructionsStats'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import ExcelPkg from 'exceljs'
@@ -124,8 +123,7 @@ function addAmountsBySubjectWorksheet(
   rows.forEach(rowData => worksheet.addRow(rowData))
 }
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

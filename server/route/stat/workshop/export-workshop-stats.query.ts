@@ -1,7 +1,4 @@
-import {
-  getAppContextPermissions,
-  type SecurityRuleContext
-} from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { createQuery } from '../../createRoute'
 import {
   workshopStatFilterSchema,
@@ -76,8 +73,7 @@ function addWorkshopNamesWorksheet(
   rows.forEach(rowData => worksheet.addRow(rowData))
 }
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

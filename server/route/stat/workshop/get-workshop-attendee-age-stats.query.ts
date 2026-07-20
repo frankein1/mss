@@ -2,8 +2,7 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { WorkshopStatFilterInput } from '~/server/schema'
 import { workshopStatFilterSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { WorkshopAttendeeRepo } from '~/server/database'
 import { WorkshopAttendeeListType } from '@prisma/client'
 import { prepareWorkshopStatFilters } from '~/server/query/stats/helpers'
@@ -11,8 +10,7 @@ import type { AgeGroup } from '~/client/options'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import getAgeGroup from '~/utils/getAgeGroup'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

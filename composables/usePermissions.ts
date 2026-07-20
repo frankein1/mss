@@ -6,7 +6,6 @@ export const defaultPermissions = (): AppContextPermissions => ({
     cgu: { asManager: false }
   },
   export: {
-    stats: false,
     history: false
   },
   edit: {
@@ -19,7 +18,6 @@ export const defaultPermissions = (): AppContextPermissions => ({
   },
   module: {
     users: false,
-    stats: false,
     statsByReferent: false,
     health: false,
     ministere: false,

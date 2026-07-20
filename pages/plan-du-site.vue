@@ -78,12 +78,10 @@
         to: routes.workshop.AppWorkshops.path(),
         label: 'Ateliers'
       })
-      if (application.value.module.stats) {
-        items.push({
-          to: routes.stats.AppStats.path(),
-          label: routes.stats.AppStats.title
-        })
-      }
+      items.push({
+        to: routes.stats.AppStats.path(),
+        label: routes.stats.AppStats.title
+      })
       items.push({
         to: routes.structure.AppPartners.path(),
         label: routes.structure.AppPartners.title
