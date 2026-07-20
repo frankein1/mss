@@ -8,8 +8,8 @@ import {
 } from '../security'
 
 export const validateRichTextSchema = (richText: string): boolean => {
-  const doc: JSONContent = JSON.parse(richText)
   try {
+    const doc: JSONContent = JSON.parse(richText)
     const schema = getSchema(tiptapExtensions)
     const contentNode = Node.fromJSON(schema, doc)
     contentNode.check()

@@ -49,7 +49,7 @@ const securityCheck = async (
     ctx,
     input.familyFileId
   )
-  if (!permissions.create) {
+  if (!permissions.create.followup) {
     return false
   }
 
