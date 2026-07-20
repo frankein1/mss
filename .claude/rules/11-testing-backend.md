@@ -50,27 +50,38 @@ Embed full context: `'{Entity} - {Operation} - {Assertion sentence}'`.
 
 Always tear down in `afterEach` hook and never in the test itself.
 
-You can use ids as global values and remove specifically the ids. Prefer this approach for structures, beneficiaries, family files, or when creating only a few objects.
+You can use ids as global values and remove specifically the ids. Prefer this approach for structures, beneficiaries, family files, or when creating one or only a few objects.
+
+The track function is useful because you can also use it anywhere in the test and not only in the setup.
 
 ```js
-let familyFileId: string
+let familyFileIds: string[] = []
+
+const track = <T extends { id: string }>(result: T) => {
+  familyFileIds.push(result.id)
+  return result
+}
 
 beforeEach(async () => {
-  const familyFile = await prismaClient.familyFile.create({
+  const familyFile = track(await prismaClient.familyFile.create({
     data: {
       structure: { connect: { id: structureId } },
       referents: { connect: [{ id: referentId }] }
     }
-  })
-  familyFileId = familyFile.id
+  }))
 })
 
 afterEach(async () => {
-  await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
+  if (familyFileIds.length) {
+    await prismaClient.familyFile.deleteMany({
+      where: { id: { in: familyFileIds } }
+    })
+    familyFileIds.length = 0
+  }
 })
 ```
 
-You also can use prefix for naming and delete with matching the corresponding prefix. Prefer this approach when creating several objects.
+You also can use prefix for naming and delete with matching the corresponding prefix. Prefer this approach when creating many objects.
 
 ```js
 afterEach(async () => {
