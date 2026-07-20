@@ -227,10 +227,8 @@
     gap: 1rem;
   }
 
-  :deep {
-    .combobox-wrapper.fr-input-group:not(:last-child),
-    .fr-select-group:not(:last-child) {
-      margin-bottom: 0;
-    }
+  :deep(.combobox-wrapper.fr-input-group:not(:last-child)),
+  :deep(.fr-select-group:not(:last-child)) {
+    margin-bottom: 0;
   }
 </style>

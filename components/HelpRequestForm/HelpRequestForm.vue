@@ -214,9 +214,7 @@
     margin-bottom: -1rem;
   }
 
-  :deep {
-    h3 {
-      color: var(--primary);
-    }
+  :deep(h3) {
+    color: var(--primary);
   }
 </style>
