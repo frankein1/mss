@@ -45,14 +45,16 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     .filter(([_key, value]) => !!value)
     .map(([key, _value]) => key as AskedHousing)
 
+  const cleanedInstructorOrganizationId = isExternalStructure
+    ? instructorOrganizationId
+    : null
+
   return {
     ...data,
     status,
     externalStructure: isExternalStructure,
-    instructorOrganizationId: isExternalStructure
-      ? instructorOrganizationId
-      : null,
-    instructorOrganizationContactId: instructorOrganizationId
+    instructorOrganizationId: cleanedInstructorOrganizationId,
+    instructorOrganizationContactId: cleanedInstructorOrganizationId
       ? instructorOrganizationContactId
       : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,

@@ -50,15 +50,17 @@ function cleanInput({
   const isAccepted = status === SocialSupportStatus.Accepted
   const isRefused = status === SocialSupportStatus.Refused
 
+  const cleanedInstructorOrganizationId = isExternalStructure
+    ? instructorOrganizationId
+    : null
+
   return {
     ...data,
     status,
     financialSupport: isFinancial,
     externalStructure: isExternalStructure,
-    instructorOrganizationId: isExternalStructure
-      ? instructorOrganizationId
-      : null,
-    instructorOrganizationContactId: instructorOrganizationId
+    instructorOrganizationId: cleanedInstructorOrganizationId,
+    instructorOrganizationContactId: cleanedInstructorOrganizationId
       ? instructorOrganizationContactId
       : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
