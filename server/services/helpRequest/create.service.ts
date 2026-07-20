@@ -133,7 +133,7 @@ export async function create({ input, ctx }: CreateParams) {
               synthesisRichText,
               privateSynthesis,
               privateSynthesisRichText,
-              ministerId,
+              ministerId: input.isMinistry && ministerId ? ministerId : null,
               numeroPegase,
               endOfSocialSupport,
               subjects: connect(subjectId),

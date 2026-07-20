@@ -1,11 +1,15 @@
 import { UserActivityType } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import { createHelpRequestSchema } from '~/server/schema'
 import type { SecurityRuleContext } from '~/server/security'
 import { HelpRequestService, FamilyFileService } from '~/server/services'
-import { validateSocialSupportPartnerOrganisations } from '../helpers'
+import {
+  validateRichTextSchema,
+  validateSocialSupportPartnerOrganisations
+} from '../helpers'
 
 const handler = ({
   input,
@@ -14,6 +18,24 @@ const handler = ({
   input: CreateHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
+  if (
+    input.synthesisRichText != null &&
+    !validateRichTextSchema(input.synthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
+  if (
+    input.privateSynthesisRichText != null &&
+    !validateRichTextSchema(input.privateSynthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
   return HelpRequestService.create({ ctx, input })
 }
 
