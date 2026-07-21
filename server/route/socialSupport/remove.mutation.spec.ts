@@ -84,7 +84,7 @@ describe('SocialSupport - Remove - Autorisations', () => {
       trpc.structureManagerMinistere.socialSupport.remove({
         id: socialSupportId
       })
-    ).rejects.toThrowError(/socialSupport[\s\S]*?no record/im)
+    ).rejects.toThrow(/socialSupport[\s\S]*?no record/im)
   })
 
   test('Un administrateur ne peut pas supprimer un social support', async ({
@@ -92,7 +92,7 @@ describe('SocialSupport - Remove - Autorisations', () => {
   }) => {
     await expect(() =>
       trpc.administrator.socialSupport.remove({ id: socialSupportId })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 })
 

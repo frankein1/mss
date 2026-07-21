@@ -87,7 +87,7 @@ describe('Workshop - Update - Update workshop data', () => {
         name: workshopName,
         partnerOrganizationId: otherPartnerOrg.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('An Agent cannot update a workshop from another structure', async ({
@@ -106,7 +106,7 @@ describe('Workshop - Update - Update workshop data', () => {
         mode: UpdateWorkshopNameMode.current,
         name: workshopName
       })
-    ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
+    ).rejects.toThrow(/workshop[\s\S]*?no record/im)
   })
 
   test('A Reception Agent can update a workshop and only the id of the created entity is returned', async ({
@@ -143,7 +143,7 @@ describe('Workshop - Update - Update workshop data', () => {
         name: workshopName,
         date
       })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 })
 

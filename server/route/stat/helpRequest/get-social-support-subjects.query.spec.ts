@@ -55,6 +55,6 @@ describe('Statistics - File Instructions - Social Support Subjects', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getHelpRequestSubjectStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 })

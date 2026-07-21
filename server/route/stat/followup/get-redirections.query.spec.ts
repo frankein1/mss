@@ -32,7 +32,7 @@ describe('Statistics - Followups - Redirections', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getFollowupRedirectionsStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats including only beneficiaries followed as a referent', async ({

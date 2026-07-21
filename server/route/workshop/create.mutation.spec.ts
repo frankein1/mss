@@ -28,7 +28,7 @@ test('Workshop - Create - An Agent cannot create a workshop with a partner organ
       date: new Date(),
       partnerOrganizationId: otherPartnerOrganizationId
     })
-  ).rejects.toThrowError(/not allowed to access route/i)
+  ).rejects.toThrow(/not allowed to access route/i)
 })
 
 test('Workshop - Create - A reception agent can create a workshop and only the id of the created entity is returned', async ({
@@ -51,7 +51,7 @@ test('Workshop - Create - An administrator cannot create a workshop', async ({
       name: 'Atelier Numérique',
       date: new Date()
     })
-  ).rejects.toThrowError(/user routes are not available to admins/i)
+  ).rejects.toThrow(/user routes are not available to admins/i)
 })
 
 async function resetDatabase(wid: string, poid: string) {

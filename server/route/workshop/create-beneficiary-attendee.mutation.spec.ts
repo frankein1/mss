@@ -77,7 +77,7 @@ describe('Authorizations', () => {
         workshopIds,
         beneficiaryId: beneficiaryFromOtherStructureId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('Create Beneficiary Attendee - An Agent cannot Create as an attendee from her structure to a workshop from another structure', async ({
@@ -90,7 +90,7 @@ describe('Authorizations', () => {
         workshopIds,
         beneficiaryId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('Create Beneficiary Attendee - An administrator cannot Create a workshop attendee', async ({
@@ -101,7 +101,7 @@ describe('Authorizations', () => {
         workshopIds,
         beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.APFELMANN].id
       })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 })
 

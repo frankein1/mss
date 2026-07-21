@@ -80,7 +80,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
       trpc.referent.housingHelpRequest.add(
         createHousingHelpRequest(apfelmannId, apfelmannId)
       )
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A reception agent cannot create a housing help request', async ({
@@ -90,7 +90,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
       trpc.receptionAgent.housingHelpRequest.add(
         createHousingHelpRequest(apfelmannId, apfelmannId)
       )
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('An administrator cannot create a housing help request', async ({
@@ -100,7 +100,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
       trpc.administrator.housingHelpRequest.add(
         createHousingHelpRequest(coursorId, coursorId)
       )
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 
   test('A manager cannot create a housing help request on a family file of another structure', async ({
@@ -110,7 +110,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
       trpc.structureManagerMinistere.housingHelpRequest.add(
         createHousingHelpRequest(coursorId, coursorId)
       )
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A manager cannot create a housing help request with a prescribing organization from another structure', async ({
@@ -130,7 +130,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
         ...createHousingHelpRequest(coursorId, coursorId),
         prescribingOrganizationId: otherPartnerOrganization.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('A manager cannot create a housing help request with an instructor organization from another structure', async ({
@@ -151,7 +151,7 @@ describe('Housing Help Request - Create - Authorizations', () => {
         externalStructure: 'true',
         instructorOrganizationId: otherPartnerOrganization.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 })
 
@@ -164,7 +164,7 @@ describe('Housing Help Request - Create - Rich text syntheses', () => {
         ...createHousingHelpRequest(coursorId, coursorId),
         synthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a housing help request with a synthesis that is not valid JSON', async ({
@@ -175,7 +175,7 @@ describe('Housing Help Request - Create - Rich text syntheses', () => {
         ...createHousingHelpRequest(coursorId, coursorId),
         synthesisRichText: 'not json at all'
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a housing help request with a private synthesis that is not a valid rich text document', async ({
@@ -186,7 +186,7 @@ describe('Housing Help Request - Create - Rich text syntheses', () => {
         ...createHousingHelpRequest(coursorId, coursorId),
         privateSynthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 })
 
