@@ -22,7 +22,7 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
 
     await expect(() =>
       trpc.structureManager.file.getFamilyFileMinimalInfo(input)
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/no record/i)
   })
 
   test('should not get MinimalInfo of a FamilyFile when id does not exist as a structure manager', async ({
@@ -32,7 +32,7 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
 
     await expect(() =>
       trpc.structureManager.file.getFamilyFileMinimalInfo(input)
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/no record/i)
   })
 
   test('should get MinimalInfo of a FamilyFile when belongs to structure as a structure manager', async ({

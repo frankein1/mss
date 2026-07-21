@@ -256,7 +256,7 @@ test('Structure - Disable - Administrator cannot deactivate structure with activ
 
   await expect(() =>
     trpc.administrator.admin.disableStructure({ id: structureId })
-  ).rejects.toThrowError(/cannot disable/i)
+  ).rejects.toThrow(/cannot disable/i)
 })
 
 test('Structure - Disable - Administrator cannot deactivate structure created in the last 6 months', async ({
@@ -272,7 +272,7 @@ test('Structure - Disable - Administrator cannot deactivate structure created in
 
   await expect(() =>
     trpc.administrator.admin.disableStructure({ id: structureId })
-  ).rejects.toThrowError(/cannot disable/i)
+  ).rejects.toThrow(/cannot disable/i)
 })
 
 async function resetDatabase(sid: string) {

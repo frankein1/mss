@@ -71,7 +71,7 @@ export function describeBudgetAuthorizations(
     }) => {
       await expect(() =>
         calls.ownStructure(trpc.receptionAgent)
-      ).rejects.toThrowError(/not allowed to access route/i)
+      ).rejects.toThrow(/not allowed to access route/i)
     })
 
     test(`${routeName} - an administrator cannot access the budget`, async ({
@@ -79,7 +79,7 @@ export function describeBudgetAuthorizations(
     }) => {
       await expect(() =>
         calls.ownStructure(trpc.administrator)
-      ).rejects.toThrowError(/user routes are not available to admins/i)
+      ).rejects.toThrow(/user routes are not available to admins/i)
     })
 
     test(`${routeName} - a structure manager cannot access the budget of another structure`, async ({
@@ -87,15 +87,15 @@ export function describeBudgetAuthorizations(
     }) => {
       await expect(() =>
         calls.otherStructure(trpc.structureManager)
-      ).rejects.toThrowError(/no.*record/im)
+      ).rejects.toThrow(/no.*record/im)
     })
 
     test(`${routeName} - a referent cannot access the budget if not assigned to the family file`, async ({
       trpc
     }) => {
-      await expect(() =>
-        calls.ownStructure(trpc.referent)
-      ).rejects.toThrowError(/no.*record/im)
+      await expect(() => calls.ownStructure(trpc.referent)).rejects.toThrow(
+        /no.*record/im
+      )
     })
 
     test(`${routeName} - a referent can access the budget if assigned to the family file`, async ({

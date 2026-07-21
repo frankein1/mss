@@ -9,6 +9,6 @@ describe('Authorizations', () => {
     const id = fixturesSocialSupportSubjects[0].id
     await expect(() =>
       trpc.socialWorker.admin.makeInactiveSocialSupportSubject({ id })
-    ).rejects.toThrowError(/user is not an administrator/i)
+    ).rejects.toThrow(/user is not an administrator/i)
   })
 })

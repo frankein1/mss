@@ -152,6 +152,6 @@ describe('School City - Search - Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.administrator.dataEducation.searchSchoolCities({ query: 'Lyon' })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 })

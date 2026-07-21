@@ -115,7 +115,7 @@ test('Workshop - Create Attendee - An Agent cannot delete an attendee of a works
         id: workshopAttendeesId[0],
         type: WorkshopAttendeeType.Beneficiary
       })
-  ).rejects.toThrowError(/workshop[\s\S]*?no record/im)
+  ).rejects.toThrow(/workshop[\s\S]*?no record/im)
 })
 
 test('Workshop - Delete Attendee - An agent can delete an attendee that is a beneficiary and the id and type of the deleted entity is returned', async ({
@@ -174,7 +174,7 @@ test('Workshop - Delete Attendee - An administrator cannot delete a workshop att
         id: workshopAttendeesId[0],
         type: WorkshopAttendeeType.Beneficiary
       })
-  ).rejects.toThrowError(/user routes are not available to admins/i)
+  ).rejects.toThrow(/user routes are not available to admins/i)
 })
 
 async function resetDatabase(

@@ -78,7 +78,7 @@ describe('Followup - Create - Authorizations', () => {
     // Blocked by FamilyFileConstraints
     await expect(() =>
       trpc.referent.followup.add(createFollowup(apfelmannId, apfelmannId))
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A reception agent can create a followup on any family file of their structure', async ({
@@ -96,7 +96,7 @@ describe('Followup - Create - Authorizations', () => {
   test('An administrator cannot create a followup', async ({ trpc }) => {
     await expect(() =>
       trpc.administrator.followup.add(createFollowup(coursorId, coursorId))
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 
   test('A manager cannot create a followup on a family file of another structure', async ({
@@ -106,7 +106,7 @@ describe('Followup - Create - Authorizations', () => {
       trpc.structureManagerMinistere.followup.add(
         createFollowup(coursorId, coursorId)
       )
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A manager cannot create a followup with a prescribing organization from another structure', async ({
@@ -126,7 +126,7 @@ describe('Followup - Create - Authorizations', () => {
         ...createFollowup(coursorId, coursorId),
         prescribingOrganizationId: otherPartnerOrganization.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 })
 
@@ -139,7 +139,7 @@ describe('Followup - Create - Rich text syntheses', () => {
         ...createFollowup(coursorId, coursorId),
         synthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a followup with a synthesis that is not valid JSON', async ({
@@ -150,7 +150,7 @@ describe('Followup - Create - Rich text syntheses', () => {
         ...createFollowup(coursorId, coursorId),
         synthesisRichText: 'not json at all'
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a followup with a private synthesis that is not a valid rich text document', async ({
@@ -161,7 +161,7 @@ describe('Followup - Create - Rich text syntheses', () => {
         ...createFollowup(coursorId, coursorId),
         privateSynthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 })
 

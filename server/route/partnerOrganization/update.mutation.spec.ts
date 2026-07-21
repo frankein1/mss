@@ -45,7 +45,7 @@ describe('Authorizations', () => {
           name: 'updated name',
           siret: '12345678901234'
         })
-    ).rejects.toThrowError(
+    ).rejects.toThrow(
       /invalid(.*)prisma.partnerOrganization[\s\S]*?no record/im
     )
   })

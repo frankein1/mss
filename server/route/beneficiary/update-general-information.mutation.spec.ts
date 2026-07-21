@@ -71,7 +71,7 @@ describe('Beneficiary - updateGeneralInformation - Authorizations', () => {
         vulnerablePerson: false,
         status: 'Active'
       })
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/no record/i)
   })
 
   test('A StructureManager cannot assign a referent from another structure', async ({
@@ -86,6 +86,6 @@ describe('Beneficiary - updateGeneralInformation - Authorizations', () => {
         vulnerablePerson: false,
         status: 'Active'
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 })

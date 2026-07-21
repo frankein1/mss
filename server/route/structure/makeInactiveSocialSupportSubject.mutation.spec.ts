@@ -29,7 +29,7 @@ describe('Authorizations', () => {
 
     await expect(() =>
       trpc.socialWorker.structure.makeInactiveSocialSupportSubject({ id })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('Structure - Make subject Inactive - A Structure Manager cannot update a subject from another structure', async ({
@@ -41,7 +41,7 @@ describe('Authorizations', () => {
         trpc.structureManager.structure.makeInactiveSocialSupportSubject({
           id: subjectIds[0]
         })
-    ).rejects.toThrowError(
+    ).rejects.toThrow(
       /invalid(.*)prisma.socialSupportSubject[\s\S]*?no record/im
     )
   })

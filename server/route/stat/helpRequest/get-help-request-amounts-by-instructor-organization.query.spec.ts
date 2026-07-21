@@ -47,7 +47,7 @@ describe('Statistics - File Instructions - Amounts delivered by Instructor Organ
       trpc.receptionAgent.stat.getHelpRequestAmountsByInstructorOrganization(
         input
       )
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats including only beneficiaries followed as a referent', async ({

@@ -113,7 +113,7 @@ describe('Authorizations', () => {
         budgetId: ownStructureBudgetId,
         beneficiaryId: ownStructureBeneficiaryId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('an administrator cannot create a budget income', async ({ trpc }) => {
@@ -122,7 +122,7 @@ describe('Authorizations', () => {
         budgetId: ownStructureBudgetId,
         beneficiaryId: ownStructureBeneficiaryId
       })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 
   test('a referent cannot create a budget income if not assigned to the family file', async ({
@@ -138,7 +138,7 @@ describe('Authorizations', () => {
           relationship: 'Conjoint'
         }
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('rejects when budget belongs to another structure', async ({ trpc }) => {
@@ -147,7 +147,7 @@ describe('Authorizations', () => {
         budgetId: otherStructureBudgetId,
         beneficiaryId: otherStructureBeneficiaryId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('rejects when beneficiary belongs to another structure', async ({
@@ -158,7 +158,7 @@ describe('Authorizations', () => {
         budgetId: ownStructureBudgetId,
         beneficiaryId: otherStructureBeneficiaryId
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('rejects when caller belongs to another structure', async ({ trpc }) => {
@@ -167,6 +167,6 @@ describe('Authorizations', () => {
         budgetId: ownStructureBudgetId,
         beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 })

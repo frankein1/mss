@@ -29,7 +29,7 @@ describe('Authorizations', () => {
       () =>
         partnerIds[0] &&
         trpc.structureManagerMinistere.partner.makeActive({ id: partnerIds[0] })
-    ).rejects.toThrowError(
+    ).rejects.toThrow(
       /invalid(.*)prisma.partnerOrganization[\s\S]*?no record/im
     )
   })
