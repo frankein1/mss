@@ -1,5 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { FixtureStructure, fixtureStructures } from './'
+import {
+  FixtureDataEducationSchool,
+  fixturesDataEducationSchools
+} from './dataEducationSchools'
 import dayjs from 'dayjs'
 
 export enum FixtureBeneficiary {
@@ -19,7 +23,10 @@ export enum FixtureBeneficiary {
   TESSON = 13,
   DUPONT = 14,
   LEROY = 15,
-  MOREAU = 16
+  MOREAU = 16,
+  SICARD = 17,
+  LEON = 18,
+  MAILLARD = 19
 }
 
 export const fixturesBeneficiaries = [
@@ -248,8 +255,65 @@ export const fixturesBeneficiaries = [
     birthDate: new Date('1992-08-14'),
     gender: 'Female',
     accommodationZone: 'OutsideEurope'
+  },
+  {
+    id: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    familyFileId: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    fileNumber: 'SICARD01GH',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'SICARD',
+    firstName: 'Noham',
+    birthDate: new Date('2016-05-12'),
+    gender: 'Male',
+    city: 'Lyon',
+    department: 'Rhône',
+    region: 'Auvergne-Rhône-Alpes',
+    schoolClass: 'CM1',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.SchLyon2]?.uai,
+    qpv: true
+  },
+  {
+    id: 'f6a7b8c9-d0e1-2345-f012-456789012345',
+    familyFileId: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    fileNumber: 'SICARD03KL',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'SICARD',
+    firstName: 'Léon',
+    birthDate: new Date('2019-03-10'),
+    gender: 'Male',
+    city: 'Lyon',
+    department: 'Rhône',
+    region: 'Auvergne-Rhône-Alpes',
+    schoolClass: 'CE1',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.SchLyon2]?.uai,
+    qpv: true
+  },
+  {
+    id: 'e5f6a7b8-c9d0-1234-ef01-345678901234',
+    familyFileId: 'e5f6a7b8-c9d0-1234-ef01-345678901234',
+    fileNumber: 'MAILLARD02IJ',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'MAILLARD',
+    firstName: 'Emy',
+    birthDate: new Date('2015-02-10'),
+    gender: 'Female',
+    city: 'Dijon',
+    department: "Côte-d'Or",
+    region: 'Bourgogne-Franche-Comté',
+    schoolClass: 'CM2',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Dijon]?.uai,
+    qpv: false
   }
 ] satisfies [
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,

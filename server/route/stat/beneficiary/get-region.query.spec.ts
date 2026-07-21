@@ -27,7 +27,8 @@ describe('Statistics - Beneficiary - Region', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 10,
-      'Bourgogne-Franche-Comté': 2,
+      'Auvergne-Rhône-Alpes': 2,
+      'Bourgogne-Franche-Comté': 3,
       'Île-de-France': 1
     })
   })
@@ -51,6 +52,7 @@ describe('Statistics - Beneficiary - Region', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,
+      'Bourgogne-Franche-Comté': 1,
       'Île-de-France': 1
     })
   })
@@ -64,7 +66,8 @@ describe('Statistics - Beneficiary - Region', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
-      'Bourgogne-Franche-Comté': 1
+      'Auvergne-Rhône-Alpes': 2,
+      'Bourgogne-Franche-Comté': 2
     })
   })
 
@@ -85,7 +88,7 @@ describe('Statistics - Beneficiary - Region', () => {
     const stats = await trpc.structureManager.stat.getRegionStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Bourgogne-Franche-Comté': 2
+      'Bourgogne-Franche-Comté': 3
     })
   })
 })

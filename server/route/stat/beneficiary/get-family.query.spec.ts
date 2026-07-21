@@ -29,7 +29,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
       'CoupleWithChildren': 1,
       'Divorced': 2,
       'Single': 1,
-      'Non renseigné': 9
+      'Non renseigné': 12
     })
   })
 
@@ -53,7 +53,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     expect(parseStats(stats)).toEqual({
       'Divorced': 1,
       'Single': 1,
-      'Non renseigné': 5
+      'Non renseigné': 6
     })
   })
 
@@ -66,7 +66,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
 
     expect(parseStats(stats)).toEqual({
       'Divorced': 2,
-      'Non renseigné': 7
+      'Non renseigné': 10
     })
   })
 
@@ -87,7 +87,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     const stats = await trpc.structureManager.stat.getFamilyStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 2
+      'Non renseigné': 3
     })
   })
 })

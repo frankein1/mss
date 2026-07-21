@@ -27,7 +27,8 @@ describe('Statistics - Beneficiary - Department', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 10,
-      "Côte-d'Or": 2,
+      "Côte-d'Or": 3,
+      'Rhône': 2,
       'Val-de-Marne': 1
     })
   })
@@ -51,6 +52,7 @@ describe('Statistics - Beneficiary - Department', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,
+      "Côte-d'Or": 1,
       'Val-de-Marne': 1
     })
   })
@@ -64,7 +66,8 @@ describe('Statistics - Beneficiary - Department', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
-      "Côte-d'Or": 1
+      "Côte-d'Or": 2,
+      'Rhône': 2
     })
   })
 
@@ -85,7 +88,7 @@ describe('Statistics - Beneficiary - Department', () => {
     const stats = await trpc.structureManager.stat.getDepartmentStats(input)
 
     expect(parseStats(stats)).toEqual({
-      "Côte-d'Or": 2
+      "Côte-d'Or": 3
     })
   })
 })

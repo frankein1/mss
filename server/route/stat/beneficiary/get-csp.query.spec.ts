@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 11,
+      'Non renseigné': 14,
       'Employed': 1,
       'JobSeeker': 1
     })
@@ -50,7 +50,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.referent.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 6,
+      'Non renseigné': 7,
       'JobSeeker': 1
     })
   })
@@ -63,7 +63,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     const stats = await trpc.structureManager.stat.getCSPStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 8,
+      'Non renseigné': 11,
       'JobSeeker': 1
     })
   })
@@ -86,7 +86,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
 
     expect(parseStats(stats)).toEqual({
       'Employed': 1,
-      'Non renseigné': 1
+      'Non renseigné': 2
     })
   })
 })

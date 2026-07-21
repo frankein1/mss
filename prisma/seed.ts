@@ -252,6 +252,7 @@ function loadFixtures() {
     loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
     loadFixturesCGUHistory(),
+    loadFixturesDataEducationSchools(),
     ...loadFixturesFamilyFiles(),
     ...loadFixturesBeneficiaries(),
     loadFixturesDataInclusionStructures(),
@@ -268,8 +269,7 @@ function loadFixtures() {
     loadWorkshops(),
     loadWorkshopExternalAttendees(),
     loadWorkshopAttendees(),
-    createMinister(),
-    loadFixturesDataEducationSchools()
+    createMinister()
   ]
 }
 

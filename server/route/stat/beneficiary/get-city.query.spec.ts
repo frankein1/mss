@@ -27,8 +27,8 @@ describe('Statistics - Beneficiary - City', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
-      'Dijon': 2,
-      'Lyon': 2,
+      'Dijon': 3,
+      'Lyon': 4,
       'Paris': 1
     })
   })
@@ -52,6 +52,7 @@ describe('Statistics - Beneficiary - City', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,
+      'Dijon': 1,
       'Paris': 1
     })
   })
@@ -65,8 +66,8 @@ describe('Statistics - Beneficiary - City', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 7,
-      'Dijon': 1,
-      'Lyon': 1
+      'Dijon': 2,
+      'Lyon': 3
     })
   })
 
@@ -87,7 +88,7 @@ describe('Statistics - Beneficiary - City', () => {
     const stats = await trpc.structureManager.stat.getCityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      Lyon: 2
+      Lyon: 4
     })
   })
 })
