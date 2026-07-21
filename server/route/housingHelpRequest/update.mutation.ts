@@ -33,7 +33,8 @@ const securityCheck = async (
     return false
   }
   const appPermissions = getAppContextPermissions(ctx)
-  if (input.privateSynthesis && !permissions.set.privateSynthesis) {
+  const hasPrivateSynthesis = typeof input.privateSynthesis === 'string'
+  if (hasPrivateSynthesis && !permissions.set.privateSynthesis) {
     return false
   }
 
