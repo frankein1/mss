@@ -11,7 +11,7 @@
           :heading-level="2"
           @update:model-value="onTabChange"
         >
-          <NuxtPage />
+          <NuxtPage :key="route.path" />
         </AtomRouteTabs>
       </div>
     </div>
