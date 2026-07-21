@@ -7,7 +7,7 @@ type Routes = typeof r
 function getBread<
   T extends
     | 'AppStructureEdit'
-    | 'AppStructureSubjects'
+    | 'AppStructureSocialSupportSubjectsEdit'
     | 'AppStructure'
     | 'AppPartners'
     | 'AppStructureUserAdd'
@@ -23,9 +23,9 @@ export const breadcrumbs = {
     ...user.AppOverview(),
     ...getBread('AppStructureEdit')
   ],
-  AppStructureSubjects: () => [
+  AppStructureSocialSupportSubjectsEdit: () => [
     ...user.AppOverview(),
-    ...getBread('AppStructureSubjects')
+    ...getBread('AppStructureSocialSupportSubjectsEdit')
   ],
   AppStructureUserEdit: (userName: string) => [
     ...user.AppOverview(),

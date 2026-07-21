@@ -178,7 +178,7 @@
     }
     matomo.trackEvent(EventCategory.User, UserAction.DeleteUser)
     snackbar.success("L'utilisateur a été supprimé avec succès.")
-    await navigateTo(routes.structure.AppStructure.path())
+    await navigateTo(routes.structure.AppStructureUsers.path())
   }
 </script>
 

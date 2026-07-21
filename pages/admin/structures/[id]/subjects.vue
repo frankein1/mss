@@ -92,7 +92,7 @@
   import type { UpdateSocialSupportSubjectsInput } from '~/server/schema'
   import { updateSocialSupportSubjectsSchema } from '~/server/schema'
 
-  const title = routes.structure.AppStructureSubjects.title
+  const title = routes.structure.AppStructureSocialSupportSubjectsEdit.title
 
   useHead({ title })
   const route = useRoute()

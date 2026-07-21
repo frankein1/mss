@@ -8,7 +8,7 @@
       <AtomBreadcrumb :links="breadcrumbs.structure.AppStructureUserAdd()" />
       <NuxtLink
         class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-arrow-left-line fr-mb-4v"
-        :to="routes.structure.AppStructure.path()"
+        :to="routes.structure.AppStructureUsers.path()"
       >
         Retour
       </NuxtLink>
@@ -66,7 +66,7 @@
       return
     }
     snackbar.success("L'utilisateur a été créé avec succès.")
-    navigateTo(routes.structure.AppStructure.path())
+    navigateTo(routes.structure.AppStructureUsers.path())
   }
 
   const onCancel = () => {
