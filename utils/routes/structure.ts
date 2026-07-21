@@ -1,5 +1,7 @@
 import { AppRoute } from './utils'
 
+const StructureRoute = `${AppRoute}/structure`
+
 export const routes = {
   AppPartners: {
     name: 'AppPartners',
@@ -9,36 +11,51 @@ export const routes = {
   AppStructure: {
     name: 'AppStructure',
     title: 'Configurer votre structure',
-    path: () => `${AppRoute}/structure`
+    path: () => StructureRoute
+  },
+  AppStructureUsers: {
+    name: 'AppStructureUsers',
+    title: 'Utilisateurs',
+    path: () => `${StructureRoute}/users`
+  },
+  AppStructureInfo: {
+    name: 'AppStructureInfo',
+    title: 'Infos structure',
+    path: () => `${StructureRoute}/info`
+  },
+  AppStructureCustomObjects: {
+    name: 'AppStructureCustomObjects',
+    title: 'Objets d’accompagnement',
+    path: () => `${StructureRoute}/custom-objects`
   },
   AppStructureEdit: {
     name: 'AppStructureEdit',
-    title: 'Modifier ma structure',
-    path: () => `${AppRoute}/structure/edit`
+    title: 'Modifier les informations de votre structure',
+    path: () => `${StructureRoute}/edit`
   },
-  AppStructureSubjects: {
-    name: 'AppStructureSubjects',
+  AppStructureSocialSupportSubjectsEdit: {
+    name: 'AppStructureSocialSupportSubjectsEdit',
     title: 'Ajouter un accompagnement',
-    path: () => `${AppRoute}/structure/subjects`
+    path: () => `${StructureRoute}/custom-objects/social-support-subjects/edit`
   },
   AppStructureUserEdit: {
     name: 'AppStructureUserEdit',
     title: (userName: string) => `Modifier le compte de ${userName}`,
-    path: (userId: string) => `${AppRoute}/structure/users/${userId}/edit`
+    path: (userId: string) => `${StructureRoute}/users/${userId}/edit`
   },
   AppStructureUserDelete: {
     name: 'AppStructureUserDelete',
     title: (userName: string) => `Supprimer le compte de ${userName}`,
-    path: (userId: string) => `${AppRoute}/structure/users/${userId}/delete`
+    path: (userId: string) => `${StructureRoute}/users/${userId}/delete`
   },
   AppStructureUserAdd: {
     name: 'AppStructureUserAdd',
     title: `Ajouter un nouvel utilisateur`,
-    path: () => `${AppRoute}/structure/users/add`
+    path: () => `${StructureRoute}/users/add`
   },
   AppStructureDora: {
     name: 'AppStructureDora',
     title: `Rechercher un acteur du territoire sur DORA`,
-    path: () => `${AppRoute}/structure/dora`
+    path: () => `${StructureRoute}/dora`
   }
 } as const

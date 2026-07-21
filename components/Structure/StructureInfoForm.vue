@@ -60,10 +60,7 @@
         />
       </div>
 
-      <div
-        id="dpo-scroll"
-        clas="fr-col-12 "
-      >
+      <div class="fr-col-12">
         <div class="fr-p-3v fr-mt-1w">
           <h3 class="fr-mb-0 fr-text--lg grey">
             Personne référente à la protection des données (DPO)&nbsp;:
@@ -130,7 +127,6 @@
   const props = defineProps<{
     structure: StructureInfo
     validate: (values: EditStructureInfoInput) => void
-    dpoScroll?: boolean
   }>()
 
   const modal = useModal()
@@ -155,15 +151,6 @@
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
     props.validate(values)
   )
-  onMounted(() => {
-    const dpoElement = document.getElementById('dpo-scroll')
-    if (dpoElement && props.dpoScroll) {
-      dpoElement.scrollIntoView({
-        block: 'start',
-        inline: 'nearest'
-      })
-    }
-  })
 </script>
 
 <style scoped lang="css">

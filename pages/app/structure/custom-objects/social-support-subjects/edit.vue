@@ -5,7 +5,9 @@
     @submit.prevent="onSubmit"
   >
     <div class="fr-container content fr-pb-5w">
-      <AtomBreadcrumb :links="breadcrumbs.structure.AppStructureSubjects()" />
+      <AtomBreadcrumb
+        :links="breadcrumbs.structure.AppStructureSocialSupportSubjectsEdit()"
+      />
 
       <PageTitle :title="title" />
 
@@ -51,7 +53,7 @@
               aria-expanded="false"
               aria-controls="accordion-selection"
             >
-              Sélectionner parmi une suggestion d’objets
+              Sélectionner parmi une suggestion d'objets
             </button>
           </h2>
           <div
@@ -118,7 +120,7 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = routes.structure.AppStructureSubjects.title
+  const title = routes.structure.AppStructureSocialSupportSubjectsEdit.title
 
   useHead({ title })
 
@@ -177,7 +179,7 @@
       mutation: () =>
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),
       onSuccess: () => {
-        navigateTo(routes.structure.AppStructure.path())
+        navigateTo(routes.structure.AppStructureCustomObjects.path())
         snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
@@ -187,7 +189,7 @@
   })
 
   const onCancel = () => {
-    navigateTo(routes.structure.AppStructure.path())
+    navigateTo(routes.structure.AppStructureCustomObjects.path())
   }
 </script>
 

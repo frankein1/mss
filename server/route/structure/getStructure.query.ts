@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { SocialSupportSubjectRepo, StructureRepo } from '~/server/database'
+import { StructureRepo } from '~/server/database'
 
 const handler = async ({
   ctx: {
@@ -16,19 +16,7 @@ const handler = async ({
     where: { id }
   })
 
-  const socialSupportSubjects = await SocialSupportSubjectRepo.findMany(user, {
-    where: {
-      inactive: false
-    },
-    orderBy: {
-      name: 'asc'
-    }
-  })
-
-  return {
-    structure,
-    socialSupportSubjects
-  }
+  return { structure }
 }
 
 export const getStructure = createQuery({
