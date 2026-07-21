@@ -266,6 +266,10 @@ export function prepareBeneficiaryStatFilters(
     formattedFilters.status = filters.beneficiaryStatus
   }
 
+  if (filters.qpv) {
+    formattedFilters.qpv = filters.qpv === 'true'
+  }
+
   if (filters.ageGroup && filters.ageGroup !== AgeGroup.Custom) {
     const dateRange = ageGroupToDateRange(filters.ageGroup)
     formattedFilters.birthDate = {
