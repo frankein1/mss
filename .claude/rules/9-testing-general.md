@@ -15,7 +15,7 @@ paths:
 
 ## Error Assertion Convention
 
-- Use `.rejects.toThrowError(/regex/i)` with a case-insensitive regex matching a stable fragment of the error message
+- Use `.rejects.toThrow(/regex/i)` with a case-insensitive regex matching a stable fragment of the error message
 - Never use bare `.rejects.toThrow()` — always assert on the error content
 
 ## Common Commands

@@ -43,7 +43,7 @@ describe('Statistics - Beneficiary - Accommodation Zone', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getAccommodationZoneStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats with beneficiaryStatus filter', async ({

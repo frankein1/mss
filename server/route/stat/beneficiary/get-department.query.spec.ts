@@ -39,7 +39,7 @@ describe('Statistics - Beneficiary - Department', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getDepartmentStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats including only beneficiaries followed as a referent', async ({

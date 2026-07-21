@@ -78,16 +78,16 @@ describe('Authorizations', () => {
 
   test('should reject administrator', async ({ trpc }) => {
     const input: Input = { familyFileId: FAMILY_FILE_ID }
-    await expect(
-      trpc.administrator.file.getDocuments(input)
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    await expect(trpc.administrator.file.getDocuments(input)).rejects.toThrow(
+      /user routes are not available to admins/i
+    )
   })
 
   test('should reject user from another structure', async ({ trpc }) => {
     const input: Input = { familyFileId: FAMILY_FILE_ID }
     await expect(
       trpc.structureManagerMinistere.file.getDocuments(input)
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/no record/i)
   })
 
   test('should allow structure manager', async ({ trpc }) => {
@@ -151,7 +151,7 @@ describe('Authorizations', () => {
     trpc
   }) => {
     const input: Input = { familyFileId: FAMILY_FILE_ID }
-    await expect(trpc.referent.file.getDocuments(input)).rejects.toThrowError(
+    await expect(trpc.referent.file.getDocuments(input)).rejects.toThrow(
       /no record/i
     )
   })
@@ -287,6 +287,6 @@ describe('Cross-structure isolation', () => {
     }
     await expect(
       trpc.structureManager.file.getDocuments(input)
-    ).rejects.toThrowError(/no record/i)
+    ).rejects.toThrow(/no record/i)
   })
 })

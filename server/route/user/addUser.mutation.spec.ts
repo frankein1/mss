@@ -26,7 +26,7 @@ describe('Authorizations', () => {
         ...USERS[0],
         role: 'SocialWorker'
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('User - Create - The created user belongs to the same structure as the Structure manager', async ({
@@ -55,6 +55,6 @@ describe('Authorizations', () => {
         //@ts-expect-error Type administrator not assignable to role.
         role: 'Administrator'
       })
-    ).rejects.toThrowError(/Administrator[\s\S]*?invalid_enum_value/i)
+    ).rejects.toThrow(/Administrator[\s\S]*?invalid_enum_value/i)
   })
 })

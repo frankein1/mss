@@ -63,7 +63,7 @@ describe('Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.socialWorker.user.delete({ id: SOCIAL_WORKER_NEW_ID })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('User - Delete - A Structure Manager cannot delete a user from another structure', async ({
@@ -71,7 +71,7 @@ describe('Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.structureManager.user.delete({ id: SOCIAL_WORKER_NEW_ID })
-    ).rejects.toThrowError(/user[\s\S]*?no record/im)
+    ).rejects.toThrow(/user[\s\S]*?no record/im)
   })
 
   test('User - Delete - A Structure Manager cannot delete their own account', async ({

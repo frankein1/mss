@@ -82,7 +82,7 @@ describe('Help Request - Create - Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.referent.helpRequest.add(createHelpRequest(apfelmannId, apfelmannId))
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A reception agent cannot create a help request', async ({ trpc }) => {
@@ -90,7 +90,7 @@ describe('Help Request - Create - Authorizations', () => {
       trpc.receptionAgent.helpRequest.add(
         createHelpRequest(apfelmannId, apfelmannId)
       )
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('An administrator cannot create a help request', async ({ trpc }) => {
@@ -98,7 +98,7 @@ describe('Help Request - Create - Authorizations', () => {
       trpc.administrator.helpRequest.add(
         createHelpRequest(coursorId, coursorId)
       )
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 
   test('A manager cannot create a help request on a family file of another structure', async ({
@@ -108,7 +108,7 @@ describe('Help Request - Create - Authorizations', () => {
       trpc.structureManagerMinistere.helpRequest.add(
         createHelpRequest(coursorId, coursorId)
       )
-    ).rejects.toThrowError(/familyFile[\s\S]*?no record/im)
+    ).rejects.toThrow(/familyFile[\s\S]*?no record/im)
   })
 
   test('A manager cannot create a help request with a prescribing organization from another structure', async ({
@@ -128,7 +128,7 @@ describe('Help Request - Create - Authorizations', () => {
         ...createHelpRequest(coursorId, coursorId),
         prescribingOrganizationId: otherPartnerOrganization.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('A manager cannot create a help request with an instructor organization from another structure', async ({
@@ -149,7 +149,7 @@ describe('Help Request - Create - Authorizations', () => {
         externalStructure: 'true',
         instructorOrganizationId: otherPartnerOrganization.id
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 })
 
@@ -162,7 +162,7 @@ describe('Help Request - Create - Rich text syntheses', () => {
         ...createHelpRequest(coursorId, coursorId),
         synthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a help request with a synthesis that is not valid JSON', async ({
@@ -173,7 +173,7 @@ describe('Help Request - Create - Rich text syntheses', () => {
         ...createHelpRequest(coursorId, coursorId),
         synthesisRichText: 'not json at all'
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 
   test('A manager cannot create a help request with a private synthesis that is not a valid rich text document', async ({
@@ -184,7 +184,7 @@ describe('Help Request - Create - Rich text syntheses', () => {
         ...createHelpRequest(coursorId, coursorId),
         privateSynthesisRichText: JSON.stringify({ type: 'notATiptapNode' })
       })
-    ).rejects.toThrowError(/invalid json was received by the server/i)
+    ).rejects.toThrow(/invalid json was received by the server/i)
   })
 })
 

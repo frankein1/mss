@@ -39,7 +39,7 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getCSPStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats including only beneficiaries followed as a referent', async ({

@@ -42,13 +42,14 @@ Embed full context: `'{Entity} - {Operation} - {Assertion sentence}'`.
 
 ## Error Assertion Convention
 
-- For securityCheck failures: `.rejects.toThrowError(/not allowed to access route/i)`
-- For admin calling protectedProcedure: `.rejects.toThrowError(/user routes are not available to admins/i)`
-- For not-found / constraint violations: include the Prisma model name before "no record", e.g. `.rejects.toThrowError(/workshop[\s\S]*?no record/im)`
+- For securityCheck failures: `.rejects.toThrow(/not allowed to access route/i)`
+- For admin calling protectedProcedure: `.rejects.toThrow(/user routes are not available to admins/i)`
+- For not-found / constraint violations: include the Prisma model name before "no record", e.g. `.rejects.toThrow(/workshop[\s\S]*?no record/im)`
 
 ## Test setup / teardown
 
-Always tear down in `afterEach` hook and never in the test itself.
+- Favor using seed data rather than setting up custom data. Only generate data when it would involve modifying seed data and amke tearing down difficult
+- Always tear down in `afterEach` hook and never in the test itself.
 
 You can use ids as global values and remove specifically the ids. Prefer this approach for structures, beneficiaries, family files, or when creating one or only a few objects.
 

@@ -154,6 +154,6 @@ describe('School - Search - Authorizations', () => {
         query: '',
         citycode: CITYCODE_LYON
       })
-    ).rejects.toThrowError(/user routes are not available to admins/i)
+    ).rejects.toThrow(/user routes are not available to admins/i)
   })
 })

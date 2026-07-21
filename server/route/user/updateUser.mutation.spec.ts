@@ -16,7 +16,7 @@ describe('Authorizations', () => {
         email: fixturesUsers[FixtureUserRole.StructureManager].email,
         role: 'SocialWorker'
       })
-    ).rejects.toThrowError(/not allowed to access route/i)
+    ).rejects.toThrow(/not allowed to access route/i)
   })
 
   test('User - Update - A Structure Manager cannot update a user from another structure', async ({
@@ -33,7 +33,7 @@ describe('Authorizations', () => {
         email: fixturesUsers[FixtureUserRole.StructureManager].email,
         role: 'StructureManager'
       })
-    ).rejects.toThrowError(/invalid(.*)prisma.user.update[\s\S]*?no record/im)
+    ).rejects.toThrow(/invalid(.*)prisma.user.update[\s\S]*?no record/im)
   })
 
   test('User - Update - An agent cannot change a role to Administrator', async ({
@@ -50,6 +50,6 @@ describe('Authorizations', () => {
         //@ts-expect-error Type administrator not assignable to role.
         role: 'Administrator'
       })
-    ).rejects.toThrowError(/Administrator[\s\S]*?invalid_enum_value/i)
+    ).rejects.toThrow(/Administrator[\s\S]*?invalid_enum_value/i)
   })
 })

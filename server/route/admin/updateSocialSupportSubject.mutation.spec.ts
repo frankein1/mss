@@ -12,6 +12,6 @@ describe('Authorizations', () => {
         id,
         name: 'new name'
       })
-    ).rejects.toThrowError(/user is not an administrator/i)
+    ).rejects.toThrow(/user is not an administrator/i)
   })
 })

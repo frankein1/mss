@@ -39,7 +39,7 @@ describe('Statistics - Beneficiary - Region', () => {
 
     await expect(() =>
       trpc.receptionAgent.stat.getRegionStats(input)
-    ).rejects.toThrowError(/not allowed to access route/)
+    ).rejects.toThrow(/not allowed to access route/)
   })
 
   test('should compute stats including only beneficiaries followed as a referent', async ({
