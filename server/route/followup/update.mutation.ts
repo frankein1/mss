@@ -55,8 +55,11 @@ const securityCheck = async (
 
   const appPermissions = getAppContextPermissions(ctx)
 
-  // CAN EDIT PRIVATE SYNTHESIS
-  if (input.privateSynthesis && !permissions.set.privateSynthesis) {
+  // Non-creators receive privateSynthesis as null (redacted by getOne);
+  // null/undefined are allowed through, the service layer will keep the DB value for non-creators.
+  // This could be improved by using undefined instead of null in getOne
+  const hasPrivateSynthesis = typeof input.privateSynthesis === 'string'
+  if (hasPrivateSynthesis && !permissions.set.privateSynthesis) {
     return false
   }
 
