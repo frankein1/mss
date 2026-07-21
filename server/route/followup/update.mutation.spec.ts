@@ -6,28 +6,29 @@ import {
   SocialSupportStatus,
   SocialSupportType
 } from '@prisma/client'
-import dayjs from 'dayjs'
-import { afterEach, beforeEach, describe, expect } from 'vitest'
+import { afterEach, describe, expect } from 'vitest'
 import { prismaClient } from '~/server/prisma'
 import { test } from '~/test/server/test-utils'
-import { createBeneficiary, createFamilyFile } from '~/test/server/fixtures'
 import {
+  FixtureBeneficiary,
   FixtureStructure,
   FixtureUserRole,
+  fixturesBeneficiaries,
   fixtureStructures,
   fixturesSocialSupportSubjects,
   fixturesUsers
 } from '~/prisma/fixtures'
-import { generateFileNumber } from '~/utils/generateFileNumber'
 
 const subjectId = fixturesSocialSupportSubjects[0].id
 
-const createdSocialSupportIds: string[] = []
+// COURSOR: referents = StructureManager + Referent
+const coursorId = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id
+// APFELMANN: referents = SocialWorker only
+const apfelmannId = fixturesBeneficiaries[FixtureBeneficiary.APFELMANN].id
+// MARTIN: Ministère structure, referent = StructureManagerMinistere
+const martinId = fixturesBeneficiaries[FixtureBeneficiary.MARTIN].id
 
-const trackId = <T extends { id: string }>(ids: string[], result: T) => {
-  ids.push(result.id)
-  return result
-}
+const createdSocialSupportIds: string[] = []
 
 const track = <T extends { socialSupportId: string }>(result: T) => {
   createdSocialSupportIds.push(result.socialSupportId)
@@ -41,8 +42,17 @@ afterEach(async () => {
     })
     createdSocialSupportIds.length = 0
   }
+  await Promise.all([
+    prismaClient.redirectionReason.deleteMany({
+      where: { name: { startsWith: 'UDT-' } }
+    }),
+    prismaClient.ministerEntity.deleteMany({
+      where: { lastName: { startsWith: 'UDT-' } }
+    })
+  ])
 })
 
+// Compulsory fields for update
 const baseUpdateInput = (
   familyFileId: string,
   beneficiaryId: string,
@@ -140,55 +150,19 @@ async function createTestFollowup(
 }
 
 describe('Followup - Update - Authorizations', () => {
-  let familyFileId: string
-  let beneficiaryId: string
-  const extraBeneficiaryIds: string[] = []
-  const extraFamilyFileIds: string[] = []
-
-  beforeEach(async () => {
-    const date = dayjs().subtract(1, 'month').toDate()
-    const familyFile = await createFamilyFile(date)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    familyFileId = familyFile.id
-    beneficiaryId = beneficiary.id
-  })
-
-  afterEach(async () => {
-    if (extraBeneficiaryIds.length) {
-      await prismaClient.beneficiary.deleteMany({
-        where: { id: { in: extraBeneficiaryIds } }
-      })
-      extraBeneficiaryIds.length = 0
-    }
-    if (extraFamilyFileIds.length) {
-      await prismaClient.familyFile.deleteMany({
-        where: { id: { in: extraFamilyFileIds } }
-      })
-      extraFamilyFileIds.length = 0
-    }
-    await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-    await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  })
-
   test('A manager can edit any followup', async ({ trpc }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
 
     const result = await trpc.structureManager.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -200,16 +174,16 @@ describe('Followup - Update - Authorizations', () => {
   test('A referent can edit a followup they created', async ({ trpc }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
 
     const result = await trpc.referent.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -221,27 +195,15 @@ describe('Followup - Update - Authorizations', () => {
   test('A social worker can edit a followup when they are member of the family file referents', async ({
     trpc
   }) => {
-    const date = dayjs().subtract(1, 'month').toDate()
     const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
-    const familyFile = await createFamilyFile(date, undefined, socialWorkerId)
-    trackId(extraFamilyFileIds, familyFile)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    trackId(extraBeneficiaryIds, beneficiary)
-
     const followup = track(
-      await createTestFollowup(familyFile.id, beneficiary.id, socialWorkerId)
+      await createTestFollowup(apfelmannId, apfelmannId, socialWorkerId)
     )
 
     const result = await trpc.socialWorker.followup.update(
       baseUpdateInput(
-        familyFile.id,
-        beneficiary.id,
+        apfelmannId,
+        apfelmannId,
         followup.id,
         followup.socialSupportId
       )
@@ -255,8 +217,8 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -264,8 +226,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.socialWorker.followup.update(
         baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         )
@@ -278,8 +240,8 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -287,8 +249,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.receptionAgent.followup.update(
         baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         )
@@ -301,8 +263,8 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -310,8 +272,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.instructor.followup.update(
         baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         )
@@ -322,8 +284,8 @@ describe('Followup - Update - Authorizations', () => {
   test('An administrator cannot edit a followup', async ({ trpc }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -331,8 +293,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.administrator.followup.update(
         baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         )
@@ -345,8 +307,8 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -354,8 +316,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.structureManagerMinistere.followup.update(
         baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         )
@@ -364,27 +326,15 @@ describe('Followup - Update - Authorizations', () => {
   })
 
   test('A social worker can edit a followup they created', async ({ trpc }) => {
-    const date = dayjs().subtract(1, 'month').toDate()
     const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
-    const familyFile = await createFamilyFile(date, undefined, socialWorkerId)
-    trackId(extraFamilyFileIds, familyFile)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    trackId(extraBeneficiaryIds, beneficiary)
-
     const followup = track(
-      await createTestFollowup(familyFile.id, beneficiary.id, socialWorkerId)
+      await createTestFollowup(apfelmannId, apfelmannId, socialWorkerId)
     )
 
     const result = await trpc.socialWorker.followup.update(
       baseUpdateInput(
-        familyFile.id,
-        beneficiary.id,
+        apfelmannId,
+        apfelmannId,
         followup.id,
         followup.socialSupportId
       )
@@ -398,16 +348,16 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.ReceptionAgent].id
       )
     )
 
     const result = await trpc.receptionAgent.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -419,16 +369,16 @@ describe('Followup - Update - Authorizations', () => {
   test('An instructor can edit a followup they created', async ({ trpc }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.InstructorActive].id
       )
     )
 
     const result = await trpc.instructor.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -442,8 +392,8 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
@@ -451,8 +401,8 @@ describe('Followup - Update - Authorizations', () => {
     await expect(() =>
       trpc.structureManager.followup.update({
         ...baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         ),
@@ -466,7 +416,7 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId)
+      await createTestFollowup(coursorId, coursorId, referentId)
     )
 
     await prismaClient.socialSupport.update({
@@ -476,8 +426,8 @@ describe('Followup - Update - Authorizations', () => {
 
     const result = await trpc.structureManager.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -490,7 +440,6 @@ describe('Followup - Update - Authorizations', () => {
       where: { id: followup.socialSupportId },
       select: { privateSynthesis: true }
     })
-    // The private synthesis is not modified
     expect(record.privateSynthesis).toBe('Secret note')
   })
 
@@ -499,14 +448,14 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId)
+      await createTestFollowup(coursorId, coursorId, referentId)
     )
 
     await expect(() =>
       trpc.structureManager.followup.update({
         ...baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         ),
@@ -520,16 +469,16 @@ describe('Followup - Update - Authorizations', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.Referent].id
       )
     )
 
     const result = await trpc.referent.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -541,40 +490,18 @@ describe('Followup - Update - Authorizations', () => {
 })
 
 describe('Followup - Update - Notifications', () => {
-  let familyFileId: string
-  let beneficiaryId: string
-
-  beforeEach(async () => {
-    const date = dayjs().subtract(1, 'month').toDate()
-    const familyFile = await createFamilyFile(date)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    familyFileId = familyFile.id
-    beneficiaryId = beneficiary.id
-  })
-
-  afterEach(async () => {
-    await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-    await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-  })
-
   test('The original creator is notified when another user updates their followup', async ({
     trpc
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId)
+      await createTestFollowup(coursorId, coursorId, referentId)
     )
 
     await trpc.structureManager.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -599,16 +526,16 @@ describe('Followup - Update - Notifications', () => {
   }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.StructureManager].id
       )
     )
 
     await trpc.structureManager.followup.update(
       baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       )
@@ -623,44 +550,19 @@ describe('Followup - Update - Notifications', () => {
 })
 
 describe('Followup - Update - Redirections', () => {
-  let familyFileId: string
-  let beneficiaryId: string
-
-  beforeEach(async () => {
-    const date = dayjs().subtract(1, 'month').toDate()
-    const familyFile = await createFamilyFile(date)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    familyFileId = familyFile.id
-    beneficiaryId = beneficiary.id
-  })
-
-  afterEach(async () => {
-    await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-    await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-    await prismaClient.redirectionReason.deleteMany({
-      where: { name: { startsWith: 'UDT-' } }
-    })
-  })
-
   test('Adding redirections to a followup that had none', async ({ trpc }) => {
     const followup = track(
       await createTestFollowup(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         fixturesUsers[FixtureUserRole.StructureManager].id
       )
     )
 
     await trpc.structureManager.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -691,15 +593,15 @@ describe('Followup - Update - Redirections', () => {
   test('Modifying existing redirections on a followup', async ({ trpc }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId, {
+      await createTestFollowup(coursorId, coursorId, referentId, {
         withRedirections: true
       })
     )
 
     await trpc.structureManager.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -734,15 +636,15 @@ describe('Followup - Update - Redirections', () => {
   test('Removing all redirections from a followup', async ({ trpc }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId, {
+      await createTestFollowup(coursorId, coursorId, referentId, {
         withRedirections: true
       })
     )
 
     await trpc.structureManager.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -758,45 +660,6 @@ describe('Followup - Update - Redirections', () => {
 })
 
 describe('Followup - Update - Conditional field mutations', () => {
-  let familyFileId: string
-  let beneficiaryId: string
-  const extraBeneficiaryIds: string[] = []
-  const extraFamilyFileIds: string[] = []
-
-  beforeEach(async () => {
-    const date = dayjs().subtract(1, 'month').toDate()
-    const familyFile = await createFamilyFile(date)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    familyFileId = familyFile.id
-    beneficiaryId = beneficiary.id
-  })
-
-  afterEach(async () => {
-    if (extraBeneficiaryIds.length) {
-      await prismaClient.beneficiary.deleteMany({
-        where: { id: { in: extraBeneficiaryIds } }
-      })
-      extraBeneficiaryIds.length = 0
-    }
-    if (extraFamilyFileIds.length) {
-      await prismaClient.familyFile.deleteMany({
-        where: { id: { in: extraFamilyFileIds } }
-      })
-      extraFamilyFileIds.length = 0
-    }
-    await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-    await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-    await prismaClient.ministerEntity.deleteMany({
-      where: { lastName: { startsWith: 'UDT-MINISTRE' } }
-    })
-  })
-
   const readFollowup = (socialSupportId: string) =>
     prismaClient.followup.findUniqueOrThrow({
       where: { socialSupportId },
@@ -814,7 +677,7 @@ describe('Followup - Update - Conditional field mutations', () => {
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId, {
+      await createTestFollowup(coursorId, coursorId, referentId, {
         medium: FollowupMedium.ExternalAppointment,
         place: 'Mairie de Dijon'
       })
@@ -822,8 +685,8 @@ describe('Followup - Update - Conditional field mutations', () => {
 
     await trpc.referent.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -840,7 +703,7 @@ describe('Followup - Update - Conditional field mutations', () => {
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId, {
+      await createTestFollowup(coursorId, coursorId, referentId, {
         medium: FollowupMedium.ThirdParty,
         thirdPersonName: 'Madame Dupont'
       })
@@ -848,8 +711,8 @@ describe('Followup - Update - Conditional field mutations', () => {
 
     await trpc.referent.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -862,30 +725,13 @@ describe('Followup - Update - Conditional field mutations', () => {
   })
 
   test('The minister can be changed on a followup', async ({ trpc }) => {
-    const date = dayjs().subtract(1, 'month').toDate()
     const ministereStructureId =
       fixtureStructures[FixtureStructure.Ministère].id
     const ministereUserId =
       fixturesUsers[FixtureUserRole.StructureManagerMinistere].id
-    const familyFile = await createFamilyFile(
-      date,
-      ministereStructureId,
-      ministereUserId,
-      ministereUserId
-    )
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      ministereStructureId,
-      ministereUserId,
-      generateFileNumber()
-    )
-
-    trackId(extraFamilyFileIds, familyFile)
-    trackId(extraBeneficiaryIds, beneficiary)
 
     const followup = track(
-      await createTestFollowup(familyFile.id, beneficiary.id, ministereUserId, {
+      await createTestFollowup(martinId, martinId, ministereUserId, {
         withMinister: true,
         structureId: ministereStructureId
       })
@@ -907,8 +753,8 @@ describe('Followup - Update - Conditional field mutations', () => {
 
     await trpc.structureManagerMinistere.followup.update({
       ...baseUpdateInput(
-        familyFile.id,
-        beneficiary.id,
+        martinId,
+        martinId,
         followup.id,
         followup.socialSupportId
       ),
@@ -922,43 +768,18 @@ describe('Followup - Update - Conditional field mutations', () => {
 })
 
 describe('Followup - Update - Clear relations', () => {
-  let familyFileId: string
-  let beneficiaryId: string
-
-  beforeEach(async () => {
-    const date = dayjs().subtract(1, 'month').toDate()
-    const familyFile = await createFamilyFile(date)
-    const beneficiary = await createBeneficiary(
-      date,
-      familyFile.id,
-      undefined,
-      undefined,
-      generateFileNumber()
-    )
-    familyFileId = familyFile.id
-    beneficiaryId = beneficiary.id
-  })
-
-  afterEach(async () => {
-    await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
-    await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
-    await prismaClient.redirectionReason.deleteMany({
-      where: { name: { startsWith: 'UDT-' } }
-    })
-  })
-
   test('Clearing the prescribing organization from a followup', async ({
     trpc
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId)
+      await createTestFollowup(coursorId, coursorId, referentId)
     )
 
     await trpc.structureManager.followup.update({
       ...baseUpdateInput(
-        familyFileId,
-        beneficiaryId,
+        coursorId,
+        coursorId,
         followup.id,
         followup.socialSupportId
       ),
@@ -983,7 +804,7 @@ describe('Followup - Update - Clear relations', () => {
   }) => {
     const referentId = fixturesUsers[FixtureUserRole.Referent].id
     const followup = track(
-      await createTestFollowup(familyFileId, beneficiaryId, referentId, {
+      await createTestFollowup(coursorId, coursorId, referentId, {
         withMinister: true
       })
     )
@@ -991,8 +812,8 @@ describe('Followup - Update - Clear relations', () => {
     await expect(() =>
       trpc.structureManager.followup.update({
         ...baseUpdateInput(
-          familyFileId,
-          beneficiaryId,
+          coursorId,
+          coursorId,
           followup.id,
           followup.socialSupportId
         ),
