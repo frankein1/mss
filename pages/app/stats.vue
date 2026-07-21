@@ -22,11 +22,13 @@
             v-if="
               socialSupportSubjectOptions &&
               beneficiariesCitiesOptions &&
+              beneficiariesSchoolsOptions &&
               agentsOptions
             "
             :key="route.path"
             :social-support-subject-options="socialSupportSubjectOptions"
             :beneficiaries-cities-options="beneficiariesCitiesOptions"
+            :beneficiaries-schools-options="beneficiariesSchoolsOptions"
             :agent-options="agentsOptions"
           />
         </AtomRouteTabs>
@@ -119,6 +121,19 @@
     }
   })
 
+  const {
+    data: beneficiariesSchoolsOptions,
+    error: beneficiariesSchoolsOptionsError
+  } = await trpcClient.config.getBeneficiariesSchools.useQuery(undefined, {
+    transform: beneficiariesSchools => {
+      const renamedSchools = beneficiariesSchools.map(school => ({
+        name: `${school.name}, ${school.zipcode} ${school.city}`,
+        uai: school.uai
+      }))
+      return toOptions(renamedSchools, 'uai', 'name')
+    }
+  })
+
   const { data: agentsOptions, error: agentsOptionsError } =
     await trpcClient.config.getAgents.useQuery(undefined, {
       transform: agents => toOptions(agents, 'id', 'name'),
@@ -131,6 +146,9 @@
     }
     if (beneficiariesCitiesOptionsError.value) {
       return "La liste des villes n'a pas pu être chargée."
+    }
+    if (beneficiariesSchoolsOptionsError.value) {
+      return "La liste des établissements scolaires n'a pas pu être chargée."
     }
     if (agentsOptionsError.value) {
       return "La liste des référents n'a pas pu être chargée."

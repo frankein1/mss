@@ -10,6 +10,7 @@
       v-model:filters="filtersFI"
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
       is-help-requests-tab
     />
@@ -24,6 +25,7 @@
       v-model:filters="filtersFW"
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
     />
 
@@ -56,6 +58,11 @@
     { value: 'perpignan', label: 'Perpignan' },
     { value: 'oyonnax', label: 'Oyonnax' },
     { value: 'quimper', label: 'Quimper' }
+  ]
+
+  const beneficiariesSchoolsOptions: Options = [
+    { value: '0750001A', label: 'Lycée Condorcet' },
+    { value: '0440001A', label: 'Collège Aristide Briand' }
   ]
 
   const agentOptions: Options = withEmptyValue(
