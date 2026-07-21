@@ -22,7 +22,7 @@ test.describe('Structure page, authenticated as Structure Manager', () => {
   test('should have title, and tabs', async ({ page }) => {
     await page.goto('/app/structure')
     await validateHeadings(page)
-    await validateTabs(page, 3)
+    await validateTabs(page, 4)
   })
 })
 
@@ -32,6 +32,6 @@ test.describe('Structure page, authenticated as Reception Agent', () => {
   test('should have title, and tabs', async ({ page }) => {
     await page.goto('/app/structure')
     await validateHeadings(page)
-    await validateTabs(page, 2)
+    await validateTabs(page, 3)
   })
 })

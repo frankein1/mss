@@ -25,23 +25,8 @@ export const routes = {
   },
   AppStructureCustomObjects: {
     name: 'AppStructureCustomObjects',
-    title: 'Objets d’accompagnement',
-    path: () => `${StructureRoute}/custom-objects`
-  },
-  AppStructureUsers: {
-    name: 'AppStructureUsers',
-    title: 'Utilisateurs',
-    path: () => `${AppRoute}/structure/users`
-  },
-  AppStructureInfo: {
-    name: 'AppStructureInfo',
-    title: 'Infos structure',
-    path: () => `${AppRoute}/structure/info`
-  },
-  AppStructureSupport: {
-    name: 'AppStructureSupport',
     title: 'Accompagnements et Dispositifs',
-    path: () => `${AppRoute}/structure/accompagnements-dispositifs`
+    path: () => `${StructureRoute}/custom-objects`
   },
   AppStructureEdit: {
     name: 'AppStructureEdit',

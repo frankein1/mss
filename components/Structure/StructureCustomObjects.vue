@@ -35,7 +35,9 @@
       <SocialSupportSubjects
         v-if="socialSupportSubjects"
         :subjects="socialSupportSubjects"
-        :edit-path="routes.structure.AppStructureSubjects.path()"
+        :edit-path="
+          routes.structure.AppStructureSocialSupportSubjectsEdit.path()
+        "
         @refresh="emit('refresh')"
       />
     </div>
