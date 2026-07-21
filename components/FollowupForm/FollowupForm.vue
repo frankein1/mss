@@ -119,7 +119,7 @@
         <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
-            :to="routes.structure.AppStructure.path()"
+            :to="routes.structure.AppStructureSocialSupportSubjects.path()"
             class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             @click="
               matomo.trackEvent(

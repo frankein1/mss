@@ -94,8 +94,8 @@
       })
       if (application.value.module.users) {
         items.push({
-          to: routes.structure.AppStructureSubjects.path(),
-          label: routes.structure.AppStructureSubjects.title
+          to: routes.structure.AppStructureSocialSupportSubjectsEdit.path(),
+          label: routes.structure.AppStructureSocialSupportSubjectsEdit.title
         })
       }
       if (application.value.view.cgu.asManager) {
