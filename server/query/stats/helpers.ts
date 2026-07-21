@@ -124,6 +124,15 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     }
   }
 
+  if (filters.qpv) {
+    const qpv = filters.qpv === 'true'
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.qpv = qpv
+    } else {
+      socialSupport.beneficiary = { qpv }
+    }
+  }
+
   if (filters.ageGroup && filters.ageGroup !== AgeGroup.Custom) {
     const dateRange = ageGroupToDateRange(filters.ageGroup)
     const gte = dateRange.lower?.toDate()
