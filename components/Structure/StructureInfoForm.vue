@@ -60,7 +60,7 @@
         />
       </div>
 
-      <div clas="fr-col-12 ">
+      <div class="fr-col-12">
         <div class="fr-p-3v fr-mt-1w">
           <h3 class="fr-mb-0 fr-text--lg grey">
             Personne référente à la protection des données (DPO)&nbsp;:
