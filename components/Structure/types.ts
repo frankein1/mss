@@ -4,7 +4,7 @@ export type StructureInfo =
   RouterOutput['structure']['getStructure']['structure']
 
 export type SocialSupportSubjects =
-  RouterOutput['structure']['getStructure']['socialSupportSubjects']
+  RouterOutput['structure']['getActiveSocialSupportSubjects']
 
 export type StructureUsers = RouterOutput['admin']['getStructure']['users']
 
