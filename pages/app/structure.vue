@@ -10,7 +10,7 @@
       :heading-level="2"
       @update:model-value="onTabChange"
     >
-      <NuxtPage />
+      <NuxtPage :key="route.path" />
     </AtomRouteTabs>
   </PageContainer>
   <NuxtPage v-else />
