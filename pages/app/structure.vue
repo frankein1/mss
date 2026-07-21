@@ -75,7 +75,9 @@
 
   async function onTabChange(index: number) {
     const tab = tabTitles.value[index]
-    if (!tab) {return}
+    if (!tab) {
+      return
+    }
     await navigateTo(tab.to)
     await nextTick()
     document.getElementById(tab.tabId)?.focus()
