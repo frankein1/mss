@@ -48,7 +48,7 @@ Embed full context: `'{Entity} - {Operation} - {Assertion sentence}'`.
 
 ## Test setup / teardown
 
-- Favor using seed data rather than setting up custom data. Only generate data when it would involve modifying seed data and amke tearing down difficult
+- Favor using seed data rather than setting up custom data. Generate custom data only when using seed data would require modifications that make teardown difficult.
 - Always tear down in `afterEach` hook and never in the test itself.
 
 You can use ids as global values and remove specifically the ids. Prefer this approach for structures, beneficiaries, family files, or when creating one or only a few objects.
