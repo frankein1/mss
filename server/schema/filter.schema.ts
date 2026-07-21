@@ -54,6 +54,7 @@ const statFilterSchema = z
     ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
     createdById: z.array(z.string().uuid()).nullish(),
     beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
+    qpv: kindOfBooleanSchema(),
     ageGroup: z.nativeEnum(AgeGroup).nullish(),
     fromAge: z.coerce
       .number()

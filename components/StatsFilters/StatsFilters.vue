@@ -30,6 +30,7 @@
     ageGroupKeys,
     ministereDepartmentServiceAcKeys,
     ministereStructureKeys,
+    yesNoOptions,
     AgeGroup
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -154,6 +155,13 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
+    statsFilters.push({
+      name: 'qpv',
+      label: beneficiaryFieldLabels.qpv,
+      options: withEmptyValue(yesNoOptions, ''),
+      type: FilterType.SelectOne,
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+    })
     if (application.value.module.statsByReferent && !props.isHistory) {
       statsFilters.push({
         name: 'referent',
