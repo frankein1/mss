@@ -179,7 +179,7 @@
       mutation: () =>
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),
       onSuccess: () => {
-        navigateTo(routes.structure.AppStructureSocialSupportSubjects.path())
+        navigateTo(routes.structure.AppStructureCustomObjects.path())
         snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
@@ -189,7 +189,7 @@
   })
 
   const onCancel = () => {
-    navigateTo(routes.structure.AppStructureSocialSupportSubjects.path())
+    navigateTo(routes.structure.AppStructureCustomObjects.path())
   }
 </script>
 

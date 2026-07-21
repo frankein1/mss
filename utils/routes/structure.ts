@@ -15,28 +15,28 @@ export const routes = {
   },
   AppStructureUsers: {
     name: 'AppStructureUsers',
-    title: 'Configurer votre structure',
+    title: 'Utilisateurs',
     path: () => `${StructureRoute}/users`
   },
   AppStructureInfo: {
     name: 'AppStructureInfo',
-    title: 'Configurer votre structure',
+    title: 'Infos structure',
     path: () => `${StructureRoute}/info`
   },
-  AppStructureSocialSupportSubjects: {
-    name: 'AppStructureSocialSupportSubjects',
-    title: 'Configurer votre structure',
-    path: () => `${StructureRoute}/social-support-subjects`
+  AppStructureCustomObjects: {
+    name: 'AppStructureCustomObjects',
+    title: 'Objets d’accompagnement',
+    path: () => `${StructureRoute}/custom-objects`
   },
   AppStructureEdit: {
     name: 'AppStructureEdit',
-    title: 'Modifier ma structure',
+    title: 'Modifier les informations de votre structure',
     path: () => `${StructureRoute}/edit`
   },
   AppStructureSocialSupportSubjectsEdit: {
     name: 'AppStructureSocialSupportSubjectsEdit',
     title: 'Ajouter un accompagnement',
-    path: () => `${StructureRoute}/social-support-subjects/edit`
+    path: () => `${StructureRoute}/custom-objects/social-support-subjects/edit`
   },
   AppStructureUserEdit: {
     name: 'AppStructureUserEdit',

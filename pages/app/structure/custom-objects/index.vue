@@ -1,7 +1,7 @@
 <template>
   <AtomLazyComponent
     :error="Boolean(error)"
-    message="Les informations de votre stucture n'ont pas pu être chargées."
+    message="Les objets personnalisés de votre structure n'ont pas pu être chargés."
     :pending="status === 'pending'"
   >
     <SocialSupportSubjects

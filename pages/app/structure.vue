@@ -56,7 +56,7 @@
         panelId: panelId('Objets d’accompagnement'),
         title: 'Objets d’accompagnement',
         icon: 'fr-icon-checkbox-circle-line',
-        to: routes.structure.AppStructureSocialSupportSubjects.path()
+        to: routes.structure.AppStructureCustomObjects.path()
       }
     )
     return tabs
