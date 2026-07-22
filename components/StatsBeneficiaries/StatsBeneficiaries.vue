@@ -150,6 +150,17 @@
       </StatsCard>
 
       <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.schoolClass.id"
+        :card-name="beneficiariesCardConfig.schoolClass.name"
+      >
+        <StatsBeneficiariesSchoolClass
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <StatsCard
         v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
@@ -319,6 +330,10 @@
     gender: {
       id: 'stats-beneficiaries-gender',
       name: 'Genres'
+    },
+    schoolClass: {
+      id: 'stats-beneficiaries-school-class',
+      name: 'Classes fréquentées'
     },
     ages: {
       id: 'stats-beneficiaries-ages',

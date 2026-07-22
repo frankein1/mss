@@ -20,6 +20,9 @@ export const statRouter = router({
   getCSPStats: protectedProcedure
     .input(routes.getCSPStatsQ.inputValidation)
     .query(routes.getCSPStatsQ.execute),
+  getSchoolClassStats: protectedProcedure
+    .input(routes.getSchoolClassStatsQ.inputValidation)
+    .query(routes.getSchoolClassStatsQ.execute),
   getFamilyStats: protectedProcedure
     .input(routes.getFamilyStatsQ.inputValidation)
     .query(routes.getFamilyStatsQ.execute),
