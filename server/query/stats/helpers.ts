@@ -112,6 +112,14 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.beneficiary = { city: { in: filters.cities } }
   }
 
+  if (filters.schoolUai?.length) {
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.schoolUai = { in: filters.schoolUai }
+    } else {
+      socialSupport.beneficiary = { schoolUai: { in: filters.schoolUai } }
+    }
+  }
+
   if (filters.referent) {
     socialSupport.createdBy = { id: filters.referent }
   }
@@ -263,6 +271,10 @@ export function prepareBeneficiaryStatFilters(
 
   if (filters.cities?.length) {
     formattedFilters.city = { in: filters.cities }
+  }
+
+  if (filters.schoolUai?.length) {
+    formattedFilters.schoolUai = { in: filters.schoolUai }
   }
 
   if (filters.referent) {

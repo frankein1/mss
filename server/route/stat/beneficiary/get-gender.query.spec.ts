@@ -26,8 +26,8 @@ describe('Statistics - Beneficiary - Gender', () => {
     const stats = await trpc.structureManager.stat.getGenderStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Female': 5,
-      'Male': 3,
+      'Female': 11,
+      'Male': 10,
       'Non renseigné': 4,
       'Other': 1
     })
@@ -52,7 +52,7 @@ describe('Statistics - Beneficiary - Gender', () => {
 
     expect(parseStats(stats)).toEqual({
       'Male': 3,
-      'Female': 2,
+      'Female': 7,
       'Other': 1,
       'Non renseigné': 1
     })
@@ -66,8 +66,8 @@ describe('Statistics - Beneficiary - Gender', () => {
     const stats = await trpc.structureManager.stat.getGenderStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Female': 3,
-      'Male': 3,
+      'Female': 9,
+      'Male': 10,
       'Non renseigné': 2,
       'Other': 1
     })
@@ -90,7 +90,7 @@ describe('Statistics - Beneficiary - Gender', () => {
     const stats = await trpc.structureManager.stat.getGenderStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Female': 1,
+      'Female': 2,
       'Non renseigné': 1
     })
   })
