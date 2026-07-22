@@ -19,12 +19,7 @@
           @update:model-value="onTabChange"
         >
           <NuxtPage
-            v-if="
-              socialSupportSubjectOptions &&
-              beneficiariesCitiesOptions &&
-              beneficiariesSchoolsOptions &&
-              agentsOptions
-            "
+            v-if="socialSupportSubjectOptions && agentsOptions"
             :key="route.path"
             :social-support-subject-options="socialSupportSubjectOptions"
             :beneficiaries-cities-options="beneficiariesCitiesOptions"
