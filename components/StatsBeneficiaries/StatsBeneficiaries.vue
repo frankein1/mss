@@ -150,17 +150,6 @@
       </StatsCard>
 
       <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.schoolClass.id"
-        :card-name="beneficiariesCardConfig.schoolClass.name"
-      >
-        <StatsBeneficiariesSchoolClass
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
         v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
         :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
@@ -200,6 +189,21 @@
           :beneficiary-count="beneficiaryCount?.count || 0"
           :filters="filters"
       /></StatsCard>
+
+      <!-- ↓ SCHOOLS ↓ -->
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.schoolClass.id"
+        :card-name="beneficiariesCardConfig.schoolClass.name"
+      >
+        <StatsBeneficiariesSchoolClass
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <!-- ↓ MINISTERES ↓ -->
 
       <template v-if="application.module.ministere">
         <StatsCard
