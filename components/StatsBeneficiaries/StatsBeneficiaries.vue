@@ -190,6 +190,21 @@
           :filters="filters"
       /></StatsCard>
 
+      <!-- ↓ SCHOOLS ↓ -->
+
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.schoolClass.id"
+        :card-name="beneficiariesCardConfig.schoolClass.name"
+      >
+        <StatsBeneficiariesSchoolClass
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
+      <!-- ↓ MINISTERES ↓ -->
+
       <template v-if="application.module.ministere">
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
@@ -319,6 +334,10 @@
     gender: {
       id: 'stats-beneficiaries-gender',
       name: 'Genres'
+    },
+    schoolClass: {
+      id: 'stats-beneficiaries-school-class',
+      name: 'Classes fréquentées'
     },
     ages: {
       id: 'stats-beneficiaries-ages',

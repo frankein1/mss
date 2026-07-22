@@ -246,7 +246,7 @@ export const beneficiarySchoolClassKeys = buildKeys(
     beneficiarySchoolClassGroups.flatMap(g =>
       g.options.map(o => [o.value, o.label])
     )
-  )
+  ) as Record<BeneficiarySchoolClass, string>
 )
 
 export const incomeSourceKeys = buildKeys({
