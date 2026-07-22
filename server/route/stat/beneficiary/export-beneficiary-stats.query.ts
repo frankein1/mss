@@ -5,6 +5,7 @@ import {
   beneficiaryAccommodationZoneKeys,
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
+  beneficiarySchoolClassKeys,
   beneficiarySocioProfessionalCategoryKeys,
   familySituationKeys,
   ageGroupKeys,
@@ -25,6 +26,7 @@ import {
   getAccommodationModeStatsQuery,
   getMobilityStatsQuery,
   getCSPStatsQuery,
+  getSchoolClassStatsQuery,
   getMinistereStructureStatsQuery,
   getMinistereDepartementServiceAcStatsQuery,
   getMinistereCategorieStatsQuery,
@@ -210,6 +212,18 @@ const handler = async ({
         beneficiarySocioProfessionalCategoryKeys.value(
           socioProfessionalCategory
         ) || STATS_NULL_LABEL,
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
+
+  // School class
+  const schoolClasses = await getSchoolClassStatsQuery(user, input)
+  addStatsWorksheet(
+    workbook,
+    'Classes fréquentées',
+    schoolClasses.map(({ schoolClass, _count }) => ({
+      label: getStatLabel(beneficiarySchoolClassKeys.byKey, schoolClass),
       number: _count,
       percent: toRatio(_count, beneficiaryCount.count)
     }))
