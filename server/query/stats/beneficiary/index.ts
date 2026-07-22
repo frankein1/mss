@@ -8,6 +8,7 @@ export { getAccommodationModeStatsQuery } from './getAccommodationModeStatsQuery
 export { getMobilityStatsQuery } from './getMobilityStatsQuery'
 export { getCSPStatsQuery } from './getCSPStatsQuery'
 export { getSchoolClassStatsQuery } from './getSchoolClassStatsQuery'
+export { getRepClassificationStatsQuery } from './getRepClassificationStatsQuery'
 export { getMinistereStructureStatsQuery } from './getMinistereStructureStatsQuery'
 export { getMinistereDepartementServiceAcStatsQuery } from './getMinistereDepartementServiceAcStatsQuery'
 export { getMinistereCategorieStatsQuery } from './getMinistereCategorieStatsQuery'

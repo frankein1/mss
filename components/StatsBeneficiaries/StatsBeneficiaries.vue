@@ -203,6 +203,17 @@
         />
       </StatsCard>
 
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.repClassification.id"
+        :card-name="beneficiariesCardConfig.repClassification.name"
+      >
+        <StatsBeneficiariesRepClassification
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+        />
+      </StatsCard>
+
       <!-- ↓ MINISTERES ↓ -->
 
       <template v-if="application.module.ministere">
@@ -335,10 +346,6 @@
       id: 'stats-beneficiaries-gender',
       name: 'Genres'
     },
-    schoolClass: {
-      id: 'stats-beneficiaries-school-class',
-      name: 'Classes fréquentées'
-    },
     ages: {
       id: 'stats-beneficiaries-ages',
       name: "Tranches d'âge"
@@ -370,6 +377,14 @@
     accomodationMode: {
       id: 'stats-beneficiaries-accomodation-mode',
       name: "Modes d'hébergement"
+    },
+    schoolClass: {
+      id: 'stats-beneficiaries-school-class',
+      name: 'Classes fréquentées'
+    },
+    repClassification: {
+      id: 'stats-beneficiaries-rep-classification',
+      name: 'Établissements REP fréquentés'
     }
   }
 

@@ -23,6 +23,9 @@ export const statRouter = router({
   getSchoolClassStats: protectedProcedure
     .input(routes.getSchoolClassStatsQ.inputValidation)
     .query(routes.getSchoolClassStatsQ.execute),
+  getRepClassificationStats: protectedProcedure
+    .input(routes.getRepClassificationStatsQ.inputValidation)
+    .query(routes.getRepClassificationStatsQ.execute),
   getFamilyStats: protectedProcedure
     .input(routes.getFamilyStatsQ.inputValidation)
     .query(routes.getFamilyStatsQ.execute),
