@@ -26,7 +26,7 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 9,
+      'Non renseigné': 22,
       'BikeOrEquivalent': 1,
       'PermitWithVehicle': 1,
       'PublicTransport': 1,
@@ -52,7 +52,7 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.referent.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 6,
+      'Non renseigné': 11,
       'PermitWithVehicle': 1
     })
   })
@@ -65,7 +65,7 @@ describe('Statistics - Beneficiary - Mobility', () => {
     const stats = await trpc.structureManager.stat.getMobilityStats(input)
 
     expect(parseStats(stats)).toEqual({
-      'Non renseigné': 8,
+      'Non renseigné': 21,
       'VehicleWithoutPermit': 1
     })
   })
@@ -88,7 +88,7 @@ describe('Statistics - Beneficiary - Mobility', () => {
 
     expect(parseStats(stats)).toEqual({
       'BikeOrEquivalent': 1,
-      'Non renseigné': 1
+      'Non renseigné': 2
     })
   })
 })

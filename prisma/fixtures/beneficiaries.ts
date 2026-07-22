@@ -1,5 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { FixtureStructure, fixtureStructures } from './'
+import {
+  FixtureDataEducationSchool,
+  fixturesDataEducationSchools
+} from './dataEducationSchools'
 import dayjs from 'dayjs'
 
 export enum FixtureBeneficiary {
@@ -19,7 +23,20 @@ export enum FixtureBeneficiary {
   TESSON = 13,
   DUPONT = 14,
   LEROY = 15,
-  MOREAU = 16
+  MOREAU = 16,
+  SICARD = 17,
+  LEON = 18,
+  MAILLARD = 19,
+  BENAMOR = 20,
+  FERRAND = 21,
+  ROUSSEL = 22,
+  DUBOIS = 23,
+  MERCIER = 24,
+  WEBER = 25,
+  LEGALL = 26,
+  FONTAINE = 27,
+  GARCIA = 28,
+  HUGO = 29
 }
 
 export const fixturesBeneficiaries = [
@@ -248,8 +265,269 @@ export const fixturesBeneficiaries = [
     birthDate: new Date('1992-08-14'),
     gender: 'Female',
     accommodationZone: 'OutsideEurope'
+  },
+  {
+    id: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    familyFileId: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    fileNumber: 'SICARD01GH',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'SICARD',
+    firstName: 'Noham',
+    birthDate: new Date('2016-05-12'),
+    gender: 'Male',
+    city: 'Lyon',
+    department: 'Rhône',
+    region: 'Auvergne-Rhône-Alpes',
+    schoolClass: 'CM1',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.SchLyon2]?.uai,
+    qpv: true
+  },
+  {
+    id: 'f6a7b8c9-d0e1-2345-f012-456789012345',
+    familyFileId: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    fileNumber: 'SICARD03KL',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'SICARD',
+    firstName: 'Léon',
+    birthDate: new Date('2019-03-10'),
+    gender: 'Male',
+    city: 'Lyon',
+    department: 'Rhône',
+    region: 'Auvergne-Rhône-Alpes',
+    schoolClass: 'CE1',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.SchLyon2]?.uai,
+    qpv: true
+  },
+  {
+    id: 'e5f6a7b8-c9d0-1234-ef01-345678901234',
+    familyFileId: 'e5f6a7b8-c9d0-1234-ef01-345678901234',
+    fileNumber: 'MAILLARD02IJ',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'MAILLARD',
+    firstName: 'Emy',
+    birthDate: new Date('2015-02-10'),
+    gender: 'Female',
+    city: 'Dijon',
+    department: "Côte-d'Or",
+    region: 'Bourgogne-Franche-Comté',
+    schoolClass: 'CM2',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Dijon]?.uai,
+    qpv: false
+  },
+
+  // --- Student beneficiaries, spread across France, one school level each ---
+  {
+    id: 'a7b8c9d0-e1f2-3456-a012-567890123456',
+    familyFileId: 'a7b8c9d0-e1f2-3456-a012-567890123456',
+    fileNumber: 'BENAMO06AA',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'BENAMOR',
+    firstName: 'Yanis',
+    birthDate: new Date('2021-04-18'),
+    gender: 'Male',
+    city: 'Marseille',
+    department: 'Bouches-du-Rhône',
+    region: "Provence-Alpes-Côte d'Azur",
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'GrandeSection',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Marseille]?.uai,
+    qpv: true
+  },
+  {
+    id: 'b8c9d0e1-f2a3-4567-b123-678901234567',
+    familyFileId: 'b8c9d0e1-f2a3-4567-b123-678901234567',
+    fileNumber: 'FERRAN07BB',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'FERRAND',
+    firstName: 'Chloé',
+    birthDate: new Date('2020-02-14'),
+    gender: 'Female',
+    city: 'Toulouse',
+    department: 'Haute-Garonne',
+    region: 'Occitanie',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'CP',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Toulouse]?.uai,
+    qpv: false
+  },
+  {
+    id: 'c9d0e1f2-a3b4-5678-c234-789012345678',
+    familyFileId: 'c9d0e1f2-a3b4-5678-c234-789012345678',
+    fileNumber: 'ROUSSE08CC',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'ROUSSEL',
+    firstName: 'Nathan',
+    birthDate: new Date('2016-03-22'),
+    gender: 'Male',
+    city: 'Bordeaux',
+    department: 'Gironde',
+    region: 'Nouvelle-Aquitaine',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'CM2',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Bordeaux]?.uai,
+    qpv: false
+  },
+  {
+    id: 'd0e1f2a3-b4c5-6789-d345-890123456789',
+    familyFileId: 'd0e1f2a3-b4c5-6789-d345-890123456789',
+    fileNumber: 'DUBOIS09DD',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'DUBOIS',
+    firstName: 'Inès',
+    birthDate: new Date('2015-05-30'),
+    gender: 'Female',
+    city: 'Lille',
+    department: 'Nord',
+    region: 'Hauts-de-France',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'Sixieme',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Lille]?.uai,
+    qpv: true
+  },
+  {
+    id: 'e1f2a3b4-c5d6-7890-e456-901234567890',
+    familyFileId: 'e1f2a3b4-c5d6-7890-e456-901234567890',
+    fileNumber: 'MERCIE10EE',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'MERCIER',
+    firstName: 'Lucas',
+    birthDate: new Date('2012-01-10'),
+    gender: 'Male',
+    city: 'Nantes',
+    department: 'Loire-Atlantique',
+    region: 'Pays de la Loire',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'Troisieme',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Nantes]?.uai,
+    qpv: false
+  },
+  {
+    id: 'f2a3b4c5-d6e7-8901-f567-012345678901',
+    familyFileId: 'f2a3b4c5-d6e7-8901-f567-012345678901',
+    fileNumber: 'WEBER11FF',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'WEBER',
+    firstName: 'Camille',
+    birthDate: new Date('2011-06-02'),
+    gender: 'Female',
+    city: 'Strasbourg',
+    department: 'Bas-Rhin',
+    region: 'Grand Est',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'SecondeGenerale',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Strasbourg]?.uai,
+    qpv: false
+  },
+  {
+    id: 'a3b4c5d6-e7f8-9012-a678-123456789012',
+    familyFileId: 'a3b4c5d6-e7f8-9012-a678-123456789012',
+    fileNumber: 'LEGALL12GG',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'LE GALL',
+    firstName: 'Enzo',
+    birthDate: new Date('2011-02-25'),
+    gender: 'Male',
+    city: 'Rennes',
+    department: 'Ille-et-Vilaine',
+    region: 'Bretagne',
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'SecondePro',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Rennes]?.uai,
+    qpv: true
+  },
+  // Beneficiary in same school
+  {
+    id: 'b4c5d6e7-f8a9-0123-b789-234567890123',
+    familyFileId: 'b4c5d6e7-f8a9-0123-b789-234567890123',
+    fileNumber: 'FONTAI13HH',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'FONTAINE',
+    firstName: 'Manon',
+    birthDate: new Date('2016-04-14'),
+    gender: 'Female',
+    city: 'Nice',
+    department: 'Alpes-Maritimes',
+    region: "Provence-Alpes-Côte d'Azur",
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'CM2',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Nice]?.uai,
+    qpv: true
+  },
+  // --- Siblings sharing the same family file, city and school ---
+  {
+    id: 'c5d6e7f8-a9b0-1234-c890-345678901234',
+    familyFileId: 'c5d6e7f8-a9b0-1234-c890-345678901234',
+    fileNumber: 'GARCIA14II',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'GARCIA',
+    firstName: 'Léa',
+    birthDate: new Date('2016-03-15'),
+    gender: 'Female',
+    city: 'Nice',
+    department: 'Alpes-Maritimes',
+    region: "Provence-Alpes-Côte d'Azur",
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'CM2',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Nice]?.uai,
+    qpv: false
+  },
+  {
+    id: 'd6e7f8a9-b0c1-2345-d901-456789012345',
+    familyFileId: 'c5d6e7f8-a9b0-1234-c890-345678901234',
+    fileNumber: 'GARCIA15JJ',
+    structureId: fixtureStructures[0].id,
+    status: 'Active',
+    usualName: 'GARCIA',
+    firstName: 'Hugo',
+    birthDate: new Date('2019-04-20'),
+    gender: 'Male',
+    city: 'Nice',
+    department: 'Alpes-Maritimes',
+    region: "Provence-Alpes-Côte d'Azur",
+    socioProfessionalCategory: 'Student',
+    schoolClass: 'CE1',
+    schoolUai:
+      fixturesDataEducationSchools[FixtureDataEducationSchool.Nice]?.uai,
+    qpv: false
   }
 ] satisfies [
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
+  Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,
   Prisma.BeneficiaryUncheckedCreateInput,

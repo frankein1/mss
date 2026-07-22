@@ -2,7 +2,11 @@
   <section class="feature-section">
     <h3 class="fr-sr-only">Filtres</h3>
     <AtomLoader
-      v-if="!socialSupportSubjectOptions || !beneficiariesCitiesOptions"
+      v-if="
+        !socialSupportSubjectOptions ||
+        !beneficiariesCitiesOptions ||
+        !beneficiariesSchoolsOptions
+      "
       class="fr-mx-auto"
     />
     <AtomAlert
@@ -54,6 +58,7 @@
     defineProps<{
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
+      beneficiariesSchoolsOptions: Options
       agentOptions: Options
       filters: StatFilterInput
       validationSchema?: any
@@ -162,6 +167,15 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
     })
+    if (props.beneficiariesSchoolsOptions.length) {
+      statsFilters.push({
+        name: 'schoolUai',
+        label: beneficiaryFieldLabels.schoolUai,
+        options: props.beneficiariesSchoolsOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+    }
     if (application.value.module.statsByReferent && !props.isHistory) {
       statsFilters.push({
         name: 'referent',

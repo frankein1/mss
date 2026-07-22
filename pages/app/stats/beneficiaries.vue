@@ -3,6 +3,7 @@
     class="stats-filters"
     :social-support-subject-options="socialSupportSubjectOptions"
     :beneficiaries-cities-options="beneficiariesCitiesOptions"
+    :beneficiaries-schools-options="beneficiariesSchoolsOptions"
     :agent-options="agentOptions"
   />
 </template>
@@ -13,6 +14,7 @@
   defineProps<{
     socialSupportSubjectOptions?: Options
     beneficiariesCitiesOptions?: Options
+    beneficiariesSchoolsOptions?: Options
     agentOptions?: Options
   }>()
 </script>
