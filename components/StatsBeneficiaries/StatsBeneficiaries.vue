@@ -190,14 +190,6 @@
           :filters="filters"
       /></StatsCard>
 
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.supportPrograms.id"
-        :card-name="beneficiariesCardConfig.supportPrograms.name"
-      >
-        <StatsBeneficiariesSupportPrograms :filters="filters" />
-      </StatsCard>
-
       <template v-if="application.module.ministere">
         <StatsCard
           class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
@@ -359,10 +351,6 @@
     accomodationMode: {
       id: 'stats-beneficiaries-accomodation-mode',
       name: "Modes d'hébergement"
-    },
-    supportPrograms: {
-      id: 'stats-beneficiaries-support-programs',
-      name: 'Dispositifs'
     }
   }
 

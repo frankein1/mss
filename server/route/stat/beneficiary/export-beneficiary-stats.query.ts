@@ -29,8 +29,7 @@ import {
   getMinistereDepartementServiceAcStatsQuery,
   getMinistereCategorieStatsQuery,
   getDepartmentStatsQuery,
-  getMinistereInterpellationStatsQuery,
-  getSupportProgramStatsQuery
+  getMinistereInterpellationStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -213,18 +212,6 @@ const handler = async ({
         ) || STATS_NULL_LABEL,
       number: _count,
       percent: toRatio(_count, beneficiaryCount.count)
-    }))
-  )
-
-  // Support programs
-  const supportPrograms = await getSupportProgramStatsQuery(user, input)
-  addStatsWorksheet(
-    workbook,
-    'Dispositifs',
-    supportPrograms.map(({ name, count }) => ({
-      label: name || STATS_NULL_LABEL,
-      number: count,
-      percent: toRatio(count, beneficiaryCount.count)
     }))
   )
 
