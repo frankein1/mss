@@ -1,4 +1,3 @@
-import type { RepClassification } from '@prisma/client'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import {
   BeneficiaryRepo,
@@ -7,11 +6,7 @@ import {
 } from '~/server/database'
 import type { StatFilterInput } from '~/server/schema'
 import type { SecurityRuleGrantee } from '~/server/security/rules/types'
-
-export type RepClassificationStatKey =
-  | RepClassification
-  | 'NonRep'
-  | 'SchoolNotFilled'
+import type { RepClassificationStatKey } from '~/client/labels/school.labels'
 
 export async function getRepClassificationStatsQuery(
   user: SecurityRuleGrantee,

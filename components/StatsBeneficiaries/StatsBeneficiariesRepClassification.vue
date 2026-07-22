@@ -32,16 +32,10 @@
   import { routes } from '~/utils/routes'
   import type { StatsPiePropType } from '~/types/stat'
   import { ChartColor } from '~/utils/color/chartColors'
+  import { repClassificationStatLabels } from '~/client/labels/school.labels'
 
   const NonRepKey = 'NonRep'
   const SchoolNotFilledKey = 'SchoolNotFilled'
-
-  const RepClassificationLabel = {
-    [NonRepKey]: 'Non REP',
-    [SchoolNotFilledKey]: 'Établissement non renseigné',
-    [RepClassification.Rep]: 'REP',
-    [RepClassification.RepPlus]: 'REP+'
-  }
 
   const RepClassificationColor = {
     [NonRepKey]: ChartColor.Yellow,
@@ -66,7 +60,7 @@
     () =>
       (data.value?.map(({ _count, repClassification }) => ({
         key: repClassification,
-        label: RepClassificationLabel[repClassification],
+        label: repClassificationStatLabels[repClassification],
         color: RepClassificationColor[repClassification],
         count: _count
       })) || []) as StatsPiePropType

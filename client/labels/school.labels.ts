@@ -23,4 +23,21 @@ const repClassificationLabels: Record<RepClassification, string> = {
   [RepClassification.RepPlus]: 'REP+'
 }
 
-export { schoolTypeLabels, schoolStatusLabels, repClassificationLabels }
+// Beneficiary REP stats bucket beneficiaries by their school's classification,
+// plus two extra non-DB buckets: a school without a REP classification, and
+// beneficiaries with no school at all.
+type RepClassificationStatKey = RepClassification | 'NonRep' | 'SchoolNotFilled'
+
+const repClassificationStatLabels: Record<RepClassificationStatKey, string> = {
+  ...repClassificationLabels,
+  NonRep: 'Non REP',
+  SchoolNotFilled: 'Établissement non renseigné'
+}
+
+export {
+  schoolTypeLabels,
+  schoolStatusLabels,
+  repClassificationLabels,
+  repClassificationStatLabels
+}
+export type { RepClassificationStatKey }
