@@ -51,6 +51,10 @@
       editRoutes.push(r.AppBeneficiaryEditExternalOrganisations.name)
     }
 
+    if (props.permissions?.edit.supportPrograms) {
+      editRoutes.push(r.AppBeneficiaryEditSupportPrograms.name)
+    }
+
     return editRoutes
   })
 

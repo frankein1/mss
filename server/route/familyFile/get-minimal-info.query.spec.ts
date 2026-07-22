@@ -74,7 +74,8 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
           general: true,
           health: true,
           occupationIncome: true,
-          relatives: true
+          relatives: true,
+          supportPrograms: true
         },
         view: {
           documents: true,
@@ -83,7 +84,8 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
           health: true,
           history: true,
           occupationIncome: true,
-          relatives: true
+          relatives: true,
+          supportPrograms: true
         },
         changeReferent: true
       },

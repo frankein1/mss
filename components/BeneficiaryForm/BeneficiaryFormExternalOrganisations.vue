@@ -67,8 +67,6 @@
         />
       </div>
     </BeneficiaryFormSection>
-
-    <BeneficiaryFormSupportPrograms />
   </section>
 </template>
 

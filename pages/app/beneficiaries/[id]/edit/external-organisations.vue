@@ -49,23 +49,11 @@
       return null
     }
 
-    const { id, structureId, externalOrganisations } = beneficiary.value
+    const { id, externalOrganisations } = beneficiary.value
 
     return {
       id,
-      structureId,
-      ...externalOrganisations,
-      supportPrograms: (externalOrganisations?.supportPrograms ?? []).map(
-        d => ({
-          id: d.id,
-          supportProgramNameId: d.supportProgramName.id,
-          startDate: d.startDate,
-          endDate: d.endDate,
-          partnerOrganisationId: d.partnerOrganisation?.id ?? null,
-          precisions: d.precisions,
-          exitReason: d.exitReason
-        })
-      )
+      ...externalOrganisations
     }
   })
 

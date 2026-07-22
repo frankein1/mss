@@ -209,8 +209,7 @@ function getColumns(userRole: UserRole) {
 }
 
 function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
-  const supportPrograms =
-    beneficiary.externalOrganisations?.supportPrograms ?? []
+  const supportPrograms = beneficiary.supportPrograms ?? []
   const join = (values: (string | null | undefined)[]) =>
     values.filter(Boolean).join(' / ')
   return {

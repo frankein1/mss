@@ -227,12 +227,20 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
     .nullish(),
   involvedPartners: stringConstraint
     .max(200, maxStringLengthMessage(200))
-    .nullish(),
-  supportPrograms: z.array(supportProgramSchema)
+    .nullish()
 })
 
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
+>
+
+export const updateBeneficiarySupportProgramsSchema = z.object({
+  id: z.string().uuid(),
+  supportPrograms: z.array(supportProgramSchema)
+})
+
+export type UpdateBeneficiarySupportProgramsInput = z.infer<
+  typeof updateBeneficiarySupportProgramsSchema
 >
 
 export const updateBeneficiaryArchiveDate = z.object({

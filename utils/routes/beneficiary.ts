@@ -19,6 +19,7 @@ export type AppBeneficiaryEditRoute =
   | 'AppBeneficiaryEditHealth'
   | 'AppBeneficiaryEditOccupation'
   | 'AppBeneficiaryEditExternalOrganisations'
+  | 'AppBeneficiaryEditSupportPrograms'
 
 function createSuffixUrl(options?: {
   tab?: BeneficiaryTab
@@ -184,10 +185,19 @@ export const routes = {
   },
   AppBeneficiaryEditExternalOrganisations: {
     name: 'AppBeneficiaryEditExternalOrganisations',
-    title: 'Structures et dispositifs',
+    title: 'Structures externes',
     path: (beneficiaryId: string, options?: BeneficiaryEditRouteOptions) =>
       getBeneficiaryEditRoute(
         `${BeneficiariesRoute}/${beneficiaryId}/edit/external-organisations`,
+        options
+      )
+  },
+  AppBeneficiaryEditSupportPrograms: {
+    name: 'AppBeneficiaryEditSupportPrograms',
+    title: 'Parcours et dispositifs',
+    path: (beneficiaryId: string, options?: BeneficiaryEditRouteOptions) =>
+      getBeneficiaryEditRoute(
+        `${BeneficiariesRoute}/${beneficiaryId}/edit/support-programs`,
         options
       )
   },

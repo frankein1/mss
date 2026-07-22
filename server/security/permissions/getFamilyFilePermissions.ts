@@ -17,6 +17,7 @@ export type FamilyFilePermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
+    supportPrograms: boolean
   }
   view: {
     general: boolean
@@ -24,6 +25,7 @@ export type FamilyFilePermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
+    supportPrograms: boolean
     documents: boolean
     history: boolean
   }
@@ -43,7 +45,8 @@ const FALSY_PERMISSIONS: FamilyFilePermissions = {
     relatives: false,
     health: false,
     occupationIncome: false,
-    externalOrganisations: false
+    externalOrganisations: false,
+    supportPrograms: false
   },
   view: {
     general: false,
@@ -51,6 +54,7 @@ const FALSY_PERMISSIONS: FamilyFilePermissions = {
     health: false,
     occupationIncome: false,
     externalOrganisations: false,
+    supportPrograms: false,
     documents: false,
     history: false
   },
@@ -87,6 +91,7 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
     edit: {
       general: true,
       externalOrganisations: true,
+      supportPrograms: !receptionAgent,
       relatives: !receptionAgent,
       health: !receptionAgent,
       occupationIncome: !receptionAgent
@@ -97,6 +102,7 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       health: false,
       occupationIncome: false,
       externalOrganisations: false,
+      supportPrograms: false,
       documents: false,
       history: false
     },
@@ -143,7 +149,8 @@ function getEditionPermissions({
       relatives: hasRestrictedRights,
       health: hasHealthAccessRight,
       occupationIncome: hasRestrictedRights,
-      externalOrganisations: hasRestrictedRights
+      externalOrganisations: hasRestrictedRights,
+      supportPrograms: hasRestrictedRights
     },
     view: {
       general: hasAccessRight,
@@ -151,6 +158,7 @@ function getEditionPermissions({
       occupationIncome: hasRestrictedRights,
       health: hasHealthAccessRight,
       externalOrganisations: hasRestrictedRights,
+      supportPrograms: hasRestrictedRights,
       documents: hasAccessRight,
       history: hasAccessRight
     },

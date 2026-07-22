@@ -67,11 +67,19 @@
           />
           <template v-if="beneficiary.externalOrganisations">
             <hr />
-            <p class="fr-text--bold">Structures et dispositifs</p>
+            <p class="fr-text--bold">Structures externes</p>
           </template>
           <BeneficiaryInfoExternalOrganisationsContent
             v-if="beneficiary.externalOrganisations"
             :external-organisations="beneficiary.externalOrganisations"
+          />
+          <template v-if="beneficiary.supportPrograms?.length">
+            <hr />
+            <p class="fr-text--bold">Parcours et dispositifs</p>
+          </template>
+          <BeneficiaryInfoSupportProgramsContent
+            v-if="beneficiary.supportPrograms?.length"
+            :support-programs="beneficiary.supportPrograms"
           />
         </div>
       </div>

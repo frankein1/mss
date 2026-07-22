@@ -1,11 +1,15 @@
 <template>
-  <BeneficiaryFormSection
-    section-title="Prestations / Dispositifs d'accompagnement"
-  >
+  <BeneficiaryFormSection>
     <div class="fr-col-12">
-      <p class="fr-hint-text fr-mb-0">
-        Exemple : portage de repas, dispositif de retour à l'emploi...
-      </p>
+      <AtomAlertMSS :alert-type="AlertType.Info">
+        <template #detailedMessage>
+          <p>
+            Renseignez les dispositifs dans lesquels le bénéficiaire est engagé.
+            À la saisie d'une date de sortie, précisez le motif et l'atteinte
+            des objectifs.
+          </p>
+        </template>
+      </AtomAlertMSS>
     </div>
 
     <BeneficiaryFormSupportProgram
@@ -33,6 +37,7 @@
 <script setup lang="ts">
   import type { SupportProgramInput } from '~/server/schema'
   import BeneficiaryFormSupportProgramDeletionModal from './BeneficiaryFormSupportProgramDeletionModal.vue'
+  import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
   const modal = useModal()

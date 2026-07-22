@@ -55,7 +55,9 @@
     [r.AppBeneficiaryEditOccupation.name]:
       props.permissions?.edit.occupationIncome,
     [r.AppBeneficiaryEditExternalOrganisations.name]:
-      props.permissions?.edit.externalOrganisations
+      props.permissions?.edit.externalOrganisations,
+    [r.AppBeneficiaryEditSupportPrograms.name]:
+      props.permissions?.edit.supportPrograms
   }
 
   const beneficiaryEditRouteTree: {
@@ -86,6 +88,10 @@
     },
     [r.AppBeneficiaryEditExternalOrganisations.name]: {
       previous: r.AppBeneficiaryEditOccupation.name,
+      next: r.AppBeneficiaryEditSupportPrograms.name
+    },
+    [r.AppBeneficiaryEditSupportPrograms.name]: {
+      previous: r.AppBeneficiaryEditExternalOrganisations.name,
       next: undefined
     }
   }

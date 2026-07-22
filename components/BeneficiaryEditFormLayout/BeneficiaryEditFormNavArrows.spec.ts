@@ -27,10 +27,18 @@ describe('BeneficiaryEditFormNavArrows - boundaries', () => {
     expect(wrapper.find('button.fr-icon-arrow-left-line').exists()).toBe(false)
   })
 
-  it('shows no next arrow on "Structures et dispositifs" tab (last tab)', async () => {
+  it('shows a next arrow on "Structures externes" tab (no longer the last tab)', async () => {
     const wrapper = await mountNavArrows(
       'AppBeneficiaryEditExternalOrganisations'
     )
+    expect(wrapper.find('button.fr-icon-arrow-right-line').exists()).toBe(true)
+    expect(wrapper.find('button.fr-icon-arrow-right-line').text()).toContain(
+      'Parcours et dispositifs'
+    )
+  })
+
+  it('shows no next arrow on "Parcours et dispositifs" tab (last tab)', async () => {
+    const wrapper = await mountNavArrows('AppBeneficiaryEditSupportPrograms')
     expect(wrapper.find('button.fr-icon-arrow-right-line').exists()).toBe(false)
   })
 })

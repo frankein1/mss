@@ -53,7 +53,8 @@ describe('BeneficiaryEditFormNavigation - edit.general', () => {
     expect(wrapper.text()).not.toContain('Entourage')
     expect(wrapper.text()).not.toContain('Santé')
     expect(wrapper.text()).not.toContain('Activité')
-    expect(wrapper.text()).not.toContain('Structures et dispositifs')
+    expect(wrapper.text()).not.toContain('Structures externes')
+    expect(wrapper.text()).not.toContain('Parcours et dispositifs')
   })
 })
 
@@ -94,17 +95,33 @@ describe('BeneficiaryEditFormNavigation - edit.occupationIncome', () => {
 })
 
 describe('BeneficiaryEditFormNavigation - edit.externalOrganisations', () => {
-  it('hides Structures et dispositifs tab when edit.externalOrganisations is false', async () => {
+  it('hides Structures externes tab when edit.externalOrganisations is false', async () => {
     const wrapper = await mountNavigation({
       edit: { externalOrganisations: false }
     })
-    expect(wrapper.text()).not.toContain('Structures et dispositifs')
+    expect(wrapper.text()).not.toContain('Structures externes')
   })
 
-  it('shows Structures et dispositifs tab when edit.externalOrganisations is true', async () => {
+  it('shows Structures externes tab when edit.externalOrganisations is true', async () => {
     const wrapper = await mountNavigation({
       edit: { externalOrganisations: true }
     })
-    expect(wrapper.text()).toContain('Structures et dispositifs')
+    expect(wrapper.text()).toContain('Structures externes')
+  })
+})
+
+describe('BeneficiaryEditFormNavigation - edit.supportPrograms', () => {
+  it('hides Parcours et dispositifs tab when edit.supportPrograms is false', async () => {
+    const wrapper = await mountNavigation({
+      edit: { supportPrograms: false }
+    })
+    expect(wrapper.text()).not.toContain('Parcours et dispositifs')
+  })
+
+  it('shows Parcours et dispositifs tab when edit.supportPrograms is true', async () => {
+    const wrapper = await mountNavigation({
+      edit: { supportPrograms: true }
+    })
+    expect(wrapper.text()).toContain('Parcours et dispositifs')
   })
 })

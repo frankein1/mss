@@ -232,6 +232,9 @@ const filter = (
   const externalOrganisations = view.externalOrganisations
     ? getExternalOrganisations(beneficiary)
     : undefined
+  const supportPrograms = view.supportPrograms
+    ? getSupportPrograms(beneficiary)
+    : undefined
   const health =
     appPermissions.module.health && view.health
       ? getHealth(beneficiary, appPermissions.edit.health.nir)
@@ -266,6 +269,7 @@ const filter = (
     externalOrganisations: !isObjectEmpty(externalOrganisations)
       ? externalOrganisations
       : undefined,
+    supportPrograms: supportPrograms?.length ? supportPrograms : undefined,
     health: !isObjectEmpty(health) ? health : undefined,
     occupationIncome: !isObjectEmpty(occupationIncome)
       ? occupationIncome
@@ -421,15 +425,18 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     orientationStructure: beneficiary.orientationStructure,
     serviceProviders: beneficiary.serviceProviders,
     involvedPartners: beneficiary.involvedPartners,
-    additionalInformation: beneficiary.additionalInformation,
-    supportPrograms: beneficiary.supportPrograms.map(d => ({
-      id: d.id,
-      startDate: d.startDate,
-      endDate: d.endDate,
-      exitReason: d.exitReason,
-      precisions: d.precisions,
-      supportProgramName: d.supportProgramName,
-      partnerOrganisation: d.partnerOrganisation
-    }))
+    additionalInformation: beneficiary.additionalInformation
   }
+}
+
+function getSupportPrograms(beneficiary: BeneficiaryOutput) {
+  return beneficiary.supportPrograms.map(d => ({
+    id: d.id,
+    startDate: d.startDate,
+    endDate: d.endDate,
+    exitReason: d.exitReason,
+    precisions: d.precisions,
+    supportProgramName: d.supportProgramName,
+    partnerOrganisation: d.partnerOrganisation
+  }))
 }

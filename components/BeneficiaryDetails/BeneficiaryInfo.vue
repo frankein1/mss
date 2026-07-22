@@ -57,6 +57,12 @@
       :beneficiary-id="beneficiary.id"
       :external-organisations="beneficiary.externalOrganisations"
     />
+
+    <BeneficiaryInfoSupportPrograms
+      v-if="beneficiary?.supportPrograms?.length"
+      :beneficiary-id="beneficiary.id"
+      :support-programs="beneficiary.supportPrograms"
+    />
   </template>
 </template>
 

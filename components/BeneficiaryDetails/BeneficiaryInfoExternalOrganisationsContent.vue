@@ -43,56 +43,6 @@
       :value="externalOrganisations.involvedPartners"
       class="fr-col-12 fr-col-lg-6"
     />
-    <div class="fr-col-12 divider">
-      <hr />
-    </div>
-    <template v-if="externalOrganisations.supportPrograms.length">
-      <div class="fr-col-12">
-        <h5 class="fr-text--md fr-mb-0">
-          Prestations / Dispositifs d'accompagnement
-        </h5>
-      </div>
-
-      <ul class="information-list fr-col-12">
-        <li
-          v-for="(
-            supportProgram, index
-          ) in externalOrganisations.supportPrograms"
-          :key="supportProgram.id"
-        >
-          <h6 class="fr-mb-1w fr-text--md">
-            {{ index + 1 }}. {{ supportProgram.supportProgramName.name }}
-          </h6>
-          <p class="fr-mb-1w">
-            <span
-              class="fr-badge fr-badge--sm"
-              :class="supportProgramStatusBadgeClass(supportProgram)"
-            >
-              {{ supportProgramStatus(supportProgram) }}
-            </span>
-            <span
-              v-if="supportProgram.startDate || supportProgram.endDate"
-              class="fr-ml-1w"
-            >
-              {{ formatSupportProgramDateRange(supportProgram) }}
-            </span>
-          </p>
-          <BeneficiaryInfoLabel
-            :label="supportProgramFieldLabels.partnerOrganisationId"
-            :value="supportProgram.partnerOrganisation?.name"
-          />
-          <BeneficiaryInfoLabel
-            v-if="supportProgram.endDate"
-            :label="supportProgramFieldLabels.exitReason"
-            :value="supportProgram.exitReason ?? undefined"
-          />
-          <BeneficiaryInfoLabel
-            :label="supportProgramFieldLabels.precisions"
-            :value="supportProgram.precisions"
-          />
-        </li>
-      </ul>
-    </template>
   </div>
 </template>
 
@@ -103,36 +53,13 @@
     beneficiaryProtectionMeasureKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { supportProgramFieldLabels } from '~/client/labels'
-  import {
-    supportProgramStatus,
-    formatSupportProgramDateRange
-  } from '~/utils/beneficiary/supportProgramStatus'
 
   defineProps<{
     externalOrganisations: GetBeneficiaryExternalOrganisations
   }>()
-
-  type SupportProgram =
-    GetBeneficiaryExternalOrganisations['supportPrograms'][number]
-
-  function supportProgramStatusBadgeClass(program: SupportProgram) {
-    const status = supportProgramStatus(program)
-    if (status === 'En cours') {
-      return 'fr-badge--success fr-badge--no-icon'
-    }
-    if (status === 'À venir') {
-      return 'fr-badge--info fr-badge--no-icon'
-    }
-    return ''
-  }
 </script>
 
 <style lang="scss" scoped>
-  .fr-grid-row > .divider:first-of-type {
-    display: none;
-  }
-
   .home > .red ~ .red {
     border: none;
   }

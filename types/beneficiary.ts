@@ -90,9 +90,9 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'serviceProviders'
   | 'involvedPartners'
   | 'additionalInformation'
-> & {
-  supportPrograms: GetSupportProgramItem[]
-}
+>
+
+export type GetBeneficiarySupportPrograms = GetSupportProgramItem[]
 
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,
@@ -187,6 +187,7 @@ export type GetBeneficiaryOutput = Pick<
     general: GetBeneficiaryGeneral
     health: GetBeneficiaryHealth | undefined
     externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
+    supportPrograms: GetBeneficiarySupportPrograms | undefined
     occupationIncome: GetBeneficiaryOccupationIncome | undefined
     entourages: GetBeneficiaryRelative[] | undefined
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined
