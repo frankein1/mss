@@ -21,4 +21,4 @@ export const supportProgramSchema = z
     outcome: sp.endDate ? sp.outcome : null
   }))
 
-export type SupportProgramInput = z.infer<typeof supportProgramSchema>
+export type SupportProgramInput = z.input<typeof supportProgramSchema>

@@ -6,7 +6,7 @@ import {
   validatePartnerOrganizationIds
 } from '~/server/security'
 import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateBeneficiarySupportProgramsInput } from '~/server/schema'
+import type { UpdateBeneficiarySupportProgramsServerInput } from '~/server/schema'
 import { updateBeneficiarySupportProgramsSchema } from '~/server/schema'
 import { BeneficiaryRepo, SupportProgramNameRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
@@ -14,7 +14,7 @@ import { prepareRelationUpdates } from '~/utils/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: UpdateBeneficiarySupportProgramsInput
+  input: UpdateBeneficiarySupportProgramsServerInput
 ) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
@@ -44,7 +44,7 @@ const securityCheck = async (
 }
 
 function toSupportProgramData(
-  sp: UpdateBeneficiarySupportProgramsInput['supportPrograms'][number]
+  sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number]
 ) {
   const endDate = sp.endDate ?? null
   return {
@@ -62,7 +62,7 @@ const handler = async ({
   ctx,
   input
 }: {
-  input: UpdateBeneficiarySupportProgramsInput
+  input: UpdateBeneficiarySupportProgramsServerInput
   ctx: ProtectedAppContext
 }) => {
   const { id, supportPrograms } = input

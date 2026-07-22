@@ -239,7 +239,11 @@ export const updateBeneficiarySupportProgramsSchema = z.object({
   supportPrograms: z.array(supportProgramSchema)
 })
 
-export type UpdateBeneficiarySupportProgramsInput = z.infer<
+export type UpdateBeneficiarySupportProgramsInput = z.input<
+  typeof updateBeneficiarySupportProgramsSchema
+>
+// Needed because zod transform makes schema from front and back different
+export type UpdateBeneficiarySupportProgramsServerInput = z.infer<
   typeof updateBeneficiarySupportProgramsSchema
 >
 
