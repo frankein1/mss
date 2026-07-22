@@ -65,7 +65,7 @@
         startDate: d.startDate,
         endDate: d.endDate,
         partnerOrganisationId: d.partnerOrganisation?.id ?? null,
-        precisions: d.precisions,
+        outcome: d.outcome ?? null,
         exitReason: d.exitReason
       }))
     }

@@ -39,8 +39,9 @@
             :value="supportProgram.exitReason ?? undefined"
           />
           <BeneficiaryInfoLabel
-            :label="supportProgramFieldLabels.precisions"
-            :value="supportProgram.precisions"
+            v-if="supportProgram.outcome"
+            :label="supportProgramFieldLabels.outcome"
+            :value="supportProgramOutcomeKeys.byKey[supportProgram.outcome]"
           />
         </li>
       </ul>
@@ -51,6 +52,7 @@
 <script setup lang="ts">
   import type { GetBeneficiarySupportPrograms } from '~/types/beneficiary'
   import { supportProgramFieldLabels } from '~/client/labels'
+  import { supportProgramOutcomeKeys } from '~/client/options'
   import {
     supportProgramStatus,
     formatSupportProgramDateRange

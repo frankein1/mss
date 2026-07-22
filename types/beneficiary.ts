@@ -74,7 +74,7 @@ export type GetBeneficiaryGeneral = Pick<
 
 export type GetSupportProgramItem = Pick<
   SupportProgram,
-  'id' | 'startDate' | 'endDate' | 'exitReason' | 'precisions'
+  'id' | 'startDate' | 'endDate' | 'exitReason' | 'outcome'
 > & {
   supportProgramName: { id: string; name: string }
   partnerOrganisation: { id: string; name: string } | null

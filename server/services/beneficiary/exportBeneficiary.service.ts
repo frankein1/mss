@@ -57,7 +57,8 @@ import {
   workshopAttendeeAttendanceKeys,
   socialSupportRedirectionTypeKeys,
   isFirstKeys,
-  isRefundableKeys
+  isRefundableKeys,
+  supportProgramOutcomeKeys
 } from '~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
@@ -668,7 +669,7 @@ type SupportProgramData = {
   startDate: string | null
   endDate: string | null
   exitReason: string | null
-  precisions: string | null
+  outcome: string | null
   partnerOrganisation: string | null
 }
 
@@ -733,7 +734,7 @@ const getBeneficiaryInfoData = (
       startDate: sp.startDate?.toLocaleDateString('fr-FR') || null,
       endDate: sp.endDate?.toLocaleDateString('fr-FR') || null,
       exitReason: sp.exitReason,
-      precisions: sp.precisions,
+      outcome: sp.outcome ? supportProgramOutcomeKeys.byKey[sp.outcome] : null,
       partnerOrganisation: sp.partnerOrganisation?.name || null
     })
   )
@@ -979,7 +980,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
           startDate: true,
           endDate: true,
           exitReason: true,
-          precisions: true,
+          outcome: true,
           supportProgramName: { select: { name: true } },
           partnerOrganisation: { select: { name: true } }
         }

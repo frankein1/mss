@@ -1,3 +1,4 @@
+import { SupportProgramOutcome } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import {
@@ -229,7 +230,8 @@ describe('Support Programs - Update - CRUD', () => {
         {
           id: programId,
           supportProgramNameId: supportProgramNameIds[6]!,
-          precisions: 'Updated precisions'
+          endDate: new Date('2024-06-30'),
+          outcome: SupportProgramOutcome.Achieved
         }
       ]
     })
@@ -242,7 +244,7 @@ describe('Support Programs - Update - CRUD', () => {
     expect(program).toMatchObject({
       id: programId,
       supportProgramName: { name: 'USP-Dispositif modifié' },
-      precisions: 'Updated precisions'
+      outcome: SupportProgramOutcome.Achieved
     })
   })
 
@@ -278,7 +280,7 @@ describe('Support Programs - Update - CRUD', () => {
           endDate,
           exitReason: 'Fin de prise en charge',
           partnerOrganisationId: partnerOrganisation.id,
-          precisions: 'Intervenant : M. Dupont'
+          outcome: SupportProgramOutcome.SubjectToConditions
         }
       ]
     })
@@ -290,6 +292,81 @@ describe('Support Programs - Update - CRUD', () => {
     expect(supportProgram?.endDate).toEqual(endDate)
     expect(supportProgram?.exitReason).toBe('Fin de prise en charge')
     expect(supportProgram?.partnerOrganisationId).toBe(partnerOrganisation.id)
-    expect(supportProgram?.precisions).toBe('Intervenant : M. Dupont')
+    expect(supportProgram?.outcome).toBe(
+      SupportProgramOutcome.SubjectToConditions
+    )
+  })
+})
+
+describe('Support Programs - Update - Outcome', () => {
+  test('Outcome is persisted when endDate is present', async ({ trpc }) => {
+    const programId = v4()
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: programId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          endDate: new Date('2024-12-31'),
+          outcome: SupportProgramOutcome.Achieved
+        }
+      ]
+    })
+
+    const program = await prismaClient.supportProgram.findUnique({
+      where: { id: programId }
+    })
+    expect(program?.outcome).toBe(SupportProgramOutcome.Achieved)
+  })
+
+  test('Outcome is silently nulled when endDate is absent', async ({
+    trpc
+  }) => {
+    const programId = v4()
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: programId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          endDate: new Date('2024-12-31'),
+          outcome: SupportProgramOutcome.Exceeded
+        }
+      ]
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: programId,
+          supportProgramNameId: supportProgramNameIds[0]!
+        }
+      ]
+    })
+
+    const program = await prismaClient.supportProgram.findUnique({
+      where: { id: programId }
+    })
+    expect(program?.outcome).toBeNull()
+  })
+
+  test('Outcome is optional when endDate is present', async ({ trpc }) => {
+    const programId = v4()
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: programId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          endDate: new Date('2024-12-31')
+        }
+      ]
+    })
+
+    const program = await prismaClient.supportProgram.findUnique({
+      where: { id: programId }
+    })
+    expect(program?.outcome).toBeNull()
   })
 })

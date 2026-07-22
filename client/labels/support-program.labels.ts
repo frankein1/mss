@@ -3,7 +3,7 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type SupportProgramFieldLabels = Pick<
   SupportProgram,
-  'precisions' | 'startDate' | 'endDate' | 'exitReason'
+  'outcome' | 'startDate' | 'endDate' | 'exitReason'
 > & {
   name: string
   partnerOrganisationId: string
@@ -16,7 +16,7 @@ export const supportProgramFieldLabels: FieldLabels<SupportProgramFieldLabels> =
     endDate: 'Date de sortie',
     exitReason: 'Motif de sortie',
     partnerOrganisationId: 'Organisme partenaire',
-    precisions: 'Précisions'
+    outcome: 'Atteinte des objectifs'
   }
 
 export const supportProgramExportFieldLabels = {
@@ -26,5 +26,5 @@ export const supportProgramExportFieldLabels = {
   supportProgramExitReason: supportProgramFieldLabels.exitReason,
   supportProgramPartnerOrganisationName:
     supportProgramFieldLabels.partnerOrganisationId,
-  supportProgramPrecisions: supportProgramFieldLabels.precisions
+  supportProgramOutcome: supportProgramFieldLabels.outcome
 }

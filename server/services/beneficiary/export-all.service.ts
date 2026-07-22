@@ -34,7 +34,8 @@ import {
   ministereDepartmentServiceAcKeys,
   ministereStructureKeys,
   familySituationKeys,
-  nationalityKeys
+  nationalityKeys,
+  supportProgramOutcomeKeys
 } from '~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
@@ -230,7 +231,11 @@ function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
     supportProgramPartnerOrganisationName: join(
       supportPrograms.map(d => d.partnerOrganisation?.name)
     ),
-    supportProgramPrecisions: join(supportPrograms.map(d => d.precisions))
+    supportProgramOutcome: join(
+      supportPrograms.map(d =>
+        d.outcome ? supportProgramOutcomeKeys.byKey[d.outcome] : null
+      )
+    )
   }
 }
 

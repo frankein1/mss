@@ -46,11 +46,12 @@ const securityCheck = async (
 function toSupportProgramData(
   sp: UpdateBeneficiarySupportProgramsInput['supportPrograms'][number]
 ) {
+  const endDate = sp.endDate ?? null
   return {
     id: sp.id,
     startDate: sp.startDate ?? null,
-    endDate: sp.endDate ?? null,
-    precisions: sp.precisions ?? null,
+    endDate,
+    outcome: endDate ? (sp.outcome ?? null) : null,
     exitReason: sp.exitReason ?? null,
     supportProgramNameId: sp.supportProgramNameId,
     partnerOrganisationId: sp.partnerOrganisationId ?? null

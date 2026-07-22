@@ -56,6 +56,17 @@
     />
   </div>
 
+  <div
+    v-if="endDate"
+    class="fr-col-12"
+  >
+    <VeeSelect
+      :name="`supportPrograms[${index}].outcome`"
+      :label="supportProgramFieldLabels.outcome"
+      :options="withEmptyValue(supportProgramOutcomeKeys.options)"
+    />
+  </div>
+
   <div class="fr-col-12">
     <VeeCombobox
       class="fr-mb-2v"
@@ -70,14 +81,6 @@
     >
       Données issues de l'annuaire de partenaires
     </NuxtLink>
-  </div>
-
-  <div class="fr-col-12">
-    <VeeInput
-      :name="`supportPrograms[${index}].precisions`"
-      :label="supportProgramFieldLabels.precisions"
-      hint="Personne intervenante, horaires..."
-    />
   </div>
 
   <div class="fr-col-12">
@@ -100,6 +103,7 @@
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { supportProgramFieldLabels } from '~/client/labels'
+  import { supportProgramOutcomeKeys } from '~/client/options'
 
   defineEmits<{
     removeSupportProgram: []

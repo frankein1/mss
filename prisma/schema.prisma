@@ -1876,10 +1876,10 @@ model SupportProgram {
   partnerOrganisationId String?              @map("partner_organisation_id") @db.Uuid
   partnerOrganisation   PartnerOrganization? @relation(fields: [partnerOrganisationId], references: [id])
 
-  precisions String?
-
   startDate DateTime? @map("start_date") @db.Date
   endDate   DateTime? @map("end_date") @db.Date
+
+  outcome SupportProgramOutcome?
 
   exitReason String? @map("exit_reason")
 
@@ -1892,6 +1892,13 @@ model SupportProgram {
   // vérifier l'utilité de cet index
   @@index(fields: [supportProgramNameId], map: "support_program_support_program_name_id_idx")
   @@map("support_program")
+}
+
+enum SupportProgramOutcome {
+  NotAchieved
+  SubjectToConditions
+  Achieved
+  Exceeded
 }
 
 enum RelativeRelationship {

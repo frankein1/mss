@@ -782,8 +782,7 @@ const configSupportProgram: Record<
   exit_reason: true,
   created_at: true,
   updated_at: true,
-  // -- BEGIN ANONYMIZED
-  precisions: false
+  outcome: true
 }
 
 export const CONFIG = {

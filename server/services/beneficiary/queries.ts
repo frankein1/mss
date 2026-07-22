@@ -167,7 +167,7 @@ const select = {
       startDate: true,
       endDate: true,
       exitReason: true,
-      precisions: true,
+      outcome: true,
       supportProgramName: { select: { id: true, name: true } },
       partnerOrganisation: { select: { id: true, name: true } }
     }
@@ -435,7 +435,7 @@ function getSupportPrograms(beneficiary: BeneficiaryOutput) {
     startDate: d.startDate,
     endDate: d.endDate,
     exitReason: d.exitReason,
-    precisions: d.precisions,
+    outcome: d.outcome,
     supportProgramName: d.supportProgramName,
     partnerOrganisation: d.partnerOrganisation
   }))
