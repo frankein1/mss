@@ -5,7 +5,7 @@
     </h3>
   </div>
 
-  <div class="fr-col-12">
+  <div class="fr-col-12 fr-col-lg-6">
     <VeeSelect
       class="fr-mb-2v"
       :name="`supportPrograms[${index}].supportProgramNameId`"
@@ -29,6 +29,22 @@
       class="fr-mt-2w"
       @close="closeDuplicateAlert"
     />
+  </div>
+
+  <div class="fr-col-12 fr-col-lg-6">
+    <VeeCombobox
+      class="fr-mb-2v"
+      :name="`supportPrograms[${index}].partnerOrganisationId`"
+      :label="supportProgramFieldLabels.partnerOrganisationId"
+      placeholder="Sélectionner l'organisme"
+      :options="withEmptyValue(partnerOrganisationOptions)"
+    />
+    <NuxtLink
+      :to="routes.structure.AppPartners.path()"
+      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
+    >
+      Données issues de l'annuaire de partenaires
+    </NuxtLink>
   </div>
 
   <div class="fr-col-12 fr-col-lg-6">
@@ -65,22 +81,6 @@
       :label="supportProgramFieldLabels.outcome"
       :options="withEmptyValue(supportProgramOutcomeKeys.options)"
     />
-  </div>
-
-  <div class="fr-col-12">
-    <VeeCombobox
-      class="fr-mb-2v"
-      :name="`supportPrograms[${index}].partnerOrganisationId`"
-      :label="supportProgramFieldLabels.partnerOrganisationId"
-      placeholder="Sélectionner l'organisme"
-      :options="withEmptyValue(partnerOrganisationOptions)"
-    />
-    <NuxtLink
-      :to="routes.structure.AppPartners.path()"
-      class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
-    >
-      Données issues de l'annuaire de partenaires
-    </NuxtLink>
   </div>
 
   <div class="fr-col-12">
