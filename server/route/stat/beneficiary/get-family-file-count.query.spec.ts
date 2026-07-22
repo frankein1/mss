@@ -14,7 +14,7 @@ describe('Statistics - Beneficiary - Family File Count', () => {
 
     const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
 
-    expect(stats).toEqual({ family: 2, beneficiary: 12 })
+    expect(stats).toEqual({ family: 3, beneficiary: 20 })
   })
 
   test('should not allow stats computation as a reception agent', async ({
@@ -34,7 +34,7 @@ describe('Statistics - Beneficiary - Family File Count', () => {
 
     const stats = await trpc.referent.stat.getFamilyFileCount(input)
 
-    expect(stats).toEqual({ family: 1, beneficiary: 6 })
+    expect(stats).toEqual({ family: 1, beneficiary: 10 })
   })
 
   test('should compute stats with beneficiaryStatus filter', async ({
@@ -44,7 +44,7 @@ describe('Statistics - Beneficiary - Family File Count', () => {
 
     const stats = await trpc.structureManager.stat.getFamilyFileCount(input)
 
-    expect(stats).toEqual({ family: 2, beneficiary: 8 })
+    expect(stats).toEqual({ family: 3, beneficiary: 16 })
   })
 
   test('should compute stats with ageGroup filter', async ({ trpc }) => {

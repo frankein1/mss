@@ -14,7 +14,7 @@ describe('Statistics - Beneficiary - Beneficiary Count', () => {
 
     const stats = await trpc.structureManager.stat.getBeneficiaryCount(input)
 
-    expect(stats.count).toBe(16)
+    expect(stats.count).toBe(26)
   })
 
   test('should not allow stats computation as a reception agent', async ({
@@ -34,7 +34,7 @@ describe('Statistics - Beneficiary - Beneficiary Count', () => {
 
     const stats = await trpc.referent.stat.getBeneficiaryCount(input)
 
-    expect(stats.count).toBe(8)
+    expect(stats.count).toBe(12)
   })
 
   test('should compute stats with beneficiaryStatus filter', async ({
@@ -44,7 +44,7 @@ describe('Statistics - Beneficiary - Beneficiary Count', () => {
 
     const stats = await trpc.structureManager.stat.getBeneficiaryCount(input)
 
-    expect(stats.count).toBe(12)
+    expect(stats.count).toBe(22)
   })
 
   test('should compute stats with ageGroup filter', async ({ trpc }) => {

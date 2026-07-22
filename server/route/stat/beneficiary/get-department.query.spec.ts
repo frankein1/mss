@@ -29,7 +29,15 @@ describe('Statistics - Beneficiary - Department', () => {
       'Non renseigné': 10,
       "Côte-d'Or": 3,
       'Rhône': 2,
-      'Val-de-Marne': 1
+      'Val-de-Marne': 1,
+      'Bouches-du-Rhône': 1,
+      'Haute-Garonne': 1,
+      'Gironde': 1,
+      'Nord': 1,
+      'Loire-Atlantique': 1,
+      'Bas-Rhin': 1,
+      'Ille-et-Vilaine': 1,
+      'Alpes-Maritimes': 3
     })
   })
 
@@ -53,7 +61,11 @@ describe('Statistics - Beneficiary - Department', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,
       "Côte-d'Or": 1,
-      'Val-de-Marne': 1
+      'Val-de-Marne': 1,
+      'Haute-Garonne': 1,
+      'Nord': 1,
+      'Bas-Rhin': 1,
+      'Alpes-Maritimes': 1
     })
   })
 
@@ -67,7 +79,15 @@ describe('Statistics - Beneficiary - Department', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 8,
       "Côte-d'Or": 2,
-      'Rhône': 2
+      'Rhône': 2,
+      'Bouches-du-Rhône': 1,
+      'Haute-Garonne': 1,
+      'Gironde': 1,
+      'Nord': 1,
+      'Loire-Atlantique': 1,
+      'Bas-Rhin': 1,
+      'Ille-et-Vilaine': 1,
+      'Alpes-Maritimes': 3
     })
   })
 

@@ -37,7 +37,7 @@ describe('Statistics - Beneficiary - Age', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 6,
-      'less-18': 3,
+      'less-18': 13,
       '18-24': 1,
       '25-34': 2,
       '35-44': 2,
@@ -65,7 +65,7 @@ describe('Statistics - Beneficiary - Age', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 3,
-      'less-18': 1,
+      'less-18': 5,
       '18-24': 1,
       '35-44': 2,
       '55-64': 1
@@ -81,7 +81,7 @@ describe('Statistics - Beneficiary - Age', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 4,
-      'less-18': 3,
+      'less-18': 13,
       '18-24': 1,
       '25-34': 1,
       '35-44': 1,

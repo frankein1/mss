@@ -29,7 +29,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
       'CoupleWithChildren': 1,
       'Divorced': 2,
       'Single': 1,
-      'Non renseigné': 12
+      'Non renseigné': 22
     })
   })
 
@@ -53,7 +53,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
     expect(parseStats(stats)).toEqual({
       'Divorced': 1,
       'Single': 1,
-      'Non renseigné': 6
+      'Non renseigné': 10
     })
   })
 
@@ -66,7 +66,7 @@ describe('Statistics - Beneficiary - Family Situation', () => {
 
     expect(parseStats(stats)).toEqual({
       'Divorced': 2,
-      'Non renseigné': 10
+      'Non renseigné': 20
     })
   })
 

@@ -174,8 +174,80 @@ export const fixturesFamilyFiles = [
     referents: {
       connect: [{ id: fixturesUsers[FixtureUserRole.Referent].id }]
     }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.BENAMOR].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.FERRAND].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.Referent].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.ROUSSEL].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.DUBOIS].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.Referent].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.MERCIER].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.WEBER].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.Referent].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.LEGALL].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.FONTAINE].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.Referent].id }]
+    }
+  },
+  {
+    id: fixturesBeneficiaries[FixtureBeneficiary.GARCIA].id,
+    structureId: fixtureStructures[0].id,
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
+    }
   }
 ] satisfies [
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
+  Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,
   Prisma.FamilyFileUncheckedCreateInput,

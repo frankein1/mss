@@ -28,7 +28,8 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 14,
       'Employed': 1,
-      'JobSeeker': 1
+      'JobSeeker': 1,
+      'Student': 10
     })
   })
 
@@ -51,7 +52,8 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 7,
-      'JobSeeker': 1
+      'JobSeeker': 1,
+      'Student': 4
     })
   })
 
@@ -64,7 +66,8 @@ describe('Statistics - Beneficiary - Socio-Professional Category (CSP)', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 11,
-      'JobSeeker': 1
+      'JobSeeker': 1,
+      'Student': 10
     })
   })
 
