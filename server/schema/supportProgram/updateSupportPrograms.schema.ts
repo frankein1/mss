@@ -12,7 +12,7 @@ export const supportProgramSchema = z
     supportProgramNameId: z.string().uuid(),
     startDate: dateOrEmpty,
     endDate: dateOrEmpty,
-    partnerOrganisationId: z.string().uuid().nullish(),
+    partnerOrganisationIds: z.array(z.string().uuid()).default([]),
     outcome: withEmptyValueOptionalNativeEnum(SupportProgramOutcome),
     exitReason: limitedStringConstraint(2, 500).nullish()
   })

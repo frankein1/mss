@@ -1873,8 +1873,7 @@ model SupportProgram {
   supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id], onDelete: Cascade)
   supportProgramNameId String             @map("support_program_name_id") @db.Uuid
 
-  partnerOrganisationId String?              @map("partner_organisation_id") @db.Uuid
-  partnerOrganisation   PartnerOrganization? @relation(fields: [partnerOrganisationId], references: [id])
+  partnerOrganisations PartnerOrganization[] @relation("partner_organization_to_support_program")
 
   startDate DateTime? @map("start_date") @db.Date
   endDate   DateTime? @map("end_date") @db.Date
@@ -2115,7 +2114,8 @@ model PartnerOrganization {
   housingHelpRequestsPrescribed HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
   workshops                     Workshop[]
   socialSupportRedirections     SocialSupportRedirection[]
-  supportPrograms               SupportProgram[]
+
+  supportPrograms SupportProgram[] @relation("partner_organization_to_support_program")
 
   @@unique([structureId, siret])
   @@map("partner_organization")

@@ -111,9 +111,9 @@ describe('Support Programs - Update - Authorizations', () => {
         ...baseInput(),
         supportPrograms: [
           {
-            id: v4(),
+            id: crypto.randomUUID(),
             supportProgramNameId: supportProgramNameIds[0]!,
-            partnerOrganisationId: foreignPartnerOrg.id
+            partnerOrganisationIds: [foreignPartnerOrg.id]
           }
         ]
       })
@@ -137,7 +137,7 @@ describe('Support Programs - Update - Authorizations', () => {
         ...baseInput(),
         supportPrograms: [
           {
-            id: v4(),
+            id: crypto.randomUUID(),
             supportProgramNameId: foreignName.id
           }
         ]
@@ -148,7 +148,7 @@ describe('Support Programs - Update - Authorizations', () => {
 
 describe('Support Programs - Update - CRUD', () => {
   test('A StructureManager can add support programs', async ({ trpc }) => {
-    const supportProgramId = v4()
+    const supportProgramId = crypto.randomUUID()
     const result =
       await trpc.structureManager.beneficiary.updateSupportPrograms({
         ...baseInput(),
@@ -176,7 +176,7 @@ describe('Support Programs - Update - CRUD', () => {
   test('Updating preserves existing programs and removes deleted ones', async ({
     trpc
   }) => {
-    const existingId = v4()
+    const existingId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [
@@ -184,7 +184,10 @@ describe('Support Programs - Update - CRUD', () => {
           id: existingId,
           supportProgramNameId: supportProgramNameIds[1]!
         },
-        { id: v4(), supportProgramNameId: supportProgramNameIds[5]! }
+        {
+          id: crypto.randomUUID(),
+          supportProgramNameId: supportProgramNameIds[5]!
+        }
       ]
     })
 
@@ -195,7 +198,10 @@ describe('Support Programs - Update - CRUD', () => {
           id: existingId,
           supportProgramNameId: supportProgramNameIds[1]!
         },
-        { id: v4(), supportProgramNameId: supportProgramNameIds[2]! }
+        {
+          id: crypto.randomUUID(),
+          supportProgramNameId: supportProgramNameIds[2]!
+        }
       ]
     })
 
@@ -216,7 +222,7 @@ describe('Support Programs - Update - CRUD', () => {
   })
 
   test('Existing program fields can be updated in place', async ({ trpc }) => {
-    const programId = v4()
+    const programId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [
@@ -254,14 +260,17 @@ describe('Support Programs - Update - CRUD', () => {
     const result = await trpc.referent.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [
-        { id: v4(), supportProgramNameId: supportProgramNameIds[3]! }
+        {
+          id: crypto.randomUUID(),
+          supportProgramNameId: supportProgramNameIds[3]!
+        }
       ]
     })
     expect(result.id).toBe(beneficiaryId)
   })
 
   test('Optional fields are correctly saved', async ({ trpc }) => {
-    const supportProgramId = v4()
+    const supportProgramId = crypto.randomUUID()
     const startDate = new Date('2024-01-01')
     const endDate = new Date('2024-06-30')
 
@@ -279,28 +288,135 @@ describe('Support Programs - Update - CRUD', () => {
           startDate,
           endDate,
           exitReason: 'Fin de prise en charge',
-          partnerOrganisationId: partnerOrganisation.id,
+          partnerOrganisationIds: [partnerOrganisation.id],
           outcome: SupportProgramOutcome.SubjectToConditions
         }
       ]
     })
 
     const supportProgram = await prismaClient.supportProgram.findUnique({
-      where: { id: supportProgramId }
+      where: { id: supportProgramId },
+      select: {
+        startDate: true,
+        endDate: true,
+        exitReason: true,
+        outcome: true,
+        partnerOrganisations: { select: { id: true } }
+      }
     })
     expect(supportProgram?.startDate).toEqual(startDate)
     expect(supportProgram?.endDate).toEqual(endDate)
     expect(supportProgram?.exitReason).toBe('Fin de prise en charge')
-    expect(supportProgram?.partnerOrganisationId).toBe(partnerOrganisation.id)
+    expect(supportProgram?.partnerOrganisations).toEqual([
+      { id: partnerOrganisation.id }
+    ])
     expect(supportProgram?.outcome).toBe(
       SupportProgramOutcome.SubjectToConditions
     )
+  })
+
+  test('Multiple partner organisations can be assigned and updated', async ({
+    trpc
+  }) => {
+    const supportProgramId = crypto.randomUUID()
+
+    const [org1, org2, org3] = await Promise.all([
+      prismaClient.partnerOrganization.create({
+        data: { structureId, name: 'USP-CAF' },
+        select: { id: true }
+      }),
+      prismaClient.partnerOrganization.create({
+        data: { structureId, name: 'USP-CPAM' },
+        select: { id: true }
+      }),
+      prismaClient.partnerOrganization.create({
+        data: { structureId, name: 'USP-MSA' },
+        select: { id: true }
+      })
+    ])
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: supportProgramId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          partnerOrganisationIds: [org1.id, org2.id]
+        }
+      ]
+    })
+
+    let sp = await prismaClient.supportProgram.findUnique({
+      where: { id: supportProgramId },
+      select: { partnerOrganisations: { select: { id: true } } }
+    })
+    expect(sp?.partnerOrganisations).toHaveLength(2)
+    expect(sp?.partnerOrganisations.map(o => o.id).sort()).toEqual(
+      [org1.id, org2.id].sort()
+    )
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: supportProgramId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          partnerOrganisationIds: [org2.id, org3.id]
+        }
+      ]
+    })
+
+    sp = await prismaClient.supportProgram.findUnique({
+      where: { id: supportProgramId },
+      select: { partnerOrganisations: { select: { id: true } } }
+    })
+    expect(sp?.partnerOrganisations).toHaveLength(2)
+    expect(sp?.partnerOrganisations.map(o => o.id).sort()).toEqual(
+      [org2.id, org3.id].sort()
+    )
+  })
+
+  test('Empty array clears all partner organisations', async ({ trpc }) => {
+    const supportProgramId = crypto.randomUUID()
+
+    const org = await prismaClient.partnerOrganization.create({
+      data: { structureId, name: 'USP-Clear' },
+      select: { id: true }
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: supportProgramId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          partnerOrganisationIds: [org.id]
+        }
+      ]
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: supportProgramId,
+          supportProgramNameId: supportProgramNameIds[0]!,
+          partnerOrganisationIds: []
+        }
+      ]
+    })
+
+    const sp = await prismaClient.supportProgram.findUnique({
+      where: { id: supportProgramId },
+      select: { partnerOrganisations: { select: { id: true } } }
+    })
+    expect(sp?.partnerOrganisations).toEqual([])
   })
 })
 
 describe('Support Programs - Update - Outcome', () => {
   test('Outcome is persisted when endDate is present', async ({ trpc }) => {
-    const programId = v4()
+    const programId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [
@@ -322,7 +438,7 @@ describe('Support Programs - Update - Outcome', () => {
   test('Outcome is silently nulled when endDate is absent', async ({
     trpc
   }) => {
-    const programId = v4()
+    const programId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [
@@ -352,7 +468,7 @@ describe('Support Programs - Update - Outcome', () => {
   })
 
   test('Outcome is optional when endDate is present', async ({ trpc }) => {
-    const programId = v4()
+    const programId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
       supportPrograms: [

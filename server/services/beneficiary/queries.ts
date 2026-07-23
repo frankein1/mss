@@ -169,7 +169,7 @@ const select = {
       exitReason: true,
       outcome: true,
       supportProgramName: { select: { id: true, name: true } },
-      partnerOrganisation: { select: { id: true, name: true } }
+      partnerOrganisations: { select: { id: true, name: true } }
     }
   }
 } satisfies Prisma.BeneficiarySelect
@@ -437,6 +437,6 @@ function getSupportPrograms(beneficiary: BeneficiaryOutput) {
     exitReason: d.exitReason,
     outcome: d.outcome,
     supportProgramName: d.supportProgramName,
-    partnerOrganisation: d.partnerOrganisation
+    partnerOrganisations: d.partnerOrganisations
   }))
 }

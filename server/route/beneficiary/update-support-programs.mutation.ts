@@ -24,8 +24,8 @@ const securityCheck = async (
     return false
   }
 
-  const partnerOrgIds = input.supportPrograms.map(
-    sp => sp.partnerOrganisationId
+  const partnerOrgIds = input.supportPrograms.flatMap(
+    sp => sp.partnerOrganisationIds
   )
   const supportProgramNameIds = input.supportPrograms.map(
     sp => sp.supportProgramNameId
@@ -53,8 +53,7 @@ function toSupportProgramData(
     endDate,
     outcome: endDate ? (sp.outcome ?? null) : null,
     exitReason: sp.exitReason ?? null,
-    supportProgramNameId: sp.supportProgramNameId,
-    partnerOrganisationId: sp.partnerOrganisationId ?? null
+    supportProgramNameId: sp.supportProgramNameId
   }
 }
 
@@ -75,14 +74,42 @@ const handler = async ({
     }
   ).then(b => b.supportPrograms)
 
+  // Relation updates must manage many-to-many relation for partner organization
+  const relationUpdates = prepareRelationUpdates(
+    supportPrograms.map(toSupportProgramData),
+    previousSupportPrograms
+  )
+
+  const partnerOrgsByProgramId = new Map(
+    supportPrograms.map(sp => [
+      sp.id,
+      sp.partnerOrganisationIds.map(orgId => ({ id: orgId }))
+    ])
+  )
+
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     select: { id: true },
     where: { id },
     data: {
-      supportPrograms: prepareRelationUpdates(
-        supportPrograms.map(toSupportProgramData),
-        previousSupportPrograms
-      )
+      supportPrograms: {
+        create: relationUpdates.create.map(({ id: spId, ...data }) => ({
+          id: spId,
+          ...data,
+          partnerOrganisations: {
+            connect: partnerOrgsByProgramId.get(spId) ?? []
+          }
+        })),
+        delete: relationUpdates.delete,
+        update: relationUpdates.update.map(u => ({
+          where: u.where,
+          data: {
+            ...u.data,
+            partnerOrganisations: {
+              set: partnerOrgsByProgramId.get(u.where.id) ?? []
+            }
+          }
+        }))
+      }
     }
   })
 

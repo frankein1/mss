@@ -30,8 +30,11 @@
             </span>
           </p>
           <BeneficiaryInfoLabel
-            :label="supportProgramFieldLabels.partnerOrganisationId"
-            :value="supportProgram.partnerOrganisation?.name"
+            :label="supportProgramFieldLabels.partnerOrganisationIds"
+            :value="
+              supportProgram.partnerOrganisations.map(o => o.name).join(', ') ||
+              undefined
+            "
           />
           <BeneficiaryInfoLabel
             v-if="supportProgram.endDate"

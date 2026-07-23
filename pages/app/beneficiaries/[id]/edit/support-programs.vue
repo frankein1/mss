@@ -64,7 +64,7 @@
         supportProgramNameId: d.supportProgramName.id,
         startDate: d.startDate,
         endDate: d.endDate,
-        partnerOrganisationId: d.partnerOrganisation?.id ?? null,
+        partnerOrganisationIds: d.partnerOrganisations?.map(o => o.id) ?? [],
         outcome: d.outcome ?? null,
         exitReason: d.exitReason
       }))

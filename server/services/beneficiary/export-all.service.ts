@@ -229,7 +229,9 @@ function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
     ),
     supportProgramExitReason: join(supportPrograms.map(d => d.exitReason)),
     supportProgramPartnerOrganisationName: join(
-      supportPrograms.map(d => d.partnerOrganisation?.name)
+      supportPrograms.map(d =>
+        d.partnerOrganisations?.map(o => o.name).join(', ')
+      )
     ),
     supportProgramOutcome: join(
       supportPrograms.map(d =>

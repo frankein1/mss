@@ -776,7 +776,6 @@ const configSupportProgram: Record<
   id: true,
   beneficiary_id: true,
   support_program_name_id: true,
-  partner_organisation_id: true,
   start_date: true,
   end_date: true,
   exit_reason: true,
@@ -784,6 +783,11 @@ const configSupportProgram: Record<
   updated_at: true,
   outcome: true
 }
+
+const configPartnerOrganizationToSupportProgram = {
+  A: true,
+  B: true
+} as Record<'A' | 'B', boolean>
 
 export const CONFIG = {
   user: configUser,
@@ -824,7 +828,9 @@ export const CONFIG = {
   redirection_reason: configRedirectionReason,
   minister: configMinister,
   support_program_name: configSupportProgramName,
-  support_program: configSupportProgram
+  support_program: configSupportProgram,
+  _partner_organization_to_support_program:
+    configPartnerOrganizationToSupportProgram
 }
 
 export type TableName = keyof typeof CONFIG

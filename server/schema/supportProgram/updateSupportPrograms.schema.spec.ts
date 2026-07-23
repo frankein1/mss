@@ -50,3 +50,41 @@ describe('Support Program Schema - Outcome validation', () => {
     expect(result.success).toBe(true)
   })
 })
+
+describe('Support Program Schema - partnerOrganisationIds validation', () => {
+  test('Schema accepts an empty array', () => {
+    const result = supportProgramSchema.safeParse({
+      ...validBase,
+      partnerOrganisationIds: []
+    })
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.partnerOrganisationIds).toEqual([])
+    }
+  })
+
+  test('Schema defaults to empty array when omitted', () => {
+    const result = supportProgramSchema.safeParse(validBase)
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.partnerOrganisationIds).toEqual([])
+    }
+  })
+
+  test('Schema accepts an array of valid UUIDs', () => {
+    const result = supportProgramSchema.safeParse({
+      ...validBase,
+      partnerOrganisationIds: [
+        '00000000-0000-0000-0000-000000000003',
+        '00000000-0000-0000-0000-000000000004'
+      ]
+    })
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.partnerOrganisationIds).toEqual([
+        '00000000-0000-0000-0000-000000000003',
+        '00000000-0000-0000-0000-000000000004'
+      ])
+    }
+  })
+})

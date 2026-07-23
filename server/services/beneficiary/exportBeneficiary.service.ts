@@ -670,7 +670,7 @@ type SupportProgramData = {
   endDate: string | null
   exitReason: string | null
   outcome: string | null
-  partnerOrganisation: string | null
+  partnerOrganisation: string
 }
 
 type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
@@ -735,7 +735,7 @@ const getBeneficiaryInfoData = (
       endDate: sp.endDate?.toLocaleDateString('fr-FR') || null,
       exitReason: sp.exitReason,
       outcome: sp.outcome ? supportProgramOutcomeKeys.byKey[sp.outcome] : null,
-      partnerOrganisation: sp.partnerOrganisation?.name || null
+      partnerOrganisation: sp.partnerOrganisations.map(o => o.name).join(', ')
     })
   )
 
@@ -982,7 +982,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
           exitReason: true,
           outcome: true,
           supportProgramName: { select: { name: true } },
-          partnerOrganisation: { select: { name: true } }
+          partnerOrganisations: { select: { name: true } }
         }
       }
     }

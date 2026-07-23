@@ -32,12 +32,11 @@
   </div>
 
   <div class="fr-col-12 fr-col-lg-6">
-    <VeeCombobox
+    <MultiSelect
       class="fr-mb-2v"
-      :name="`supportPrograms[${index}].partnerOrganisationId`"
-      :label="supportProgramFieldLabels.partnerOrganisationId"
-      placeholder="Sélectionner l'organisme"
-      :options="withEmptyValue(partnerOrganisationOptions)"
+      :name="`supportPrograms[${index}].partnerOrganisationIds`"
+      :label="supportProgramFieldLabels.partnerOrganisationIds"
+      :options="partnerOrganisationOptions"
     />
     <NuxtLink
       :to="routes.structure.AppPartners.path()"

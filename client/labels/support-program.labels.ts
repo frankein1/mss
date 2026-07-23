@@ -6,7 +6,7 @@ type SupportProgramFieldLabels = Pick<
   'outcome' | 'startDate' | 'endDate' | 'exitReason'
 > & {
   name: string
-  partnerOrganisationId: string
+  partnerOrganisationIds: string
 }
 
 export const supportProgramFieldLabels: FieldLabels<SupportProgramFieldLabels> =
@@ -15,7 +15,7 @@ export const supportProgramFieldLabels: FieldLabels<SupportProgramFieldLabels> =
     startDate: "Date d'entrée",
     endDate: 'Date de sortie',
     exitReason: 'Motif de sortie',
-    partnerOrganisationId: 'Organisme partenaire',
+    partnerOrganisationIds: 'Organismes partenaires',
     outcome: 'Atteinte des objectifs'
   }
 
@@ -25,6 +25,6 @@ export const supportProgramExportFieldLabels = {
   supportProgramEndDate: supportProgramFieldLabels.endDate,
   supportProgramExitReason: supportProgramFieldLabels.exitReason,
   supportProgramPartnerOrganisationName:
-    supportProgramFieldLabels.partnerOrganisationId,
+    supportProgramFieldLabels.partnerOrganisationIds,
   supportProgramOutcome: supportProgramFieldLabels.outcome
 }
