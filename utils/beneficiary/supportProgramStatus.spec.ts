@@ -163,7 +163,7 @@ describe('formatSupportProgramDateRange', () => {
         startDate: utcDate('2026-01-15'),
         endDate: null
       })
-    ).toBe('15/01/2026 →')
+    ).toBe("15/01/2026 →  (aujourd'hui)")
   })
 
   test('returns date range when both dates exist', () => {
