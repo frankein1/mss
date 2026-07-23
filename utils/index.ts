@@ -1,4 +1,12 @@
 import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween.js'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
+
+dayjs.extend(isBetween)
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
 
 export function dateIsSameOrBefore(date: Dayjs, upper: Dayjs): boolean {
   return date.isSameOrBefore(upper, 'day')
