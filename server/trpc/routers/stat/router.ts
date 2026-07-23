@@ -26,6 +26,9 @@ export const statRouter = router({
   getRepClassificationStats: protectedProcedure
     .input(routes.getRepClassificationStatsQ.inputValidation)
     .query(routes.getRepClassificationStatsQ.execute),
+  getSocialSupportCountPerBeneficiaryStats: protectedProcedure
+    .input(routes.getSocialSupportCountPerBeneficiaryStatsQ.inputValidation)
+    .query(routes.getSocialSupportCountPerBeneficiaryStatsQ.execute),
   getFamilyStats: protectedProcedure
     .input(routes.getFamilyStatsQ.inputValidation)
     .query(routes.getFamilyStatsQ.execute),

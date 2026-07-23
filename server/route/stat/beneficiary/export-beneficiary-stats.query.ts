@@ -33,7 +33,8 @@ import {
   getMinistereDepartementServiceAcStatsQuery,
   getMinistereCategorieStatsQuery,
   getDepartmentStatsQuery,
-  getMinistereInterpellationStatsQuery
+  getMinistereInterpellationStatsQuery,
+  getSocialSupportCountPerBeneficiaryStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -302,6 +303,25 @@ const handler = async ({
         number: _count,
         percent: toRatio(_count, totalCount)
       }))
+    )
+
+    // Social support count per beneficiary
+    const socialSupportCounts =
+      await getSocialSupportCountPerBeneficiaryStatsQuery(user, input)
+    const socialSupportCountTotal = socialSupportCounts.reduce(
+      (acc, cur) => acc + cur._count,
+      0
+    )
+    addStatsWorksheet(
+      workbook,
+      'Suivis par bénéficiaire',
+      socialSupportCounts
+        .filter(({ _count }) => _count > 0)
+        .map(({ label, _count }) => ({
+          label,
+          number: _count,
+          percent: toRatio(_count, socialSupportCountTotal)
+        }))
     )
   }
 
