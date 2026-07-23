@@ -15,6 +15,7 @@ import {
   getStatLabel,
   AgeGroup
 } from '~/client/options'
+import { repClassificationStatLabels } from '~/client/labels/school.labels'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
@@ -27,6 +28,7 @@ import {
   getMobilityStatsQuery,
   getCSPStatsQuery,
   getSchoolClassStatsQuery,
+  getRepClassificationStatsQuery,
   getMinistereStructureStatsQuery,
   getMinistereDepartementServiceAcStatsQuery,
   getMinistereCategorieStatsQuery,
@@ -224,6 +226,18 @@ const handler = async ({
     'Classes fréquentées',
     schoolClasses.map(({ schoolClass, _count }) => ({
       label: getStatLabel(beneficiarySchoolClassKeys.byKey, schoolClass),
+      number: _count,
+      percent: toRatio(_count, beneficiaryCount.count)
+    }))
+  )
+
+  // REP classification
+  const repClassifications = await getRepClassificationStatsQuery(user, input)
+  addStatsWorksheet(
+    workbook,
+    'Fréquentation REP',
+    repClassifications.map(({ repClassification, _count }) => ({
+      label: repClassificationStatLabels[repClassification],
       number: _count,
       percent: toRatio(_count, beneficiaryCount.count)
     }))
