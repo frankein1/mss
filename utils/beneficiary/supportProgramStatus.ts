@@ -31,6 +31,8 @@ export function formatSupportProgramDateRange(
   const start = program.startDate
     ? formatDate(program.startDate)
     : '(date non définie)'
-  const end = program.endDate ? ` → ${formatDate(program.endDate)}` : ' →'
+  const end = program.endDate
+    ? ` → ${formatDate(program.endDate)}`
+    : " → (aujourd'hui)"
   return `${start}${end}`
 }
