@@ -60,7 +60,7 @@ const FIELDS: (keyof typeof exportLabels)[] = [
   'refusalReasonOther',
   'dueDate',
   'fullFile',
-  'endOfSocialSupport',
+  // 'endOfSocialSupport',
   'updated',
   'minister',
   'numeroPegase',
@@ -181,9 +181,9 @@ export async function exportFileInstructions({
           synthesis: socialSupport.synthesis || '',
           dueDate: socialSupport.dueDate || '',
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
-          endOfSocialSupport: getBooleanOrEmpty(
-            socialSupport.endOfSocialSupport
-          ),
+          // endOfSocialSupport: getBooleanOrEmpty(
+          //   socialSupport.endOfSocialSupport
+          // ),
           // Ideally it should be converted into timezone of the user
           updated: socialSupport.updated || '',
           minister: socialSupport.minister

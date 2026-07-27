@@ -34,10 +34,10 @@
               :label="followupFieldLabels.firstFollowup"
               name="firstFollowup"
             />
-            <VeeCheckbox
+            <!-- <VeeCheckbox
               name="endOfSocialSupport"
               :label="followupFieldLabels.endOfSocialSupport"
-            />
+            /> -->
             <VeeCheckbox
               name="isDuringWalkInSession"
               :label="followupFieldLabels.isDuringWalkInSession"
