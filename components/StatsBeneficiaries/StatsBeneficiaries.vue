@@ -214,6 +214,16 @@
         />
       </StatsCard>
 
+      <StatsCard
+        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        :card-id="beneficiariesCardConfig.socialSupportCount.id"
+        :card-name="beneficiariesCardConfig.socialSupportCount.name"
+      >
+        <StatsBeneficiariesSocialSupportCount
+          :beneficiary-count="beneficiaryCount?.count || 0"
+          :filters="filters"
+      /></StatsCard>
+
       <!-- ↓ MINISTERES ↓ -->
 
       <template v-if="application.module.ministere">
@@ -259,16 +269,6 @@
           "
         >
           <StatsBeneficiariesMinistereInterpellation
-            :beneficiary-count="beneficiaryCount?.count || 0"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardMinistereConfig.socialSupportCount.id"
-          :card-name="beneficiariesCardMinistereConfig.socialSupportCount.name"
-        >
-          <StatsBeneficiariesSocialSupportCount
             :beneficiary-count="beneficiaryCount?.count || 0"
             :filters="filters"
         /></StatsCard>
@@ -395,6 +395,10 @@
     repClassification: {
       id: 'stats-beneficiaries-rep-classification',
       name: 'Établissements REP fréquentés'
+    },
+    socialSupportCount: {
+      id: 'stats-beneficiaries-social-support-count',
+      name: 'Nombre de suivis par bénéficiaire'
     }
   }
 
@@ -418,10 +422,6 @@
     ministereInterpellation: {
       id: 'stats-beneficiaries-interpellation',
       name: 'Bénéficiaires ayant interpellé chaque ministre'
-    },
-    socialSupportCount: {
-      id: 'stats-beneficiaries-social-support-count',
-      name: 'Nombre de suivis par bénéficiaire'
     }
   }
 

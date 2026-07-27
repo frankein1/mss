@@ -8,7 +8,7 @@ import { getAppContextPermissions } from '~/server/security'
 
 const securityCheck = (ctx: SecurityRuleContext) => {
   const permissions = getAppContextPermissions(ctx)
-  return permissions.module.stats && permissions.module.ministere
+  return permissions.module.stats
 }
 
 const handler = async ({
