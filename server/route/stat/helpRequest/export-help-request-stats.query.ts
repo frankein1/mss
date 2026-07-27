@@ -15,7 +15,8 @@ import {
   getHelpRequestAmountsByInstructorOrganizationQuery,
   getHelpRequestAmountsBySubjectQuery,
   getHelpRequestHousingStatsQuery,
-  getHelpRequestRedirectionsStatsQuery
+  getHelpRequestRedirectionsStatsQuery,
+  getHelpRequestRedirectionReasonsStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -407,6 +408,25 @@ const handler = async ({
     }
   ]
   addStatsWorksheet(workbook, 'Réorientations', helpRequestRedirectionsRows)
+
+  // Redirection reasons
+  const helpRequestRedirectionReasonsData =
+    await getHelpRequestRedirectionReasonsStatsQuery(user, input)
+  const redirectionReasonsBase =
+    helpRequestRedirectionReasonsData.helpRequestsWithReason._count
+  const redirectionReasonsRows: StatsRow[] = [
+    {
+      label: 'Instructions de dossiers avec au moins un motif de réorientation',
+      number: redirectionReasonsBase,
+      percent: toRatio(redirectionReasonsBase, helpRequestCount.total)
+    },
+    ...helpRequestRedirectionReasonsData.reasons.map(reason => ({
+      label: reason.name,
+      number: reason._count,
+      percent: toRatio(reason._count, helpRequestCount.total)
+    }))
+  ]
+  addStatsWorksheet(workbook, 'Motifs de réorientation', redirectionReasonsRows)
 
   // Housing request
   const housingRequest = await getHelpRequestHousingStatsQuery(user, input)
