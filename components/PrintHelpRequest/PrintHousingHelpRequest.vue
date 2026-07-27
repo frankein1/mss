@@ -126,8 +126,6 @@
         </ul>
         <template
           v-if="
-            housingHelpRequest.fileInstruction.socialSupport
-              .endOfSocialSupport ||
             housingReason ||
             housingHelpRequest.uniqueId ||
             housingHelpRequest.fileInstruction.decisionDate ||
@@ -138,7 +136,7 @@
           <hr class="fr-mt-4w" />
           <h3>Informations sur la demande de logement</h3>
           <ul>
-            <PrintDetailItem
+            <!-- <PrintDetailItem
               :title="helpRequestFieldLabels.endOfSocialSupport"
               :content="
                 housingHelpRequest.fileInstruction.socialSupport
@@ -146,7 +144,7 @@
                   ? 'OUI'
                   : null
               "
-            />
+            /> -->
             <PrintDetailItem
               :title="housingHelpRequestFieldLabels.reason"
               :content="housingReason"
