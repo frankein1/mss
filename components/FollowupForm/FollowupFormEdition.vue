@@ -78,6 +78,7 @@
       endOfSocialSupport: followup.value.endOfSocialSupport || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
+      isDuringWalkInSession: followup.value.isDuringWalkInSession || false,
       isMinistry: application.value.module.ministere,
       duration: followup.value.duration,
       ministerId: followup.value.ministerId,

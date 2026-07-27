@@ -128,6 +128,7 @@ Each entity has a matching `*Constraints.ts` file that builds Prisma `where` cla
 
 ### ORM conventions
 
+- Do not use Prisma `include`, use `select`
 - No direct SQL queries except in `scheduler/db-anonymizer`
 - Performance: avoid large joins, large data fetches (rather paginate)
 - Performance: make use of `relationLoadStrategy: "query"` if necessary

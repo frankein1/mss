@@ -62,7 +62,8 @@ const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof exportLabels)[] = [
   'updated',
   'createdById',
   'lastUpdatedById',
-  'duration'
+  'duration',
+  'isDuringWalkInSession'
 ]
 const REDIRECTION_EXPORTED_FIELDS: (keyof typeof redirectionExportLabels)[] = [
   'type',
@@ -234,6 +235,7 @@ function formatRow(filtered: FilteredFollowup, maps: LookupMaps): RowType {
     createdById: createdBy ? formatUserDisplayName(createdBy) : '',
     lastUpdatedById: lastUpdatedBy ? formatUserDisplayName(lastUpdatedBy) : '',
     duration: followupDurationKeys.value(filtered.duration) || '',
+    isDuringWalkInSession: getBooleanOrEmpty(filtered.isDuringWalkInSession),
     type: redirections
       .map(r => socialSupportRedirectionTypeKeys.value(r.type))
       .filter((type): type is string => type != null)

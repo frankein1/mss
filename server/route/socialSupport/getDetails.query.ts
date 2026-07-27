@@ -173,6 +173,7 @@ async function getSocialSupportDetail({
           classified: true,
           firstFollowup: true,
           forwardedToJustice: true,
+          isDuringWalkInSession: true,
           duration: true,
           socialSupportId: true,
           prescribingOrganization: true,
