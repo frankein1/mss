@@ -14,7 +14,8 @@ import {
   getFollowupStatusStatsQuery,
   getFollowupDurationStatsQuery,
   getFollowupMeanTimeStatsQuery,
-  getFollowupRedirectionsStatsQuery
+  getFollowupRedirectionsStatsQuery,
+  getFollowupRedirectionReasonsStatsQuery
 } from '~/server/query/stats'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
@@ -55,9 +56,7 @@ function addStatsWorksheet(workbook: Workbook, name: string, rows: StatsRow[]) {
 }
 
 function addDurationWorksheet(workbook: Workbook, rows: DurationRow[]) {
-  const worksheet = workbook.addWorksheet(
-    "Durée moyenne par objet d'accompagnement"
-  )
+  const worksheet = workbook.addWorksheet("Durée moyenne par obj d'acc.")
   worksheet.columns = [
     { key: 'label', header: "Objet d'accompagnement", width: 40 },
     {
@@ -200,6 +199,25 @@ const handler = async ({
     }
   ]
   addStatsWorksheet(workbook, 'Réorientations', followupsRedirectionsRows)
+
+  // Redirection reasons
+  const followupRedirectionReasonsData =
+    await getFollowupRedirectionReasonsStatsQuery(user, input)
+  const redirectionReasonsBase =
+    followupRedirectionReasonsData.followupsWithReason._count
+  const redirectionReasonsRows: StatsRow[] = [
+    {
+      label: 'Entretiens avec au moins un motif de réorientation',
+      number: redirectionReasonsBase,
+      percent: toRatio(redirectionReasonsBase, followupCount)
+    },
+    ...followupRedirectionReasonsData.reasons.map(reason => ({
+      label: reason.name,
+      number: reason._count,
+      percent: toRatio(reason._count, followupCount)
+    }))
+  ]
+  addStatsWorksheet(workbook, 'Motifs de réorientation', redirectionReasonsRows)
 
   // Prescribing Organizations
   const followupPrescribingOrganizationData =
