@@ -76,7 +76,8 @@
         },
         beneficiaryId: 'ben-1',
         dueDate: new Date('2024-02-15'),
-        medium: 'PlannedInPerson'
+        medium: 'PlannedInPerson',
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -131,7 +132,8 @@
           fileNumber: 'ben-2'
         },
         beneficiaryId: 'ben-2',
-        medium: 'PhoneCall'
+        medium: 'PhoneCall',
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -179,7 +181,8 @@
         dueDate: new Date('2024-03-20'),
         synthesis: 'Accompagnement logement en cours',
         medium: 'BeneficiaryHouseAppointment',
-        firstFollowup: true
+        firstFollowup: true,
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -235,7 +238,8 @@
         },
         beneficiaryId: 'ben-4',
         medium: 'ExternalAppointment',
-        helpRequested: true
+        helpRequested: true,
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -270,7 +274,8 @@
         },
         beneficiaryId: 'ben-5',
         dueDate: new Date('2024-04-18'),
-        medium: 'Email'
+        medium: 'Email',
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -315,7 +320,8 @@
           fileNumber: 'ben-6'
         },
         beneficiaryId: 'ben-6',
-        medium: 'Videoconference'
+        medium: 'Videoconference',
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -382,7 +388,8 @@
         beneficiaryId: 'ben-7',
         dueDate: new Date('2024-05-14'),
         medium: 'UnplannedInPerson',
-        firstFollowup: false
+        firstFollowup: false,
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -428,7 +435,8 @@
           fileNumber: 'ben-8'
         },
         beneficiaryId: 'ben-8',
-        medium: 'PostalMail'
+        medium: 'PostalMail',
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -475,7 +483,8 @@
         beneficiaryId: 'ben-9',
         dueDate: new Date('2024-06-22'),
         medium: 'ThirdParty',
-        helpRequested: true
+        helpRequested: true,
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
@@ -521,7 +530,8 @@
         },
         beneficiaryId: 'ben-10',
         medium: 'PlannedInPerson',
-        firstFollowup: true
+        firstFollowup: true,
+        isDuringWalkInSession: false
       },
       permissions: {
         view: true,
