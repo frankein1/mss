@@ -98,13 +98,16 @@ describe('Statistics - Beneficiary - Social Support Count Per Beneficiary', () =
     ).rejects.toThrow(/not allowed to access route/i)
   })
 
-  test('should not allow stats computation for a non-ministère structure', async ({
+  test('should compute stats as a structure manager from a non-ministère structure', async ({
     trpc
   }) => {
     const input: Input = {}
 
-    await expect(() =>
-      trpc.structureManager.stat.getSocialSupportCountPerBeneficiaryStats(input)
-    ).rejects.toThrow(/not allowed to access route/i)
+    const stats =
+      await trpc.structureManager.stat.getSocialSupportCountPerBeneficiaryStats(
+        input
+      )
+
+    expect(stats).toBeInstanceOf(Array)
   })
 })

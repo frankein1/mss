@@ -244,6 +244,25 @@ const handler = async ({
     }))
   )
 
+  // Social support count per beneficiary
+  const socialSupportCounts =
+    await getSocialSupportCountPerBeneficiaryStatsQuery(user, input)
+  const socialSupportCountTotal = socialSupportCounts.reduce(
+    (acc, cur) => acc + cur._count,
+    0
+  )
+  addStatsWorksheet(
+    workbook,
+    'Suivis par bénéficiaire',
+    socialSupportCounts
+      .filter(({ _count }) => _count > 0)
+      .map(({ label, _count }) => ({
+        label,
+        number: _count,
+        percent: toRatio(_count, socialSupportCountTotal)
+      }))
+  )
+
   if (structure.type === StructureType.Ministere) {
     // Ministere structure
     const structures = await getMinistereStructureStatsQuery(user, input)
@@ -303,25 +322,6 @@ const handler = async ({
         number: _count,
         percent: toRatio(_count, totalCount)
       }))
-    )
-
-    // Social support count per beneficiary
-    const socialSupportCounts =
-      await getSocialSupportCountPerBeneficiaryStatsQuery(user, input)
-    const socialSupportCountTotal = socialSupportCounts.reduce(
-      (acc, cur) => acc + cur._count,
-      0
-    )
-    addStatsWorksheet(
-      workbook,
-      'Suivis par bénéficiaire',
-      socialSupportCounts
-        .filter(({ _count }) => _count > 0)
-        .map(({ label, _count }) => ({
-          label,
-          number: _count,
-          percent: toRatio(_count, socialSupportCountTotal)
-        }))
     )
   }
 
