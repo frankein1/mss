@@ -295,6 +295,7 @@ const configFollowup: Record<
   classified: true,
   first_followup: true,
   forwarded_to_justice: true,
+  is_during_walk_in_session: true,
   duration: true,
   social_support_id: true,
   // -- BEGIN ANONYMIZED

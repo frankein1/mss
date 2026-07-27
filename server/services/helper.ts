@@ -292,7 +292,11 @@ export function filterFollowup({
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
-    duration: show(followup.duration, conditions.details)
+    duration: show(followup.duration, conditions.details),
+    isDuringWalkInSession: show(
+      followup.isDuringWalkInSession,
+      conditions.details
+    )
   }
 }
 export function filterFollowupForExport<T extends Partial<Followup>>({
@@ -322,7 +326,11 @@ export function filterFollowupForExport<T extends Partial<Followup>>({
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
     place: show(followup.place, conditions.details),
-    duration: show(followup.duration, conditions.details)
+    duration: show(followup.duration, conditions.details),
+    isDuringWalkInSession: show(
+      followup.isDuringWalkInSession,
+      conditions.details
+    )
   }
 }
 export function filterFileInstruction({

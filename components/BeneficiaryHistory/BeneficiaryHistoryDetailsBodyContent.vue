@@ -21,6 +21,11 @@
             {{ followupFieldLabels.firstFollowup }}
           </p>
         </li>
+        <li v-if="socialSupport.followup?.isDuringWalkInSession">
+          <p class="fr-badge fr-badge--info fr-badge--no-icon">
+            {{ followupFieldLabels.isDuringWalkInSession }}
+          </p>
+        </li>
       </ul>
     </div>
     <ul class="information-list">

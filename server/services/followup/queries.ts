@@ -19,6 +19,7 @@ const select = {
   medium: true,
   classified: true,
   forwardedToJustice: true,
+  isDuringWalkInSession: true,
   firstFollowup: true,
   helpRequested: true,
   thirdPersonName: true,
