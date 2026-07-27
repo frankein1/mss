@@ -136,16 +136,6 @@
       matomoEventAction: BeneficiaryFilterEventAction.Status
     })
 
-    filters.push({
-      name: 'qpv',
-      label: 'Quartier prioritaire',
-      options: withEmptyValue(yesNoOptions, 'Tous'),
-      type: FilterType.SelectOne,
-      alwaysExpanded: filters.length < maxAlwaysExpandedNb,
-      matomoEventCategory: EventCategory.BeneficiaryFilter,
-      matomoEventAction: BeneficiaryFilterEventAction.QPV
-    })
-
     if (application.value.module.vulnerablePerson) {
       filters.push({
         name: 'vulnerablePerson',
@@ -209,6 +199,16 @@
         }
       )
     }
+
+    filters.push({
+      name: 'qpv',
+      label: 'Quartier prioritaire',
+      options: withEmptyValue(yesNoOptions, 'Tous'),
+      type: FilterType.SelectOne,
+      alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.BeneficiaryFilter,
+      matomoEventAction: BeneficiaryFilterEventAction.QPV
+    })
 
     filters.push({
       name: 'notFilled',
