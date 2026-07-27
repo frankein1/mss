@@ -102,12 +102,12 @@
   >
     Ce dossier est complet
   </li>
-  <li v-if="endOfSocialSupport">
+  <!-- <li v-if="endOfSocialSupport">
     <span class="information-label">{{
       helpRequestFieldLabels.endOfSocialSupport
     }}</span>
     : Oui
-  </li>
+  </li> -->
   <li v-if="housingHelpRequest.handlingDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.handlingDate }} :</span

@@ -1,12 +1,12 @@
 <template>
-  <li v-if="endOfSocialSupport">
+  <!-- <li v-if="endOfSocialSupport">
     <span
       v-if="endOfSocialSupport"
       class="information-label"
       >{{ followupFieldLabels.endOfSocialSupport }} :</span
     >
     Oui
-  </li>
+  </li> -->
   <li><span class="information-label">Type :</span> {{ medium }}</li>
   <li v-if="followup.prescribingOrganization?.name">
     <span class="information-label"

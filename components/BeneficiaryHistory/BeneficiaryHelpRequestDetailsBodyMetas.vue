@@ -59,12 +59,12 @@
     >
     {{ formatDate(fileInstruction.decisionDate) }}
   </li>
-  <li v-if="endOfSocialSupport">
+  <!-- <li v-if="endOfSocialSupport">
     <span class="information-label">{{
       helpRequestFieldLabels.endOfSocialSupport
     }}</span>
     : Oui
-  </li>
+  </li> -->
   <li v-if="helpRequest.handlingDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.handlingDate }} :</span

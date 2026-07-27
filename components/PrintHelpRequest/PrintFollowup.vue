@@ -20,10 +20,10 @@
             :title="followupFieldLabels.firstFollowup"
             :content="followup.firstFollowup ? 'OUI' : null"
           />
-          <PrintDetailItem
+          <!-- <PrintDetailItem
             :title="followupFieldLabels.endOfSocialSupport"
             :content="followup.endOfSocialSupport ? 'OUI' : null"
-          />
+          /> -->
           <PrintDetailItem
             :title="followupFieldLabels.isDuringWalkInSession"
             :content="followup.isDuringWalkInSession ? 'OUI' : null"
