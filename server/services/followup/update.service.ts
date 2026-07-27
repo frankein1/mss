@@ -66,6 +66,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     numeroPegase,
     classified,
     forwardedToJustice,
+    isDuringWalkInSession,
     socialSupportId,
     duration,
     socialSupportRedirections
@@ -162,6 +163,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         firstFollowup,
         classified,
         forwardedToJustice,
+        isDuringWalkInSession,
         duration
       },
       select: {

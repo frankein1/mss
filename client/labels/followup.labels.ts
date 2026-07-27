@@ -17,6 +17,7 @@ export const followupFieldLabels = {
   firstFollowup: '1er entretien',
   endOfSocialSupport: "Fin d'accompagnement",
   forwardedToJustice: 'Transmis à la justice',
+  isDuringWalkInSession: 'Entretien en permanence',
   minister: 'Ministre',
   ministerId: 'Ministre',
   numeroPegase: 'Numéro Pégase',

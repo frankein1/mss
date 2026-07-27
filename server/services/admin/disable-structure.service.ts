@@ -484,6 +484,7 @@ async function updateFollowups(structureId: string) {
     classified: null,
     firstFollowup: null,
     forwardedToJustice: null,
+    isDuringWalkInSession: false,
     duration: null
   }
   await FollowupRepo.prisma.updateMany({

@@ -49,6 +49,9 @@
       {{#if endOfSocialSupport}}
         <li><span class='bold'>Fin d'accompagnement : </span>Oui</li>
       {{/if}}
+      {{#if isDuringWalkInSession}}
+        <li><span class='bold'>Pendant une permanence : </span>Oui</li>
+      {{/if}}
       {{#if date}}<li><span class='bold'>Date de saisie
           </span>{{{date}}}</li>{{/if}}
       {{#if minister}}

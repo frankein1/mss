@@ -25,6 +25,10 @@
             :content="followup.endOfSocialSupport ? 'OUI' : null"
           />
           <PrintDetailItem
+            :title="followupFieldLabels.isDuringWalkInSession"
+            :content="followup.isDuringWalkInSession ? 'OUI' : null"
+          />
+          <PrintDetailItem
             :title="followupFieldLabels.duration"
             :content="followupDurationKeys.value(followup.duration)"
           />

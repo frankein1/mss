@@ -54,6 +54,7 @@ export const addFollowupSchemaBase = z.object({
   prescribingOrganizationContactId: z.string().nullish(),
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false),
+  isDuringWalkInSession: z.boolean().default(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration),
   socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()
 })

@@ -8,6 +8,7 @@ const followupExportSelect = {
   firstFollowup: true,
   classified: true,
   forwardedToJustice: true,
+  isDuringWalkInSession: true,
   helpRequested: true,
   thirdPersonName: true,
   place: true,

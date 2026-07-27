@@ -47,6 +47,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     numeroPegase,
     classified,
     forwardedToJustice,
+    isDuringWalkInSession,
     duration,
     socialSupportRedirections
   } = input
@@ -137,6 +138,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
           firstFollowup,
           classified,
           forwardedToJustice,
+          isDuringWalkInSession,
           duration
         }
       },

@@ -38,6 +38,10 @@
               name="endOfSocialSupport"
               :label="followupFieldLabels.endOfSocialSupport"
             />
+            <VeeCheckbox
+              name="isDuringWalkInSession"
+              :label="followupFieldLabels.isDuringWalkInSession"
+            />
           </div>
         </div>
 

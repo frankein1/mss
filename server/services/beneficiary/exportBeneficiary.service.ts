@@ -385,6 +385,7 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     forwardedToJustice: socialSupport.followup?.forwardedToJustice,
     helpRequested: socialSupport.followup?.helpRequested,
     classified: socialSupport.followup?.classified,
+    isDuringWalkInSession: socialSupport.followup?.isDuringWalkInSession,
     redirections,
     documents: documents || null
   }
@@ -976,6 +977,7 @@ const getSocialSupports = async (
           forwardedToJustice: true,
           helpRequested: true,
           classified: true,
+          isDuringWalkInSession: true,
           prescribingOrganization: {
             select: {
               name: true
