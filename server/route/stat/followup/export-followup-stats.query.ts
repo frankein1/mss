@@ -21,8 +21,7 @@ import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import type { ProtectedAppContext } from '~/server/trpc'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
 import { getSocialSupportSubjectTotalDuration } from '~/utils/followups/getSocialSupportSubjetcTotalDuration'
 import ExcelPkg from 'exceljs'
@@ -75,8 +74,7 @@ function addDurationWorksheet(workbook: Workbook, rows: DurationRow[]) {
   rows.forEach(rowData => worksheet.addRow(rowData))
 }
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).export.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

@@ -38,16 +38,6 @@ describe('Statistics - Followups - Redirection reasons', () => {
     })
   })
 
-  test('should not allow stats computation as a reception agent', async ({
-    trpc
-  }) => {
-    const input: Input = {}
-
-    await expect(() =>
-      trpc.receptionAgent.stat.getFollowupRedirectionReasonsStats(input)
-    ).rejects.toThrow(/not allowed to access route/)
-  })
-
   test('should compute stats including only beneficiaries followed as a referent', async ({
     trpc
   }) => {

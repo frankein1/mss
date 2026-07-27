@@ -2,16 +2,14 @@ import { createQuery } from '~/server/route'
 import type { ProtectedAppContext } from '~/server/trpc'
 import type { WorkshopStatFilterInput } from '~/server/schema'
 import { workshopStatFilterSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { WorkshopRepo } from '~/server/database'
 import {
   prepareDateFilters,
   prepareWorkshopStatFilters
 } from '~/server/query/stats/helpers'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

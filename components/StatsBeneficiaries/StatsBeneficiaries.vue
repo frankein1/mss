@@ -454,7 +454,7 @@
       })
     }
 
-    if (beneficiaryCount.value?.count != 0 && application.value.export.stats) {
+    if (beneficiaryCount.value?.count != 0) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {

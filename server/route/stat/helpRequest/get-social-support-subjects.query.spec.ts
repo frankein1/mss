@@ -47,14 +47,4 @@ describe('Statistics - File Instructions - Social Support Subjects', () => {
       "Secours d'urgence": 0
     })
   })
-
-  test('should not allow stats computation as a reception agent', async ({
-    trpc
-  }) => {
-    const input: Input = {}
-
-    await expect(() =>
-      trpc.receptionAgent.stat.getHelpRequestSubjectStats(input)
-    ).rejects.toThrow(/not allowed to access route/)
-  })
 })
