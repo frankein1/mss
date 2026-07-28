@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType, type Beneficiary } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import type { SecurityRuleContext } from '~/server/security'
 import { validatePartnerOrganizationIds } from '~/server/security'
@@ -9,6 +9,7 @@ import { updateBeneficiaryExternalOrganisationsSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 import { prepareRelationUpdates } from '~/utils/prisma'
+import { validateBeneficiaryPartnerOrganisations } from '../helpers'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -22,20 +23,7 @@ const securityCheck = async (
     return false
   }
 
-  const orgIds: (string | null | undefined)[] = [
-    input.prescribingOrganizationId
-  ]
-  const contactIds: (string | null | undefined)[] = [
-    input.prescribingOrganizationContactId
-  ]
-  if (input.contributingPartners.length) {
-    orgIds.push(...input.contributingPartners.map(p => p.partnerOrganizationId))
-    contactIds.push(
-      ...input.contributingPartners.map(p => p.partnerOrganizationContactId)
-    )
-  }
-
-  return validatePartnerOrganizationIds(ctx.user, orgIds, contactIds)
+  return validateBeneficiaryPartnerOrganisations(ctx.user, input)
 }
 
 const handler = async ({
@@ -62,7 +50,52 @@ const handler = async ({
     }
   })
 
-  const legacyNulls: Record<string, null> = {}
+  const nullableLegacyFields = nullifyLegacyFieldsIfPartnersAreFilled(
+    contributingPartners,
+    prescribingOrganizationId,
+    current
+  )
+
+  const preparedPartners = contributingPartners.map(p => ({
+    id: p.id || randomUUID(),
+    partnerOrganizationId: p.partnerOrganizationId,
+    partnerOrganizationContactId: p.partnerOrganizationContactId || null,
+    precisions: p.precisions || null
+  }))
+
+  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
+    select: { id: true },
+    where: { id },
+    data: {
+      ...scalarFields,
+      ...nullableLegacyFields,
+      prescribingOrganizationId: prescribingOrganizationId || null,
+      prescribingOrganizationContactId:
+        prescribingOrganizationContactId || null,
+      contributingPartners: prepareRelationUpdates(
+        preparedPartners,
+        current.contributingPartners
+      )
+    }
+  })
+
+  return updatedBeneficiary
+}
+
+function nullifyLegacyFieldsIfPartnersAreFilled(
+  contributingPartners: UpdateBeneficiaryExternalOrganisationsInput['contributingPartners'],
+  prescribingOrganizationId: UpdateBeneficiaryExternalOrganisationsInput['prescribingOrganizationId'],
+  current: Pick<
+    Beneficiary,
+    'involvedPartners' | 'serviceProviders' | 'prescribingStructure'
+  > & { contributingPartners: unknown[] }
+) {
+  const legacyNulls: Partial<
+    Record<
+      'prescribingStructure' | 'involvedPartners' | 'serviceProviders',
+      null
+    >
+  > = {}
 
   if (prescribingOrganizationId && current.prescribingStructure) {
     legacyNulls.prescribingStructure = null
@@ -78,30 +111,7 @@ const handler = async ({
     }
   }
 
-  const preparedPartners = contributingPartners.map(p => ({
-    id: p.id || randomUUID(),
-    partnerOrganizationId: p.partnerOrganizationId,
-    partnerOrganizationContactId: p.partnerOrganizationContactId || null,
-    precisions: p.precisions || null
-  }))
-
-  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
-    select: { id: true },
-    where: { id },
-    data: {
-      ...scalarFields,
-      ...legacyNulls,
-      prescribingOrganizationId: prescribingOrganizationId || null,
-      prescribingOrganizationContactId:
-        prescribingOrganizationContactId || null,
-      contributingPartners: prepareRelationUpdates(
-        preparedPartners,
-        current.contributingPartners
-      )
-    }
-  })
-
-  return updatedBeneficiary
+  return legacyNulls
 }
 
 export const updateExternalOrganisationsMutation = createMutation({

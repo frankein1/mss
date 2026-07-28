@@ -14,7 +14,6 @@ import { prismaClient } from '~/server/prisma'
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id
-const referentId = fixturesUsers[FixtureUserRole.Referent].id
 
 const orgCAF = fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26]
 const orgFT =
@@ -28,7 +27,7 @@ beforeEach(async () => {
   const familyFile = await prismaClient.familyFile.create({
     data: {
       structure: { connect: { id: structureId } },
-      referents: { connect: [{ id: referentId }] }
+      referents: { connect: [{ id: socialWorkerId }] }
     }
   })
   familyFileId = familyFile.id
@@ -51,10 +50,6 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  await prismaClient.beneficiaryContributingPartner.deleteMany({
-    where: { beneficiaryId }
-  })
-  await prismaClient.beneficiary.deleteMany({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
   await prismaClient.partnerOrganization.deleteMany({
     where: { name: { startsWith: 'UEXO-' } }
@@ -175,6 +170,32 @@ describe('Beneficiary - Update external organisations - Authorizations', () => {
         ]
       })
     ).rejects.toThrow(/not allowed to access route/i)
+  })
+
+  test('A ReceptionAgent cannot update external organisations', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.receptionAgent.beneficiary.updateExternalOrganisations(baseInput())
+    ).rejects.toThrow(/not allowed to access route/i)
+  })
+
+  test('A user from another structure cannot update external organisations', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.structureManagerMinistere.beneficiary.updateExternalOrganisations(
+        baseInput()
+      )
+    ).rejects.toThrow(/no record/i)
+  })
+
+  test('A Referent cannot update external organisations of a beneficiary of which she is not the referent', async ({
+    trpc
+  }) => {
+    await expect(
+      trpc.referent.beneficiary.updateExternalOrganisations(baseInput())
+    ).rejects.toThrow(/no record/i)
   })
 })
 
