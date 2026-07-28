@@ -10,7 +10,6 @@ export type AppContextPermissions = {
     }
   }
   export: {
-    stats: boolean
     history: boolean
   }
   edit: {
@@ -29,7 +28,6 @@ export type AppContextPermissions = {
   }
   module: {
     users: boolean // User management
-    stats: boolean
     statsByReferent: boolean
     health: boolean
     ministere: boolean
@@ -66,8 +64,7 @@ function getAdminContextPermissions(): AppContextPermissions {
       }
     },
     export: {
-      history: false,
-      stats: false
+      history: false
     },
     edit: {
       structure: true,
@@ -83,7 +80,6 @@ function getAdminContextPermissions(): AppContextPermissions {
     },
     module: {
       users: false,
-      stats: false,
       statsByReferent: false,
       health: false,
       ministere: false,
@@ -125,10 +121,7 @@ function getUserContextPermissions(
       }
     },
     export: {
-      history: manager || socialWorker || referent || instructor,
-      stats: ministryAgent
-        ? manager || referent
-        : manager || socialWorker || instructor || referent
+      history: manager || socialWorker || referent || instructor
     },
     edit: {
       structure: manager,
@@ -144,9 +137,6 @@ function getUserContextPermissions(
     },
     module: {
       users: manager,
-      stats: ministryAgent
-        ? manager || referent
-        : manager || socialWorker || instructor || referent,
       statsByReferent: socialWorker || manager,
       health: true,
       ministere: ministryAgent,

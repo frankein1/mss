@@ -231,13 +231,11 @@
         label: 'Ateliers',
         icon: 'fr-icon-calendar-event-line'
       })
-      if (application.value.module.stats) {
-        items.push({
-          to: routes.stats.AppStatsBeneficiaries.path(),
-          label: 'Statistiques',
-          icon: 'fr-icon-line-chart-line'
-        })
-      }
+      items.push({
+        to: routes.stats.AppStatsBeneficiaries.path(),
+        label: 'Statistiques',
+        icon: 'fr-icon-line-chart-line'
+      })
     }
 
     return items

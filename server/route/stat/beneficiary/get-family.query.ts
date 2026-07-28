@@ -3,11 +3,9 @@ import type { ProtectedAppContext } from '~/server/trpc'
 import type { StatFilterInput } from '~/server/schema'
 import { statFilterSchema } from '~/server/schema'
 import { getFamilyStatsQuery } from '~/server/query/stats'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,

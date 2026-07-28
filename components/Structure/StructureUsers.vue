@@ -76,7 +76,6 @@
       <RoleTable
         id="roles-details"
         class="fr-p-4v"
-        :permissions="application"
       />
     </div>
   </section>
@@ -86,7 +85,6 @@
   import type { SructureUserList } from '~/types/user'
   import { routes } from '~/utils/routes'
 
-  const { application } = usePermissions()
   const trpcClient = useTrpcClient()
 
   const {

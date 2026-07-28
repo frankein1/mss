@@ -88,16 +88,6 @@ describe('Statistics - Beneficiary - Social Support Count Per Beneficiary', () =
     })
   })
 
-  test('should not allow stats computation as a reception agent', async ({
-    trpc
-  }) => {
-    const input: Input = {}
-
-    await expect(() =>
-      trpc.receptionAgent.stat.getSocialSupportCountPerBeneficiaryStats(input)
-    ).rejects.toThrow(/not allowed to access route/i)
-  })
-
   test('should compute stats as a structure manager from a non-ministère structure', async ({
     trpc
   }) => {

@@ -312,7 +312,7 @@
       })
     }
 
-    if (followupCount.value != 0 && application.value.export.stats) {
+    if (followupCount.value != 0) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {

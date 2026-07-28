@@ -9,12 +9,10 @@ import {
   getHelpRequestBeneficiaryNumberQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FollowupRepo } from '~/server/database'
 
-const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).module.stats
+const securityCheck = AllowSecurityCheck
 
 /* This could be splitted into two routes to avoid overfetching */
 const handler = async ({

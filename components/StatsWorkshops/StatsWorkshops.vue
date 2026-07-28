@@ -191,7 +191,7 @@
       })
     }
 
-    if (workshopCount.value?.total != 0 && application.value.export.stats) {
+    if (workshopCount.value?.total != 0) {
       menus.push({
         label: 'En tableur (.xlsx)',
         onClick: () => {
