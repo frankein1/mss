@@ -1,5 +1,10 @@
 import { describe, test, expect } from 'vitest'
-import { dateOrEmpty, phoneConstraint } from './helpers.schema'
+import {
+  dateOrEmpty,
+  phoneConstraint,
+  requiredUuid,
+  uuidOrEmpty
+} from './helpers.schema'
 import { validDate } from '~/utils/zod'
 
 describe('phone number schema', () => {
@@ -129,5 +134,37 @@ describe('date or empty schema', () => {
     const d = dateOrEmpty.safeParse('Jan 20 2020')
     expect(d.success).toBe(true)
     expect(d.data).toStrictEqual(new Date('2020-01-20'))
+  })
+})
+
+describe('uuid schema', () => {
+  test('validates nullish uuid if uuidOrEmpty', () => {
+    let d = uuidOrEmpty.safeParse(undefined)
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(undefined)
+
+    d = uuidOrEmpty.safeParse(null)
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(null)
+
+    d = uuidOrEmpty.safeParse('')
+    expect(d.success).toBe(true)
+    expect(d.data).toBe(null)
+
+    d = uuidOrEmpty.safeParse('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
+    expect(d.success).toBe(true)
+    expect(d.data).toBe('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
+  })
+
+  test('prevent nullish value if requiredUuid', () => {
+    let d = requiredUuid.safeParse(undefined)
+    expect(d.success).toBe(false)
+
+    d = requiredUuid.safeParse(null)
+    expect(d.success).toBe(false)
+
+    d = requiredUuid.safeParse('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
+    expect(d.success).toBe(true)
+    expect(d.data).toBe('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
   })
 })

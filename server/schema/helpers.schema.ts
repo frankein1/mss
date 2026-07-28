@@ -105,6 +105,16 @@ export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
     z.nativeEnum(nativeEnum).nullish()
   )
 
+export const uuidOrEmpty = z.preprocess(
+  arg => (arg === '' ? null : arg),
+  z.string().uuid().nullish()
+)
+
+export const requiredUuid = z.preprocess(
+  arg => (arg === '' ? null : arg),
+  z.string().uuid(requiredErrorMessage)
+)
+
 export const kindOfBooleanSchema = (required = false) => {
   if (required) {
     return z.enum(['true', 'false'], { required_error: requiredErrorMessage })
