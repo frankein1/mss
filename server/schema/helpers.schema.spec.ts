@@ -160,8 +160,18 @@ describe('uuid schema', () => {
     let d = requiredUuid.safeParse(undefined)
     expect(d.success).toBe(false)
 
+    let message = d.error?.message && JSON.parse(d.error?.message)[0].message
+    expect(message).toBe(requiredErrorMessage)
+
     d = requiredUuid.safeParse(null)
     expect(d.success).toBe(false)
+    message = d.error?.message && JSON.parse(d.error?.message)[0].message
+    expect(message).toBe(requiredErrorMessage)
+
+    d = requiredUuid.safeParse('malformed-uuid')
+    expect(d.success).toBe(false)
+    message = d.error?.message && JSON.parse(d.error?.message)[0].message
+    expect(message).toBe('Invalid uuid')
 
     d = requiredUuid.safeParse('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
     expect(d.success).toBe(true)

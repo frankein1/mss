@@ -112,7 +112,12 @@ export const uuidOrEmpty = z.preprocess(
 
 export const requiredUuid = z.preprocess(
   arg => (arg === '' ? null : arg),
-  z.string().uuid(requiredErrorMessage)
+  z
+    .string({
+      required_error: requiredErrorMessage,
+      invalid_type_error: requiredErrorMessage
+    })
+    .uuid()
 )
 
 export const kindOfBooleanSchema = (required = false) => {
