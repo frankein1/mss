@@ -9,7 +9,6 @@ import {
   BeneficiaryMinistereDepartementServiceAc,
   BeneficiaryMinistereStructure,
   BeneficiaryMobility,
-  BeneficiaryOrientationType,
   BeneficiaryPensionOrganisation,
   BeneficiaryProtectionMeasure,
   BeneficiarySchoolClass,
@@ -35,7 +34,8 @@ import {
   siretConstraint,
   numeroPegaseContraint,
   dateOrEmpty,
-  openText
+  openText,
+  limitedStringConstraint
 } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
@@ -206,27 +206,36 @@ export type UpdateBeneficiaryOccupationInput = z.infer<
   typeof updateBeneficiaryOccupationSchema
 >
 
+const contributingPartnerSchema = z.object({
+  id: z.string().uuid().optional(),
+  partnerOrganizationId: z.string().uuid(),
+  partnerOrganizationContactId: z
+    .string()
+    .uuid()
+    .nullish()
+    .transform(v => v || null),
+  precisions: limitedStringConstraint(null, 200).nullish()
+})
+
+export type ContributingPartnerInput = z.infer<typeof contributingPartnerSchema>
+
 export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   id: z.string().uuid(),
   protectionMeasure: withEmptyValueOptionalNativeEnum(
     BeneficiaryProtectionMeasure
   ),
-  representative: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  prescribingStructure: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  orientationType: withEmptyValueOptionalNativeEnum(BeneficiaryOrientationType),
-  orientationStructure: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  serviceProviders: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
-  involvedPartners: stringConstraint
-    .max(200, maxStringLengthMessage(200))
+  representative: limitedStringConstraint(null, 100).nullish(),
+  prescribingOrganizationId: z
+    .string()
+    .uuid()
     .nullish()
+    .transform(v => v || null),
+  prescribingOrganizationContactId: z
+    .string()
+    .uuid()
+    .nullish()
+    .transform(v => v || null),
+  contributingPartners: z.array(contributingPartnerSchema).max(50).default([])
 })
 
 export const updateBeneficiaryArchiveDate = z.object({

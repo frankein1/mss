@@ -16,10 +16,14 @@
   >
     <AtomLazyComponent
       :pending
-      :error="Boolean(errorFetch)"
-      message="Les informations du bénéficiaires n'ont pas pu être chargées."
+      :error="Boolean(errorBen || errorPartner)"
+      message="Les informations du bénéficiaire n'ont pas pu être chargées."
     >
-      <BeneficiaryFormExternalOrganisations v-if="bindedValues" />
+      <BeneficiaryFormExternalOrganisations
+        v-if="bindedValues && partnerOrganizations"
+        :partner-organizations="partnerOrganizations"
+        :external-organisations="beneficiary?.externalOrganisations"
+      />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -40,21 +44,43 @@
     permissions,
     beneficiaryIdentification,
     familyIdentification,
-    pending,
-    error: errorFetch
+    pending: beneficiaryPending,
+    error: errorBen
   } = await useBeneficiaryDetails(beneficiaryId)
+
+  const {
+    data: partnerOrganizations,
+    pending: partnerOrganizationsPending,
+    error: errorPartner
+  } = await trpcClient.partner.getAll.useQuery()
+
+  const pending = computed(
+    () => beneficiaryPending.value || partnerOrganizationsPending.value
+  )
 
   const bindedValues = computed(() => {
     if (!beneficiary.value) {
       return null
     }
 
-    const { id, structureId, externalOrganisations } = beneficiary.value
+    const { id, externalOrganisations } = beneficiary.value
 
     return {
       id,
-      structureId,
-      ...externalOrganisations
+      protectionMeasure: externalOrganisations?.protectionMeasure,
+      representative: externalOrganisations?.representative,
+      prescribingOrganizationId:
+        externalOrganisations?.prescribingOrganization?.id || null,
+      prescribingOrganizationContactId:
+        externalOrganisations?.prescribingOrganizationContact?.id || null,
+      contributingPartners: (
+        externalOrganisations?.contributingPartners || []
+      ).map(cp => ({
+        id: cp.id,
+        partnerOrganizationId: cp.partnerOrganization.id,
+        partnerOrganizationContactId: cp.partnerOrganizationContact?.id || null,
+        precisions: cp.precisions
+      }))
     }
   })
 

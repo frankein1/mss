@@ -154,6 +154,8 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   relationship: true,
   employer: true,
   activity_status: true,
+  prescribing_organization_id: true,
+  prescribing_organization_contact_id: true,
   // -- BEGIN ANONYMIZED
   employer_siret: false,
   first_name: false,
@@ -179,6 +181,19 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   health_additional_information: false,
   numero_pegase: false,
   representative: false
+}
+
+const configBeneficiaryContributingPartner: Record<
+  SnakeCase<keyof typeof Prisma.BeneficiaryContributingPartnerScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  beneficiary_id: true,
+  partner_organization_id: true,
+  partner_organization_contact_id: true,
+  created_at: true,
+  // -- BEGIN ANONYMIZED
+  precisions: false
 }
 
 const configDocument: Record<
@@ -762,6 +777,7 @@ export const CONFIG = {
   family_file: configFamilyFile,
   followup_type: configSubject,
   beneficiary: configBeneficiary,
+  beneficiary_contributing_partner: configBeneficiaryContributingPartner,
   document: configDocument,
   _family_file_referents: configFamilyFileToReferent,
   social_support: configSocialSupport,

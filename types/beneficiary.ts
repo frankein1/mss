@@ -71,6 +71,14 @@ export type GetBeneficiaryGeneral = Pick<
   | 'additionalInformation'
 >
 
+// FIXME this should use preferable types from Prisma CLient
+export type ContributingPartnerOutput = {
+  id: string
+  partnerOrganization: { id: string; name: string }
+  partnerOrganizationContact: { id: string; name: string } | null
+  precisions: string | null
+}
+
 export type GetBeneficiaryExternalOrganisations = Pick<
   Beneficiary,
   | 'protectionMeasure'
@@ -81,7 +89,11 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'serviceProviders'
   | 'involvedPartners'
   | 'additionalInformation'
->
+> & {
+  prescribingOrganization: { id: string; name: string } | null
+  prescribingOrganizationContact: { id: string; name: string } | null
+  contributingPartners: ContributingPartnerOutput[]
+}
 
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,

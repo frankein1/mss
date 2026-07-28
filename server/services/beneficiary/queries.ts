@@ -99,6 +99,21 @@ const select = {
   orientationStructure: true,
   serviceProviders: true,
   involvedPartners: true,
+  prescribingOrganization: {
+    select: { id: true, name: true }
+  },
+  prescribingOrganizationContact: {
+    select: { id: true, name: true }
+  },
+  contributingPartners: {
+    select: {
+      id: true,
+      partnerOrganization: { select: { id: true, name: true } },
+      partnerOrganizationContact: { select: { id: true, name: true } },
+      precisions: true
+    },
+    orderBy: { partnerOrganization: { name: 'asc' } }
+  },
 
   // relations
   socialSupports: {
@@ -410,6 +425,9 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     orientationStructure: beneficiary.orientationStructure,
     serviceProviders: beneficiary.serviceProviders,
     involvedPartners: beneficiary.involvedPartners,
-    additionalInformation: beneficiary.additionalInformation
+    additionalInformation: beneficiary.additionalInformation,
+    prescribingOrganization: beneficiary.prescribingOrganization,
+    prescribingOrganizationContact: beneficiary.prescribingOrganizationContact,
+    contributingPartners: beneficiary.contributingPartners
   }
 }

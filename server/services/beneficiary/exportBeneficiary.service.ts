@@ -659,6 +659,9 @@ type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
   beneficiaries: FamilyFileBeneficiaryData[]
   referents: string | null
   relatives: BeneficiaryRelativeData[] | null
+  prescribingOrganizationName: string | null
+  prescribingOrganizationContactName: string | null
+  contributingPartnersText: string | null
 }
 
 const getBeneficiaryInfoData = (
@@ -773,6 +776,22 @@ const getBeneficiaryInfoData = (
       : null,
     contractType: beneficiary.contractType
       ? beneficiaryContractTypeKeys.value(beneficiary.contractType)
+      : null,
+    prescribingOrganizationName:
+      beneficiary.prescribingOrganization?.name || null,
+    prescribingOrganizationContactName:
+      beneficiary.prescribingOrganizationContact?.name || null,
+    contributingPartnersText: beneficiary.contributingPartners?.length
+      ? beneficiary.contributingPartners
+          .map(
+            cp =>
+              cp.partnerOrganization.name +
+              (cp.partnerOrganizationContact
+                ? ` (${cp.partnerOrganizationContact.name})`
+                : '') +
+              (cp.precisions ? ` — ${cp.precisions}` : '')
+          )
+          .join(', ')
       : null
   }
 }
@@ -896,10 +915,22 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       protectionMeasure: true,
       representative: true,
       prescribingStructure: true,
+      prescribingOrganizationId: true,
+      prescribingOrganizationContactId: true,
       orientationType: true,
       orientationStructure: true,
       serviceProviders: true,
       involvedPartners: true,
+      prescribingOrganization: { select: { name: true } },
+      prescribingOrganizationContact: { select: { name: true } },
+      contributingPartners: {
+        select: {
+          partnerOrganization: { select: { name: true } },
+          partnerOrganizationContact: { select: { name: true } },
+          precisions: true
+        },
+        orderBy: { partnerOrganization: { name: 'asc' } }
+      },
       additionalInformation: true,
       numeroPegase: true,
       accommodationZone: true,

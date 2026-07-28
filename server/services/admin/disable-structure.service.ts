@@ -246,6 +246,8 @@ export const disableStructure = async ({
     orientationStructure: null,
     serviceProviders: null,
     involvedPartners: null,
+    prescribingOrganizationId: null,
+    prescribingOrganizationContactId: null,
     additionalInformation: null,
     numeroPegase: null,
     accommodationZone: null
