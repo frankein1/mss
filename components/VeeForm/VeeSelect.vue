@@ -17,6 +17,12 @@
         class="color-red"
         >*</span
       >
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+      >
+        {{ hint }}
+      </span>
     </label>
     <select
       :id="id"
@@ -70,6 +76,7 @@
       name: string
       options: Options
       required?: boolean
+      hint?: string
       noLabel?: boolean
       labelledBy?: string
       disabled?: boolean
@@ -80,7 +87,8 @@
       labelledBy: undefined,
       disabled: false,
       disabledOptions: () => [],
-      required: false
+      required: false,
+      hint: undefined
     }
   )
 
