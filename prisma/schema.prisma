@@ -1794,13 +1794,23 @@ model Beneficiary {
   funeralContract           String?                               @map("funeral_contract")
 
   // External Structures
-  protectionMeasure    BeneficiaryProtectionMeasure? @map("protection_measure")
-  representative       String?
-  prescribingStructure String?                       @map("prescribing_structure")
-  orientationType      BeneficiaryOrientationType?   @map("orientation_type")
-  orientationStructure String?                       @map("orientation_structure")
-  serviceProviders     String?                       @map("service_providers")
-  involvedPartners     String?                       @map("involved_partners")
+  protectionMeasure                BeneficiaryProtectionMeasure?    @map("protection_measure")
+  representative                   String?
+  /// Legacy field replaced by prescribingOrganizationId
+  prescribingStructure             String?                          @map("prescribing_structure")
+  /// Legacy field - was not heavily used
+  orientationType                  BeneficiaryOrientationType?      @map("orientation_type")
+  /// Legacy field - was not heavily used
+  orientationStructure             String?                          @map("orientation_structure")
+  /// Legacy field replaced by BeneficiaryContributingPartner table
+  serviceProviders                 String?                          @map("service_providers")
+  /// Legacy field replaced by BeneficiaryContributingPartner table
+  involvedPartners                 String?                          @map("involved_partners")
+  prescribingOrganization          PartnerOrganization?             @relation("beneficiary_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
+  prescribingOrganizationId        String?                          @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganizationContact   PartnerOrganizationContact?      @relation("beneficiary_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
+  prescribingOrganizationContactId String?                          @map("prescribing_organization_contact_id") @db.Uuid
+  contributingPartners             BeneficiaryContributingPartner[]
 
   additionalInformation String?                       @map("additional_information")
   numeroPegase          String?                       @map("numero_pegase")
@@ -1837,6 +1847,26 @@ model Beneficiary {
   @@index(fields: [structureId, familyFileId], map: "beneficiary_structure_id_family_file_id_idx")
   @@index(fields: [structureId, fileNumber], map: "beneficiary_structure_id_file_number_idx")
   @@map("beneficiary")
+}
+
+model BeneficiaryContributingPartner {
+  id String @id @default(uuid()) @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+
+  partnerOrganization   PartnerOrganization @relation(fields: [partnerOrganizationId], references: [id])
+  partnerOrganizationId String              @map("partner_organization_id") @db.Uuid
+
+  partnerOrganizationContact   PartnerOrganizationContact? @relation(fields: [partnerOrganizationContactId], references: [id])
+  partnerOrganizationContactId String?                     @map("partner_organization_contact_id") @db.Uuid
+
+  precisions String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index(fields: [beneficiaryId], map: "beneficiary_contributing_partner_beneficiary_id_idx")
+  @@map("beneficiary_contributing_partner")
 }
 
 enum RelativeRelationship {
@@ -2046,13 +2076,15 @@ model PartnerOrganization {
   dataInclusionStructureV1 DataInclusionStructureV1? @relation(fields: [dataInclusionIdV1], references: [id])
   dataInclusionIdV1        String?                   @map("data_inclusion_id_v1")
 
-  contacts                      PartnerOrganizationContact[]
-  followupsPrescribed           Followup[]                   @relation("followup_prescribing_organization")
-  fileInstructionsInstructed    FileInstruction[]            @relation("file_instruction_instructor_organization")
-  helpRequestsPrescribed        HelpRequest[]                @relation("help_request_prescribing_organization")
-  housingHelpRequestsPrescribed HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
-  workshops                     Workshop[]
-  socialSupportRedirections     SocialSupportRedirection[]
+  contacts                        PartnerOrganizationContact[]
+  followupsPrescribed             Followup[]                       @relation("followup_prescribing_organization")
+  fileInstructionsInstructed      FileInstruction[]                @relation("file_instruction_instructor_organization")
+  helpRequestsPrescribed          HelpRequest[]                    @relation("help_request_prescribing_organization")
+  housingHelpRequestsPrescribed   HousingHelpRequest[]             @relation("housing_help_request_prescribing_organization")
+  workshops                       Workshop[]
+  socialSupportRedirections       SocialSupportRedirection[]
+  beneficiariesPrescribed         Beneficiary[]                    @relation("beneficiary_prescribing_organization")
+  beneficiaryContributingPartners BeneficiaryContributingPartner[]
 
   @@unique([structureId, siret])
   @@map("partner_organization")
@@ -2068,11 +2100,13 @@ model PartnerOrganizationContact {
   partner   PartnerOrganization @relation(fields: [partnerId], references: [id], onDelete: Cascade)
   partnerId String              @map("partner_id") @db.Uuid
 
-  followupsPrescribed           Followup[]                 @relation("followup_prescribing_organization_contact")
-  fileInstructionsInstructed    FileInstruction[]          @relation("file_instruction_instructor_organization_contact")
-  helpRequestsPrescribed        HelpRequest[]              @relation("help_request_prescribing_organization_contact")
-  housingHelpRequestsPrescribed HousingHelpRequest[]       @relation("housing_help_request_prescribing_organization_contact")
-  socialSupportRedirections     SocialSupportRedirection[]
+  followupsPrescribed             Followup[]                       @relation("followup_prescribing_organization_contact")
+  fileInstructionsInstructed      FileInstruction[]                @relation("file_instruction_instructor_organization_contact")
+  helpRequestsPrescribed          HelpRequest[]                    @relation("help_request_prescribing_organization_contact")
+  housingHelpRequestsPrescribed   HousingHelpRequest[]             @relation("housing_help_request_prescribing_organization_contact")
+  socialSupportRedirections       SocialSupportRedirection[]
+  beneficiariesPrescribed         Beneficiary[]                    @relation("beneficiary_prescribing_organization_contact")
+  beneficiaryContributingPartners BeneficiaryContributingPartner[]
 
   @@map("partner_organization_contact")
 }

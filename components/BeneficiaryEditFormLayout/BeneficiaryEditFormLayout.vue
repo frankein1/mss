@@ -65,7 +65,11 @@
 <script setup lang="ts" generic="T extends ZodSchema">
   import type { ZodSchema, z } from 'zod'
   import type { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
+  import {
+    beneficiaryFieldLabels,
+    beneficiaryContributingPartnerFieldLabels,
+    relativeFieldLabels
+  } from '~/client/labels'
   import type { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
   import type {
@@ -183,6 +187,7 @@
 
   const { errors } = useDisplayFormErrors(form, caughtErrors, {
     ...beneficiaryFieldLabels,
+    ...beneficiaryContributingPartnerFieldLabels,
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 

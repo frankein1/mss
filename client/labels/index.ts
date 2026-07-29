@@ -1,5 +1,6 @@
 export {
   beneficiaryFieldLabels,
+  beneficiaryContributingPartnerFieldLabels,
   beneficiaryExportFieldLabels
 } from './beneficiary.labels'
 export { userFieldLabels } from './user.labels'

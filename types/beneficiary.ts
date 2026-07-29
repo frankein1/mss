@@ -1,6 +1,7 @@
 import type {
   Beneficiary,
   BeneficiaryRelative,
+  Prisma,
   RepClassification,
   SchoolStatus,
   SchoolType,
@@ -8,6 +9,7 @@ import type {
   UserStatus
 } from '@prisma/client'
 import type { RouterOutput } from '~/server/trpc/routers'
+import type { contributingPartnerSelect } from '~/server/services/beneficiary/queries'
 
 export type BeneficiaryReferent = {
   id: string
@@ -71,6 +73,11 @@ export type GetBeneficiaryGeneral = Pick<
   | 'additionalInformation'
 >
 
+export type ContributingPartnerOutput =
+  Prisma.BeneficiaryContributingPartnerGetPayload<{
+    select: typeof contributingPartnerSelect
+  }>
+
 export type GetBeneficiaryExternalOrganisations = Pick<
   Beneficiary,
   | 'protectionMeasure'
@@ -81,7 +88,11 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'serviceProviders'
   | 'involvedPartners'
   | 'additionalInformation'
->
+> & {
+  prescribingOrganization: { id: string; name: string } | null
+  prescribingOrganizationContact: { id: string; name: string } | null
+  contributingPartners: ContributingPartnerOutput[]
+}
 
 export type GetBeneficiaryOccupationIncome = Pick<
   Beneficiary,
