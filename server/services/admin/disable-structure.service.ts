@@ -112,6 +112,15 @@ export const disableStructure = async ({
       }
     })
 
+  const deleteContributingPartners = () =>
+    prismaClient.beneficiaryContributingPartner.deleteMany({
+      where: {
+        beneficiary: {
+          structureId: id
+        }
+      }
+    })
+
   const deleteBudget = () =>
     BudgetRepo.prisma.deleteMany({
       where: {
@@ -299,6 +308,7 @@ export const disableStructure = async ({
     deleteDocuments(),
     deleteBudget(),
     deleteRelatives(),
+    deleteContributingPartners(),
     updateSocialSupports(),
     updateBeneficiaries(),
     updateStructure()

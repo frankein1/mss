@@ -39,6 +39,11 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
+  const [beneficiaryDetails, partnerResult] = await Promise.all([
+    useBeneficiaryDetails(beneficiaryId),
+    trpcClient.partner.getAll.useQuery()
+  ])
+
   const {
     beneficiary,
     permissions,
@@ -46,13 +51,13 @@
     familyIdentification,
     pending: beneficiaryPending,
     error: errorBen
-  } = await useBeneficiaryDetails(beneficiaryId)
+  } = beneficiaryDetails
 
   const {
     data: partnerOrganizations,
     pending: partnerOrganizationsPending,
     error: errorPartner
-  } = await trpcClient.partner.getAll.useQuery()
+  } = partnerResult
 
   const pending = computed(
     () => beneficiaryPending.value || partnerOrganizationsPending.value

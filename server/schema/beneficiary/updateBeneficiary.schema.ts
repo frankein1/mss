@@ -235,7 +235,10 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
     .uuid()
     .nullish()
     .transform(v => v || null),
-  contributingPartners: z.array(contributingPartnerSchema).max(50).default([])
+  contributingPartners: z
+    .array(contributingPartnerSchema)
+    .max(50, 'Veuillez renseigner au maximum 50 partenaires.')
+    .default([])
 })
 
 export const updateBeneficiaryArchiveDate = z.object({
