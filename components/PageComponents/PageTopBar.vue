@@ -27,7 +27,7 @@
     const menus: MenuItem[] = [
       {
         label: 'Configuration',
-        to: routes.structure.AppStructure.path(),
+        to: routes.structure.AppStructureUsers.path(),
         icon: 'fr-icon-settings-4-line'
       }
     ]
