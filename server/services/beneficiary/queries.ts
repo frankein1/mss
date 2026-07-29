@@ -12,6 +12,13 @@ import {
 } from '~/server/security'
 import { isObjectEmpty } from '~/server/utils/isObjectEmpty'
 
+export const contributingPartnerSelect = {
+  id: true,
+  partnerOrganization: { select: { id: true, name: true } },
+  partnerOrganizationContact: { select: { id: true, name: true } },
+  precisions: true
+} satisfies Prisma.BeneficiaryContributingPartnerSelect
+
 const select = {
   id: true,
   familyFileId: true,
@@ -99,6 +106,16 @@ const select = {
   orientationStructure: true,
   serviceProviders: true,
   involvedPartners: true,
+  prescribingOrganization: {
+    select: { id: true, name: true }
+  },
+  prescribingOrganizationContact: {
+    select: { id: true, name: true }
+  },
+  contributingPartners: {
+    select: contributingPartnerSelect,
+    orderBy: { partnerOrganization: { name: 'asc' } }
+  },
 
   // relations
   socialSupports: {
@@ -410,6 +427,9 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     orientationStructure: beneficiary.orientationStructure,
     serviceProviders: beneficiary.serviceProviders,
     involvedPartners: beneficiary.involvedPartners,
-    additionalInformation: beneficiary.additionalInformation
+    additionalInformation: beneficiary.additionalInformation,
+    prescribingOrganization: beneficiary.prescribingOrganization,
+    prescribingOrganizationContact: beneficiary.prescribingOrganizationContact,
+    contributingPartners: beneficiary.contributingPartners
   }
 }

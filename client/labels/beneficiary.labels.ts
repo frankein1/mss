@@ -1,4 +1,7 @@
-import type { Beneficiary } from '@prisma/client'
+import type {
+  Beneficiary,
+  BeneficiaryContributingPartner
+} from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
@@ -86,6 +89,8 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   orientationStructure: "Organisme d'orientation",
   serviceProviders: 'Prestataires',
   involvedPartners: 'Partenaires intervenants',
+  prescribingOrganizationId: 'Organisme prescripteur',
+  prescribingOrganizationContactId: 'Contact organisme prescripteur',
   deathDate: 'Date de décès',
   ministereCategorie: 'Catégorie',
   ministereDepartementServiceAc:
@@ -109,6 +114,15 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   schoolUai: 'Établissement scolaire fréquenté'
 }
 
+const beneficiaryContributingPartnerFieldLabels = {
+  id: 'Identifiant',
+  beneficiaryId: 'Bénéficiaire',
+  partnerOrganizationId: 'Partenaire intervenant',
+  partnerOrganizationContactId: 'Contact du partenaire intervenant',
+  precisions: 'Précisions',
+  createdAt: 'Date de création'
+} as const satisfies FieldLabels<BeneficiaryContributingPartner>
+
 const beneficiaryReferentTransfertLabels = {
   referentId: 'Sélectionnez l’agent référent à ajouter'
 }
@@ -119,4 +133,8 @@ export const beneficiaryExportFieldLabels = {
   beneficiaryFirstName: 'Prénom bénéficiaire'
 }
 
-export { beneficiaryFieldLabels, beneficiaryReferentTransfertLabels }
+export {
+  beneficiaryFieldLabels,
+  beneficiaryContributingPartnerFieldLabels,
+  beneficiaryReferentTransfertLabels
+}

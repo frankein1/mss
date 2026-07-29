@@ -56,3 +56,35 @@ export function validateSocialSupportPartnerOrganisations<
 
   return validatePartnerOrganizationIds(user, partnerOrgIds, contactIds)
 }
+
+interface BeneficiaryPartnerPayload {
+  prescribingOrganizationId?: string | null | undefined
+  prescribingOrganizationContactId?: string | null | undefined
+  contributingPartners?:
+    | {
+        partnerOrganizationId?: string | null | undefined
+        partnerOrganizationContactId?: string | null | undefined
+      }[]
+    | null
+}
+
+export function validateBeneficiaryPartnerOrganisations<
+  T extends BeneficiaryPartnerPayload
+>(user: SecurityRuleGrantee, input: T) {
+  const partnerOrgIds: (string | null | undefined)[] = [
+    input.prescribingOrganizationId
+  ]
+  const contactIds: (string | null | undefined)[] = [
+    input.prescribingOrganizationContactId
+  ]
+  if (input.contributingPartners?.length) {
+    partnerOrgIds.push(
+      ...input.contributingPartners.map(r => r.partnerOrganizationId)
+    )
+    contactIds.push(
+      ...input.contributingPartners.map(r => r.partnerOrganizationContactId)
+    )
+  }
+
+  return validatePartnerOrganizationIds(user, partnerOrgIds, contactIds)
+}
