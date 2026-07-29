@@ -4,10 +4,11 @@ export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
   Array.from(options).map(o => o.value) as [string, ...string[]]
 
 export const requiredErrorMessage = 'Veuillez renseigner ce champ.'
+export const invalidTypeErrorMessage = 'Cette valeur est incorrecte.'
 
 export const errorMessages = {
   required_error: requiredErrorMessage,
-  invalid_type_error: 'Cette valeur est incorrecte.'
+  invalid_type_error: invalidTypeErrorMessage
 }
 
 export const minStringLengthMessage = (length: number) =>
@@ -26,4 +27,8 @@ export const validNumber =
 export const validIntNumber = 'Veuillez entrer un nombre entier.'
 
 export const validYear = 'Veuillez renseigner une année valide.'
-export const validDate = 'Veuillez renseigner un format de date valide.'
+export const validDate = 'Veuillez saisir une date valide : JJ/MM/AAAA.'
+export const validSelectionMessage =
+  'Veuillez sélectionner une option proposée.'
+export const validUrlMessage = 'Veuillez renseigner une URL valide.'
+export const invalidValueMessage = 'Cette valeur est incorrecte.'
