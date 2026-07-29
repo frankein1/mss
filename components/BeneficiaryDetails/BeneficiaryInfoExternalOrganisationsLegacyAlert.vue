@@ -1,7 +1,7 @@
 <template>
-  <AtomAlertMSS
+  <AtomAlert
     v-if="hasLegacyData && !closed"
-    :alert-type="AlertType.Info"
+    :alert-type="AlertType.Warning"
     message="Des données historiques existent pour ce bénéficiaire et doivent être reportées dans les nouveaux champs."
     closeable
     class="fr-mb-6v"
@@ -35,7 +35,7 @@
         </li>
       </ul>
     </template>
-  </AtomAlertMSS>
+  </AtomAlert>
 </template>
 
 <script setup lang="ts">
