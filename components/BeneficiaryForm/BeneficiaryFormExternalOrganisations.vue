@@ -148,10 +148,8 @@
     return toOptions(selectedPrescribingOrg.value.contacts || [], 'id', 'name')
   })
 
-  const onPrescribingOrganizationChange = (id: string) => {
-    if (!id) {
-      setPrescribingContactId(null)
-    }
+  const onPrescribingOrganizationChange = () => {
+    setPrescribingContactId(null)
   }
 
   /**
@@ -159,20 +157,15 @@
    */
 
   const isDuplicate = (index: number) => {
-    const { value: row } = useFieldValue<ContributingPartnerInput>(
-      `contributingPartners[${index}]`
-    )
-    if (!row?.partnerOrganizationId) {
+    const row = fields.value[index]?.value
+    if (!row || !row.partnerOrganizationId) {
       return false
     }
-    return fields.value.some((_, i) => {
+    return fields.value.some((field, i) => {
       if (i === index) {
         return false
       }
-      const { value: other } = useFieldValue<ContributingPartnerInput>(
-        `contributingPartners[${i}]`
-      )
-      return other?.partnerOrganizationId === row.partnerOrganizationId
+      return field.value.partnerOrganizationId === row.partnerOrganizationId
     })
   }
 
