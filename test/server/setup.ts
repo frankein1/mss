@@ -7,6 +7,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import duration from 'dayjs/plugin/duration'
 
 dayjs.locale('fr')
 dayjs.extend(isBetween)
@@ -14,6 +15,7 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.extend(duration)
 
 /** The vitest 4 environment being not isolated (see vitest.config.ts)
  * The mocks are defined globally otherwise with vitest >= 4 the real
