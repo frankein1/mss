@@ -33,7 +33,7 @@
     <VeeInput
       :label="contributingPartnerFieldLabels.precisions"
       :name="`contributingPartners[${index}].precisions`"
-      hint="Personne intervenante, horaires…"
+      hint="Horaires, lieu…"
     />
   </div>
 
