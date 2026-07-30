@@ -6,7 +6,12 @@ import {
   requiredUuid,
   uuidOrEmpty
 } from './helpers.schema'
-import { validDate, validSelectionMessage } from '~/utils/zod'
+import {
+  validDate,
+  validYear,
+  requiredErrorMessage,
+  validSelectionMessage
+} from '~/utils/zod'
 
 describe('phone number schema', () => {
   test('fails phone number with 3 digits', () => {
