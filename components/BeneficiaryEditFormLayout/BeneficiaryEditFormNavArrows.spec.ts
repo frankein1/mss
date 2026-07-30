@@ -27,7 +27,7 @@ describe('BeneficiaryEditFormNavArrows - boundaries', () => {
     expect(wrapper.find('button.fr-icon-arrow-left-line').exists()).toBe(false)
   })
 
-  it('shows no next arrow on Structures extérieures tab (last tab)', async () => {
+  it('shows no next arrow on Partenaires tab (last tab)', async () => {
     const wrapper = await mountNavArrows(
       'AppBeneficiaryEditExternalOrganisations'
     )

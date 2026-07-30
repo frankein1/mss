@@ -1,4 +1,13 @@
 import { z } from 'zod'
+import {
+  requiredErrorMessage,
+  invalidTypeErrorMessage,
+  validDate,
+  validEmailMessage,
+  validSelectionMessage,
+  validUrlMessage,
+  invalidValueMessage
+} from '~/utils/zod'
 
 export * from './beneficiary'
 export * from './followup'
@@ -30,10 +39,27 @@ export * from './redirection'
 
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
   switch (issue.code) {
+    case 'invalid_type':
+      if (issue.received === 'undefined') {
+        return { message: requiredErrorMessage }
+      }
+      return { message: invalidTypeErrorMessage }
     case 'invalid_date':
-      return { message: 'Veuillez saisir une date valide : JJ/MM/AAAA.' }
+      return { message: validDate }
     case 'invalid_enum_value':
-      return { message: 'Veuillez sélectionner une option proposée.' }
+      return { message: validSelectionMessage }
+    case 'invalid_string':
+      if (typeof issue.validation === 'string') {
+        switch (issue.validation) {
+          case 'uuid':
+            return { message: validSelectionMessage }
+          case 'email':
+            return { message: validEmailMessage }
+          case 'url':
+            return { message: validUrlMessage }
+        }
+      }
+      return { message: invalidValueMessage }
     default:
       return { message: ctx.defaultError }
   }

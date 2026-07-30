@@ -184,7 +184,7 @@ export const routes = {
   },
   AppBeneficiaryEditExternalOrganisations: {
     name: 'AppBeneficiaryEditExternalOrganisations',
-    title: 'Structures extérieures',
+    title: 'Partenaires',
     path: (beneficiaryId: string, options?: BeneficiaryEditRouteOptions) =>
       getBeneficiaryEditRoute(
         `${BeneficiariesRoute}/${beneficiaryId}/edit/external-organisations`,
