@@ -119,9 +119,21 @@
     "node": "24.17.0"
   },
   "lint-staged": {
-    "*.{js,ts,vue}": "eslint --cache --fix",
-    "*.{css,scss,sass,html,vue}": "stylelint  --allow-empty-input",
-    "*.**": "prettier --ignore-unknown --check {.,**/*.prisma}"
+    "*.{js,ts}": [
+      "eslint --cache --fix",
+      "prettier --ignore-unknown --write --list-different"
+    ],
+    "*.vue": [
+      "eslint --cache --fix",
+      "prettier --ignore-unknown --write --list-different",
+      "stylelint --fix --allow-empty-input"
+    ],
+    "*.{css,scss,sass,html}": [
+      "prettier --ignore-unknown --write --list-different",
+      "stylelint --fix --allow-empty-input"
+    ],
+    "*.prisma": "prettier --ignore-unknown --write --list-different",
+    "!(*.{js,ts}|*.vue|*.{css,scss,sass,html}|*.prisma)": "prettier --ignore-unknown --write --list-different"
   },
   "packageManager": "pnpm@11.1.3"
 }

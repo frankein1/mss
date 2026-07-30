@@ -1,11 +1,17 @@
 import { describe, test, expect } from 'vitest'
+import '~/server/schema'
 import {
   dateOrEmpty,
   phoneConstraint,
   requiredUuid,
   uuidOrEmpty
 } from './helpers.schema'
-import { validDate } from '~/utils/zod'
+import {
+  validDate,
+  validYear,
+  requiredErrorMessage,
+  validSelectionMessage
+} from '~/utils/zod'
 
 describe('phone number schema', () => {
   test('fails phone number with 3 digits', () => {
@@ -171,7 +177,7 @@ describe('uuid schema', () => {
     d = requiredUuid.safeParse('malformed-uuid')
     expect(d.success).toBe(false)
     message = d.error?.message && JSON.parse(d.error?.message)[0].message
-    expect(message).toBe('Invalid uuid')
+    expect(message).toBe(validSelectionMessage)
 
     d = requiredUuid.safeParse('efcb6276-2d62-47b4-8c1e-04f4e8a15048')
     expect(d.success).toBe(true)

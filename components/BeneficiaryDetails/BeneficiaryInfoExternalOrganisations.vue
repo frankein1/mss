@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryInfoSection
-    title="Structures extérieures"
+    title="Partenaires"
     :edit-link="editLink"
   >
     <BeneficiaryInfoExternalOrganisationsContent

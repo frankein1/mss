@@ -56,7 +56,7 @@
       <div class="fr-col-12 fr-p-2w">
         <AtomAlertMSS :alert-type="AlertType.Info">
           <template #detailedMessage>
-            <p>
+            <p class="fr-my-2w">
               Renseignez les partenaires qui interviennent auprès du
               bénéficiaire.
             </p>

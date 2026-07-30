@@ -67,7 +67,7 @@
           />
           <template v-if="beneficiary.externalOrganisations">
             <hr />
-            <p class="fr-text--bold">Structures extérieures</p>
+            <p class="fr-text--bold">Partenaires</p>
           </template>
           <BeneficiaryInfoExternalOrganisationsContent
             v-if="beneficiary.externalOrganisations"
