@@ -34,3 +34,4 @@ export {
   fixturesDataEducationSchools,
   FixtureDataEducationSchool
 } from './dataEducationSchools'
+export { fixturesMinisters } from './ministers'

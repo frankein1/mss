@@ -24,3 +24,11 @@ dayjs.extend(duration)
  */
 vi.mock('~/server/lib/encryption/kms')
 vi.mock('~/server/lib/data-inclusion')
+vi.mock('~/server/integrations/brevo/service', () => ({
+  createOrUpdateUser: vi.fn().mockResolvedValue(undefined),
+  createOrUpdateStructure: vi.fn().mockResolvedValue(undefined),
+  sendStructureEvent: vi.fn().mockResolvedValue(undefined),
+  createContactAttributes: vi.fn().mockResolvedValue(undefined),
+  createStructureAttributes: vi.fn().mockResolvedValue(undefined),
+  linkUserToStructure: vi.fn().mockResolvedValue(undefined)
+}))
