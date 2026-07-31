@@ -22,7 +22,7 @@ const setupFactory = t.createCallerFactory(appRouter)
  * using a test context for tRPC with dummy event
  * see https://trpc.io/docs/server/server-side-calls
  */
-const createCaller = (user: AppContext['user']) => {
+export const createCaller = (user: AppContext['user']) => {
   const event = { context: { auth: null } } as any as H3Event
   const ctx = { event, user }
 

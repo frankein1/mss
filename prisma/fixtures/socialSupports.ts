@@ -16,8 +16,33 @@ import {
   FixtureUserRole,
   fixturesPartnerOrganizations,
   FixturePartnerOrganization,
-  fixturesPartnerOrganizationContacts
+  fixturesPartnerOrganizationContacts,
+  fixturesNotifications,
+  FixtureNotification
 } from './'
+
+export enum FixtureSocialSupport {
+  FollowupTearlePlannedInPerson = 0,
+  FollowupTearlePhoneCall = 1,
+  FollowupCoursorVideoconference = 2,
+  FollowupPensonUnplannedInPerson = 3,
+  FollowupCoursorInProgress = 4,
+  FollowupUnknownWithComment = 5,
+  HelpRequestTearleOther = 6,
+  HelpRequestCoursorOtherInvestigation = 7,
+  HelpRequestUnknownFinancial = 8,
+  HelpRequestUnknownFinancialExternal = 9,
+  HelpRequestUnknownFinancialExternalPrescribing = 10,
+  HelpRequestPenberthyFinancialInvestigation = 11,
+  HousingTearleAccepted = 12,
+  HousingCoursorInvestigation = 13,
+  HousingUnknownWithAskedHousing = 14,
+  HousingUnknownExternal = 15,
+  HousingUnknownExternalPrescribing = 16,
+  HousingPenberthyFirstRequest = 17
+}
+
+export const fixtureCommentId = '24d14db7-c0ac-4924-86ae-c786efba3afc'
 
 export const fixturesRedirectionReasons = [
   {
@@ -216,19 +241,12 @@ const fixturesFollowupSocialSupports = [
     date: new Date('2022-10-25'),
     comments: {
       create: {
-        id: '24d14db7-c0ac-4924-86ae-c786efba3afc',
+        id: fixtureCommentId,
         createdById: fixturesUsers[FixtureUserRole.StructureManager].id,
         content:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nisl erat, facilisis eget congue eget, fermentum vitae ante. Maecenas bibendum quis dui luctus molestie. Fusce sollicitudin dolor eget libero tempus semper. Praesent non urna libero. Vivamus vitae ex magna. Ut semper, sem vitae tincidunt finibus, nisl tortor blandit massa, vel rutrum est felis quis metus. In hac habitasse platea dictumst. Ut eget sapien sodales, varius lorem ut, posuere est. Quisque fermentum, erat a luctus vehicula, lorem quam cursus lorem, sed mollis augue felis et urna.',
         notification: {
-          create: {
-            id: '3a39f0ae-17c0-4616-9e76-523faad59cfc',
-            recipientId: fixturesUsers[FixtureUserRole.Referent].id,
-            beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
-            socialSupportId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
-            type: 'NewComment',
-            itemCreatedById: fixturesUsers[FixtureUserRole.StructureManager].id
-          }
+          create: fixturesNotifications[FixtureNotification.ReferentNewComment]
         }
       }
     },

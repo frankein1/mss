@@ -21,7 +21,8 @@ import {
   fixturesWorkshops,
   fixturesWorkshopExternalAttendees,
   fixturesWorkshopAttendees,
-  fixturesDataEducationSchools
+  fixturesDataEducationSchools,
+  fixturesMinisters
 } from './fixtures'
 import { ministers } from './ministers'
 
@@ -236,6 +237,15 @@ function loadFixturesDataEducationSchools() {
   })
 }
 
+function loadFixtureMinisters() {
+  console.log('👑 Fixture Ministers...')
+
+  return prismaClient.ministerEntity.createMany({
+    data: fixturesMinisters,
+    skipDuplicates: true
+  })
+}
+
 function createMinister() {
   console.log('👑 Ministers...')
 
@@ -269,6 +279,7 @@ function loadFixtures() {
     loadWorkshops(),
     loadWorkshopExternalAttendees(),
     loadWorkshopAttendees(),
+    loadFixtureMinisters(),
     createMinister()
   ]
 }

@@ -17,9 +17,12 @@ export {
   FixturePartnerOrganization
 } from './partnerOrganizations'
 export { fixturesPartnerOrganizationContacts } from './partnerOrganizationContacts'
+export { fixturesNotifications, FixtureNotification } from './notifications'
 export {
   fixturesSocialSupports,
-  fixturesRedirectionReasons
+  fixturesRedirectionReasons,
+  FixtureSocialSupport,
+  fixtureCommentId
 } from './socialSupports'
 export { fixturesBudgets } from './budgets'
 export { fixturesBudgetIncomes } from './budgetIncomes'
@@ -34,3 +37,4 @@ export {
   fixturesDataEducationSchools,
   FixtureDataEducationSchool
 } from './dataEducationSchools'
+export { fixturesMinisters } from './ministers'
