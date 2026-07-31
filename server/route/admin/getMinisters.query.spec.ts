@@ -2,6 +2,8 @@ import { describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import { fixturesMinisters } from '~/prisma/fixtures'
 
+const minister = fixturesMinisters[0]!
+
 describe('Ministers - Get Ministers - Authorizations', () => {
   test('A non-admin user is rejected', async ({ trpc }) => {
     await expect(() =>
@@ -20,9 +22,9 @@ describe('Ministers - Get Ministers - Results', () => {
     expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBeGreaterThan(0)
 
-    const seededMinister = result.find(m => m.id === fixturesMinisters[0].id)
+    const seededMinister = result.find(m => m.id === minister.id)
     expect(seededMinister).toBeDefined()
-    expect(seededMinister!.firstName).toBe(fixturesMinisters[0].firstName)
-    expect(seededMinister!.lastName).toBe(fixturesMinisters[0].lastName)
+    expect(seededMinister!.firstName).toBe(minister.firstName)
+    expect(seededMinister!.lastName).toBe(minister.lastName)
   })
 })

@@ -30,7 +30,7 @@ afterEach(async () => {
 describe('Admin - Send Email - Authorizations', () => {
   test('A non-admin user is rejected', async ({ trpc }) => {
     await expect(() =>
-      trpc.structureManager.admin.sendEmail({ id: createdIds[0] })
+      trpc.structureManager.admin.sendEmail({ id: createdIds[0]! })
     ).rejects.toThrow(/user is not an administrator/i)
   })
 })
@@ -40,13 +40,13 @@ describe('Admin - Send Email - Happy path', () => {
     trpc
   }) => {
     const result = await trpc.administrator.admin.sendEmail({
-      id: createdIds[0]
+      id: createdIds[0]!
     })
 
     expect(result.email.status).toBe('ToSend')
 
     const email = await prismaClient.email.findUniqueOrThrow({
-      where: { id: createdIds[0] }
+      where: { id: createdIds[0]! }
     })
     expect(email.status).toBe('ToSend')
   })

@@ -33,7 +33,7 @@ describe('Admin - Toggle Rdvsp - Happy path', () => {
       where: { id: structure.id },
       select: { externalRdvspActive: true }
     })
-    originalValue = current.externalRdvspActive
+    originalValue = current.externalRdvspActive!
 
     const newValue = !originalValue
 
