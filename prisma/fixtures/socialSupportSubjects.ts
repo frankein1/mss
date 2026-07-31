@@ -66,7 +66,8 @@ export const fixturesSocialSupportSubjects = [
   {
     id: '2445b4bc-17a5-4005-8e7a-68af06479306',
     name: 'PASS Adulte',
-    ownedByStructureId: fixtureStructures[0].id
+    ownedByStructureId: fixtureStructures[0].id,
+    inactive: true
   },
   {
     id: '5641909b-41d4-4e0d-bd41-9ec12f3fe49b',

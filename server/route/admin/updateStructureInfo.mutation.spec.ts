@@ -1,22 +1,43 @@
-import { describe, expect, afterEach } from 'vitest'
+import { describe, expect, beforeEach, afterEach } from 'vitest'
 import { test } from '~/test/server/test-utils'
 import { prismaClient } from '~/server/prisma'
-import { fixtureStructures, FixtureStructure } from '~/prisma/fixtures'
 
-const structure = fixtureStructures[FixtureStructure.Test]
+const PREFIX = 'USI-'
+let structureId: string
+
+beforeEach(async () => {
+  const structure = await prismaClient.structure.create({
+    data: {
+      name: `${PREFIX}Structure`,
+      type: 'Ccas',
+      address: '1 rue Test',
+      city: 'Testville',
+      zipcode: '00000',
+      phone: '01 00 00 00 00',
+      email: `${PREFIX}structure@test.com`
+    }
+  })
+  structureId = structure.id
+})
+
+afterEach(async () => {
+  await prismaClient.structure.deleteMany({
+    where: { name: { startsWith: PREFIX } }
+  })
+})
 
 describe('Admin - Update Structure Info - Authorizations', () => {
   test('A non-admin user is rejected', async ({ trpc }) => {
     await expect(() =>
       trpc.structureManager.admin.updateStructureInfo({
-        id: structure.id,
+        id: structureId,
         type: 'Ccas',
-        name: structure.name,
-        zipcode: structure.zipcode,
-        city: structure.city,
-        address: structure.address,
-        phone: structure.phone,
-        email: structure.email,
+        name: `${PREFIX}Structure`,
+        zipcode: '00000',
+        city: 'Testville',
+        address: '1 rue Test',
+        phone: '01 00 00 00 00',
+        email: `${PREFIX}structure@test.com`,
         dpoFirstName: 'Jean',
         dpoLastName: 'Dupont',
         dpoEmail: 'dpo@test.com'
@@ -26,41 +47,29 @@ describe('Admin - Update Structure Info - Authorizations', () => {
 })
 
 describe('Admin - Update Structure Info - Happy path', () => {
-  afterEach(async () => {
-    await prismaClient.structure.update({
-      where: { id: structure.id },
-      data: {
-        name: structure.name,
-        city: structure.city,
-        address: structure.address,
-        email: structure.email
-      }
-    })
-  })
-
   test('An administrator can update structure admin info', async ({ trpc }) => {
     const result = await trpc.administrator.admin.updateStructureInfo({
-      id: structure.id,
+      id: structureId,
       type: 'Ccas',
-      name: 'Updated Structure Name',
-      zipcode: structure.zipcode,
-      city: 'Updated City',
+      name: `${PREFIX}Updated Name`,
+      zipcode: '00000',
+      city: `${PREFIX}Updated City`,
       address: '99 rue Updated',
-      phone: structure.phone,
-      email: 'updated-structure@test.com',
+      phone: '01 00 00 00 00',
+      email: `${PREFIX}updated@test.com`,
       dpoFirstName: 'Marie',
       dpoLastName: 'Martin',
       dpoEmail: 'dpo-updated@test.com'
     })
 
-    expect(result.id).toBe(structure.id)
+    expect(result.id).toBe(structureId)
 
     const updated = await prismaClient.structure.findUniqueOrThrow({
-      where: { id: structure.id }
+      where: { id: structureId }
     })
-    expect(updated.name).toBe('Updated Structure Name')
-    expect(updated.city).toBe('Updated City')
+    expect(updated.name).toBe(`${PREFIX}Updated Name`)
+    expect(updated.city).toBe(`${PREFIX}Updated City`)
     expect(updated.address).toBe('99 rue Updated')
-    expect(updated.email).toBe('updated-structure@test.com')
+    expect(updated.email).toBe(`${PREFIX}updated@test.com`)
   })
 })

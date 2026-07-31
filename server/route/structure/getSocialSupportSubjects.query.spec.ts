@@ -7,5 +7,6 @@ describe('Structure - Get Social Support Subjects - Data', () => {
   }) => {
     const result = await trpc.socialWorker.structure.getSocialSupportSubjects()
     expect(result.length).toBeGreaterThan(0)
+    expect(result.some(s => s.inactive === true)).toBe(true)
   })
 })

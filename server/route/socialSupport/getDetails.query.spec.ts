@@ -1,8 +1,14 @@
 import { describe, expect } from 'vitest'
 import { test } from '~/test/server/test-utils'
+import {
+  fixturesSocialSupports,
+  FixtureSocialSupport,
+  fixtureCommentId
+} from '~/prisma/fixtures'
 
-const socialSupportId = '19ed2ebb-4e28-433a-9e2d-d97d9098624a'
-const commentId = '24d14db7-c0ac-4924-86ae-c786efba3afc'
+const socialSupportId =
+  fixturesSocialSupports[FixtureSocialSupport.FollowupUnknownWithComment]!.id
+const commentId = fixtureCommentId
 
 describe('Social Support - Get Details - Comment permissions', () => {
   test('The comment creator sees edit and delete permissions', async ({

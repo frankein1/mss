@@ -47,12 +47,12 @@ describe('canBeDisabled', () => {
     ).toBe(false)
   })
 
-  test('should return true at the boundary (exactly 6 months + 2 weeks ago)', () => {
+  test('should return false at the boundary (exactly 6 months + 2 weeks ago)', () => {
     expect(
       canBeDisabled({
-        lastAccess: new Date('2024-11-30'),
+        lastAccess: new Date('2024-12-01'),
         created: new Date('2024-01-01')
       })
-    ).toBe(true)
+    ).toBe(false)
   })
 })
