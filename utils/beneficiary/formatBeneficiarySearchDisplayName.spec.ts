@@ -58,7 +58,7 @@ describe('formatBeneficiarySearchDisplayName', () => {
         firstName: null,
         usualName: null,
         birthName: null
-      } as any)
+      })
     ).toBe('')
   })
 })

@@ -31,7 +31,7 @@ describe('formatAddress', () => {
         zipcode: null,
         city: null,
         region: null
-      } as any)
+      })
     ).toBe('')
   })
 })

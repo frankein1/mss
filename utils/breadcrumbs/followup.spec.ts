@@ -98,8 +98,8 @@ describe('followup breadcrumbs', () => {
       { text: 'Bénéficiaires', to: '/app/beneficiaries' },
       { text: 'Marie DUPONT', to: '/app/files/fam-1' },
       {
-        text: 'Entretien avec une personne bénéficiaire',
-        to: '/app/files/fam-1/followups/add'
+        text: "Modifier l'entretien avec une personne bénéficiaire",
+        to: '/app/files/fam-1/followups/fu-1/edit'
       }
     ])
   })

@@ -13,7 +13,7 @@ describe('hasIdentityInformations', () => {
     nationality: null,
     deathDate: null,
     numeroPegase: null
-  } as any
+  }
 
   test('should return falsy when all fields are null', () => {
     expect(hasIdentityInformations(empty)).toBeFalsy()
@@ -22,17 +22,17 @@ describe('hasIdentityInformations', () => {
   test('should return truthy when all fields are populated', () => {
     expect(
       hasIdentityInformations({
-        title: 'Mr',
+        title: 'Mister',
         usualName: 'Dupont',
         firstName: 'Marie',
         birthDate: new Date(),
         birthPlace: 'Paris',
         gender: 'Female',
         birthName: 'Martin',
-        nationality: 'French',
+        nationality: 'FRA',
         deathDate: new Date(),
         numeroPegase: '123'
-      } as any)
+      })
     ).toBeTruthy()
   })
 

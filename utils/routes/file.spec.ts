@@ -1,5 +1,10 @@
 import { describe, test, expect } from 'vitest'
 import { routes } from './file'
+import {
+  FilterFileInstructionNotFilled,
+  FilterFollowupNotFilled
+} from '../constants/filters'
+import { TypeSuivi } from '~/client/options'
 
 describe('file routes', () => {
   describe('AppFile', () => {
@@ -38,9 +43,9 @@ describe('file routes', () => {
     test('path returns /app/history/followups with notFilled filter', () => {
       expect(
         routes.AppHistoryFollowups.path({
-          notFilled: 'something' as any
+          notFilled: FilterFollowupNotFilled.Duration
         })
-      ).toBe('/app/history/followups?not-filled=something')
+      ).toBe('/app/history/followups?not-filled=duration')
     })
   })
 
@@ -54,9 +59,9 @@ describe('file routes', () => {
     test('path returns /app/history/file-instructions with notFilled filter', () => {
       expect(
         routes.AppHistoryFileInstructions.path({
-          notFilled: 'something' as any
+          notFilled: FilterFileInstructionNotFilled.HousingIsFirst
         })
-      ).toBe('/app/history/file-instructions?not-filled=something')
+      ).toBe('/app/history/file-instructions?not-filled=isFirst')
     })
   })
 
@@ -68,8 +73,8 @@ describe('file routes', () => {
     })
 
     test('path returns /app/historyprint/:id/print with type', () => {
-      expect(routes.AppHistoryPrint.path('h-1', 'followup' as any)).toBe(
-        '/app/historyprint/h-1/print?type=followup'
+      expect(routes.AppHistoryPrint.path('h-1', TypeSuivi.Followup)).toBe(
+        '/app/historyprint/h-1/print?type=Followup'
       )
     })
   })

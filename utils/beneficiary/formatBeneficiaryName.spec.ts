@@ -18,7 +18,7 @@ describe('formatBeneficiaryName', () => {
         title: null,
         firstName: 'Marie',
         usualName: null
-      } as any)
+      })
     ).toBe('Marie')
   })
 
@@ -28,7 +28,7 @@ describe('formatBeneficiaryName', () => {
         title: null,
         firstName: null,
         usualName: 'Dupont'
-      } as any)
+      })
     ).toBe('Dupont')
   })
 })

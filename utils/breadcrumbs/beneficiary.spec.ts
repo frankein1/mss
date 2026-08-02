@@ -59,7 +59,7 @@ describe('beneficiary breadcrumbs', () => {
     ])
   })
 
-  test('AppBeneficiary with AppHistory origin skips beneficiaries (commented out)', () => {
+  test('AppBeneficiary with AppHistory origin skips beneficiaries', () => {
     expect(breadcrumbs.AppBeneficiary(beneficiary, 'AppHistory')).toEqual([
       { text: 'Tableau de bord', to: '/app/overview' },
       { text: 'Marie DUPONT', to: '/app/beneficiaries/ben-1' }

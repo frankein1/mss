@@ -3,22 +3,22 @@ import sortBeneficiarySearchResults from './sortBeneficiarySearchResults'
 
 describe('sortBeneficiarySearchResults', () => {
   test('should rank usualName match above birthName match', () => {
-    const a = { usualName: 'Martin', birthName: null, firstName: null } as any
-    const b = { usualName: null, birthName: 'Martin', firstName: null } as any
+    const a = { usualName: 'Martin', birthName: null, firstName: null }
+    const b = { usualName: null, birthName: 'Martin', firstName: null }
     const sorted = [a, b].sort(sortBeneficiarySearchResults('martin'))
     expect(sorted[0]).toBe(a)
   })
 
   test('should rank birthName match above firstName match', () => {
-    const a = { usualName: null, birthName: 'Dupont', firstName: null } as any
-    const b = { usualName: null, birthName: null, firstName: 'Dupont' } as any
+    const a = { usualName: null, birthName: 'Dupont', firstName: null }
+    const b = { usualName: null, birthName: null, firstName: 'Dupont' }
     const sorted = [a, b].sort(sortBeneficiarySearchResults('dupont'))
     expect(sorted[0]).toBe(a)
   })
 
   test('should sort alphabetically on usualName when scores are equal', () => {
-    const a = { usualName: 'albert', birthName: null, firstName: null } as any
-    const b = { usualName: 'bernard', birthName: null, firstName: null } as any
+    const a = { usualName: 'albert', birthName: null, firstName: null }
+    const b = { usualName: 'bernard', birthName: null, firstName: null }
     const sorted = [a, b].sort(sortBeneficiarySearchResults('xxx'))
     expect(sorted[0]).toBe(a)
   })
@@ -28,12 +28,12 @@ describe('sortBeneficiarySearchResults', () => {
       usualName: 'éric',
       birthName: null,
       firstName: null
-    } as any
+    }
     const noMatch = {
       usualName: 'zzz',
       birthName: null,
       firstName: null
-    } as any
+    }
     const sorted = [noMatch, accented].sort(
       sortBeneficiarySearchResults('eric')
     )
@@ -45,12 +45,12 @@ describe('sortBeneficiarySearchResults', () => {
       usualName: 'Dupont',
       birthName: null,
       firstName: null
-    } as any
+    }
     const noMatch = {
       usualName: 'Martin',
       birthName: null,
       firstName: null
-    } as any
+    }
     const sorted = [noMatch, match].sort(sortBeneficiarySearchResults('dupont'))
     expect(sorted[0]).toBe(match)
   })

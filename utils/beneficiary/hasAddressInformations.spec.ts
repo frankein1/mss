@@ -12,7 +12,7 @@ describe('hasAddressInformations', () => {
     region: null,
     department: null,
     qpv: null
-  } as any
+  }
 
   test('should return falsy when all fields are null', () => {
     expect(hasAddressInformations(empty)).toBeFalsy()
@@ -23,14 +23,14 @@ describe('hasAddressInformations', () => {
       hasAddressInformations({
         accommodationMode: 'Owner',
         accommodationAdditionalInformation: 'RDC',
-        accommodationZone: 'Urban',
+        accommodationZone: 'France',
         street: '12 rue de la Paix',
         zipcode: '75001',
         city: 'Paris',
         region: 'IDF',
         department: '75',
-        qpv: 'QPV1'
-      } as any)
+        qpv: true
+      })
     ).toBeTruthy()
   })
 

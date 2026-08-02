@@ -46,11 +46,7 @@ function getBreadBeneficiaryFromOriginPage(
     case 'AppOverview':
       return [...user.AppOverview(), ...getBreadBeneficiary(beneficiary)]
     case 'AppHistory':
-      return [
-        ...user.AppOverview(),
-        // ...getBread('AppHistory'),
-        ...getBreadBeneficiary(beneficiary)
-      ]
+      return [...user.AppOverview(), ...getBreadBeneficiary(beneficiary)]
     default:
       return [
         ...user.AppOverview(),
@@ -78,7 +74,6 @@ export const breadcrumbs = {
     beneficiary: BeneficiaryIdentification | null,
     originPage?: 'AppOverview' | 'AppBeneficiaries' | 'AppHistory' | undefined
   ) => getBreadBeneficiaryFromOriginPage(beneficiary, originPage),
-  // AppHistory: () => [...user.AppOverview(), ...getBread('AppHistory')],
   AppBeneficiaryEdit: (beneficiary: BeneficiaryIdentification | null) => [
     ...user.AppOverview(),
     ...getBreadBeneficiary(beneficiary),

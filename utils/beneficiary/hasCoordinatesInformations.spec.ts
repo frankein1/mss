@@ -12,7 +12,7 @@ describe('hasCoordinatesInformations', () => {
     phone2: null,
     email: null,
     addressComplement: null
-  } as any
+  }
 
   test('should return falsy when all fields are null', () => {
     expect(hasCoordinatesInformations(empty)).toBeFalsy()
@@ -30,7 +30,7 @@ describe('hasCoordinatesInformations', () => {
         phone2: '0605060708',
         email: 'test@test.fr',
         addressComplement: 'Apt 3'
-      } as any)
+      })
     ).toBeTruthy()
   })
 

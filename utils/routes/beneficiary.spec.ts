@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest'
 import { routes } from './beneficiary'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import { FilterBeneficiaryNotFilled } from '../constants/filters'
 
 describe('beneficiary routes', () => {
   describe('AppBeneficiaries', () => {
@@ -11,9 +12,9 @@ describe('beneficiary routes', () => {
     test('path returns /app/beneficiaries with notFilled filter', () => {
       expect(
         routes.AppBeneficiaries.path({
-          notFilled: 'some-filter' as any
+          notFilled: FilterBeneficiaryNotFilled.AgeGroup
         })
-      ).toBe('/app/beneficiaries?not-filled=some-filter')
+      ).toBe('/app/beneficiaries?not-filled=birthDate')
     })
   })
 
