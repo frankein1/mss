@@ -45,6 +45,9 @@ afterEach(async () => {
     }),
     prismaClient.ministerEntity.deleteMany({
       where: { lastName: { startsWith: 'HHRUM-' } }
+    }),
+    prismaClient.partnerOrganization.deleteMany({
+      where: { name: { startsWith: 'HHRUM-' } }
     })
   ])
 })

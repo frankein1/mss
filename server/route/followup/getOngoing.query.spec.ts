@@ -5,10 +5,7 @@ describe('Followup - GetOngoing - Authorizations', () => {
   test('A referent can get ongoing followup counts', async ({ trpc }) => {
     const result = await trpc.referent.followup.getOngoing()
 
-    expect(result.length).toBeGreaterThan(0)
-    const inProgress = result.find(r => r.status === 'InProgress')
-    expect(inProgress).toBeDefined()
-    expect(inProgress!._count).toBeGreaterThan(0)
+    expect(result).toEqual([{ status: 'InProgress', _count: 1 }])
   })
 
   test('A manager gets an empty result when they have no ongoing followups', async ({

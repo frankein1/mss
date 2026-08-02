@@ -12,8 +12,8 @@ describe('Followup - GetPage - Authorizations', () => {
   test('A manager can list followups', async ({ trpc }) => {
     const result = await trpc.structureManager.followup.getPage(input)
 
-    expect(result.count).toBeGreaterThan(0)
-    expect(result.items.length).toBeGreaterThan(0)
+    expect(result.count).toBe(6)
+    expect(result.items).toHaveLength(6)
   })
 
   test('A referent sees only followups from their assigned family files', async ({

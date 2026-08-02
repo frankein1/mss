@@ -31,7 +31,7 @@ describe('PartnerOrganization - Create - Authorizations', () => {
       await trpc.structureManager.partner.create(createInput())
     )
 
-    expect(result.id).toBeDefined()
+    expect(result.id).toEqual(expect.any(String))
   })
 
   test('A social worker can create a partner organization', async ({
@@ -39,7 +39,7 @@ describe('PartnerOrganization - Create - Authorizations', () => {
   }) => {
     const result = track(await trpc.socialWorker.partner.create(createInput()))
 
-    expect(result.id).toBeDefined()
+    expect(result.id).toEqual(expect.any(String))
   })
 
   test('A referent cannot create a partner organization', async ({ trpc }) => {

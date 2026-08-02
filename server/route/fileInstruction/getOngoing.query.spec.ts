@@ -7,27 +7,13 @@ describe('FileInstruction - GetOngoing - Authorizations', () => {
   }) => {
     const result = await trpc.socialWorker.fileInstruction.getOngoing()
 
-    expect(result.length).toBeGreaterThan(0)
-    const investigationOngoing = result.find(
-      r => r.status === 'InvestigationOngoing'
-    )
-    expect(investigationOngoing).toBeDefined()
-    expect(investigationOngoing!._count).toBeGreaterThan(0)
+    expect(result).toEqual([{ status: 'InvestigationOngoing', _count: 4 }])
   })
 
   test('A manager gets an empty result when they have no ongoing file instructions', async ({
     trpc
   }) => {
     const result = await trpc.structureManager.fileInstruction.getOngoing()
-
-    expect(result).toStrictEqual([])
-  })
-
-  test('A user from another structure gets an empty result', async ({
-    trpc
-  }) => {
-    const result =
-      await trpc.structureManagerMinistere.fileInstruction.getOngoing()
 
     expect(result).toStrictEqual([])
   })

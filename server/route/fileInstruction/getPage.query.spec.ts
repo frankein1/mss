@@ -12,8 +12,8 @@ describe('FileInstruction - GetPage - Authorizations', () => {
   test('A manager can list file instructions', async ({ trpc }) => {
     const result = await trpc.structureManager.fileInstruction.getPage(input)
 
-    expect(result.count).toBeGreaterThan(0)
-    expect(result.items.length).toBeGreaterThan(0)
+    expect(result.count).toBe(12)
+    expect(result.items).toHaveLength(10)
   })
 
   test('A referent sees only file instructions from their assigned family files', async ({

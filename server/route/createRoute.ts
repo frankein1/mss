@@ -150,14 +150,10 @@ export const createRoute = <
           input,
           objectId,
           key
+        }).catch((e: unknown) => {
+          /* TODO/ Management de l'erreur, envoi à sentry ? */
+          console.error(e)
         })
-          .then(() => {
-            console.debug(`update beneficiaries last activity: ${action}`)
-          })
-          .catch((e: unknown) => {
-            /* TODO/ Management de l'erreur, envoi à sentry ? */
-            console.error(e)
-          })
       }
     }
 

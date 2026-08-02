@@ -9,7 +9,7 @@ describe('PartnerOrganization - GetAll - Authorizations', () => {
   test('A manager can list active partner organizations', async ({ trpc }) => {
     const result = await trpc.structureManager.partner.getAll()
 
-    expect(result.length).toBeGreaterThanOrEqual(18)
+    expect(result).toHaveLength(18)
     const ids = result.map((p: { id: string }) => p.id)
     expect(ids).toContain(
       fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
