@@ -46,6 +46,14 @@ Embed full context: `'{Entity} - {Operation} - {Assertion sentence}'`.
 - For admin calling protectedProcedure: `.rejects.toThrow(/user routes are not available to admins/i)`
 - For not-found / constraint violations: include the Prisma model name before "no record", e.g. `.rejects.toThrow(/workshop[\s\S]*?no record/im)`
 
+## Assertion precision
+
+- Favor exact assertions (`toEqual`, `toStrictEqual`) over imprecise ones — assert **what** the result is, not merely that it exists or is non-empty
+- Anti-patterns: `toBeDefined()`, `toBeTruthy()`, `toBeGreaterThan(0)`, `.length > 0` — these pass on any non-trivial result and catch almost no regressions
+- Use `toMatchObject` only when some fields are genuinely non-deterministic (timestamps, auto-generated IDs) — when the full shape is known, use `toEqual`
+- Use `toHaveLength` only when the exact content isn't the point of the test
+- For opaque generated values, use `expect.any(String)` rather than `toBeDefined()`
+
 ## Test setup / teardown
 
 - Favor using seed data rather than setting up custom data. Generate custom data only when using seed data would require modifications that make teardown difficult.

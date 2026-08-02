@@ -47,7 +47,8 @@ export const fixturesPartnerOrganizations = [
   {
     id: 'c8825cc8-76fb-4792-8add-f66b62e8c839',
     name: 'Maison des Solidarités',
-    structureId
+    structureId,
+    inactive: true
   },
   // V1 partner orgs (dataInclusionIdV1 filled, no v0)
   {

@@ -26,6 +26,15 @@ function getBreadForFileFollowupAdd(familyFileId: string) {
   ]
 }
 
+function getBreadForFileFollowupEdit(familyFileId: string, followupId: string) {
+  return [
+    {
+      text: r.AppBeneficiaryFollowupEdit.title(null),
+      to: r.AppBeneficiaryFollowupEdit.path(familyFileId, followupId)
+    }
+  ]
+}
+
 interface FollowupEdit {
   id: string
   familyFileId: string
@@ -67,6 +76,9 @@ export const breadcrumbs = {
     fileIdentification: BeneficiaryNames[] | null
   ) => [
     ...file.AppFile(followup?.familyFileId || '', fileIdentification),
-    ...getBreadForFileFollowupAdd(followup?.familyFileId || '')
+    ...getBreadForFileFollowupEdit(
+      followup?.familyFileId || '',
+      followup?.id || ''
+    )
   ]
 }
