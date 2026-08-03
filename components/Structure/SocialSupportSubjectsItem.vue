@@ -1,47 +1,37 @@
 <template>
-  <div class="sss-item">
-    <div>{{ label }}</div>
-
-    <div
+  <li class="sss-item">
+    <p class="fr-mb-0">{{ label }}</p>
+    <ul
       v-if="application.edit.structure"
-      class="sss-item__actions"
+      class="fr-btns-group fr-btns-group--inline"
     >
-      <button
-        :id="`button-edit-${id}`"
-        :class="editClass"
-        data-fr-opened="false"
-        :aria-controls="editAriaControls"
-        :aria-describedby="`tooltip-edit-${id}`"
-        aria-label="editTooltipLabel"
-        @click="onEdit"
-      >
-        <span
-          :id="`tooltip-edit-${id}`"
-          class="fr-tooltip fr-placement"
-          aria-hidden="true"
+      <li>
+        <button
+          :id="`button-edit-${id}`"
+          type="button"
+          class="fr-btn fr-icon-edit-line fr-btn--tertiary-no-outline fr-m-0"
+          data-fr-opened="false"
+          :disabled="isDefault"
+          aria-controls="global-modal"
+          @click="onEdit"
         >
-          {{ editTooltipLabel }}
-        </span>
-      </button>
-
-      <button
-        :id="`button-remove-${id}`"
-        class="icon fr-icon-close-circle-line"
-        data-fr-opened="false"
-        aria-controls="global-modal"
-        :aria-describedby="`tooltip-remove-${id}`"
-        aria-label="Retirer"
-        @click="$emit('remove')"
-      >
-        <span
-          :id="`tooltip-remove-${id}`"
-          class="fr-tooltip fr-placement"
-          aria-hidden="true"
-          >Retirer</span
+          {{ editLabel }}
+        </button>
+      </li>
+      <li>
+        <button
+          :id="`button-remove-${id}`"
+          type="button"
+          class="fr-btn fr-icon-delete-bin-6-line fr-btn--tertiary-no-outline btn-delete-action fr-m-0"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          @click="$emit('remove')"
         >
-      </button>
-    </div>
-  </div>
+          Retirer
+        </button>
+      </li>
+    </ul>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -58,22 +48,12 @@
 
   const { application } = usePermissions()
 
-  const editTooltipLabel = computed(() => {
+  const editLabel = computed(() => {
     if (props.isDefault) {
       return "Cet objet d'accompagnement n'est pas modifiable"
     }
     return 'Modifier'
   })
-
-  const editClass = computed(() =>
-    props.isDefault
-      ? 'icon fr-icon-pencil-line edit--disabled'
-      : 'icon fr-icon-pencil-line'
-  )
-
-  const editAriaControls = computed(() =>
-    props.isDefault ? '' : 'global-modal'
-  )
 
   const onEdit = () => {
     if (!props.isDefault) {
@@ -90,20 +70,5 @@
     max-height: 66px;
     padding: 20px 0;
     border-bottom: solid 1px var(--border-default-grey);
-  }
-
-  .sss-item__actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .icon {
-    color: var(--primary);
-    cursor: pointer;
-  }
-
-  .edit--disabled {
-    color: var(--text-disabled-grey);
-    cursor: default;
   }
 </style>

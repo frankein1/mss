@@ -127,11 +127,11 @@
   }
 
   .big-accordion {
-    --default-padding: 2.5rem;
+    --default-padding: 1.5rem;
 
     .big-accordion__btn {
       padding: var(--default-padding);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
 
       &[aria-expanded='true'] {
@@ -140,8 +140,21 @@
       }
     }
 
-    .fr-collapse--expanded.big {
+    .fr-collapse--expanded {
       padding: var(--default-padding);
+    }
+
+    @include dsfr-media-query.respond-from('md') {
+      // FROM MD breakpoint
+      --default-padding: 2.5rem;
+
+      .big-accordion__btn {
+        font-size: 1.5rem;
+      }
+
+      .fr-collapse--expanded {
+        padding: var(--default-padding);
+      }
     }
   }
 </style>
