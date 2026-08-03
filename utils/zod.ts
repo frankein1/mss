@@ -1,8 +1,3 @@
-import type { Options } from '~/utils/options'
-
-export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
-  Array.from(options).map(o => o.value) as [string, ...string[]]
-
 export const requiredErrorMessage = 'Veuillez renseigner ce champ.'
 export const invalidTypeErrorMessage = 'Cette valeur est incorrecte.'
 
