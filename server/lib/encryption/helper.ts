@@ -5,6 +5,4 @@ export const ALGORITHMS = {
 
 export interface DataForEncryptionContext {
   documentKey: string
-  contentType: string
-  contentLength: number
 }

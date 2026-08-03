@@ -1257,7 +1257,9 @@ const exportDocumentFromS3Bucket = async (
       name: true,
       filenameDisk: true,
       mimeType: true,
-      size: true
+      size: true,
+      // eslint-disable-next-line no-restricted-syntax -- authorized for benericiary archival process which includes documents
+      encryptedDataKey: true
     }
   })
 
@@ -1268,13 +1270,16 @@ const exportDocumentFromS3Bucket = async (
       console.error('archive: missing document metadata')
       continue
     }
+    if (!doc.encryptedDataKey) {
+      console.error('archive: missing data key')
+      continue
+    }
     const c = await downloadWithEncryption({
       config,
       bucketKey: doc.filenameDisk,
+      encryptedDataKey: doc.encryptedDataKey,
       dataForEncryptionContext: {
-        documentKey: doc.key,
-        contentType: doc.mimeType,
-        contentLength: doc.size
+        documentKey: doc.key
       }
     })
 

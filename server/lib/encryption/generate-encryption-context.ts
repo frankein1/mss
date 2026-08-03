@@ -1,14 +1,9 @@
-import { createHash } from 'node:crypto'
 import { internal } from '~/utils/api/errors'
 
 interface EncryptionContext {
   encryptionVersion: string
   encryptionAlgorithm: string
-  kmsKeyId: string
   documentKeyInDB: string
-  contentType: string
-  contentLength: number
-  encryptedDataKey: string
 }
 /** Generate a **deterministic** encoding for Associated Authenticated Data (AAD) since it is used in
  * **byte-for-byte** comparison upon decryption. See
@@ -20,17 +15,13 @@ interface EncryptionContext {
  * [
  *   encryptionVersion,
  *   encryptionAlgorithm,
- *   kmsKeyId,
- *   encryptedDataKeySha256,
- *   documentKeyInDB,
- *   contentType,
- *   contentLength
+ *   documentKeyInDB
  * ]
  *
  * Strings are encoded in utf8 format.
  *
- * WARNING!! No modification of this function can be performed without changing the
- * encryption version
+ * WARNING!! Once real documents have been encrypted, no modification of this function can be
+ * performed without changing the encryption version
  *
  * WARNING!! If this function is modified, then:
  * 1. the encryption version must be incremented (it is an integer cast as string)
@@ -42,21 +33,13 @@ interface EncryptionContext {
 export function createCanonicalAuthenticatedData({
   encryptionVersion,
   encryptionAlgorithm,
-  kmsKeyId,
-  documentKeyInDB,
-  contentType,
-  contentLength,
-  encryptedDataKey
+  documentKeyInDB
 }: EncryptionContext) {
   if (encryptionVersion === '1') {
     return Buffer.concat([
       Buffer.from(encryptionVersion, 'utf-8'),
       Buffer.from(encryptionAlgorithm, 'utf-8'),
-      Buffer.from(kmsKeyId, 'utf-8'),
-      createHash('sha256').update(encryptedDataKey).digest(),
-      Buffer.from(documentKeyInDB, 'utf-8'),
-      Buffer.from(contentType, 'utf-8'),
-      Buffer.from(contentLength.toString(), 'utf-8')
+      Buffer.from(documentKeyInDB, 'utf-8')
     ])
   }
 

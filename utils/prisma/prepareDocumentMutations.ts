@@ -1,8 +1,8 @@
 import type { Document } from '@prisma/client'
 
-export function prepareDocumentsMutations(
+export function prepareDocumentsMutations<T extends Pick<Document, 'key'>[]>(
   inputDocuments: string[],
-  targetDocuments?: Document[]
+  targetDocuments?: T
 ) {
   return {
     connect: inputDocuments.map(key => ({ key })),

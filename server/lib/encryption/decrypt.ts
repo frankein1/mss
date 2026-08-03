@@ -13,7 +13,6 @@ export async function decrypt(
   metadata: {
     encryptionVersion: string
     encryptionAlgorithm: string
-    kmsKeyId: string
   },
   dataForEncryptionContext: DataForEncryptionContext
 ) {
@@ -30,7 +29,7 @@ export async function decrypt(
    * WARNING! The plaintext DEK MUST NEVER be transmitted or stored outside of the server.
    */
   const dataKey = await kms.decrypt({
-    keyId: metadata.kmsKeyId,
+    keyId: config.kms.keyId,
     ciphertext: encryptedDataKey
   })
 
@@ -54,11 +53,7 @@ export async function decrypt(
   const additionalData = createCanonicalAuthenticatedData({
     encryptionVersion: metadata.encryptionVersion,
     encryptionAlgorithm: metadata.encryptionAlgorithm,
-    kmsKeyId: metadata.kmsKeyId,
-    encryptedDataKey,
-    documentKeyInDB: dataForEncryptionContext.documentKey,
-    contentType: dataForEncryptionContext.contentType,
-    contentLength: dataForEncryptionContext.contentLength
+    documentKeyInDB: dataForEncryptionContext.documentKey
   })
 
   const params: AesGcmParams = {
