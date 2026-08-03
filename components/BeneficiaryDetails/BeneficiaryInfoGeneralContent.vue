@@ -26,7 +26,10 @@
         class="fr-col-12 fr-col-lg-6"
       />
     </div>
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div
+      v-if="general.birthName || general.nationality"
+      class="fr-grid-row fr-grid-row--gutters"
+    >
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.birthName"
         :value="general.birthName"
@@ -38,7 +41,11 @@
         class="fr-col-12 fr-col-lg-6"
       />
     </div>
-    <div class="fr-grid-row fr-grid-row--gutters">
+
+    <div
+      v-if="general.numeroPegase"
+      class="fr-grid-row fr-grid-row--gutters"
+    >
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.numeroPegase"
         :value="general.numeroPegase"
@@ -49,10 +56,9 @@
   </template>
 
   <template v-if="hasAddressInformations(general)">
-    <hr class="fr-col-12 fr-mt-5v" />
-
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-pb-1w">
+        <hr />
         <h5 class="fr-text--md fr-mb-0">Adresse/Hébergement</h5>
       </div>
     </div>
