@@ -1258,6 +1258,7 @@ const exportDocumentFromS3Bucket = async (
       filenameDisk: true,
       mimeType: true,
       size: true,
+      // eslint-disable-next-line no-restricted-syntax -- authorized for benericiary archival process which includes documents
       encryptedDataKey: true
     }
   })

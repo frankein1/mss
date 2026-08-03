@@ -76,6 +76,7 @@ async function getDocumentMetadata(key: string, user: UserContext) {
       size: true,
       migrated: true,
       filenameDisk: true,
+      // eslint-disable-next-line no-restricted-syntax -- authorized for document download process
       encryptedDataKey: true
     }
   })
