@@ -36,7 +36,7 @@ import {
   beneficiaryGirKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiaryProtectionMeasureKeys,
-  beneficiaryOrientationTypeKeys,
+  // beneficiaryOrientationTypeKeys,
   relativeRelationshipKeys,
   beneficiaryStatusKeys,
   beneficiaryTitleKeys,
@@ -284,7 +284,9 @@ const compile = async function (templateName: string, data: any) {
   return hbs.compile(template)(data)
 }
 
-const getBeneficiaryName = (beneficiary: Beneficiary) => {
+function getBeneficiaryName<
+  T extends Pick<Beneficiary, 'firstName' | 'usualName'>
+>(beneficiary: T) {
   return beneficiary.firstName + ' ' + beneficiary.usualName
 }
 
@@ -655,7 +657,9 @@ type FamilyFileBeneficiaryData = {
   relationship: string | null
 }
 
-type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
+type BeneficiaryInfoData = FieldLabels<
+  Omit<Beneficiary, 'id' | 'orientationType' | 'orientationStructure'>
+> & {
   beneficiaries: FamilyFileBeneficiaryData[]
   referents: string | null
   relatives: BeneficiaryRelativeData[] | null
@@ -750,9 +754,9 @@ const getBeneficiaryInfoData = (
     protectionMeasure: beneficiary.protectionMeasure
       ? beneficiaryProtectionMeasureKeys.value(beneficiary.protectionMeasure)
       : null,
-    orientationType: beneficiary.orientationType
-      ? beneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
-      : null,
+    // orientationType: beneficiary.orientationType
+    //   ? beneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
+    //   : null,
     relationship: beneficiary.relationship
       ? relativeRelationshipKeys.value(beneficiary.relationship)
       : null,
@@ -917,8 +921,8 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       prescribingStructure: true,
       prescribingOrganizationId: true,
       prescribingOrganizationContactId: true,
-      orientationType: true,
-      orientationStructure: true,
+      // orientationType: true,
+      // orientationStructure: true,
       serviceProviders: true,
       involvedPartners: true,
       prescribingOrganization: { select: { name: true } },
