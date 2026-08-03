@@ -210,9 +210,12 @@ model Document {
 
   migrated Boolean @default(false)
 
+  encryptedDataKey String? @map("encrypted_data_key")
+
   documentContent DocumentContent?
 
   @@index([familyFileId])
+  @@index([migrated])
   @@map("document")
 }
 

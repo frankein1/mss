@@ -240,18 +240,17 @@ async function uploadEncryptedToS3({
   const bucketKey = generateBucketKeyForDocument(documentKey)
   const filename = sanitizeFilename(input.file.name)
 
-  await uploadWithEncryption({
+  const { encryptedDataKey } = await uploadWithEncryption({
     config,
     bucketKey,
     plainData: file.data,
     dataForEncryptionContext: {
-      documentKey,
-      contentType: input.file.mimeType,
-      contentLength: input.file.size
+      documentKey
     }
   })
 
   try {
+    // FIXME: add retry for this in case of temporary db indispo
     const document = await DocumentRepo.create(user, {
       select: {
         key: true,
@@ -272,11 +271,14 @@ async function uploadEncryptedToS3({
         size: input.file.size,
         mimeType: input.file.mimeType,
         expirationDate: input.expirationDate ?? null,
+        encryptedDataKey,
         migrated: true // migrated to S3
       }
     })
     return document
   } catch (e) {
+    // If storing the document data in DB fails the document content won't be readable
+    // So it is cleaned and an error is sent.
     await deleteFile(config, bucketKey).catch(s3e =>
       console.error(`upload: cleanup failed for ${bucketKey}`, s3e)
     )

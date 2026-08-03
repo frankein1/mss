@@ -1,14 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
-import type { DefaultArgs } from '@prisma/client/runtime/library'
 import { shouldLog, formatPrismaQueryLog } from '~/server/utils/logging.js'
 import picocolors from 'picocolors'
-
-declare global {
-  // allow global `var` declarations
-
-  var prismaClient: PrismaClient | undefined
-}
 
 const shouldLogPrisma = shouldLog('prisma')
 
@@ -18,18 +11,27 @@ if (shouldLogPrisma) {
   prismaLogLevels.push({ emit: 'event', level: 'query' })
 }
 
-// If prismaClient variable is renamed, the Prisma eslint rule `no-restricted-syntax` in eslint.config must be adapted accordingly.
-export const prismaClient: PrismaClient<
-  Prisma.PrismaClientOptions,
-  Prisma.LogLevel,
-  DefaultArgs
-> =
-  global.prismaClient ||
-  new PrismaClient({
-    log: prismaLogLevels
+function createPrismaClient() {
+  return new PrismaClient({
+    log: prismaLogLevels,
+    // prevent fields to be included by default in queries
+    omit: {
+      document: {
+        encryptedDataKey: true
+      }
+    }
   })
+}
 
-export * from '@prisma/client'
+type ExtendedPrismaClient = ReturnType<typeof createPrismaClient>
+
+declare global {
+  var prismaClient: ExtendedPrismaClient | undefined
+}
+
+// If prismaClient variable is renamed, the Prisma eslint rule `no-restricted-syntax` in eslint.config must be adapted accordingly.
+export const prismaClient: ExtendedPrismaClient =
+  global.prismaClient || createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   global.prismaClient = prismaClient
