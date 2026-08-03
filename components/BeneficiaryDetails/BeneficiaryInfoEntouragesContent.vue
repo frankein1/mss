@@ -1,6 +1,6 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters">
-    <div
+  <ul class="fr-grid-row fr-grid-row--gutters information-list">
+    <li
       v-for="(entourage, index) in entourages"
       :key="entourage?.id"
       class="fr-col-12"
@@ -10,8 +10,8 @@
         class="fr-col-12 fr-mt-5v"
       />
       <BeneficiaryInfoRelative :relative="entourage" />
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script setup lang="ts">

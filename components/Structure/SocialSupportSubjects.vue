@@ -1,9 +1,5 @@
 <template>
-  <section class="feature-section bg-color-white sss">
-    <h3 class="fr-h4 sss__title">
-      Objets d’accompagnements proposés par votre structure
-    </h3>
-
+  <section class="sss">
     <AtomCallout>
       <div class="sss__note">
         <p class="fr-callout__text">
@@ -25,7 +21,7 @@
     </AtomCallout>
 
     <SocialSupportSubjectsEmpty v-if="subjects.length === 0" />
-    <div
+    <ul
       v-else
       class="sss__items"
     >
@@ -38,7 +34,7 @@
         @edit="editSubject(item.id, item.name)"
         @remove="removeSubject(item.id, item.name)"
       />
-    </div>
+    </ul>
 
     <div
       v-if="application.edit.structure"
