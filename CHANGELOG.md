@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.63.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.62.0...v1.63.0) (2026-08-03)
+
+
+### Features
+
+* **bénéficiaire:** ajout des partenaires intervenants dans le formulaire ([0e3de62](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0e3de62e0dc7991543e927e091cc958555ab5804)), closes [#1145](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1145)
+* **bénéficiaire:** améliorations UI de la gestion des partenaires ([1744557](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/17445577d49884bd933af7874403f45dbcca7d46)), closes [#1145](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1145)
+
+
+### Bug Fixes
+
+* **bénéficiaire:** suppression champs structure d'orientation et type d'orientation dans l'UI ([f58306d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f58306d113db9adc5b180a1b6054e88266f134db)), closes [#1145](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1145)
+
 ## [1.62.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.61.0...v1.62.0) (2026-07-29)
 
 
