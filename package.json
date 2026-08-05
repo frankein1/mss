@@ -10,6 +10,7 @@
     "build:scheduler": "tsdown --no-config scheduler/index.ts --out-dir .output-scheduler && tsdown --no-config scheduler/_caller.ts --out-dir .output-scheduler_caller",
     "start": "nuxt start",
     "start:scheduler": "node .output-scheduler/index.mjs",
+    "start:caller": "node .output-scheduler_caller/_caller.mjs",
     "generate": "nuxt generate",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
     "lint:typecheck": "nuxt typecheck",

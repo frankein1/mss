@@ -1,6 +1,7 @@
 import { Cron } from 'croner'
-import { initSentry } from './utils'
 import { jobs } from './jobs'
+import { initSentry, withErrorCapture } from './utils'
+import { scalingoRun } from './scalingo-utils'
 
 /**
  * WARNING!
@@ -22,6 +23,16 @@ function startScheduler() {
     timezone,
     name: 'queuedEmailSender'
   })
+
+  // const at8pm = '0 20 * * *'
+  // new Cron(
+  //   at8pm,
+  //   () => withErrorCapture(() => scalingoRun('documentS3Migration')),
+  //   {
+  //     timezone,
+  //     name: 'documentS3Migration'
+  //   }
+  // )
 
   const at23pm = '0 23 * * *'
   new Cron(at23pm, jobs.emailCreator, { timezone, name: 'emailCreator' })

@@ -67,7 +67,9 @@ interface S3Metadata {
   'iv': string
 }
 interface UploadWithEncryptionInput {
-  config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'>
+  config: Pick<AppConfig, 'document' | 's3' | 'kms' | 'public'> & {
+    public: { mssEnvironment: string }
+  }
   bucketKey: string
   plainData: Buffer
   dataForEncryptionContext: DataForEncryptionContext

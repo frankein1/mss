@@ -316,10 +316,15 @@ async function main() {
   }
 }
 
-main()
 ;['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(signal =>
   process.on(signal, async () => {
-    await prismaClient.$disconnect()
+    await cleanup()
     process.exit(1)
   })
 )
+
+async function cleanup() {
+  await prismaClient.$disconnect()
+}
+
+main().finally(cleanup)

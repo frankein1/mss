@@ -3,7 +3,14 @@ export const SCHEDULER_ENV = {
     useS3Storage:
       (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',
     encryptionVersion: '1',
-    encryptionAlgorithm: 'aes_256_gcm'
+    encryptionAlgorithm: 'aes_256_gcm',
+    migration: {
+      activate:
+        (process.env.NUXT_DOCUMENT_MIGRATION_ACTIVATE || 'false') === 'true',
+      maxDurationHours: parseFloat(
+        process.env.NUXT_DOCUMENT_MIGRATION_MAX_DURATION_HOURS || '3'
+      )
+    }
   },
   s3: {
     accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID || '',
@@ -53,5 +60,10 @@ export const SCHEDULER_ENV = {
     landingPageUrl:
       process.env.NUXT_PUBLIC_LANDING_PAGE_URL ||
       'https://monsuivisocial.incubateur.anct.gouv.fr'
+  },
+  scalingo: {
+    apiToken: process.env.NUXT_SCALINGO_API_TOKEN || '',
+    app: process.env.APP || '',
+    regionName: process.env.REGION_NAME || 'osc-fr1'
   }
 }
