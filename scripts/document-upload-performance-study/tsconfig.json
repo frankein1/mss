@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["./run.mts", "../../.nuxt/types/schema.d.ts"],
+  "compilerOptions": {
+    "types": ["node", "vitest/globals"]
+  }
+}
