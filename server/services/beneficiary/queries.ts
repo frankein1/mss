@@ -1,4 +1,10 @@
-import type { Prisma, SocialSupportSubject } from '@prisma/client'
+import {
+  FileInstructionType,
+  SocialSupportType,
+  type Prisma,
+  type SocialSupportSubject
+} from '@prisma/client'
+import { fileInstructionTypeFilterKeys } from '~/client/options'
 import { BeneficiaryRepo } from '~/server/database'
 import type {
   AppContextPermissions,
@@ -120,6 +126,7 @@ const select = {
   // relations
   socialSupports: {
     select: {
+      socialSupportType: true,
       subjects: {
         select: {
           id: true,
@@ -285,9 +292,23 @@ const filter = (
 }
 
 function getHistory(beneficiary: BeneficiaryOutput) {
+  const subjects = getUniqueSubjects(beneficiary)
+  const socialSupportTypes = beneficiary.socialSupports.map(
+    ss => ss.socialSupportType
+  )
+  // Add housing subject if the beneficiary has a housing social support
+  if (socialSupportTypes.includes(SocialSupportType.HelpRequestHousing)) {
+    subjects.unshift({
+      name: fileInstructionTypeFilterKeys.byKey[FileInstructionType.Housing],
+      id: FileInstructionType.Housing
+    })
+  }
   return {
     historyTotal: beneficiary._count.socialSupports,
-    subjects: getUniqueSubjects(beneficiary)
+    socialSupportTypes: beneficiary.socialSupports.map(
+      ss => ss.socialSupportType
+    ),
+    subjects
   }
 }
 
