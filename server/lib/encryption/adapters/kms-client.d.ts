@@ -12,4 +12,11 @@ export interface KmsClient {
     keyId: string
     ciphertext: string
   }): Promise<{ plaintext: string }>
+
+  rewrap(params: {
+    keyId: string
+    ciphertext: string
+  }): Promise<{ ciphertext: string }>
+
+  getKeyLatestVersion(params: { keyId: string }): Promise<string>
 }

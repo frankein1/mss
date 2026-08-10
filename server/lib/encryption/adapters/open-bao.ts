@@ -59,7 +59,7 @@ async function getOpenBaoClient(config: Pick<RuntimeConfig, 'kms'>) {
           // Refresh auth when about to expire or if retried from error
           if (
             options.retry ||
-            instance.expiresAt.getTime() + 240 * 1000 <= Date.now()
+            Date.now() + 240 * 1000 >= instance.expiresAt.getTime()
           ) {
             authed = await appRoleLogin(config)
             instance.token = authed.token
@@ -91,6 +91,20 @@ function createOpenBaoKmsAdapter(
         body: { ciphertext: params.ciphertext }
       })
       return res.data
+    },
+    rewrap: async params => {
+      const res = await api(`/transit/rewrap/${params.keyId}`, {
+        method: 'POST',
+        body: { ciphertext: params.ciphertext }
+      })
+      return res.data
+    },
+    getKeyLatestVersion: async params => {
+      const res = await api(`/transit/keys/${params.keyId}`)
+      const latestVersion = Math.max(
+        ...Object.keys(res.keys).map(key => parseInt(key))
+      )
+      return `v${latestVersion}`
     }
   }
 }
