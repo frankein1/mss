@@ -68,6 +68,7 @@
         null) as ActiveBeneficiarySocioProfessionalCategory | null,
       schoolUai: occupationIncome?.schoolUai ?? null,
       school: occupationIncome?.school ?? null,
+      schoolPrograms: occupationIncome?.schoolPrograms || [],
       pensionOrganisations: occupationIncome?.pensionOrganisations || [],
       activityStatus: occupationIncome?.activityStatus || []
     }

@@ -139,6 +139,7 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   study_level: true,
   school_class: true,
   school_uai: true,
+  school_programs: true,
   family_situation: true,
   ministere_structure: true,
   ministere_departement_service_ac: true,

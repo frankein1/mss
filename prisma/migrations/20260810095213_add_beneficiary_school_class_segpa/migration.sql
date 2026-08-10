@@ -1,0 +1,24 @@
+-- AlterEnum
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'SixiemeSegpa';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'CinquiemeSegpa';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'QuatriemeSegpa';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'TroisiemeSegpa';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'SixiemeUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'CinquiemeUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'QuatriemeUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'TroisiemeUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'SecondeGeneraleUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'PremiereGeneraleUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'PremiereTechnoUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'TerminaleGeneraleUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'TerminaleTechnoUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'SecondeProUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'PremiereProUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'TerminaleProUlis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'CAP1Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'CAP2Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'BMA1Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'BMA2Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'BNMA1Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'BNMA2Ulis';
+ALTER TYPE "BeneficiarySchoolClass" ADD VALUE 'BNMA3Ulis';

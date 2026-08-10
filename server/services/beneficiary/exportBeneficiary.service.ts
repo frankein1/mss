@@ -43,6 +43,7 @@ import {
   beneficiaryGenderKeys,
   beneficiaryContractTypeKeys,
   beneficiarySchoolClassKeys,
+  beneficiarySchoolProgramKeys,
   beneficiaryStudyLevelKeys,
   beneficiaryActivityStatusKeys,
   pensionOrganisationKeys,
@@ -677,6 +678,9 @@ const getBeneficiaryInfoData = (
   const activityStatus = beneficiary.activityStatus.map(item =>
     beneficiaryActivityStatusKeys.value(item)
   )
+  const schoolPrograms = beneficiary.schoolPrograms.map(item =>
+    beneficiarySchoolProgramKeys.value(item)
+  )
   const beneficiaries = beneficiary.familyFile?.beneficiaries?.map(
     beneficiary => ({
       firstName: beneficiary.firstName,
@@ -777,6 +781,9 @@ const getBeneficiaryInfoData = (
       : null,
     schoolClass: beneficiary.schoolClass
       ? beneficiarySchoolClassKeys.value(beneficiary.schoolClass)
+      : null,
+    schoolPrograms: beneficiary.schoolPrograms?.length
+      ? schoolPrograms.join(', ')
       : null,
     contractType: beneficiary.contractType
       ? beneficiaryContractTypeKeys.value(beneficiary.contractType)
@@ -906,6 +913,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       contractType: true,
       schoolUai: true,
       schoolClass: true,
+      schoolPrograms: true,
       studyLevel: true,
       occupation: true,
       employer: true,

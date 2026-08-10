@@ -12,6 +12,7 @@ import {
   BeneficiaryPensionOrganisation,
   BeneficiaryProtectionMeasure,
   BeneficiarySchoolClass,
+  BeneficiarySchoolProgram,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
   BeneficiaryStudyLevel,
@@ -173,6 +174,9 @@ export const updateBeneficiaryOccupationSchema = z.object({
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   schoolClass: withEmptyValueOptionalNativeEnum(BeneficiarySchoolClass),
+  schoolPrograms: z.array(
+    z.nativeEnum(BeneficiarySchoolProgram, errorMessages)
+  ),
   schoolUai: z
     .string()
     .nullish()

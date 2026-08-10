@@ -42,11 +42,19 @@
 
       <BeneficiaryFormSchoolSearch :initial-school="localInitialSchool" />
 
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelectOptionGroup
           name="schoolClass"
           :label="beneficiaryFieldLabels.schoolClass"
           :groups="beneficiarySchoolClassGroups"
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6">
+        <MultiSelect
+          name="schoolPrograms"
+          :label="beneficiaryFieldLabels.schoolPrograms"
+          :options="beneficiarySchoolProgramKeys.options"
         />
       </div>
     </BeneficiaryFormSection>
@@ -168,6 +176,7 @@
     beneficiaryActivityStatusKeys,
     beneficiaryContractTypeKeys,
     beneficiarySchoolClassGroups,
+    beneficiarySchoolProgramKeys,
     pensionOrganisationKeys,
     ministereDepartmentServiceAcKeys,
     ministereStructureKeys,
@@ -195,6 +204,7 @@
 
   const { setValue: setSchoolUai } = useField<string | null>('schoolUai')
   const { setValue: setSchoolClass } = useField<string | null>('schoolClass')
+  const { setValue: setSchoolPrograms } = useField<string[]>('schoolPrograms')
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
@@ -207,6 +217,7 @@
       localInitialSchool.value = null
       setSchoolUai(null)
       setSchoolClass(null)
+      setSchoolPrograms([])
     }
   })
 </script>
