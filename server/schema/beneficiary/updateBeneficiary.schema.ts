@@ -174,7 +174,9 @@ export const updateBeneficiaryOccupationSchema = z.object({
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   schoolClass: withEmptyValueOptionalNativeEnum(BeneficiarySchoolClass),
-  schoolProgram: z.array(z.nativeEnum(BeneficiarySchoolProgram, errorMessages)),
+  schoolPrograms: z.array(
+    z.nativeEnum(BeneficiarySchoolProgram, errorMessages)
+  ),
   schoolUai: z
     .string()
     .nullish()

@@ -111,7 +111,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   vulnerablePerson: 'Registre des personnes vulnérables',
   relationship: 'Lien de la relation',
   schoolClass: 'Classe fréquentée',
-  schoolProgram: 'Dispositif scolaire',
+  schoolPrograms: 'Dispositif scolaire',
   schoolUai: 'Établissement scolaire fréquenté'
 }
 

@@ -678,7 +678,7 @@ const getBeneficiaryInfoData = (
   const activityStatus = beneficiary.activityStatus.map(item =>
     beneficiaryActivityStatusKeys.value(item)
   )
-  const schoolProgram = beneficiary.schoolProgram.map(item =>
+  const schoolPrograms = beneficiary.schoolPrograms.map(item =>
     beneficiarySchoolProgramKeys.value(item)
   )
   const beneficiaries = beneficiary.familyFile?.beneficiaries?.map(
@@ -782,8 +782,8 @@ const getBeneficiaryInfoData = (
     schoolClass: beneficiary.schoolClass
       ? beneficiarySchoolClassKeys.value(beneficiary.schoolClass)
       : null,
-    schoolProgram: beneficiary.schoolProgram?.length
-      ? schoolProgram.join(', ')
+    schoolPrograms: beneficiary.schoolPrograms?.length
+      ? schoolPrograms.join(', ')
       : null,
     contractType: beneficiary.contractType
       ? beneficiaryContractTypeKeys.value(beneficiary.contractType)
@@ -913,7 +913,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
       contractType: true,
       schoolUai: true,
       schoolClass: true,
-      schoolProgram: true,
+      schoolPrograms: true,
       studyLevel: true,
       occupation: true,
       employer: true,

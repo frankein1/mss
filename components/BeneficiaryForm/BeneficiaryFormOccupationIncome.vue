@@ -52,8 +52,8 @@
 
       <div class="fr-col-12 fr-col-lg-6">
         <MultiSelect
-          name="schoolProgram"
-          :label="beneficiaryFieldLabels.schoolProgram"
+          name="schoolPrograms"
+          :label="beneficiaryFieldLabels.schoolPrograms"
           :options="beneficiarySchoolProgramKeys.options"
         />
       </div>
@@ -204,7 +204,7 @@
 
   const { setValue: setSchoolUai } = useField<string | null>('schoolUai')
   const { setValue: setSchoolClass } = useField<string | null>('schoolClass')
-  const { setValue: setSchoolProgram } = useField<string[]>('schoolProgram')
+  const { setValue: setSchoolPrograms } = useField<string[]>('schoolPrograms')
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
@@ -217,7 +217,7 @@
       localInitialSchool.value = null
       setSchoolUai(null)
       setSchoolClass(null)
-      setSchoolProgram([])
+      setSchoolPrograms([])
     }
   })
 </script>

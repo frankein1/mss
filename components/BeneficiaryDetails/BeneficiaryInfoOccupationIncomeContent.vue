@@ -19,7 +19,7 @@
     <template
       v-if="
         occupationIncome.schoolClass ||
-        occupationIncome.schoolProgram?.length ||
+        occupationIncome.schoolPrograms?.length ||
         occupationIncome.school
       "
     >
@@ -33,8 +33,8 @@
         class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiaryInfoLabel
-        :label="beneficiaryFieldLabels.schoolProgram"
-        :value="schoolProgram"
+        :label="beneficiaryFieldLabels.schoolPrograms"
+        :value="schoolPrograms"
         class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiarySchoolInfo
@@ -174,9 +174,9 @@
     )
   )
 
-  const schoolProgram = computed(() =>
+  const schoolPrograms = computed(() =>
     arrayToString(
-      occupationIncome.schoolProgram || [],
+      occupationIncome.schoolPrograms || [],
       beneficiarySchoolProgramKeys.byKey
     )
   )
