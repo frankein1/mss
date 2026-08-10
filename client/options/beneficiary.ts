@@ -7,6 +7,7 @@ import {
   BeneficiaryOrientationType,
   BeneficiaryProtectionMeasure,
   BeneficiarySchoolClass,
+  BeneficiarySchoolProgram,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
   BeneficiaryTitle,
@@ -298,6 +299,12 @@ export const beneficiarySchoolClassKeys = buildKeys(
     )
   ) as Record<BeneficiarySchoolClass, string>
 )
+
+export const beneficiarySchoolProgramKeys = buildKeys({
+  [BeneficiarySchoolProgram.ClasseRelais]: 'Classe relais',
+  [BeneficiarySchoolProgram.Upe2a]: 'UPE2A',
+  [BeneficiarySchoolProgram.Upe2aNsa]: 'UPE2A-NSA'
+})
 
 export const incomeSourceKeys = buildKeys({
   Aah: 'AAH',

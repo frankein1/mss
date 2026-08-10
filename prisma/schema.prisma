@@ -1114,6 +1114,12 @@ enum BeneficiarySchoolClass {
   BNMA3Ulis
 }
 
+enum BeneficiarySchoolProgram {
+  ClasseRelais
+  Upe2a
+  Upe2aNsa
+}
+
 enum BeneficiaryProtectionMeasure {
   //Tutelle
   Tutelle
@@ -1804,9 +1810,10 @@ model Beneficiary {
   insurance                   String?
 
   // School
-  schoolClass BeneficiarySchoolClass? @map("school_class")
-  school      DataEducationSchool?    @relation(fields: [schoolUai], references: [uai])
-  schoolUai   String?                 @map("school_uai")
+  schoolClass   BeneficiarySchoolClass?    @map("school_class")
+  schoolProgram BeneficiarySchoolProgram[] @map("school_program")
+  school        DataEducationSchool?       @relation(fields: [schoolUai], references: [uai])
+  schoolUai     String?                    @map("school_uai")
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")

@@ -16,7 +16,13 @@
     />
 
     <!-- ECOLE -->
-    <template v-if="occupationIncome.schoolClass || occupationIncome.school">
+    <template
+      v-if="
+        occupationIncome.schoolClass ||
+        occupationIncome.schoolProgram?.length ||
+        occupationIncome.school
+      "
+    >
       <div class="fr-col-12">
         <hr class="" />
         <h5 class="fr-text--md fr-mb-0">Informations scolaires</h5>
@@ -24,6 +30,11 @@
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.schoolClass"
         :value="beneficiarySchoolClassKeys.value(occupationIncome.schoolClass)"
+        class="fr-col-12 fr-col-lg-6"
+      />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.schoolProgram"
+        :value="schoolProgram"
         class="fr-col-12 fr-col-lg-6"
       />
       <BeneficiarySchoolInfo
@@ -122,7 +133,8 @@
     ministereCategorieKeys,
     ministereDepartmentServiceAcKeys,
     beneficiaryStudyLevelKeys,
-    beneficiarySchoolClassKeys
+    beneficiarySchoolClassKeys,
+    beneficiarySchoolProgramKeys
   } from '~/client/options'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
@@ -159,6 +171,13 @@
     arrayToString(
       occupationIncome.activityStatus || [],
       beneficiaryActivityStatusKeys.byKey
+    )
+  )
+
+  const schoolProgram = computed(() =>
+    arrayToString(
+      occupationIncome.schoolProgram || [],
+      beneficiarySchoolProgramKeys.byKey
     )
   )
 

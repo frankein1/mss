@@ -239,6 +239,7 @@ export const disableStructure = async ({
     contractType: null,
     studyLevel: null,
     schoolClass: null,
+    schoolProgram: { set: [] },
     schoolUai: null,
     occupation: null,
     employer: null,
