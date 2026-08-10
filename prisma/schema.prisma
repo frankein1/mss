@@ -1068,12 +1068,28 @@ enum BeneficiarySchoolClass {
   Cinquieme
   Quatrieme
   Troisieme
+  // Collège - SEGPA
+  SixiemeSegpa
+  CinquiemeSegpa
+  QuatriemeSegpa
+  TroisiemeSegpa
+  // Collège - ULIS
+  SixiemeUlis
+  CinquiemeUlis
+  QuatriemeUlis
+  TroisiemeUlis
   // Lycée général et technologique
   SecondeGenerale
   PremiereGenerale
   PremiereTechno
   TerminaleGenerale
   TerminaleTechno
+  // Lycée général et technologique - ULIS
+  SecondeGeneraleUlis
+  PremiereGeneraleUlis
+  PremiereTechnoUlis
+  TerminaleGeneraleUlis
+  TerminaleTechnoUlis
   // Lycée professionnel
   SecondePro
   PremierePro
@@ -1085,6 +1101,17 @@ enum BeneficiarySchoolClass {
   BNMA1
   BNMA2
   BNMA3
+  // Lycée professionnel - ULIS
+  SecondeProUlis
+  PremiereProUlis
+  TerminaleProUlis
+  CAP1Ulis
+  CAP2Ulis
+  BMA1Ulis
+  BMA2Ulis
+  BNMA1Ulis
+  BNMA2Ulis
+  BNMA3Ulis
 }
 
 enum BeneficiaryProtectionMeasure {

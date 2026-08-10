@@ -187,7 +187,15 @@ export const beneficiarySchoolClassGroups = [
       { value: BeneficiarySchoolClass.Sixieme, label: '6ème' },
       { value: BeneficiarySchoolClass.Cinquieme, label: '5ème' },
       { value: BeneficiarySchoolClass.Quatrieme, label: '4ème' },
-      { value: BeneficiarySchoolClass.Troisieme, label: '3ème' }
+      { value: BeneficiarySchoolClass.Troisieme, label: '3ème' },
+      { value: BeneficiarySchoolClass.SixiemeSegpa, label: '6ème SEGPA' },
+      { value: BeneficiarySchoolClass.CinquiemeSegpa, label: '5ème SEGPA' },
+      { value: BeneficiarySchoolClass.QuatriemeSegpa, label: '4ème SEGPA' },
+      { value: BeneficiarySchoolClass.TroisiemeSegpa, label: '3ème SEGPA' },
+      { value: BeneficiarySchoolClass.SixiemeUlis, label: '6ème ULIS' },
+      { value: BeneficiarySchoolClass.CinquiemeUlis, label: '5ème ULIS' },
+      { value: BeneficiarySchoolClass.QuatriemeUlis, label: '4ème ULIS' },
+      { value: BeneficiarySchoolClass.TroisiemeUlis, label: '3ème ULIS' }
     ]
   },
   {
@@ -212,6 +220,26 @@ export const beneficiarySchoolClassGroups = [
       {
         value: BeneficiarySchoolClass.TerminaleTechno,
         label: 'Terminale technologique'
+      },
+      {
+        value: BeneficiarySchoolClass.SecondeGeneraleUlis,
+        label: '2nde générale et technologique ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.PremiereGeneraleUlis,
+        label: '1ère générale ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.PremiereTechnoUlis,
+        label: '1ère technologique ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminaleGeneraleUlis,
+        label: 'Terminale générale ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminaleTechnoUlis,
+        label: 'Terminale technologique ULIS'
       }
     ]
   },
@@ -236,7 +264,29 @@ export const beneficiarySchoolClassGroups = [
       { value: BeneficiarySchoolClass.BMA2, label: 'BMA 2e année' },
       { value: BeneficiarySchoolClass.BNMA1, label: 'BNMA 1re année' },
       { value: BeneficiarySchoolClass.BNMA2, label: 'BNMA 2e année' },
-      { value: BeneficiarySchoolClass.BNMA3, label: 'BNMA 3e année' }
+      { value: BeneficiarySchoolClass.BNMA3, label: 'BNMA 3e année' },
+      {
+        value: BeneficiarySchoolClass.SecondeProUlis,
+        label: 'Seconde professionnelle ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.PremiereProUlis,
+        label: 'Première professionnelle ULIS'
+      },
+      {
+        value: BeneficiarySchoolClass.TerminaleProUlis,
+        label: 'Terminale professionnelle ULIS'
+      },
+      { value: BeneficiarySchoolClass.CAP1Ulis, label: 'CAP 1ère année ULIS' },
+      { value: BeneficiarySchoolClass.CAP2Ulis, label: 'CAP 2ème année ULIS' },
+      { value: BeneficiarySchoolClass.BMA1Ulis, label: 'BMA 1re année ULIS' },
+      { value: BeneficiarySchoolClass.BMA2Ulis, label: 'BMA 2e année ULIS' },
+      {
+        value: BeneficiarySchoolClass.BNMA1Ulis,
+        label: 'BNMA 1re année ULIS'
+      },
+      { value: BeneficiarySchoolClass.BNMA2Ulis, label: 'BNMA 2e année ULIS' },
+      { value: BeneficiarySchoolClass.BNMA3Ulis, label: 'BNMA 3e année ULIS' }
     ]
   }
 ]
