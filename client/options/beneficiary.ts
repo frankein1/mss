@@ -144,7 +144,7 @@ export const beneficiaryContractTypeKeys = buildKeys({
 
 export const beneficiaryStudyLevelKeys = buildKeys({
   [BeneficiaryStudyLevel.Maternelle]: 'Maternelle',
-  [BeneficiaryStudyLevel.Primaire]: 'Primaire',
+  [BeneficiaryStudyLevel.Primaire]: 'Élémentaire',
   [BeneficiaryStudyLevel.Collège]: 'Collège',
   [BeneficiaryStudyLevel.Lycée]: 'Lycée',
   [BeneficiaryStudyLevel.Brevet]: 'Brevet',
