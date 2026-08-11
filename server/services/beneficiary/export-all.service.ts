@@ -23,6 +23,7 @@ import {
   beneficiaryActivityStatusKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiarySchoolClassKeys,
+  beneficiarySchoolProgramKeys,
   beneficiaryStatusKeys,
   beneficiaryStudyLevelKeys,
   pensionOrganisationKeys,
@@ -79,6 +80,7 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'occupation',
     'studyLevel',
     'schoolClass',
+    'schoolPrograms',
     'employer',
     'employerSiret',
     'unemploymentNumber',
@@ -286,6 +288,11 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       : '',
     schoolClass: occupationIncome?.schoolClass
       ? beneficiarySchoolClassKeys.byKey[occupationIncome.schoolClass]
+      : '',
+    schoolPrograms: occupationIncome?.schoolPrograms
+      ? occupationIncome.schoolPrograms
+          .map(item => beneficiarySchoolProgramKeys.byKey[item])
+          .join(', ')
       : '',
     employer: occupationIncome?.employer || '',
     employerSiret: occupationIncome?.employerSiret || '',

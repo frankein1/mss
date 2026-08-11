@@ -7,9 +7,13 @@ import BeneficiaryFormOccupationIncome from './BeneficiaryFormOccupationIncome.v
 
 function mountOccupationForm() {
   return mountSuspended(
-    withForm(BeneficiaryFormOccupationIncome, updateBeneficiaryOccupationSchema, {
-      initialSchool: null
-    })
+    withForm(
+      BeneficiaryFormOccupationIncome,
+      updateBeneficiaryOccupationSchema,
+      {
+        initialSchool: null
+      }
+    )
   )
 }
 
