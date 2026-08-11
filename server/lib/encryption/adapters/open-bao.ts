@@ -102,7 +102,7 @@ function createOpenBaoKmsAdapter(
     getKeyLatestVersion: async params => {
       const res = await api(`/transit/keys/${params.keyId}`)
       const latestVersion = Math.max(
-        ...Object.keys(res.keys).map(key => parseInt(key))
+        ...Object.keys(res.data.keys).map(key => parseInt(key))
       )
       return `v${latestVersion}`
     }
