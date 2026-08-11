@@ -24,6 +24,10 @@ variables:
   UBUNTU_SHA: sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c
   # SONAR_VERSION: 12.0
   SONAR_SHA: sha256:97c145e4f8fe1786906c604272d17901e745051bc6c8173582f31aac8d0eb7fe
+  # Accept @gouvfr/dsfr's CGU non-interactively so its preinstall license
+  # check (now allowed to run via allowBuilds in pnpm-workspace.yaml) doesn't
+  # block CI installs
+  DSFR_ACCEPT_LICENSE: 1
 
 secret_detection:
   variables:
