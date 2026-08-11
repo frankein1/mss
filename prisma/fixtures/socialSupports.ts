@@ -261,6 +261,8 @@ const fixturesFollowupSocialSupports = [
         size: 887560,
         tags: ['BudgetRessources'],
         confidential: false,
+        migrated: true,
+        encryptedDataKey: 'vault:v2:seeded-document-dek',
         beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
         familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
         createdById: fixturesUsers[FixtureUserRole.StructureManager].id,
