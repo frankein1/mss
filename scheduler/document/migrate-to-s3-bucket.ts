@@ -35,7 +35,7 @@ const LOCAL_ENV = {
   uploadConcurrency: parseUploadConcurrency()
 }
 
-function query(i: number, batchSize: number, excludeKeys: string[]) {
+function query(batchSize: number, excludeKeys: string[]) {
   return prismaClient.document.findMany({
     where: {
       migrated: false,
@@ -45,7 +45,7 @@ function query(i: number, batchSize: number, excludeKeys: string[]) {
       })
     },
     orderBy: [{ created: 'asc' }, { key: 'asc' }],
-    skip: i * batchSize,
+    skip: 0,
     take: batchSize,
     select: {
       key: true,
@@ -58,7 +58,7 @@ type DocumentToMigrate = Awaited<ReturnType<typeof query>>[0]
 
 async function fetchDocumentBatch(excludeKeys: string[]) {
   const start = performance.now()
-  const docs = query(0, LOCAL_ENV.uploadConcurrency, excludeKeys)
+  const docs = await query(LOCAL_ENV.uploadConcurrency, excludeKeys)
   console.debug(
     `migrate-to-s3-bucket: fetching ${LOCAL_ENV.uploadConcurrency} documents in ${performance.now() - start} ms`
   )

@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import type { DocumentType, Prisma } from '@prisma/client'
+import type { DocumentType } from '@prisma/client'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
@@ -47,7 +47,7 @@ const CREATED_BY_ID = fixturesUsers[FixtureUserRole.StructureManager].id
 
 const sampleContents = SAMPLES.map(s => Buffer.from(randomBytes(s.bytes)))
 
-function buildDocumentData(): Prisma.DocumentCreateManyInput[] {
+function buildDocumentData() {
   return Array.from({ length: N_DOCUMENTS }, (_, i) => {
     const sample = SAMPLES[i % SAMPLES.length]!
     const beneficiaryId = BENEFICIARY_IDS[i % BENEFICIARY_IDS.length]!
@@ -76,15 +76,12 @@ async function main() {
   const docData = buildDocumentData()
 
   console.log(`Create ${N_DOCUMENTS} documents`)
-  const documents = await prismaClient.document.createManyAndReturn({
-    select: { key: true },
-    data: docData
-  })
+  await prismaClient.document.createMany({ data: docData })
 
   console.log('Create document contents in chunks')
   const chunkSize = 10
-  for (let i = 0; i < documents.length; i += chunkSize) {
-    const chunk = documents.slice(i, i + chunkSize)
+  for (let i = 0; i < docData.length; i += chunkSize) {
+    const chunk = docData.slice(i, i + chunkSize)
     await prismaClient.documentContent.createMany({
       data: chunk.map(({ key }, j) => ({
         id: crypto.randomUUID(),
@@ -94,7 +91,7 @@ async function main() {
     })
     if ((i / chunkSize) % 20 === 0) {
       console.log(
-        `  chunk ${i / chunkSize + 1}/${Math.ceil(documents.length / chunkSize)}`
+        `  chunk ${i / chunkSize + 1}/${Math.ceil(docData.length / chunkSize)}`
       )
     }
   }
