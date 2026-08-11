@@ -29,7 +29,7 @@
         class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom"
       >
         <div class="fr-col-12">
-          <div class="btn-container">
+          <div class="btn-container md-row-btn-container">
             <VeeCheckbox
               :label="followupFieldLabels.firstFollowup"
               name="firstFollowup"
@@ -46,7 +46,7 @@
         </div>
 
         <!-- ROW -->
-        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeInput
             name="date"
             :label="followupFieldLabels.date"
@@ -55,14 +55,14 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="duration"
             :label="followupFieldLabels.duration"
             :options="withEmptyValue(followupDurationKeys.options)"
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="medium"
             :label="followupFieldLabels.medium"
@@ -70,6 +70,29 @@
             required
           />
         </div>
+
+        <div
+          v-if="medium === FollowupMedium.ExternalAppointment"
+          class="fr-col-12 fr-col-lg-6"
+        >
+          <VeeInput
+            name="place"
+            :label="followupFieldLabels.place"
+          />
+        </div>
+        <div
+          v-else-if="medium === FollowupMedium.ThirdParty"
+          class="fr-col-12 fr-col-lg-6"
+        >
+          <VeeInput
+            name="thirdPersonName"
+            :label="followupFieldLabels.thirdPersonName"
+          />
+        </div>
+        <div
+          v-else
+          class="fr-col-12 fr-col-lg-6"
+        ></div>
 
         <template v-if="application.module.ministere">
           <div class="fr-col-12">
@@ -87,29 +110,6 @@
             />
           </div>
         </template>
-
-        <div
-          v-if="medium === FollowupMedium.ExternalAppointment"
-          class="fr-col-12 fr-col-md-6"
-        >
-          <VeeInput
-            name="place"
-            :label="followupFieldLabels.place"
-          />
-        </div>
-        <div
-          v-else-if="medium === FollowupMedium.ThirdParty"
-          class="fr-col-12 fr-col-md-6"
-        >
-          <VeeInput
-            name="thirdPersonName"
-            :label="followupFieldLabels.thirdPersonName"
-          />
-        </div>
-        <div
-          v-else
-          class="fr-col-12 fr-col-md-6"
-        ></div>
 
         <div class="fr-col-12">
           <MultiSelect
@@ -134,13 +134,13 @@
           >
             Je personnalise les objets d'accompagnement de ma structure
           </NuxtLink>
-          <template v-else>
+          <p v-else>
             Les responsables de votre structure peuvent personnaliser les objets
             d'accompagnement.
-          </template>
+          </p>
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="status"
             :label="followupFieldLabels.status"
@@ -149,7 +149,7 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeInput
             name="dueDate"
             :label="followupFieldLabels.dueDate"
@@ -158,7 +158,7 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeCombobox
             :label="followupFieldLabels.prescribingOrganizationId"
             placeholder="Saisir le nom de l'organisme"
@@ -167,7 +167,7 @@
             @change-value="onPrescribingOrganization"
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="prescribingOrganizationContactId"
             :disabled="organizationContactIsDisabled"
@@ -176,7 +176,7 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6 fr-mt-0 fr-pt-0">
+        <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
             class="fr-link fr-icon-info-fill fr-link--icon-left"
@@ -507,6 +507,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
   h2 {
     color: var(--primary);
   }
@@ -515,5 +517,18 @@
     *:last-child {
       margin-bottom: 0;
     }
+  }
+
+  .md-row-btn-container {
+    flex-direction: column;
+    align-items: flex-start;
+
+    @include dsfr-media-query.respond-from('sm') {
+      flex-direction: row;
+    }
+  }
+
+  :deep(.combobox-wrapper.fr-input-group) {
+    margin-bottom: 0;
   }
 </style>
