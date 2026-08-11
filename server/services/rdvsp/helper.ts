@@ -97,7 +97,7 @@ export function getAgentClient({ user_id }: { user_id: string }) {
       let accessToken = agentAuthInfo.accessToken
       if (
         !agentAuthInfo.expiresAt ||
-        new Date(agentAuthInfo.expiresAt).getTime() + 5000 < Date.now()
+        Date.now() + 5000 >= new Date(agentAuthInfo.expiresAt).getTime()
       ) {
         const refreshedAgentAuthInfo = await refreshAgentToken(user_id)
         if (!refreshedAgentAuthInfo.accessToken) {
