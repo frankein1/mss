@@ -45,7 +45,7 @@ const BENEFICIARY_IDS = [
 
 const CREATED_BY_ID = fixturesUsers[FixtureUserRole.StructureManager].id
 
-const sampleContents = SAMPLES.map(s => Buffer.from(randomBytes(s.bytes)))
+const sampleContents = SAMPLES.map(s => randomBytes(s.bytes))
 
 function buildDocumentData() {
   return Array.from({ length: N_DOCUMENTS }, (_, i) => {
@@ -86,7 +86,9 @@ async function main() {
       data: chunk.map(({ key }, j) => ({
         id: crypto.randomUUID(),
         documentKey: key,
-        content: sampleContents[(i + j) % sampleContents.length]!
+        content: sampleContents[
+          (i + j) % sampleContents.length
+        ]! as Uint8Array<ArrayBuffer>
       }))
     })
     if ((i / chunkSize) % 20 === 0) {
