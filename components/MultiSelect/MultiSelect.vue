@@ -1,6 +1,6 @@
 <template>
   <div
-    class="multiselect"
+    class="multiselect fr-select-group"
     :class="{
       'fr-select-group--error': error,
       'fr-select-group--disabled': disabled

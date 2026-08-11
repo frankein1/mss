@@ -5,7 +5,7 @@
     </h2>
 
     <BeneficiaryFormSection>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeSelect
           name="socioProfessionalCategory"
           :label="beneficiaryFieldLabels.socioProfessionalCategory"
@@ -14,7 +14,7 @@
           "
         />
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <MultiSelect
           name="activityStatus"
           :label="beneficiaryFieldLabels.activityStatus"
@@ -42,7 +42,7 @@
 
       <BeneficiaryFormSchoolSearch :initial-school="localInitialSchool" />
 
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeSelectOptionGroup
           name="schoolClass"
           :label="beneficiaryFieldLabels.schoolClass"
@@ -50,7 +50,7 @@
         />
       </div>
 
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <MultiSelect
           name="schoolPrograms"
           :label="beneficiaryFieldLabels.schoolPrograms"
@@ -80,13 +80,13 @@
           :options="withEmptyValue(beneficiaryStudyLevelKeys.options)"
         />
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeInput
           name="employer"
           :label="beneficiaryFieldLabels.employer"
         />
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeInput
           name="employerSiret"
           :label="beneficiaryFieldLabels.employerSiret"

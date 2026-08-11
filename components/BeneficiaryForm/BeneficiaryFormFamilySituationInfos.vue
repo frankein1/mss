@@ -28,14 +28,14 @@
       type="date"
     />
   </div>
-  <div class="fr-col-12 fr-col-lg-6">
+  <div class="fr-col-12 fr-col-xl-6">
     <VeeInput
       name="minorChildren"
       :label="beneficiaryFieldLabels.minorChildren"
       type="number"
     />
   </div>
-  <div class="fr-col-12 fr-col-lg-6">
+  <div class="fr-col-12 fr-col-xl-6">
     <VeeInput
       name="majorChildren"
       :label="beneficiaryFieldLabels.majorChildren"

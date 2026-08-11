@@ -73,7 +73,7 @@
       </div>
 
       <!-- ROW -->
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
@@ -83,7 +83,7 @@
         />
       </div>
 
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="prescribingOrganizationContactId"
           :disabled="prescribingOrganizationContactIsDisabled"
@@ -116,7 +116,7 @@
       </div>
 
       <!-- ROW -->
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
@@ -125,7 +125,7 @@
         />
       </div>
 
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="prescribingOrganizationContactId"
           :disabled="prescribingOrganizationContactIsDisabled"
@@ -158,7 +158,7 @@
     <!-- ROW -->
 
     <template v-if="isExternalSupport">
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.instructorOrganizationId"
           name="instructorOrganizationId"
@@ -166,7 +166,7 @@
           @change-value="onInstructorOrganization"
         />
       </div>
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="instructorOrganizationContactId"
           :label="helpRequestFieldLabels.instructorOrganizationContactId"
