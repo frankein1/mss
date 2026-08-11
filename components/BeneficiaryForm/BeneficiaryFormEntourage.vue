@@ -10,21 +10,21 @@
       </button>
     </template>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         v-autofocus="'input'"
         :label="relativeFieldLabels.lastName"
         :name="`entourages[${index}].lastName`"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :label="relativeFieldLabels.firstName"
         :name="`entourages[${index}].firstName`"
       />
     </div>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :label="relativeFieldLabels.birthDate"
         :name="`entourages[${index}].birthDate`"
@@ -32,14 +32,14 @@
       />
     </div>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :name="`entourages[${index}].city`"
         :label="relativeFieldLabels.city"
       />
     </div>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :name="`entourages[${index}].phone`"
         :label="relativeFieldLabels.phone"
@@ -47,7 +47,7 @@
       />
     </div>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :name="`entourages[${index}].email`"
         :label="relativeFieldLabels.email"

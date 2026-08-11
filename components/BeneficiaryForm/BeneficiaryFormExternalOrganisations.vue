@@ -10,7 +10,7 @@
     />
 
     <BeneficiaryFormSection>
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeCombobox
           :label="beneficiaryFieldLabels.prescribingOrganizationId"
           hint="Issu de l'annuaire des partenaires de la structure"
@@ -19,7 +19,7 @@
           @change-value="onPrescribingOrganizationChange"
         />
       </div>
-      <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-col-12 fr-col-xl-6">
         <VeeSelect
           :label="beneficiaryFieldLabels.prescribingOrganizationContactId"
           name="prescribingOrganizationContactId"
