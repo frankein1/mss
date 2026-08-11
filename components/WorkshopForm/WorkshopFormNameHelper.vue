@@ -3,7 +3,7 @@
     <DsfrAccordion
       id="workshop-form-accordion-1"
       title="L'atelier a plusieurs séances : comment faire ?"
-      title-tag="p"
+      :title-tag="'p' as TitleTag"
     >
       <p>
         Vous pourrez dupliquer cet atelier à la prochaine étape. Le nom de
@@ -24,7 +24,9 @@
   </DsfrAccordionsGroup>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import type { TitleTag } from '@gouvminint/vue-dsfr'
+</script>
 
 <style scoped>
   .bulb-icon {

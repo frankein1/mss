@@ -259,7 +259,9 @@
                 :model-value="modelValue"
                 :placeholder="placeholder"
                 style="justify-content: flex-end"
-                @update:model-value="emit('update:modelValue', $event)"
+                @update:model-value="
+                  emit('update:modelValue', String($event ?? ''))
+                "
                 @search="emit('search', $event)"
               />
             </div>
@@ -305,7 +307,9 @@
                 :searchbar-id="searchbarId"
                 :model-value="modelValue"
                 :placeholder="placeholder"
-                @update:model-value="emit('update:modelValue', $event)"
+                @update:model-value="
+                  emit('update:modelValue', String($event ?? ''))
+                "
                 @search="emit('search', $event)"
               />
             </div>
