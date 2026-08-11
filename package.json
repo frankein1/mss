@@ -33,7 +33,7 @@
     "@aws-sdk/lib-storage": "^3.1019.0",
     "@braintree/sanitize-url": "^7.1.2",
     "@gouvfr/dsfr": "~1.15.1",
-    "@gouvminint/vue-dsfr": "^8.8.0",
+    "@gouvminint/vue-dsfr": "^8.17.0",
     "@iconify/vue": "^4.3.0",
     "@prisma/client": "^6.19.3",
     "@scaleway/sdk": "^3.2.1",

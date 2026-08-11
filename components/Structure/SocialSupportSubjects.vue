@@ -1,5 +1,5 @@
 <template>
-  <section class="sss">
+  <section class="feature-section structure-info fr-p-5v fr-p-md-10v fr-mb-5w">
     <AtomCallout>
       <div class="sss__note">
         <p class="fr-callout__text">
@@ -151,10 +151,6 @@
 
 <style scoped lang="scss">
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
-
-  .sss > *:not(:last-of-type) {
-    margin-bottom: 1.5rem;
-  }
 
   .sss__title {
     color: var(--primary);
