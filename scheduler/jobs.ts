@@ -10,6 +10,7 @@ import documentNotifications from './notification/create-document-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 import importDataEducationSchools from './data-education/import-schools'
+import { rotateKeyEncryptionKey } from './document/rotate-key-encryption-key'
 
 export const jobs = {
   /** Sends emails from the queue.
@@ -58,7 +59,11 @@ export const jobs = {
    * Runs every Sunday at 06:00 */
   dataInclusionStructureImport: importDataInclusionStructures,
 
-  dataEducationSchoolImport: importDataEducationSchools
+  dataEducationSchoolImport: importDataEducationSchools,
+
+  /** Run the DEK rewrap after having rotated the encryption key in Open Bao
+   * Manually launched */
+  rotateKEK: rotateKeyEncryptionKey
 } satisfies Record<string, () => Promise<unknown>>
 
 export type JobName = keyof typeof jobs
