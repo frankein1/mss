@@ -35,6 +35,12 @@ function createScalewayKmsAdapter(api: KeyManagerv1alpha1.API): KmsClient {
         keyId: params.keyId,
         ciphertext: params.ciphertext
       })
+    },
+    rewrap: async () => {
+      throw new Error('scaleway rewrap is not implemented')
+    },
+    getKeyLatestVersion: async () => {
+      throw new Error('scaleway key version is not implemented')
     }
   }
 }
