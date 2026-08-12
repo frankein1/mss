@@ -12,6 +12,7 @@ trustPolicy: no-downgrade
 # To preserve older versions, after 6 months of package age the trust policy is removed
 trustPolicyIgnoreAfter: 432000
 allowBuilds:
+  '@gouvfr/dsfr': true
   '@parcel/watcher': false
   '@prisma/client': false
   '@prisma/engines': false

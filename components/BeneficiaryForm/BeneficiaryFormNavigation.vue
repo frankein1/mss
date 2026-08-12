@@ -1,8 +1,10 @@
 <template>
   <nav
+    id="secondary-navigation"
     class="fr-sidemenu"
     role="navigation"
     aria-labelledby="sidemenu-title"
+    tabindex="-1"
   >
     <div class="fr-sidemenu__inner fr-pr-0">
       <button
