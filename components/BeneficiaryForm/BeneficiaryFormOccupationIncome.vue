@@ -130,17 +130,17 @@
           />
         </div>
         <div class="fr-col-12">
-          <VeeCombobox
-            name="ministereDepartementServiceAc"
-            :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-            :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
-          />
-        </div>
-        <div class="fr-col-12">
           <VeeSelect
             name="ministereStructure"
             :label="beneficiaryFieldLabels.ministereStructure"
             :options="withEmptyValue(ministereStructureKeys.options)"
+          />
+        </div>
+        <div class="fr-col-12">
+          <VeeCombobox
+            name="ministereDepartementServiceAc"
+            :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+            :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
           />
         </div>
       </template>

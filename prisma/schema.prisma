@@ -1476,6 +1476,26 @@ enum BeneficiaryMinistereDepartementServiceAc {
   NouvelleCaledonie988
   // Agents en instance d'affectation
   AgentsEnInstanceDaffectation
+  // ARS-DD 75
+  ArsDd75
+  // ARS-DD 77
+  ArsDd77
+  // ARS-DD 78
+  ArsDd78
+  // ARS-DD 91
+  ArsDd91
+  // ARS-DD 92
+  ArsDd92
+  // ARS-DD 93
+  ArsDd93
+  // ARS-DD 94
+  ArsDd94
+  // ARS-DD 95
+  ArsDd95
+  // Cabinet Ministériel Affaires Sociales / Santé
+  CabinetMinisterielAffairesSocialesSante
+  // Cabinet Ministériel Travail
+  CabinetMinisterielTravail
   // CHATEFP
   Chatefp
   // CNCP
@@ -1488,12 +1508,22 @@ enum BeneficiaryMinistereDepartementServiceAc {
   Cnit
   // CNML
   Cnml
+  // Comité Hist sécu
+  ComiteHistSecu
   // COMJS
   Comjs
+  // DAEI
+  Daei
   // DAJ
   Daj
   // DARES
   Dares
+  // DDC
+  Ddc
+  // DFAS
+  Dfas
+  // DGCS
+  Dgcs
   // DGEFP
   Dgefp
   // DGOS
@@ -1504,20 +1534,42 @@ enum BeneficiaryMinistereDepartementServiceAc {
   Dgs
   // DGT
   Dgt
+  // DICOM
+  Dicom
   // DIGES
   Diges
+  // Direction affaires réservées
+  DirectionAffairesReservees
+  // Direction de la santé publique
+  DirectionDeLaSantePublique
+  // Direction de la stratégie
+  DirectionDeLaStrategie
+  // Direction de l'offre de soins
+  DirectionDeLoffreDeSoins
+  // Direction démocratie sanitaire
+  DirectionDemocratieSanitaire
+  // Direction générale adjointe
+  DirectionGeneraleAdjointe
   // DJEPVA
   Djepva
+  // DNS
+  Dns
   // DNUM
   Dnum
+  // DREES
+  Drees
   // DRH
   Drh
   // DS
   Ds
+  // DSS
+  Dss
   // IGAS
   Igas
   // IGJS
   Igjs
+  // MNC
+  Mnc
   // Secrétariat aux personnes handicapées
   SecretariatAuxPersonnesHandicapees
   // SGMCAS

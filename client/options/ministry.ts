@@ -201,27 +201,62 @@ export const ministereDepartmentServiceAcKeys = buildKeys({
     '(988) Nouvelle-Calédonie',
   [BeneficiaryMinistereDepartementServiceAc.AgentsEnInstanceDaffectation]:
     "Agents en instance d'affectation",
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd75]: 'ARS-DD 75',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd77]: 'ARS-DD 77',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd78]: 'ARS-DD 78',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd91]: 'ARS-DD 91',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd92]: 'ARS-DD 92',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd93]: 'ARS-DD 93',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd94]: 'ARS-DD 94',
+  [BeneficiaryMinistereDepartementServiceAc.ArsDd95]: 'ARS-DD 95',
+  [BeneficiaryMinistereDepartementServiceAc.CabinetMinisterielAffairesSocialesSante]:
+    'Cabinet Ministériel Affaires Sociales / Santé',
+  [BeneficiaryMinistereDepartementServiceAc.CabinetMinisterielTravail]:
+    'Cabinet Ministériel Travail',
   [BeneficiaryMinistereDepartementServiceAc.Chatefp]: 'CHATEFP',
   [BeneficiaryMinistereDepartementServiceAc.Cncp]: 'CNCP',
   [BeneficiaryMinistereDepartementServiceAc.Cnefop]: 'CNEFOP',
   [BeneficiaryMinistereDepartementServiceAc.Cng]: 'CNG',
   [BeneficiaryMinistereDepartementServiceAc.Cnit]: 'CNIT',
   [BeneficiaryMinistereDepartementServiceAc.Cnml]: 'CNML',
+  [BeneficiaryMinistereDepartementServiceAc.ComiteHistSecu]:
+    'Comité d’histoire de la Sécurité sociale',
   [BeneficiaryMinistereDepartementServiceAc.Comjs]: 'COMJS',
+  [BeneficiaryMinistereDepartementServiceAc.Daei]: 'DAEI',
   [BeneficiaryMinistereDepartementServiceAc.Daj]: 'DAJ',
   [BeneficiaryMinistereDepartementServiceAc.Dares]: 'DARES',
+  [BeneficiaryMinistereDepartementServiceAc.Ddc]: 'DDC',
+  [BeneficiaryMinistereDepartementServiceAc.Dfas]: 'DFAS',
+  [BeneficiaryMinistereDepartementServiceAc.Dgcs]: 'DGCS',
   [BeneficiaryMinistereDepartementServiceAc.Dgefp]: 'DGEFP',
   [BeneficiaryMinistereDepartementServiceAc.Dgos]: 'DGOS',
   [BeneficiaryMinistereDepartementServiceAc.Dgp]: 'DGP',
   [BeneficiaryMinistereDepartementServiceAc.Dgs]: 'DGS',
   [BeneficiaryMinistereDepartementServiceAc.Dgt]: 'DGT',
+  [BeneficiaryMinistereDepartementServiceAc.Dicom]: 'DICOM',
   [BeneficiaryMinistereDepartementServiceAc.Diges]: 'DIGES',
+  [BeneficiaryMinistereDepartementServiceAc.DirectionAffairesReservees]:
+    'Direction affaires réservées',
+  [BeneficiaryMinistereDepartementServiceAc.DirectionDeLaSantePublique]:
+    'Direction de la santé publique',
+  [BeneficiaryMinistereDepartementServiceAc.DirectionDeLaStrategie]:
+    'Direction de la stratégie',
+  [BeneficiaryMinistereDepartementServiceAc.DirectionDeLoffreDeSoins]:
+    "Direction de l'offre de soins",
+  [BeneficiaryMinistereDepartementServiceAc.DirectionDemocratieSanitaire]:
+    'Direction démocratie sanitaire',
+  [BeneficiaryMinistereDepartementServiceAc.DirectionGeneraleAdjointe]:
+    'Direction générale adjointe',
   [BeneficiaryMinistereDepartementServiceAc.Djepva]: 'DJEPVA',
+  [BeneficiaryMinistereDepartementServiceAc.Dns]: 'DNS',
   [BeneficiaryMinistereDepartementServiceAc.Dnum]: 'DNUM',
+  [BeneficiaryMinistereDepartementServiceAc.Drees]: 'DREES',
   [BeneficiaryMinistereDepartementServiceAc.Drh]: 'DRH',
   [BeneficiaryMinistereDepartementServiceAc.Ds]: 'DS',
+  [BeneficiaryMinistereDepartementServiceAc.Dss]: 'DSS',
   [BeneficiaryMinistereDepartementServiceAc.Igas]: 'IGAS',
   [BeneficiaryMinistereDepartementServiceAc.Igjs]: 'IGJS',
+  [BeneficiaryMinistereDepartementServiceAc.Mnc]: 'MNC',
   [BeneficiaryMinistereDepartementServiceAc.SecretariatAuxPersonnesHandicapees]:
     'Secrétariat aux personnes handicapées',
   [BeneficiaryMinistereDepartementServiceAc.Sgmcas]: 'SGMCAS'
