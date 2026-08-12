@@ -12,13 +12,23 @@ trustPolicy: no-downgrade
 # To preserve older versions, after 6 months of package age the trust policy is removed
 trustPolicyIgnoreAfter: 432000
 allowBuilds:
+  '@gouvfr/dsfr': true
   '@parcel/watcher': false
   '@prisma/client': false
   '@prisma/engines': false
   esbuild: false
   prisma: false
+  sharp: false
   unrs-resolver: false
 shamefullyHoist: true
+# @gouvfr/dsfr-nexus (dev tooling pulled in by @gouvfr/dsfr) declares peerDependencies
+# on @gouvfr/dsfr-token and @gouvfr/dsfr-weave, neither of which is published on npm.
+# autoInstallPeers must be off too, otherwise pnpm still tries to fetch them and 404s.
+autoInstallPeers: false
+peerDependencyRules:
+  ignoreMissing:
+    - '@gouvfr/dsfr-token'
+    - '@gouvfr/dsfr-weave'
 minimumReleaseAgeExclude:
   - nuxt@3.21.8
   - '@nuxt/kit@3.21.8'
