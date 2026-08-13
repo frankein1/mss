@@ -91,7 +91,7 @@
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
           type="button"
-          @click="addPartner"
+          @click="push({ id: randomUUID() } as any)"
         >
           Ajouter un partenaire
         </button>
@@ -117,6 +117,8 @@
     partnerOrganizations: PartnerOrganizationIdName[]
     externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
   }>()
+
+  const randomUUID = () => crypto.randomUUID()
 
   const { fields, push, remove } = useFieldArray<ContributingPartnerInput>(
     'contributingPartners'
@@ -183,10 +185,5 @@
       }
       return field.value.partnerOrganizationId === row.partnerOrganizationId
     })
-  }
-
-  const addPartner = async () => {
-    push({ id: crypto.randomUUID() } as any)
-    await nextTick()
   }
 </script>

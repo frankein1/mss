@@ -15,7 +15,7 @@
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line fr-mb-0"
         type="button"
-        @click="addRedirectionAndReplaceFocus"
+        @click="push({ id: randomUUID() } as any)"
       >
         Ajouter une redirection
       </button>
@@ -26,6 +26,9 @@
 <script lang="ts" setup>
   import type { SocialSupportRedirectionsInput } from '~~/server/schema'
   import type { PartnerOrganizationIdName } from '~~/types/partner'
+
+  const randomUUID = () => crypto.randomUUID()
+
   const { partnerOrganizations, partnerOrganizationOptions } = defineProps<{
     partnerOrganizationOptions: Options
     partnerOrganizations: Array<PartnerOrganizationIdName>
@@ -49,16 +52,4 @@
         value: name
       })) ?? []
   )
-
-  const addRedirectionAndReplaceFocus = async () => {
-    push({ id: crypto.randomUUID() } as any)
-    await nextTick()
-    const wrappers = document.querySelectorAll('.redirection-wrapper')
-    const lastWrapper = wrappers[wrappers.length - 1]
-    lastWrapper
-      ?.querySelector<HTMLElement>(
-        'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
-      )
-      ?.focus()
-  }
 </script>

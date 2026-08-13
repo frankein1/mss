@@ -31,6 +31,20 @@ Must be RGAA compliant (https://accessibilite.numerique.gouv.fr/methode/criteres
 - In content components rendered inside `BeneficiaryInfoSection` (which uses `aria-level="4"`), sub-section titles should use `<h5>`
 - Apply DSFR typographic classes (`fr-h5`, `fr-h6`, etc.) to control visual size independently of the semantic level when needed
 
+## Focus management on dynamically revealed form fields
+
+- When:
+  - a button adds a new entry via `useFieldArray.push()`
+  - a button reveals a field via `v-if`
+- How to manage focus:
+  - Add the `v-autofocus` directive to the sub-component or the revealed element so keyboard focus moves to its first focusable child on mount.
+
+Notes:
+
+- Place `v-autofocus` inside the sub-component, not at the call site in the parent.
+- The directive's default selector covers `input`, `select`, `textarea`, and `[tabindex]`.
+- Never use manual DOM focus calls (`querySelector` + `.focus()`) inside the parent component's click handler.
+
 ## Automatic testing
 
 - End to end playwright tests for a11y validation with Axe plugin tool

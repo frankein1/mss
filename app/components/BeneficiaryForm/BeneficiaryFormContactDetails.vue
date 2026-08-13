@@ -37,7 +37,7 @@
       </button>
       <VeeInput
         v-else
-        v-autofocus="'input'"
+        v-autofocus
         name="phone2"
         :label="beneficiaryFieldLabels.phone2"
         type="tel"

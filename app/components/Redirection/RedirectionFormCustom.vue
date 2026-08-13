@@ -1,5 +1,8 @@
 <template>
-  <div class="redirection-wrapper">
+  <div
+    v-autofocus
+    class="redirection-wrapper"
+  >
     <div class="form-header">
       <VeeRadioButtons
         :name="`socialSupportRedirections[${index}].type`"

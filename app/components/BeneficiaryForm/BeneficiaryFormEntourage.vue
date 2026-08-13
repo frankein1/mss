@@ -12,7 +12,7 @@
 
     <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
-        v-autofocus="'input'"
+        v-autofocus
         :label="relativeFieldLabels.lastName"
         :name="`entourages[${index}].lastName`"
       />

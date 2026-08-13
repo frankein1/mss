@@ -123,6 +123,7 @@
           class="fr-col-6"
         >
           <VeeInput
+            v-autofocus
             name="phone2"
             :label="partnerOrganizationFieldLabels.phone2"
             type="tel"
