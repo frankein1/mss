@@ -3,10 +3,10 @@ import {
   BeneficiaryRepo,
   BeneficiaryConstraints,
   DataEducationSchoolRepo
-} from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security/rules/types'
-import type { RepClassificationStatKey } from '~/client/labels/school.labels'
+} from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security/rules/types'
+import type { RepClassificationStatKey } from '~~/client/labels/school.labels'
 
 export async function getRepClassificationStatsQuery(
   user: SecurityRuleGrantee,

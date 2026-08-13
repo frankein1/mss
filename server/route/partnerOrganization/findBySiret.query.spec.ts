@@ -1,7 +1,7 @@
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
-import { fixtureStructures } from '~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { fixtureStructures } from '~~/prisma/fixtures'
 import { fakerFR as faker } from '@faker-js/faker'
 
 const structureId = fixtureStructures[0].id

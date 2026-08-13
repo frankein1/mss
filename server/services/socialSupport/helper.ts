@@ -1,5 +1,5 @@
-import { SocialSupportRepo } from '~/server/database'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { SocialSupportRepo } from '~~/server/database'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 export const getSocialSupportWithRedirections = async (
   user: SecurityRuleGrantee,

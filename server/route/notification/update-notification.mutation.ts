@@ -1,10 +1,10 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { UpdateNotificationInput } from '~/server/schema'
-import { updateNotificationSchema } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { NotificationRepo } from '~/server/database'
+import { createMutation } from '~~/server/route'
+import type { UpdateNotificationInput } from '~~/server/schema'
+import { updateNotificationSchema } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { NotificationRepo } from '~~/server/database'
 
 const handler = async ({
   ctx: { user },

@@ -1,6 +1,6 @@
 import { UserActivityObject } from '@prisma/client'
 import type { z } from 'zod'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 export const updateBeneficiariesLastActivity = async (
   beneficiaryIds: string[]

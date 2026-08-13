@@ -1,16 +1,16 @@
 import type { Prisma } from '@prisma/client'
 import { filterFollowup, filterSocialSupport } from '../helper'
-import { FollowupRepo } from '~/server/database'
+import { FollowupRepo } from '~~/server/database'
 import type {
   AppContextPermissions,
   FollowupPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
+} from '~~/server/security'
 import {
   getAppContextPermissions,
   getFollowupPermissions
-} from '~/server/security'
+} from '~~/server/security'
 
 const select = {
   id: true,

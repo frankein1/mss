@@ -1,4 +1,4 @@
 export type {
   FollowupPageItems,
   FollowupPageItem
-} from '~/server/route/followup'
+} from '~~/server/route/followup'

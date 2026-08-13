@@ -1,11 +1,11 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { idSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { validateOneBelongsToStructure } from '~/server/security'
-import type { IdInput } from '~/server/schema'
-import { WorkshopNameRepo, WorkshopRepo } from '~/server/database'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { idSchema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { validateOneBelongsToStructure } from '~~/server/security'
+import type { IdInput } from '~~/server/schema'
+import { WorkshopNameRepo, WorkshopRepo } from '~~/server/database'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) =>
   validateOneBelongsToStructure(

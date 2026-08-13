@@ -7,8 +7,8 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { afterEach, describe, expect } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   FixtureStructure,
@@ -17,7 +17,7 @@ import {
   fixtureStructures,
   fixturesSocialSupportSubjects,
   fixturesUsers
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const subjectId = fixturesSocialSupportSubjects[0].id
 

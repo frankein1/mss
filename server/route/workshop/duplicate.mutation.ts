@@ -1,18 +1,18 @@
 import { UserActivityType, WorkshopAttendeeType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { DuplicateWorkshopInput } from '~/server/schema'
-import { duplicateWorkshopSchema } from '~/server/schema'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { DuplicateWorkshopInput } from '~~/server/schema'
+import { duplicateWorkshopSchema } from '~~/server/schema'
 import {
   WorkshopRepo,
   PartnerOrganizationRepo,
   WorkshopAttendeeRepo
-} from '~/server/database'
+} from '~~/server/database'
 import {
   getAppContextPermissions,
   type SecurityRuleContext
-} from '~/server/security'
-import { prismaClient } from '~/server/prisma'
+} from '~~/server/security'
+import { prismaClient } from '~~/server/prisma'
 import { TRPCError } from '@trpc/server'
 
 const securityCheck = async (

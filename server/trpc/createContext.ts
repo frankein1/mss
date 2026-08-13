@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import { fetchUserContext } from '~~/server/utils/fetchUserContext'
 
 export const createContext = async (event: H3Event) => {
   const userId = event.context.auth?.userId

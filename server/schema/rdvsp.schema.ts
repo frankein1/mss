@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { RdvspStatus } from '~/types/rdvsp'
+import { RdvspStatus } from '~~/types/rdvsp'
 
 export const planAppointmentSchema = z.object({
   beneficiaryId: z.string().uuid()

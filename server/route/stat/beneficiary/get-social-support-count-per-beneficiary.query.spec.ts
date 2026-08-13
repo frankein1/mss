@@ -1,8 +1,8 @@
 import { describe, expect, beforeAll, afterAll } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
-import { test } from '~/test/server/test-utils'
-import type { AppRouter } from '~/server/trpc/routers'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import type { AppRouter } from '~~/server/trpc/routers'
+import { prismaClient } from '~~/server/prisma'
 import {
   fixtureStructures,
   FixtureStructure,
@@ -10,7 +10,7 @@ import {
   FixtureUserRole,
   fixturesBeneficiaries,
   FixtureBeneficiary
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 type Input = inferProcedureInput<
   AppRouter['stat']['getSocialSupportCountPerBeneficiaryStats']

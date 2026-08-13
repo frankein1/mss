@@ -1,7 +1,7 @@
-import type { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { getAgentClient } from './helper'
-import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
-import type { RdvspStatus } from '~/types/rdvsp'
+import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
+import type { RdvspStatus } from '~~/types/rdvsp'
 
 export default async function updateAppointmentStatus({
   input: { id, status },

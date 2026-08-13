@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import { emptySchema } from '~/server/schema'
-import { StructureRepo, UserRepo } from '~/server/database'
-import type { AdminContext } from '~/server/trpc'
+import { createQuery } from '~~/server/route'
+import { emptySchema } from '~~/server/schema'
+import { StructureRepo, UserRepo } from '~~/server/database'
+import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
   const users = await UserRepo.count(user, {})

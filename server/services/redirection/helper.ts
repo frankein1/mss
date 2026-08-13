@@ -1,6 +1,6 @@
-import { prismaClient } from '~/server/prisma'
-import { RedirectionReasonRepo } from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security'
+import { prismaClient } from '~~/server/prisma'
+import { RedirectionReasonRepo } from '~~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
 
 type WithReasonName = { redirectionReasonName?: string | null }
 

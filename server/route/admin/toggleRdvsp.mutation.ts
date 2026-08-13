@@ -1,10 +1,10 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ToggleRdvspInput } from '~/server/schema'
-import { toggleRdvspSchema } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
-import { StructureRepo } from '~/server/database'
-import { sendStructureEvent } from '~/server/integrations/brevo/service'
+import { createMutation } from '~~/server/route'
+import type { ToggleRdvspInput } from '~~/server/schema'
+import { toggleRdvspSchema } from '~~/server/schema'
+import type { AdminContext } from '~~/server/trpc'
+import { StructureRepo } from '~~/server/database'
+import { sendStructureEvent } from '~~/server/integrations/brevo/service'
 
 const adminHandler = async ({
   ctx: _ctx,

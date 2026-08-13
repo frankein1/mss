@@ -1,5 +1,5 @@
-import { followupRoutes as routes } from '~/server/route'
-import { protectedProcedure, router } from '~/server/trpc'
+import { followupRoutes as routes } from '~~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
 
 export const followupRouter = router({
   add: protectedProcedure

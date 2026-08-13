@@ -1,7 +1,7 @@
 import { vi } from 'vitest'
 import { UserStatus } from '@prisma/client'
-import type { FamilyFilePermissions } from '~/server/security'
-import type { BeneficiaryReferent } from '~/types/beneficiary'
+import type { FamilyFilePermissions } from '~~/server/security'
+import type { BeneficiaryReferent } from '~~/types/beneficiary'
 
 export function createFakeTrpcClientBeneficiary() {
   return {

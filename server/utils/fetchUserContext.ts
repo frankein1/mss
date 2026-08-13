@@ -1,4 +1,4 @@
-import { UserRepo } from '~/server/database'
+import { UserRepo } from '~~/server/database'
 import type { Prisma } from '@prisma/client'
 
 export const structureContextSelect = {

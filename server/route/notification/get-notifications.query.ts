@@ -1,12 +1,12 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { GetNotificationsInput } from '~/server/schema'
-import { getNotificationsSchema } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { NotificationRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { GetNotificationsInput } from '~~/server/schema'
+import { getNotificationsSchema } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { NotificationRepo } from '~~/server/database'
 import { takeAndSkipFromPagination } from '~/utils/table'
-import { notificationTypeKeys } from '~/client/options'
+import { notificationTypeKeys } from '~~/client/options'
 import {
   getDescription,
   getDescriptionHint,

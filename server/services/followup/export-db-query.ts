@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { FollowupRepo } from '~/server/database'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { FollowupRepo } from '~~/server/database'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 const followupExportSelect = {
   id: true,

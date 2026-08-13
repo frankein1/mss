@@ -10,9 +10,9 @@ import type {
   SocialSupportType
 } from '@prisma/client'
 import { fakerFR as faker } from '@faker-js/faker'
-import type { ArrayElement } from '~/types/utils'
+import type { ArrayElement } from '~~/types/utils'
 import { equiRandomEnum } from './fixtures/utils'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const STRUCTURE_COUNT = 200
 // if USERS_PER_STRUCTURE is null use Jeanne Responsable

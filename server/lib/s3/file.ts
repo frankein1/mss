@@ -5,10 +5,10 @@ import {
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { getS3Client } from './config'
-import { encrypt } from '~/server/lib/encryption/encrypt'
-import type { DataForEncryptionContext } from '~/server/lib/encryption/helper'
-import { decrypt } from '~/server/lib/encryption/decrypt'
-import type { AppConfig } from '~/types/appConfig'
+import { encrypt } from '~~/server/lib/encryption/encrypt'
+import type { DataForEncryptionContext } from '~~/server/lib/encryption/helper'
+import { decrypt } from '~~/server/lib/encryption/decrypt'
+import type { AppConfig } from '~~/types/appConfig'
 
 const S3_DELETE_BATCH_SIZE = 1000
 

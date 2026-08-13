@@ -1,8 +1,8 @@
-import { protectedProcedure, router } from '..'
+import { protectedProcedure, router } from '../../trpc'
 import {
   deleteDocumentMutation,
   editDocumentMutation
-} from '~/server/route/document'
+} from '~~/server/route/document'
 
 export const documentRouter = router({
   edit: protectedProcedure

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import type { StatFilterInput } from '~/server/schema'
+import type { StatFilterInput } from '~~/server/schema'
 import {
   prepareBeneficiaryStatFilters,
   prepareSocialSupportStatFilters

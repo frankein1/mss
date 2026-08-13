@@ -1,7 +1,7 @@
-import { prismaClient } from '~/server/prisma'
-import { getPageDocuments } from '~/server/services/familyFile/getPageDocuments.service'
-import type { SecurityRuleContext } from '~/server/security'
-import type { GetDocumentsInput } from '~/server/schema'
+import { prismaClient } from '~~/server/prisma'
+import { getPageDocuments } from '~~/server/services/familyFile/getPageDocuments.service'
+import type { SecurityRuleContext } from '~~/server/security'
+import type { GetDocumentsInput } from '~~/server/schema'
 import {
   fixtureStructures,
   FixtureStructure,

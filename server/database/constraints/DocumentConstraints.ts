@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { BeneficiaryConstraints } from './BeneficiaryConstraints'
-import type { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin, isReceptionAgent } from '~/server/security/rules/helpers'
+import type { SecurityRuleGrantee } from '~~/server/security'
+import { isAdmin, isReceptionAgent } from '~~/server/security/rules/helpers'
 import { TRPCError } from '@trpc/server'
 
 const get = (user: SecurityRuleGrantee) => {

@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import { withErrorCapture } from '../utils'
-import { StructureRepo } from '~/server/database'
+import { StructureRepo } from '~~/server/database'
 import { SCHEDULER_ENV } from '../env'
-import { disableStructure } from '~/server/services/admin/disable-structure.service'
+import { disableStructure } from '~~/server/services/admin/disable-structure.service'
 
 const MAX_BENEFICIARIES = 10
 

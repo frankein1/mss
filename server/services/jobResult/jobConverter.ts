@@ -1,5 +1,5 @@
 import type { JobResult as PrismaJobResult } from '@prisma/client'
-import type { JobResult } from '~/server/schema'
+import type { JobResult } from '~~/server/schema'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export const jobConverter = (job: PrismaJobResult) =>

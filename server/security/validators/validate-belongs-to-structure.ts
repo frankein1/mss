@@ -1,4 +1,4 @@
-import type { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 type StructureScopedCounter = (
   user: SecurityRuleGrantee,

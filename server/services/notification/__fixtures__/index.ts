@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
-import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
+import { BeneficiaryRepo, FamilyFileRepo } from '~~/server/database'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
   fixtureStructures,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const ID_JOHN_DOE = '06581dca-5a11-4ca4-a3b6-65f6b6a4afb7'
 const ID_JANE = '25ed4fd5-a05f-49f6-bcec-0cf3c60fd629'

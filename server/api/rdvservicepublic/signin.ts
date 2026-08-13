@@ -1,7 +1,7 @@
 import { useSession } from 'h3'
 import { randomUUID } from 'node:crypto'
-import type { RdvspAuthSession } from '~/server/types/session'
-import { getConfig, authorize } from '~/server/lib/rdvsp-oauth.client'
+import type { RdvspAuthSession } from '~~/server/types/session'
+import { getConfig, authorize } from '~~/server/lib/rdvsp-oauth.client'
 
 /** RDVSP signin endpoint called by MSS frontend
  * Not managed with trpc because it handles redirection

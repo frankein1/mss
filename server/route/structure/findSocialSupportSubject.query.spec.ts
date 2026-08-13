@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { fixturesSocialSupportSubjects } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixturesSocialSupportSubjects } from '~~/prisma/fixtures'
 
 describe('Structure - Find Social Support Subject - Data', () => {
   test('A SocialWorker finds an existing subject by name', async ({ trpc }) => {

@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
 import { BudgetIncomeType } from '@prisma/client'
-import { BudgetIncomeRepo } from '~/server/database'
-import type { CreateBudgetIncomeInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { BudgetIncomeRepo } from '~~/server/database'
+import type { CreateBudgetIncomeInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
 export async function createBudgetIncome(

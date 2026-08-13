@@ -2,18 +2,18 @@ import fs from 'fs'
 import path from 'path'
 import hbs from 'handlebars'
 import JSZip from 'jszip'
-import type { ExportBeneficiaryInput } from '~/server/schema/beneficiary/exportbeneficiary.schema'
+import type { ExportBeneficiaryInput } from '~~/server/schema/beneficiary/exportbeneficiary.schema'
 import type {
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
+} from '~~/server/security'
 import {
   BeneficiaryRepo,
   UserRepo,
   SocialSupportRepo,
   DocumentRepo,
   WorkshopRepo
-} from '~/server/database'
+} from '~~/server/database'
 import type {
   Prisma,
   Beneficiary,
@@ -59,13 +59,13 @@ import {
   socialSupportRedirectionTypeKeys,
   isFirstKeys,
   isRefundableKeys
-} from '~/client/options'
+} from '~~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
 import { formatMinisterName } from '~/utils/minister'
-import { prismaClient } from '~/server/prisma'
-import { downloadWithEncryption } from '~/server/lib/s3/file'
+import { prismaClient } from '~~/server/prisma'
+import { downloadWithEncryption } from '~~/server/lib/s3/file'
 
 type FieldLabels<T> = Record<keyof T, any>
 

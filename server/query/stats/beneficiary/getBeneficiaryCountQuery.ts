@@ -1,7 +1,7 @@
 import { prepareBeneficiaryStatFilters } from '../helpers'
-import { BeneficiaryRepo } from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { BeneficiaryRepo } from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security/rules/types'
 
 export async function getBeneficiaryCountQuery(
   user: SecurityRuleGrantee,

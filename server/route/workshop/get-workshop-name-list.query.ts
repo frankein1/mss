@@ -1,8 +1,8 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { WorkshopNameRepo } from '~/server/database/repository/WorkshopNameRepository'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { emptySchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { WorkshopNameRepo } from '~~/server/database/repository/WorkshopNameRepository'
 
 const securityCheck = AllowSecurityCheck
 

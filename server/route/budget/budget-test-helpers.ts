@@ -1,12 +1,12 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
   fixturesBudgets,
   fixturesBudgetIncomes,
   fixturesBudgetExpenses
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 export const budgetFixtures = {
   ownStructure: {

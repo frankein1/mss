@@ -1,12 +1,12 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import type { SecurityRuleContext } from '../rules'
 import {
   FixtureStructure,
   fixtureStructures,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { getSocialSupportPermissions } from './getSocialSupportPermissions'
 import { SocialSupportType } from '@prisma/client'
 

@@ -1,12 +1,12 @@
 import { describe, expect, beforeAll } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import isBetween from 'dayjs/plugin/isBetween.js'
-import { AgeGroup } from '~/client/options'
-import type { AppRouter } from '~/server/trpc/routers'
+import { AgeGroup } from '~~/client/options'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 beforeAll(() => {
   dayjs.extend(isBetween)

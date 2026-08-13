@@ -1,4 +1,4 @@
-import type { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { getAgentAuthInfo, getAgentClient } from './helper'
 
 export default async function getAuthStatus({

@@ -1,6 +1,6 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { afterEach, beforeEach, expect, describe } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
@@ -8,7 +8,7 @@ import {
   FixtureUserRole,
   fixturesBeneficiaries,
   FixtureBeneficiary
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const createdById = fixturesUsers[FixtureUserRole.SocialWorker].id

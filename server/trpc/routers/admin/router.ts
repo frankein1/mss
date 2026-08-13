@@ -1,6 +1,6 @@
-import { adminProcedure, router } from '~/server/trpc'
+import { adminProcedure, router } from '~~/server/trpc'
 
-import { adminRoutes } from '~/server/route'
+import { adminRoutes } from '~~/server/route'
 
 export const adminRouter = router({
   createStructure: adminProcedure

@@ -1,0 +1,97 @@
+<template>
+  <div>
+    <div class="fr-container">
+      <WorkshopFormHeader
+        :title="title"
+        :breadcrumbs="breadcrumbs.workshop.AppWorkshopAdd()"
+      />
+    </div>
+    <WorkshopForm
+      mode="create"
+      :is-submitting="status === 'pending'"
+      :caught-errors
+      @submit="onSubmit"
+      @cancel="onCancel"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
+  import type { CreateWorkshopInput } from '~~/server/schema'
+  import { createWorkshopSchema } from '~~/server/schema'
+
+  const title = routes.workshop.AppWorkshopAdd.title
+
+  useHead({ title })
+
+  const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
+  const router = useRouter()
+
+  // Form
+  const { handleSubmit } = useForm<CreateWorkshopInput>({
+    validationSchema: toTypedSchema(createWorkshopSchema)
+  })
+
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      onCreateWorkshop(values)
+    }
+  )
+
+  const { mutate, error, status } =
+    trpcClient.workshop.createWorkshop.useMutation()
+
+  const onCreateWorkshop = async (input: CreateWorkshopInput) => {
+    const workshopCreated = await mutate(input)
+
+    if (error.value || !workshopCreated) {
+      snackbar.error(
+        "La création de l'atelier a échoué.",
+        snackbar.focus('form', 'select')
+      )
+      return
+    }
+    const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)
+    navigateTo(workshopRoute)
+  }
+
+  const onCancel = () => {
+    router.back()
+  }
+</script>
+
+<style scoped lang="scss">
+  .fr-container {
+    max-width: 58rem;
+  }
+
+  .page-title-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 1rem;
+
+    .page-title-image {
+      grid-area: 1 / 1 / 3 / 2;
+      border-radius: 0.5rem;
+      background-color: #fff;
+      width: 6rem;
+      height: 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title {
+      grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .required {
+      grid-area: 2 / 2 / 3 / 3;
+    }
+  }
+</style>

@@ -1,8 +1,8 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { BeneficiaryService } from '~/server/services'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { idSchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { BeneficiaryService } from '~~/server/services'
 
 const securityCheck = AllowSecurityCheck
 

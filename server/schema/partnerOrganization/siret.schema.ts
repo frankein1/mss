@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { siretConstraint } from '..'
+import { siretConstraint } from '../../schema'
 
 export const siretSchema = z.object({
   siret: siretConstraint

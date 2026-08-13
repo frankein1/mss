@@ -1,5 +1,5 @@
-import { EmailRepo } from '~/server/database'
-import type { AppConfig } from '~/types/appConfig'
+import { EmailRepo } from '~~/server/database'
+import type { AppConfig } from '~~/types/appConfig'
 
 export const createEmail = async ({
   to,

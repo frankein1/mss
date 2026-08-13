@@ -1,0 +1,368 @@
+<template>
+  <BeneficiaryFormSection section-title="Adresse/Hébergement">
+    <div
+      v-if="showAccomodationSuggestion"
+      class="fr-col-12"
+    >
+      <AtomAlert
+        :alert-type="AlertType.Info"
+        message="des informations d'hébergement sont disponibles dans le dossier foyer"
+      >
+        <template #detailedMessage>
+          <div class="accommodation-suggestions">
+            <p>
+              L'encart du formulaire Adresse/Hébergement sera intégralement
+              complété avec les données du bénéficiaire choisi.
+            </p>
+            <ul>
+              <li
+                v-for="member in membersAccommodation"
+                :key="member.id"
+              >
+                <hr class="fr-hr fr-my-2w" />
+                <div class="accommodation-suggestion-row">
+                  <div>
+                    <p class="fr-text--bold fr-mb-0">
+                      {{ formatBeneficiaryDisplayName(member) }}
+                    </p>
+                    <p class="fr-text--sm fr-mb-0">
+                      {{ formatAccommodationSummary(member) }}
+                    </p>
+                    <details
+                      v-if="formatAccommodationComplement(member)"
+                      class="fr-text--sm"
+                    >
+                      <summary>Informations complémentaires</summary>
+                      <p class="fr-text--sm fr-mb-0">
+                        {{ formatAccommodationComplement(member) }}
+                      </p>
+                    </details>
+                  </div>
+                  <DsfrButton
+                    secondary
+                    size="sm"
+                    label="Appliquer"
+                    @click="applyAccommodation(member)"
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </AtomAlert>
+    </div>
+    <div class="fr-col-12">
+      <VeeSelect
+        name="accommodationMode"
+        :label="beneficiaryFieldLabels.accommodationMode"
+        :options="withEmptyValue(beneficiaryAccommodationModeKeys.options)"
+      />
+    </div>
+    <div
+      v-if="isHosted"
+      class="fr-col-12"
+    >
+      <VeeInput
+        name="accommodationName"
+        :label="accommodationNameLabel"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeInput
+        name="accommodationAdditionalInformation"
+        :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeAddressCombobox
+        name="street"
+        :label="beneficiaryFieldLabels.street"
+        :zip-code="zipcode"
+        hint="Rechercher par adresse complète (numéro, voie, ville, code postal)"
+        @address-selected="onSelected"
+      />
+    </div>
+    <div
+      v-if="qpv"
+      class="fr-col-12"
+    >
+      <BeneficiaryQpvAlert :qpv="qpv" />
+    </div>
+    <div class="fr-col-12 fr-col-lg-4">
+      <VeeInput
+        name="zipcode"
+        :label="beneficiaryFieldLabels.zipcode"
+        @change-value="setZipcodeValue($event)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-8">
+      <VeeCityCombobox
+        name="city"
+        :label="beneficiaryFieldLabels.city"
+        :zip-code="zipcode"
+        @city-selected="onCitySelected"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeInput
+        name="addressComplement"
+        :label="beneficiaryFieldLabels.addressComplement"
+        hint="Bâtiment, escalier, numéro d'appartement, lieu-dit, etc."
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeDepartmentInput
+        name="department"
+        :label="beneficiaryFieldLabels.department"
+        @department-selected="setDepartmentValue($event)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeRegionInput
+        name="region"
+        :label="beneficiaryFieldLabels.region"
+        @region-selected="setRegionValue($event)"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeInput
+        name="district"
+        :label="beneficiaryFieldLabels.district"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeCheckbox
+        name="qpv"
+        :label="beneficiaryFieldLabels.qpv"
+      />
+    </div>
+    <div
+      v-if="application.module.ministere"
+      class="fr-col-12"
+    >
+      <VeeSelect
+        name="accommodationZone"
+        :label="beneficiaryFieldLabels.accommodationZone"
+        :options="withEmptyValue(beneficiaryAccommodationZoneKeys.options)"
+      />
+    </div>
+  </BeneficiaryFormSection>
+</template>
+
+<script setup lang="ts">
+  import type { BeneficiaryAccommodationMode } from '@prisma/client'
+  import { beneficiaryFieldLabels } from '~~/client/labels'
+  import {
+    HostedAccommodationMode,
+    OrganisationAccommodationModes,
+    ThirdPartyAccommodationModes,
+    beneficiaryAccommodationModeKeys,
+    beneficiaryAccommodationZoneKeys
+  } from '~~/client/options'
+  import VeeCheckbox from '../VeeForm/VeeCheckbox.vue'
+  import type { MemberAccommodation } from './types'
+  import type { AddressSelected } from '~/components/VeeForm/types'
+  import { AlertType } from '~/utils/constants/alert'
+  import { EventCategory, FamilyFileAction } from '~~/types/matomo.js'
+  import {
+    useQpvResolution,
+    type QpvFeatureProperties
+  } from '~/composables/useQpvResolution'
+
+  const { membersAccommodation = [] } = defineProps<{
+    membersAccommodation?: MemberAccommodation[]
+  }>()
+
+  const { application } = usePermissions()
+  const { values, setValues } = useFormContext()
+  const matomo = useMatomo()
+
+  const { value: accommodationMode } =
+    useField<BeneficiaryAccommodationMode>('accommodationMode')
+  const { setValue: setZipcodeValue, value: zipcode } =
+    useField<string>('zipcode')
+  const { setValue: setCityValue } = useField<string>('city')
+  const { setValue: setDepartmentValue } = useField<string>('department')
+  const { setValue: setRegionValue } = useField<string>('region')
+
+  const isHosted = computed(() =>
+    HostedAccommodationMode.includes(accommodationMode.value)
+  )
+
+  const accommodationNameLabel = computed(() => {
+    if (!accommodationMode.value) {
+      return ''
+    }
+    if (OrganisationAccommodationModes.includes(accommodationMode.value)) {
+      return 'Dénomination de la structure'
+    }
+    if (ThirdPartyAccommodationModes.includes(accommodationMode.value)) {
+      return 'Nom et prénom du tiers'
+    }
+    return ''
+  })
+
+  const { onCitySelected, onAddressSelected } = useAddressFields({
+    setCityValue,
+    setZipcodeValue,
+    setRegionValue,
+    setDepartmentValue
+  })
+
+  const { resolveQpv, resolveQpvFromAddress } = useQpvResolution()
+
+  const qpv = ref<QpvFeatureProperties | null>(null)
+  const isSelectingAddress = ref(false)
+
+  // Guards against out-of-order resolveQpv responses: if the user picks a
+  // new address before a previous lookup resolves, only the response
+  // matching the latest count is allowed to update qpv.
+  let qpvRequestCount = 0
+
+  async function onSelected(address: AddressSelected) {
+    isSelectingAddress.value = true
+
+    const requestCount = ++qpvRequestCount
+    try {
+      onAddressSelected(address)
+      const result = await resolveQpv(address.coordinates)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    } finally {
+      isSelectingAddress.value = false
+    }
+  }
+
+  // This watcher clears a stale QPV resolution when the user edits the
+  // address by hand instead of picking a suggestion from the autocomplete.
+  // isSelectingAddress stays true for the whole onSelected flow above,
+  // because selecting a suggestion triggers several writes to the street
+  // field (VeeAutocomplete syncs its value both directly and via a prop
+  // watcher), and only the last one settles.
+  watch(
+    () => values.street,
+    () => {
+      if (isSelectingAddress.value) {
+        return
+      }
+      // Bump the counter so any in-flight resolveInitialQpv/onSelected
+      // result fails the requestCount guard and cannot overwrite this reset.
+      qpvRequestCount++
+      qpv.value = null
+    }
+  )
+
+  // On editing an existing beneficiary, the address fields already have a
+  // value but no coordinates, so the initial QPV state has to be resolved
+  // by geocoding that address instead of relying on the autocomplete result.
+  async function resolveInitialQpv(street: string, zipCode: string) {
+    const requestCount = ++qpvRequestCount
+    try {
+      const result = await resolveQpvFromAddress(street, zipCode)
+      if (requestCount === qpvRequestCount) {
+        qpv.value = result
+      }
+    } catch {
+      if (requestCount === qpvRequestCount) {
+        qpv.value = null
+      }
+    }
+  }
+
+  onMounted(() => {
+    if (values.street && values.zipcode && values.city) {
+      resolveInitialQpv(values.street, values.zipcode)
+    }
+  })
+
+  const sectionIsEmpty = computed(
+    () =>
+      !values.accommodationMode &&
+      !values.street &&
+      !values.city &&
+      !values.zipcode
+  )
+
+  const showAccomodationSuggestion = computed(
+    () => sectionIsEmpty.value && membersAccommodation.length > 0
+  )
+
+  function formatAccommodationSummary(member: MemberAccommodation): string {
+    const parts: string[] = []
+    const modeLabel = beneficiaryAccommodationModeKeys.value(
+      member.accommodationMode
+    )
+    if (modeLabel) {
+      parts.push(modeLabel)
+    }
+    const zoneLabel = beneficiaryAccommodationZoneKeys.value(
+      member.accommodationZone
+    )
+    if (zoneLabel) {
+      parts.push(zoneLabel)
+    }
+    const addressParts = [
+      member.street,
+      member.addressComplement,
+      member.zipcode,
+      member.city
+    ]
+      .filter(Boolean)
+      .join(', ')
+    if (addressParts) {
+      parts.push(addressParts)
+    }
+
+    return parts.join(' — ')
+  }
+
+  function formatAccommodationComplement(member: MemberAccommodation): string {
+    const parts = [
+      member.accommodationName,
+      member.accommodationAdditionalInformation,
+      member.qpv ? beneficiaryFieldLabels.qpv : null
+    ].filter(Boolean)
+
+    return parts.join(' — ')
+  }
+
+  function applyAccommodation(member: MemberAccommodation) {
+    setValues({
+      accommodationMode: member.accommodationMode ?? null,
+      accommodationName: member.accommodationName ?? '',
+      accommodationZone: member.accommodationZone ?? null,
+      accommodationAdditionalInformation:
+        member.accommodationAdditionalInformation ?? '',
+      street: member.street ?? '',
+      addressComplement: member.addressComplement ?? '',
+      zipcode: member.zipcode ?? '',
+      city: member.city ?? '',
+      department: member.department ?? '',
+      region: member.region ?? '',
+      qpv: member.qpv ?? false
+    })
+    matomo.trackEvent(
+      EventCategory.FamilyFile,
+      FamilyFileAction.CopyAccommodation
+    )
+  }
+</script>
+
+<style lang="scss" scoped>
+  .accommodation-suggestions > ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .accommodation-suggestion-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+</style>

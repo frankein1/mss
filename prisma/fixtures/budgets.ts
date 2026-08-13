@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { FixtureBeneficiary, fixturesBeneficiaries } from './'
+import { FixtureBeneficiary, fixturesBeneficiaries } from '../fixtures'
 
 export const fixturesBudgets = [
   {

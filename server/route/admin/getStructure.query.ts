@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { AdminContext } from '~/server/trpc'
-import type { IdInput } from '~/server/schema'
-import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { SocialSupportSubjectRepo, StructureRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { AdminContext } from '~~/server/trpc'
+import type { IdInput } from '~~/server/schema'
+import { idSchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { SocialSupportSubjectRepo, StructureRepo } from '~~/server/database'
 
 const adminHandler = async ({
   ctx: { user },

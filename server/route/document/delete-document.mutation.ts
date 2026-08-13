@@ -1,12 +1,12 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { DeleteDocumentInput } from '~/server/schema'
-import { deleteDocumentSchema } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { SecurityRuleContext } from '~/server/security'
-import { DocumentService } from '~/server/services'
-import { DocumentRepo } from '~/server/database'
-import { deleteFile } from '~/server/lib/s3/file'
+import { createMutation } from '~~/server/route'
+import type { DeleteDocumentInput } from '~~/server/schema'
+import { deleteDocumentSchema } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { SecurityRuleContext } from '~~/server/security'
+import { DocumentService } from '~~/server/services'
+import { DocumentRepo } from '~~/server/database'
+import { deleteFile } from '~~/server/lib/s3/file'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

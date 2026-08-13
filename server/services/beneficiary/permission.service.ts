@@ -1,17 +1,17 @@
 import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo } from '~~/server/database'
 import type {
   FamilyFilePermissions,
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
-import { getFamilyFilePermissions } from '~/server/security'
+} from '~~/server/security'
+import { getFamilyFilePermissions } from '~~/server/security'
 import {
   getGranteRole,
   isInSameStructure,
   isMemberOfReferents
-} from '~/server/security/rules/helpers'
+} from '~~/server/security/rules/helpers'
 
 export function getBeneficiarySecurityTarget(
   user: SecurityRuleGrantee,

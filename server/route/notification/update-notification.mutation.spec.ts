@@ -1,7 +1,7 @@
 import { afterEach, describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
-import { fixturesNotifications, FixtureNotification } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { fixturesNotifications, FixtureNotification } from '~~/prisma/fixtures'
 
 const notificationId =
   fixturesNotifications[FixtureNotification.ReferentNewComment].id

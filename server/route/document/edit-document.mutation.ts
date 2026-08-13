@@ -1,11 +1,11 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { EditDocumentInput } from '~/server/schema'
-import { editDocumentSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { DocumentRepo } from '~/server/database'
-import { DocumentService } from '~/server/services'
+import { createMutation } from '~~/server/route'
+import type { EditDocumentInput } from '~~/server/schema'
+import { editDocumentSchema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { DocumentRepo } from '~~/server/database'
+import { DocumentService } from '~~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

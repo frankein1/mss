@@ -1,9 +1,9 @@
-import { router, protectedProcedure } from '~/server/trpc'
+import { router, protectedProcedure } from '~~/server/trpc'
 import {
   addCommentMutation,
   deleteCommentMutation,
   editCommentMutation
-} from '~/server/route/comment'
+} from '~~/server/route/comment'
 
 export const commentRouter = router({
   add: protectedProcedure

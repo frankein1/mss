@@ -9,7 +9,7 @@ paths:
 
 ## Frontend
 
-- **Framework**: Nuxt 3 with Vue 3 Composition API
+- **Framework**: Nuxt 4 with Vue 3 Composition API
 - **Language**: TypeScript v5 (strict mode, noUncheckedIndexedAccess)
 - **Design System**: DSFR (French government design system) v1.14
 - **UI Components**: @gouvminint/vue-dsfr (based on DSFR) v8

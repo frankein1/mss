@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { fixtureStructures, FixtureStructure } from './'
+import { fixtureStructures, FixtureStructure } from '../fixtures'
 
 export enum FixtureUserRole {
   Instructor = 0,

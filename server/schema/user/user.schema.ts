@@ -1,4 +1,4 @@
-import { NonAdminUserRole } from '~/types/user'
+import { NonAdminUserRole } from '~~/types/user'
 import { z } from 'zod'
 import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import {

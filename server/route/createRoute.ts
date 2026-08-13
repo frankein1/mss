@@ -1,12 +1,12 @@
 import type { H3Event } from 'h3'
 import type { ZodType, z } from 'zod'
 import { isAdmin } from '../security/rules/helpers'
-import { forbiddenError } from '~/server/trpc'
-import { addUserActivity } from '~/server/query'
-import type { SecurityRule, SecurityRuleGrantee } from '~/server/security'
-import type { SecurityRuleStructure } from '~/server/security/rules/types'
+import { forbiddenError } from '~~/server/trpc'
+import { addUserActivity } from '~~/server/query'
+import type { SecurityRule, SecurityRuleGrantee } from '~~/server/security'
+import type { SecurityRuleStructure } from '~~/server/security/rules/types'
 import { UserActivityType, type UserActivityObject } from '@prisma/client'
-import { handleBeneficiariesLastActivityUpdate } from '~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
+import { handleBeneficiariesLastActivityUpdate } from '~~/server/query/beneficiaryLastActivity/updateBeneficiariesLastActivity'
 
 export type AdminRouteHandlerContext<Grantee> = {
   user: Grantee

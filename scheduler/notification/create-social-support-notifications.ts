@@ -6,7 +6,7 @@ import {
   HousingHelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo
-} from '~/server/database'
+} from '~~/server/database'
 import { withErrorCapture } from '../utils'
 import { getSocialSupportNotificationRecipientIds } from './getNotificationRecipientIds'
 

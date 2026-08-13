@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { BeneficiaryRepo } from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security'
+import { BeneficiaryRepo } from '~~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
 
 export async function getBeneficiaryListQuery(
   ctx: SecurityRuleContext,

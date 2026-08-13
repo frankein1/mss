@@ -1,8 +1,8 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { idSchema } from '~/server/schema'
-import { PartnerOrganizationRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { idSchema } from '~~/server/schema'
+import { PartnerOrganizationRepo } from '~~/server/database'
 
 export const handler = async ({
   ctx: { user },

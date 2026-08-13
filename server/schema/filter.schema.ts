@@ -18,15 +18,15 @@ import {
   withEmptyValueOptionalNativeEnum
 } from './helpers.schema'
 import { maxStringLengthMessage, validIntNumber } from '~/utils/zod'
-import { TypeSuivi, AgeGroup } from '~/client/options'
-import { StatPeriodFilter } from '~/types/stat'
-import { FollowupPeriodFilter } from '~/types/followup'
+import { TypeSuivi, AgeGroup } from '~~/client/options'
+import { StatPeriodFilter } from '~~/types/stat'
+import { FollowupPeriodFilter } from '~~/types/followup'
 import {
   FilterBeneficiaryNotFilled,
   FilterFollowupNotFilled,
   FilterWorkshopTimeDirection
 } from '~/utils/constants/filters'
-import { WorkshopPeriodFilter } from '~/types/workshop'
+import { WorkshopPeriodFilter } from '~~/types/workshop'
 
 const statFilterSchema = z
   .object({

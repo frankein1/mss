@@ -1,15 +1,15 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
+import { createMutation } from '~~/server/route'
 import type {
   AppContextPermissions,
   SecurityRuleContext
-} from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateBeneficiaryOccupationInput } from '~/server/schema'
-import { updateBeneficiaryOccupationSchema } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+} from '~~/server/security'
+import { getAppContextPermissions } from '~~/server/security'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { UpdateBeneficiaryOccupationInput } from '~~/server/schema'
+import { updateBeneficiaryOccupationSchema } from '~~/server/schema'
+import { BeneficiaryRepo } from '~~/server/database'
+import { BeneficiaryService } from '~~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

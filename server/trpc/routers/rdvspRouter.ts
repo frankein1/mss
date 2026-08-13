@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from '~/server/trpc'
-import { rdvspRoutes } from '~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
+import { rdvspRoutes } from '~~/server/route'
 
 export const rdvspRouter = router({
   getAppointment: protectedProcedure

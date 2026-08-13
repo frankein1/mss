@@ -1,12 +1,12 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/route'
+import { createQuery } from '~~/server/route'
 import type {
   AdminGetEmailsInput,
   EmailAdminFilterInput
-} from '~/server/schema'
-import { adminGetEmailsSchema } from '~/server/schema'
-import { EmailRepo } from '~/server/database'
-import type { AdminContext } from '~/server/trpc'
+} from '~~/server/schema'
+import { adminGetEmailsSchema } from '~~/server/schema'
+import { EmailRepo } from '~~/server/database'
+import type { AdminContext } from '~~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 const adminHandler = async ({

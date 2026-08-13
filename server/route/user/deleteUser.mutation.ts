@@ -1,16 +1,16 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { DeleteUserInput } from '~/server/schema'
-import { deleteUserShema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { DeleteUserInput } from '~~/server/schema'
+import { deleteUserShema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getAppContextPermissions } from '~~/server/security'
 import {
   StructureRepo,
   UserRepo,
   WorkshopNameRepo,
   WorkshopRepo
-} from '~/server/database'
+} from '~~/server/database'
 import { TRPCError } from '@trpc/server'
 
 const handler = async ({

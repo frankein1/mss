@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { UserRepo } from '~/server/database'
+import { UserRepo } from '~~/server/database'
 import { createEmail, createEmailSubject } from './utils'
 import type { User } from '@prisma/client'
 import { UserStatus } from '@prisma/client'

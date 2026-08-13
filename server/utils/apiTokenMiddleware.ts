@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const apiTokenMiddleware = async (event: H3Event) => {
   const authorization = getRequestHeader(event, 'authorization')

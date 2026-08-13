@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { prismaClient } from '~~/server/prisma'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 function findUniqueOrThrow<T extends Prisma.CommentFindUniqueOrThrowArgs>(
   _user: SecurityRuleGrantee,

@@ -1,10 +1,10 @@
-import { protectedProcedure, router } from '~/server/trpc'
+import { protectedProcedure, router } from '~~/server/trpc'
 import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
   getBeneficiariesSchoolsQuery,
   getExaminationDatesQuery
-} from '~/server/route/config'
+} from '~~/server/route/config'
 
 export const configRouter = router({
   getAgents: protectedProcedure

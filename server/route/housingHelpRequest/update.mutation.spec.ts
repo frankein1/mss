@@ -7,8 +7,8 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { afterEach, describe, expect } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   FixtureStructure,
@@ -16,7 +16,7 @@ import {
   fixturesBeneficiaries,
   fixtureStructures,
   fixturesUsers
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 // COURSOR: referents = StructureManager + Referent
 const coursorId = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id

@@ -1,14 +1,14 @@
 import type { Prisma } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
-import type { GetSimilarBeneficiaryInput } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/database/repository'
-import { BeneficiaryConstraints } from '~/server/database/constraints'
-import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
+import type { GetSimilarBeneficiaryInput } from '~~/server/schema'
+import { BeneficiaryRepo } from '~~/server/database/repository'
+import { BeneficiaryConstraints } from '~~/server/database/constraints'
+import type { SecurityRuleContext } from '~~/server/security/rules/types'
+import { appendConstraints } from '~~/server/database/repository/helper/appendConstraints'
 import {
   isReferent,
   isMemberOfReferents
-} from '~/server/security/rules/helpers'
+} from '~~/server/security/rules/helpers'
 
 function prepareSimilarFilter({
   firstName,

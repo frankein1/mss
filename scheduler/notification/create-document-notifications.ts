@@ -1,6 +1,6 @@
 import { UserStatus, type Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { withErrorCapture } from '../utils'
 import { getDocumentNotificationRecipientIds } from './getNotificationRecipientIds'
 

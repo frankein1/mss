@@ -10,12 +10,12 @@ import type {
   FileInstructionPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
+} from '~~/server/security'
 import {
   getAppContextPermissions,
   getFileInstructionPermissions
-} from '~/server/security'
-import { FileInstructionRepo } from '~/server/database/repository/FileInstructionRepository'
+} from '~~/server/security'
+import { FileInstructionRepo } from '~~/server/database/repository/FileInstructionRepository'
 
 function findMany(
   user: SecurityRuleGrantee,

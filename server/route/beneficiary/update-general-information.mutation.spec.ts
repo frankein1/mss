@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
-import { prismaClient } from '~/server/prisma'
+} from '~~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
 
 let familyFileId: string
 let beneficiaryId: string

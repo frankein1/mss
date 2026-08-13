@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import { MinisterRepo } from '~/server/database'
-import { createQuery } from '~/server/route'
-import { emptySchema } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
+import { MinisterRepo } from '~~/server/database'
+import { createQuery } from '~~/server/route'
+import { emptySchema } from '~~/server/schema'
+import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
   return await MinisterRepo.findMany(user, {

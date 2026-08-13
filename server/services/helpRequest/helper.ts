@@ -2,7 +2,7 @@ import { SocialSupportStatus } from '@prisma/client'
 import type {
   CreateHelpRequestInput,
   EditHelpRequestInput
-} from '~/server/schema'
+} from '~~/server/schema'
 
 export function cleanUpdateInput({
   input,

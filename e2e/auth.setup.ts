@@ -1,7 +1,7 @@
 import { test as setup } from '@playwright/test'
 import type { BrowserContext } from '@playwright/test'
-import { fixturesUsers, FixtureUserRole } from '~/prisma/fixtures'
-import { signJwt } from '~/server/lib/jwt'
+import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
+import { signJwt } from '~~/server/lib/jwt'
 import { minutesToMillis } from '~/utils/time'
 
 async function setAuthenticationToken(

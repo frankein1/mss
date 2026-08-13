@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { IdInput } from '~/server/schema'
-import { idSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { FollowupService } from '~/server/services'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { IdInput } from '~~/server/schema'
+import { idSchema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security/rules/types'
+import { FollowupService } from '~~/server/services'
 
 const handler = ({
   input: { id },

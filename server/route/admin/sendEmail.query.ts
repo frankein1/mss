@@ -1,9 +1,9 @@
 import { EmailStatus } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { AdminSendEmailInput } from '~/server/schema'
-import { adminSendEmailSchema } from '~/server/schema'
-import { EmailRepo } from '~/server/database'
-import type { AdminContext } from '~/server/trpc'
+import { createQuery } from '~~/server/route'
+import type { AdminSendEmailInput } from '~~/server/schema'
+import { adminSendEmailSchema } from '~~/server/schema'
+import { EmailRepo } from '~~/server/database'
+import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({
   input: { id }

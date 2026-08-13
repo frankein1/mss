@@ -6,17 +6,17 @@ import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { performance } from 'node:perf_hooks'
 import { Upload } from '@aws-sdk/lib-storage'
-import type { KmsClient } from '~/server/lib/encryption/adapters/kms-client'
+import type { KmsClient } from '~~/server/lib/encryption/adapters/kms-client'
 // The server modules are authored as ESM but tsx emits them as CommonJS (no
 // package.json `type: module`), so ESM named-import linking fails. Loading
 // them via `await import()` returns the full CJS namespace instead.
 const { getOpenBaoKeyManagerClient } = await import(
-  '~/server/lib/encryption/adapters/open-bao'
+  '~~/server/lib/encryption/adapters/open-bao'
 )
-const { encrypt } = await import('~/server/lib/encryption/encrypt')
-const { getS3Client } = await import('~/server/lib/s3/config')
-const { generateBucketKeyForDocument } = await import('~/server/lib/s3/helper')
-const { deleteFiles } = await import('~/server/lib/s3/file')
+const { encrypt } = await import('~~/server/lib/encryption/encrypt')
+const { getS3Client } = await import('~~/server/lib/s3/config')
+const { generateBucketKeyForDocument } = await import('~~/server/lib/s3/helper')
+const { deleteFiles } = await import('~~/server/lib/s3/file')
 
 type AppConfig = {
   document: {

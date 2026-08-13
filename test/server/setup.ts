@@ -22,9 +22,9 @@ dayjs.extend(duration)
  * module import would be cached by other tests and the mocks not
  * applied when needed
  */
-vi.mock('~/server/lib/encryption/kms')
-vi.mock('~/server/lib/data-inclusion')
-vi.mock('~/server/integrations/brevo/service', () => ({
+vi.mock('~~/server/lib/encryption/kms')
+vi.mock('~~/server/lib/data-inclusion')
+vi.mock('~~/server/integrations/brevo/service', () => ({
   createOrUpdateUser: vi.fn().mockResolvedValue(undefined),
   createOrUpdateStructure: vi.fn().mockResolvedValue(undefined),
   sendStructureEvent: vi.fn().mockResolvedValue(undefined),

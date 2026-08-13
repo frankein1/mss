@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
-import { forbiddenError, type ProtectedAppContext } from '~/server/trpc'
-import { emptySchema } from '~/server/schema'
-import { UserRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getAppContextPermissions } from '~~/server/security'
+import { forbiddenError, type ProtectedAppContext } from '~~/server/trpc'
+import { emptySchema } from '~~/server/schema'
+import { UserRepo } from '~~/server/database'
 import { UserRole } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>

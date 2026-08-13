@@ -1,8 +1,8 @@
 import { createMutation } from '../createRoute'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/database'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { emptySchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { UserRepo } from '~~/server/database'
 
 const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
   const {

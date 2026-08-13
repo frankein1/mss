@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { formatUserDisplayName } from '~/utils/user'
-import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/database'
+import { emptySchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { UserRepo } from '~~/server/database'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   return await UserRepo.findMany(user, {

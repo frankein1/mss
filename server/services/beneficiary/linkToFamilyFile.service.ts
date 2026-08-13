@@ -1,8 +1,8 @@
-import type { SecurityRuleContext } from '~/server/security'
-import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
+import { BeneficiaryRepo, FamilyFileRepo } from '~~/server/database'
 import type { RelativeRelationship } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-import { prismaClient } from '~/server/prisma/prismaClient'
+import { prismaClient } from '~~/server/prisma/prismaClient'
 import { MSS_ERROR_CODES } from '~/utils/error'
 
 export async function linkToFamilyFile({

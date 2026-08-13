@@ -1,9 +1,9 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixturesDataEducationSchools,
   FixtureDataEducationSchool
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const CITYCODE_LYON_1ER =
   fixturesDataEducationSchools[FixtureDataEducationSchool.Lyon1erA]!.citycode

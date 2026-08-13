@@ -16,13 +16,13 @@ import type {
   Beneficiary
 } from '@prisma/client'
 
-import type { BeneficiaryIdentification } from '~/types/beneficiary'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { FamilyFileSecurityTarget } from '~/server/services'
+import type { BeneficiaryIdentification } from '~~/types/beneficiary'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { FamilyFileSecurityTarget } from '~~/server/services'
 import {
   getCommentPermissions,
   getDocumentPermissions
-} from '~/server/security'
+} from '~~/server/security'
 
 interface Conditions {
   details: boolean

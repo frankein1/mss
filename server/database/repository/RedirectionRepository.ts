@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { appendConstraints } from './helper/appendConstraints'
-import { prismaClient } from '~/server/prisma'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { prismaClient } from '~~/server/prisma'
+import type { SecurityRuleGrantee } from '~~/server/security'
 import { SocialSupportConstraints } from '../constraints'
 
 type Constraint = (

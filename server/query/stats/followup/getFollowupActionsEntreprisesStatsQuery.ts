@@ -1,8 +1,8 @@
 import { StructureType } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
-import { FollowupRepo } from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
+import { FollowupRepo } from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
 
 export async function getFollowupActionsEntreprisesStatsQuery(
   ctx: ProtectedAppContext,

@@ -1,4 +1,4 @@
-import { BeneficiaryRepo, StructureRepo, UserRepo } from '~/server/database'
+import { BeneficiaryRepo, StructureRepo, UserRepo } from '~~/server/database'
 import { mapStructureToBrevoCompany, mapUserToBrevoContact } from './utils'
 import {
   createCompany,
@@ -11,8 +11,8 @@ import {
   sendEvent,
   updateCompany
 } from './apiClient'
-import { structureTypeKeys, userRoleKeys } from '~/client/options'
-import { prismaClient } from '~/server/prisma'
+import { structureTypeKeys, userRoleKeys } from '~~/client/options'
+import { prismaClient } from '~~/server/prisma'
 import { UserRole, UserStatus } from '@prisma/client'
 
 export async function createOrUpdateUser(userId: string) {

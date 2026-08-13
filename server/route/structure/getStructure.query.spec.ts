@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { fixtureStructures, FixtureStructure } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixtureStructures, FixtureStructure } from '~~/prisma/fixtures'
 
 describe('Structure - Get - Authorizations', () => {
   test('An Administrator is rejected by protectedProcedure', async ({

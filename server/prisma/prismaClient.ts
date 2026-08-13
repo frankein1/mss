@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
-import { shouldLog, formatPrismaQueryLog } from '~/server/utils/logging.js'
+import { shouldLog, formatPrismaQueryLog } from '~~/server/utils/logging.js'
 import picocolors from 'picocolors'
 
 const shouldLogPrisma = shouldLog('prisma')

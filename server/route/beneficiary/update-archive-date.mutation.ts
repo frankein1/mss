@@ -1,12 +1,12 @@
 import { NotificationType, UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { SecurityRuleContext } from '~/server/security'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { updateBeneficiaryArchiveDate } from '~/server/schema'
-import { BeneficiaryService } from '~/server/services'
-import { BeneficiaryRepo, NotificationRepo, UserRepo } from '~/server/database'
+import { createMutation } from '~~/server/route'
+import type { SecurityRuleContext } from '~~/server/security'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { updateBeneficiaryArchiveDate } from '~~/server/schema'
+import { BeneficiaryService } from '~~/server/services'
+import { BeneficiaryRepo, NotificationRepo, UserRepo } from '~~/server/database'
 import dayjs from 'dayjs'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

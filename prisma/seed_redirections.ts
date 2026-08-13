@@ -12,7 +12,7 @@ import {
   FixturePartnerOrganization,
   fixturesRedirectionReasons
 } from './fixtures'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const STRUCTURE_ID = fixtureStructures[FixtureStructure.Test].id
 const CREATOR_ID = fixturesUsers[FixtureUserRole.SocialWorker].id

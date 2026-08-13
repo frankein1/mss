@@ -1,10 +1,10 @@
 import type { Prisma } from '@prisma/client'
 import { UserRole } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { AdminGetUsersInput, UserAdminFilterInput } from '~/server/schema'
-import { adminGetUsersSchema } from '~/server/schema'
-import { UserRepo } from '~/server/database'
-import type { AdminContext } from '~/server/trpc'
+import { createQuery } from '~~/server/route'
+import type { AdminGetUsersInput, UserAdminFilterInput } from '~~/server/schema'
+import { adminGetUsersSchema } from '~~/server/schema'
+import { UserRepo } from '~~/server/database'
+import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({
   ctx: { user },
