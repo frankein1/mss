@@ -106,11 +106,14 @@
     if (!data.value) {
       return
     }
-    data.value.documents = data.value.documents.map(documentItem =>
-      documentItem.document.key === updatedDocument.key
-        ? { document: updatedDocument, permissions: documentItem.permissions }
-        : documentItem
-    )
+    data.value = {
+      ...data.value,
+      documents: data.value.documents.map(documentItem =>
+        documentItem.document.key === updatedDocument.key
+          ? { document: updatedDocument, permissions: documentItem.permissions }
+          : documentItem
+      )
+    }
   }
 
   function onDocumentDeleted(documentKey: string) {
@@ -118,10 +121,13 @@
       return
     }
 
-    data.value.count--
-    data.value.documents = data.value.documents.filter(
-      ({ document: { key } }) => key !== documentKey
-    )
+    data.value = {
+      ...data.value,
+      count: data.value.count - 1,
+      documents: data.value.documents.filter(
+        ({ document: { key } }) => key !== documentKey
+      )
+    }
   }
 </script>
 
