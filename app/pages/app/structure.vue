@@ -45,15 +45,15 @@
     }
     tabs.push(
       {
-        tabId: 'Infos structure',
-        panelId: panelId('Infos structure'),
+        tabId: 'Infos-structure',
+        panelId: panelId('Infos-structure'),
         title: 'Infos structure',
         icon: 'fr-icon-home-4-line',
         to: routes.structure.AppStructureInfo.path()
       },
       {
-        tabId: 'Objets d’accompagnement',
-        panelId: panelId('Objets d’accompagnement'),
+        tabId: 'Objets-d-accompagnement',
+        panelId: panelId('Objets-d-accompagnement'),
         title: 'Objets d’accompagnement',
         icon: 'fr-icon-checkbox-circle-line',
         to: routes.structure.AppStructureCustomObjects.path()

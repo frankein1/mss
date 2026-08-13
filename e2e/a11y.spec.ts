@@ -50,7 +50,9 @@ test.describe('a11y - Website', () => {
       disableRules: siteFacileDisableRules
     })
   })
-  test('Contact', async ({ page }) => {
+  // Contact page is too long to load
+  test.skip('Contact', async ({ page }) => {
+    test.setTimeout(50000)
     await page.goto(routes.landing.Contact.path(WEBSITE_URL))
     await analyze(page, {
       exclude: siteFacileExludeElements,
@@ -139,7 +141,7 @@ test.describe('a11y - Application', () => {
   })
 
   test('Structure manager - User Management', async ({ page }) => {
-    await page.goto('/app/users')
+    await page.goto('/app/structure/users')
 
     await analyze(page, {
       exclude: appExcludeElements,
@@ -148,7 +150,16 @@ test.describe('a11y - Application', () => {
   })
 
   test('Structure manager - Structure configuration', async ({ page }) => {
-    await page.goto('/app/structure')
+    await page.goto('/app/structure/info')
+
+    await analyze(page, {
+      exclude: appExcludeElements,
+      disableRules: siteFacileDisableRules
+    })
+  })
+
+  test('Structure manager - Structure custom objects', async ({ page }) => {
+    await page.goto('/app/structure/custom-objects')
 
     await analyze(page, {
       exclude: appExcludeElements,

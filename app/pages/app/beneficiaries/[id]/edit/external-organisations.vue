@@ -50,7 +50,8 @@
     beneficiaryIdentification,
     familyIdentification,
     pending: beneficiaryPending,
-    error: errorBen
+    error: errorBen,
+    refresh
   } = beneficiaryDetails
 
   const {
@@ -111,6 +112,7 @@
       return
     }
 
+    await refresh()
     navigateTo(target)
   }
 

@@ -42,7 +42,8 @@
     beneficiaryIdentification,
     familyIdentification,
     pending,
-    error: errorFetch
+    error: errorFetch,
+    refresh
   } = await useBeneficiaryDetails(beneficiaryId)
 
   const bindedValues = computed(() => {
@@ -80,6 +81,7 @@
       return
     }
 
+    await refresh()
     navigateTo(target)
   }
 

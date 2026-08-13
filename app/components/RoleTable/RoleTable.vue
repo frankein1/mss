@@ -4,7 +4,7 @@
     tabindex="0"
   >
     <div class="fr-table fr-table--no-caption stripped-table">
-      <table>
+      <table tabindex="0">
         <caption>
           Détails des rôles et habilitations
         </caption>

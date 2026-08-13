@@ -26,7 +26,10 @@ export default defineNuxtConfig({
       compilerOptions: {
         verbatimModuleSyntax: true,
         noUncheckedIndexedAccess: true
-      }
+      },
+      // Nuxt 4's app tsconfig only scans app/ by default — e2e/ needs to be
+      // added explicitly so editors resolve ~ aliases in Playwright specs.
+      include: ['../e2e/**/*']
     }
   },
 

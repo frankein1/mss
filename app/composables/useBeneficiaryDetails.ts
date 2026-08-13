@@ -10,7 +10,7 @@ export const useBeneficiaryDetails = async (
     options: options ? { accommodation: options.accommodation } : undefined
   }))
 
-  const { data, pending, error } =
+  const { data, pending, error, refresh } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery(queryInput)
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
@@ -44,6 +44,7 @@ export const useBeneficiaryDetails = async (
     familyIdentification,
     membersAccommodation,
     pending,
-    error
+    error,
+    refresh
   }
 }

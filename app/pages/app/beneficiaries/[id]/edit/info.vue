@@ -63,7 +63,8 @@
     familyIdentification,
     membersAccommodation,
     pending: beneficiaryPending,
-    error: beneficiaryError
+    error: beneficiaryError,
+    refresh
   } = await useBeneficiaryDetails(beneficiaryId, { accommodation: true })
 
   const pending = computed(
@@ -155,6 +156,7 @@
       return
     }
 
+    await refresh()
     navigateTo(target)
   }
 
