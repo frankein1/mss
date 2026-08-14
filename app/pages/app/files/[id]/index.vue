@@ -335,8 +335,7 @@
       household: selectedBeneficiary.value.taxHouseholds,
       mutationSplit: () => trpcClient.file.split.mutate({ id }),
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
-        trpcClient.beneficiary.updateTaxHousehold.mutate(values),
-      reloadData: refreshFamilyFile
+        trpcClient.beneficiary.updateTaxHousehold.mutate(values)
     })
   }
 

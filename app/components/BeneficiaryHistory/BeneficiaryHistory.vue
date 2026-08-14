@@ -132,7 +132,7 @@
   }))
   const { data: socialSupports, error } =
     await trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
-      queryKey: 'getFamilyFile.history'
+      queryKey: `getFamilyFile.history.${familyFileId}`
     })
   const { data: rdvspAuthStatus } = application.value.module.rdv
     ? await trpcClient.rdvsp.getAuthStatus.useQuery()
