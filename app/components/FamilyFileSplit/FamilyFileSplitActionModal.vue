@@ -68,7 +68,7 @@
             label="Pas maintenant"
             type="button"
             secondary
-            @click="goToInitialFile"
+            @click="goToNewFile()"
           ></DsfrButton>
         </li>
 
@@ -86,6 +86,7 @@
 </template>
 
 <script setup lang="ts">
+  import { getQueryKey } from 'trpc-nuxt/client'
   import type { SplitOutput } from './types'
   import type { UpdateBeneficiaryTaxHouseholdInput } from '~~/server/schema'
   import { updateBeneficiaryTaxHouseholdSchema } from '~~/server/schema'
@@ -100,12 +101,12 @@
     mutationFamilySituation: (
       values: UpdateBeneficiaryTaxHouseholdInput
     ) => Promise<{ id: string; familyFileId: string }>
-    reloadData: () => Promise<void>
   }>()
 
   const modal = useModal()
   const snackbar = useSnackbar()
   const matomo = useMatomo()
+  const trpcClient = useTrpcClient()
 
   const steps = [
     `Dissocier ${props.beneficiaryName} du dossier`,
@@ -113,6 +114,9 @@
   ]
 
   const currentStep = ref(1)
+
+  /** Family file created by the split, the beneficiary now belongs to it */
+  const newFamilyFileId = ref<string>()
 
   /** Step 1 : Split beneficiary from family file */
   const isSubmittingSplit = ref(false)
@@ -122,7 +126,8 @@
     await useTrpcMutation({
       mutation: props.mutationSplit,
       isSubmitting: isSubmittingSplit,
-      onSuccess: () => {
+      onSuccess: ({ id }) => {
+        newFamilyFileId.value = id
         currentStep.value = 2
       },
       onFailure: () => {
@@ -134,12 +139,37 @@
     })
   }
 
-  /** Step 2 : Update Family Situation of the beneficiary */
-  const goToInitialFile = () => {
+  /** Leave the initial family file for the one created by the split */
+  const goToNewFile = async (familyFileId?: string) => {
+    const targetFamilyFileId = familyFileId ?? newFamilyFileId.value
+
+    snackbar.success(
+      `${props.beneficiaryName} a bien été retiré du dossier.
+      Pensez à mettre à jour le statut du dossier, les agents référents
+      et le budget si nécessaire.`,
+      () => {},
+      10000
+    )
+
+    // Beneficiary details are cached per beneficiary id: the cache must be
+    // dropped so that the new family file page fetches the post-split data
+    const beneficiaryDetailsKey = getQueryKey(
+      trpcClient.beneficiary.getBeneficiaryDetails
+    )
+    clearNuxtData(key => key.startsWith(beneficiaryDetailsKey))
+
+    if (targetFamilyFileId) {
+      await navigateTo(
+        routes.file.AppFile.path(targetFamilyFileId, {
+          beneficiaryId: props.id
+        })
+      )
+    }
+
     modal.close()
-    props.reloadData()
   }
 
+  /** Step 2 : Update Family Situation of the beneficiary */
   const { handleSubmit } = useForm<UpdateBeneficiaryTaxHouseholdInput>({
     validationSchema: toTypedSchema(updateBeneficiaryTaxHouseholdSchema),
     initialValues: {
@@ -155,19 +185,7 @@
     useTrpcMutation({
       mutation: () => props.mutationFamilySituation(values),
       isSubmitting: isSubmittingSituation,
-      onSuccess: ({ familyFileId, id }) => {
-        snackbar.success(
-          `${props.beneficiaryName} a bien été retiré du dossier. 
-          Pensez à mettre à jour le statut du dossier, les agents référents 
-          et le budget si nécessaire.`,
-          () => {},
-          10000
-        )
-        navigateTo(
-          routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
-        )
-        modal.close()
-      },
+      onSuccess: ({ familyFileId }) => goToNewFile(familyFileId),
       onFailure: () => {
         snackbar.error(
           'La mise à jour de la situation familiale du bénéficiaire a échoué',

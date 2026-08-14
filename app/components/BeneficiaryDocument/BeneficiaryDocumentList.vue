@@ -93,7 +93,7 @@
   }))
   const { data, error, refresh, pending } =
     trpcClient.file.getDocuments.useQuery(documentsQueryInput, {
-      queryKey: 'getFamilyFile.documents'
+      queryKey: `getFamilyFile.documents.${familyFileId}`
     })
 
   const documents = computed(() => data.value?.documents || [])
