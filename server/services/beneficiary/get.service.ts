@@ -1,5 +1,5 @@
 import { getOne } from './queries'
-import type { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~~/server/security'
 
 export async function get({
   ctx,

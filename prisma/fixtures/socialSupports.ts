@@ -19,7 +19,7 @@ import {
   fixturesPartnerOrganizationContacts,
   fixturesNotifications,
   FixtureNotification
-} from './'
+} from '../fixtures'
 
 export enum FixtureSocialSupport {
   FollowupTearlePlannedInPerson = 0,

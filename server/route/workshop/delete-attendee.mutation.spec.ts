@@ -1,6 +1,6 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { beforeEach, afterEach, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
@@ -8,7 +8,7 @@ import {
   FixtureUserRole,
   fixturesBeneficiaries,
   FixtureBeneficiary
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { faker } from '@faker-js/faker'
 import { WorkshopAttendeeType } from '@prisma/client'
 

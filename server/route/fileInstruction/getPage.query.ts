@@ -1,10 +1,10 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { FileInstructionPageInput } from '~/server/schema'
-import { getFileInstructionPageSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { FileInstructionService } from '~/server/services'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { FileInstructionPageInput } from '~~/server/schema'
+import { getFileInstructionPageSchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { FileInstructionService } from '~~/server/services'
 
 const handler = ({
   input,

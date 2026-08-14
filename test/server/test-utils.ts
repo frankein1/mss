@@ -1,19 +1,19 @@
 import type { H3Event } from 'h3'
 import { test as base } from 'vitest'
-import { test as t } from '~/server/trpc/createRouter'
-import { appRouter } from '~/server/trpc/routers'
-import type { AppContext } from '~/server/trpc'
+import { test as t } from '~~/server/trpc/createRouter'
+import { appRouter } from '~~/server/trpc/routers'
+import type { AppContext } from '~~/server/trpc'
 import {
   fixturesUsers,
   fixtureStructures,
   FixtureUserRole,
   FixtureStructure
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import type {
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
-import type { SecurityRuleStructure } from '~/server/security/rules/types'
+} from '~~/server/security'
+import type { SecurityRuleStructure } from '~~/server/security/rules/types'
 
 const setupFactory = t.createCallerFactory(appRouter)
 

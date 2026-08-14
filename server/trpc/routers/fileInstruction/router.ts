@@ -1,5 +1,5 @@
-import { fileInstructionRoutes as routes } from '~/server/route'
-import { protectedProcedure, router } from '~/server/trpc'
+import { fileInstructionRoutes as routes } from '~~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
 
 export const fileInstructionRouter = router({
   getPage: protectedProcedure

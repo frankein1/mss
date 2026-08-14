@@ -1,11 +1,11 @@
-import { budgetExpensesKeys, budgetIncomeKeys } from '~/client/options'
+import { budgetExpensesKeys, budgetIncomeKeys } from '~~/client/options'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 import type {
   BudgetExpensesWithLoansAndDebts,
   BudgetIncomeWithCustoms,
   ExpensesKey,
   IncomeKey
-} from '~/types/budget'
+} from '~~/types/budget'
 
 export const getExpensesRows = (
   expenses: BudgetExpensesWithLoansAndDebts | null

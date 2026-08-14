@@ -4,7 +4,7 @@ import {
   FixtureUserRole,
   fixturesBeneficiaries,
   FixtureBeneficiary
-} from './'
+} from '../fixtures'
 
 export enum FixtureNotification {
   ReferentNewComment = 0

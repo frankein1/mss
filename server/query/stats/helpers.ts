@@ -2,10 +2,10 @@ import type { Prisma, SocialSupportRedirectionType } from '@prisma/client'
 import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
-import type { StatFilterInput, WorkshopStatFilterInput } from '~/server/schema'
+import type { StatFilterInput, WorkshopStatFilterInput } from '~~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
-import { StatPeriodFilter } from '~/types/stat'
-import { AgeGroup } from '~/client/options'
+import { StatPeriodFilter } from '~~/types/stat'
+import { AgeGroup } from '~~/client/options'
 
 export function preparePrescribingOrganizationStats(
   historyItems: {

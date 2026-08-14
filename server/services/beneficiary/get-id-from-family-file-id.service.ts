@@ -1,4 +1,4 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 export async function getIdFromFamilyFileId(familyFileId: string) {
   const beneficiaries = await prismaClient.beneficiary.findMany({

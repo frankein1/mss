@@ -1,6 +1,6 @@
 import { describe, expect, afterEach, beforeEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 import {
   fixturesUsers,
   FixtureUserRole,
@@ -8,7 +8,7 @@ import {
   FixtureBeneficiary,
   fixtureStructures,
   FixtureStructure
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const notificationIds: string[] = []
 

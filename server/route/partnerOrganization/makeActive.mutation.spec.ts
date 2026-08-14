@@ -1,7 +1,7 @@
-import { test } from '~/test/server/test-utils'
-import { fixtureStructures } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixtureStructures } from '~~/prisma/fixtures'
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { fakerFR as faker } from '@faker-js/faker'
 
 const partnerIds: string[] = []

@@ -1,8 +1,8 @@
-import { createMutation } from '~/server/route'
-import type { AdminContext } from '~/server/trpc'
-import type { IdInput } from '~/server/schema'
-import { idSchema } from '~/server/schema'
-import { SocialSupportSubjectRepo } from '~/server/database'
+import { createMutation } from '~~/server/route'
+import type { AdminContext } from '~~/server/trpc'
+import type { IdInput } from '~~/server/schema'
+import { idSchema } from '~~/server/schema'
+import { SocialSupportSubjectRepo } from '~~/server/database'
 import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({

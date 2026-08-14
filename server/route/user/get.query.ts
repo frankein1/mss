@@ -1,10 +1,10 @@
-import { createQuery } from '~/server/route'
-import { forbiddenError, type ProtectedAppContext } from '~/server/trpc'
-import type { GetUserInput } from '~/server/schema'
-import { getUserSchema } from '~/server/schema'
-import { UserRepo, WorkshopNameRepo, WorkshopRepo } from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security/rules/types'
-import { getAppContextPermissions } from '~/server/security'
+import { createQuery } from '~~/server/route'
+import { forbiddenError, type ProtectedAppContext } from '~~/server/trpc'
+import type { GetUserInput } from '~~/server/schema'
+import { getUserSchema } from '~~/server/schema'
+import { UserRepo, WorkshopNameRepo, WorkshopRepo } from '~~/server/database'
+import type { SecurityRuleContext } from '~~/server/security/rules/types'
+import { getAppContextPermissions } from '~~/server/security'
 import { UserRole, type Prisma } from '@prisma/client'
 
 const securityCheck = (ctx: SecurityRuleContext) =>

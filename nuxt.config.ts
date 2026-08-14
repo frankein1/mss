@@ -2,7 +2,7 @@
 import { createRequire } from 'module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { MAX_UPLOAD_SIZE_BYTES } from './utils/constants'
+import { MAX_UPLOAD_SIZE_BYTES } from './app/utils/constants'
 
 const prismaClientPath = createRequire(import.meta.url).resolve(
   '@prisma/client'
@@ -26,7 +26,10 @@ export default defineNuxtConfig({
       compilerOptions: {
         verbatimModuleSyntax: true,
         noUncheckedIndexedAccess: true
-      }
+      },
+      // Nuxt 4's app tsconfig only scans app/ by default — e2e/ needs to be
+      // added explicitly so editors resolve ~ aliases in Playwright specs.
+      include: ['../e2e/**/*']
     }
   },
 
@@ -102,6 +105,16 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/test-utils/module'
   ],
+
+  // trpc-nuxt's client types import AsyncData/AsyncDataOptions from #imports,
+  // but Nuxt only generates that facade entry for names it detects in app code.
+  // Without this, the missing types silently degrade to `any` under skipLibCheck.
+  imports: {
+    imports: [
+      { name: 'AsyncData', type: true, from: '#app' },
+      { name: 'AsyncDataOptions', type: true, from: '#app' }
+    ]
+  },
   // app: {
   //   head: {
   //     meta: [{ name: 'robots', content: 'noindex' }]
@@ -110,7 +123,7 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
     server: {
-      hmr: {
+      ws: {
         // Fix websocket errors cf. https://github.com/nuxt/nuxt/discussions/27779
         clientPort: 3000
       }
@@ -154,6 +167,11 @@ export default defineNuxtConfig({
           silenceDeprecations: ['import', 'global-builtin'],
           quietDeps: true
         }
+      },
+      // DSFR ships legacy IE `\0` media query hacks that lightningcss
+      // (Vite's default CSS minifier) rejects outright rather than stripping.
+      lightningcss: {
+        errorRecovery: true
       }
     },
     resolve: {

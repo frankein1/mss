@@ -1,4 +1,4 @@
-import { verifyJwt } from '~/server/lib/jwt'
+import { verifyJwt } from '~~/server/lib/jwt'
 import { setUser } from '@sentry/node'
 
 declare module 'h3' {

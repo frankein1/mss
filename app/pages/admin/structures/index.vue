@@ -1,0 +1,79 @@
+<template>
+  <div class="fr-p-2w">
+    <div class="fr-grid-row">
+      <div class="fr-col-8">
+        <input
+          class="fr-input"
+          placeholder="nom, code postal"
+          @change="onSearch"
+        />
+      </div>
+      <div class="fr-col-3">
+        <button
+          class="fr-btn fr-btn--secondary"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          title="Ajouter une structure"
+          aria-label="Ajouter une structure"
+          @click="onCreateStructure"
+        >
+          Ajouter une structure
+        </button>
+      </div>
+    </div>
+    <StructureTableAdmin
+      v-show="!pending"
+      :structures="structures"
+    />
+  </div>
+</template>
+<script lang="ts" setup>
+  import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
+  import type { CreateStructureInput } from '~~/server/schema'
+  import { routes } from '~/utils/routes'
+
+  const trpcClient = useTrpcClient()
+
+  const snackbar = useSnackbar()
+  const modal = useModal()
+
+  const search = ref<string>()
+  const isSubmitting = ref(false)
+
+  const queryInput = computed(() => ({
+    search: search.value
+  }))
+
+  const { data, pending } =
+    await trpcClient.admin.getStructures.useQuery(queryInput)
+
+  const structures = computed(() => data.value?.structures || [])
+
+  function onSearch(event: Event) {
+    const input = event.target as HTMLInputElement
+    const value = input.value.trim()
+    search.value = value
+  }
+
+  const onCreateStructure = () => {
+    modal.open(StructureAdminInfoForm, {
+      title: "Création d'une structure",
+      structure: undefined,
+      validate: addStructure
+    })
+  }
+
+  function addStructure(structure: CreateStructureInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.createStructure.mutate(structure),
+      isSubmitting,
+      onSuccess: ({ id }) => {
+        modal.close()
+        navigateTo(routes.admin.AdminStructure.path(id))
+      },
+      onFailure: () => {
+        snackbar.error("L'ajout de la structure a échoué.")
+      }
+    })
+  }
+</script>

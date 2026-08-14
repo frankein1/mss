@@ -1,1 +1,1 @@
-export type { GetHousingHelpRequestOutput } from '~/server/route/housingHelpRequest'
+export type { GetHousingHelpRequestOutput } from '~~/server/route/housingHelpRequest'

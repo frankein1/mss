@@ -22,7 +22,7 @@ import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
 import { rdvspRouter } from './rdvspRouter'
-import { router } from '~/server/trpc'
+import { router } from '~~/server/trpc'
 import { workshopRouter } from './workshop/router'
 import { ministerRouter } from './minister/router'
 import { redirectionRouter } from './redirection/router'
@@ -60,8 +60,8 @@ export type AppRouter = typeof appRouter
 export type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
-export * from '~/server/trpc/routers/housingHelpRequest'
-export * from '~/server/trpc/routers/notification'
-export * from '~/server/trpc/routers/beneficiary'
-export * from '~/server/trpc/routers/followup'
-export * from '~/server/trpc/routers/fileInstruction'
+export * from '~~/server/trpc/routers/housingHelpRequest'
+export * from '~~/server/trpc/routers/notification'
+export * from '~~/server/trpc/routers/beneficiary'
+export * from '~~/server/trpc/routers/followup'
+export * from '~~/server/trpc/routers/fileInstruction'

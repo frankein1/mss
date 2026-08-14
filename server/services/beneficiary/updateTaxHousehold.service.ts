@@ -1,5 +1,5 @@
-import { BeneficiaryRepo } from '~/server/database'
-import type { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
+import { BeneficiaryRepo } from '~~/server/database'
+import type { UpdateBeneficiaryTaxHouseholdInput } from '~~/server/schema'
 import { isSeparate, isMarried } from '~/utils/beneficiary'
 
 export async function updateTaxHousehold(

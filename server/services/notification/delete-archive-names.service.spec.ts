@@ -1,11 +1,11 @@
 import { describe, vi, beforeEach, afterEach, it, expect } from 'vitest'
 import dayjs from 'dayjs'
-import { ArchivedBeneficiaryRepo } from '~/server/database'
+import { ArchivedBeneficiaryRepo } from '~~/server/database'
 import {
   FixtureStructure,
   fixtureStructures,
   fixturesUsers
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { BeneficiaryTitle, StructureType } from '@prisma/client'
 import { deleteArchivedNames } from './delete-archive-names.service'
 

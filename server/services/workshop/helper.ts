@@ -11,8 +11,8 @@ import {
   WorkshopAttendeeType
 } from '@prisma/client'
 import dayjs from 'dayjs'
-import type { WorkshopFilterInput } from '~/server/schema'
-import { WorkshopPeriodFilter } from '~/types/workshop'
+import type { WorkshopFilterInput } from '~~/server/schema'
+import { WorkshopPeriodFilter } from '~~/types/workshop'
 import { FilterWorkshopTimeDirection } from '~/utils/constants/filters'
 
 const getGenderFromTitle = (title: BeneficiaryTitle | null | undefined) => {

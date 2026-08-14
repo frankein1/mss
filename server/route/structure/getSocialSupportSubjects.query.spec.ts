@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
 describe('Structure - Get Social Support Subjects - Data', () => {
   test('A SocialWorker gets all subjects including inactive', async ({

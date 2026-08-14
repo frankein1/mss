@@ -3,11 +3,11 @@ import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { booleanPointInPolygon, point } from '@turf/turf'
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson'
-import { fetchDataEducationSchools } from '~/server/lib/data-education'
-import type { JobResult } from '~/server/schema'
-import { dataEducationSchoolServerSchema } from '~/server/schema'
-import { DataEducationSchoolRepo } from '~/server/database/repository'
-import { prismaClient } from '~/server/prisma'
+import { fetchDataEducationSchools } from '~~/server/lib/data-education'
+import type { JobResult } from '~~/server/schema'
+import { dataEducationSchoolServerSchema } from '~~/server/schema'
+import { DataEducationSchoolRepo } from '~~/server/database/repository'
+import { prismaClient } from '~~/server/prisma'
 
 const PAGE_SIZE = 100
 const SCHOOL_TYPES = ['Ecole', 'Collège', 'EREA', 'Lycée']

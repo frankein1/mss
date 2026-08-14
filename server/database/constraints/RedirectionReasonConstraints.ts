@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import type { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin } from '~/server/security/rules/helpers'
+import type { SecurityRuleGrantee } from '~~/server/security'
+import { isAdmin } from '~~/server/security/rules/helpers'
 
 // All users of a structure can see, edit, delete, create any
 // redirection reason in the same structure.

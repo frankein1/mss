@@ -1,10 +1,10 @@
 import { describe, expect, afterEach } from 'vitest'
 import type { inferProcedureInput } from '@trpc/server'
-import { fixturesBeneficiaries, FixtureBeneficiary } from '~/prisma/fixtures'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { fixturesBeneficiaries, FixtureBeneficiary } from '~~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 
-import type { AppRouter } from '~/server/trpc/routers'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 type Input = inferProcedureInput<
   AppRouter['beneficiary']['createFamilyFileMember']

@@ -5,9 +5,9 @@ import {
   fixtureStructures,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+} from '~~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 import dayjs from 'dayjs'
 import { BeneficiaryStatus } from '@prisma/client'
 import { randomUUID } from 'node:crypto'

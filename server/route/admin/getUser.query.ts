@@ -1,8 +1,8 @@
 import { UserRole } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { AdminContext } from '~/server/trpc'
-import { idSchema } from '~/server/schema'
-import { UserRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { AdminContext } from '~~/server/trpc'
+import { idSchema } from '~~/server/schema'
+import { UserRepo } from '~~/server/database'
 
 const adminHandler = async ({
   ctx,

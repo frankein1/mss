@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import type { SecurityRuleContext } from '~/server/security'
-import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
-import type { IdInput } from '~/server/schema'
-import { forbiddenError } from '~/server/trpc'
+import type { SecurityRuleContext } from '~~/server/security'
+import { BeneficiaryRepo, FamilyFileRepo } from '~~/server/database'
+import type { IdInput } from '~~/server/schema'
+import { forbiddenError } from '~~/server/trpc'
 
 async function getBeneficiary(ctx: SecurityRuleContext, beneficiaryId: string) {
   return await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {

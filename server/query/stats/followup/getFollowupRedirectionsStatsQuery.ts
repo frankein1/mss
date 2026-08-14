@@ -3,9 +3,9 @@ import {
   getCountByTypes,
   prepareFollowupStatFilters
 } from '../helpers'
-import { PartnerOrganizationRepo, RedirectionRepo } from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { PartnerOrganizationRepo, RedirectionRepo } from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security/rules/types'
 
 export async function getFollowupRedirectionsStatsQuery(
   user: SecurityRuleGrantee,

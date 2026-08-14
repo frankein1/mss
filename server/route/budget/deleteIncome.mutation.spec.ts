@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 import {
   describeBudgetAuthorizations,
   budgetFixtures

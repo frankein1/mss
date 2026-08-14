@@ -1,7 +1,7 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { afterEach, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { fixtureStructures, FixtureStructure } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixtureStructures, FixtureStructure } from '~~/prisma/fixtures'
 
 let workshopId: string
 let otherPartnerOrganizationId: string

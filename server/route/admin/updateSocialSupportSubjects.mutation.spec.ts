@@ -1,7 +1,7 @@
 import { describe, expect, afterEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
-import { fixtureStructures, FixtureStructure } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { fixtureStructures, FixtureStructure } from '~~/prisma/fixtures'
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 

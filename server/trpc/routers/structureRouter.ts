@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from '~/server/trpc'
-import { structureRoutes } from '~/server/route/structure'
+import { protectedProcedure, router } from '~~/server/trpc'
+import { structureRoutes } from '~~/server/route/structure'
 
 export const structureRouter = router({
   getStructure: protectedProcedure

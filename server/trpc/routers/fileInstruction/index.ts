@@ -1,4 +1,4 @@
 export type {
   FileInstruction,
   FileInstructions
-} from '~/server/route/fileInstruction'
+} from '~~/server/route/fileInstruction'

@@ -1,9 +1,9 @@
-import { protectedProcedure, router } from '~/server/trpc'
+import { protectedProcedure, router } from '~~/server/trpc'
 import {
   getArchiveNotificationsQuery,
   getNotificationsQuery,
   updateNotificationMutation
-} from '~/server/route/notification'
+} from '~~/server/route/notification'
 
 export const notificationRouter = router({
   get: protectedProcedure

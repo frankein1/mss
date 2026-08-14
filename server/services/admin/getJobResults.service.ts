@@ -3,8 +3,8 @@ import { jobConverter } from '../jobResult/jobConverter'
 import type {
   JobResultAdminFilterInput,
   AdminGetJobResultsInput
-} from '~/server/schema'
-import { JobResultRepo } from '~/server/database'
+} from '~~/server/schema'
+import { JobResultRepo } from '~~/server/database'
 import { takeAndSkipFromPagination } from '~/utils/table'
 
 function prepareFilters(

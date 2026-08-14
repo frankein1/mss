@@ -4,17 +4,17 @@ import {
   filterHousingHelpRequest,
   filterSocialSupport
 } from '../helper'
-import { HousingHelpRequestRepo } from '~/server/database'
+import { HousingHelpRequestRepo } from '~~/server/database'
 import type {
   AppContextPermissions,
   FileInstructionPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
+} from '~~/server/security'
 import {
   getAppContextPermissions,
   getFileInstructionPermissions
-} from '~/server/security'
+} from '~~/server/security'
 
 export const select = {
   id: true,

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { prismaClient } from '~/server/prisma'
-import { fixturesBeneficiaries, FixtureBeneficiary } from '~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
+import { fixturesBeneficiaries, FixtureBeneficiary } from '~~/prisma/fixtures'
 
 const idCoursor = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id
 const idPenberthy = fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id

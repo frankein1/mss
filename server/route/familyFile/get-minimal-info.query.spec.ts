@@ -5,10 +5,10 @@ import {
   fixturesBeneficiaries,
   FixtureBeneficiary,
   fixturesUsers
-} from '~/prisma/fixtures'
-import { test } from '~/test/server/test-utils'
+} from '~~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
 
-import type { AppRouter } from '~/server/trpc/routers'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['file']['getFamilyFileMinimalInfo']>
 

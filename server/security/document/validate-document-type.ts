@@ -1,5 +1,5 @@
 import { filetypemime } from 'magic-bytes.js'
-import { documentFileAllowedTypes } from '~/client/options'
+import { documentFileAllowedTypes } from '~~/client/options'
 
 export function validateDocumentType(data: Buffer) {
   const mimes = filetypemime(data)

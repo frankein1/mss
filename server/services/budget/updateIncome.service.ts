@@ -1,9 +1,9 @@
 import type {
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
-import { BudgetIncomeRepo } from '~/server/database/repository'
-import type { UpdateBudgetIncomeInput } from '~/server/schema'
+} from '~~/server/security'
+import { BudgetIncomeRepo } from '~~/server/database/repository'
+import type { UpdateBudgetIncomeInput } from '~~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 
 export async function updateIncome({

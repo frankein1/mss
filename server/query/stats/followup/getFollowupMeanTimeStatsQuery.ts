@@ -1,7 +1,7 @@
 import { prepareFollowupStatFilters } from '../helpers'
-import { SocialSupportSubjectRepo } from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SocialSupportSubjectRepo } from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security/rules/types'
 
 export async function getFollowupMeanTimeStatsQuery(
   user: SecurityRuleGrantee,

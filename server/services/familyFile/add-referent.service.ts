@@ -1,6 +1,6 @@
-import { UserRepo } from '~/server/database'
+import { UserRepo } from '~~/server/database'
 
-import type { SecurityRuleGrantee } from '~/server/security'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 export async function addReferentToFamilyFile({
   user,

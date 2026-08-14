@@ -1,5 +1,5 @@
 import type { SocialSupportSubject } from '@prisma/client'
-import type { FieldLabels } from '~/types/fieldLabels'
+import type { FieldLabels } from '~~/types/fieldLabels'
 
 type SocialSupportSubjectFieldLabels = Pick<SocialSupportSubject, 'id' | 'name'>
 

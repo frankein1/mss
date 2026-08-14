@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
-import type { JobResult } from '~/server/schema'
-import { dataInclusionStructureServerSchemaV1 } from '~/server/schema'
-import { fetchStructuresPages } from '~/server/lib/data-inclusion'
-import { prismaClient } from '~/server/prisma'
+import type { JobResult } from '~~/server/schema'
+import { dataInclusionStructureServerSchemaV1 } from '~~/server/schema'
+import { fetchStructuresPages } from '~~/server/lib/data-inclusion'
+import { prismaClient } from '~~/server/prisma'
 
 async function importStructures(job: JobResult) {
   // This will be merged with scheduler env when the code will be migrated

@@ -1,5 +1,5 @@
-import type { SecurityRuleContext } from '~/server/security'
-import { FamilyFileRepo } from '~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
+import { FamilyFileRepo } from '~~/server/database'
 
 export async function getMembersAccommodation({
   ctx,

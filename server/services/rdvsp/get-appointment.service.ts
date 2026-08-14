@@ -1,11 +1,11 @@
-import type { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import {
   castAppointmentDatestringToUTC,
   getAgentClient,
   mapRdvspRdvStatusToAppointmentStatus
 } from './helper'
-import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
-import { UserRepo } from '~/server/database'
+import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
+import { UserRepo } from '~~/server/database'
 
 export default async function getAppointment({
   input,

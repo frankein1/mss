@@ -1,10 +1,10 @@
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixturesSocialSupportSubjects,
   fixtureStructures
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const subjectIds: string[] = []
 

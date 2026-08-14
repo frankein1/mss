@@ -9,7 +9,7 @@ import type {
   BudgetIncomeCustom
 } from '@prisma/client'
 import type { BeneficiaryFileIdentification } from './beneficiary'
-import type { getBudget } from '~/server/services/budget/getBudget.service'
+import type { getBudget } from '~~/server/services/budget/getBudget.service'
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,

@@ -1,9 +1,9 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   FixturePartnerOrganization,
   fixturesPartnerOrganizations
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 describe('PartnerOrganization - GetAll - Authorizations', () => {
   test('A manager can list active partner organizations', async ({ trpc }) => {

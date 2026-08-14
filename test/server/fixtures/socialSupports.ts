@@ -7,8 +7,8 @@ import {
   fixturesPartnerOrganizations,
   FixturePartnerOrganization,
   fixturesPartnerOrganizationContacts
-} from '~/prisma/fixtures'
-import { prismaClient } from '~/server/prisma'
+} from '~~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
 
 const defaultStructureId = fixtureStructures[FixtureStructure.Test].id
 const defaultReferentId = fixturesUsers[FixtureUserRole.Referent].id

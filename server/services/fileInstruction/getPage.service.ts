@@ -1,9 +1,9 @@
 import { getPage as getPageFn } from './queries'
 import { prepareFilters, prepareSort } from './helper'
-import type { SecurityRuleContext } from '~/server/security'
+import type { SecurityRuleContext } from '~~/server/security'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import type { FileInstructionPageInput } from '~/server/schema'
-import { FileInstructionRepo } from '~/server/database/repository'
+import type { FileInstructionPageInput } from '~~/server/schema'
+import { FileInstructionRepo } from '~~/server/database/repository'
 
 export async function getPage({
   ctx,

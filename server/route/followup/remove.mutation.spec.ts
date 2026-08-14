@@ -1,12 +1,12 @@
 import { FollowupMedium, SocialSupportStatus } from '@prisma/client'
 import { afterEach, describe, expect } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
   fixturesSocialSupportSubjects
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const coursorId = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id
 const subjectId = fixturesSocialSupportSubjects[0]!.id

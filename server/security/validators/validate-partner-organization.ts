@@ -1,6 +1,6 @@
-import type { SecurityRuleGrantee } from '~/server/security'
-import { PartnerOrganizationRepo } from '~/server/database'
-import { prismaClient } from '~/server/prisma'
+import type { SecurityRuleGrantee } from '~~/server/security'
+import { PartnerOrganizationRepo } from '~~/server/database'
+import { prismaClient } from '~~/server/prisma'
 import { validateManyBelongToStructure } from './validate-belongs-to-structure'
 
 function nonEmpty(id: string | null | undefined): id is string {

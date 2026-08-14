@@ -1,12 +1,12 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { AddPartnerOrganizationInput } from '~/server/schema'
-import { addPartnerOrganizationSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { AddPartnerOrganizationInput } from '~~/server/schema'
+import { addPartnerOrganizationSchema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getAppContextPermissions } from '~~/server/security'
 
-import { PartnerOrganizationService } from '~/server/services'
+import { PartnerOrganizationService } from '~~/server/services'
 
 const handler = ({
   input,

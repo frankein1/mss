@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from '~/server/trpc'
-import { dataInclusionRoutes } from '~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
+import { dataInclusionRoutes } from '~~/server/route'
 
 export const dataInclusionRouter = router({
   searchStructures: protectedProcedure

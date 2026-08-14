@@ -6,7 +6,10 @@ import {
   requiredNativeEnum,
   dateOrEmpty
 } from './helpers.schema'
-import { documentFileMaxSize, documentFileAllowedTypes } from '~/client/options'
+import {
+  documentFileMaxSize,
+  documentFileAllowedTypes
+} from '~~/client/options'
 import {
   errorMessages,
   maxStringLengthMessage,

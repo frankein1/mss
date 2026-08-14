@@ -1,11 +1,11 @@
 import { UserActivityType, UserRole } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-import { UserRepo, StructureRepo } from '~/server/database'
-import { createOrUpdateUser } from '~/server/integrations/brevo/service'
-import { createMutation } from '~/server/route'
-import type { AdminEditUserInput } from '~/server/schema'
-import { adminEditUserSchema } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
+import { UserRepo, StructureRepo } from '~~/server/database'
+import { createOrUpdateUser } from '~~/server/integrations/brevo/service'
+import { createMutation } from '~~/server/route'
+import type { AdminEditUserInput } from '~~/server/schema'
+import { adminEditUserSchema } from '~~/server/schema'
+import type { AdminContext } from '~~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 
 const adminHandler = async ({

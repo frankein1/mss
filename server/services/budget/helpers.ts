@@ -3,8 +3,8 @@ import type {
   ExpensesKey,
   BudgetExpensesWithLoansAndDebts,
   BudgetIncomeWithCustoms
-} from '~/types/budget'
-import { budgetIncomeKeys, budgetExpensesKeys } from '~/client/options'
+} from '~~/types/budget'
+import { budgetIncomeKeys, budgetExpensesKeys } from '~~/client/options'
 import { incrementBudgetTotal } from '~/utils/budget'
 
 export const getTotalIncome = (incomes: BudgetIncomeWithCustoms[]) => {

@@ -8,7 +8,7 @@ import {
   stringConstraint,
   dateOrEmpty,
   requiredNativeEnum
-} from '.'
+} from '../schema'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 
 export const getBudgetSchema = z.object({

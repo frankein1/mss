@@ -7,7 +7,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import type { ZodSchema } from 'zod'
 import merge from 'lodash.merge'
-import type { AppContextPermissions } from '~/server/security'
+import type { AppContextPermissions } from '~~/server/security'
 import { defaultPermissions } from '~/composables/usePermissions'
 
 type DeepPartial<T> = {

@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { fixturesUsers, FixtureUserRole } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
 
 describe('Users - Get Users - Authorizations', () => {
   test('A non-admin user is rejected', async ({ trpc }) => {

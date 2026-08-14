@@ -9,7 +9,7 @@ import {
   stringOrEmpty,
   websiteConstraint,
   websiteSanitizeTransform
-} from '..'
+} from '../../schema'
 
 const contactPartnerOrganizationSchema = z
   .array(

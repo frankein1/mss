@@ -1,5 +1,5 @@
 import type { SocialSupportRedirection } from '@prisma/client'
-import type { FieldLabels } from '~/types/fieldLabels'
+import type { FieldLabels } from '~~/types/fieldLabels'
 
 type SocialSupportRedirectionLabels = Pick<
   SocialSupportRedirection,

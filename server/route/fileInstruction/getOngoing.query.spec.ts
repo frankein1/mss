@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
 describe('FileInstruction - GetOngoing - Authorizations', () => {
   test('A social worker can get ongoing file instruction counts', async ({

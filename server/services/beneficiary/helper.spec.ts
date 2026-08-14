@@ -3,7 +3,7 @@ import {
   prepareBeneficiaryFilters,
   prepareBeneficiarySearchConditions
 } from './helper'
-import { AgeGroup } from '~/client/options'
+import { AgeGroup } from '~~/client/options'
 
 beforeAll(() => {
   vi.useFakeTimers()

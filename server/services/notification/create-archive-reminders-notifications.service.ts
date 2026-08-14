@@ -1,6 +1,6 @@
 import { NotificationType } from '@prisma/client'
 import dayjs from 'dayjs'
-import { NotificationRepo } from '~/server/database'
+import { NotificationRepo } from '~~/server/database'
 import { getInactiveBeneficiariesWithOneMonthNotification } from './helper'
 import { performance } from 'node:perf_hooks'
 

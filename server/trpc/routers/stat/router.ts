@@ -1,5 +1,5 @@
-import { statRoutes as routes } from '~/server/route'
-import { protectedProcedure, router } from '~/server/trpc'
+import { statRoutes as routes } from '~~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
 
 export const statRouter = router({
   getAccommodationZoneStats: protectedProcedure

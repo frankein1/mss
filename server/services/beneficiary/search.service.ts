@@ -1,7 +1,7 @@
 import { prepareBeneficiarySearchConditions } from './helper'
-import type { SearchBeneficiaryInput } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { BeneficiaryRepo } from '~/server/database'
+import type { SearchBeneficiaryInput } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { BeneficiaryRepo } from '~~/server/database'
 import { StructureType } from '@prisma/client'
 
 export async function search({

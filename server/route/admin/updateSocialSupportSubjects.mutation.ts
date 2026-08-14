@@ -1,10 +1,10 @@
-import { createMutation } from '~/server/route'
-import type { AdminContext } from '~/server/trpc'
-import type { UpdateAdminStructureSubjectsInput } from '~/server/schema'
-import { updateAdminStructureSubjectsSchema } from '~/server/schema'
-import { StructureRepo } from '~/server/database'
-import { StructureService } from '~/server/services'
-import { structureContextSelect } from '~/server/utils/fetchUserContext'
+import { createMutation } from '~~/server/route'
+import type { AdminContext } from '~~/server/trpc'
+import type { UpdateAdminStructureSubjectsInput } from '~~/server/schema'
+import { updateAdminStructureSubjectsSchema } from '~~/server/schema'
+import { StructureRepo } from '~~/server/database'
+import { StructureService } from '~~/server/services'
+import { structureContextSelect } from '~~/server/utils/fetchUserContext'
 import { UserActivityType } from '@prisma/client'
 
 const adminHandler = async ({

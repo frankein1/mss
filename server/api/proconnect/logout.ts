@@ -1,10 +1,10 @@
 import { UserActivityType } from '@prisma/client'
-import { getProConnectClient } from '~/server/lib'
-import { prismaClient } from '~/server/prisma'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { getProConnectClient } from '~~/server/lib'
+import { prismaClient } from '~~/server/prisma'
+import { addUserActivity } from '~~/server/query/userActivity/addUserActivity'
 import type { H3Event } from 'h3'
 import { unauthorized } from '~/utils/api/errors'
-import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import { fetchUserContext } from '~~/server/utils/fetchUserContext'
 
 export default defineEventHandler(async event => {
   const { inactive } = getQuery(event)

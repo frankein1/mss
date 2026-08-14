@@ -1,11 +1,11 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { DataEducationSchoolRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { DataEducationSchoolRepo } from '~~/server/database'
 import {
   searchDataEducationSchoolSchema,
   type SearchDataEducationSchoolInput
-} from '~/server/schema'
+} from '~~/server/schema'
 import { SCHOOL_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 
 const securityCheck = AllowSecurityCheck

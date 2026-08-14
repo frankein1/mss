@@ -1,6 +1,6 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { describe, expect, afterEach } from 'vitest'
-import { test, createSecurityContext } from '~/test/server/test-utils'
+import { test, createSecurityContext } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
@@ -9,7 +9,7 @@ import {
   fixturesBeneficiaries,
   FixtureBeneficiary,
   fixturesSocialSupportSubjects
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import {
   resolveRedirectionReasonIds,
   deleteOrphanedRedirectionReasons

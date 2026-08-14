@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-import type { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin } from '~/server/security/rules/helpers'
+import type { SecurityRuleGrantee } from '~~/server/security'
+import { isAdmin } from '~~/server/security/rules/helpers'
 
 // For now, all users of a structure can see, edit, delete, create any workshop
 // in the same structure.

@@ -6,7 +6,7 @@ import {
   FixtureUserRole,
   FixtureBeneficiary,
   fixturesBeneficiaries
-} from '.'
+} from '../fixtures'
 
 export const fixturesFamilyFiles = [
   {

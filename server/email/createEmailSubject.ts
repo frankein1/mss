@@ -1,4 +1,4 @@
-import type { AppConfig } from '~/types/appConfig'
+import type { AppConfig } from '~~/types/appConfig'
 
 export const createEmailSubject = (
   subject: string,

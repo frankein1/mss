@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { StatFilterInput } from '~/server/schema'
-import { statFilterSchema } from '~/server/schema'
-import { getSocialSupportCountPerBeneficiaryStatsQuery } from '~/server/query/stats'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { StatFilterInput } from '~~/server/schema'
+import { statFilterSchema } from '~~/server/schema'
+import { getSocialSupportCountPerBeneficiaryStatsQuery } from '~~/server/query/stats'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
 
 const securityCheck = AllowSecurityCheck
 

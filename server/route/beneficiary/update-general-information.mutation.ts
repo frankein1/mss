@@ -1,16 +1,16 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
+import { createMutation } from '~~/server/route'
 import {
   getFamilyFilePermissions,
   validateManyBelongToStructure,
   type SecurityRuleContext
-} from '~/server/security'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
-import { updateBeneficiaryGeneralInformationSchema } from '~/server/schema'
+} from '~~/server/security'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { UpdateBeneficiaryGeneralInformationInput } from '~~/server/schema'
+import { updateBeneficiaryGeneralInformationSchema } from '~~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo, UserRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryRepo, UserRepo } from '~~/server/database'
+import { BeneficiaryService } from '~~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import type { SecurityRuleContext } from '~/server/security'
-import { DataInclusionStructureV1Repo } from '~/server/database/repository'
-import type { SearchDataInclusionStructureInput } from '~/server/schema'
-import { StructureRepo } from '~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
+import { DataInclusionStructureV1Repo } from '~~/server/database/repository'
+import type { SearchDataInclusionStructureInput } from '~~/server/schema'
+import { StructureRepo } from '~~/server/database'
 
 function getQueryForDepartmentSearch(zipcode: string) {
   const query = zipcode.substring(0, zipcode.startsWith('97') ? 3 : 2)

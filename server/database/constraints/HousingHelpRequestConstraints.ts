@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { FileInstructionConstraints } from './FileInstructionConstraints'
-import type { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin } from '~/server/security/rules/helpers'
+import type { SecurityRuleGrantee } from '~~/server/security'
+import { isAdmin } from '~~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.HousingHelpRequestWhereInput = {}

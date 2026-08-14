@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import {
   BeneficiaryRelativeRepo,
   BeneficiaryRepo,
@@ -15,15 +15,16 @@ import {
   SocialSupportRepo,
   StructureRepo,
   UserRepo
-} from '~/server/database'
+} from '~~/server/database'
 import { customAlphabet } from 'nanoid'
-import { deleteFiles } from '~/server/lib/s3/file'
-import { createEmail } from '~/server/query/email'
-import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { deleteFiles } from '~~/server/lib/s3/file'
+import { createEmail } from '~~/server/query/email'
+import { createEmailSubject } from '~~/server/email/createEmailSubject'
 import { canBeDisabled } from '~/utils/structure'
-import { forbiddenError } from '~/server/trpc'
-import type { AppConfig } from '~/types/appConfig'
-import { getDisabledStructureAlert } from '~/server/email/disabledStructureAlert'
+import { formatDate } from '~/utils/formatDate'
+import { forbiddenError } from '~~/server/trpc'
+import type { AppConfig } from '~~/types/appConfig'
+import { getDisabledStructureAlert } from '~~/server/email/disabledStructureAlert'
 
 export const disableStructure = async ({
   id,

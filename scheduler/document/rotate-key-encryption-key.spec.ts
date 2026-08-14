@@ -1,17 +1,17 @@
 import { describe, it, expect, afterEach, vi } from 'vitest'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import {
   fixturesBeneficiaries,
   FixtureBeneficiary,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { DocumentType } from '@prisma/client'
 import { rotateKeyEncryptionKey } from './rotate-key-encryption-key'
 
 process.env.NUXT_DOCUMENT_ROTATE_KEK_BATCH_SIZE = '2'
 
-vi.mock('~/server/lib/encryption/kms')
+vi.mock('~~/server/lib/encryption/kms')
 
 const DOC_NAME_PREFIX = 'ROTATE-KEK-'
 

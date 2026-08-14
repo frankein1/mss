@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { RepClassification, SchoolStatus, SchoolType } from '@prisma/client'
-import { stringConstraint } from '.'
+import { stringConstraint } from '../schema'
 
 const schoolTypeMap: Record<string, SchoolType> = {
   'Ecole': SchoolType.Ecole,

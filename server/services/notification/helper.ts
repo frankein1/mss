@@ -1,7 +1,7 @@
 import { NotificationType, UserRole, UserStatus } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import dayjs from 'dayjs'
-import { NotificationRepo } from '~/server/database'
+import { NotificationRepo } from '~~/server/database'
 
 // Find beneficiary with no archive due date or past due date (means delay hasnt been set or is past due)
 // They must be inactive for more than 23 months (beacause notification 1 month before the 2 years of inactivity)

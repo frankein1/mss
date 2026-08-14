@@ -10,7 +10,7 @@ import {
 import dayjs from 'dayjs'
 import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 import { withEmptyValueOptionalNativeEnum } from '../helpers.schema'
-import { FileInstructionPeriodFilter } from '~/types/fileInstruction'
+import { FileInstructionPeriodFilter } from '~~/types/fileInstruction'
 
 export const fileInstructionFilterSchema = z.object({
   fileInstructionType: z.nativeEnum(FileInstructionType).nullish(),

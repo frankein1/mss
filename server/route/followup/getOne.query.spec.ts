@@ -1,14 +1,14 @@
 import { FollowupMedium, SocialSupportStatus } from '@prisma/client'
 import { afterEach, describe, expect } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   FixtureSocialSupport,
   fixturesBeneficiaries,
   fixturesSocialSupports,
   fixturesSocialSupportSubjects
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const coursorId = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id
 
@@ -93,7 +93,7 @@ describe('Followup - GetOne - Field filtering', () => {
 
   const createFollowupWithPrivateSynthesis = async (
     caller: Awaited<
-      ReturnType<typeof import('~/test/server/test-utils').createCaller>
+      ReturnType<typeof import('~~/test/server/test-utils').createCaller>
     >,
     familyFileId: string,
     beneficiaryId: string

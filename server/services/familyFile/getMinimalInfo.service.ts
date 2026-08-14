@@ -1,6 +1,6 @@
-import type { SecurityRuleContext } from '~/server/security'
-import { getFamilyFilePermissions } from '~/server/security'
-import { FamilyFileRepo } from '~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getFamilyFilePermissions } from '~~/server/security'
+import { FamilyFileRepo } from '~~/server/database'
 
 export async function getMinimalInfo({
   ctx,

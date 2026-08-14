@@ -1,4 +1,4 @@
-import { JobResultRepo } from '~/server/database'
+import { JobResultRepo } from '~~/server/database'
 
 export async function getOngoingJob() {
   return await JobResultRepo.prisma.findFirst({

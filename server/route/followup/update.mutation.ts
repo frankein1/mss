@@ -1,14 +1,14 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { EditFollowupInput } from '~/server/schema'
-import { editFollowupSchema } from '~/server/schema'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { EditFollowupInput } from '~~/server/schema'
+import { editFollowupSchema } from '~~/server/schema'
 import {
   getAppContextPermissions,
   type SecurityRuleContext
-} from '~/server/security'
+} from '~~/server/security'
 
-import { FollowupService } from '~/server/services'
+import { FollowupService } from '~~/server/services'
 import {
   validateRichTextSchema,
   validateSocialSupportPartnerOrganisations

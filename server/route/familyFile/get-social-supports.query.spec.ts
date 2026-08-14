@@ -1,10 +1,10 @@
 import { describe, expect } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import type { inferProcedureInput } from '@trpc/server'
-import { FixtureBeneficiary, fixturesFamilyFiles } from '~/prisma/fixtures'
-import { test } from '~/test/server/test-utils'
+import { FixtureBeneficiary, fixturesFamilyFiles } from '~~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
 
-import type { AppRouter } from '~/server/trpc/routers'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['file']['getSocialSupports']>
 

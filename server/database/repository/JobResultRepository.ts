@@ -1,4 +1,4 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 export const JobResultRepo = {
   prisma: {
