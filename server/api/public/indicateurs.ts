@@ -1,6 +1,6 @@
 import { defineEventHandler } from 'h3'
-import { StructureRepo } from '~/server/database'
-import apiTokenMiddleware from '~/server/utils/apiTokenMiddleware'
+import { StructureRepo } from '~~/server/database'
+import apiTokenMiddleware from '~~/server/utils/apiTokenMiddleware'
 import dayjs from 'dayjs'
 
 function isActiveSinceNDays(date: Date | null, nDays: number) {

@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   describeBudgetAuthorizations,
   budgetFixtures

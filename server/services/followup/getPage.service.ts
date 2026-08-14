@@ -1,8 +1,8 @@
 import { getPage as getPageFn } from './queries'
 import { prepareFilters, prepareSort } from './helper'
-import { FollowupRepo } from '~/server/database'
-import type { GetFollowupsInput } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
+import { FollowupRepo } from '~~/server/database'
+import type { GetFollowupsInput } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 export async function getPage({

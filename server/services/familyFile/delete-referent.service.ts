@@ -1,5 +1,5 @@
-import { UserRepo } from '~/server/database'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { UserRepo } from '~~/server/database'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 export async function deleteReferentFromFamilyfile({
   user,

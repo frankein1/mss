@@ -1,6 +1,6 @@
 import { vi, test, expect, beforeEach } from 'vitest'
 import { handleStructuresImport } from './structure-import.service'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 beforeEach(async () => {
   vi.stubEnv('NUXT_DATA_INCLUSION_API_URL', 'http://test-api.data-inclusion.fr')

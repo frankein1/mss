@@ -3,9 +3,9 @@ import { filterOutEmptyElements } from '../helper'
 import type {
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security'
-import type { UpdateBeneficiaryEntourageInput } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/database'
+} from '~~/server/security'
+import type { UpdateBeneficiaryEntourageInput } from '~~/server/schema'
+import { BeneficiaryRepo } from '~~/server/database'
 import { prepareRelationUpdates } from '~/utils/prisma'
 
 function getBeneficiarySecurityTargetWithEntourage(

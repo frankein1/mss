@@ -1,6 +1,6 @@
-import { PartnerOrganizationRepo } from '~/server/database'
-import type { EditPartnerOrganizationInput } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security/rules/types'
+import { PartnerOrganizationRepo } from '~~/server/database'
+import type { EditPartnerOrganizationInput } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security/rules/types'
 
 export async function update({
   input,

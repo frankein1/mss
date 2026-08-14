@@ -9,7 +9,7 @@ import type {
 } from '../security/rules/types'
 import type { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
-import { shouldLog } from '~/server/utils/logging'
+import { shouldLog } from '~~/server/utils/logging'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson,

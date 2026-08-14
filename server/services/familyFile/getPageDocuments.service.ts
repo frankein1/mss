@@ -1,12 +1,12 @@
 import type { Prisma } from '@prisma/client'
 import { getFamilyFileSecurityTarget } from './permission.service'
-import { DocumentRepo } from '~/server/database'
+import { DocumentRepo } from '~~/server/database'
 import type {
   BeneficiaryDocumentFilterInput,
   GetDocumentsInput
-} from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getDocumentPermissions } from '~/server/security'
+} from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getDocumentPermissions } from '~~/server/security'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 function prepareBeneficiaryDocumentsFilters(

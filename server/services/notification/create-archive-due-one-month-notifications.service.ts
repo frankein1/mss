@@ -1,6 +1,6 @@
 import { NotificationType } from '@prisma/client'
-import { NotificationRepo } from '~/server/database'
-import { prismaClient } from '~/server/prisma'
+import { NotificationRepo } from '~~/server/database'
+import { prismaClient } from '~~/server/prisma'
 import { performance } from 'node:perf_hooks'
 import { getInactiveBeneficiaries } from './helper'
 

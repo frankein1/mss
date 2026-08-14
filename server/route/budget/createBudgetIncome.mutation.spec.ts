@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   FixtureBeneficiary,
   FixtureStructure,
   fixturesBeneficiaries,
   fixturesBudgets,
   fixtureStructures
-} from '~/prisma/fixtures'
-import { prismaClient } from '~/server/prisma'
+} from '~~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
 import { budgetFixtures } from './budget-test-helpers'
 import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
 

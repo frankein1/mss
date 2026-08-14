@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { GetSocialSupportSubjectInput } from '~/server/schema'
-import { getSocialSupportSubjectSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { SocialSupportSubjectRepo } from '~/server/database'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { GetSocialSupportSubjectInput } from '~~/server/schema'
+import { getSocialSupportSubjectSchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { SocialSupportSubjectRepo } from '~~/server/database'
 
 const handler = async ({
   ctx: { user, structure },

@@ -1,0 +1,121 @@
+<template>
+  <form
+    ref="form"
+    novalidate
+    @submit.prevent="onSubmit"
+  >
+    <div class="fr-container">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div
+          v-if="props.familyFileIdentification.length > 0"
+          class="fr-col-12"
+        >
+          <VeeRadioButtons
+            name="beneficiaryId"
+            label="Choisir un membre du foyer&nbsp;:"
+            :options="beneficiaryOptions"
+            :inline="true"
+            required
+            @change-value="watchBeneficiary($event)"
+          />
+        </div>
+
+        <template
+          v-if="
+            selectedBeneficiary === BUDGET_INCOME_FOR_MEMBER_VALUE ||
+            props.familyFileIdentification.length === 0
+          "
+        >
+          <div class="fr-col-12">
+            <p class="fr-mb-2w">
+              <RequiredFields />
+            </p>
+          </div>
+          <div class="fr-col-12">
+            <VeeInput
+              name="member.lastName"
+              :label="relativeFieldLabels.lastName"
+              required
+            />
+          </div>
+
+          <div class="fr-col-12">
+            <VeeInput
+              name="member.firstName"
+              :label="relativeFieldLabels.firstName"
+              required
+            />
+          </div>
+
+          <div class="fr-col-12">
+            <VeeSelect
+              name="member.relationship"
+              :label="relativeFieldLabels.relationship"
+              :options="withEmptyValue(taxHouseHoldRelationshipKeys.options)"
+              required
+            />
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <BudgetActions
+      class="fr-mt-6w"
+      :is-submitting="isSubmitting"
+      confirm-label="Valider"
+      @cancel="modal.close"
+    />
+  </form>
+</template>
+
+<script setup lang="ts">
+  import { taxHouseHoldRelationshipKeys } from '~~/client/options'
+  import { relativeFieldLabels } from '~~/client/labels'
+
+  import type { CreateBudgetIncomeInput } from '~~/server/schema'
+  import { createBudgetIncomeSchema } from '~~/server/schema'
+  import type { BeneficiaryFileIdentification } from '~~/types/beneficiary'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { BUDGET_INCOME_FOR_MEMBER_VALUE } from '~/utils/constants/income'
+
+  const props = defineProps<{
+    budgetId: string
+    isSubmitting: boolean
+    familyFileIdentification: BeneficiaryFileIdentification[]
+    add: (values: CreateBudgetIncomeInput) => void
+  }>()
+
+  // Refs
+  const selectedBeneficiary = ref<string | undefined>(undefined)
+  const modal = useModal()
+
+  const beneficiaryOptions = computed(() => {
+    const options = props.familyFileIdentification.map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
+    options.push({
+      label: 'Autre',
+      value: BUDGET_INCOME_FOR_MEMBER_VALUE
+    })
+    return options
+  })
+
+  const { handleSubmit } = useForm<CreateBudgetIncomeInput>({
+    validationSchema: toTypedSchema(createBudgetIncomeSchema),
+    initialValues: {
+      budgetId: props.budgetId,
+      beneficiaryId:
+        props.familyFileIdentification.length > 0
+          ? selectedBeneficiary.value
+          : BUDGET_INCOME_FOR_MEMBER_VALUE
+    }
+  })
+
+  const watchBeneficiary = (value: string) => {
+    selectedBeneficiary.value = value
+  }
+  const onSubmit = handleSubmit(values => {
+    props.add(values)
+  })
+</script>

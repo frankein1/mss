@@ -1,6 +1,6 @@
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import { test, createCaller } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test, createCaller } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 
 const PREFIX = 'SUSI-'
 

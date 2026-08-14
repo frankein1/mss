@@ -1,9 +1,9 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   FixturePartnerOrganization,
   fixturesPartnerOrganizations
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const partnerId =
   fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id

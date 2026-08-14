@@ -1,17 +1,17 @@
 import { UserActivityType } from '@prisma/client'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { SecurityRuleContext } from '~/server/security'
-import type { IdInput } from '~/server/schema'
-import { idSchema } from '~/server/schema'
-import { createMutation } from '~/server/route/createRoute'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { SecurityRuleContext } from '~~/server/security'
+import type { IdInput } from '~~/server/schema'
+import { idSchema } from '~~/server/schema'
+import { createMutation } from '~~/server/route/createRoute'
 import {
   BeneficiaryRepo,
   DocumentRepo,
   FamilyFileRepo
-} from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
-import { prismaClient } from '~/server/prisma'
-import { deleteFiles } from '~/server/lib/s3/file'
+} from '~~/server/database'
+import { BeneficiaryService } from '~~/server/services'
+import { prismaClient } from '~~/server/prisma'
+import { deleteFiles } from '~~/server/lib/s3/file'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
   const permissions = await BeneficiaryService.getEditionPermissions(

@@ -1,18 +1,18 @@
 import type { Prisma } from '@prisma/client'
 import { UserStatus, UserActivityType } from '@prisma/client'
 import pkg from 'jsonwebtoken'
-import { signJwt } from '~/server/lib/jwt'
-import { getProConnectClient } from '~/server/lib/proconnect.client'
-import { structureContextSelect } from '~/server/utils/fetchUserContext'
+import { signJwt } from '~~/server/lib/jwt'
+import { getProConnectClient } from '~~/server/lib/proconnect.client'
+import { structureContextSelect } from '~~/server/utils/fetchUserContext'
 import type {
   ProConnectUserInfo,
   ProConnectClient
-} from '~/server/lib/proconnect.client'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UserRepo } from '~/server/database'
-import { prismaClient } from '~/server/prisma'
+} from '~~/server/lib/proconnect.client'
+import { addUserActivity } from '~~/server/query/userActivity/addUserActivity'
+import { UserRepo } from '~~/server/database'
+import { prismaClient } from '~~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
-import type { AuthSession } from '~/server/types/session'
+import type { AuthSession } from '~~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
 import { cookieOptions } from '~/utils/cookie'
 import { routes } from '~/utils/routes'
@@ -90,7 +90,7 @@ export default defineEventHandler(async event => {
 
   // Validate id token signature
   // See https://curity.io/resources/learn/jwt-best-practices/ sections 3 to 6
-  let validatedIdToken: { nonce: string; amr: string[] } | null = null
+  let validatedIdToken: { nonce: string; amr: string[] } | null
 
   try {
     const decoded = decode(idToken, { complete: true })
@@ -121,7 +121,7 @@ export default defineEventHandler(async event => {
   const userinfo = await fetchUserInfo(client, accessToken)
 
   // Validate jwt user info signature
-  let validatedUserInfo: ProConnectUserInfo | null = null
+  let validatedUserInfo: ProConnectUserInfo | null
   try {
     const decoded = decode(userinfo, { complete: true })
     if (!decoded) {
@@ -152,7 +152,7 @@ export default defineEventHandler(async event => {
 
   const account = await getAccount({ sub })
 
-  let user: UserAuthInfo | null = null
+  let user: UserAuthInfo | null
   if (account) {
     user = account.user
   } else {

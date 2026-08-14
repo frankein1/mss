@@ -1,5 +1,5 @@
-import { ministerRoutes as routes } from '~/server/route'
-import { protectedProcedure, router } from '~/server/trpc'
+import { ministerRoutes as routes } from '~~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
 
 export const ministerRouter = router({
   getMinisters: protectedProcedure

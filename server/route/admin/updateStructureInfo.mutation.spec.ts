@@ -1,6 +1,6 @@
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 
 const PREFIX = 'USI-'
 let structureId: string

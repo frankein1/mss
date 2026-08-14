@@ -1,5 +1,5 @@
 import type { MinisterEntity } from '@prisma/client'
-import type { FieldLabels } from '~/types/fieldLabels'
+import type { FieldLabels } from '~~/types/fieldLabels'
 
 export const ministerFieldLabels: FieldLabels<
   Omit<MinisterEntity, 'oldMinister'>

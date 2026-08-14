@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from '~/server/trpc'
-import { userRoutes as routes } from '~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
+import { userRoutes as routes } from '~~/server/route'
 
 export const userRouter = router({
   update: protectedProcedure

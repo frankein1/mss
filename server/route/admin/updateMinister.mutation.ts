@@ -1,8 +1,11 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
-import { MinisterRepo } from '~/server/database'
-import { createMutation } from '~/server/route'
-import { updateMinisterSchema, type UpdateMinisterInput } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
+import { MinisterRepo } from '~~/server/database'
+import { createMutation } from '~~/server/route'
+import {
+  updateMinisterSchema,
+  type UpdateMinisterInput
+} from '~~/server/schema'
+import type { AdminContext } from '~~/server/trpc'
 
 export const adminHandler = async ({
   ctx,

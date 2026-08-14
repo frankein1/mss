@@ -3,13 +3,13 @@ import {
   UserActivityType,
   UserStatus
 } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateUserInput } from '~/server/schema'
-import { editUserSchema } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security'
-import { getAppContextPermissions } from '~/server/security'
-import { UserRepo } from '~/server/database'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { UpdateUserInput } from '~~/server/schema'
+import { editUserSchema } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { getAppContextPermissions } from '~~/server/security'
+import { UserRepo } from '~~/server/database'
 import { TRPCError } from '@trpc/server'
 
 const handler = async ({

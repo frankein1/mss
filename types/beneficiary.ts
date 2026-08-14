@@ -8,8 +8,8 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
-import type { RouterOutput } from '~/server/trpc/routers'
-import type { contributingPartnerSelect } from '~/server/services/beneficiary/queries'
+import type { RouterOutput } from '~~/server/trpc/routers'
+import type { contributingPartnerSelect } from '~~/server/services/beneficiary/queries'
 
 export type BeneficiaryReferent = {
   id: string

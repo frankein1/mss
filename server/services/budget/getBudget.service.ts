@@ -1,6 +1,6 @@
 import { getDeltaIncomeExpenses } from './helpers'
-import type { SecurityRuleContext } from '~/server/security'
-import { BudgetRepo } from '~/server/database/repository'
+import type { SecurityRuleContext } from '~~/server/security'
+import { BudgetRepo } from '~~/server/database/repository'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export async function getBudget({

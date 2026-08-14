@@ -1,17 +1,17 @@
 import { UserActivityType } from '@prisma/client'
 import { defineEventHandler } from 'h3'
-import { DocumentRepo } from '~/server/database'
-import { addUserActivity } from '~/server/query'
-import { DocumentService } from '~/server/services'
+import { DocumentRepo } from '~~/server/database'
+import { addUserActivity } from '~~/server/query'
+import { DocumentService } from '~~/server/services'
 import { badrequest, forbidden, internal } from '~/utils/api/errors'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import type { RuntimeConfig } from 'nuxt/schema'
-import { downloadWithEncryption } from '~/server/lib/s3/file'
+import { downloadWithEncryption } from '~~/server/lib/s3/file'
 import {
   fetchUserContext,
   type UserContext
-} from '~/server/utils/fetchUserContext'
-import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
+} from '~~/server/utils/fetchUserContext'
+import { checkUserIsAuthenticated } from '~~/server/utils/checkUserIsAuthenticated'
 
 export default defineEventHandler(async event => {
   const userId = event.context.auth?.userId

@@ -1,8 +1,8 @@
-import type { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { getAgentClient } from './helper'
 
-import { BeneficiaryRepo } from '~/server/database'
-import type { RdvspRdv } from '~/server/lib/rdvsp-oauth.client'
+import { BeneficiaryRepo } from '~~/server/database'
+import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
 
 export default async function getAppointments({
   input,

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 
 export const exportAttendanceSchema = z.object({
   code: z.string().length(VALIDATION_CODE_LENGTH),

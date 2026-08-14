@@ -1,4 +1,4 @@
-import { createArchiveDueRemindersNotifications } from '~/server/services/notification/create-archive-reminders-notifications.service'
+import { createArchiveDueRemindersNotifications } from '~~/server/services/notification/create-archive-reminders-notifications.service'
 
 const archiveRemindersNotifications = async () => {
   try {

@@ -15,9 +15,9 @@ import {
   FixtureUserRole,
   fixturesBeneficiaries,
   FixtureBeneficiary
-} from '.'
+} from '../fixtures'
 import dayjs from 'dayjs'
-import { toFirstLetterUpperCase } from '../../utils/toFirstLetterUpperCase'
+import { toFirstLetterUpperCase } from '../../app/utils/toFirstLetterUpperCase'
 import { equiRandomEnum } from './utils'
 
 const WORKSHOP_COUNT = 100

@@ -1,13 +1,13 @@
 import { UserActivityType, WorkshopAttendeeType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { DeleteAttendeeInput } from '~/server/schema'
-import { deleteAttendeeSchema } from '~/server/schema'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { DeleteAttendeeInput } from '~~/server/schema'
+import { deleteAttendeeSchema } from '~~/server/schema'
 import {
   WorkshopAttendeeRepo,
   WorkshopExternalAttendeeRepo
-} from '~/server/database'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+} from '~~/server/database'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
 import { badrequest } from '~/utils/api/errors'
 
 const securityCheck = AllowSecurityCheck

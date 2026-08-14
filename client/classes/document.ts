@@ -1,4 +1,4 @@
-import { DocumentTag } from '~/types/document'
+import { DocumentTag } from '~~/types/document'
 
 export function getDocumentTagClass(tag: string) {
   switch (tag) {

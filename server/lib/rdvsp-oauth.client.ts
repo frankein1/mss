@@ -1,7 +1,7 @@
 import { apiRoutes } from '~/utils/routes'
 import { ofetch, FetchError } from 'ofetch'
-import { invalidError, unauthorizedError } from '~/server/trpc'
-import type { RdvspStatus } from '~/types/rdvsp'
+import { invalidError, unauthorizedError } from '~~/server/trpc'
+import type { RdvspStatus } from '~~/types/rdvsp'
 
 interface RdvspConfig {
   clientId: string

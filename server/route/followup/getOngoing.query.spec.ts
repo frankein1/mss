@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
 describe('Followup - GetOngoing - Authorizations', () => {
   test('A referent can get ongoing followup counts', async ({ trpc }) => {

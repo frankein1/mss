@@ -1,9 +1,9 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/route'
-import type { AdminGetStructuresInput } from '~/server/schema'
-import { adminGetStructuresSchema } from '~/server/schema'
-import { StructureRepo } from '~/server/database'
-import type { AdminContext } from '~/server/trpc'
+import { createQuery } from '~~/server/route'
+import type { AdminGetStructuresInput } from '~~/server/schema'
+import { adminGetStructuresSchema } from '~~/server/schema'
+import { StructureRepo } from '~~/server/database'
+import type { AdminContext } from '~~/server/trpc'
 import { canBeDisabled } from '~/utils/structure'
 
 const adminHandler = async ({

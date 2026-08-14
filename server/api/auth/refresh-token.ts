@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { signJwt } from '~/server/lib/jwt'
+import { signJwt } from '~~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { apiRoutes } from '~/utils/routes'
 

@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
 describe('Overview - Get Overview - Authorizations', () => {
   test('A non-admin user is rejected', async ({ trpc }) => {

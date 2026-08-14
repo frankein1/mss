@@ -1,5 +1,5 @@
 import { StructureType } from '@prisma/client'
-import { createQuery } from '~/server/route'
+import { createQuery } from '~~/server/route'
 import {
   beneficiaryAccommodationModeKeys,
   beneficiaryAccommodationZoneKeys,
@@ -14,8 +14,8 @@ import {
   ministereStructureKeys,
   getStatLabel,
   AgeGroup
-} from '~/client/options'
-import { repClassificationStatLabels } from '~/client/labels/school.labels'
+} from '~~/client/options'
+import { repClassificationStatLabels } from '~~/client/labels/school.labels'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
@@ -35,13 +35,13 @@ import {
   getDepartmentStatsQuery,
   getMinistereInterpellationStatsQuery,
   getSocialSupportCountPerBeneficiaryStatsQuery
-} from '~/server/query/stats'
-import type { StatFilterInput } from '~/server/schema'
-import { statFilterSchema } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
+} from '~~/server/query/stats'
+import type { StatFilterInput } from '~~/server/schema'
+import { statFilterSchema } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
 import { STATS_NULL_LABEL } from '~/utils/constants/stats'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
 import { getCustomAgeGroupLabel } from '~/utils/stats'
 import ExcelPkg from 'exceljs'
 import type { Workbook } from 'exceljs'

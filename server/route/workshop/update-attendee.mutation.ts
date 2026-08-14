@@ -1,10 +1,10 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateAttendeeServerInput } from '~/server/schema'
-import { updateAttendeeSchema } from '~/server/schema'
-import { WorkshopAttendeeRepo } from '~/server/database'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { UpdateAttendeeServerInput } from '~~/server/schema'
+import { updateAttendeeSchema } from '~~/server/schema'
+import { WorkshopAttendeeRepo } from '~~/server/database'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
 
 const securityCheck = AllowSecurityCheck
 

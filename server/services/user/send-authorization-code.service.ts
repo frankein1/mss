@@ -1,10 +1,10 @@
-import { UserRepo } from '~/server/database'
+import { UserRepo } from '~~/server/database'
 import { customAlphabet } from 'nanoid'
 import dayjs from 'dayjs'
-import { createEmail } from '~/server/query'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
-import { createEmailSubject } from '~/server/email/createEmailSubject'
+import { createEmail } from '~~/server/query'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+import { createEmailSubject } from '~~/server/email/createEmailSubject'
 
 const nanoid = customAlphabet('123456789', VALIDATION_CODE_LENGTH)
 

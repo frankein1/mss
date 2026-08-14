@@ -1,6 +1,6 @@
 import { describe, expect, afterEach, beforeEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 
 let ministerId: string
 

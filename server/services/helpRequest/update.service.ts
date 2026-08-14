@@ -1,21 +1,21 @@
 import type { Prisma } from '@prisma/client'
 import { NotificationType } from '@prisma/client'
-import { SocialSupportSubjectService } from '..'
+import { SocialSupportSubjectService } from '../../services'
 import { cleanUpdateInput } from './helper'
 import {
   SocialSupportRepo,
   HelpRequestRepo,
   FileInstructionRepo,
   NotificationRepo
-} from '~/server/database'
-import type { EditHelpRequestInput } from '~/server/schema'
-import type { SecurityRuleContext } from '~/server/security/rules/types'
+} from '~~/server/database'
+import type { EditHelpRequestInput } from '~~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security/rules/types'
 import {
   prepareDocumentsMutations,
   connect,
   prepareRelationUpdates
 } from '~/utils/prisma'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { filterOutEmptyElements } from '../helper'
 import { getSocialSupportWithRedirections } from '../socialSupport/helper'
 import { randomUUID } from 'node:crypto'

@@ -1,8 +1,8 @@
 import {
   getAppContextPermissions,
   getSocialSupportPermissions
-} from '~/server/security'
-import type { FamilyFileSecurityTarget } from '~/server/services'
+} from '~~/server/security'
+import type { FamilyFileSecurityTarget } from '~~/server/services'
 import {
   filterComments,
   filterDocuments,
@@ -11,8 +11,8 @@ import {
   filterHelpRequest,
   filterHousingHelpRequest,
   filterSocialSupport
-} from '~/server/services/helper'
-import type { ProtectedAppContext } from '~/server/trpc'
+} from '~~/server/services/helper'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import type { SocialSupportDetail } from './getDetails.query'
 
 export function formatSocialSupportDetail(

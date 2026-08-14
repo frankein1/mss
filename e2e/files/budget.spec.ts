@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { fixturesBeneficiaries, FixtureBeneficiary } from '~/prisma/fixtures'
+import { fixturesBeneficiaries, FixtureBeneficiary } from '~~/prisma/fixtures'
 
 const idApfelmann = fixturesBeneficiaries[FixtureBeneficiary.APFELMANN].id
 const familyFileId =

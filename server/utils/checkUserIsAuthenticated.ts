@@ -1,4 +1,4 @@
-import { forbidden } from '../../utils/api/errors'
+import { forbidden } from '../../app/utils/api/errors'
 import type { UserContext } from './fetchUserContext'
 
 export const checkUserIsAuthenticated = (user: UserContext) => {

@@ -1,0 +1,312 @@
+<template>
+  <AtomLazyComponent
+    :pending="filePending || pending"
+    :error="Boolean(fileError || error)"
+    message="Le revenu mensuel n'a pas pu être chargé."
+  >
+    <form
+      v-if="familyFileIdentification && income"
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <div class="content">
+        <div class="fr-container fr-pb-2w">
+          <AtomBreadcrumb
+            :links="
+              breadcrumbs.budget.AppFileBudgetIncomeEdit(
+                familyFileId,
+                familyFileIdentification,
+                incomeId
+              )
+            "
+          />
+
+          <PageTitle
+            :title="title"
+            pictogram-path="/pictograms/money.svg"
+            pictogram-background
+            :subtitle="subtitle"
+          />
+
+          <div>
+            <AtomAlert
+              v-if="legacyResources"
+              class="fr-mb-4w"
+              :alert-type="AlertType.Warning"
+              message="Veuillez répartir les ressources précedemment renseignées via l'ancienne section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
+            >
+              <template #detailedMessage>
+                <p class="euro-symbol">{{ legacyResources }}</p>
+              </template>
+            </AtomAlert>
+
+            <BudgetIncomeForm />
+          </div>
+
+          <section class="income__total">
+            <h2 class="fr-h4 fr-m-0">Total :</h2>
+            <span
+              class="fr-h4 fr-m-0"
+              :class="{ 'euro-symbol': total !== null }"
+              >{{ total !== null ? euros(total) : '-' }}</span
+            >
+          </section>
+        </div>
+      </div>
+
+      <BudgetActionBar
+        :is-submitting="isSubmitting"
+        :has-secondary-action="true"
+        confirm-secondary-label="Supprimer"
+        confirm-secondary-type="button"
+        confirm-secondary-class="fr-btn btn-delete-action fr-btn--secondary"
+        @cancel="onCancel"
+        @delete="onDelete"
+      />
+    </form>
+  </AtomLazyComponent>
+</template>
+
+<script setup lang="ts">
+  import { AlertType } from '~/utils/constants/alert'
+  import { useFamilyFileMinimalInfo } from '~/composables/useFamilyFileMinimalInfo'
+  import type { UpdateBudgetIncomeInput } from '~~/server/schema'
+  import { updateBudgetIncomeSchema } from '~~/server/schema'
+  import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { incomeSourceKeys, budgetIncomeKeys } from '~~/client/options'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import {
+    formatBudgetMemberLabel,
+    incomeHasBeenFilled,
+    incrementBudgetTotal
+  } from '~/utils/budget'
+  import { euros } from '~/utils/euros'
+  import type { IncomeKey } from '~~/types/budget'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
+  import BudgetDeleteConfirmation from '~/components/FamilyFileBudget/BudgetDeleteConfirmation.vue'
+
+  const route = useRoute()
+  const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
+
+  const familyFileId = route.params.id as string
+  const incomeId = route.params.iid as string
+
+  const title = routes.budget.AppFileBudgetIncomeEdit.title
+
+  useHead({ title })
+
+  definePageMeta({
+    name: routes.budget.AppFileBudgetIncomeEdit.name
+  })
+
+  const {
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
+
+  const {
+    data: income,
+    pending,
+    error
+  } = await trpcClient.budget.getIncome.useQuery({ id: incomeId })
+
+  const subtitle = computed(() => {
+    return income.value ? formatBudgetMemberLabel(income.value) : ''
+  })
+
+  const incomeIsFilled = computed(() =>
+    income.value ? incomeHasBeenFilled(income.value) : false
+  )
+
+  /** Convert legacy income source (e.g. "Aah,PrimeActivite") into readable labels */
+  function formatIncomeSource(incomeSource: string | null) {
+    const sources = incomeSource
+      ? incomeSource.replace(/[{}]/g, '').split(',')
+      : []
+    return sources
+      .map(
+        source =>
+          incomeSourceKeys.byKey[source as keyof typeof incomeSourceKeys.byKey]
+      )
+      .join(', ')
+  }
+
+  const legacyResources = computed(() => {
+    const budget = income.value?.budget
+    if (!budget) {
+      return null
+    }
+
+    if (incomeIsFilled.value) {
+      return null
+    }
+
+    if (income.value?.type === 'Beneficiary') {
+      const amount = prismaDecimalToNumber(budget.legacyMainIncomeAmount)
+      return amount
+        ? `${formatIncomeSource(budget.legacyMainIncomeSource) || budget.legacyMainIncomeSource} : ${amount}`
+        : null
+    }
+
+    const relationship = income.value?.relationship
+    if (relationship === 'Conjoint') {
+      const amount = prismaDecimalToNumber(budget.legacyPartnerMainIncomeAmount)
+      return amount
+        ? `${formatIncomeSource(budget.legacyPartnerMainIncomeSource) || budget.legacyPartnerMainIncomeSource} : ${amount}`
+        : null
+    }
+
+    if (relationship === 'EnfantMajeur') {
+      const amount = prismaDecimalToNumber(
+        budget.legacyMajorChildrenMainIncomeAmount
+      )
+      return amount
+        ? `${formatIncomeSource(budget.legacyMajorChildrenMainIncomeSource) || budget.legacyMajorChildrenMainIncomeSource} : ${amount}`
+        : null
+    }
+
+    const amount = prismaDecimalToNumber(
+      budget.legacyOtherMembersMainIncomeAmount
+    )
+
+    return amount
+      ? `${formatIncomeSource(budget.legacyOtherMembersMainIncomeSource) || budget.legacyOtherMembersMainIncomeSource} : ${amount}`
+      : null
+  })
+
+  const {
+    handleSubmit,
+    meta,
+    isSubmitting,
+    values: incomeValues
+  } = useForm<UpdateBudgetIncomeInput>({
+    validationSchema: toTypedSchema(updateBudgetIncomeSchema),
+    initialValues: {
+      id: income.value?.id,
+      salary: prismaDecimalToNumber(income.value?.salary),
+      primeActivite: prismaDecimalToNumber(income.value?.primeActivite),
+
+      // Pensions
+      retirement: prismaDecimalToNumber(income.value?.retirement),
+      alimony: prismaDecimalToNumber(income.value?.alimony),
+      disability: prismaDecimalToNumber(income.value?.disability),
+
+      // Allocations
+      unemployment: prismaDecimalToNumber(income.value?.unemployment),
+      ass: prismaDecimalToNumber(income.value?.ass),
+      rsa: prismaDecimalToNumber(income.value?.rsa),
+      apl: prismaDecimalToNumber(income.value?.apl),
+      family: prismaDecimalToNumber(income.value?.family),
+      aah: prismaDecimalToNumber(income.value?.aah),
+      aspa: prismaDecimalToNumber(income.value?.aspa),
+
+      // Autre ressources
+      dailyAllowance: prismaDecimalToNumber(income.value?.dailyAllowance),
+      annuity: prismaDecimalToNumber(income.value?.annuity),
+      other: prismaDecimalToNumber(income.value?.other),
+
+      // Ressources personnalisée
+      customs: (income.value?.customs || []).map(custom => ({
+        id: custom.id,
+        type: custom.type,
+        amount: prismaDecimalToNumber(custom.amount)
+      }))
+    }
+  })
+
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
+    tab: BeneficiaryTab.Budget,
+    originPage: route.name as typeof routes.budget.AppFileBudgetIncomeEdit.name
+  })
+
+  const onSubmit = handleSubmit(async values => {
+    isNavigatingWithFormActions.value = true
+
+    await useTrpcMutation({
+      mutation: () => trpcClient.budget.updateIncome.mutate(values),
+      onSuccess: () => {
+        navigateTo(budgetTabRoute)
+        snackbar.success('Les revenus mensuels ont été mis à jour avec succès')
+      },
+      onFailure: () => {
+        snackbar.error(
+          'La mise à jour des revenus mensuels a échoué.',
+          snackbar.focus()
+        )
+      }
+    })
+  })
+
+  const defaultTotal = computed(() =>
+    budgetIncomeKeys.keys.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, incomeValues[cur as IncomeKey]),
+      null
+    )
+  )
+  const customIncomeTotal = computed(() =>
+    incomeValues.customs.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amount),
+      null
+    )
+  )
+
+  const total = computed(() => {
+    if (defaultTotal.value === null && customIncomeTotal.value === null) {
+      return null
+    }
+    return (defaultTotal.value || 0) + (customIncomeTotal.value || 0)
+  })
+
+  function onCancel() {
+    navigateTo(budgetTabRoute)
+  }
+
+  const modal = useModal()
+  function onDelete() {
+    modal.open(BudgetDeleteConfirmation, {
+      title: `Supprimer les revenus ${subtitle.value}`,
+      deleteItem: async () => {
+        await useTrpcMutation({
+          mutation: () =>
+            trpcClient.budget.deleteIncome.mutate({
+              id: income.value?.id || ''
+            }),
+          onSuccess: () => {
+            modal.close()
+            navigateTo(budgetTabRoute)
+            snackbar.success('Les revenus mensuels ont été supprimés.')
+          },
+          onFailure: () => {
+            snackbar.error(
+              'La suppression des revenus mensuels a échoué.',
+              snackbar.focus()
+            )
+          }
+        })
+      },
+      cancel: () => {}
+    })
+  }
+</script>
+
+<style scoped lang="scss">
+  .income__total {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .income__total__value {
+    color: var(--primary);
+    font-weight: var(--font-weight-bold);
+  }
+</style>

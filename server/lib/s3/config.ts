@@ -1,5 +1,5 @@
 import { S3Client } from '@aws-sdk/client-s3'
-import type { AppConfig } from '~/types/appConfig'
+import type { AppConfig } from '~~/types/appConfig'
 
 let instance: S3Client | null = null
 

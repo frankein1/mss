@@ -1,6 +1,6 @@
 import { expect, afterEach, beforeEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 import {
   createStructure,
   createUsers,
@@ -9,7 +9,7 @@ import {
   createSocialSupports,
   TestFixtureUsers,
   TestFixturePartnerOrganizations
-} from '~/test/server/fixtures'
+} from '~~/test/server/fixtures'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import dayjs from 'dayjs'

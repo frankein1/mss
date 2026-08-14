@@ -1,0 +1,135 @@
+<template>
+  <dialog
+    id="global-modal"
+    ref="modal"
+    class="fr-modal"
+    role="dialog"
+    aria-labelledby="global-modal-title"
+  >
+    <div class="fr-container fr-container--fluid fr-container-md">
+      <div class="fr-grid-row fr-grid-row--center">
+        <div
+          :class="['fr-col-12', getModalSizeClassName(modalState?.props.size)]"
+        >
+          <div class="fr-modal__body">
+            <div class="fr-modal__header">
+              <button
+                v-autofocus
+                class="fr-btn--close fr-btn force-focus-visible"
+                aria-controls="global-modal"
+                title="Fermer"
+                @click="close"
+              >
+                Fermer
+              </button>
+            </div>
+            <div class="fr-modal__content">
+              <h1
+                v-if="title"
+                id="global-modal-title"
+                class="fr-modal__title"
+              >
+                <span
+                  class="fr-icon-arrow-right-line fr-icon--lg"
+                  aria-hidden="true"
+                ></span>
+                {{ title }}
+              </h1>
+              <component
+                :is="modalState.component"
+                v-if="modalState && isOpen"
+                v-bind="modalProps"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</template>
+
+<script lang="ts" setup generic="M extends Component">
+  import { useModal } from '../../composables/useModal'
+  import type { Modal } from '~~/types/modal'
+
+  const { isOpen, setReady, setIsOpen, title, triggerOpen, close, modalState } =
+    useModal()
+
+  const modalProps = computed(() => {
+    const props = modalState?.value.props
+    if (!props) {
+      return
+    }
+
+    const { title, size, triggerOpen, ...rest } = props
+
+    return rest
+  })
+
+  const modal = useTemplateRef('modal')
+
+  function getModalSizeClassName(size: Modal['size']) {
+    switch (size) {
+      case 'sm':
+        return 'fr-col-md-4'
+      case 'lg':
+        return 'fr-col-md-8'
+      case 'xl':
+        return 'fr-col-12'
+      case 'md':
+      default:
+        return 'fr-col-md-6'
+    }
+  }
+
+  // This becomes non null much later in the page loading process
+  // and prevents the modal to be disclosed when using triggerOpen
+  const dsfrModal = computed(() => {
+    return modal.value ? window.dsfr(modal.value) : undefined
+  })
+
+  const unwatch = watch(modal, () => {
+    // This is the hack that allows the modal to be set ready when
+    // (I guess) window.dsfr becomes non null
+    if (modal.value) {
+      setTimeout(() => {
+        setReady()
+        unwatch()
+      }, 1000)
+    }
+  })
+
+  const stopWatch = watch(isOpen, value => {
+    if (!value) {
+      dsfrModal.value?.modal.conceal()
+    }
+    if (value && triggerOpen.value) {
+      dsfrModal.value?.modal.disclose()
+    }
+  })
+
+  function onClose() {
+    setIsOpen(false)
+    close()
+  }
+  // Modal closes and destroy component when concealed
+  onMounted(() => {
+    modal.value?.addEventListener('dsfr.conceal', onClose)
+  })
+
+  onUnmounted(() => {
+    stopWatch()
+    modal.value?.removeEventListener('dsfr.conceal', onClose)
+  })
+</script>
+
+<style scoped lang="scss">
+  .fr-modal__body {
+    overflow-y: auto;
+  }
+
+  .fr-modal__content {
+    padding-bottom: 4rem;
+    margin-bottom: 0;
+  }
+</style>

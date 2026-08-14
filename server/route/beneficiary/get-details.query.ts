@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { SecurityRuleContext } from '~/server/security'
-import type { GetBeneficiaryDetailsInput } from '~/server/schema'
-import { getBeneficiaryDetailsSchema } from '~/server/schema'
-import { BeneficiaryService, FamilyFileService } from '~/server/services'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { SecurityRuleContext } from '~~/server/security'
+import type { GetBeneficiaryDetailsInput } from '~~/server/schema'
+import { getBeneficiaryDetailsSchema } from '~~/server/schema'
+import { BeneficiaryService, FamilyFileService } from '~~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

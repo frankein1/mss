@@ -1,10 +1,10 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixturesSocialSupports,
   FixtureSocialSupport,
   fixtureCommentId
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const socialSupportId =
   fixturesSocialSupports[FixtureSocialSupport.FollowupUnknownWithComment]!.id

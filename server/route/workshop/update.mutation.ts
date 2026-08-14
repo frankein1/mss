@@ -1,21 +1,21 @@
 import type { Prisma } from '@prisma/client'
 import { UserActivityType, WorkshopAttendeeListType } from '@prisma/client'
-import { createMutation } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import type { UpdateWorkShopInput } from '~/server/schema'
-import { updateWorkshopSchema } from '~/server/schema'
+import { createMutation } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import type { UpdateWorkShopInput } from '~~/server/schema'
+import { updateWorkshopSchema } from '~~/server/schema'
 import {
   WorkshopRepo,
   WorkshopNameRepo,
   PartnerOrganizationRepo,
   WorkshopAttendeeRepo
-} from '~/server/database'
-import type { SecurityRuleContext } from '~/server/security'
+} from '~~/server/database'
+import type { SecurityRuleContext } from '~~/server/security'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 import { getOne } from './get.query'
 import { TRPCError } from '@trpc/server'
 import { MSS_ERROR_CODES } from '~/utils/error'
-import { prismaClient } from '~/server/prisma/prismaClient'
+import { prismaClient } from '~~/server/prisma/prismaClient'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

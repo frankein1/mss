@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { FixtureStructure, fixtureStructures } from './'
+import { FixtureStructure, fixtureStructures } from '../fixtures'
 import {
   FixtureDataEducationSchool,
   fixturesDataEducationSchools

@@ -1,9 +1,9 @@
-import { createQuery } from '~/server/route'
-import { emptySchema } from '~/server/schema'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { NotificationRepo } from '~/server/database'
-import { notificationTypeKeys } from '~/client/options'
+import { createQuery } from '~~/server/route'
+import { emptySchema } from '~~/server/schema'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { NotificationRepo } from '~~/server/database'
+import { notificationTypeKeys } from '~~/client/options'
 import {
   getDescription,
   getDescriptionHint,

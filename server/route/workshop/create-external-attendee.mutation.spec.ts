@@ -1,12 +1,12 @@
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { afterEach, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { formatDate } from '~/utils/formatDate'
 import { faker } from '@faker-js/faker'
 
@@ -188,7 +188,4 @@ async function resetDatabase(workshopIds: string[]) {
       }
     }
   })
-
-  // Reset for next test
-  workshopIds = []
 }

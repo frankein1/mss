@@ -1,10 +1,10 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import { SchoolType, SchoolStatus } from '@prisma/client'
 import {
   fixturesDataEducationSchools,
   FixtureDataEducationSchool
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 
 const CITYCODE_LYON =
   fixturesDataEducationSchools[FixtureDataEducationSchool.SchLyon1]!.citycode

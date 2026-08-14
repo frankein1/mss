@@ -1,8 +1,8 @@
 import { FileInstructionType } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
-import { SocialSupportRepo } from '~/server/database'
-import type { StatFilterInput } from '~/server/schema'
-import type { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SocialSupportRepo } from '~~/server/database'
+import type { StatFilterInput } from '~~/server/schema'
+import type { SecurityRuleGrantee } from '~~/server/security/rules/types'
 
 export async function getFileInstructionTypeStatsQuery(
   user: SecurityRuleGrantee,

@@ -1,12 +1,12 @@
 import type { Prisma } from '@prisma/client'
 import { BeneficiaryStatus, BudgetIncomeType } from '@prisma/client'
-import { BeneficiaryRepo, BudgetRepo } from '~/server/database'
-import type { CreateFamilyFileMemberInput } from '~/server/schema'
+import { BeneficiaryRepo, BudgetRepo } from '~~/server/database'
+import type { CreateFamilyFileMemberInput } from '~~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import type {
   SecurityRuleContext,
   SecurityRuleGrantee
-} from '~/server/security/rules/types'
+} from '~~/server/security/rules/types'
 import { connect } from '~/utils/prisma'
 
 type CreateParams = {

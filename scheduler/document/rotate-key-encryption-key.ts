@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { SCHEDULER_ENV } from '../env'
-import { prismaClient } from '~/server/prisma'
-import { getKeyManagerClient } from '~/server/lib/encryption/kms'
+import { prismaClient } from '~~/server/prisma'
+import { getKeyManagerClient } from '~~/server/lib/encryption/kms'
 
 const LOCAL_ENV = {
   batchSize: parseInt(

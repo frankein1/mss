@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { stringConstraint } from '.'
+import { stringConstraint } from '../schema'
 
 export const dataInclusionStructureApiSchema = z.object({
   id: z.string(),

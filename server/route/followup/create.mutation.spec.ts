@@ -8,9 +8,9 @@ import {
 } from '@prisma/client'
 import dayjs from 'dayjs'
 import { afterEach, beforeEach, describe, expect } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
-import { createBeneficiary, createFamilyFile } from '~/test/server/fixtures'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { createBeneficiary, createFamilyFile } from '~~/test/server/fixtures'
 import {
   FixtureBeneficiary,
   FixtureStructure,
@@ -19,7 +19,7 @@ import {
   fixturesBeneficiaries,
   fixturesSocialSupportSubjects,
   fixturesUsers
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 
 const subjectId = fixturesSocialSupportSubjects[0].id

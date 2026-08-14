@@ -5,8 +5,8 @@ import { maxStringLengthMessage } from '~/utils/zod'
 import {
   paginatedSchema,
   stringConstraint
-} from '~/server/schema/helpers.schema'
-import { jobResultAdminFilterSchema } from '~/server/schema/filter.schema'
+} from '~~/server/schema/helpers.schema'
+import { jobResultAdminFilterSchema } from '~~/server/schema/filter.schema'
 
 const jobInternalResultSchema = z.object({
   nImported: z.number().optional(),

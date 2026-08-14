@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { fixturesMinisters } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixturesMinisters } from '~~/prisma/fixtures'
 
 const minister = fixturesMinisters[0]!
 

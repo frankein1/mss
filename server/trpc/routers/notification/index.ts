@@ -1,1 +1,1 @@
-export type { NotificationItem } from '~/server/route/notification'
+export type { NotificationItem } from '~~/server/route/notification'

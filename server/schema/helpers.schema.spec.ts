@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import '~/server/schema'
+import '~~/server/schema'
 import {
   dateOrEmpty,
   phoneConstraint,

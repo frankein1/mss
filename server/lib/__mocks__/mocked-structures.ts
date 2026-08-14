@@ -1,4 +1,4 @@
-import type { DataInclusionStructureApiInputV1 } from '~/server/schema'
+import type { DataInclusionStructureApiInputV1 } from '~~/server/schema'
 
 export const dataInclusionStructures = [
   {

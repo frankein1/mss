@@ -1,6 +1,6 @@
-import type { SecurityRuleContext } from '~/server/security'
-import { BudgetRepo } from '~/server/database/repository'
-import type { UpdateBudgetInfoInput } from '~/server/schema'
+import type { SecurityRuleContext } from '~~/server/security'
+import { BudgetRepo } from '~~/server/database/repository'
+import type { UpdateBudgetInfoInput } from '~~/server/schema'
 
 export async function updateInfo({
   ctx,

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
-import { NotificationRepo } from '~/server/database'
-import { fixturesUsers, FixtureUserRole } from '~/prisma/fixtures'
+import { NotificationRepo } from '~~/server/database'
+import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
 import { NotificationType } from '@prisma/client'
 import { test } from './__fixtures__'
 import { createArchiveDueRemindersNotifications } from './create-archive-reminders-notifications.service'

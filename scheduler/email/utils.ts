@@ -1,4 +1,4 @@
-import { EmailRepo } from '~/server/database'
+import { EmailRepo } from '~~/server/database'
 import { createTransport } from 'nodemailer'
 import { SCHEDULER_ENV } from '../env'
 

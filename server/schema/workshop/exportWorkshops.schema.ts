@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { VALIDATION_CODE_LENGTH } from '~/server/utils/constants'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import { workshopFilterSchema } from '../filter.schema'
 
 export const exportWorkshopsSchema = z.object({

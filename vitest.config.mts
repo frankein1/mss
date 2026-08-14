@@ -1,4 +1,3 @@
-import path from 'path'
 import {
   // defineConfig,
   configDefaults,
@@ -7,11 +6,6 @@ import {
 import { defineVitestConfig } from '@nuxt/test-utils/config'
 
 export default defineVitestConfig({
-  resolve: {
-    alias: {
-      '~': path.resolve(__dirname)
-    }
-  },
   test: {
     environment: 'nuxt',
     environmentOptions: {

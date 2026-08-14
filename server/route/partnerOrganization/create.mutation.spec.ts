@@ -1,6 +1,6 @@
 import { describe, expect, afterEach } from 'vitest'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
 import { fakerFR as faker } from '@faker-js/faker'
 
 const createdPartnerIds: string[] = []

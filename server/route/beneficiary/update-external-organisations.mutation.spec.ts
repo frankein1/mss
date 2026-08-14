@@ -1,6 +1,6 @@
 import { BeneficiaryOrientationType } from '@prisma/client'
 import { afterEach, beforeEach, describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 import {
   fixtureStructures,
   FixtureStructure,
@@ -9,8 +9,8 @@ import {
   fixturesPartnerOrganizations,
   FixturePartnerOrganization,
   fixturesPartnerOrganizationContacts
-} from '~/prisma/fixtures'
-import { prismaClient } from '~/server/prisma'
+} from '~~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
 
 const structureId = fixtureStructures[FixtureStructure.Test].id
 const socialWorkerId = fixturesUsers[FixtureUserRole.SocialWorker].id

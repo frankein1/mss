@@ -1,8 +1,8 @@
-import { UserRepo } from '~/server/database'
-import { signJwt } from '~/server/lib/jwt'
-import { getAppContextPermissions } from '~/server/security'
+import { UserRepo } from '~~/server/database'
+import { signJwt } from '~~/server/lib/jwt'
+import { getAppContextPermissions } from '~~/server/security'
 import { cookieOptions } from '~/utils/cookie'
-import { structureContextSelect } from '~/server/utils/fetchUserContext'
+import { structureContextSelect } from '~~/server/utils/fetchUserContext'
 
 /** Renew session using most recent user information from database
  *  and reissue a new auth token */

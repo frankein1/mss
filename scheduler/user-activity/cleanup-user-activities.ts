@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import { withErrorCapture } from '../utils'
 
 export async function cleanupUserActivities() {

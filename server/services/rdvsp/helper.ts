@@ -1,14 +1,19 @@
-import { getConfig, refreshToken } from '~/server/lib/rdvsp-oauth.client'
-import { forbiddenError, unauthorizedError } from '~/server/trpc'
+import { getConfig, refreshToken } from '~~/server/lib/rdvsp-oauth.client'
+import { forbiddenError, unauthorizedError } from '~~/server/trpc'
 import { ofetch, type FetchHooks } from 'ofetch'
-import { shouldLog } from '~/server/utils/logging.js'
+import { shouldLog } from '~~/server/utils/logging.js'
 
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import picocolors from 'picocolors'
 
 import { SocialSupportStatus } from '@prisma/client'
-import { RdvspStatus } from '~/types/rdvsp'
+import { RdvspStatus } from '~~/types/rdvsp'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc.js'
+import timezone from 'dayjs/plugin/timezone.js'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 // Given an MSS userId, it retrieves the matching RDVSP agent's auth info
 export async function getAgentAuthInfo(userId: string) {

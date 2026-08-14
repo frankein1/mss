@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
 describe('Notification - Get - Data', () => {
   test('A SocialWorker can fetch notifications', async ({ trpc }) => {

@@ -1,12 +1,12 @@
 import { useSession } from 'h3'
-import type { RdvspAuthSession } from '~/server/types/session'
-import * as client from '~/server/lib/rdvsp-oauth.client'
-import { prismaClient } from '~/server/prisma'
+import type { RdvspAuthSession } from '~~/server/types/session'
+import * as client from '~~/server/lib/rdvsp-oauth.client'
+import { prismaClient } from '~~/server/prisma'
 import { routes } from '~/utils/routes'
-import { checkUserIsAuthenticated } from '~/server/utils/checkUserIsAuthenticated'
+import { checkUserIsAuthenticated } from '~~/server/utils/checkUserIsAuthenticated'
 import { unauthorized, badrequest, forbidden } from '~/utils/api/errors'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-import { fetchUserContext } from '~/server/utils/fetchUserContext'
+import { fetchUserContext } from '~~/server/utils/fetchUserContext'
 
 /** RDVSP Oauth callback endpoint
  * Register rdvsp auth token in database and redirect to page

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { prismaClient } from '~/server/prisma'
-import { FixtureUserRole, fixturesUsers } from '~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
+import { FixtureUserRole, fixturesUsers } from '~~/prisma/fixtures'
 
 test.afterEach(async () => {
   await prismaClient.cGUHistory.deleteMany({

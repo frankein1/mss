@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from '~/server/trpc'
-import { dataEducationRoutes } from '~/server/route'
+import { protectedProcedure, router } from '~~/server/trpc'
+import { dataEducationRoutes } from '~~/server/route'
 
 export const dataEducationRouter = router({
   searchSchoolCities: protectedProcedure

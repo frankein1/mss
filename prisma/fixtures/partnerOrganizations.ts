@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { fixtureStructures } from './'
+import { fixtureStructures } from '../fixtures'
 import { fixturesDataInclusionStructures } from './dataInclusionStructures'
 
 const structureId = fixtureStructures[0].id

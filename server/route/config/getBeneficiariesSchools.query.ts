@@ -1,12 +1,12 @@
-import { createQuery } from '~/server/route'
-import type { ProtectedAppContext } from '~/server/trpc'
-import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { emptySchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
 import {
   BeneficiaryRepo,
   BeneficiaryConstraints,
   DataEducationSchoolRepo
-} from '~/server/database'
+} from '~~/server/database'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   // HACK: right solution is to abstract groupBy in repo

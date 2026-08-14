@@ -6,14 +6,14 @@ import {
   FixtureUserRole,
   FixtureStructure,
   fixturesSocialSupportSubjects
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import {
   FamilyFileRepo,
   BeneficiaryRepo,
   HelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo
-} from '~/server/database'
+} from '~~/server/database'
 import dayjs from 'dayjs'
 import { faker } from '@faker-js/faker'
 import {
@@ -23,7 +23,7 @@ import {
   SocialSupportType,
   type BeneficiaryStatus
 } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import * as socialSupportNotifications from './create-social-support-notifications'
 
 const ID_AUDREY_HORN = faker.string.uuid()

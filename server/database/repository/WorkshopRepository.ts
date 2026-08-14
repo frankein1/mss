@@ -4,8 +4,8 @@ import {
   appendConstraints,
   appendCreateConstraints
 } from './helper/appendConstraints'
-import { prismaClient } from '~/server/prisma'
-import type { SecurityRuleGrantee } from '~/server/security'
+import { prismaClient } from '~~/server/prisma'
+import type { SecurityRuleGrantee } from '~~/server/security'
 
 // READ
 

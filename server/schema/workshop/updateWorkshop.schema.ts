@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { createWorkshopSchemaBase } from './createWorkshop.schema'
-import { timeGroup } from '~/client/options'
+import { timeGroup } from '~~/client/options'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 import { requiredNativeEnum } from '../helpers.schema'
 

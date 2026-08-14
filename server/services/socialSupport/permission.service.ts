@@ -1,9 +1,9 @@
-import { SocialSupportRepo } from '~/server/database'
+import { SocialSupportRepo } from '~~/server/database'
 import type {
   SecurityRuleGrantee,
   SecurityRuleContext
-} from '~/server/security'
-import { getSocialSupportPermissions } from '~/server/security/permissions'
+} from '~~/server/security'
+import { getSocialSupportPermissions } from '~~/server/security/permissions'
 
 function getSocialSupportSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return SocialSupportRepo.findUniqueOrThrow(user, {

@@ -7,10 +7,10 @@ import {
   fixturesFamilyFiles,
   fixturesUsers,
   FixtureUserRole
-} from '~/prisma/fixtures'
-import { prismaClient } from '~/server/prisma'
-import { test } from '~/test/server/test-utils'
-import type { AppRouter } from '~/server/trpc/routers'
+} from '~~/prisma/fixtures'
+import { prismaClient } from '~~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 type Input = inferProcedureInput<AppRouter['file']['getDocuments']>
 

@@ -5,12 +5,12 @@ import {
   fixtureStructures,
   FixtureUserRole,
   FixtureStructure
-} from '~/prisma/fixtures'
+} from '~~/prisma/fixtures'
 import {
   BeneficiaryRepo,
   FamilyFileRepo,
   NotificationRepo
-} from '~/server/database'
+} from '~~/server/database'
 import dayjs from 'dayjs'
 import { faker } from '@faker-js/faker'
 import {
@@ -18,7 +18,7 @@ import {
   NotificationType,
   type BeneficiaryStatus
 } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 import * as documentNotifications from './create-document-notifications'
 
 const ID_BENEFICIARY = faker.string.uuid()

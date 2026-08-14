@@ -1,6 +1,6 @@
 import type { FilterType } from '~/utils/constants/filters'
 import type { Options } from '~/utils/options'
-import type { EventCategory, EventAction } from '~/types/matomo'
+import type { EventCategory, EventAction } from '~~/types/matomo'
 
 type FilterPropBase = {
   name: string

@@ -1,4 +1,4 @@
-import type { AppConfig } from '~/types/appConfig'
+import type { AppConfig } from '~~/types/appConfig'
 import { routes } from '~/utils/routes'
 
 export function getDisabledStructureAlert(config: Pick<AppConfig, 'public'>) {

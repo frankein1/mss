@@ -1,5 +1,5 @@
-import { test } from '~/test/server/test-utils'
-import { fixturesSocialSupportSubjects } from '~/prisma/fixtures'
+import { test } from '~~/test/server/test-utils'
+import { fixturesSocialSupportSubjects } from '~~/prisma/fixtures'
 import { describe, expect } from 'vitest'
 
 describe('Authorizations', () => {

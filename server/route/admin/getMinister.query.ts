@@ -1,9 +1,9 @@
 import type { Prisma } from '@prisma/client'
-import { MinisterRepo } from '~/server/database'
-import { createQuery } from '~/server/route'
-import { idSchema } from '~/server/schema'
-import type { AdminContext } from '~/server/trpc'
-import type { IdInput } from '~/server/schema'
+import { MinisterRepo } from '~~/server/database'
+import { createQuery } from '~~/server/route'
+import { idSchema } from '~~/server/schema'
+import type { AdminContext } from '~~/server/trpc'
+import type { IdInput } from '~~/server/schema'
 
 const adminHandler = async ({
   ctx: { user },

@@ -1,0 +1,155 @@
+<template>
+  <li v-if="helpRequest.prescribingOrganization?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.prescribingOrganizationId }} :</span
+    >
+    {{ helpRequest.prescribingOrganization.name }}
+  </li>
+  <li v-if="helpRequest.prescribingOrganizationContact?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.prescribingOrganizationContactId }} :</span
+    >
+    {{ helpRequest.prescribingOrganizationContact.name }}
+  </li>
+  <li v-if="instructorOrganization">
+    <span class="information-label">Instruction :</span>
+    {{ instructorOrganization }}
+  </li>
+  <li v-if="fileInstruction.instructorOrganizationContact?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.instructorOrganizationContactId }} :</span
+    >
+    {{ fileInstruction.instructorOrganizationContact?.name }}
+  </li>
+  <li v-if="helpRequest.isRefundable !== null">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.isRefundable }} :</span
+    >
+    {{ helpRequest.isRefundable ? 'Oui' : 'Non' }}
+  </li>
+  <li v-if="helpRequest.askedAmount">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.askedAmount }} :</span
+    >
+    <span class="euro-symbol fr-ml-1v">{{
+      euros(helpRequest.askedAmount)
+    }}</span>
+  </li>
+  <li
+    v-if="fileInstruction.fullFile"
+    class="fr-icon-success-line"
+  >
+    Ce dossier est complet
+  </li>
+  <li v-if="fileInstruction.dispatchDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.dispatchDate }} :</span
+    >
+    {{ formatDate(fileInstruction.dispatchDate) }}
+  </li>
+  <li v-if="fileInstruction.examinationDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.examinationDate }} :</span
+    >
+    {{ formatDate(fileInstruction.examinationDate) }}
+  </li>
+  <li v-if="fileInstruction.decisionDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.decisionDate }} :</span
+    >
+    {{ formatDate(fileInstruction.decisionDate) }}
+  </li>
+  <!-- <li v-if="endOfSocialSupport">
+    <span class="information-label">{{
+      helpRequestFieldLabels.endOfSocialSupport
+    }}</span>
+    : Oui
+  </li> -->
+  <li v-if="helpRequest.handlingDate">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.handlingDate }} :</span
+    >
+    {{ formatDate(helpRequest.handlingDate) }}
+  </li>
+  <li v-if="status === SocialSupportStatus.Accepted && allocatedAmount">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.allocatedAmount }} :</span
+    >
+    {{ allocatedAmount }}
+  </li>
+  <li v-if="hasRefusalReason">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.refusalReason }} :</span
+    >
+    {{ refusalReason }}
+  </li>
+</template>
+
+<script setup lang="ts">
+  import { SocialSupportStatus } from '@prisma/client'
+  import type { FileInstructionData, HelpRequestData } from './types'
+  import {
+    paymentMethodKeys,
+    fileInstructionRefusalReasonKeys
+  } from '~~/client/options'
+  import { euros } from '~/utils/euros'
+  import { formatDate } from '~/utils/formatDate'
+  import { helpRequestFieldLabels } from '~~/client/labels'
+
+  const props = defineProps<{
+    fileInstruction: FileInstructionData
+    helpRequest: HelpRequestData
+    status: SocialSupportStatus
+    endOfSocialSupport: boolean
+  }>()
+
+  const instructorOrganization = computed(() => {
+    if (!props.fileInstruction.externalStructure) {
+      return 'Interne'
+    }
+    return props.fileInstruction.instructorOrganization
+      ? props.fileInstruction.instructorOrganization.name
+      : 'Externe'
+  })
+
+  const allocatedAmount = computed(() => {
+    let allocatedAmount = ''
+    if (props.helpRequest.allocatedAmount) {
+      allocatedAmount += euros(props.helpRequest.allocatedAmount)
+    }
+    if (props.helpRequest.paymentDate || props.helpRequest.paymentMethod) {
+      if (allocatedAmount) {
+        allocatedAmount += ' '
+      }
+      allocatedAmount += '('
+    }
+    if (props.helpRequest.paymentDate) {
+      allocatedAmount += formatDate(props.helpRequest.paymentDate)
+      if (props.helpRequest.paymentMethod) {
+        allocatedAmount += ' - '
+      } else {
+        allocatedAmount += ')'
+      }
+    }
+    if (props.helpRequest.paymentMethod) {
+      allocatedAmount += `${paymentMethodKeys.value(
+        props.helpRequest.paymentMethod
+      )})`
+    }
+    return allocatedAmount
+  })
+
+  const refusalReason = computed(() => {
+    const { refusalReason, refusalReasonOther } = props.fileInstruction
+    return (
+      refusalReasonOther ||
+      (refusalReason
+        ? fileInstructionRefusalReasonKeys.value(refusalReason)
+        : '')
+    )
+  })
+
+  const hasRefusalReason = computed(
+    () => props.status === SocialSupportStatus.Refused && refusalReason.value
+  )
+</script>

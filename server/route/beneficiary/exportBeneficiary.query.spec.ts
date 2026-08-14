@@ -1,11 +1,11 @@
 import { expect, afterEach, beforeEach } from 'vitest'
-import { test } from '~/test/server/test-utils'
-import { prismaClient } from '~/server/prisma'
+import { test } from '~~/test/server/test-utils'
+import { prismaClient } from '~~/server/prisma'
 import { TextWriter, ZipReader, BlobReader } from '@zip.js/zip.js'
 import { readFileSync } from 'fs'
 import { formatDate } from '~/utils/formatDate'
-import { createFamilyFile } from '~/test/server/fixtures/familyFiles'
-import { createBeneficiary } from '~/test/server/fixtures/beneficiaries'
+import { createFamilyFile } from '~~/test/server/fixtures/familyFiles'
+import { createBeneficiary } from '~~/test/server/fixtures/beneficiaries'
 
 let familyFileId: string
 let beneficiaryId: string

@@ -1,8 +1,11 @@
 import dayjs from 'dayjs'
 import type { SocialSupportSubject, Prisma } from '@prisma/client'
-import type { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
-import { FollowupPeriodFilter } from '~/types/followup'
-import { SortOrder } from '~/types/table'
+import type {
+  FollowupFilterInput,
+  ExportFollowupsInput
+} from '~~/server/schema'
+import { FollowupPeriodFilter } from '~~/types/followup'
+import { SortOrder } from '~~/types/table'
 import { FilterFollowupNotFilled } from '~/utils/constants/filters'
 
 export function prepareSocialSupportSubjectsMutations(

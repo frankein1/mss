@@ -1,9 +1,9 @@
 import { describe, expect } from 'vitest'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
 import { FileInstructionType } from '@prisma/client'
-import { test } from '~/test/server/test-utils'
+import { test } from '~~/test/server/test-utils'
 
-import type { AppRouter } from '~/server/trpc/routers'
+import type { AppRouter } from '~~/server/trpc/routers'
 
 type Input = inferProcedureInput<
   AppRouter['stat']['getHelpRequestRedirectionReasonsStats']
