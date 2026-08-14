@@ -19,32 +19,3 @@ allowBuilds:
   prisma: false
   unrs-resolver: false
 shamefullyHoist: true
-minimumReleaseAgeExclude:
-  - nuxt@3.21.8
-  - '@nuxt/kit@3.21.8'
-  - '@nuxt/nitro-server@3.21.8'
-  - '@nuxt/schema@3.21.8'
-  - '@nuxt/vite-builder@3.21.8'
-  - '@dxup/nuxt@0.5.6'
-  - '@nuxt/devtools-kit@3.4.1'
-  - '@nuxt/devtools-wizard@3.4.1'
-  - '@nuxt/devtools@3.4.1'
-  - '@nuxt/kit@4.5.2'
-  - '@nuxt/nitro-server@4.5.2'
-  - '@nuxt/schema@4.5.2'
-  - '@nuxt/vite-builder@4.5.2'
-  - '@unhead/bundler@3.3.1'
-  - '@unhead/vue@3.3.1'
-  - devalue@5.9.0
-  - magicast@0.5.4
-  - nuxt@4.5.2
-  - oxc-walker@1.1.1
-  - postcss@8.5.25
-  - seroval@1.6.2
-  - strip-literal@4.0.0
-  - structured-clone-es@2.0.1
-  - undici@8.10.0
-  - unhead@3.3.1
-  - unimport@6.4.0
-  - vite@8.2.0
-  - vue-component-type-helpers@3.3.9
