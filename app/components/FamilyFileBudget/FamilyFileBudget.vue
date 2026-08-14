@@ -74,7 +74,7 @@
   }>()
   const { data: budget, error } = await trpcClient.budget.getBudget.useQuery(
     { familyFileId },
-    { queryKey: 'getFamilyFile.budget' }
+    { queryKey: `getFamilyFile.budget.${familyFileId}` }
   )
 
   const firstFamilyfileId = budget?.value?.familyFileId

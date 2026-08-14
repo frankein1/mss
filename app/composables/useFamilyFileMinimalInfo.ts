@@ -11,7 +11,9 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     {
       id: familyFileId
     },
-    { queryKey: 'getFamilyFileMinimalInfo' }
+    // The key must be scoped to the family file, otherwise navigating from one
+    // family file to another reuses the cached data of the previous one
+    { queryKey: `getFamilyFileMinimalInfo.${familyFileId}` }
   )
 
   const familyFileIdentification = computed(
