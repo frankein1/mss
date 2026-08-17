@@ -1,5 +1,8 @@
 <template>
-  <section class="feature-section fr-container fr-p-5w fr-mb-3w">
+  <section
+    ref="sectionRef"
+    class="feature-section fr-container fr-p-5w fr-mb-3w"
+  >
     <h2 class="fr-h2 primary">Crédit(s)</h2>
 
     <LoanForm
@@ -15,7 +18,7 @@
       icon="fr-icon-add-line"
       tertiary
       no-outline
-      @click="push({ id: randomUUID() })"
+      @click="addLoan()"
     />
 
     <section class="subtotal fr-h4 fr-mt-3w">
@@ -37,7 +40,15 @@
 
   defineProps<{ total: number | null }>()
 
+  const sectionRef = useTemplateRef('sectionRef')
+  const { focusElementAdded } = useDynamicFieldFocus(sectionRef)
+
   const { fields, push, remove } = useFieldArray<UpdateLoanOrDebtInput>('loans')
+
+  function addLoan() {
+    push({ id: randomUUID() })
+    focusElementAdded()
+  }
 </script>
 
 <style scoped>

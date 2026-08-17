@@ -24,6 +24,7 @@
     </div>
     <div
       v-if="!noPhone"
+      ref="phone2Ref"
       class="fr-col-12"
       :class="{ 'fr-col-lg-6 fr-col-offset-lg-6--right': showPhone2 }"
     >
@@ -31,13 +32,12 @@
         v-if="!showPhone2"
         class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line"
         type="button"
-        @click="showPhone2 = true"
+        @click="displayPhone2()"
       >
         Ajouter un numéro de téléphone
       </button>
       <VeeInput
         v-else
-        v-autofocus
         name="phone2"
         :label="beneficiaryFieldLabels.phone2"
         type="tel"
@@ -56,8 +56,16 @@
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~~/client/labels'
 
+  const phone2Ref = useTemplateRef('phone2Ref')
+  const { focusElementAdded } = useDynamicFieldFocus(phone2Ref)
+
   const { value: noPhone } = useField<boolean>('noPhone')
   const { value: phone2 } = useField<boolean>('phone2')
 
   const showPhone2 = ref<boolean>(!!phone2.value)
+
+  function displayPhone2() {
+    showPhone2.value = true
+    focusElementAdded()
+  }
 </script>

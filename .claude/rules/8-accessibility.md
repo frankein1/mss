@@ -33,17 +33,33 @@ Must be RGAA compliant (https://accessibilite.numerique.gouv.fr/methode/criteres
 
 ## Focus management on dynamically revealed form fields
 
-- When:
-  - a button adds a new entry via `useFieldArray.push()`
-  - a button reveals a field via `v-if`
-- How to manage focus:
-  - Add the `v-autofocus` directive to the sub-component or the revealed element so keyboard focus moves to its first focusable child on mount.
+Focus a newly revealed element only on explicit user action (button click), never on component mount.
 
-Notes:
+### When
 
-- Place `v-autofocus` inside the sub-component, not at the call site in the parent.
-- The directive's default selector covers `input`, `select`, `textarea`, and `[tabindex]`.
-- Never use manual DOM focus calls (`querySelector` + `.focus()`) inside the parent component's click handler.
+- A button adds a new entry via `useFieldArray.push()`
+- A button reveals a field via `v-if`
+
+### How
+
+Use the `useDynamicFieldFocus(containerRef, sectionSelector)` composable — the **parent** owns focus, children stay passive.
+
+1. **Parent**: call `focusElementAdded()` right after `push()` or toggling visibility.
+2. **Child (repeated items)**: add `data-field-group` to an existing element wrapping the first input — never add a wrapper div just for this.
+3. **Child (single-field toggle)**: no `data-field-group` needed — the composable falls back to the container itself.
+
+The composable waits for `nextTick`, finds the **last** element matching `sectionSelector` (default `'[data-field-group]'`) inside the container, and focuses its first focusable field.
+
+### Where to place `data-field-group`
+
+- **Single-root child component**: on the root element.
+- **Fragment child component** (multiple roots): on the element that contains the first input.
+- **Inline `v-for`** (no child component): on the repeated element.
+
+### Anti-patterns
+
+- **`v-autofocus` directive** — fires on every mount, including non-user-triggered re-renders. Keep focus control in the parent.
+- **Manual DOM focus** (`querySelector` + `.focus()`) in the parent's click handler — use the composable instead.
 
 ## Automatic testing
 

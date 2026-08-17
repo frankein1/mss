@@ -118,7 +118,10 @@
 
     <hr class="separator" />
 
-    <section class="fr-grid-row fr-grid-row--gutters">
+    <section
+      ref="customExpensesRef"
+      class="fr-grid-row fr-grid-row--gutters"
+    >
       <h3 class="fr-h5 fr-m-0 fr-col-12">Autres charges</h3>
 
       <div class="fr-col-12">
@@ -181,7 +184,7 @@
         icon="fr-icon-add-line"
         tertiary
         no-outline
-        @click="push({ id: randomUUID() })"
+        @click="addCustomExpense()"
       />
     </section>
 
@@ -205,8 +208,16 @@
 
   defineProps<{ total: number | null }>()
 
+  const customExpensesRef = useTemplateRef('customExpensesRef')
+  const { focusElementAdded } = useDynamicFieldFocus(customExpensesRef)
+
   const { fields, push, remove } =
     useFieldArray<UpdateLoanOrDebtInput>('customs')
+
+  function addCustomExpense() {
+    push({ id: randomUUID() })
+    focusElementAdded()
+  }
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-autofocus
+    data-field-group
     class="fr-grid-row fr-grid-row--gutters"
   >
     <div class="fr-col-12">

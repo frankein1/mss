@@ -65,7 +65,7 @@
       </div>
     </BeneficiaryFormSection>
 
-    <BeneficiaryFormSection>
+    <BeneficiaryFormSection ref="contributingPartnersRef">
       <div class="fr-col-12 fr-p-2w">
         <AtomAlertMSS :alert-type="AlertType.Info">
           <template #detailedMessage>
@@ -91,7 +91,7 @@
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
           type="button"
-          @click="push({ id: randomUUID() } as any)"
+          @click="addPartner()"
         >
           Ajouter un partenaire
         </button>
@@ -120,9 +120,17 @@
 
   const randomUUID = () => crypto.randomUUID()
 
+  const contributingPartnersRef = useTemplateRef('contributingPartnersRef')
+  const { focusElementAdded } = useDynamicFieldFocus(contributingPartnersRef)
+
   const { fields, push, remove } = useFieldArray<ContributingPartnerInput>(
     'contributingPartners'
   )
+
+  function addPartner() {
+    push({ id: randomUUID() } as any)
+    focusElementAdded()
+  }
 
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'

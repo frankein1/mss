@@ -1,5 +1,8 @@
 <template>
-  <BeneficiaryFormSection :section-title="`Proche ${index + 1}`">
+  <BeneficiaryFormSection
+    data-field-group
+    :section-title="`Proche ${index + 1}`"
+  >
     <template #titleAction>
       <button
         class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"
@@ -12,7 +15,6 @@
 
     <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
-        v-autofocus
         :label="relativeFieldLabels.lastName"
         :name="`entourages[${index}].lastName`"
       />

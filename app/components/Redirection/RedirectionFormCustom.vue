@@ -1,6 +1,6 @@
 <template>
   <div
-    v-autofocus
+    data-field-group
     class="redirection-wrapper"
   >
     <div class="form-header">

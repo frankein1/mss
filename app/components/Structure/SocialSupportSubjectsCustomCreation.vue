@@ -1,9 +1,12 @@
 <template>
-  <div class="fr-container fr-p-2w">
+  <div
+    ref="containerRef"
+    class="fr-container fr-p-2w"
+  >
     <div
       v-for="(item, index) in fields"
       :key="item.key"
-      v-autofocus
+      data-field-group
       class="fr-grid-row fr-grid-row--gutters fr-mb-2w"
     >
       <div class="fr-col-12 fr-col-md-8">
@@ -30,7 +33,7 @@
         <button
           class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-line"
           type="button"
-          @click="push({ id: randomUUID() })"
+          @click="addCustomSubject()"
         >
           Ajouter un autre objet
         </button>
@@ -42,7 +45,15 @@
 <script lang="ts" setup>
   const randomUUID = () => crypto.randomUUID()
 
+  const containerRef = useTemplateRef('containerRef')
+  const { focusElementAdded } = useDynamicFieldFocus(containerRef)
+
   const { fields, push, remove } = useFieldArray('customs')
+
+  function addCustomSubject() {
+    push({ id: randomUUID() })
+    focusElementAdded()
+  }
 </script>
 
 <style lang="scss" scoped>
