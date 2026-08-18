@@ -1,0 +1,201 @@
+// @vitest-environment nuxt
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
+import { flushPromises } from '@vue/test-utils'
+import AdminTransferUserForm from './AdminTransferUserForm.vue'
+
+const getStructuresMock = vi.fn()
+const sendCodeMock = vi.fn()
+const transferMock = vi.fn()
+
+const fakeTrpcClient = {
+  admin: {
+    getStructures: {
+      query: getStructuresMock
+    },
+    authorizeUserTransfer: {
+      mutate: sendCodeMock
+    },
+    transferUser: {
+      mutate: transferMock
+    }
+  }
+}
+
+mockNuxtImport('useTrpcClient', () => () => fakeTrpcClient)
+
+const targetStructure = {
+  id: 's-target',
+  name: 'CCAS Autun',
+  type: 'Ccas',
+  city: 'Autun',
+  zipcode: '71400'
+}
+
+const user = {
+  id: 'u-1',
+  displayName: 'Jean DUPONT',
+  currentStructureId: 's-current',
+  currentStructureName: 'CCAS Test'
+}
+
+async function mountForm() {
+  return mountSuspended(AdminTransferUserForm, { props: { user } })
+}
+
+async function selectStructureAndRole(wrapper: any) {
+  const combobox = wrapper.find<HTMLInputElement>('input[type="search"]')
+  await combobox.trigger('focus')
+  await flushPromises()
+  await wrapper.find('li[role="option"]').trigger('click')
+  await flushPromises()
+  const roleSelect = wrapper.find<HTMLSelectElement>(
+    '#admin-transfer-user-role'
+  )
+  roleSelect.element.value = 'Referent'
+  await roleSelect.trigger('change')
+  await flushPromises()
+}
+
+describe('AdminTransferUserForm - Form step', () => {
+  beforeEach(() => {
+    getStructuresMock.mockReset()
+    getStructuresMock.mockResolvedValue({ structures: [targetStructure] })
+    sendCodeMock.mockReset()
+    transferMock.mockReset()
+  })
+
+  it('disables the next button until both fields have values', async () => {
+    const wrapper = await mountForm()
+    await flushPromises()
+
+    const nextBtn = wrapper.get<HTMLButtonElement>(
+      '[data-testid="transfer-form-next"]'
+    )
+    expect(nextBtn.element.disabled).toBe(true)
+
+    await selectStructureAndRole(wrapper)
+
+    expect(nextBtn.element.disabled).toBe(false)
+  })
+})
+
+describe('AdminTransferUserForm - Preview step', () => {
+  beforeEach(() => {
+    getStructuresMock.mockReset()
+    getStructuresMock.mockResolvedValue({ structures: [targetStructure] })
+    sendCodeMock.mockReset().mockResolvedValue({ sent: true })
+    transferMock.mockReset()
+  })
+
+  it('renders the user name, current structure, destination and role', async () => {
+    const wrapper = await mountForm()
+    await flushPromises()
+    await selectStructureAndRole(wrapper)
+    await wrapper.get('[data-testid="transfer-form-next"]').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.get('[data-testid="preview-user"]').text()).toBe(
+      'Jean DUPONT'
+    )
+    expect(wrapper.get('[data-testid="preview-from-structure"]').text()).toBe(
+      'CCAS Test'
+    )
+    expect(wrapper.get('[data-testid="preview-to-structure"]').text()).toBe(
+      'CCAS Autun'
+    )
+    expect(wrapper.get('[data-testid="preview-new-role"]').text()).toBe(
+      'Référent'
+    )
+  })
+
+  it('the send-code button is gated by the acknowledgment checkbox', async () => {
+    const wrapper = await mountForm()
+    await flushPromises()
+    await selectStructureAndRole(wrapper)
+    await wrapper.get('[data-testid="transfer-form-next"]').trigger('click')
+    await flushPromises()
+
+    const sendBtn = wrapper.get<HTMLButtonElement>(
+      '[data-testid="transfer-preview-send-code"]'
+    )
+    expect(sendBtn.element.disabled).toBe(true)
+
+    const ack = wrapper.get<HTMLInputElement>('#admin-transfer-ack')
+    ack.element.checked = true
+    await ack.trigger('change')
+
+    expect(sendBtn.element.disabled).toBe(false)
+  })
+})
+
+describe('AdminTransferUserForm - Code step', () => {
+  beforeEach(() => {
+    getStructuresMock.mockReset()
+    getStructuresMock.mockResolvedValue({ structures: [targetStructure] })
+    sendCodeMock.mockReset().mockResolvedValue({ sent: true })
+    transferMock.mockReset().mockResolvedValue({ id: user.id })
+  })
+
+  it('sends the transferUser mutation with the code and payload', async () => {
+    const wrapper = await mountForm()
+    await flushPromises()
+    await selectStructureAndRole(wrapper)
+    await wrapper.get('[data-testid="transfer-form-next"]').trigger('click')
+    await flushPromises()
+
+    const ack = wrapper.get<HTMLInputElement>('#admin-transfer-ack')
+    ack.element.checked = true
+    await ack.trigger('change')
+    await wrapper
+      .get('[data-testid="transfer-preview-send-code"]')
+      .trigger('click')
+    await flushPromises()
+
+    const codeInput = wrapper.get<HTMLInputElement>(
+      '[data-testid="transfer-code-input"]'
+    )
+    codeInput.element.value = '12345678'
+    await codeInput.trigger('input')
+
+    await wrapper.get('[data-testid="transfer-code-submit"]').trigger('click')
+    await flushPromises()
+
+    expect(transferMock).toHaveBeenCalledWith({
+      userId: user.id,
+      newStructureId: targetStructure.id,
+      newRole: 'Referent',
+      confirmationCode: '12345678'
+    })
+    expect(wrapper.emitted('transferred')).toBeTruthy()
+  })
+
+  it('surfaces a code error inline when the mutation rejects with an invalid-code message', async () => {
+    transferMock.mockRejectedValueOnce(new Error('Invalid code'))
+
+    const wrapper = await mountForm()
+    await flushPromises()
+    await selectStructureAndRole(wrapper)
+    await wrapper.get('[data-testid="transfer-form-next"]').trigger('click')
+    await flushPromises()
+
+    const ack = wrapper.get<HTMLInputElement>('#admin-transfer-ack')
+    ack.element.checked = true
+    await ack.trigger('change')
+    await wrapper
+      .get('[data-testid="transfer-preview-send-code"]')
+      .trigger('click')
+    await flushPromises()
+
+    const codeInput = wrapper.get<HTMLInputElement>(
+      '[data-testid="transfer-code-input"]'
+    )
+    codeInput.element.value = '99999999'
+    await codeInput.trigger('input')
+    await wrapper.get('[data-testid="transfer-code-submit"]').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Invalid code')
+    expect(wrapper.emitted('transferred')).toBeFalsy()
+  })
+})

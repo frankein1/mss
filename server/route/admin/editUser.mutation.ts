@@ -7,6 +7,7 @@ import type { AdminEditUserInput } from '~~/server/schema'
 import { adminEditUserSchema } from '~~/server/schema'
 import type { AdminContext } from '~~/server/trpc'
 import { cleanEmail } from '~/utils/user'
+import { MSS_ERROR_CODES } from '~/utils/error'
 
 const adminHandler = async ({
   ctx,
@@ -21,23 +22,32 @@ const adminHandler = async ({
     where: { id }
   })
 
-  if (targetUser.role === UserRole.Administrator) {
+  if (targetUser.role === UserRole.Administrator || !targetUser.structureId) {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Cannot edit an Administrator'
     })
   }
 
-  if (targetUser.structureId) {
-    const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
-      where: { id: targetUser.structureId }
+  const hasChangedTargetStructure = user.structureId !== targetUser.structureId
+  if (hasChangedTargetStructure) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Cannot change the structure to which the user belongs',
+      cause: {
+        MSS_CODE: MSS_ERROR_CODES.ADMIN_CANNOT_CHANGE_USER_S_STRUCTURE
+      }
     })
-    if (structure.disabled) {
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'Cannot edit a user in a disabled structure'
-      })
-    }
+  }
+
+  const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: targetUser.structureId }
+  })
+  if (structure.disabled) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Cannot edit a user in a disabled structure'
+    })
   }
 
   const updatedUser = await UserRepo.prisma.update({

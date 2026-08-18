@@ -22,6 +22,7 @@
             :user="user"
             :is-submitting="isSubmitting"
             @update-user="onUpdateUser($event as AdminEditUserInput)"
+            @transferred="onTransferred"
           />
         </div>
       </div>
@@ -45,10 +46,15 @@
   const {
     data: user,
     pending,
-    error
+    error,
+    refresh
   } = await trpcClient.admin.getUser.useQuery({
     id: userId
   })
+
+  function onTransferred() {
+    refresh()
+  }
 
   function onUpdateUser(updatedUser: AdminEditUserInput) {
     useTrpcMutation({

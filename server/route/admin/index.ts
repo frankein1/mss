@@ -1,6 +1,8 @@
 import { createStructure } from './createStructure.mutation'
 import { createUser } from './createUser.mutation'
 import { editUser } from './editUser.mutation'
+import { authorizeUserTransfer } from './authorize-user-transfer.mutation'
+import { transferUser } from './transferUser.mutation'
 import { getEmails } from './getEmails.query'
 import { getOverview } from './getOverview.query'
 import { getStructure } from './getStructure.query'
@@ -27,6 +29,8 @@ export const adminRoutes = {
   createStructure,
   createUser,
   editUser,
+  authorizeUserTransfer,
+  transferUser,
   getEmails,
   getOverview,
   getStructure,

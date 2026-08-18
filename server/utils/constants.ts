@@ -1,4 +1,4 @@
-export const VALIDATION_CODE_LENGTH = 8
+export const VALIDATION_CODE_LENGTH = 12
 
 /** Logs */
 export const TRPC_REQUEST_LOG_MSG = 'trpc-logger'

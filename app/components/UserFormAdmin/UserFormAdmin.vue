@@ -32,7 +32,21 @@
           required
         />
       </div>
-      <div class="fr-col-6">
+      <div
+        v-if="props.user"
+        class="fr-col-6"
+      >
+        <VeeInput
+          name="structureId"
+          hint="Le changement de structure s'effectue via l'action de transfert."
+          :label="userFieldLabels.structureId"
+          disabled
+        />
+      </div>
+      <div
+        v-else
+        class="fr-col-6"
+      >
         <VeeCombobox
           name="structureId"
           :label="userFieldLabels.structureId"
@@ -73,6 +87,25 @@
       Enregistrer
     </button>
   </form>
+
+  <section
+    v-if="props.user"
+    class="admin-transfer-zone fr-mt-4w"
+  >
+    <h2 class="fr-h6">Transférer vers une autre structure</h2>
+    <p class="fr-text--sm fr-mb-2w">
+      Vous pouvez transférer cet utilisateur vers une autre structure. Cette
+      opération est sensible : son rôle pourra être modifié et elle devra être
+      confirmée par un code envoyé à votre boîte email.
+    </p>
+    <DsfrButton
+      label="Transférer vers une autre structure"
+      type="button"
+      secondary
+      data-testid="open-transfer-modal"
+      @click="onOpenTransfer"
+    />
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -87,10 +120,13 @@
   } from '~~/server/schema'
   import { adminEditUserSchema, adminCreateUserSchema } from '~~/server/schema'
   import { toOptions, withEmptyValue } from '~/utils/options'
+  import { formatUserDisplayName } from '~/utils/user'
+  import AdminTransferUserForm from '~/components/AdminTransferUser/AdminTransferUserForm.vue'
 
   const trpcClient = useTrpcClient()
   const route = useRoute()
   const urlStructureId = route.query.structureId as string | undefined
+  const modal = useModal()
 
   const props = defineProps<{
     user?: AdminUserOutput
@@ -99,6 +135,7 @@
 
   const emit = defineEmits<{
     updateUser: [user: AdminEditUserInput | AdminCreateUserInput]
+    transferred: []
   }>()
 
   const form = useTemplateRef('form')
@@ -110,6 +147,34 @@
       ? toOptions(structures.value?.structures, 'id', 'name')
       : []
   )
+
+  const currentStructureName = computed(() => {
+    if (!props.user?.structureId) {
+      return ''
+    }
+    return (
+      structures.value?.structures.find(s => s.id === props.user?.structureId)
+        ?.name ?? ''
+    )
+  })
+
+  function onOpenTransfer() {
+    if (!props.user?.structureId) {
+      return
+    }
+    modal.open(AdminTransferUserForm, {
+      title: 'Transférer un utilisateur',
+      size: 'lg',
+      triggerOpen: true,
+      user: {
+        id: props.user.id,
+        displayName: formatUserDisplayName(props.user),
+        currentStructureId: props.user.structureId,
+        currentStructureName: currentStructureName.value
+      },
+      onTransferred: () => emit('transferred')
+    })
+  }
 
   const { handleSubmit } = useForm<AdminEditUserInput | AdminCreateUserInput>({
     validationSchema: toTypedSchema(

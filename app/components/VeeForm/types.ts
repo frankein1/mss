@@ -1,3 +1,5 @@
+import type { StructureType } from '@prisma/client'
+
 export type BanAddress = {
   id: string
   banId: string
@@ -82,4 +84,13 @@ export type CitySelected = {
   city: string
   codeRegion: string
   codeDepartement: string
+}
+
+export type StructureOption = {
+  id: string
+  name: string
+  type: StructureType
+  city: string
+  zipcode: string
+  disabled?: boolean
 }

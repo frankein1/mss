@@ -11,6 +11,7 @@ import {
 } from '~/utils/zod'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+import { UserRole } from '@prisma/client'
 
 export const paginatedSchema = z.object({
   page: z.number().int().gte(1),
@@ -184,6 +185,14 @@ export const validationCodeConstraint = z
     `Le code de validation doit contenir ${VALIDATION_CODE_LENGTH} chiffres.`
   )
   .regex(/^\d+$/, 'Le code de validation ne doit contenir que des chiffres.')
+
+export const nonAdminUserRoleSchema = requiredNativeEnum(UserRole).refine(
+  role => role !== UserRole.Administrator,
+  {
+    message:
+      "Un administrateur ne peut pas être créé via l'interface d'administration"
+  }
+)
 
 export const beneficiaryIdSchema = z.object({
   beneficiaryId: z.string().uuid()

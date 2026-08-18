@@ -80,6 +80,26 @@ describe('Admin - Edit User - Reject editing an Administrator', () => {
   })
 })
 
+describe('Admin - Edit User - Reject changing the structureId', () => {
+  const otherStructureId = fixtureStructures[FixtureStructure.Autun].id
+
+  test('An administrator cannot change a user structure via the edit form', async ({
+    trpc
+  }) => {
+    await expect(() =>
+      trpc.administrator.admin.editUser({
+        id: seededUser.id,
+        firstName: seededUser.firstName,
+        lastName: seededUser.lastName,
+        email: seededUser.email,
+        role: 'SocialWorker',
+        status: 'Active',
+        structureId: otherStructureId
+      })
+    ).rejects.toThrow(/cannot change the structure/i)
+  })
+})
+
 describe('Admin - Edit User - Reject editing a user in a disabled structure', () => {
   let disabledStructureId: string
   let disabledUserId: string

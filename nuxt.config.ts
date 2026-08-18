@@ -353,6 +353,25 @@ export default defineNuxtConfig({
         }
       }
     },
+    // The transfer user flow is a sensitive admin action — limit to a handful of calls per minute per session.
+    '/api/trpc/admin.transferUser': {
+      security: {
+        rateLimiter: {
+          interval: 60_000,
+          tokensPerInterval: 5
+        }
+      }
+    },
+    // The transfer confirmation-code sender is tighter — 5 attempts per 15 minutes per session
+    // to blunt brute force of the six-digit code within its 10-minute TTL.
+    '/api/trpc/admin.authorizeUserTransfer': {
+      security: {
+        rateLimiter: {
+          interval: 900_000,
+          tokensPerInterval: 5
+        }
+      }
+    },
     // The Proconnect only logout is limited to 2 calls per minute
     '/api/proconnect/proconnect-logout': {
       security: {

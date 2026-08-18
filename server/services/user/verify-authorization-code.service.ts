@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'crypto'
 import { UserRepo } from '~~/server/database'
 import type { AuthContext } from '~~/server/trpc'
 import { forbiddenError } from '~~/server/trpc'
@@ -18,10 +19,16 @@ export async function verifyAuthorizationCode({
     }
   })
 
-  if (
-    dayjs().isAfter(dayjs(user.authorizationCodeValidity)) ||
-    user.authorizationCode !== input.code
-  ) {
+  const expired = dayjs().isAfter(dayjs(user.authorizationCodeValidity))
+  const codeMatch =
+    user.authorizationCode != null &&
+    user.authorizationCode.length === input.code.length &&
+    timingSafeEqual(
+      Buffer.from(user.authorizationCode),
+      Buffer.from(input.code)
+    )
+
+  if (expired || !codeMatch) {
     throw forbiddenError('Invalid code')
   }
 

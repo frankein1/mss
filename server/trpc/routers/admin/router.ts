@@ -30,6 +30,12 @@ export const adminRouter = router({
   editUser: adminProcedure
     .input(adminRoutes.editUser.inputValidation)
     .mutation(adminRoutes.editUser.executeAsAdmin),
+  authorizeUserTransfer: adminProcedure
+    .input(adminRoutes.authorizeUserTransfer.inputValidation)
+    .mutation(adminRoutes.authorizeUserTransfer.executeAsAdmin),
+  transferUser: adminProcedure
+    .input(adminRoutes.transferUser.inputValidation)
+    .mutation(adminRoutes.transferUser.executeAsAdmin),
   getEmails: adminProcedure
     .input(adminRoutes.getEmails.inputValidation)
     .query(adminRoutes.getEmails.executeAsAdmin),
