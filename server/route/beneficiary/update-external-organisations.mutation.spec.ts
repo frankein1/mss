@@ -60,6 +60,8 @@ const baseInput = () => ({
   id: beneficiaryId,
   protectionMeasure: null,
   representative: null,
+  orientationType: null,
+  orientationStructure: null,
   prescribingOrganizationId: null,
   prescribingOrganizationContactId: null,
   contributingPartners: []
@@ -410,21 +412,38 @@ describe('Beneficiary - Update external organisations - Contributing partners', 
   })
 })
 
-describe('Beneficiary - Update external organisations - Legacy field preservation', () => {
-  test('orientationType and orientationStructure are never nulled regardless of updates', async ({
+describe('Beneficiary - Update external organisations - Orientation fields', () => {
+  test('A manager can update orientationType and orientationStructure', async ({
     trpc
   }) => {
     await trpc.structureManager.beneficiary.updateExternalOrganisations({
       ...baseInput(),
-      prescribingOrganizationId: orgCAF.id,
-      contributingPartners: [{ partnerOrganizationId: orgFT.id }]
+      orientationType: BeneficiaryOrientationType.Elu,
+      orientationStructure: 'Nouvel organisme orientation'
     })
 
     const ben = await prismaClient.beneficiary.findUniqueOrThrow({
       where: { id: beneficiaryId },
       select: { orientationType: true, orientationStructure: true }
     })
-    expect(ben.orientationType).toBe('Tiers')
-    expect(ben.orientationStructure).toBe('Ancien organisme orientation')
+    expect(ben.orientationType).toBe('Elu')
+    expect(ben.orientationStructure).toBe('Nouvel organisme orientation')
+  })
+
+  test('A manager can clear orientationType and orientationStructure', async ({
+    trpc
+  }) => {
+    await trpc.structureManager.beneficiary.updateExternalOrganisations({
+      ...baseInput(),
+      orientationType: null,
+      orientationStructure: null
+    })
+
+    const ben = await prismaClient.beneficiary.findUniqueOrThrow({
+      where: { id: beneficiaryId },
+      select: { orientationType: true, orientationStructure: true }
+    })
+    expect(ben.orientationType).toBeNull()
+    expect(ben.orientationStructure).toBeNull()
   })
 })
