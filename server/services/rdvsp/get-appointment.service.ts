@@ -19,7 +19,7 @@ export default async function getAppointment({
   const { rdvs } = await agentClient<{ rdvs: RdvspRdv[] }>('/rdvs', {
     query: {
       'id': input.id,
-      'include[]': ['participations']
+      'include[]': ['motif', 'agents', 'participations']
     }
   })
 
@@ -39,9 +39,14 @@ export default async function getAppointment({
     starts_at
   } = rdvs[0]
 
+  console.log('rdv[0]', JSON.stringify(rdvs[0], undefined, 2))
+
   const status = getParticipationStatus(rdvs[0], [
     input.beneficiaryExternalRdvspId
   ])
+
+  console.log('status', status)
+  console.log('agents', agents)
 
   const createdBy = { id: created_by_id, firstName: '', lastName: '' }
   if (created_by_id === agents[0]?.id) {
