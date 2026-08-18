@@ -50,6 +50,19 @@
           :label="beneficiaryFieldLabels.representative"
         />
       </div>
+      <div class="fr-col-12">
+        <VeeSelect
+          name="orientationType"
+          :label="beneficiaryFieldLabels.orientationType"
+          :options="withEmptyValue(beneficiaryOrientationTypeKeys.options)"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeInput
+          name="orientationStructure"
+          :label="beneficiaryFieldLabels.orientationStructure"
+        />
+      </div>
     </BeneficiaryFormSection>
 
     <BeneficiaryFormSection>
@@ -88,7 +101,10 @@
 </template>
 
 <script setup lang="ts">
-  import { beneficiaryProtectionMeasureKeys } from '~~/client/options'
+  import {
+    beneficiaryProtectionMeasureKeys,
+    beneficiaryOrientationTypeKeys
+  } from '~~/client/options'
   import { beneficiaryFieldLabels } from '~~/client/labels/beneficiary.labels'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
