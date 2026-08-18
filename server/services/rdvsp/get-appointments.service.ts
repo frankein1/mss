@@ -21,14 +21,17 @@ export default async function getAppointments({
     .map(({ externalRdvspId }) => externalRdvspId!)
 
   if (beneficiaryExternalIds.length === 0) {
-    return []
+    return { rdvs: [] as RdvspRdv[], beneficiaryExternalIds: [] as number[] }
   }
   const { rdvs } = await agentClient<{ rdvs: RdvspRdv[] }>('/rdvs', {
     query: {
       'user_id[]': beneficiaryExternalIds,
-      'include[]': ['motif', 'users', 'agents']
+      'include[]': ['motif', 'users', 'agents', 'participations']
     }
   })
 
-  return rdvs
+  return {
+    rdvs,
+    beneficiaryExternalIds: beneficiaryExternalIds.map(Number)
+  }
 }

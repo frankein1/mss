@@ -56,7 +56,11 @@ export interface RdvspRdv {
   collectif: boolean
   starts_at: string
   users: { id: number; first_name: string; last_name: string }[]
-  participations: { id: number; first_name: string; last_name: string }[]
+  participations: {
+    id: number
+    status: RdvspStatus
+    user: { id: number; first_name: string; last_name: string }
+  }[]
   url_for_agents: string
 }
 

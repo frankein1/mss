@@ -7,6 +7,7 @@
       <BeneficiaryHistoryDetailsAppointment
         v-if="type === 'Appointment'"
         :id="Number(socialSupportId)"
+        :beneficiary-external-rdvsp-id="beneficiaryExternalRdvspId"
       />
       <BeneficiaryHistoryDetailsBodyContentProvider
         v-else
@@ -28,6 +29,7 @@
     collapseId: string
     type: SocialSupportType
     familyFilePermissions: FamilyFilePermissions
+    beneficiaryExternalRdvspId?: number
   }>()
 
   const emit = defineEmits<{

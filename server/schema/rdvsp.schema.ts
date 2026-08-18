@@ -17,7 +17,8 @@ export type UpdateAppointmentStatusInput = z.infer<
 >
 
 export const getAppointmentSchema = z.object({
-  id: z.number()
+  id: z.number(),
+  beneficiaryExternalRdvspId: z.number()
 })
 
 export type GetAppointmentInput = z.infer<typeof getAppointmentSchema>

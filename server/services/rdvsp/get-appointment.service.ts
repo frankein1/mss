@@ -2,6 +2,7 @@ import type { ProtectedAppContext } from '~~/server/trpc'
 import {
   castAppointmentDatestringToUTC,
   getAgentClient,
+  getParticipationStatus,
   mapRdvspRdvStatusToAppointmentStatus
 } from './helper'
 import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
@@ -11,12 +12,15 @@ export default async function getAppointment({
   input,
   ctx
 }: {
-  input: { id: number }
+  input: { id: number; beneficiaryExternalRdvspId: number }
   ctx: ProtectedAppContext
 }) {
   const agentClient = getAgentClient({ user_id: ctx.user.id })
   const { rdvs } = await agentClient<{ rdvs: RdvspRdv[] }>('/rdvs', {
-    query: { id: input.id }
+    query: {
+      'id': input.id,
+      'include[]': ['participations']
+    }
   })
 
   if (rdvs.length === 0 || !rdvs[0]) {
@@ -32,9 +36,12 @@ export default async function getAppointment({
     url_for_agents,
     motif,
     collectif,
-    status,
     starts_at
   } = rdvs[0]
+
+  const status = getParticipationStatus(rdvs[0], [
+    input.beneficiaryExternalRdvspId
+  ])
 
   const createdBy = { id: created_by_id, firstName: '', lastName: '' }
   if (created_by_id === agents[0]?.id) {

@@ -1,4 +1,8 @@
-import { getConfig, refreshToken } from '~~/server/lib/rdvsp-oauth.client'
+import {
+  getConfig,
+  refreshToken,
+  type RdvspRdv
+} from '~~/server/lib/rdvsp-oauth.client'
 import { forbiddenError, unauthorizedError } from '~~/server/trpc'
 import { ofetch, type FetchHooks } from 'ofetch'
 import { shouldLog } from '~~/server/utils/logging.js'
@@ -157,6 +161,26 @@ export function getAppointmentRdvspUrl(
   rdvId: string
 ) {
   return `${baseUrl}/admin/organisations/${organisationId}/rdvs/${rdvId}`
+}
+
+export function findBeneficiaryParticipation(
+  rdv: RdvspRdv,
+  beneficiaryExternalRdvspIds: number[]
+) {
+  return rdv.participations?.find(p =>
+    beneficiaryExternalRdvspIds.includes(p.user.id)
+  )
+}
+
+export function getParticipationStatus(
+  rdv: RdvspRdv,
+  beneficiaryExternalRdvspIds: number[]
+): RdvspStatus {
+  const participation = findBeneficiaryParticipation(
+    rdv,
+    beneficiaryExternalRdvspIds
+  )
+  return participation?.status ?? rdv.status
 }
 
 export function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {

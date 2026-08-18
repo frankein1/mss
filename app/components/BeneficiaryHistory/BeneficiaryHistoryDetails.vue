@@ -18,6 +18,7 @@
       :social-support-id="socialSupportId"
       :collapse-id="collapseId"
       :family-file-permissions="familyFilePermissions"
+      :beneficiary-external-rdvsp-id="item.beneficiaryExternalRdvspId"
       @deleted="emit('deleted', socialSupportId)"
     />
   </li>
