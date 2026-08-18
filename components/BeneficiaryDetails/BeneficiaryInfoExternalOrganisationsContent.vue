@@ -28,6 +28,21 @@
       :value="externalOrganisations.representative"
       class="fr-col-12 fr-col-lg-6"
     />
+
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.orientationType"
+      :value="
+        beneficiaryOrientationTypeKeys.value(
+          externalOrganisations.orientationType
+        )
+      "
+      class="fr-col-12 fr-col-lg-6"
+    />
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.orientationStructure"
+      :value="externalOrganisations.orientationStructure"
+      class="fr-col-12 fr-col-lg-6"
+    />
   </div>
   <div
     v-if="
@@ -67,7 +82,10 @@
 
 <script setup lang="ts">
   import type { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
-  import { beneficiaryProtectionMeasureKeys } from '~/client/options'
+  import {
+    beneficiaryProtectionMeasureKeys,
+    beneficiaryOrientationTypeKeys
+  } from '~/client/options'
   import {
     beneficiaryFieldLabels,
     beneficiaryContributingPartnerFieldLabels

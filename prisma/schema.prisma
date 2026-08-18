@@ -1798,9 +1798,7 @@ model Beneficiary {
   representative                   String?
   /// Legacy field replaced by prescribingOrganizationId
   prescribingStructure             String?                          @map("prescribing_structure")
-  /// Legacy field - was not heavily used
   orientationType                  BeneficiaryOrientationType?      @map("orientation_type")
-  /// Legacy field - was not heavily used
   orientationStructure             String?                          @map("orientation_structure")
   /// Legacy field replaced by BeneficiaryContributingPartner table
   serviceProviders                 String?                          @map("service_providers")

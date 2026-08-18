@@ -9,6 +9,7 @@ import {
   BeneficiaryMinistereDepartementServiceAc,
   BeneficiaryMinistereStructure,
   BeneficiaryMobility,
+  BeneficiaryOrientationType,
   BeneficiaryPensionOrganisation,
   BeneficiaryProtectionMeasure,
   BeneficiarySchoolClass,
@@ -225,6 +226,8 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
     BeneficiaryProtectionMeasure
   ),
   representative: limitedStringConstraint(null, 100).nullish(),
+  orientationType: withEmptyValueOptionalNativeEnum(BeneficiaryOrientationType),
+  orientationStructure: limitedStringConstraint(null, 200).nullish(),
   prescribingOrganizationId: z
     .string()
     .uuid()
