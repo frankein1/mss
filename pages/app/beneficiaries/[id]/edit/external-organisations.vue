@@ -72,6 +72,8 @@
 
     return {
       id,
+      orientationType: externalOrganisations?.orientationType ?? null,
+      orientationStructure: externalOrganisations?.orientationStructure ?? null,
       protectionMeasure: externalOrganisations?.protectionMeasure,
       representative: externalOrganisations?.representative,
       prescribingOrganizationId:
