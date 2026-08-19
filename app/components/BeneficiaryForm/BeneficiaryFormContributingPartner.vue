@@ -5,7 +5,10 @@
     </h3>
   </div>
 
-  <div class="fr-col-12 fr-col-lg-6">
+  <div
+    data-field-group
+    class="fr-col-12 fr-col-lg-6"
+  >
     <VeeCombobox
       :label="contributingPartnerFieldLabels.partnerOrganizationId"
       :name="`contributingPartners[${index}].partnerOrganizationId`"

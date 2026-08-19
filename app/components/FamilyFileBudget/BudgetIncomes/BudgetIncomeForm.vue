@@ -127,7 +127,10 @@
 
     <hr class="separator" />
 
-    <section class="fr-grid-row fr-grid-row--gutters">
+    <section
+      ref="customIncomeRef"
+      class="fr-grid-row fr-grid-row--gutters"
+    >
       <h2 class="fr-h5 fr-m-0 fr-col-12">Ressources personnalisées</h2>
       <div class="fr-col-12">
         <CustomForm
@@ -144,7 +147,7 @@
         icon="fr-icon-add-line"
         tertiary
         no-outline
-        @click="push({ id: randomUUID() })"
+        @click="addCustomIncome()"
       />
     </section>
   </div>
@@ -156,8 +159,16 @@
 
   const randomUUID = () => crypto.randomUUID()
 
+  const customIncomeRef = useTemplateRef('customIncomeRef')
+  const { focusElementAdded } = useDynamicFieldFocus(customIncomeRef)
+
   const { fields, push, remove } =
     useFieldArray<UpdateLoanOrDebtInput>('customs')
+
+  function addCustomIncome() {
+    push({ id: randomUUID() })
+    focusElementAdded()
+  }
 </script>
 
 <style scoped>

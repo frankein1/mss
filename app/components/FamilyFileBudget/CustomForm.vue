@@ -1,5 +1,8 @@
 <template>
-  <section class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+  <section
+    data-field-group
+    class="fr-grid-row fr-grid-row--gutters fr-mb-2w"
+  >
     <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         v-if="type === 'expense'"

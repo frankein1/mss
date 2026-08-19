@@ -1,5 +1,8 @@
 <template>
-  <section class="fr-grid-row fr-grid-row--gutters">
+  <section
+    data-field-group
+    class="fr-grid-row fr-grid-row--gutters"
+  >
     <div class="fr-col-9 fr-col-sm-10 fr-col-lg-11">
       <VeeInput
         :name="`loans[${index}].type`"

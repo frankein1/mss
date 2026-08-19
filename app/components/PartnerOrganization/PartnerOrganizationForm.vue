@@ -119,20 +119,18 @@
           />
         </div>
         <div
-          v-if="showPhone2"
+          ref="phone2Ref"
           class="fr-col-6"
+          :class="{ 'partner-form__open-phone': !showPhone2 }"
         >
           <VeeInput
+            v-if="showPhone2"
             name="phone2"
             :label="partnerOrganizationFieldLabels.phone2"
             type="tel"
           />
-        </div>
-        <div
-          v-else
-          class="fr-col-6 partner-form__open-phone"
-        >
           <button
+            v-else
             class="fr-link fr-icon-file-add-line fr-text--sm fr-mb-1w"
             @click="displayPhone2"
           >
@@ -176,7 +174,7 @@
       <button
         class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
         type="button"
-        @click="push({ id: randomUUID() })"
+        @click="addContact()"
       >
         Ajouter une personne
       </button>
@@ -241,13 +239,24 @@
   const fieldsDisabled = computed(() => props.dataSource === 'DataInclusionV1')
 
   const form = useTemplateRef('form')
+  const { focusElementAdded } = useDynamicFieldFocus(form)
+
   const showPhone2 = ref(props.showPhone2)
   const partnerWithSameSiret = ref<PartnerOrganizationData>()
 
   const { fields, push, remove } = useFieldArray('contacts')
 
+  function addContact() {
+    push({ id: randomUUID() })
+    focusElementAdded()
+  }
+
+  const phone2Ref = useTemplateRef('phone2Ref')
+  const { focusElementAdded: focusPhone2 } = useDynamicFieldFocus(phone2Ref)
+
   function displayPhone2() {
     showPhone2.value = true
+    focusPhone2()
   }
 
   async function onSiretChange(input: string) {
