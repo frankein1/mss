@@ -658,13 +658,21 @@ type FamilyFileBeneficiaryData = {
   relationship: string | null
 }
 
+type ContributingPartnerData = {
+  index: number
+  partnerOrganizationName: string
+  partnerOrganizationContactName: string | null
+  precisions: string | null
+  hasDetails: boolean
+}
+
 type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
   beneficiaries: FamilyFileBeneficiaryData[]
   referents: string | null
   relatives: BeneficiaryRelativeData[] | null
   prescribingOrganizationName: string | null
   prescribingOrganizationContactName: string | null
-  contributingPartnersText: string | null
+  contributingPartners: ContributingPartnerData[] | null
 }
 
 const getBeneficiaryInfoData = (
@@ -690,6 +698,21 @@ const getBeneficiaryInfoData = (
   const referents = beneficiary.familyFile?.referents
     .map(referent => referent.firstName + ' ' + referent.lastName)
     .sort((a, b) => a.localeCompare(b))
+  const contributingPartners = beneficiary.contributingPartners?.length
+    ? beneficiary.contributingPartners.map(
+        (contributingPartner, idx): ContributingPartnerData => ({
+          index: idx + 1,
+          partnerOrganizationName: contributingPartner.partnerOrganization.name,
+          partnerOrganizationContactName:
+            contributingPartner.partnerOrganizationContact?.name || null,
+          precisions: contributingPartner.precisions,
+          hasDetails: Boolean(
+            contributingPartner.partnerOrganizationContact ||
+              contributingPartner.precisions
+          )
+        })
+      )
+    : null
   const relatives = beneficiary.relatives
     ? [...beneficiary.relatives]
         .sort((a, b) =>
@@ -790,18 +813,7 @@ const getBeneficiaryInfoData = (
       beneficiary.prescribingOrganization?.name || null,
     prescribingOrganizationContactName:
       beneficiary.prescribingOrganizationContact?.name || null,
-    contributingPartnersText: beneficiary.contributingPartners?.length
-      ? beneficiary.contributingPartners
-          .map(
-            cp =>
-              cp.partnerOrganization.name +
-              (cp.partnerOrganizationContact
-                ? ` (${cp.partnerOrganizationContact.name})`
-                : '') +
-              (cp.precisions ? ` — ${cp.precisions}` : '')
-          )
-          .join(', ')
-      : null
+    contributingPartners: contributingPartners
   }
 }
 

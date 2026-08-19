@@ -318,6 +318,14 @@
     <hr />
     <h2>Partenaires</h2>
     <ul>
+      {{#if prescribingOrganizationName}}
+        <li><span class='bold'>Organisme prescripteur :
+          </span>{{{prescribingOrganizationName}}}</li>
+      {{/if}}
+      {{#if prescribingOrganizationContactName}}
+        <li><span class='bold'>Contact organisme prescripteur :
+          </span>{{{prescribingOrganizationContactName}}}</li>
+      {{/if}}
       {{#if protectionMeasure}}
         <li><span class='bold'>Mesures de protection :
           </span>{{{protectionMeasure}}}</li>
@@ -325,10 +333,6 @@
       {{#if representative}}
         <li><span class='bold'>Nom, prénom, coordonnées du mandataire :
           </span>{{{representative}}}</li>
-      {{/if}}
-      {{#if prescribingStructure}}
-        <li><span class='bold'>Organisme prescripteur :
-          </span>{{{prescribingStructure}}}</li>
       {{/if}}
       {{#if orientationType}}
         <li><span class='bold'>Mode d'orientation :
@@ -338,13 +342,39 @@
         <li><span class='bold'>Organisme d'orientation :
           </span>{{{orientationStructure}}}</li>
       {{/if}}
+      {{#if prescribingStructure}}
+        <li><span class='bold'>Organisme prescripteur (donnée historique) :
+          </span>{{{prescribingStructure}}}</li>
+      {{/if}}
       {{#if serviceProviders}}
-        <li><span class='bold'>Prestataires : </span>{{{serviceProviders}}}</li>
+        <li><span class='bold'>Prestataires (donnée historique) :
+          </span>{{{serviceProviders}}}</li>
       {{/if}}
       {{#if involvedPartners}}
-        <li><span class='bold'>Partenaires intervenants :
+        <li><span class='bold'>Partenaires intervenants (donnée historique) :
           </span>{{{involvedPartners}}}</li>
       {{/if}}
     </ul>
+    {{#if contributingPartners}}
+      <h3>Partenaires intervenants</h3>
+      {{#each contributingPartners}}
+        <ul>
+          <li><h4>{{index}}. {{{partnerOrganizationName}}}</h4>
+            {{#if hasDetails}}
+              <ul>
+                {{#if partnerOrganizationContactName}}
+                  <li><span class='bold'>Contact du partenaire intervenant :
+                    </span>{{{partnerOrganizationContactName}}}</li>
+                {{/if}}
+                {{#if precisions}}
+                  <li><span class='bold'>Précisions :
+                    </span>{{{precisions}}}</li>
+                {{/if}}
+              </ul>
+            {{/if}}
+          </li>
+        </ul>
+      {{/each}}
+    {{/if}}
   </body>
 </html>
