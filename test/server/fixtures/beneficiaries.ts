@@ -2,7 +2,10 @@ import {
   fixtureStructures,
   FixtureStructure,
   fixturesUsers,
-  FixtureUserRole
+  FixtureUserRole,
+  fixturesPartnerOrganizations,
+  FixturePartnerOrganization,
+  fixturesPartnerOrganizationContacts
 } from '~~/prisma/fixtures'
 import { prismaClient } from '~~/server/prisma'
 
@@ -112,6 +115,33 @@ export async function createBeneficiary(
       orientationStructure: 'CCAS de Lyon 6',
       serviceProviders: null,
       involvedPartners: "Service d'assistance de son département de travail",
+      prescribingOrganization: {
+        connect: {
+          id: fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
+        }
+      },
+      prescribingOrganizationContact: {
+        connect: { id: fixturesPartnerOrganizationContacts[0].id }
+      },
+      contributingPartners: {
+        create: [
+          {
+            partnerOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.FranceTravail
+              ].id,
+            partnerOrganizationContactId:
+              fixturesPartnerOrganizationContacts[2].id,
+            precisions: 'Accompagnement vers le retour à l’emploi'
+          },
+          {
+            partnerOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.MairieValence
+              ].id
+          }
+        ]
+      },
       additionalInformation: null,
       numeroPegase: '12547AD54',
       accommodationZone: 'France',
