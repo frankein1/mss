@@ -1,5 +1,8 @@
 <template>
-  <div class="redirection-wrapper">
+  <div
+    data-field-group
+    class="redirection-wrapper"
+  >
     <div class="form-header">
       <VeeRadioButtons
         :name="`socialSupportRedirections[${index}].type`"

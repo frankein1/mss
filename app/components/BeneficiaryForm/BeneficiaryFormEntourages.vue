@@ -1,5 +1,8 @@
 <template>
-  <section class="fr-p-3v">
+  <section
+    ref="sectionRef"
+    class="fr-p-3v"
+  >
     <h2 class="title-blue fr-mb-6v">
       {{ routes.beneficiary.AppBeneficiaryEditEntourage.title }}
     </h2>
@@ -12,10 +15,17 @@
       @remove-entourage="remove(idx)"
     />
 
-    <BeneficiaryFormAddRelative
-      name="entourages"
-      add-button-label="Ajouter un proche"
-    />
+    <BeneficiaryFormSection>
+      <div class="fr-col-12">
+        <button
+          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-add-circle-line"
+          type="button"
+          @click="addEntourage()"
+        >
+          Ajouter un proche
+        </button>
+      </div>
+    </BeneficiaryFormSection>
   </section>
 </template>
 
@@ -23,6 +33,14 @@
   import type { CreateOrUpdateEntourageInput } from '~~/server/schema'
   import { routes } from '~/utils/routes'
 
-  const { remove, fields } =
+  const sectionRef = useTemplateRef('sectionRef')
+  const { focusElementAdded } = useDynamicFieldFocus(sectionRef)
+
+  const { remove, fields, push } =
     useFieldArray<CreateOrUpdateEntourageInput>('entourages')
+
+  function addEntourage() {
+    push({ id: crypto.randomUUID(), caregiver: false, hosted: false })
+    focusElementAdded()
+  }
 </script>
