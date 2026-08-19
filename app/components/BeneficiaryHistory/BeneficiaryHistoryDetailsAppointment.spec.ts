@@ -49,7 +49,10 @@ describe('BeneficiaryHistoryDetailsAppointment - Collective', () => {
     mockUseQuery = createMockUseQuery(collectiveAppointment)
 
     const wrapper = await mountSuspended(BeneficiaryHistoryDetailsAppointment, {
-      props: { id: 1, beneficiaryExternalRdvspId: 42 }
+      props: {
+        id: 1,
+        rdvMetadata: { collectif: true, beneficiaryId: 'benef-uuid' }
+      }
     })
 
     expect(wrapper.text()).toContain(
@@ -63,7 +66,10 @@ describe('BeneficiaryHistoryDetailsAppointment - Collective', () => {
     mockUseQuery = createMockUseQuery(collectiveAppointment)
 
     const wrapper = await mountSuspended(BeneficiaryHistoryDetailsAppointment, {
-      props: { id: 1, beneficiaryExternalRdvspId: 42 }
+      props: {
+        id: 1,
+        rdvMetadata: { collectif: true, beneficiaryId: 'benef-uuid' }
+      }
     })
 
     const link = wrapper.find('a[target="_blank"]')
@@ -77,7 +83,7 @@ describe('BeneficiaryHistoryDetailsAppointment - Individual', () => {
     mockUseQuery = createMockUseQuery(individualAppointment)
 
     const wrapper = await mountSuspended(BeneficiaryHistoryDetailsAppointment, {
-      props: { id: 1, beneficiaryExternalRdvspId: 42 }
+      props: { id: 1, rdvMetadata: { collectif: false } }
     })
 
     expect(wrapper.find('select#select-statut').exists()).toBe(true)

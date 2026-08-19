@@ -8,7 +8,6 @@ import {
 } from '@prisma/client'
 import { TypeSuivi } from '~~/client/options'
 import { SocialSupportRepo } from '~~/server/database'
-import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
 import { createQuery } from '~~/server/route'
 import {
   getSocialSupportsSchema,
@@ -16,11 +15,13 @@ import {
 } from '~~/server/schema/familyFile/getSocialSupports.schema'
 import type { SecurityRuleContext } from '~~/server/security'
 import { FamilyFileService, RdvspService } from '~~/server/services'
+import type {
+  EnrichedAppointment,
+  RdvMetadata
+} from '~~/server/services/rdvsp/get-appointments.service'
 import type { ProtectedAppContext } from '~~/server/trpc'
 import {
   castAppointmentDatestringToUTC,
-  findBeneficiaryParticipation,
-  getParticipationStatus,
   mapRdvspRdvStatusToAppointmentStatus
 } from '~~/server/services/rdvsp/helper'
 
@@ -90,42 +91,33 @@ type SocialSupportItem = Pick<
   createdBy: Pick<User, 'firstName' | 'lastName'>
   beneficiary: Pick<Beneficiary, 'firstName' | 'usualName'>
   subjects?: { name: string }[]
-  beneficiaryExternalRdvspId?: number
+  rdvMetadata?: RdvMetadata
 }
 
-export function mapRdvspRdvToSocialSupportItem(
-  rdv: RdvspRdv,
-  beneficiaryExternalRdvspIds: number[]
-): SocialSupportItem | null {
-  const participation = findBeneficiaryParticipation(
-    rdv,
-    beneficiaryExternalRdvspIds
-  )
-
-  if (rdv.participations?.length > 0 && !participation) {
-    return null
-  }
-
-  const status = getParticipationStatus(rdv, beneficiaryExternalRdvspIds)
-
+/**
+ * Format rdv as a social support item with an added rdvMetadata field
+ * Manage matched beneficiary for collective rdvs
+ */
+export function mapRdvspRdvToSocialSupportItem({
+  rdv,
+  status,
+  rdvMetadata,
+  beneficiary
+}: EnrichedAppointment): SocialSupportItem {
   return {
     id: rdv.id.toString(),
+    // Only a single participating agent is displayed for now,
+    // although multiple agents can participate to a single appointment.
     createdBy: {
       firstName: rdv.agents[0]?.first_name ?? '',
       lastName: rdv.agents[0]?.last_name ?? ''
     },
-    beneficiary: {
-      firstName:
-        participation?.user.first_name ?? rdv.users[0]?.first_name ?? '',
-      usualName: participation?.user.last_name ?? rdv.users[0]?.last_name ?? ''
-    },
+    beneficiary,
     status: mapRdvspRdvStatusToAppointmentStatus(status),
     date: castAppointmentDatestringToUTC(rdv.starts_at),
     socialSupportType: SocialSupportType.Appointment,
-    // Be careful, the frontend checks the presence of the [Collectif] fragment
-    // in "subtype" to determine allowed status updates on appointments.
-    subtype: `${rdv.motif.collectif ? '[Collectif] ' : ''}${rdv.motif.name}`,
-    beneficiaryExternalRdvspId: participation?.user.id
+    subtype: rdv.motif.name,
+    rdvMetadata
   }
 }
 
@@ -148,14 +140,12 @@ const handler = async ({
           input: { familyFileId: input.familyFileId },
           ctx
         })
-          .then(({ rdvs, beneficiaryExternalIds }) =>
-            rdvs
-              .map(rdv =>
-                mapRdvspRdvToSocialSupportItem(rdv, beneficiaryExternalIds)
-              )
-              .filter((item): item is SocialSupportItem => item !== null)
+          .then(appointments =>
+            appointments.map(mapRdvspRdvToSocialSupportItem)
           )
           .catch(error => {
+            // Only log the error silently, we still want to displaye
+            // the social supports.
             console.error(error)
             return []
           })

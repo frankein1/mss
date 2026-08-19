@@ -3,6 +3,7 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { SocialSupportStatus, SocialSupportType } from '@prisma/client'
 import { RdvspStatus } from '~~/types/rdvsp'
 import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
+import type { EnrichedAppointment } from '~~/server/services/rdvsp/get-appointments.service'
 import { mapRdvspRdvToSocialSupportItem } from './get-social-supports.query'
 
 mockNuxtImport('useRuntimeConfig', () => {
@@ -41,87 +42,68 @@ function createRdv(overrides: Partial<RdvspRdv> = {}): RdvspRdv {
   }
 }
 
+function createEnriched(
+  overrides: Partial<Omit<EnrichedAppointment, 'rdv'>> & {
+    rdv?: Partial<RdvspRdv>
+  } = {}
+): EnrichedAppointment {
+  const { rdv, ...rest } = overrides
+  return {
+    rdv: createRdv(rdv),
+    status: RdvspStatus.Seen,
+    rdvMetadata: { collectif: false },
+    beneficiary: { firstName: 'Jean', usualName: 'Dupont' },
+    ...rest
+  }
+}
+
+// The mapper is a pure shaper: participation match, status resolution and the
+// beneficiaryId join are covered by the helper spec and the getAppointments
+// service, not here.
 describe('mapRdvspRdvToSocialSupportItem', () => {
-  it('uses participation status for an individual RDV', () => {
-    const rdv = createRdv({
-      status: RdvspStatus.Unknown,
-      participations: [
-        {
-          id: 10,
-          status: RdvspStatus.Seen,
-          user: { id: 42, first_name: 'Jean', last_name: 'Dupont' }
-        }
-      ]
-    })
+  it('shapes an individual appointment with a plain motif name subtype', () => {
+    const result = mapRdvspRdvToSocialSupportItem(
+      createEnriched({
+        status: RdvspStatus.Seen,
+        rdvMetadata: { collectif: false },
+        beneficiary: { firstName: 'Jean', usualName: 'Dupont' }
+      })
+    )
 
-    const result = mapRdvspRdvToSocialSupportItem(rdv, [42])
-
-    expect(result).toMatchObject({
+    expect(result).toEqual({
+      id: '1',
+      createdBy: { firstName: 'Agent', lastName: 'Smith' },
+      beneficiary: { firstName: 'Jean', usualName: 'Dupont' },
       status: SocialSupportStatus.RdvSeen,
-      socialSupportType: SocialSupportType.Appointment
+      date: new Date('2026-06-01T10:00Z'),
+      socialSupportType: SocialSupportType.Appointment,
+      subtype: 'Consultation',
+      rdvMetadata: { collectif: false }
     })
   })
 
-  it('extracts the correct beneficiary participation status for a collective RDV', () => {
-    const rdv = createRdv({
-      collectif: true,
-      motif: {
-        id: 1,
-        name: 'Atelier',
-        collectif: true,
-        location_type: 'public_office'
-      },
-      status: RdvspStatus.Unknown,
-      participations: [
-        {
-          id: 10,
-          status: RdvspStatus.Seen,
-          user: { id: 42, first_name: 'Jean', last_name: 'Dupont' }
+  it('places the collective flag and beneficiaryId in rdvMetadata without prefixing the subtype', () => {
+    const result = mapRdvspRdvToSocialSupportItem(
+      createEnriched({
+        rdv: {
+          motif: {
+            id: 1,
+            name: 'Atelier',
+            collectif: true,
+            location_type: 'public_office'
+          }
         },
-        {
-          id: 11,
-          status: RdvspStatus.Excused,
-          user: { id: 99, first_name: 'Marie', last_name: 'Martin' }
-        }
-      ]
-    })
-
-    const result = mapRdvspRdvToSocialSupportItem(rdv, [99])
+        status: RdvspStatus.Excused,
+        rdvMetadata: { collectif: true, beneficiaryId: 'beneficiary-uuid' },
+        beneficiary: { firstName: 'Marie', usualName: 'Martin' }
+      })
+    )
 
     expect(result).toMatchObject({
       status: SocialSupportStatus.RdvExcused,
       beneficiary: { firstName: 'Marie', usualName: 'Martin' },
-      subtype: '[Collectif] Atelier',
-      beneficiaryExternalRdvspId: 99
-    })
-  })
-
-  it('returns null when no matching participation is found', () => {
-    const rdv = createRdv({
-      participations: [
-        {
-          id: 10,
-          status: RdvspStatus.Seen,
-          user: { id: 42, first_name: 'Jean', last_name: 'Dupont' }
-        }
-      ]
-    })
-
-    const result = mapRdvspRdvToSocialSupportItem(rdv, [999])
-
-    expect(result).toBeNull()
-  })
-
-  it('falls back to RDV status when participations array is empty', () => {
-    const rdv = createRdv({
-      status: RdvspStatus.Revoked,
-      participations: []
-    })
-
-    const result = mapRdvspRdvToSocialSupportItem(rdv, [42])
-
-    expect(result).toMatchObject({
-      status: SocialSupportStatus.RdvRevoked
+      subtype: 'Atelier',
+      rdvMetadata: { collectif: true, beneficiaryId: 'beneficiary-uuid' }
     })
   })
 })

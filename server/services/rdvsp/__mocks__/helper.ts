@@ -6,7 +6,7 @@ export {
   mapRdvspRdvStatusToAppointmentStatus,
   castAppointmentDatestringToUTC,
   findBeneficiaryParticipation,
-  getParticipationStatus
+  getStatusFromRdv
 } from '../helper'
 
 export const getAgentClient = vi.fn(() => vi.fn())

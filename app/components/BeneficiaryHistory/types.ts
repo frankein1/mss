@@ -4,6 +4,10 @@ type SocialSupportsOutput = RouterOutput['file']['getSocialSupports']
 export type SocialSupportItem = SocialSupportsOutput[0]
 export type SocialSupportData = SocialSupportItem
 
+// Appointment-only metadata carried on RDVSP items (collective flag + the specific
+// participant's beneficiaryId for collective appointments).
+export type RdvMetadata = NonNullable<SocialSupportItem['rdvMetadata']>
+
 type SocialSupportDetailOutput = RouterOutput['socialSupport']['getDetails']
 export type SocialSupportDetailItem = SocialSupportDetailOutput
 export type SocialSupportDetailData = SocialSupportDetailItem['data']

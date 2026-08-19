@@ -111,6 +111,7 @@
   </AtomLazyComponent>
 </template>
 <script setup lang="ts">
+  import type { RdvMetadata } from './types'
   import { BeneficiaryHistoryAction, EventCategory } from '~~/types/matomo'
   import { RdvspStatus } from '~~/types/rdvsp'
   import { formatUserDisplayName } from '~/utils/user'
@@ -118,7 +119,7 @@
 
   const props = defineProps<{
     id: number
-    beneficiaryExternalRdvspId?: number
+    rdvMetadata?: RdvMetadata
   }>()
 
   const trpcClient = useTrpcClient()
@@ -129,7 +130,12 @@
     error
   } = trpcClient.rdvsp.getAppointment.useQuery({
     id: props.id,
-    beneficiaryExternalRdvspId: props.beneficiaryExternalRdvspId!
+    // rdvMetadata is a discriminated union keyed on `collectif`; beneficiaryId only
+    // exists on the collective variant, where the server resolves it to the RDVSP
+    // participation to reconcile that specific participant's status.
+    beneficiaryId: props.rdvMetadata?.collectif
+      ? props.rdvMetadata.beneficiaryId
+      : undefined
   })
 
   const status = computed(() => {

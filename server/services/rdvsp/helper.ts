@@ -172,14 +172,23 @@ export function findBeneficiaryParticipation(
   )
 }
 
-export function getParticipationStatus(
-  rdv: RdvspRdv,
-  beneficiaryExternalRdvspIds: number[]
+/**
+ * Two-case status resolution keyed on the instance flag `rdv.collectif`:
+ * - Individual rdv: the authoritative status is on the rdv itself (`rdv.status`).
+ * - Collective rdv: the status lives on the beneficiary's participation, not on
+ *   the rdv. Fall back to `rdv.status` when the beneficiary has no participation.
+ *
+ * The caller passes the already-matched participation (via
+ * `findBeneficiaryParticipation`) so the lookup is done once at the call site and
+ * both the list and detail paths share this single rule.
+ */
+export function getStatusFromRdv(
+  rdv: Pick<RdvspRdv, 'collectif' | 'status'>,
+  participation?: { status: RdvspStatus }
 ): RdvspStatus {
-  const participation = findBeneficiaryParticipation(
-    rdv,
-    beneficiaryExternalRdvspIds
-  )
+  if (!rdv.collectif) {
+    return rdv.status
+  }
   return participation?.status ?? rdv.status
 }
 
