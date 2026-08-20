@@ -1,4 +1,8 @@
-import { getConfig, refreshToken } from '~~/server/lib/rdvsp-oauth.client'
+import {
+  getConfig,
+  refreshToken,
+  type RdvspRdv
+} from '~~/server/lib/rdvsp-oauth.client'
 import { forbiddenError, unauthorizedError } from '~~/server/trpc'
 import { ofetch, type FetchHooks } from 'ofetch'
 import { shouldLog } from '~~/server/utils/logging.js'
@@ -157,6 +161,35 @@ export function getAppointmentRdvspUrl(
   rdvId: string
 ) {
   return `${baseUrl}/admin/organisations/${organisationId}/rdvs/${rdvId}`
+}
+
+export function findBeneficiaryParticipation(
+  rdv: RdvspRdv,
+  beneficiaryExternalRdvspIds: number[]
+) {
+  return rdv.participations?.find(p =>
+    beneficiaryExternalRdvspIds.includes(p.user.id)
+  )
+}
+
+/**
+ * Two-case status resolution keyed on the instance flag `rdv.collectif`:
+ * - Individual rdv: the authoritative status is on the rdv itself (`rdv.status`).
+ * - Collective rdv: the status lives on the beneficiary's participation, not on
+ *   the rdv. Fall back to `rdv.status` when the beneficiary has no participation.
+ *
+ * The caller passes the already-matched participation (via
+ * `findBeneficiaryParticipation`) so the lookup is done once at the call site and
+ * both the list and detail paths share this single rule.
+ */
+export function getStatusFromRdv(
+  rdv: Pick<RdvspRdv, 'collectif' | 'status'>,
+  participation?: { status: RdvspStatus }
+): RdvspStatus {
+  if (!rdv.collectif) {
+    return rdv.status
+  }
+  return participation?.status ?? rdv.status
 }
 
 export function mapRdvspRdvStatusToAppointmentStatus(status: RdvspStatus) {
