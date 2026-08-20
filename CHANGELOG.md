@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.64.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.63.0...v1.64.0) (2026-08-20)
+
+
+### Features
+
+* **accessibilité:** correctifs bénéficiaire,accompagnement et structure ([f3c6885](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f3c6885f63c9e1a38b1267972811a90ab84c2385))
+* **bénéficiaires:** ajout de dispositifs scolaire, ajout des SEGPA et ULIS dans les classes ([6469068](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/646906897a6a8585ad70078c1442056fc8b93030)), closes [#1141](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1141)
+* **document:** script de rewrap des DEK suite à rotation de la KEK ([ce5fea3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ce5fea3e9a96edafa73e9d788995ca7196407150)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **ministères:** ajout d'items au champ "Département ou service de l'administration centrale"" ([b3fb8da](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b3fb8da5d02c0c3623acf558ccc522538cbf36be)), closes [#1132](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1132)
+
+
+### Bug Fixes
+
+* **accessibilité:** correction du focus lors de l'ajout dynamique d'un champ dans un formulaire ([cb9b06a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cb9b06ac077ecc8bb922d527a460e126ba5d1659)), closes [#1158](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1158)
+* amélioration de l'affichage des formulaires ([cf532e6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cf532e64fd1e1c27b6e5a959adb3cb28e4bd78e8))
+* **bénéficiaire:** données initiales dans le formulaire ([f9bc2c2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f9bc2c2ea07100dbeb682399c6c7c8740aaf3433))
+* **bénéficiaire:** restauration structure et mode d'orientation ([db8c1ed](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/db8c1ed40b464659d1a4ac9476db1b7c9b1898bb)), closes [#1160](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1160)
+* **document:** simplification AAD utilisant document key ([efb05e3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/efb05e3205ab8678d7339c1023f9c9587dbd3181)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **rdvsp:** corrige rafraichissement du token ([c9142c2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c9142c2f3ce5341ee6a42d7e79d121515926ff61))
+* **rdvsp:** statut rdv collectif synchronisé ([5c2e36f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5c2e36f8788265a57dc481d7c6c6ff543b58a91e)), closes [#1157](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1157)
+* redirection après dissociation de dossier ([7ad71f7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7ad71f7433a3ffef33ee27ca3651398fa8283d7e))
+
 ## [1.63.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.62.0...v1.63.0) (2026-08-03)
 
 
