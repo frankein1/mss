@@ -46,6 +46,9 @@ const statFilterSchema = z
     cities: z
       .array(stringConstraint.max(50, maxStringLengthMessage(50)))
       .nullish(),
+    employers: z
+      .array(stringConstraint.max(50, maxStringLengthMessage(50)))
+      .nullish(),
     schoolUai: z
       .array(stringConstraint.max(50, maxStringLengthMessage(50)))
       .nullish(),

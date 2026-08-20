@@ -1,0 +1,25 @@
+import { createQuery } from '~~/server/route'
+import type { ProtectedAppContext } from '~~/server/trpc'
+import { emptySchema } from '~~/server/schema'
+import { AllowSecurityCheck } from '~~/server/security/rules/types'
+import { BeneficiaryRepo, BeneficiaryConstraints } from '~~/server/database'
+
+const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
+  // HACK: right solution is to abstract groupBy in repo
+  const constraints = BeneficiaryConstraints.get(user)
+
+  return await BeneficiaryRepo.prisma.groupBy({
+    by: ['employer'],
+    where: {
+      employer: { not: null },
+      ...constraints
+    },
+    orderBy: [{ employer: 'asc' }]
+  })
+}
+
+export const getBeneficiariesEmployersQuery = createQuery({
+  handler,
+  inputValidation: emptySchema,
+  securityCheck: AllowSecurityCheck
+})

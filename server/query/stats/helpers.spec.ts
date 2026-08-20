@@ -13,6 +13,14 @@ describe('prepareBeneficiaryStatFilters', () => {
       schoolUai: { in: ['0750001A'] }
     })
   })
+
+  test('employers filter alone produces an employer in-filter', () => {
+    const filters = { employers: ['Mairie de Nantes'] } as StatFilterInput
+
+    expect(prepareBeneficiaryStatFilters(filters)).toStrictEqual({
+      employer: { in: ['Mairie de Nantes'] }
+    })
+  })
 })
 
 describe('prepareSocialSupportStatFilters', () => {
@@ -33,6 +41,20 @@ describe('prepareSocialSupportStatFilters', () => {
     expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
       beneficiary: {
         city: { in: ['Lyon'] },
+        schoolUai: { in: ['0750001A'] }
+      }
+    })
+  })
+
+  test('employers and school combine on the same beneficiary sub-filter', () => {
+    const filters = {
+      employers: ['Mairie de Nantes'],
+      schoolUai: ['0750001A']
+    } as StatFilterInput
+
+    expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
+      beneficiary: {
+        employer: { in: ['Mairie de Nantes'] },
         schoolUai: { in: ['0750001A'] }
       }
     })

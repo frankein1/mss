@@ -112,6 +112,14 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.beneficiary = { city: { in: filters.cities } }
   }
 
+  if (filters.employers?.length) {
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.employer = { in: filters.employers }
+    } else {
+      socialSupport.beneficiary = { employer: { in: filters.employers } }
+    }
+  }
+
   if (filters.schoolUai?.length) {
     if (socialSupport.beneficiary) {
       socialSupport.beneficiary.schoolUai = { in: filters.schoolUai }
@@ -271,6 +279,10 @@ export function prepareBeneficiaryStatFilters(
 
   if (filters.cities?.length) {
     formattedFilters.city = { in: filters.cities }
+  }
+
+  if (filters.employers?.length) {
+    formattedFilters.employer = { in: filters.employers }
   }
 
   if (filters.schoolUai?.length) {

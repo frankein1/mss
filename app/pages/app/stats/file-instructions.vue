@@ -2,6 +2,7 @@
   <StatsHelpRequest
     :social-support-subject-options="socialSupportSubjectOptions"
     :beneficiaries-cities-options="beneficiariesCitiesOptions"
+    :beneficiaries-employers-options="beneficiariesEmployersOptions"
     :beneficiaries-schools-options="beneficiariesSchoolsOptions"
     :agent-options="agentOptions"
   />
@@ -13,6 +14,7 @@
   defineProps<{
     socialSupportSubjectOptions?: Options
     beneficiariesCitiesOptions?: Options
+    beneficiariesEmployersOptions?: Options
     beneficiariesSchoolsOptions?: Options
     agentOptions?: Options
   }>()

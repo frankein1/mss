@@ -56,6 +56,7 @@ export const fixturesBeneficiaries = [
     region: 'Bourgogne-Franche-Comté',
     mobility: 'BikeOrEquivalent',
     socioProfessionalCategory: 'Employed',
+    employer: 'Ville de Dijon',
     accommodationMode: 'PrivateRenting'
   },
   {
@@ -96,7 +97,8 @@ export const fixturesBeneficiaries = [
     status: 'Active',
     birthDate: new Date('1978-11-22'),
     city: 'Lyon',
-    mobility: 'VehicleWithoutPermit'
+    mobility: 'VehicleWithoutPermit',
+    employer: 'Boulangerie Saint-Jean'
   },
   {
     id: '6e3922b5-f8c9-47c4-8522-5b4cba529a13',
@@ -113,7 +115,8 @@ export const fixturesBeneficiaries = [
     email: 'lridewood0@de.vu',
     city: 'Dijon',
     department: "Côte-d'Or",
-    region: 'Bourgogne-Franche-Comté'
+    region: 'Bourgogne-Franche-Comté',
+    employer: 'La Poste'
   },
   {
     id: '732c1aa4-70ed-47d5-85d1-941738ea8d3c',
@@ -125,7 +128,8 @@ export const fixturesBeneficiaries = [
     usualName: 'PISCOPO',
     firstName: 'Valérie',
     birthDate: new Date('2005-09-30'),
-    gender: 'Male'
+    gender: 'Male',
+    employer: 'Garage Michaud'
   },
   {
     id: '5c0f2623-63fb-46c1-ae58-1b4360180a89',
@@ -137,7 +141,8 @@ export const fixturesBeneficiaries = [
     usualName: 'APFELMANN',
     firstName: 'Aurélie',
     gender: 'Female',
-    familySituation: 'Divorced'
+    familySituation: 'Divorced',
+    employer: 'Crèche Les Petits Pas'
   },
   {
     id: '36e4078f-4182-4fb7-a1f5-117a950204b6',
@@ -167,7 +172,8 @@ export const fixturesBeneficiaries = [
     mobility: 'PermitWithVehicle',
     familySituation: 'Single',
     department: 'Val-de-Marne',
-    region: 'Île-de-France'
+    region: 'Île-de-France',
+    employer: 'Assistance Publique - Hôpitaux de Paris'
   },
   {
     id: '960fccab-bf9f-419d-a411-a2b2472c1b64',
@@ -179,7 +185,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Léonore',
     birthDate: new Date('1965-10-08'),
     gender: 'Male',
-    email: 'rsword6@wp.com'
+    email: 'rsword6@wp.com',
+    employer: 'France Travail'
   },
   {
     id: '0bef7580-29e7-449c-a9a6-1f66ee5e3633',
@@ -190,7 +197,8 @@ export const fixturesBeneficiaries = [
     usualName: 'DOWNER',
     firstName: 'Anaé',
     gender: 'Other',
-    familySituation: 'Divorced'
+    familySituation: 'Divorced',
+    employer: 'Menuiserie Dubreuil'
   },
   {
     id: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
@@ -200,7 +208,8 @@ export const fixturesBeneficiaries = [
     status: 'Active',
     usualName: 'MARTIN',
     firstName: 'Martine',
-    gender: 'Female'
+    gender: 'Female',
+    employer: "Ministère de l'Intérieur"
   },
   {
     id: '3d18f5ac-45cb-4e7a-9fd1-2a8d537bc2c0',
@@ -239,7 +248,8 @@ export const fixturesBeneficiaries = [
     birthDate: new Date('1988-05-20'),
     gender: 'Male',
     city: 'Paris',
-    accommodationZone: 'France'
+    accommodationZone: 'France',
+    employer: "Ministère de l'Intérieur"
   },
   {
     id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
@@ -252,7 +262,8 @@ export const fixturesBeneficiaries = [
     birthDate: new Date('1975-12-03'),
     gender: 'Female',
     city: 'Lyon',
-    accommodationZone: 'Europe'
+    accommodationZone: 'Europe',
+    employer: 'Ministère de la Justice'
   },
   {
     id: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
@@ -264,7 +275,8 @@ export const fixturesBeneficiaries = [
     firstName: 'Sophie',
     birthDate: new Date('1992-08-14'),
     gender: 'Female',
-    accommodationZone: 'OutsideEurope'
+    accommodationZone: 'OutsideEurope',
+    employer: 'Ministère des Armées'
   },
   {
     id: 'd4e5f6a7-b8c9-0123-def0-234567890123',

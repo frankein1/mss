@@ -2,6 +2,7 @@ import { protectedProcedure, router } from '~~/server/trpc'
 import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
+  getBeneficiariesEmployersQuery,
   getBeneficiariesSchoolsQuery,
   getExaminationDatesQuery
 } from '~~/server/route/config'
@@ -13,6 +14,9 @@ export const configRouter = router({
   getBeneficiariesCities: protectedProcedure
     .input(getBeneficiariesCitiesQuery.inputValidation)
     .query(getBeneficiariesCitiesQuery.execute),
+  getBeneficiariesEmployers: protectedProcedure
+    .input(getBeneficiariesEmployersQuery.inputValidation)
+    .query(getBeneficiariesEmployersQuery.execute),
   getBeneficiariesSchools: protectedProcedure
     .input(getBeneficiariesSchoolsQuery.inputValidation)
     .query(getBeneficiariesSchoolsQuery.execute),
