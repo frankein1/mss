@@ -59,7 +59,7 @@ describe('BeneficiaryHistoryDetailsAppointment - Collective', () => {
       'Le statut de ce rendez-vous collectif ne peut être modifié que depuis RDV Service Public'
     )
     expect(wrapper.text()).toContain('Modifier dans RDV Service Public')
-    expect(wrapper.find('select#select-statut').exists()).toBe(false)
+    expect(wrapper.find('select#select-status').exists()).toBe(false)
   })
 
   it('opens RDVSP link in a new tab with correct URL', async () => {
@@ -86,7 +86,7 @@ describe('BeneficiaryHistoryDetailsAppointment - Individual', () => {
       props: { id: 1, rdvMetadata: { collectif: false } }
     })
 
-    expect(wrapper.find('select#select-statut').exists()).toBe(true)
+    expect(wrapper.find('select#select-status').exists()).toBe(true)
     expect(wrapper.text()).not.toContain(
       'Le statut de ce rendez-vous collectif ne peut être modifié que depuis'
     )

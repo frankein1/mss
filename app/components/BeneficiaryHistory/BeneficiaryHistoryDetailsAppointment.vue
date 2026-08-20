@@ -57,15 +57,15 @@
         <div class="fr-select-group">
           <label
             class="fr-label"
-            for="select-statut"
+            for="select-status"
           >
             Changer le statut
           </label>
           <select
-            id="select-statut"
+            id="select-status"
             class="fr-select"
-            aria-describedby="select-statut-messages"
-            name="select-statut"
+            aria-describedby="select-status-message"
+            name="select-status"
             @change="updateStatus"
           >
             <template
@@ -82,7 +82,7 @@
             </template>
           </select>
           <div
-            id="select-statut-messages"
+            id="select-status-message"
             class="fr-messages-group"
             aria-live="polite"
           ></div>
