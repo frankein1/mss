@@ -7,14 +7,25 @@
       <span :class="attrs.icon"></span>
     </div>
     <div class="history-details__meta">
-      <p class="fr-mb-0 fr-text--xs history-details__type-title">
-        <AtomPictogram
-          v-if="attrs.picto"
-          :path="attrs.picto"
-          length="2rem"
+      <div class="history-details__type-title-row">
+        <p class="fr-mb-0 fr-text--xs history-details__type-title">
+          <AtomPictogram
+            v-if="attrs.picto"
+            :path="attrs.picto"
+            length="2rem"
+          />
+          {{ attrs.title }}
+        </p>
+        <AtomBadge
+          v-if="
+            socialSupport.socialSupportType === SocialSupportType.Appointment &&
+            socialSupport.rdvMetadata?.collectif
+          "
+          small
+          :color="BadgeColor.Blue"
+          label="Collectif"
         />
-        {{ attrs.title }}
-      </p>
+      </div>
       <h4 class="history-details__title">
         <span class="fr-sr-only">{{ attrs.title }} - </span>
         <template v-if="socialSupport.createdBy">
@@ -83,6 +94,7 @@
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import dayjs from 'dayjs'
   import { FileInstructionType, SocialSupportType } from '@prisma/client'
+  import { BadgeColor } from '~~/types/badge'
 
   const route = useRoute()
 
@@ -233,6 +245,12 @@
 
   .history-details__type-title > svg {
     vertical-align: text-bottom;
+  }
+
+  .history-details__type-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .beneficiary-history-details-collapse__title {

@@ -23,6 +23,7 @@ dayjs.extend(duration)
  * applied when needed
  */
 vi.mock('~~/server/lib/encryption/kms')
+vi.mock('~~/server/services/rdvsp/helper')
 vi.mock('~~/server/lib/data-inclusion')
 vi.mock('~~/server/integrations/brevo/service', () => ({
   createOrUpdateUser: vi.fn().mockResolvedValue(undefined),

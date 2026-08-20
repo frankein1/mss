@@ -7,6 +7,7 @@
       <BeneficiaryHistoryDetailsAppointment
         v-if="type === 'Appointment'"
         :id="Number(socialSupportId)"
+        :rdv-metadata="rdvMetadata"
       />
       <BeneficiaryHistoryDetailsBodyContentProvider
         v-else
@@ -20,6 +21,7 @@
 
 <script setup lang="ts">
   import type { SocialSupportType } from '@prisma/client'
+  import type { RdvMetadata } from './types'
   import type { FamilyFilePermissions } from '~~/server/security'
 
   defineProps<{
@@ -28,6 +30,7 @@
     collapseId: string
     type: SocialSupportType
     familyFilePermissions: FamilyFilePermissions
+    rdvMetadata?: RdvMetadata
   }>()
 
   const emit = defineEmits<{

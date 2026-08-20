@@ -18,6 +18,7 @@
       :social-support-id="socialSupportId"
       :collapse-id="collapseId"
       :family-file-permissions="familyFilePermissions"
+      :rdv-metadata="item.rdvMetadata"
       @deleted="emit('deleted', socialSupportId)"
     />
   </li>

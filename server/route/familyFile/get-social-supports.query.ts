@@ -8,7 +8,6 @@ import {
 } from '@prisma/client'
 import { TypeSuivi } from '~~/client/options'
 import { SocialSupportRepo } from '~~/server/database'
-import type { RdvspRdv } from '~~/server/lib/rdvsp-oauth.client'
 import { createQuery } from '~~/server/route'
 import {
   getSocialSupportsSchema,
@@ -16,6 +15,10 @@ import {
 } from '~~/server/schema/familyFile/getSocialSupports.schema'
 import type { SecurityRuleContext } from '~~/server/security'
 import { FamilyFileService, RdvspService } from '~~/server/services'
+import type {
+  EnrichedAppointment,
+  RdvMetadata
+} from '~~/server/services/rdvsp/get-appointments.service'
 import type { ProtectedAppContext } from '~~/server/trpc'
 import {
   castAppointmentDatestringToUTC,
@@ -88,9 +91,19 @@ type SocialSupportItem = Pick<
   createdBy: Pick<User, 'firstName' | 'lastName'>
   beneficiary: Pick<Beneficiary, 'firstName' | 'usualName'>
   subjects?: { name: string }[]
+  rdvMetadata?: RdvMetadata
 }
 
-function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
+/**
+ * Format rdv as a social support item with an added rdvMetadata field
+ * Manage matched beneficiary for collective rdvs
+ */
+export function mapRdvspRdvToSocialSupportItem({
+  rdv,
+  status,
+  rdvMetadata,
+  beneficiary
+}: EnrichedAppointment): SocialSupportItem {
   return {
     id: rdv.id.toString(),
     // Only a single participating agent is displayed for now,
@@ -99,16 +112,12 @@ function mapRdvspRdvToSocialSupportItem(rdv: RdvspRdv): SocialSupportItem {
       firstName: rdv.agents[0]?.first_name ?? '',
       lastName: rdv.agents[0]?.last_name ?? ''
     },
-    beneficiary: {
-      firstName: rdv.users[0]?.first_name ?? '',
-      usualName: rdv.users[0]?.last_name ?? ''
-    },
-    status: mapRdvspRdvStatusToAppointmentStatus(rdv.status),
+    beneficiary,
+    status: mapRdvspRdvStatusToAppointmentStatus(status),
     date: castAppointmentDatestringToUTC(rdv.starts_at),
     socialSupportType: SocialSupportType.Appointment,
-    // Be careful, the frontend checks the presence of the [Collectif] fragment
-    // in "subtype" to determine allowed status updates on appointments.
-    subtype: `${rdv.motif.collectif ? '[Collectif] ' : ''}${rdv.motif.name}`
+    subtype: rdv.motif.name,
+    rdvMetadata
   }
 }
 
@@ -131,7 +140,9 @@ const handler = async ({
           input: { familyFileId: input.familyFileId },
           ctx
         })
-          .then(rdvs => rdvs.map(mapRdvspRdvToSocialSupportItem))
+          .then(appointments =>
+            appointments.map(mapRdvspRdvToSocialSupportItem)
+          )
           .catch(error => {
             // Only log the error silently, we still want to displaye
             // the social supports.

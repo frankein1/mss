@@ -5,15 +5,34 @@ import {
   type GetAppointmentInput
 } from '~~/server/schema'
 import type { SecurityRuleContext } from '~~/server/security'
-import { getAppContextPermissions } from '~~/server/security'
+import {
+  getAppContextPermissions,
+  validateOneBelongsToStructure
+} from '~~/server/security'
+import { BeneficiaryRepo } from '~~/server/database'
 import { RdvspService } from '~~/server/services'
 
-const securityCheck = (ctx: SecurityRuleContext) => {
+const securityCheck = async (
+  ctx: SecurityRuleContext,
+  input: GetAppointmentInput
+) => {
   const permissions = getAppContextPermissions({
     user: ctx.user,
     structure: ctx.structure
   })
-  return permissions.module.rdv
+  if (!permissions.module.rdv) {
+    return false
+  }
+  // A collective appointment supplies the participant's beneficiaryId; make sure it
+  // belongs to the caller's structure before it drives the participation lookup.
+  if (input.beneficiaryId) {
+    return validateOneBelongsToStructure(
+      ctx.user,
+      input.beneficiaryId,
+      BeneficiaryRepo.findUniqueOrThrow
+    )
+  }
+  return true
 }
 
 const handler = ({

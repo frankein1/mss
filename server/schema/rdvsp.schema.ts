@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RdvspStatus } from '~~/types/rdvsp'
+import { uuidOrEmpty } from './helpers.schema'
 
 export const planAppointmentSchema = z.object({
   beneficiaryId: z.string().uuid()
@@ -17,7 +18,9 @@ export type UpdateAppointmentStatusInput = z.infer<
 >
 
 export const getAppointmentSchema = z.object({
-  id: z.number()
+  id: z.number(),
+  // Only necessary for collective appointments to reconcile participation
+  beneficiaryId: uuidOrEmpty
 })
 
 export type GetAppointmentInput = z.infer<typeof getAppointmentSchema>
