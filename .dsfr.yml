@@ -1,0 +1,4 @@
+# Acceptation des modalités d'utilisation du DSFR (@gouvfr/dsfr).
+# Doit correspondre au cguVersion de doc/legal/cgu.md du package,
+# sinon le script preinstall du DSFR fait échouer l'installation.
+accept-license: '1.0.0'
