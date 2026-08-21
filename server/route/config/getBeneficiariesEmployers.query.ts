@@ -11,7 +11,9 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   return await BeneficiaryRepo.prisma.groupBy({
     by: ['employer'],
     where: {
-      employer: { not: null },
+      // Employer is free text: an emptied field is stored as '' and must not
+      // end up as a blank option in the stats filter
+      employer: { not: null, notIn: [''] },
       ...constraints
     },
     orderBy: [{ employer: 'asc' }]
