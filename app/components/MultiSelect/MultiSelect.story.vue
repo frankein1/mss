@@ -91,13 +91,13 @@
 
   const tabTitles = [
     {
-      tabId: 'Onglet 1',
+      tabId: 'Onglet1',
       panelId: 'tab-content-0',
       title: 'Onglet 1',
       icon: 'fr-icon-draft-fill'
     },
     {
-      tabId: 'Onglet 2',
+      tabId: 'Onglet2',
       panelId: 'tab-content-1',
       title: 'Onglet 2',
       icon: 'fr-icon-questionnaire-fill'
