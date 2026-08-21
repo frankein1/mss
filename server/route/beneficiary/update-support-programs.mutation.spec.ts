@@ -238,6 +238,7 @@ describe('Support Programs - Update - CRUD', () => {
         {
           id: programId,
           supportProgramNameId: supportProgramNameIds[6]!,
+          startDate: new Date('2024-01-01'),
           endDate: new Date('2024-06-30'),
           outcome: SupportProgramOutcome.Achieved
         }
@@ -425,6 +426,7 @@ describe('Support Programs - Update - Outcome', () => {
         {
           id: programId,
           supportProgramNameId: supportProgramNameIds[0]!,
+          startDate: new Date('2024-01-01'),
           endDate: new Date('2024-12-31'),
           outcome: SupportProgramOutcome.Achieved
         }
@@ -447,6 +449,7 @@ describe('Support Programs - Update - Outcome', () => {
         {
           id: programId,
           supportProgramNameId: supportProgramNameIds[0]!,
+          startDate: new Date('2024-01-01'),
           endDate: new Date('2024-12-31'),
           outcome: SupportProgramOutcome.Exceeded
         }
@@ -477,6 +480,7 @@ describe('Support Programs - Update - Outcome', () => {
         {
           id: programId,
           supportProgramNameId: supportProgramNameIds[0]!,
+          startDate: new Date('2024-01-01'),
           endDate: new Date('2024-12-31')
         }
       ]
@@ -519,6 +523,7 @@ describe('Support Programs - Update - Lifecycle Enforcement', () => {
           {
             id: crypto.randomUUID(),
             supportProgramNameId: nonLifecycleNameId,
+            startDate: new Date('2024-01-01'),
             endDate: new Date('2024-12-31')
           }
         ]
