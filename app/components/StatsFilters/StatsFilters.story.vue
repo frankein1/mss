@@ -10,6 +10,7 @@
       v-model:filters="filtersFI"
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :beneficiaries-employers-options="beneficiariesEmployersOptions"
       :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
       is-help-requests-tab
@@ -25,6 +26,7 @@
       v-model:filters="filtersFW"
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :beneficiaries-employers-options="beneficiariesEmployersOptions"
       :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
     />
@@ -58,6 +60,12 @@
     { value: 'perpignan', label: 'Perpignan' },
     { value: 'oyonnax', label: 'Oyonnax' },
     { value: 'quimper', label: 'Quimper' }
+  ]
+
+  const beneficiariesEmployersOptions: Options = [
+    { value: 'Mairie de Nantes', label: 'Mairie de Nantes' },
+    { value: 'Pharmacie du centre', label: 'Pharmacie du centre' },
+    { value: 'La Poste', label: 'La Poste' }
   ]
 
   const beneficiariesSchoolsOptions: Options = [

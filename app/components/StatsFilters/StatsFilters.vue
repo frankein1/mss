@@ -5,6 +5,7 @@
       v-if="
         !socialSupportSubjectOptions ||
         !beneficiariesCitiesOptions ||
+        !beneficiariesEmployersOptions ||
         !beneficiariesSchoolsOptions
       "
       class="fr-mx-auto"
@@ -58,6 +59,7 @@
     defineProps<{
       socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
+      beneficiariesEmployersOptions: Options
       beneficiariesSchoolsOptions: Options
       agentOptions: Options
       filters: StatFilterInput
@@ -154,8 +156,17 @@
     if (props.beneficiariesCitiesOptions.length) {
       statsFilters.push({
         name: 'cities',
-        label: 'Ville',
+        label: beneficiaryFieldLabels.city,
         options: props.beneficiariesCitiesOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+    }
+    if (props.beneficiariesEmployersOptions.length) {
+      statsFilters.push({
+        name: 'employers',
+        label: beneficiaryFieldLabels.employer,
+        options: props.beneficiariesEmployersOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })

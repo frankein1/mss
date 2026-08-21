@@ -6,6 +6,7 @@
       v-model:filters="filters"
       :social-support-subject-options="socialSupportSubjectOptions"
       :beneficiaries-cities-options="beneficiariesCitiesOptions"
+      :beneficiaries-employers-options="beneficiariesEmployersOptions"
       :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
       :validation-schema="statFilterSchema"
@@ -295,12 +296,14 @@
     defineProps<{
       socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
+      beneficiariesEmployersOptions?: Options
       beneficiariesSchoolsOptions?: Options
       agentOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
+      beneficiariesEmployersOptions: () => [],
       beneficiariesSchoolsOptions: () => [],
       agentOptions: () => []
     }

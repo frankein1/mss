@@ -1,4 +1,5 @@
 export * from './getAgents.query'
 export * from './getBeneficiariesCities.query'
+export * from './getBeneficiariesEmployers.query'
 export * from './getBeneficiariesSchools.query'
 export * from './getExaminationDates.query'

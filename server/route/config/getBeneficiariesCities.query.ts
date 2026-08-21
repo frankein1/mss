@@ -11,7 +11,7 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   return await BeneficiaryRepo.prisma.groupBy({
     by: ['city'],
     where: {
-      city: { not: null },
+      city: { not: null, notIn: [''] },
       ...constraints
     },
     orderBy: [{ city: 'asc' }]
