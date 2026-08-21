@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16.11-alpine
+    container_name: mss-postgres
+    environment:
+      POSTGRES_USER: mss
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mss
+    ports:
+      - '5433:5432'
+    volumes:
+      - mss_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mss']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    container_name: mss-app
+    build:
+      context: ../..
+      dockerfile: scripts/memory-leak-tests/Dockerfile
+      args:
+        - NUXT_PUBLIC_APP_URL=http://localhost:3000
+        - NUXT_PUBLIC_LANDING_PAGE_URL=http://localhost:3000
+        - NUXT_PUBLIC_MSS_ENVIRONMENT=local
+        - NUXT_PUBLIC_EMAIL_FROM=noreply@localhost
+    ports:
+      - '3000:3000'
+    # Limit memory to test memory overflow
+    mem_limit: 512m
+    env_file:
+      - .env.docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  mss_postgres_data:
