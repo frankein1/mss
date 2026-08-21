@@ -21,8 +21,10 @@ export default defineVitestConfig({
       exclude: [
         ...coverageConfigDefaults.exclude,
         'e2e/**',
-        '**/*{.,-}{story}.?(c|m)[jt]s?(x)',
-        'pages/stories.vue'
+        // Stories are .vue files in this project, kept in sync with
+        // sonar.exclusions in sonar-project.properties
+        '**/*.story.vue',
+        '**/stories.vue'
       ]
     },
     // tests will run sequentially, but in the same global context
