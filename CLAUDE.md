@@ -19,45 +19,35 @@
 
 ## Project Structure Guide
 
-### Directory Organization
+### Nuxt 4 default layout
+
+- **Client** → `app/` (components, composables, pages, layouts, middleware, plugins, utils, assets)
+- **Server** → `server/` at the repo root
+
+### Path aliases
+
+- `~/` → `app/` (client-side)
+- `~~/` → repo root; use for imports for root folders
+
+### Non-obvious conventions
+
+Conventions that are not discoverable from `ls`
 
 ```
-├── /components/             Vue 3 components (354 files)
-│   ├── Atom*               Base atomic UI components
-│   ├── Beneficiary*        Beneficiary-related forms
-│   ├── Admin*              Administrative interfaces
-│   └── [Domain modules]    Feature-specific components
-├── /composables/            Reusable Vue Composition API logic
-├── /pages/                  Nuxt file-based routing
-│   ├── /admin              Administrative pages
-│   ├── /app                Core application pages
-│   ├── /auth               Authentication pages
-│   └── /cgu                Terms & conditions pages
-├── /server/                 Backend code
-│   ├── /api                REST endpoints (only for OAuth flows, document uploads, external integrations)
-│   ├── /trpc               tRPC API infrastructure
-│   ├── /database           Prisma ORM and repositories, constraints
-│   ├── /lib                Utilities (jwt, oauth, s3 file management)
-│   ├── /services           Domain business logic
-│   ├── /integrations       External API integrations
-│   ├── /email              Email templates
-│   ├── /scheduler          Legacy Scheduled jobs
-│   ├── /schema             Zod validation
-│   ├── /plugins            Nuxt server plugins
-│   └── /query              Specific queries for statistics
-├── /utils/                  Client-side utilities
-├── /types/                  Shared TypeScript types
-├── /middleware/             Nuxt router SSR middleware (auth, cgu)
-├── /plugins/                Nuxt client plugins
-├── /layouts/                Nuxt layout components
-├── /assets/                 Styles (SCSS), icons
-├── /public/                 Static assets
-├── /e2e/                    Playwright E2E tests
-├── /test/                   Test utils, test trpc setup and fixtures for integration tests
-├── /prisma/                 Database schema & migrations
-├── nuxt.config.ts           Nuxt configuration
-├── package.json             Dependencies
-└── docker-compose.dev.yml   PostgreSQL, RustFS, Open Bao local setup
+server/
+├── api/          REST (OAuth callbacks, document uploads, external integrations)
+├── trpc/         Non-REST endpoints
+├── scheduler/    Legacy Scheduled jobs
+├── query/        Statistics/reporting queries
+└── database/     Prisma repositories + authorization constraints
+
+<root>
+├── client/       Shared static data (classes, colors, labels, options)
+├── types/        Types shared across server + client (single-side types stay in their bucket)
+└── test/         Integration-test setup, fixtures, tRPC harness (unit tests sit next to source)
+
+app/
+└── components/   Flat dir; prefixes (Atom*, Beneficiary*, Admin*, Stats*, …) mark domain grouping
 ```
 
 ---
