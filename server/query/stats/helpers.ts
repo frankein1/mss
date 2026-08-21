@@ -109,7 +109,11 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   }
 
   if (filters.cities?.length) {
-    socialSupport.beneficiary = { city: { in: filters.cities } }
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.city = { in: filters.cities }
+    } else {
+      socialSupport.beneficiary = { city: { in: filters.cities } }
+    }
   }
 
   if (filters.employers?.length) {
