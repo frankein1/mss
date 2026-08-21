@@ -28,6 +28,7 @@ services:
         - NUXT_PUBLIC_EMAIL_FROM=noreply@localhost
     ports:
       - '3000:3000'
+    # Limit memory to test memory overflow
     mem_limit: 512m
     env_file:
       - .env.docker

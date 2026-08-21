@@ -40,8 +40,7 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 COPY --from=builder /app/.output ./.output
-# Prisma query engine binaries are not bundled by nitro
-# COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+# Prisma 6 query engine binaries are not bundled by nitro
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 EXPOSE 3000
