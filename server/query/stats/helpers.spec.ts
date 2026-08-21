@@ -1,5 +1,9 @@
 import { describe, test, expect } from 'vitest'
-import type { StatFilterInput } from '~~/server/schema'
+import {
+  BeneficiaryMinistereDepartementServiceAc,
+  BeneficiaryMinistereStructure
+} from '@prisma/client'
+import type { StatFilterInput } from '../../schema'
 import {
   prepareBeneficiaryStatFilters,
   prepareSocialSupportStatFilters
@@ -11,6 +15,14 @@ describe('prepareBeneficiaryStatFilters', () => {
 
     expect(prepareBeneficiaryStatFilters(filters)).toStrictEqual({
       schoolUai: { in: ['0750001A'] }
+    })
+  })
+
+  test('employers filter alone produces an employer in-filter', () => {
+    const filters = { employers: ['Mairie de Nantes'] } as StatFilterInput
+
+    expect(prepareBeneficiaryStatFilters(filters)).toStrictEqual({
+      employer: { in: ['Mairie de Nantes'] }
     })
   })
 })
@@ -33,6 +45,52 @@ describe('prepareSocialSupportStatFilters', () => {
     expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
       beneficiary: {
         city: { in: ['Lyon'] },
+        schoolUai: { in: ['0750001A'] }
+      }
+    })
+  })
+
+  test('cities do not discard the ministere sub-filters set before them', () => {
+    const filters = {
+      ministereStructure: BeneficiaryMinistereStructure.Ars,
+      ministereDepartementServiceAc:
+        BeneficiaryMinistereDepartementServiceAc.Ain01,
+      cities: ['Dijon']
+    } as StatFilterInput
+
+    expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
+      beneficiary: {
+        ministereStructure: BeneficiaryMinistereStructure.Ars,
+        ministereDepartementServiceAc:
+          BeneficiaryMinistereDepartementServiceAc.Ain01,
+        city: { in: ['Dijon'] }
+      }
+    })
+  })
+
+  test('employers merge into a beneficiary sub-filter already set by cities', () => {
+    const filters = {
+      cities: ['Dijon'],
+      employers: ['La Poste']
+    } as StatFilterInput
+
+    expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
+      beneficiary: {
+        city: { in: ['Dijon'] },
+        employer: { in: ['La Poste'] }
+      }
+    })
+  })
+
+  test('employers and school combine on the same beneficiary sub-filter', () => {
+    const filters = {
+      employers: ['Mairie de Nantes'],
+      schoolUai: ['0750001A']
+    } as StatFilterInput
+
+    expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
+      beneficiary: {
+        employer: { in: ['Mairie de Nantes'] },
         schoolUai: { in: ['0750001A'] }
       }
     })

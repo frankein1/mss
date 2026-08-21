@@ -23,6 +23,7 @@
             :key="route.path"
             :social-support-subject-options="socialSupportSubjectOptions"
             :beneficiaries-cities-options="beneficiariesCitiesOptions"
+            :beneficiaries-employers-options="beneficiariesEmployersOptions"
             :beneficiaries-schools-options="beneficiariesSchoolsOptions"
             :agent-options="agentsOptions"
           />
@@ -36,6 +37,7 @@
   import { toOptions } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
+  import { hasDefinedEmployer } from '~/utils/beneficiary/hasDefinedEmployer'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
@@ -117,6 +119,16 @@
   })
 
   const {
+    data: beneficiariesEmployersOptions,
+    error: beneficiariesEmployersOptionsError
+  } = await trpcClient.config.getBeneficiariesEmployers.useQuery(undefined, {
+    transform: beneficiariesEmployers => {
+      const definedEmployers = beneficiariesEmployers.filter(hasDefinedEmployer)
+      return toOptions(definedEmployers, 'employer', 'employer')
+    }
+  })
+
+  const {
     data: beneficiariesSchoolsOptions,
     error: beneficiariesSchoolsOptionsError
   } = await trpcClient.config.getBeneficiariesSchools.useQuery(undefined, {
@@ -141,6 +153,9 @@
     }
     if (beneficiariesCitiesOptionsError.value) {
       return "La liste des villes n'a pas pu être chargée."
+    }
+    if (beneficiariesEmployersOptionsError.value) {
+      return "La liste des employeurs n'a pas pu être chargée."
     }
     if (beneficiariesSchoolsOptionsError.value) {
       return "La liste des établissements scolaires n'a pas pu être chargée."
