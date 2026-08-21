@@ -68,6 +68,20 @@ describe('prepareSocialSupportStatFilters', () => {
     })
   })
 
+  test('employers merge into a beneficiary sub-filter already set by cities', () => {
+    const filters = {
+      cities: ['Dijon'],
+      employers: ['La Poste']
+    } as StatFilterInput
+
+    expect(prepareSocialSupportStatFilters(filters)).toStrictEqual({
+      beneficiary: {
+        city: { in: ['Dijon'] },
+        employer: { in: ['La Poste'] }
+      }
+    })
+  })
+
   test('employers and school combine on the same beneficiary sub-filter', () => {
     const filters = {
       employers: ['Mairie de Nantes'],
