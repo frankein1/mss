@@ -5,7 +5,6 @@ export {
   unauthorizedError
 } from './trpcErrors'
 export {
-  publicProcedure,
   protectedProcedure,
   adminProcedure,
   authProcedure,

@@ -20,6 +20,8 @@ export default defineEventHandler(event => {
     return redirectLogOut(event)
   }
 
+  enrichLogger(event, { id: userId })
+
   const {
     auth: { jwtKey }
   } = config

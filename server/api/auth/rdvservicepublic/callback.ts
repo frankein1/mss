@@ -30,8 +30,8 @@ export default defineEventHandler(async event => {
   }
 
   const user = await fetchUserContext(userId)
-
   checkUserIsAuthenticated(user)
+  enrichLogger(event, user)
 
   const session = await useSession<RdvspAuthSession>(event, {
     password: auth.sessionSecret
