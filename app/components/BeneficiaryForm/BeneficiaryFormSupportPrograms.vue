@@ -1,5 +1,5 @@
 <template>
-  <BeneficiaryFormSection>
+  <BeneficiaryFormSection ref="supportProgramsRef">
     <div class="fr-col-12">
       <AtomAlertMSS :alert-type="AlertType.Info">
         <template #detailedMessage>
@@ -47,6 +47,9 @@
 
   const trpcClient = useTrpcClient()
   const modal = useModal()
+
+  const supportProgramsRef = useTemplateRef('supportProgramsRef')
+  const { focusElementAdded } = useDynamicFieldFocus(supportProgramsRef)
 
   const { data: supportProgramNames } =
     await trpcClient.supportProgram.getNameList.useQuery()
@@ -120,5 +123,6 @@
 
   function addSupportProgram() {
     push({ id: crypto.randomUUID(), supportProgramNameId: '' })
+    focusElementAdded()
   }
 </script>

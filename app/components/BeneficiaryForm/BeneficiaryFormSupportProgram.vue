@@ -6,7 +6,7 @@
   </div>
 
   <div
-    v-autofocus
+    data-field-group
     class="fr-col-12 fr-col-lg-6"
   >
     <VeeSelect
