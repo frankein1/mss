@@ -140,7 +140,7 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
+        <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
             :to="routes.structure.AppStructureCustomObjects.path()"
@@ -196,7 +196,9 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <div
+          class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right fr-mt-0 fr-pt-0"
+        >
           <NuxtLink
             :to="routes.structure.AppPartners.path()"
             class="fr-link fr-icon-info-fill fr-link--icon-left"
