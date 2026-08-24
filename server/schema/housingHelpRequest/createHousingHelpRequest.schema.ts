@@ -18,7 +18,8 @@ import {
   openText,
   stringOrEmpty,
   stringConstraint,
-  openRichText
+  openRichText,
+  uuidOrEmpty
 } from '../helpers.schema'
 import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 import { SocialSupportRedirectionSchema } from '../redirection'
@@ -63,7 +64,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   housingType: z.array(z.nativeEnum(HousingType)).nullish(),
   roomCount: z.array(z.nativeEnum(HousingRoomCount)).nullish(),
   isPmr: z.boolean().default(false),
-  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish()
+  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish(),
+  supportProgramId: uuidOrEmpty
 })
 
 export const createHousingHelpRequestSchema = z.discriminatedUnion(

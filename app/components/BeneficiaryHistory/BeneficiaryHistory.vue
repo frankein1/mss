@@ -6,6 +6,7 @@
         v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
         :family-file-identification="familyFileIdentification"
+        :support-program-name-options="supportProgramNames ?? []"
       />
     </section>
     <AtomAlert
@@ -125,6 +126,11 @@
       familyFileIdentification: BeneficiaryFileIdentification[]
     }>()
   const socialSupportsFilters = ref<SocialSupportFilterInput>({})
+
+  const { data: supportProgramNames } =
+    await trpcClient.supportProgram.getNamesForFamilyFile.useQuery(
+      computed(() => ({ familyFileId }))
+    )
 
   const socialSupportsQueryInput = computed(() => ({
     familyFileId,

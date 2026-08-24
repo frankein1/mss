@@ -38,3 +38,8 @@ export {
   FixtureDataEducationSchool
 } from './dataEducationSchools'
 export { fixturesMinisters } from './ministers'
+export {
+  fixturesSupportProgramNames,
+  FixtureProgramName
+} from './supportProgramNames'
+export { fixturesSupportPrograms } from './supportPrograms'

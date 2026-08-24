@@ -58,6 +58,19 @@
         Données issues de l'annuaire de partenaires
       </NuxtLink>
     </div>
+    <div
+      v-if="supportProgramNameOptions.length > 0"
+      class="fr-col-12"
+    >
+      <VeeCombobox
+        class="fr-mb-1w"
+        :label="workshopLabels.supportProgramNameId"
+        placeholder="Rechercher un dispositif ou axe d'intervention"
+        name="supportProgramNameId"
+        :options="withEmptyValue(supportProgramNameOptions)"
+        :disabled="isSubmitting"
+      />
+    </div>
     <div class="fr-col-12">
       <VeeInput
         type="text"
@@ -80,9 +93,11 @@
     timeGroup.map(time => ({ label: time, value: time }))
   )
 
-  // Get partners organisations
-  const { data: partnerOrganizations } =
-    await trpcClient.partner.getAll.useQuery()
+  const [{ data: partnerOrganizations }, { data: supportProgramNames }] =
+    await Promise.all([
+      trpcClient.partner.getAll.useQuery(),
+      trpcClient.supportProgram.getNameList.useQuery()
+    ])
 
   const calculateTimeValue = (startValue: string) => {
     const index = timeGroup.findIndex(time => time === startValue)
@@ -109,5 +124,9 @@
       ...rest
     }))
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
+
+  const supportProgramNameOptions = computed(() => {
+    return toOptions(supportProgramNames.value ?? [], 'id', 'name')
   })
 </script>

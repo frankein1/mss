@@ -8,7 +8,8 @@ import {
   requiredLimitedStringConstraint,
   stringConstraint,
   limitedStringConstraint,
-  withEmptyValueOptionalNativeEnum
+  withEmptyValueOptionalNativeEnum,
+  uuidOrEmpty
 } from '../helpers.schema'
 import { AgeLimitCondition } from '@prisma/client'
 import { timeGroup } from '~~/client/options'
@@ -19,7 +20,8 @@ export const createWorkshopSchemaBase = z.object({
   startTime: limitedStringConstraint(null, 6).nullish(),
   endTime: limitedStringConstraint(null, 6).nullish(),
   location: stringConstraint.max(200, maxStringLengthMessage(200)).nullish(),
-  partnerOrganizationId: z.string().uuid().nullish(),
+  partnerOrganizationId: uuidOrEmpty,
+  supportProgramNameId: uuidOrEmpty,
   host: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   sessionName: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   description: stringConstraint

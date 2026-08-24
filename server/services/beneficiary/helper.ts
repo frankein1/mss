@@ -153,6 +153,12 @@ export function prepareBeneficiaryFilters(
     formattedFilters[filters.notFilled] = null
   }
 
+  if (filters.supportProgramNameIds?.length) {
+    formattedFilters.supportPrograms = {
+      some: { supportProgramNameId: { in: filters.supportProgramNameIds } }
+    }
+  }
+
   if (formattedFilters.AND.length === 0) {
     // There might not be any filters inside the AND clause after all
     delete formattedFilters.AND

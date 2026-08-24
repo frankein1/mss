@@ -115,11 +115,12 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  CGUHistory         CGUHistory[]
-  userActivities     UserActivity[]
-  WorkshopName       WorkshopName[]
-  Workshop           Workshop[]
-  RedirectionReasons RedirectionReason[]
+  CGUHistory          CGUHistory[]
+  userActivities      UserActivity[]
+  WorkshopName        WorkshopName[]
+  Workshop            Workshop[]
+  RedirectionReasons  RedirectionReason[]
+  supportProgramNames SupportProgramName[]
 
   @@map("user")
 }
@@ -172,6 +173,7 @@ model Structure {
   Workshop              Workshop[]
   WorkshopName          WorkshopName[]
   RedirectionReasons    RedirectionReason[]
+  supportProgramNames   SupportProgramName[]
 
   @@map("structure")
 }
@@ -394,12 +396,16 @@ model SocialSupport {
   // depending on the type of SocialSupport
   subtype           String?
 
+  supportProgramId String?         @map("support_program_id") @db.Uuid
+  supportProgram   SupportProgram? @relation(fields: [supportProgramId], references: [id], onDelete: SetNull)
+
   followup                  Followup?
   fileInstruction           FileInstruction?
   socialSupportRedirections SocialSupportRedirection[]
 
   @@index(fields: [structureId, familyFileId], map: "social_support_structure_id_family_file_id_idx")
   @@index(fields: [beneficiaryId], map: "social_support_beneficiary_id_idx")
+  @@index(fields: [supportProgramId], map: "social_support_support_program_id_idx")
   @@map("social_support")
 }
 
@@ -1914,11 +1920,12 @@ model Beneficiary {
   archiveDueDateHistory DateTime[] @map("archive_due_date_history") @db.Date
   lastActivity          DateTime?  @map("last_activity")
 
-  relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
+  relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  socialSupports SocialSupport[]
-  documents      Document[]
-  notifications  Notification[]
+  socialSupports  SocialSupport[]
+  supportPrograms SupportProgram[]
+  documents       Document[]
+  notifications   Notification[]
 
   income BudgetIncome?
 
@@ -1954,6 +1961,63 @@ model BeneficiaryContributingPartner {
 
   @@index(fields: [beneficiaryId], map: "beneficiary_contributing_partner_beneficiary_id_idx")
   @@map("beneficiary_contributing_partner")
+}
+
+model SupportProgramName {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String
+  hasLifecycle Boolean   @default(false) @map("has_lifecycle")
+  structure    Structure @relation(fields: [structureId], references: [id])
+  structureId  String    @map("structure_id") @db.Uuid
+
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String   @map("created_by_id") @db.Uuid
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  supportPrograms SupportProgram[]
+  workshops       Workshop[]
+
+  @@unique([structureId, name])
+  @@map("support_program_name")
+}
+
+/// Beneficiary Support Program
+model SupportProgram {
+  id String @id @default(uuid()) @db.Uuid
+
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  supportProgramName   SupportProgramName @relation(fields: [supportProgramNameId], references: [id], onDelete: Cascade)
+  supportProgramNameId String             @map("support_program_name_id") @db.Uuid
+
+  partnerOrganisations PartnerOrganization[] @relation("partner_organization_to_support_program")
+
+  startDate DateTime? @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  outcome SupportProgramOutcome?
+
+  exitReason String? @map("exit_reason")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  socialSupports SocialSupport[]
+
+  @@index(fields: [beneficiaryId], map: "support_program_beneficiary_id_idx")
+  // vérifier l'utilité de cet index
+  @@index(fields: [supportProgramNameId], map: "support_program_support_program_name_id_idx")
+  @@map("support_program")
+}
+
+enum SupportProgramOutcome {
+  NotAchieved
+  PartiallyAchieved
+  SubjectToConditions
+  Achieved
+  Exceeded
 }
 
 enum RelativeRelationship {
@@ -2173,6 +2237,8 @@ model PartnerOrganization {
   beneficiariesPrescribed         Beneficiary[]                    @relation("beneficiary_prescribing_organization")
   beneficiaryContributingPartners BeneficiaryContributingPartner[]
 
+  supportPrograms SupportProgram[] @relation("partner_organization_to_support_program")
+
   @@unique([structureId, siret])
   @@map("partner_organization")
 }
@@ -2303,6 +2369,7 @@ enum UserActivityObject {
   WorkshopName
   Minister
   RedirectionReason
+  SupportProgramName
 }
 
 model UserActivity {
@@ -2447,6 +2514,8 @@ model Workshop {
   location              String?
   partnerOrganizationId String?              @map("partner_organization_id") @db.Uuid
   partnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
+  supportProgramNameId  String?              @map("support_program_name_id") @db.Uuid
+  supportProgramName    SupportProgramName?  @relation(fields: [supportProgramNameId], references: [id], onDelete: SetNull)
   host                  String?
   sessionName           String?              @map("session_name")
   description           String?
@@ -2460,6 +2529,7 @@ model Workshop {
 
   workshopAttendees WorkshopAttendee[]
 
+  @@index(fields: [structureId], map: "workshop_structure_id_idx")
   @@map("workshop")
 }
 

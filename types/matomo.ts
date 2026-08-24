@@ -38,7 +38,8 @@ export enum BeneficiaryFilterEventAction {
   NotFilled = 'Champ non renseigné',
   QPV = 'Quartier prioritaire de la politique de la ville',
   MinistereDepartementServiceAc = "Département ou service de l'Administration Centrale",
-  MinistereStructure = 'Structure de rattachement'
+  MinistereStructure = 'Structure de rattachement',
+  SupportProgram = "Dispositifs ou axes d'intervention concernés"
 }
 
 export enum BeneficiaryHistoryAction {
@@ -67,7 +68,8 @@ export enum BeneficiaryHistoryFilterEventAction {
   TypeSuivi = 'Type de suivi',
   SocialSupportSubject = "Type d'accompagnement",
   Referent = 'Référent',
-  InvolvedBeneficiary = 'Bénéficiaire concerné'
+  InvolvedBeneficiary = 'Bénéficiaire concerné',
+  SupportProgram = "Dispositifs ou axes d'intervention concernés"
 }
 
 export enum BeneficiaryArchiveAction {

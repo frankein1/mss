@@ -69,7 +69,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     isDuringWalkInSession,
     socialSupportId,
     duration,
-    socialSupportRedirections
+    socialSupportRedirections,
+    supportProgramId
   } = input
 
   const { socialSupportRedirections: previousRedirectionIds } =
@@ -139,6 +140,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
         numeroPegase,
         endOfSocialSupport,
         dueDate,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : { disconnect: true },
         socialSupportRedirections: prepareRedirections
           ? prepareRelationUpdates(prepareRedirections, previousRedirectionIds)
           : undefined

@@ -1,25 +1,5 @@
 <template>
-  <section class="feature-section structure-info fr-p-5v fr-p-md-10v fr-mb-5w">
-    <AtomCallout>
-      <div class="sss__note">
-        <p class="fr-callout__text">
-          Les aides légales et facultatives sélectionnées ci-dessous
-          correspondent aux
-          <strong>
-            objets des instructions de dossiers et des synthèses d’entretiens </strong
-          >, visibles par tous les membres de votre structure.
-          <strong>Ces intitulés alimenteront vos statistiques</strong> et vous
-          permettront de facilement retrouver vos dossiers.
-        </p>
-
-        <img
-          src="/pictograms/inclusion.svg"
-          class="img fr-hidden fr-unhidden-sm"
-          alt=""
-        />
-      </div>
-    </AtomCallout>
-
+  <section class="sss">
     <SocialSupportSubjectsEmpty v-if="subjects.length === 0" />
     <ul
       v-else
@@ -156,13 +136,6 @@
     color: var(--primary);
   }
 
-  .sss__note {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
   .sss__items {
     padding: 1rem 0;
 
@@ -170,10 +143,5 @@
       columns: 2;
       column-gap: 3rem;
     }
-  }
-
-  .img {
-    max-height: 100px;
-    height: auto;
   }
 </style>

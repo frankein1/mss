@@ -10,6 +10,7 @@
       :beneficiaries-employers-options="beneficiariesEmployersOptions"
       :beneficiaries-schools-options="beneficiariesSchoolsOptions"
       :agent-options="agentOptions"
+      :support-program-name-options="supportProgramNameOptions"
       :is-help-request="false"
       :is-history="true"
     />
@@ -199,13 +200,15 @@
       beneficiariesEmployersOptions?: Options
       beneficiariesSchoolsOptions?: Options
       agentOptions?: Options
+      supportProgramNameOptions?: Options
     }>(),
     {
       socialSupportSubjectOptions: () => [],
       beneficiariesCitiesOptions: () => [],
       beneficiariesEmployersOptions: () => [],
       beneficiariesSchoolsOptions: () => [],
-      agentOptions: () => []
+      agentOptions: () => [],
+      supportProgramNameOptions: () => []
     }
   )
 

@@ -12,7 +12,8 @@ import {
   dateOrEmpty,
   openText,
   stringOrEmpty,
-  openRichText
+  openRichText,
+  uuidOrEmpty
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -56,7 +57,8 @@ export const addFollowupSchemaBase = z.object({
   forwardedToJustice: z.boolean().default(false),
   isDuringWalkInSession: z.boolean().default(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration),
-  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish()
+  socialSupportRedirections: z.array(SocialSupportRedirectionSchema).nullish(),
+  supportProgramId: uuidOrEmpty
 })
 
 export const addFollowupSchema = z.discriminatedUnion('isMinistry', [

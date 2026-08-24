@@ -1,0 +1,38 @@
+import type { Prisma } from '@prisma/client'
+import {
+  fixtureStructures,
+  FixtureStructure,
+  fixturesUsers,
+  FixtureUserRole
+} from '.'
+
+export enum FixtureProgramName {
+  PortageRepas = 0,
+  AideDomicile = 1,
+  Externe = 2
+}
+
+export const fixturesSupportProgramNames = [
+  {
+    id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    name: 'Portage de repas',
+    structureId: fixtureStructures[FixtureStructure.Test].id,
+    createdById: fixturesUsers[FixtureUserRole.StructureManager].id
+  },
+  {
+    id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+    name: 'Aide à domicile',
+    structureId: fixtureStructures[FixtureStructure.Test].id,
+    createdById: fixturesUsers[FixtureUserRole.StructureManager].id
+  },
+  {
+    id: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
+    name: 'Programme externe',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    createdById: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id
+  }
+] satisfies [
+  Prisma.SupportProgramNameCreateManyInput,
+  Prisma.SupportProgramNameCreateManyInput,
+  Prisma.SupportProgramNameCreateManyInput
+]

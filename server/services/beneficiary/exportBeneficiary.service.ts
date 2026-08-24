@@ -58,7 +58,8 @@ import {
   workshopAttendeeAttendanceKeys,
   socialSupportRedirectionTypeKeys,
   isFirstKeys,
-  isRefundableKeys
+  isRefundableKeys,
+  supportProgramOutcomeKeys
 } from '~~/client/options'
 import { getBudget } from '../budget/getBudget.service'
 import { createExportFromWorkbook } from '~/utils/export/createExport'
@@ -66,6 +67,7 @@ import { exportBudgetWorkbook } from '../budget/exportBudgetSpreadsheet'
 import { formatMinisterName } from '~/utils/minister'
 import { prismaClient } from '~~/server/prisma'
 import { downloadWithEncryption } from '~~/server/lib/s3/file'
+import { formatSupportProgramLabel } from '~/utils/beneficiary/formatSupportProgramOption'
 
 type FieldLabels<T> = Record<keyof T, any>
 
@@ -332,6 +334,7 @@ type FollowupData = FieldLabels<
   SocialSupportForFollowupData & {
     prescribingOrganizationName: string | null
     prescribingOrganizationContact: string | null
+    supportProgramName: string | null
     actions: boolean
     documents: DocumentData[] | null
     subjectsNames: string
@@ -371,6 +374,9 @@ const getFollowupData = (socialSupport: SocialSupportItem): FollowupData => {
     thirdPersonName: socialSupport.followup?.thirdPersonName,
     place: socialSupport.followup?.place,
     subjectsNames: subjectsNames.join(', '),
+    supportProgramName: socialSupport.supportProgram
+      ? formatSupportProgramLabel(socialSupport.supportProgram)
+      : null,
     status: socialSupport.status
       ? followupStatusKeys.value(socialSupport.status)
       : null,
@@ -461,6 +467,7 @@ type HousingHelpRequestData = FieldLabels<
 >
 
 type FileInstructionData = SocialSupportForFileInstructionData & {
+  supportProgramName: string | null
   helpRequest?: HelpRequestData
   housingHelpRequest?: HousingHelpRequestData
   documents: DocumentData[] | null
@@ -529,6 +536,9 @@ const getHelpRequestData = (
     numeroPegase: socialSupport.numeroPegase,
     synthesis: socialSupport.synthesis,
     // endOfSocialSupport: socialSupport.endOfSocialSupport || null,
+    supportProgramName: socialSupport.supportProgram
+      ? formatSupportProgramLabel(socialSupport.supportProgram)
+      : null,
     documents: documents || null,
     redirections: redirections || null,
     ...(socialSupport.socialSupportType === 'HelpRequest' && {
@@ -673,6 +683,16 @@ type BeneficiaryInfoData = FieldLabels<Omit<Beneficiary, 'id'>> & {
   prescribingOrganizationName: string | null
   prescribingOrganizationContactName: string | null
   contributingPartners: ContributingPartnerData[] | null
+  supportPrograms: SupportProgramData[]
+}
+
+type SupportProgramData = {
+  name: string
+  startDate: string | null
+  endDate: string | null
+  exitReason: string | null
+  outcome: string | null
+  partnerOrganisation: string
 }
 
 const getBeneficiaryInfoData = (
@@ -741,10 +761,32 @@ const getBeneficiaryInfoData = (
         )
     : null
 
+  const supportPrograms: SupportProgramData[] = beneficiary.supportPrograms.map(
+    sp => {
+      const hasLifecycle = sp.supportProgramName.hasLifecycle
+      return {
+        name: sp.supportProgramName.name,
+        startDate: hasLifecycle
+          ? sp.startDate?.toLocaleDateString('fr-FR') || null
+          : null,
+        endDate: hasLifecycle
+          ? sp.endDate?.toLocaleDateString('fr-FR') || null
+          : null,
+        exitReason: hasLifecycle ? sp.exitReason : null,
+        outcome:
+          hasLifecycle && sp.outcome
+            ? supportProgramOutcomeKeys.byKey[sp.outcome]
+            : null,
+        partnerOrganisation: sp.partnerOrganisations.map(o => o.name).join(', ')
+      }
+    }
+  )
+
   return {
     ...beneficiary,
     beneficiaries,
     relatives,
+    supportPrograms,
     referents: referents ? referents.join(', ') : null,
     birthDate: beneficiary.birthDate
       ? beneficiary.birthDate.toLocaleDateString('fr-FR')
@@ -995,6 +1037,17 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
             orderBy: [{ created: 'asc' }]
           }
         }
+      },
+      supportPrograms: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          exitReason: true,
+          outcome: true,
+          supportProgramName: { select: { name: true, hasLifecycle: true } },
+          partnerOrganisations: { select: { name: true } }
+        }
       }
     }
   })
@@ -1115,6 +1168,13 @@ const getSocialSupports = async (
               handlingDate: true
             }
           }
+        }
+      },
+      supportProgram: {
+        select: {
+          startDate: true,
+          endDate: true,
+          supportProgramName: { select: { name: true, hasLifecycle: true } }
         }
       },
       minister: {

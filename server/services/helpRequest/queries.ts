@@ -82,6 +82,17 @@ export const select = {
           },
           subjects: true,
           minister: true,
+          supportProgramId: true,
+          supportProgram: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              supportProgramName: {
+                select: { id: true, name: true, hasLifecycle: true }
+              }
+            }
+          },
           beneficiary: {
             select: {
               id: true,
