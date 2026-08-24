@@ -88,7 +88,8 @@ export async function update({ input, ctx }: UpdateParams) {
     housingType,
     roomCount,
     lowIncomeHousingType,
-    isPmr
+    isPmr,
+    supportProgramId
   } = cleanUpdateInput(input)
 
   const { socialSupportRedirections: previousRedirectionIds } =
@@ -153,6 +154,9 @@ export async function update({ input, ctx }: UpdateParams) {
         endOfSocialSupport,
         dueDate,
         date,
+        supportProgram: supportProgramId
+          ? connect(supportProgramId)
+          : { disconnect: true },
         documents: prepareDocumentsMutations(
           documents,
           target.fileInstruction.socialSupport.documents
@@ -209,12 +213,9 @@ export async function update({ input, ctx }: UpdateParams) {
         maxRent,
         maxCharges,
         isPmr,
-        prescribingOrganization: prescribingOrganizationId
-          ? connect(prescribingOrganizationId)
-          : undefined,
-        prescribingOrganizationContact: prescribingOrganizationContactId
-          ? connect(prescribingOrganizationContactId)
-          : undefined
+        prescribingOrganizationId: prescribingOrganizationId || null,
+        prescribingOrganizationContactId:
+          prescribingOrganizationContactId || null
       },
       select: {
         id: true

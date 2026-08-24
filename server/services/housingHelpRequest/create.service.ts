@@ -62,7 +62,8 @@ export async function create({ input, ctx }: CreateParams) {
     reason,
     taxHouseholdAdditionalInformation,
     uniqueId,
-    askedHousing
+    askedHousing,
+    supportProgramId
   } = cleanCreateInput(input)
 
   const reasonIds = await resolveRedirectionReasonIds(
@@ -124,6 +125,7 @@ export async function create({ input, ctx }: CreateParams) {
           socialSupport: {
             create: {
               status,
+              supportProgramId: supportProgramId,
               socialSupportType: SocialSupportType.HelpRequestHousing,
               subtype: FileInstructionType.Housing,
               createdById: ctx.user.id,

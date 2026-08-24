@@ -95,6 +95,17 @@ function findMany(
               partnerOrganizationContact: { select: { name: true } },
               redirectionReason: { select: { name: true } }
             }
+          },
+          supportProgramId: true,
+          supportProgram: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              supportProgramName: {
+                select: { id: true, name: true, hasLifecycle: true }
+              }
+            }
           }
         }
       },

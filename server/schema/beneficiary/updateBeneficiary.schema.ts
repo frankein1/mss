@@ -23,6 +23,7 @@ import {
 } from '@prisma/client'
 import { z } from 'zod'
 import { createOrUpdateEntourageSchema } from '../relative.schema'
+import { supportProgramSchema } from '../supportProgram/updateSupportPrograms.schema'
 import {
   requiredNativeEnum,
   stringOrEmpty,
@@ -248,10 +249,23 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
     .default([])
 })
 
-export const updateBeneficiaryArchiveDate = z.object({
-  id: z.string().uuid()
-})
-
 export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
   typeof updateBeneficiaryExternalOrganisationsSchema
 >
+
+export const updateBeneficiarySupportProgramsSchema = z.object({
+  id: z.string().uuid(),
+  supportPrograms: z.array(supportProgramSchema)
+})
+
+export type UpdateBeneficiarySupportProgramsInput = z.input<
+  typeof updateBeneficiarySupportProgramsSchema
+>
+// Needed because zod transform makes schema from front and back different
+export type UpdateBeneficiarySupportProgramsServerInput = z.infer<
+  typeof updateBeneficiarySupportProgramsSchema
+>
+
+export const updateBeneficiaryArchiveDate = z.object({
+  id: z.string().uuid()
+})

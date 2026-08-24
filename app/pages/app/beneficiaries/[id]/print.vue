@@ -73,6 +73,14 @@
             v-if="beneficiary.externalOrganisations"
             :external-organisations="beneficiary.externalOrganisations"
           />
+          <template v-if="beneficiary.supportPrograms?.length">
+            <hr />
+            <p class="fr-text--bold">Parcours et dispositifs</p>
+          </template>
+          <BeneficiaryInfoSupportProgramsContent
+            v-if="beneficiary.supportPrograms?.length"
+            :support-programs="beneficiary.supportPrograms"
+          />
         </div>
       </div>
     </div>

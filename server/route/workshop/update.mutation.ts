@@ -8,9 +8,13 @@ import {
   WorkshopRepo,
   WorkshopNameRepo,
   PartnerOrganizationRepo,
+  SupportProgramNameRepo,
   WorkshopAttendeeRepo
 } from '~~/server/database'
-import type { SecurityRuleContext } from '~~/server/security'
+import {
+  validateOneBelongsToStructure,
+  type SecurityRuleContext
+} from '~~/server/security'
 import { UpdateWorkshopNameMode } from '~/utils/constants/workshop'
 import { getOne } from './get.query'
 import { TRPCError } from '@trpc/server'
@@ -21,22 +25,35 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateWorkShopInput
 ) => {
-  if (!input.partnerOrganizationId) {
-    return true
-  }
-  try {
-    await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {
-      where: { id: input.partnerOrganizationId },
-      select: { id: true }
-    })
-  } catch {
-    return false
-  }
-  return true
+  const { user } = ctx
+  const { partnerOrganizationId: pid, supportProgramNameId: sid } = input
+  const [pfound, sfound] = await Promise.all([
+    !pid ||
+      validateOneBelongsToStructure(
+        user,
+        pid,
+        PartnerOrganizationRepo.findUniqueOrThrow
+      ),
+    !sid ||
+      validateOneBelongsToStructure(
+        user,
+        sid,
+        SupportProgramNameRepo.findUniqueOrThrow
+      )
+  ])
+
+  return pfound && sfound
 }
 
 const handler = async ({
-  input: { partnerOrganizationId, mode, name, id, ...input },
+  input: {
+    partnerOrganizationId,
+    supportProgramNameId,
+    mode,
+    name,
+    id,
+    ...input
+  },
   ctx
 }: {
   input: UpdateWorkShopInput
@@ -76,6 +93,9 @@ const handler = async ({
         ...input,
         partnerOrganization: partnerOrganizationId
           ? { connect: { id: partnerOrganizationId } }
+          : { disconnect: true },
+        supportProgramName: supportProgramNameId
+          ? { connect: { id: supportProgramNameId } }
           : { disconnect: true }
       }
     })

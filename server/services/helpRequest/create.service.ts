@@ -58,7 +58,8 @@ export async function create({ input, ctx }: CreateParams) {
     endOfSocialSupport,
     financialSupport,
     isRefundable,
-    date
+    date,
+    supportProgramId
   } = cleanCreateInput(input)
 
   const reasonIds = await resolveRedirectionReasonIds(
@@ -121,6 +122,7 @@ export async function create({ input, ctx }: CreateParams) {
             create: {
               date,
               status,
+              supportProgramId: supportProgramId,
               socialSupportType: SocialSupportType.HelpRequest,
               subtype: financialSupport
                 ? FileInstructionType.Financial

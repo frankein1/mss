@@ -41,7 +41,11 @@
     </div>
 
     <p
-      v-if="workshop.host || workshop.partnerOrganization"
+      v-if="
+        workshop.host ||
+        workshop.partnerOrganization ||
+        workshop.supportProgramName
+      "
       class="host fr-text--sm"
     >
       <span v-if="workshop.host"
@@ -51,6 +55,18 @@
       <span v-if="workshop.partnerOrganization"
         >Organisme financeur/partenaire :
         {{ workshop.partnerOrganization.name }}</span
+      >
+      <span
+        v-if="
+          (workshop.host || workshop.partnerOrganization) &&
+          workshop.supportProgramName
+        "
+      >
+        •
+      </span>
+      <span v-if="workshop.supportProgramName"
+        >Dispositif ou axe d'intervention&nbsp;:
+        {{ workshop.supportProgramName.name }}</span
       >
     </p>
     <p

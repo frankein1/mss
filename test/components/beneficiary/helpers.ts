@@ -31,6 +31,7 @@ export function createFakeFamilyFilePermissions(
       health: true,
       occupationIncome: true,
       externalOrganisations: true,
+      supportPrograms: true,
       ...overrides?.edit
     },
     view: {
@@ -39,6 +40,7 @@ export function createFakeFamilyFilePermissions(
       health: true,
       occupationIncome: true,
       externalOrganisations: true,
+      supportPrograms: true,
       documents: true,
       history: true,
       ...overrides?.view

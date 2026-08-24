@@ -1,9 +1,15 @@
 // @vitest-environment nuxt
+import { ref } from 'vue'
 import { describe, it, expect } from 'vitest'
-import { mountSuspended } from '@nuxt/test-utils/runtime'
+import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import type { FamilyFilePermissions } from '~~/server/security'
 import { createFakeFamilyFilePermissions } from '~~/test/components/beneficiary/helpers'
 import BeneficiaryEditFormNavigation from './BeneficiaryEditFormNavigation.vue'
+
+mockNuxtImport(
+  'useHasSupportProgramNames',
+  () => () => Promise.resolve({ hasSupportProgramNames: ref(true) })
+)
 
 const BENEFICIARY_ID = '00000000-0000-0000-0000-000000000001'
 
@@ -54,6 +60,7 @@ describe('BeneficiaryEditFormNavigation - edit.general', () => {
     expect(wrapper.text()).not.toContain('Santé')
     expect(wrapper.text()).not.toContain('Activité')
     expect(wrapper.text()).not.toContain('Partenaires')
+    expect(wrapper.text()).not.toContain('Parcours et dispositifs')
   })
 })
 
@@ -106,5 +113,21 @@ describe('BeneficiaryEditFormNavigation - edit.externalOrganisations', () => {
       edit: { externalOrganisations: true }
     })
     expect(wrapper.text()).toContain('Partenaires')
+  })
+})
+
+describe('BeneficiaryEditFormNavigation - edit.supportPrograms', () => {
+  it('hides Parcours et dispositifs tab when edit.supportPrograms is false', async () => {
+    const wrapper = await mountNavigation({
+      edit: { supportPrograms: false }
+    })
+    expect(wrapper.text()).not.toContain('Parcours et dispositifs')
+  })
+
+  it('shows Parcours et dispositifs tab when edit.supportPrograms is true', async () => {
+    const wrapper = await mountNavigation({
+      edit: { supportPrograms: true }
+    })
+    expect(wrapper.text()).toContain('Parcours et dispositifs')
   })
 })

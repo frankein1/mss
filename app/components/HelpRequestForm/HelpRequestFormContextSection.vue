@@ -91,10 +91,48 @@
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
       </div>
+
+      <div
+        v-if="hasSupportProgramNames"
+        class="fr-col-12 fr-col-lg-6"
+      >
+        <VeeSelect
+          name="supportProgramId"
+          :label="helpRequestFieldLabels.supportProgramId"
+          :options="withEmptyValue(supportProgramOptions)"
+          :disabled="supportProgramOptionsDisabled"
+          :description="
+            supportProgramOptionsDisabled
+              ? 'Aucun dispositif ou axe d\'intervention renseigné pour ce bénéficiaire.'
+              : undefined
+          "
+        />
+      </div>
     </template>
 
     <template v-else>
-      <div class="fr-col-12">
+      <div
+        v-if="hasSupportProgramNames"
+        class="fr-col-12 fr-col-lg-6"
+      >
+        <VeeSelect
+          name="supportProgramId"
+          :label="helpRequestFieldLabels.supportProgramId"
+          :options="
+            supportProgramOptions.length
+              ? withEmptyValue(supportProgramOptions)
+              : []
+          "
+          :disabled="supportProgramOptionsDisabled"
+          :description="
+            supportProgramOptionsDisabled
+              ? 'Aucun dispositif renseigné pour ce bénéficiaire'
+              : undefined
+          "
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.subjectId"
           name="subjectId"
@@ -102,7 +140,8 @@
           required
         />
       </div>
-      <div class="fr-col-12 fr-mt-0 fr-pt-0">
+
+      <div class="fr-col-12 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
         <NuxtLink
           v-if="application.edit.structure"
           :to="routes.structure.AppStructureCustomObjects.path()"
@@ -220,6 +259,7 @@
   import type { CreateHousingHelpRequestInput } from '~~/server/schema'
   import type { PartnerOrganizationIdName } from '~~/types/partner'
   import { routes } from '~/utils/routes'
+  import { withEmptyValue } from '~/utils/options'
 
   const { application } = usePermissions()
 
@@ -233,6 +273,9 @@
       name: string
       message: string
     }
+    supportProgramOptions: { value: string; label: string }[]
+    supportProgramOptionsDisabled: boolean
+    hasSupportProgramNames: boolean
   }>()
 
   const { value: isFirst } =

@@ -9,7 +9,8 @@ import { FamilyFileService, FollowupService } from '~~/server/services'
 import { TRPCError } from '@trpc/server'
 import {
   validateRichTextSchema,
-  validateSocialSupportPartnerOrganisations
+  validateSocialSupportPartnerOrganisations,
+  validateSupportProgramId
 } from '../helpers'
 
 const handler = ({
@@ -50,6 +51,10 @@ const securityCheck = async (
     input.familyFileId
   )
   if (!permissions.create.followup) {
+    return false
+  }
+
+  if (!(await validateSupportProgramId(ctx.user, input.supportProgramId))) {
     return false
   }
 

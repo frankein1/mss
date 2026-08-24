@@ -55,6 +55,17 @@ const select = {
       ministerId: true,
       numeroPegase: true,
       endOfSocialSupport: true,
+      supportProgramId: true,
+      supportProgram: {
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          supportProgramName: {
+            select: { id: true, name: true, hasLifecycle: true }
+          }
+        }
+      },
       createdBy: {
         select: { id: true, firstName: true, lastName: true }
       },

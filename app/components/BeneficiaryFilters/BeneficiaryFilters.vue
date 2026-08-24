@@ -71,6 +71,14 @@
     queryKey: 'config.getAgents.options'
   })
 
+  const {
+    data: supportProgramNameOptions,
+    error: supportProgramNameOptionsError
+  } = await trpcClient.supportProgram.getActiveNameList.useQuery(undefined, {
+    transform: programNames => toOptions(programNames, 'id', 'name'),
+    queryKey: 'config.getActiveSupportProgramNameList.options'
+  })
+
   const pending = computed(
     () => socialSupportSubjectOptionsPending.value || agentOptionsPending.value
   )
@@ -81,6 +89,9 @@
     }
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
+    }
+    if (supportProgramNameOptionsError.value) {
+      return "La liste des dispositifs n'a pas pu être chargée."
     }
     return ''
   })
@@ -110,6 +121,17 @@
         matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
       }
     ]
+    if (supportProgramNameOptions.value?.length) {
+      filters.push({
+        name: 'supportProgramNameIds',
+        label: "Dispositif ou axe d'intervention",
+        options: supportProgramNameOptions.value,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: true,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.SupportProgram
+      })
+    }
 
     if (hasReferentsFilters) {
       filters.push({

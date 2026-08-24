@@ -376,5 +376,36 @@
         </ul>
       {{/each}}
     {{/if}}
+    {{#if supportPrograms.length}}
+      <hr />
+      <h2>Parcours et dispositifs</h2>
+      {{#each supportPrograms}}
+        <ul>
+          {{#if name}}
+            <li><span class='bold'>Nom du dispositif : </span>{{{name}}}</li>
+          {{/if}}
+          {{#if partnerOrganisation}}
+            <li><span class='bold'>Organisme partenaire :
+              </span>{{{partnerOrganisation}}}</li>
+          {{/if}}
+          {{#if startDate}}
+            <li><span class='bold'>Date d'entrée :
+              </span>{{{startDate}}}</li>
+          {{/if}}
+          {{#if endDate}}
+            <li><span class='bold'>Date de sortie :
+              </span>{{{endDate}}}</li>
+          {{/if}}
+          {{#if exitReason}}
+            <li><span class='bold'>Motif de sortie :
+              </span>{{{exitReason}}}</li>
+          {{/if}}
+          {{#if outcome}}
+            <li><span class='bold'>Atteinte des objectifs :
+              </span>{{{outcome}}}</li>
+          {{/if}}
+        </ul>
+      {{/each}}
+    {{/if}}
   </body>
 </html>

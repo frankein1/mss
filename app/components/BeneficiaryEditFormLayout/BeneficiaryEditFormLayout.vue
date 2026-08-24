@@ -68,7 +68,8 @@
   import {
     beneficiaryFieldLabels,
     beneficiaryContributingPartnerFieldLabels,
-    relativeFieldLabels
+    relativeFieldLabels,
+    supportProgramFieldLabels
   } from '~~/client/labels'
   import type { FamilyFilePermissions } from '~~/server/security'
   import type { FieldLabels } from '~~/types/fieldLabels'
@@ -188,7 +189,8 @@
   const { errors } = useDisplayFormErrors(form, caughtErrors, {
     ...beneficiaryFieldLabels,
     ...beneficiaryContributingPartnerFieldLabels,
-    ...relativeFieldLabels
+    ...relativeFieldLabels,
+    ...supportProgramFieldLabels
   } as FieldLabels<Partial<T>>)
 
   function onCancel() {

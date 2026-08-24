@@ -62,12 +62,18 @@
       beneficiariesEmployersOptions: Options
       beneficiariesSchoolsOptions: Options
       agentOptions: Options
+      supportProgramNameOptions?: Options
       filters: StatFilterInput
       validationSchema?: any
       isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    { isHelpRequest: false, isHistory: false, validationSchema: undefined }
+    {
+      isHelpRequest: false,
+      isHistory: false,
+      validationSchema: undefined,
+      supportProgramNameOptions: () => []
+    }
   )
 
   const emit = defineEmits<{
@@ -167,6 +173,15 @@
         name: 'employers',
         label: beneficiaryFieldLabels.employer,
         options: props.beneficiariesEmployersOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+    }
+    if (props.supportProgramNameOptions?.length) {
+      statsFilters.push({
+        name: 'supportProgramNameIds',
+        label: "Dispositif ou axe d'intervention",
+        options: props.supportProgramNameOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
