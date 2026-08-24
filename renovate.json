@@ -20,6 +20,12 @@
   "ignoreDeps": ["pnpm", "h3", "html-to-image", "@nuxt/test-utils"],
   "packageRules": [
     {
+      "groupName": "nuxt",
+      "description": "nuxt and @nuxt/kit must be bumped together and stay on the exact same version, otherwise two copies of @nuxt/kit end up in the lockfile. Versions are pinned exactly (no caret) because the minimumReleaseAge policy in pnpm-workspace.yaml makes pnpm install fail on a too-recent version that a caret range would resolve to.",
+      "matchPackageNames": ["nuxt", "@nuxt/kit"],
+      "rangeStrategy": "pin"
+    },
+    {
       "groupName": "Playwright",
       "matchPackageNames": ["/@playwright/test/", "/@axe-core/playwright/"]
     },

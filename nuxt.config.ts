@@ -359,5 +359,8 @@ export default defineNuxtConfig({
     }
   },
 
+  // Deliberately left on the Nuxt 3 era default as of 2026-08-21: bumping it
+  // switches on newer Nitro/Nuxt behaviour defaults and needs a full e2e run,
+  // so it is tracked as its own task rather than drifting silently.
   compatibilityDate: '2024-08-30'
 })
