@@ -11,8 +11,7 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import {
   beneficiaryContributingPartnerFieldLabels,
-  beneficiaryFieldLabels,
-  supportProgramExportFieldLabels
+  beneficiaryFieldLabels
 } from '~~/client/labels'
 import type {
   GetBeneficiaryOutput,
@@ -36,8 +35,7 @@ import {
   ministereDepartmentServiceAcKeys,
   ministereStructureKeys,
   familySituationKeys,
-  nationalityKeys,
-  supportProgramOutcomeKeys
+  nationalityKeys
 } from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
@@ -241,59 +239,16 @@ const addContributingPartnersWorksheet = (
   })
 }
 
-const SUPPORT_PROGRAM_EXPORTED_FIELDS = Object.keys(
-  supportProgramExportFieldLabels
-) as (keyof typeof supportProgramExportFieldLabels)[]
-
 function getColumns(userRole: UserRole) {
   const baseFields =
     userRole === UserRole.StructureManager
       ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE
       : BENEFICIARY_EXPORTED_FIELDS_PARTIAL
-  return [
-    ...baseFields.map(key => ({
-      key,
-      header: beneficiaryFieldLabels[key],
-      width: 32
-    })),
-    ...SUPPORT_PROGRAM_EXPORTED_FIELDS.map(key => ({
-      key,
-      header: supportProgramExportFieldLabels[key],
-      width: 32
-    }))
-  ]
-}
-
-function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
-  const supportPrograms = beneficiary.supportPrograms ?? []
-  const join = (values: (string | null | undefined)[]) =>
-    values.filter(Boolean).join(' / ')
-  return {
-    supportProgramName: join(
-      supportPrograms.map(d => d.supportProgramName?.name)
-    ),
-    supportProgramStartDate: join(
-      supportPrograms.map(d =>
-        d.startDate ? new Date(d.startDate).toLocaleDateString('fr-FR') : null
-      )
-    ),
-    supportProgramEndDate: join(
-      supportPrograms.map(d =>
-        d.endDate ? new Date(d.endDate).toLocaleDateString('fr-FR') : null
-      )
-    ),
-    supportProgramExitReason: join(supportPrograms.map(d => d.exitReason)),
-    supportProgramPartnerOrganisationName: join(
-      supportPrograms.map(d =>
-        d.partnerOrganisations?.map(o => o.name).join(', ')
-      )
-    ),
-    supportProgramOutcome: join(
-      supportPrograms.map(d =>
-        d.outcome ? supportProgramOutcomeKeys.byKey[d.outcome] : null
-      )
-    )
-  }
+  return baseFields.map(key => ({
+    key,
+    header: beneficiaryFieldLabels[key],
+    width: 32
+  }))
 }
 
 function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
@@ -332,7 +287,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
   }
 
   if (userRole !== UserRole.StructureManager) {
-    return { ...exported, ...formatSupportProgramFields(beneficiary) }
+    return exported
   }
 
   return {
@@ -412,8 +367,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
-    lastActivity: beneficiary.lastActivity,
-    ...formatSupportProgramFields(beneficiary)
+    lastActivity: beneficiary.lastActivity
   }
 }
 
