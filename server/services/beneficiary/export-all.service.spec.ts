@@ -3,7 +3,7 @@
  * generated worksheets as js objects and not as an excel file
  */
 import { describe, expect, beforeEach, afterEach } from 'vitest'
-import type { Worksheet } from 'exceljs'
+import type { Row, Worksheet } from 'exceljs'
 import { exportWorkbook } from './export-all.service'
 import { createSecurityContext, test } from '~~/test/server/test-utils'
 import type { ExportBeneficiariesInput } from '~~/server/schema'
@@ -81,6 +81,46 @@ describe('Beneficiary - Export All Service - Contributing partners worksheet', (
     ).toHaveLength(0)
   })
 })
+
+describe('Beneficiary - Export All Service - External organisations columns', () => {
+  test('should export the external organisations of the beneficiary', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.structureManager)
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const worksheet = workbook.getWorksheet('Bénéficiaires')
+    const row = findRowByFileNumber(worksheet, FILE_NUMBER)
+
+    expect(row?.getCell('protectionMeasure').value).toBe('Curatelle renforcée')
+    expect(row?.getCell('representative').value).toBe('Parent')
+    expect(row?.getCell('prescribingOrganizationId').value).toBe('CAF 26')
+    expect(row?.getCell('prescribingOrganizationContactId').value).toBe(
+      'Sandrine de la CAF 26'
+    )
+    expect(row?.getCell('orientationType').value).toBe(
+      'Orientation Département'
+    )
+    expect(row?.getCell('orientationStructure').value).toBe('CCAS de Lyon 6')
+  })
+})
+
+/** Find the data row of a beneficiary, header row excluded */
+const findRowByFileNumber = (
+  worksheet: Worksheet | undefined,
+  fileNumber: string
+) => {
+  let found: Row | undefined
+  worksheet?.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      return
+    }
+    if (row.getCell('fileNumber').value === fileNumber) {
+      found = row
+    }
+  })
+  return found
+}
 
 /** Read the data rows of a worksheet, header row excluded */
 const readRows = (worksheet: Worksheet | undefined) => {

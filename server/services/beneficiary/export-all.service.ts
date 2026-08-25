@@ -35,7 +35,9 @@ import {
   ministereDepartmentServiceAcKeys,
   ministereStructureKeys,
   familySituationKeys,
-  nationalityKeys
+  nationalityKeys,
+  beneficiaryProtectionMeasureKeys,
+  beneficiaryOrientationTypeKeys
 } from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
@@ -93,6 +95,12 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'additionalInformation',
     'numeroPegase',
     'entourages',
+    'prescribingOrganizationId',
+    'prescribingOrganizationContactId',
+    'protectionMeasure',
+    'representative',
+    'orientationType',
+    'orientationStructure',
     'subjects',
     'referents',
     'aidantConnectAuthorized',
@@ -252,7 +260,8 @@ function getColumns(userRole: UserRole) {
 }
 
 function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
-  const { general, occupationIncome, taxHouseholds } = beneficiary
+  const { general, occupationIncome, taxHouseholds, externalOrganisations } =
+    beneficiary
 
   const exported = {
     usualName: general.usualName || '',
@@ -367,7 +376,23 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
-    lastActivity: beneficiary.lastActivity
+    lastActivity: beneficiary.lastActivity,
+    protectionMeasure: externalOrganisations?.protectionMeasure
+      ? beneficiaryProtectionMeasureKeys.byKey[
+          externalOrganisations.protectionMeasure
+        ]
+      : '',
+    representative: externalOrganisations?.representative || '',
+    prescribingOrganizationId:
+      externalOrganisations?.prescribingOrganization?.name || '',
+    prescribingOrganizationContactId:
+      externalOrganisations?.prescribingOrganizationContact?.name || '',
+    orientationType: externalOrganisations?.orientationType
+      ? beneficiaryOrientationTypeKeys.byKey[
+          externalOrganisations.orientationType
+        ]
+      : '',
+    orientationStructure: externalOrganisations?.orientationStructure || ''
   }
 }
 
