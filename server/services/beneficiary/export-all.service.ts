@@ -10,8 +10,8 @@ import type { SecurityRuleContext } from '~~/server/security'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import {
-  beneficiaryFieldLabels,
-  supportProgramExportFieldLabels
+  beneficiaryContributingPartnerFieldLabels,
+  beneficiaryFieldLabels
 } from '~~/client/labels'
 import type {
   GetBeneficiaryOutput,
@@ -36,11 +36,12 @@ import {
   ministereStructureKeys,
   familySituationKeys,
   nationalityKeys,
-  supportProgramOutcomeKeys
+  beneficiaryProtectionMeasureKeys,
+  beneficiaryOrientationTypeKeys
 } from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
-import type { Column } from 'exceljs'
+import type { Column, Workbook } from 'exceljs'
 import type { RowType } from '~~/types/export'
 
 const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels)[] =
@@ -94,6 +95,12 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'additionalInformation',
     'numeroPegase',
     'entourages',
+    'prescribingOrganizationId',
+    'prescribingOrganizationContactId',
+    'protectionMeasure',
+    'representative',
+    'orientationType',
+    'orientationStructure',
     'subjects',
     'referents',
     'aidantConnectAuthorized',
@@ -143,7 +150,8 @@ export const exportWorkbook = async ({
     ...prepareBeneficiaryFilters(input.filters)
   }
   const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
-  const formatedBeneficiaries = dataRequest.map(({ beneficiary }) =>
+  const beneficiaries = dataRequest.map(({ beneficiary }) => beneficiary)
+  const formatedBeneficiaries = beneficiaries.map(beneficiary =>
     formatData(beneficiary, ctx.user.role)
   )
 
@@ -185,66 +193,75 @@ export const exportWorkbook = async ({
     }
   })
 
+  // 3 add the contributing partners worksheet
+  addContributingPartnersWorksheet(workbook, beneficiaries)
+
   return workbook
 }
 
-const SUPPORT_PROGRAM_EXPORTED_FIELDS = Object.keys(
-  supportProgramExportFieldLabels
-) as (keyof typeof supportProgramExportFieldLabels)[]
+const CONTRIBUTING_PARTNER_EXPORTED_COLUMNS = [
+  { key: 'beneficiaryFileNumber', header: beneficiaryFieldLabels.fileNumber },
+  {
+    key: 'partnerOrganizationName',
+    header: beneficiaryContributingPartnerFieldLabels.partnerOrganizationId
+  },
+  {
+    key: 'partnerOrganizationContactName',
+    header:
+      beneficiaryContributingPartnerFieldLabels.partnerOrganizationContactId
+  },
+  {
+    key: 'precisions',
+    header: beneficiaryContributingPartnerFieldLabels.precisions
+  }
+]
+
+const addContributingPartnersWorksheet = (
+  workbook: Workbook,
+  beneficiaries: GetBeneficiaryOutput[]
+) => {
+  const worksheet = workbook.addWorksheet('Partenaires intervenants')
+  worksheet.columns = CONTRIBUTING_PARTNER_EXPORTED_COLUMNS.map(column => ({
+    ...column,
+    width: 32
+  }))
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
+  beneficiaries.forEach(beneficiary => {
+    const contributingPartners =
+      beneficiary.externalOrganisations?.contributingPartners ?? []
+    contributingPartners.forEach(contributingPartner => {
+      worksheet.addRow({
+        beneficiaryFileNumber: beneficiary.fileNumber,
+        partnerOrganizationName: contributingPartner.partnerOrganization.name,
+        partnerOrganizationContactName:
+          contributingPartner.partnerOrganizationContact?.name || '',
+        precisions: contributingPartner.precisions || ''
+      })
+    })
+  })
+}
 
 function getColumns(userRole: UserRole) {
   const baseFields =
     userRole === UserRole.StructureManager
       ? BENEFICIARY_EXPORTED_FIELDS_COMPLETE
       : BENEFICIARY_EXPORTED_FIELDS_PARTIAL
-  return [
-    ...baseFields.map(key => ({
-      key,
-      header: beneficiaryFieldLabels[key],
-      width: 32
-    })),
-    ...SUPPORT_PROGRAM_EXPORTED_FIELDS.map(key => ({
-      key,
-      header: supportProgramExportFieldLabels[key],
-      width: 32
-    }))
-  ]
-}
-
-function formatSupportProgramFields(beneficiary: GetBeneficiaryOutput) {
-  const supportPrograms = beneficiary.supportPrograms ?? []
-  const join = (values: (string | null | undefined)[]) =>
-    values.filter(Boolean).join(' / ')
-  return {
-    supportProgramName: join(
-      supportPrograms.map(d => d.supportProgramName?.name)
-    ),
-    supportProgramStartDate: join(
-      supportPrograms.map(d =>
-        d.startDate ? new Date(d.startDate).toLocaleDateString('fr-FR') : null
-      )
-    ),
-    supportProgramEndDate: join(
-      supportPrograms.map(d =>
-        d.endDate ? new Date(d.endDate).toLocaleDateString('fr-FR') : null
-      )
-    ),
-    supportProgramExitReason: join(supportPrograms.map(d => d.exitReason)),
-    supportProgramPartnerOrganisationName: join(
-      supportPrograms.map(d =>
-        d.partnerOrganisations?.map(o => o.name).join(', ')
-      )
-    ),
-    supportProgramOutcome: join(
-      supportPrograms.map(d =>
-        d.outcome ? supportProgramOutcomeKeys.byKey[d.outcome] : null
-      )
-    )
-  }
+  return baseFields.map(key => ({
+    key,
+    header: beneficiaryFieldLabels[key],
+    width: 32
+  }))
 }
 
 function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
-  const { general, occupationIncome, taxHouseholds } = beneficiary
+  const { general, occupationIncome, taxHouseholds, externalOrganisations } =
+    beneficiary
 
   const exported = {
     usualName: general.usualName || '',
@@ -279,7 +296,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
   }
 
   if (userRole !== UserRole.StructureManager) {
-    return { ...exported, ...formatSupportProgramFields(beneficiary) }
+    return exported
   }
 
   return {
@@ -360,7 +377,22 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
       ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
     lastActivity: beneficiary.lastActivity,
-    ...formatSupportProgramFields(beneficiary)
+    protectionMeasure: externalOrganisations?.protectionMeasure
+      ? beneficiaryProtectionMeasureKeys.byKey[
+          externalOrganisations.protectionMeasure
+        ]
+      : '',
+    representative: externalOrganisations?.representative || '',
+    prescribingOrganizationId:
+      externalOrganisations?.prescribingOrganization?.name || '',
+    prescribingOrganizationContactId:
+      externalOrganisations?.prescribingOrganizationContact?.name || '',
+    orientationType: externalOrganisations?.orientationType
+      ? beneficiaryOrientationTypeKeys.byKey[
+          externalOrganisations.orientationType
+        ]
+      : '',
+    orientationStructure: externalOrganisations?.orientationStructure || ''
   }
 }
 
