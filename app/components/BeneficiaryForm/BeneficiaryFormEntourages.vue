@@ -12,7 +12,7 @@
       :key="field.key"
       :entourage="field"
       :index="idx"
-      @remove-entourage="remove(idx)"
+      @remove-entourage="removeEntourage(idx)"
     />
 
     <BeneficiaryFormSection>
@@ -33,6 +33,8 @@
   import type { CreateOrUpdateEntourageInput } from '~~/server/schema'
   import { routes } from '~/utils/routes'
 
+  const snackbar = useSnackbar()
+
   const sectionRef = useTemplateRef('sectionRef')
   const { focusElementAdded } = useDynamicFieldFocus(sectionRef)
 
@@ -42,5 +44,14 @@
   function addEntourage() {
     push({ id: crypto.randomUUID(), caregiver: false, hosted: false })
     focusElementAdded()
+  }
+
+  function removeEntourage(idx: number) {
+    try {
+      remove(idx)
+      snackbar.success('Le proche a été supprimé.')
+    } catch {
+      snackbar.error('La suppression du proche a échoué.')
+    }
   }
 </script>

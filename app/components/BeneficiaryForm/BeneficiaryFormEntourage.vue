@@ -3,16 +3,6 @@
     data-field-group
     :section-title="`Proche ${index + 1}`"
   >
-    <template #titleAction>
-      <button
-        class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"
-        type="button"
-        @click="emit('removeEntourage')"
-      >
-        Supprimer ce proche
-      </button>
-    </template>
-
     <div class="fr-col-12 fr-col-xl-6">
       <VeeInput
         :label="relativeFieldLabels.lastName"
@@ -89,6 +79,17 @@
           sensibles (données de santé, mots de passe, etc).
         </template>
       </VeeTextarea>
+    </div>
+
+    <div class="fr-col-12">
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-delete-line btn-delete-action"
+        type="button"
+        :aria-label="`Supprimer le proche ${index + 1}`"
+        @click="emit('removeEntourage')"
+      >
+        Supprimer le proche
+      </button>
     </div>
   </BeneficiaryFormSection>
 </template>
