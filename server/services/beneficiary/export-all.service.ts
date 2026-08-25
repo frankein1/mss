@@ -10,6 +10,7 @@ import type { SecurityRuleContext } from '~~/server/security'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import {
+  beneficiaryContributingPartnerFieldLabels,
   beneficiaryFieldLabels,
   supportProgramExportFieldLabels
 } from '~~/client/labels'
@@ -40,7 +41,7 @@ import {
 } from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
-import type { Column } from 'exceljs'
+import type { Column, Workbook } from 'exceljs'
 import type { RowType } from '~~/types/export'
 
 const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels)[] =
@@ -143,7 +144,8 @@ export const exportWorkbook = async ({
     ...prepareBeneficiaryFilters(input.filters)
   }
   const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
-  const formatedBeneficiaries = dataRequest.map(({ beneficiary }) =>
+  const beneficiaries = dataRequest.map(({ beneficiary }) => beneficiary)
+  const formatedBeneficiaries = beneficiaries.map(beneficiary =>
     formatData(beneficiary, ctx.user.role)
   )
 
@@ -185,7 +187,58 @@ export const exportWorkbook = async ({
     }
   })
 
+  // 3 add the contributing partners worksheet
+  addContributingPartnersWorksheet(workbook, beneficiaries)
+
   return workbook
+}
+
+const CONTRIBUTING_PARTNER_EXPORTED_COLUMNS = [
+  { key: 'beneficiaryFileNumber', header: beneficiaryFieldLabels.fileNumber },
+  {
+    key: 'partnerOrganizationName',
+    header: beneficiaryContributingPartnerFieldLabels.partnerOrganizationId
+  },
+  {
+    key: 'partnerOrganizationContactName',
+    header:
+      beneficiaryContributingPartnerFieldLabels.partnerOrganizationContactId
+  },
+  {
+    key: 'precisions',
+    header: beneficiaryContributingPartnerFieldLabels.precisions
+  }
+]
+
+const addContributingPartnersWorksheet = (
+  workbook: Workbook,
+  beneficiaries: GetBeneficiaryOutput[]
+) => {
+  const worksheet = workbook.addWorksheet('Partenaires intervenants')
+  worksheet.columns = CONTRIBUTING_PARTNER_EXPORTED_COLUMNS.map(column => ({
+    ...column,
+    width: 32
+  }))
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
+  beneficiaries.forEach(beneficiary => {
+    const contributingPartners =
+      beneficiary.externalOrganisations?.contributingPartners ?? []
+    contributingPartners.forEach(contributingPartner => {
+      worksheet.addRow({
+        beneficiaryFileNumber: beneficiary.fileNumber,
+        partnerOrganizationName: contributingPartner.partnerOrganization.name,
+        partnerOrganizationContactName:
+          contributingPartner.partnerOrganizationContact?.name || '',
+        precisions: contributingPartner.precisions || ''
+      })
+    })
+  })
 }
 
 const SUPPORT_PROGRAM_EXPORTED_FIELDS = Object.keys(
