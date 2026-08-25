@@ -18,13 +18,3 @@ export const supportProgramFieldLabels: FieldLabels<SupportProgramFieldLabels> =
     partnerOrganisationIds: 'Organismes partenaires',
     outcome: 'Atteinte des objectifs'
   }
-
-export const supportProgramExportFieldLabels = {
-  supportProgramName: supportProgramFieldLabels.name,
-  supportProgramStartDate: supportProgramFieldLabels.startDate,
-  supportProgramEndDate: supportProgramFieldLabels.endDate,
-  supportProgramExitReason: supportProgramFieldLabels.exitReason,
-  supportProgramPartnerOrganisationName:
-    supportProgramFieldLabels.partnerOrganisationIds,
-  supportProgramOutcome: supportProgramFieldLabels.outcome
-}
