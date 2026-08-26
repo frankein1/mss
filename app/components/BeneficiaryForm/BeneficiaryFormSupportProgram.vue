@@ -31,14 +31,22 @@
       class="fr-mb-2v"
       :name="`supportPrograms[${index}].partnerOrganisationIds`"
       :label="supportProgramFieldLabels.partnerOrganisationIds"
+      :disabled="partnerOrganisationOptions.length === 0"
       :options="partnerOrganisationOptions"
     />
     <NuxtLink
+      v-if="partnerOrganisationOptions.length > 0"
       :to="routes.structure.AppPartners.path()"
       class="fr-link fr-icon-info-fill fr-link--icon-left fr-text--sm"
     >
       Données issues de l'annuaire de partenaires
     </NuxtLink>
+    <p
+      v-else
+      class="fr-text--sm text--muted"
+    >
+      Aucune données issues de l'annuaire de partenaires
+    </p>
   </div>
 
   <div class="fr-col-12">

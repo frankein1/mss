@@ -28,7 +28,7 @@
       :label="contributingPartnerFieldLabels.partnerOrganizationContactId"
       :name="`contributingPartners[${index}].partnerOrganizationContactId`"
       hint="Issu de l'annuaire des partenaires de la structure"
-      :disabled="contactDisabled"
+      :disabled="row.partnerOrganizationContactId == null"
       :options="withEmptyValue(contactOptions)"
     />
   </div>
@@ -90,8 +90,6 @@
     }
     return []
   })
-
-  const contactDisabled = computed(() => !row.partnerOrganizationId)
 
   const onOrgChange = () => {
     setContactId(null)
