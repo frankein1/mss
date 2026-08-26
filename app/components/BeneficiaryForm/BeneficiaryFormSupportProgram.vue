@@ -49,9 +49,11 @@
     </p>
   </div>
 
-  <div class="fr-col-12">
+  <div
+    v-if="showDuplicateAlert"
+    class="fr-col-12"
+  >
     <AtomAlert
-      v-if="showDuplicateAlert"
       :alert-type="AlertType.Info"
       message="Attention, ce bénéficiaire semble déjà être inscrit dans un dispositif ou axe d'intervention similaire."
       :closeable="true"
