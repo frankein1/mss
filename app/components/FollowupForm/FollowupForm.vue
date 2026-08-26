@@ -48,7 +48,6 @@
           </div>
         </div>
 
-        <!-- ROW -->
         <div class="fr-col-12 fr-col-lg-6">
           <VeeInput
             name="date"
@@ -65,6 +64,7 @@
             :options="withEmptyValue(followupDurationKeys.options)"
           />
         </div>
+
         <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="medium"
@@ -73,7 +73,6 @@
             required
           />
         </div>
-
         <div
           v-if="medium === FollowupMedium.ExternalAppointment"
           class="fr-col-12 fr-col-lg-6"
@@ -114,50 +113,45 @@
           </div>
         </template>
 
-        <div
-          v-if="hasSupportProgramNames"
-          class="fr-col-12 fr-col-lg-6"
-        >
-          <VeeSelect
-            name="supportProgramId"
-            :label="followupFieldLabels.supportProgramId"
-            :options="withEmptyValue(supportProgramOptions)"
-            :disabled="supportProgramOptions.length === 0"
-            :hint="
-              supportProgramOptions.length === 0
-                ? 'Aucun dispositif ou axe d\'intervention renseigné pour ce bénéficiaire'
-                : undefined
-            "
-          />
-        </div>
-
         <div class="fr-col-12 fr-col-lg-6">
           <MultiSelect
             name="subjects"
             :label="followupFieldLabels.subjects"
             :options="socialSupportSubjectOptions"
             required
+            :tooltip="
+              !application.edit.structure
+                ? 'Les responsables de votre structure peuvent personnaliser les objets d\'accompagnement.'
+                : undefined
+            "
           />
+          <div class="fr-mt-2v">
+            <NuxtLink
+              v-if="application.edit.structure"
+              :to="routes.structure.AppStructureCustomObjects.path()"
+              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+              @click="
+                matomo.trackEvent(
+                  EventCategory.FollowupForm,
+                  FollowupFormAction.SocialSupportSubjectLink
+                )
+              "
+            >
+              Je personnalise les objets d'accompagnement de ma structure
+            </NuxtLink>
+          </div>
         </div>
 
-        <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
-          <NuxtLink
-            v-if="application.edit.structure"
-            :to="routes.structure.AppStructureCustomObjects.path()"
-            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-            @click="
-              matomo.trackEvent(
-                EventCategory.FollowupForm,
-                FollowupFormAction.SocialSupportSubjectLink
-              )
+        <div class="fr-col-12 fr-col-lg-6">
+          <VeeSelect
+            name="supportProgramId"
+            :label="followupFieldLabels.supportProgramId"
+            :options="withEmptyValue(supportProgramOptions)"
+            :disabled="
+              !hasSupportProgramNames || supportProgramOptions.length === 0
             "
-          >
-            Je personnalise les objets d'accompagnement de ma structure
-          </NuxtLink>
-          <p v-else>
-            Les responsables de votre structure peuvent personnaliser les objets
-            d'accompagnement.
-          </p>
+            :hint="supportProgramHint"
+          />
         </div>
 
         <div class="fr-col-12 fr-col-lg-6">
@@ -189,28 +183,26 @@
         </div>
         <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
+            class="fr-mb-0"
             name="prescribingOrganizationContactId"
             :disabled="organizationContactIsDisabled"
             :label="followupFieldLabels.prescribingOrganizationContactId"
             :options="withEmptyValue(prescribingOrganizationContactOptions)"
           />
-        </div>
-
-        <div
-          class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right fr-mt-0 fr-pt-0"
-        >
-          <NuxtLink
-            :to="routes.structure.AppPartners.path()"
-            class="fr-link fr-icon-info-fill fr-link--icon-left"
-            @click="
-              matomo.trackEvent(
-                EventCategory.FollowupForm,
-                FollowupFormAction.PartnersLink
-              )
-            "
-          >
-            Données issues de l'annuaire de partenaires
-          </NuxtLink>
+          <div class="fr-mt-2v">
+            <NuxtLink
+              :to="routes.structure.AppPartners.path()"
+              class="fr-link fr-icon-info-fill fr-link--icon-left"
+              @click="
+                matomo.trackEvent(
+                  EventCategory.FollowupForm,
+                  FollowupFormAction.PartnersLink
+                )
+              "
+            >
+              Données issues de l'annuaire de partenaires
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </section>
@@ -537,6 +529,19 @@
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 
+  const supportProgramHint = computed(() => {
+    if (fetchProgramsError.value) {
+      return 'Aucun dispositif trouvé.'
+    }
+    if (!hasSupportProgramNames.value) {
+      return "Aucun dispositif ou axe d'intervention renseigné dans cette structure."
+    }
+    if (supportProgramOptions.value.length === 0) {
+      return "Aucun dispositif ou axe d'intervention renseigné pour ce bénéficiaire."
+    }
+    return undefined
+  })
+
   // Minister combobox
   const { setValue: setMinisterId, value: initialMinisterId } = useField<
     string | undefined
@@ -570,6 +575,10 @@
   }
 
   :deep(.combobox-wrapper.fr-input-group) {
+    margin-bottom: 0;
+  }
+
+  :deep(.multiselect) {
     margin-bottom: 0;
   }
 </style>

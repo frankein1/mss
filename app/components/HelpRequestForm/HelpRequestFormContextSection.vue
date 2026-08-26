@@ -138,6 +138,11 @@
           name="subjectId"
           :options="socialSupportSubjectOptions"
           required
+          :tooltip="
+            !application.edit.structure
+              ? 'Les responsables de votre structure peuvent personnaliser les objets d\'accompagnement.'
+              : undefined
+          "
         />
       </div>
 
@@ -148,10 +153,6 @@
           class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
           >Je personnalise les objets d'accompagnement de ma structure
         </NuxtLink>
-        <p v-else>
-          Les responsables de votre structure peuvent personnaliser les objets
-          d'accompagnement
-        </p>
       </div>
 
       <!-- ROW -->

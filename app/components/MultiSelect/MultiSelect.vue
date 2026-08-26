@@ -17,6 +17,23 @@
         class="color-red"
         >*</span
       >
+      <template v-if="tooltip">
+        <button
+          :aria-describedby="tooltipId"
+          type="button"
+          class="fr-btn--tooltip fr-btn"
+        >
+          infobulle
+        </button>
+        <span
+          :id="tooltipId"
+          class="fr-tooltip fr-placement"
+          role="tooltip"
+          >{{ tooltip }}</span
+        >
+        <span class="fr-sr-only">{{ tooltip }}</span>
+      </template>
+
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -163,6 +180,7 @@
       hint?: string
       dropdownOver?: boolean
       disabled?: boolean
+      tooltip?: string
     }>(),
     {
       optionsClass: '',
@@ -176,7 +194,8 @@
       required: false,
       hint: '',
       dropdownOver: true,
-      disabled: false
+      disabled: false,
+      tooltip: undefined
     }
   )
 
@@ -205,6 +224,7 @@
 
   const displayInputId = computed(() => `multi-select-${id.value}-fake-select`)
   const labelId = computed(() => `multi-select-${id.value}-label`)
+  const tooltipId = computed(() => `multi-select-${id.value}-tooltip`)
 
   const convertValuesToOptions = (initialValues: string[] | null): Options => {
     if (initialValues == null) {
@@ -349,6 +369,11 @@
 <style lang="scss" scoped>
   .multiselect {
     position: relative;
+
+    label > .fr-btn--tooltip {
+      position: absolute;
+      top: -3px;
+    }
 
     .multiselect-content {
       min-height: 1.5rem;

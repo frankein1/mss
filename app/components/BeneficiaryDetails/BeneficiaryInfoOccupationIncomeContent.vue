@@ -24,7 +24,7 @@
       "
     >
       <div class="fr-col-12">
-        <hr class="" />
+        <hr class="separateur" />
         <h5 class="fr-text--md fr-mb-0">Informations scolaires</h5>
       </div>
       <BeneficiaryInfoLabel
@@ -47,7 +47,7 @@
     <!-- PRO -->
     <template v-if="hasProfessionnalInfo">
       <div class="fr-col-12">
-        <hr class="" />
+        <hr class="separateur" />
         <h5 class="fr-text--md fr-mb-0">Informations professionnelles</h5>
       </div>
 
@@ -185,3 +185,12 @@
     return (arr || []).map(o => options[o] || o).join(', ')
   }
 </script>
+
+<style lang="scss" scoped>
+  // BeneficiaryInfoLabel renders nothing when its value is empty, so the first
+  // column actually present in the row is the one that must not be preceded by
+  // a separator.
+  .fr-grid-row > .fr-col-12:first-child > .separateur {
+    display: none;
+  }
+</style>
