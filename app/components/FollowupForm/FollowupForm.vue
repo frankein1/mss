@@ -530,6 +530,9 @@
   })
 
   const supportProgramHint = computed(() => {
+    if (fetchProgramsError.value) {
+      return 'Aucun dispositif trouvé.'
+    }
     if (!hasSupportProgramNames.value) {
       return "Aucun dispositif ou axe d'intervention renseigné dans cette structure."
     }
