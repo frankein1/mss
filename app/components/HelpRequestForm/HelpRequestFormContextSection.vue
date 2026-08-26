@@ -92,10 +92,7 @@
         />
       </div>
 
-      <div
-        v-if="hasSupportProgramNames"
-        class="fr-col-12 fr-col-lg-6"
-      >
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeSelect
           name="supportProgramId"
           :label="helpRequestFieldLabels.supportProgramId"
@@ -111,27 +108,6 @@
     </template>
 
     <template v-else>
-      <div
-        v-if="hasSupportProgramNames"
-        class="fr-col-12 fr-col-lg-6"
-      >
-        <VeeSelect
-          name="supportProgramId"
-          :label="helpRequestFieldLabels.supportProgramId"
-          :options="
-            supportProgramOptions.length
-              ? withEmptyValue(supportProgramOptions)
-              : []
-          "
-          :disabled="supportProgramOptionsDisabled"
-          :description="
-            supportProgramOptionsDisabled
-              ? 'Aucun dispositif renseigné pour ce bénéficiaire'
-              : undefined
-          "
-        />
-      </div>
-
       <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.subjectId"
@@ -144,18 +120,37 @@
               : undefined
           "
         />
+        <div class="fr-mt-2v">
+          <NuxtLink
+            v-if="application.edit.structure"
+            :to="routes.structure.AppStructureCustomObjects.path()"
+            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+            >Je personnalise les objets d'accompagnement de ma structure
+          </NuxtLink>
+        </div>
       </div>
 
-      <div class="fr-col-12 fr-col-offset-lg-6 fr-mt-0 fr-pt-0">
-        <NuxtLink
-          v-if="application.edit.structure"
-          :to="routes.structure.AppStructureCustomObjects.path()"
-          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-          >Je personnalise les objets d'accompagnement de ma structure
-        </NuxtLink>
+      <div
+        v-if="hasSupportProgramNames"
+        class="fr-col-12 fr-col-lg-6"
+      >
+        <VeeSelect
+          name="supportProgramId"
+          :label="helpRequestFieldLabels.supportProgramId"
+          :options="
+            supportProgramOptions.length
+              ? withEmptyValue(supportProgramOptions)
+              : []
+          "
+          :disabled="!hasSupportProgramNames || supportProgramOptionsDisabled"
+          :description="
+            supportProgramOptionsDisabled
+              ? 'Aucun dispositif renseigné pour ce bénéficiaire.'
+              : undefined
+          "
+        />
       </div>
 
-      <!-- ROW -->
       <div class="fr-col-12 fr-col-lg-6">
         <VeeCombobox
           :label="helpRequestFieldLabels.prescribingOrganizationId"
@@ -163,6 +158,14 @@
           :options="withEmptyValue(partnerOrganizationOptions)"
           @change-value="onPrescribingOrganization"
         />
+        <div class="fr-mt-2v">
+          <NuxtLink
+            :to="routes.structure.AppPartners.path()"
+            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+          >
+            Données issues de l'annuaire de partenaires
+          </NuxtLink>
+        </div>
       </div>
 
       <div class="fr-col-12 fr-col-lg-6">
@@ -172,16 +175,6 @@
           :label="helpRequestFieldLabels.prescribingOrganizationContactId"
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
-      </div>
-
-      <!-- ROW -->
-      <div class="fr-col-12 fr-mt-0 fr-pt-0">
-        <NuxtLink
-          :to="routes.structure.AppPartners.path()"
-          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-        >
-          Données issues de l'annuaire de partenaires
-        </NuxtLink>
       </div>
     </template>
 
@@ -390,3 +383,14 @@
     return false
   })
 </script>
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
+  :deep(.combobox-wrapper.fr-input-group) {
+    margin-bottom: 0;
+  }
+
+  :deep(.multiselect) {
+    margin-bottom: 0;
+  }
+</style>
