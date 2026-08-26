@@ -9,7 +9,7 @@
     <div class="fr-col-12">
       <AtomAlert
         :alert-type="AlertType.Warning"
-        message="Un dossier semble déjà exister pour ce bénéficiaire"
+        message="Un dossier semble déjà exister pour ce bénéficiaire."
       >
         <template #detailedMessage>
           <template v-if="!similarBeneficiary.referent">
