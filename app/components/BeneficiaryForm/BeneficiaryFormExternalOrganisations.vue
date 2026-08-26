@@ -84,7 +84,7 @@
         :is-duplicate="isDuplicate(idx)"
         :partner-organizations="partnerOrganizations"
         :partner-organization-options="partnerOrganizationOptions"
-        @remove-partner="remove(idx)"
+        @remove-partner="removePartner(idx)"
       />
 
       <div class="fr-col-12">
@@ -118,6 +118,8 @@
     externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
   }>()
 
+  const snackbar = useSnackbar()
+
   const randomUUID = () => crypto.randomUUID()
 
   const contributingPartnersRef = useTemplateRef('contributingPartnersRef')
@@ -130,6 +132,15 @@
   function addPartner() {
     push({ id: randomUUID() } as any)
     focusElementAdded()
+  }
+
+  function removePartner(idx: number) {
+    try {
+      remove(idx)
+      snackbar.success('Le partenaire intervenant a été supprimé.')
+    } catch {
+      snackbar.error('La suppression du partenaire intervenant a échoué.')
+    }
   }
 
   const { value: prescribingOrganizationId } = useField<string | null>(

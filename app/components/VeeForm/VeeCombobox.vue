@@ -14,6 +14,22 @@
         class="color-red"
         >*</span
       >
+      <template v-if="tooltip">
+        <button
+          :aria-describedby="tooltipId"
+          type="button"
+          class="fr-btn--tooltip fr-btn"
+        >
+          infobulle
+        </button>
+        <span
+          :id="tooltipId"
+          class="fr-tooltip fr-placement"
+          role="tooltip"
+          >{{ tooltip }}</span
+        >
+        <span class="fr-sr-only">{{ tooltip }}</span>
+      </template>
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -115,6 +131,8 @@
     () => `searchable-select-${id.value}-display-input`
   )
   const gridId = computed(() => `searchable-select-${id.value}-grid`)
+  const tooltipId = computed(() => `vee-combobox-${id.value}-tooltip`)
+
   const resultRowId = useId()
   const resultItemId = useId()
 
@@ -133,12 +151,14 @@
       required?: boolean
       hint?: string
       withCreation?: boolean
+      tooltip?: string
     }>(),
     {
       required: false,
       hint: undefined,
       placeholder: undefined,
-      withCreation: false
+      withCreation: false,
+      tooltip: undefined
     }
   )
 
@@ -317,6 +337,11 @@
 
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
+
+  label > .fr-btn--tooltip {
+    position: absolute;
+    top: -3px;
+  }
 
   input[type='search'] {
     background-image:

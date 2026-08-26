@@ -68,7 +68,7 @@
           </li>
           <li>
             <button
-              class="fr-btn"
+              class="fr-btn btn-delete-action"
               type="submit"
               :disabled="!!error || (count !== 0 && !confirmed) || isSubmitting"
             >

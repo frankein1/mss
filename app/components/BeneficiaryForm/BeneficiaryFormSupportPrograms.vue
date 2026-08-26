@@ -47,6 +47,7 @@
 
   const trpcClient = useTrpcClient()
   const modal = useModal()
+  const snackbar = useSnackbar()
 
   const supportProgramsRef = useTemplateRef('supportProgramsRef')
   const { focusElementAdded } = useDynamicFieldFocus(supportProgramsRef)
@@ -117,8 +118,19 @@
     modal.open(BeneficiaryFormSupportProgramDeletionModal, {
       title: "Suppression du dispositif ou axe d'intervention",
       supportProgramId: id!,
-      remove: () => remove(idx)
+      remove: () => removeSupportProgram(idx)
     })
+  }
+
+  function removeSupportProgram(idx: number) {
+    try {
+      remove(idx)
+      snackbar.success("Le dispositif ou axe d'intervention a été supprimé.")
+    } catch {
+      snackbar.error(
+        "La suppression du dispositif ou axe d'intervention a échoué."
+      )
+    }
   }
 
   function addSupportProgram() {
