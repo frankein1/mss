@@ -180,6 +180,7 @@ const select = {
     select: { socialSupports: true }
   },
   supportPrograms: {
+    orderBy: { createdAt: 'asc' },
     select: {
       id: true,
       startDate: true,
