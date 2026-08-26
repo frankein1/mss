@@ -235,12 +235,10 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   orientationStructure: limitedStringConstraint(null, 200).nullish(),
   prescribingOrganizationId: z
     .string()
-    .uuid()
     .nullish()
     .transform(v => v || null),
   prescribingOrganizationContactId: z
     .string()
-    .uuid()
     .nullish()
     .transform(v => v || null),
   contributingPartners: z

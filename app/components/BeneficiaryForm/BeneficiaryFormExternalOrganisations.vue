@@ -15,7 +15,7 @@
           :label="beneficiaryFieldLabels.prescribingOrganizationId"
           hint="Issu de l'annuaire des partenaires de la structure"
           name="prescribingOrganizationId"
-          :options="withEmptyValue(partnerOrganizationOptions)"
+          :options="partnerOrganizationOptions"
           @change-value="onPrescribingOrganizationChange"
         />
       </div>
