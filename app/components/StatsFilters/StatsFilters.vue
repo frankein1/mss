@@ -168,15 +168,6 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
-    if (props.beneficiariesEmployersOptions.length) {
-      statsFilters.push({
-        name: 'employers',
-        label: beneficiaryFieldLabels.employer,
-        options: props.beneficiariesEmployersOptions,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
-      })
-    }
     if (props.supportProgramNameOptions?.length) {
       statsFilters.push({
         name: 'supportProgramNameIds',
@@ -271,6 +262,17 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
     })
+
+    if (props.beneficiariesEmployersOptions.length) {
+      statsFilters.push({
+        name: 'employers',
+        label: beneficiaryFieldLabels.employer,
+        options: props.beneficiariesEmployersOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      })
+    }
+
     if (props.beneficiariesSchoolsOptions.length) {
       statsFilters.push({
         name: 'schoolUai',
