@@ -22,17 +22,23 @@ const handler = async ({
           supportProgramName: {
             select: { id: true, name: true, hasLifecycle: true }
           }
-        },
-        orderBy: { createdAt: 'asc' }
+        }
       }
     }
   })
 
-  return beneficiary.supportPrograms.map(sp => ({
-    ...sp,
-    startDate: sp.supportProgramName.hasLifecycle ? sp.startDate : null,
-    endDate: sp.supportProgramName.hasLifecycle ? sp.endDate : null
-  }))
+  return (
+    beneficiary.supportPrograms
+      .map(sp => ({
+        ...sp,
+        startDate: sp.supportProgramName.hasLifecycle ? sp.startDate : null,
+        endDate: sp.supportProgramName.hasLifecycle ? sp.endDate : null
+      }))
+      // Sorted in JS: the database collation orders uppercase before lowercase
+      .sort((a, b) =>
+        a.supportProgramName.name.localeCompare(b.supportProgramName.name, 'fr')
+      )
+  )
 }
 
 export const getSupportProgramsForBeneficiaryQuery = createQuery({
