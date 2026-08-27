@@ -147,6 +147,16 @@
         props.notification.beneficiary.id
       )
     }
+    if (
+      (props.notification.type === NotificationType.SupportProgramEndToday ||
+        props.notification.type ===
+          NotificationType.SupportProgramEndOneMonth) &&
+      props.notification.beneficiary
+    ) {
+      return routes.beneficiary.AppBeneficiaryEditSupportPrograms.path(
+        props.notification.beneficiary.id
+      )
+    }
     if (props.notification.beneficiary) {
       return routes.file.AppFile.path(
         props.notification.beneficiary.familyFile.id,

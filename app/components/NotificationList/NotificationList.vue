@@ -75,7 +75,9 @@
           NotificationType.EndOfSupport,
           NotificationType.EndOfSupportOneMonth,
           NotificationType.DocumentExpirationOneMonth,
-          NotificationType.DocumentExpirationToday
+          NotificationType.DocumentExpirationToday,
+          NotificationType.SupportProgramEndOneMonth,
+          NotificationType.SupportProgramEndToday
         ]
       case NotificationTypeFilterValue.NewComment:
         return [NotificationType.NewComment]
@@ -107,7 +109,9 @@
           NotificationType.UpdateFollowupElement,
           NotificationType.NewSocialSupportSubject,
           NotificationType.DocumentExpirationOneMonth,
-          NotificationType.DocumentExpirationToday
+          NotificationType.DocumentExpirationToday,
+          NotificationType.SupportProgramEndOneMonth,
+          NotificationType.SupportProgramEndToday
         ]
     }
   })

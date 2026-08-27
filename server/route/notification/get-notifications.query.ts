@@ -48,6 +48,7 @@ const handler = async ({
     id: n.id,
     documentId: n.documentId,
     socialSupportId: n.socialSupportId,
+    supportProgramId: n.supportProgramId,
     type: n.type,
     beneficiary: n.beneficiary,
     created: n.created,

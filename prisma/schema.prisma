@@ -2005,6 +2005,7 @@ model SupportProgram {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   socialSupports SocialSupport[]
+  notifications  Notification[]
 
   @@index(fields: [beneficiaryId], map: "support_program_beneficiary_id_idx")
   // vérifier l'utilité de cet index
@@ -2281,6 +2282,8 @@ enum NotificationType {
   ArchiveDueToday              @map("ArchiveDue")
   ArchiveDueSevenDays
   ArchiveDueOneMonth
+  SupportProgramEndToday
+  SupportProgramEndOneMonth
 }
 
 model Notification {
@@ -2301,6 +2304,9 @@ model Notification {
 
   socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String?        @map("social_support_id") @db.Uuid
+
+  supportProgram   SupportProgram? @relation(fields: [supportProgramId], references: [id], onDelete: Cascade)
+  supportProgramId String?         @map("support_program_id") @db.Uuid
 
   itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
   itemCreatedById String? @map("item_created_by_id") @db.Uuid

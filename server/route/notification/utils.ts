@@ -82,6 +82,10 @@ export function getDescription(notification: Notification) {
         'Expiration dans un mois',
         'Expiration'
       )
+    case 'SupportProgramEndToday':
+      return getDateNotificationDescription(created, 'Fin de dispositif')
+    case 'SupportProgramEndOneMonth':
+      return getDateNotificationDescription(dateInAMonth, 'Fin de dispositif')
 
     default:
       return ''
@@ -161,6 +165,9 @@ export function getDescriptionHint(
     case 'DocumentExpirationToday':
     case 'DocumentExpirationOneMonth':
       return 'sur le document'
+    case 'SupportProgramEndToday':
+    case 'SupportProgramEndOneMonth':
+      return 'sur le dispositif'
     default:
       return ''
   }

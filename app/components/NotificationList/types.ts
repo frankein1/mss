@@ -9,6 +9,7 @@ export type NotificationItemType = {
   read?: boolean | null
   documentId?: string | null
   socialSupportId?: string | null
+  supportProgramId?: string | null
   beneficiary?: {
     id: string
     firstName: string | null

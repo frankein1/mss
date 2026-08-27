@@ -16,5 +16,7 @@ export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.NewSocialSupportSubject]: 'fr-icon-settings-5-line',
   [NotificationType.ArchiveDueToday]: 'ri-folder-close-line',
   [NotificationType.ArchiveDueOneMonth]: 'ri-folder-close-line',
-  [NotificationType.ArchiveDueSevenDays]: 'ri-folder-close-line'
+  [NotificationType.ArchiveDueSevenDays]: 'ri-folder-close-line',
+  [NotificationType.SupportProgramEndToday]: 'fr-icon-calendar-event-line',
+  [NotificationType.SupportProgramEndOneMonth]: 'fr-icon-calendar-event-line'
 }

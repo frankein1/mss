@@ -17,7 +17,9 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.NewSocialSupportSubject]: 'Configuration',
   [NotificationType.ArchiveDueToday]: 'Archive',
   [NotificationType.ArchiveDueOneMonth]: 'Archive',
-  [NotificationType.ArchiveDueSevenDays]: 'Archive'
+  [NotificationType.ArchiveDueSevenDays]: 'Archive',
+  [NotificationType.SupportProgramEndToday]: 'Échéance',
+  [NotificationType.SupportProgramEndOneMonth]: 'Échéance'
 })
 
 export enum NotificationTypeFilterValue {
