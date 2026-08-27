@@ -11,7 +11,8 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import {
   beneficiaryContributingPartnerFieldLabels,
-  beneficiaryFieldLabels
+  beneficiaryFieldLabels,
+  supportProgramFieldLabels
 } from '~~/client/labels'
 import type {
   GetBeneficiaryOutput,
@@ -37,7 +38,8 @@ import {
   familySituationKeys,
   nationalityKeys,
   beneficiaryProtectionMeasureKeys,
-  beneficiaryOrientationTypeKeys
+  beneficiaryOrientationTypeKeys,
+  supportProgramOutcomeKeys
 } from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
@@ -196,6 +198,9 @@ export const exportWorkbook = async ({
   // 3 add the contributing partners worksheet
   addContributingPartnersWorksheet(workbook, beneficiaries)
 
+  // 4 add the support programs worksheet
+  addSupportProgramsWorksheet(workbook, beneficiaries)
+
   return workbook
 }
 
@@ -242,6 +247,53 @@ const addContributingPartnersWorksheet = (
         partnerOrganizationContactName:
           contributingPartner.partnerOrganizationContact?.name || '',
         precisions: contributingPartner.precisions || ''
+      })
+    })
+  })
+}
+
+const SUPPORT_PROGRAM_EXPORTED_COLUMNS = [
+  { key: 'beneficiaryFileNumber', header: beneficiaryFieldLabels.fileNumber },
+  { key: 'name', header: supportProgramFieldLabels.name },
+  {
+    key: 'partnerOrganisations',
+    header: supportProgramFieldLabels.partnerOrganisationIds
+  },
+  { key: 'startDate', header: supportProgramFieldLabels.startDate },
+  { key: 'endDate', header: supportProgramFieldLabels.endDate },
+  { key: 'outcome', header: supportProgramFieldLabels.outcome }
+]
+
+const addSupportProgramsWorksheet = (
+  workbook: Workbook,
+  beneficiaries: GetBeneficiaryOutput[]
+) => {
+  const worksheet = workbook.addWorksheet('Dispositifs')
+  worksheet.columns = SUPPORT_PROGRAM_EXPORTED_COLUMNS.map(column => ({
+    ...column,
+    width: 32
+  }))
+  worksheet.getRow(1).font = { bold: true }
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: worksheet.columnCount }
+  }
+
+  beneficiaries.forEach(beneficiary => {
+    const supportPrograms = beneficiary.supportPrograms ?? []
+    supportPrograms.forEach(supportProgram => {
+      worksheet.addRow({
+        beneficiaryFileNumber: beneficiary.fileNumber,
+        name: supportProgram.supportProgramName.name,
+        partnerOrganisations: supportProgram.partnerOrganisations
+          .map(partnerOrganisation => partnerOrganisation.name)
+          .join(' / '),
+        startDate: supportProgram.startDate || '',
+        endDate: supportProgram.endDate || '',
+        outcome: supportProgram.outcome
+          ? supportProgramOutcomeKeys.byKey[supportProgram.outcome]
+          : ''
       })
     })
   })

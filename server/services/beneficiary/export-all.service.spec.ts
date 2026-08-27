@@ -10,6 +10,14 @@ import type { ExportBeneficiariesInput } from '~~/server/schema'
 import { prismaClient } from '~~/server/prisma'
 import { createFamilyFile } from '~~/test/server/fixtures/familyFiles'
 import { createBeneficiary } from '~~/test/server/fixtures/beneficiaries'
+import {
+  fixtureStructures,
+  FixtureStructure,
+  fixturesUsers,
+  FixtureUserRole,
+  fixturesPartnerOrganizations,
+  FixturePartnerOrganization
+} from '~~/prisma/fixtures'
 
 const FILE_NUMBER = '87MB42GCB5'
 
@@ -21,6 +29,7 @@ const input: ExportBeneficiariesInput = {
 
 let familyFileId: string
 let beneficiaryId: string
+let supportProgramNameIds: string[] = []
 
 beforeEach(async () => {
   const date = new Date('2020-11-25')
@@ -28,12 +37,77 @@ beforeEach(async () => {
   familyFileId = familyFile.id
   const beneficiary = await createBeneficiary(date, familyFileId)
   beneficiaryId = beneficiary.id
+  supportProgramNameIds = await createSupportPrograms(beneficiaryId)
 })
 
 afterEach(async () => {
   await prismaClient.beneficiary.delete({ where: { id: beneficiaryId } })
   await prismaClient.familyFile.delete({ where: { id: familyFileId } })
+  await prismaClient.supportProgramName.deleteMany({
+    where: { id: { in: supportProgramNameIds } }
+  })
+  supportProgramNameIds.length = 0
 })
+
+/**
+ * Enroll the beneficiary in two support programs: one with a lifecycle
+ * (dates and outcome are exported) and one without (they are not).
+ * Returns the ids of the created program names, to be cleaned up afterwards.
+ */
+async function createSupportPrograms(beneficiaryId: string) {
+  const supportProgramName = await createSupportProgramName(
+    'Accompagnement budgétaire',
+    true
+  )
+  const noLifecycleProgramName = await createSupportProgramName(
+    'Portage de repas ponctuel',
+    false
+  )
+  await prismaClient.supportProgram.create({
+    data: {
+      beneficiaryId,
+      supportProgramNameId: supportProgramName.id,
+      startDate: new Date('2025-03-01'),
+      endDate: new Date('2025-09-15'),
+      exitReason: 'Déménagement',
+      outcome: 'PartiallyAchieved',
+      partnerOrganisations: {
+        connect: [
+          {
+            id: fixturesPartnerOrganizations[
+              FixturePartnerOrganization.FranceTravail
+            ].id
+          },
+          {
+            id: fixturesPartnerOrganizations[
+              FixturePartnerOrganization.MairieValence
+            ].id
+          }
+        ]
+      }
+    }
+  })
+  await prismaClient.supportProgram.create({
+    data: {
+      beneficiaryId,
+      supportProgramNameId: noLifecycleProgramName.id,
+      startDate: new Date('2025-04-01'),
+      outcome: 'Achieved'
+    }
+  })
+  return [supportProgramName.id, noLifecycleProgramName.id]
+}
+
+function createSupportProgramName(name: string, hasLifecycle: boolean) {
+  return prismaClient.supportProgramName.create({
+    data: {
+      name,
+      hasLifecycle,
+      structureId: fixtureStructures[FixtureStructure.Test].id,
+      createdById: fixturesUsers[FixtureUserRole.StructureManager].id
+    }
+  })
+}
 
 describe('Beneficiary - Export All Service - Contributing partners worksheet', () => {
   test('should list one row per contributing partner', async ({ users }) => {
@@ -78,6 +152,64 @@ describe('Beneficiary - Export All Service - Contributing partners worksheet', (
 
     expect(
       readRows(worksheet).filter(row => row.fileNumber === FILE_NUMBER)
+    ).toHaveLength(0)
+  })
+})
+
+describe('Beneficiary - Export All Service - Support programs worksheet', () => {
+  test('should list one row per support program', async ({ users }) => {
+    const ctx = createSecurityContext(users.structureManager)
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const worksheet = workbook.getWorksheet('Dispositifs')
+
+    expect(worksheet).toBeDefined()
+    expect(worksheet?.getRow(1).values).toEqual([
+      undefined,
+      'N° dossier bénéficiaire',
+      'Nom du dispositif',
+      'Organismes partenaires',
+      "Date d'entrée",
+      'Date de sortie',
+      'Atteinte des objectifs'
+    ])
+    expect(
+      readSupportProgramRows(worksheet).filter(
+        row => row.fileNumber === FILE_NUMBER
+      )
+    ).toEqual([
+      {
+        fileNumber: FILE_NUMBER,
+        name: 'Accompagnement budgétaire',
+        partnerOrganisations: 'France Travail / Mairie de Valence',
+        startDate: new Date('2025-03-01'),
+        endDate: new Date('2025-09-15'),
+        outcome: 'Partiel'
+      },
+      {
+        // the program name has no lifecycle: dates and outcome are empty
+        fileNumber: FILE_NUMBER,
+        name: 'Portage de repas ponctuel',
+        partnerOrganisations: '',
+        startDate: '',
+        endDate: '',
+        outcome: ''
+      }
+    ])
+  })
+
+  test('should not list support programs of another structure', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.structureManagerMinistere)
+
+    const workbook = await exportWorkbook({ ctx, input })
+    const worksheet = workbook.getWorksheet('Dispositifs')
+
+    expect(
+      readSupportProgramRows(worksheet).filter(
+        row => row.fileNumber === FILE_NUMBER
+      )
     ).toHaveLength(0)
   })
 })
@@ -139,6 +271,32 @@ const readRows = (worksheet: Worksheet | undefined) => {
       partner: row.getCell('partnerOrganizationName').value,
       contact: row.getCell('partnerOrganizationContactName').value,
       precisions: row.getCell('precisions').value
+    })
+  })
+  return rows
+}
+
+/** Read the data rows of the support programs worksheet, header row excluded */
+const readSupportProgramRows = (worksheet: Worksheet | undefined) => {
+  const rows: {
+    fileNumber: unknown
+    name: unknown
+    partnerOrganisations: unknown
+    startDate: unknown
+    endDate: unknown
+    outcome: unknown
+  }[] = []
+  worksheet?.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      return
+    }
+    rows.push({
+      fileNumber: row.getCell('beneficiaryFileNumber').value,
+      name: row.getCell('name').value,
+      partnerOrganisations: row.getCell('partnerOrganisations').value,
+      startDate: row.getCell('startDate').value,
+      endDate: row.getCell('endDate').value,
+      outcome: row.getCell('outcome').value
     })
   })
   return rows
