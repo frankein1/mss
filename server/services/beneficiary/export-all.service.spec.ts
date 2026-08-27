@@ -187,7 +187,7 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
         outcome: 'Partiel'
       },
       {
-        // the program name has no lifecycle: dates and outcome are not exported
+        // the program name has no lifecycle: dates and outcome are empty
         fileNumber: FILE_NUMBER,
         name: 'Portage de repas ponctuel',
         partnerOrganisations: '',
