@@ -50,6 +50,7 @@
   } from '~~/client/labels'
   import { formatMinisterName } from '~/utils/minister'
   import { AlertType } from '~/utils/constants/alert'
+  import { EventCategory, StatFilterEventAction } from '~~/types/matomo'
 
   const { application } = usePermissions()
   const trpcClient = useTrpcClient()
@@ -121,14 +122,18 @@
         type: FilterType.Radio,
         alwaysExpanded: true,
         pictos: fileInstructionTypePictos,
-        disabled: !props.isHelpRequest
+        disabled: !props.isHelpRequest,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.HelpRequestSubject
       },
       {
         name: 'period',
         label: 'Période',
         type: FilterType.SelectOne,
         options: withEmptyValue(periodKeys.options, ''),
-        alwaysExpanded: true
+        alwaysExpanded: true,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.Period
       }
     ]
 
@@ -156,7 +161,9 @@
         options: props.socialSupportSubjectOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
-        disabled: props.filters.helpRequestSubject === 'Housing'
+        disabled: props.filters.helpRequestSubject === 'Housing',
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.SocialSupportSubject
       })
     }
     if (props.beneficiariesCitiesOptions.length) {
@@ -165,7 +172,9 @@
         label: beneficiaryFieldLabels.city,
         options: props.beneficiariesCitiesOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.City
       })
     }
     if (props.supportProgramNameOptions?.length) {
@@ -174,7 +183,9 @@
         label: "Dispositif ou axe d'intervention",
         options: props.supportProgramNameOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.SupportProgram
       })
     }
     if (application.value.module.statsByReferent && !props.isHistory) {
@@ -183,7 +194,20 @@
         label: 'Référent',
         options: agentOptionsWithEmptyValue.value,
         type: FilterType.SelectOne,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.Referent
+      })
+    }
+    if (props.isHistory) {
+      statsFilters.push({
+        name: 'createdById',
+        label: 'Agent',
+        options: props.agentOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.Agent
       })
     }
     statsFilters.push({
@@ -191,17 +215,10 @@
       label: 'Statut du bénéficiaire',
       options: withEmptyValue(beneficiaryStatusKeys.options),
       type: FilterType.SelectOne,
-      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.StatFilter,
+      matomoEventAction: StatFilterEventAction.BeneficiaryStatus
     })
-    if (props.isHistory) {
-      statsFilters.push({
-        name: 'createdById',
-        label: 'Agent',
-        options: props.agentOptions,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
-      })
-    }
     if (application.value.module.ministere && ministerOptions.value != null) {
       if (ministerOptions.value != null) {
         statsFilters.push({
@@ -209,7 +226,9 @@
           label: helpRequestFieldLabels.minister,
           options: ministerOptions.value,
           type: FilterType.SelectMultiple,
-          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+          matomoEventCategory: EventCategory.StatFilter,
+          matomoEventAction: StatFilterEventAction.Minister
         })
       }
       statsFilters.push({
@@ -217,14 +236,18 @@
         label: beneficiaryFieldLabels.ministereDepartementServiceAc,
         options: withEmptyValue(ministereDepartmentServiceAcKeys.options),
         type: FilterType.SelectOne,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.MinistryDepartementServiceAc
       })
       statsFilters.push({
         name: 'ministereStructure',
         label: beneficiaryFieldLabels.ministereStructure,
         options: withEmptyValue(ministereStructureKeys.options),
         type: FilterType.SelectOne,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.MinistryStructure
       })
     }
     statsFilters.push({
@@ -235,7 +258,9 @@
         "Toutes les tranches d'âge"
       ),
       type: FilterType.SelectOne,
-      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.StatFilter,
+      matomoEventAction: StatFilterEventAction.AgeGroup
     })
 
     if (props.filters.ageGroup === AgeGroup.Custom) {
@@ -260,7 +285,9 @@
       label: beneficiaryFieldLabels.qpv,
       options: withEmptyValue(yesNoOptions, ''),
       type: FilterType.SelectOne,
-      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+      matomoEventCategory: EventCategory.StatFilter,
+      matomoEventAction: StatFilterEventAction.QPV
     })
 
     if (props.beneficiariesEmployersOptions.length) {
@@ -269,7 +296,9 @@
         label: beneficiaryFieldLabels.employer,
         options: props.beneficiariesEmployersOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.Employer
       })
     }
 
@@ -279,7 +308,9 @@
         label: beneficiaryFieldLabels.schoolUai,
         options: props.beneficiariesSchoolsOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.StatFilter,
+        matomoEventAction: StatFilterEventAction.School
       })
     }
 

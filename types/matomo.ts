@@ -3,6 +3,7 @@ export enum EventCategory {
   BeneficiaryHistoryFilter = "Filtre Historique d'un bénéficiaire",
   FollowupFilter = 'Filtre Entretien',
   HelpRequestFilter = "Filtre Demande d'aide",
+  StatFilter = 'Filtre Statistiques',
   Document = 'Document',
   CreateBeneficiary = 'Créer un bénéficiaire',
   UsersActivity = 'Historique des changements',
@@ -115,6 +116,24 @@ export enum HelpRequestFilterEventAction {
   MinistereStructure = 'Structure de rattachement'
 }
 
+export enum StatFilterEventAction {
+  HelpRequestSubject = "Thématique d'instruction",
+  Period = 'Période',
+  SocialSupportSubject = "Objet de l'accompagnement",
+  City = 'Ville',
+  SupportProgram = "Dispositifs ou axes d'intervention concernés",
+  Referent = 'Référent',
+  BeneficiaryStatus = 'Statut du bénéficiaire',
+  Agent = 'Agent',
+  Minister = 'Ministre',
+  MinistryDepartementServiceAc = "Département ou service de l'Administration Centrale",
+  MinistryStructure = 'Structure de rattachement',
+  AgeGroup = "Tranche d'âge",
+  QPV = 'Quartier prioritaire de la politique de la ville',
+  Employer = 'Employeur',
+  School = 'Établissement scolaire fréquenté'
+}
+
 export enum DocumentEventAction {
   See = 'Voir',
   Download = 'Télécharger',
@@ -189,6 +208,7 @@ export type EventAction =
   | BeneficiaryHistoryFilterEventAction
   | FollowupFilterEventAction
   | HelpRequestFilterEventAction
+  | StatFilterEventAction
   | DocumentEventAction
   | CreateBeneficiaryEventAction
   | UserActivityEventAction
