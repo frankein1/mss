@@ -1,7 +1,7 @@
 import { useSession } from 'h3'
 import { randomUUID } from 'node:crypto'
 import { getProConnectClient } from '~~/server/lib'
-import type { AuthSession } from '~~/server/types/session'
+import type { OAuthHandshake } from '~~/server/types/session'
 import { isSafeRedirectUrl } from '~/utils/isSafeRedirectUrl'
 
 export default defineEventHandler(async event => {
@@ -28,7 +28,7 @@ export default defineEventHandler(async event => {
     auth: { sessionSecret }
   } = useRuntimeConfig()
 
-  const session = await useSession<AuthSession>(event, {
+  const session = await useSession<OAuthHandshake>(event, {
     password: sessionSecret
   })
 

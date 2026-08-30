@@ -1,4 +1,4 @@
-export interface AuthSession {
+export interface OAuthHandshake {
   nonce: string
   state: string
   redirectUrl?: string

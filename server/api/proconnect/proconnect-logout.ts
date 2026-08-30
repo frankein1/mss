@@ -1,4 +1,4 @@
-import type { AuthSession } from '~~/server/types/session'
+import type { OAuthHandshake } from '~~/server/types/session'
 import { badrequest } from '~/utils/api/errors'
 
 /** Manage logout for Proconnect when the login for
@@ -8,7 +8,7 @@ export default defineEventHandler(async event => {
     auth: { sessionSecret }
   } = useRuntimeConfig()
 
-  const session = await useSession<AuthSession>(event, {
+  const session = await useSession<OAuthHandshake>(event, {
     password: sessionSecret
   })
 

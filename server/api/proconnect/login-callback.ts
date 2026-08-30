@@ -12,7 +12,7 @@ import { addUserActivity } from '~~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~~/server/database'
 import { prismaClient } from '~~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
-import type { AuthSession } from '~~/server/types/session'
+import type { OAuthHandshake } from '~~/server/types/session'
 import { forbidden, unauthorized } from '~/utils/api/errors'
 import { cookieOptions } from '~/utils/cookie'
 import { routes } from '~/utils/routes'
@@ -54,7 +54,7 @@ export default defineEventHandler(async event => {
     throw unauthorized('[ProConnect] no state returned from ProConnect')
   }
 
-  const session = await useSession<AuthSession>(event, {
+  const session = await useSession<OAuthHandshake>(event, {
     password: sessionSecret
   })
 
@@ -396,4 +396,4 @@ async function provideLogoutUrl(
 }
 
 type UserAuthInfo = NonNullable<Awaited<ReturnType<typeof getUser>>>
-type NitroSession = Awaited<ReturnType<typeof useSession<AuthSession>>>
+type NitroSession = Awaited<ReturnType<typeof useSession<OAuthHandshake>>>
