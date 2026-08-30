@@ -1,4 +1,4 @@
-import { verifyJwt } from '~~/server/lib/jwt'
+import { validateSession } from '~~/server/lib/session'
 import { setUser } from '@sentry/node'
 
 declare module 'h3' {
@@ -9,34 +9,35 @@ declare module 'h3' {
   }
 }
 
-export default defineEventHandler(event => {
+export default defineEventHandler(async event => {
   const cookies = parseCookies(event)
   if (!cookies) {
     setUser(null)
     return
   }
-  const config = useRuntimeConfig()
-  const { cookieKey } = config.public.auth
+  const {
+    auth: { sessionAbsoluteMaxMinutes },
+    public: {
+      auth: { cookieKey, tokenValidationInMinutes }
+    }
+  } = useRuntimeConfig()
   const sessionToken = cookies[cookieKey]
   if (!sessionToken) {
     setUser(null)
     return
   }
-  const {
-    auth: { jwtKey }
-  } = config
 
-  let payload
-  try {
-    payload = verifyJwt(sessionToken, jwtKey)
-  } catch {
+  const session = await validateSession(sessionToken, {
+    slidingExpiryMinutes: tokenValidationInMinutes,
+    absoluteMaxMinutes: sessionAbsoluteMaxMinutes
+  })
+
+  if (!session) {
     deleteCookie(event, cookieKey)
     setUser(null)
     return
   }
 
-  const { user } = payload
-
-  event.context.auth = { userId: user.id }
-  setUser({ id: user.id })
+  event.context.auth = { userId: session.userId }
+  setUser({ id: session.userId })
 })
