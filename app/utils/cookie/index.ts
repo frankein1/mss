@@ -16,7 +16,7 @@ export const cookieOptions = ({
   return {
     path: '/',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     expires: new Date(Date.now() + minutesToMillis(expiresInMinutes)),
     sameSite: 'lax'
   }
