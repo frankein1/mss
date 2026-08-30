@@ -1,29 +1,36 @@
 // @ts-check
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-/**
- * Interactive-transaction ancestor selector.
- *
- * Matches any node inside a `.$transaction(async (tx) => { ... })` callback,
- * regardless of the callback parameter name.
- *
- * Scoped to the interactive form (arg 0 is a function) so it doesn't double-fire
- * on the array form `.$transaction([...])`, whose inner calls are already covered
- * by the receiver-anchored selectors (prismaClient.* / *Repo.* / *Repo.prisma.*).
- */
-const INTERACTIVE_TX_ANCESTOR =
+const CALL_SHAPES = [
+  // Matches prismaClient.<model>.<method>({...})
+  'CallExpression[callee.object.object.name="prismaClient"]',
+  // Matches *Repo.<method>({...})
+  'CallExpression[callee.object.name=/Repo$/]',
+  // Matches *Repo.prisma.<method>({...})
+  'CallExpression[callee.object.object.name=/Repo$/][callee.object.property.name="prisma"]',
+  /**
+   * Interactive-transaction ancestor selector.
+   *
+   * Matches any node inside a `.$transaction(async (tx) => { ... })` callback,
+   * regardless of the callback parameter name.
+   *
+   * Scoped to the interactive form (arg 0 is a function) so it doesn't double-fire
+   * on the array form `.$transaction([...])`, whose inner calls are already covered
+   * by the receiver-anchored selectors (prismaClient.* / *Repo.* / *Repo.prisma.*).
+   */
   'CallExpression[callee.property.name="$transaction"][arguments.0.type=/FunctionExpression$/]'
-
-const prismaIncludeSelectors = [
-  // Matches prismaClient.<model>.<method>({include: {...}})
-  'CallExpression[callee.object.object.name="prismaClient"] Property[key.name="include"]',
-  // Matches *Repo.<method>({include: {...}})
-  'CallExpression[callee.object.name=/Repo$/] Property[key.name="include"]',
-  // Matches *Repo.prisma.<method>({include: {...}})
-  'CallExpression[callee.object.object.name=/Repo$/][callee.object.property.name="prisma"] Property[key.name="include"]',
-  // Matches *.$transaction(async (tx) => {include: {...}})
-  `${INTERACTIVE_TX_ANCESTOR} Property[key.name="include"]`
 ]
+
+/**
+ * @param {string} clause key name for the clause to prevent
+ * @param {string} message error message
+ */
+function prismaRestrictions(clause, message) {
+  return CALL_SHAPES.map(shape => ({
+    selector: `${shape} Property[key.name="${clause}"]`,
+    message
+  }))
+}
 
 /**
  * Prevent Prisma `include`, favor `select` to avoid overfetching.
@@ -31,42 +38,44 @@ const prismaIncludeSelectors = [
  * Matches: prismaClient.<model>.<method>(...), *Repo.<method>(...),
  * *Repo.prisma.<method>(...), and any call inside an interactive $transaction.
  */
-const prismaIncludeRestrictions = prismaIncludeSelectors.map(selector => ({
-  selector,
-  message:
-    'Avoid `include` on Prisma queries — use `select` and enumerate only the fields you need. If you have a genuinely new legitimate case, add an `eslint-disable-next-line no-restricted-syntax` comment with a one-line justification and flag it for review.'
-}))
-
-const encryptedDataKeySelectors = [
-  'CallExpression[callee.object.object.name="prismaClient"] Property[key.name="select"] Property[key.name="encryptedDataKey"]',
-  'CallExpression[callee.object.name=/Repo$/] Property[key.name="select"] Property[key.name="encryptedDataKey"]',
-  'CallExpression[callee.object.object.name=/Repo$/][callee.object.property.name="prisma"] Property[key.name="select"] Property[key.name="encryptedDataKey"]',
-  `${INTERACTIVE_TX_ANCESTOR} Property[key.name="select"] Property[key.name="encryptedDataKey"]`,
-  'CallExpression[callee.object.object.name="prismaClient"] Property[key.name="omit"] Property[key.name="encryptedDataKey"]',
-  'CallExpression[callee.object.name=/Repo$/] Property[key.name="omit"] Property[key.name="encryptedDataKey"]',
-  'CallExpression[callee.object.object.name=/Repo$/][callee.object.property.name="prisma"] Property[key.name="omit"] Property[key.name="encryptedDataKey"]',
-  `${INTERACTIVE_TX_ANCESTOR} Property[key.name="omit"] Property[key.name="encryptedDataKey"]`
-]
+const prismaIncludeRestrictions = prismaRestrictions(
+  'include',
+  'Avoid `include` on Prisma queries — use `select` and enumerate only the fields you need. If you have a genuinely new legitimate case, add an `eslint-disable-next-line no-restricted-syntax` comment with a one-line justification and flag it for review.'
+)
 
 /**
- * Forbid access to Document.encryptedDataKey for security reasons.
+ * Forbid access to specific Prisma fields for security reasons.
  *
- * The Prisma client omits it by default (see server/prisma/prismaClient.ts).
+ * The Prisma client should omit them by default (see server/prisma/prismaClient.ts).
  * These rules block the two ways to re-expose it:
- * - `select: { encryptedDataKey: true }`
- * - `omit: { encryptedDataKey: false }`
+ * - `select: { fieldName: true }`
+ * - `omit: { fieldName: false }`
  *
  * across four call shapes: prismaClient.*, *Repo.*, *Repo.prisma.*,
  * and any call inside an interactive $transaction.
  *
  * Not covered: raw queries (`$queryRaw`, `$queryRawUnsafe`, `$executeRaw*`)
+ * @param {string} fieldAndTableName
  */
-const encryptedDataKeyRestrictions = encryptedDataKeySelectors.map(
-  selector => ({
-    selector,
-    message:
-      'Access to Document.encryptedDataKey is forbidden. The Prisma client omits this field by default (server/prisma/prismaClient.ts). Do not `select` it or `omit: false` it. If you have a genuinely new legitimate case, add an `eslint-disable-next-line no-restricted-syntax` comment with a one-line justification and flag it for security review.'
-  })
+function forbiddenFieldRestrictions(fieldAndTableName) {
+  const fieldName = fieldAndTableName.split('.')[1]
+  const CLAUSES = ['select', 'omit']
+  const message = `Access to ${fieldAndTableName} is forbidden. The Prisma client omits this field by default (server/prisma/prismaClient.ts). Do not 'select' it or 'omit: false' it. If you have a genuinely new legitimate case, add an 'eslint-disable-next-line no-restricted-syntax' comment with a one-line justification and flag it for security review.`
+
+  return CALL_SHAPES.flatMap(shape =>
+    CLAUSES.map(clause => ({
+      selector: `${shape} Property[key.name="${clause}"] Property[key.name="${fieldName}"]`,
+      message
+    }))
+  )
+}
+
+const encryptedDataKeyRestrictions = forbiddenFieldRestrictions(
+  'Document.encryptedDataKey'
+)
+
+const tokenHashRestrictions = forbiddenFieldRestrictions(
+  'AuthSession.tokenHash'
 )
 
 export default withNuxt(
@@ -100,7 +109,8 @@ export default withNuxt(
       'no-restricted-syntax': [
         'warn',
         ...prismaIncludeRestrictions,
-        ...encryptedDataKeyRestrictions
+        ...encryptedDataKeyRestrictions,
+        ...tokenHashRestrictions
       ]
     }
   }

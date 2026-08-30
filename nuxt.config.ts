@@ -206,6 +206,9 @@ export default defineNuxtConfig({
     auth: {
       jwtKey: process.env.NUXT_AUTH_JWT_KEY,
       sessionSecret: process.env.NUXT_AUTH_SESSION_SECRET,
+      sessionAbsoluteMaxMinutes: parseInt(
+        process.env.NUXT_AUTH_SESSION_ABSOLUTE_MAX_MINUTES || '240'
+      ),
       proconnectIssuer: process.env.NUXT_AUTH_PROCONNECT_ISSUER_URL,
       proconnectClientId: process.env.NUXT_AUTH_PROCONNECT_CLIENT_ID,
       proconnectClientSecret: process.env.NUXT_AUTH_PROCONNECT_CLIENT_SECRET,

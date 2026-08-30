@@ -18,6 +18,9 @@ function createPrismaClient() {
     omit: {
       document: {
         encryptedDataKey: true
+      },
+      authSession: {
+        tokenHash: true
       }
     }
   })
