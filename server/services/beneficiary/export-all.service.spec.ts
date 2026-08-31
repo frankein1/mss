@@ -214,6 +214,20 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
   })
 })
 
+describe('Beneficiary - Export All Service - Worksheets by role', () => {
+  test('should not add the additional worksheets for a non structure manager', async ({
+    users
+  }) => {
+    const ctx = createSecurityContext(users.socialWorker)
+
+    const workbook = await exportWorkbook({ ctx, input })
+
+    expect(workbook.getWorksheet('Bénéficiaires')).toBeDefined()
+    expect(workbook.getWorksheet('Partenaires intervenants')).toBeUndefined()
+    expect(workbook.getWorksheet('Dispositifs')).toBeUndefined()
+  })
+})
+
 describe('Beneficiary - Export All Service - External organisations columns', () => {
   test('should export the external organisations of the beneficiary', async ({
     users
