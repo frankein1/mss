@@ -30,9 +30,11 @@
 
     <section class="feature-section fr-p-6v fr-p-md-8v fr-mb-4v">
       <h2 class="fr-h4">Contexte de la synthèse d'entretien</h2>
-      <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--top">
+      <div
+        class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom followup-form-container"
+      >
         <div class="fr-col-12">
-          <div class="btn-container md-row-btn-container">
+          <div class="btn-container sm-row-btn-container">
             <VeeCheckbox
               :label="followupFieldLabels.firstFollowup"
               name="firstFollowup"
@@ -125,24 +127,27 @@
                 : undefined
             "
           />
-          <div class="fr-mt-2v">
-            <NuxtLink
-              v-if="application.edit.structure"
-              :to="routes.structure.AppStructureCustomObjects.path()"
-              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-              @click="
-                matomo.trackEvent(
-                  EventCategory.FollowupForm,
-                  FollowupFormAction.SocialSupportSubjectLink
-                )
-              "
-            >
-              Je personnalise les objets d'accompagnement de ma structure
-            </NuxtLink>
-          </div>
         </div>
 
-        <div class="fr-col-12 fr-col-lg-6">
+        <div
+          class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right custom-object-link"
+        >
+          <NuxtLink
+            v-if="application.edit.structure"
+            :to="routes.structure.AppStructureCustomObjects.path()"
+            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+            @click="
+              matomo.trackEvent(
+                EventCategory.FollowupForm,
+                FollowupFormAction.SocialSupportSubjectLink
+              )
+            "
+          >
+            Je personnalise les objets d'accompagnement de ma structure
+          </NuxtLink>
+        </div>
+
+        <div class="fr-col-12 fr-col-lg-6 support-program">
           <VeeSelect
             name="supportProgramId"
             :label="followupFieldLabels.supportProgramId"
@@ -181,7 +186,25 @@
             @change-value="onPrescribingOrganization"
           />
         </div>
-        <div class="fr-col-12 fr-col-lg-6">
+
+        <div
+          class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right partner-link"
+        >
+          <NuxtLink
+            :to="routes.structure.AppPartners.path()"
+            class="fr-link fr-icon-info-fill fr-link--icon-left"
+            @click="
+              matomo.trackEvent(
+                EventCategory.FollowupForm,
+                FollowupFormAction.PartnersLink
+              )
+            "
+          >
+            Données issues de l'annuaire de partenaires
+          </NuxtLink>
+        </div>
+
+        <div class="fr-col-12 fr-col-lg-6 prescribing-organization-contact">
           <VeeSelect
             class="fr-mb-0"
             name="prescribingOrganizationContactId"
@@ -189,20 +212,6 @@
             :label="followupFieldLabels.prescribingOrganizationContactId"
             :options="withEmptyValue(prescribingOrganizationContactOptions)"
           />
-          <div class="fr-mt-2v">
-            <NuxtLink
-              :to="routes.structure.AppPartners.path()"
-              class="fr-link fr-icon-info-fill fr-link--icon-left"
-              @click="
-                matomo.trackEvent(
-                  EventCategory.FollowupForm,
-                  FollowupFormAction.PartnersLink
-                )
-              "
-            >
-              Données issues de l'annuaire de partenaires
-            </NuxtLink>
-          </div>
         </div>
       </div>
     </section>
@@ -565,12 +574,38 @@
     }
   }
 
-  .md-row-btn-container {
+  .sm-row-btn-container {
     flex-direction: column;
     align-items: flex-start;
 
     @include dsfr-media-query.respond-from('sm') {
       flex-direction: row;
+    }
+  }
+
+  .followup-form-container {
+    // Change link items order after LG breakpoint
+
+    @include dsfr-media-query.respond-from('lg') {
+      .custom-object-link {
+        order: 1;
+      }
+
+      .custom-object-link ~ * {
+        order: 2;
+      }
+
+      .support-program {
+        order: 0;
+      }
+
+      .partner-link {
+        order: 3;
+      }
+
+      .prescribing-organization-contact {
+        order: 2;
+      }
     }
   }
 
