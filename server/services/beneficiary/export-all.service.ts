@@ -64,8 +64,8 @@ const BENEFICIARY_EXPORTED_FIELDS_COMPLETE: (keyof typeof beneficiaryFieldLabels
     'addressComplement',
     'zipcode',
     'city',
-    'region',
     'department',
+    'region',
     'district',
     'qpv',
     'accommodationZone',
@@ -126,8 +126,9 @@ export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryField
     'addressComplement',
     'zipcode',
     'city',
-    'region',
     'department',
+    'region',
+    'district',
     'phone1',
     'phone2',
     'email',
@@ -135,6 +136,7 @@ export const BENEFICIARY_EXPORTED_FIELDS_PARTIAL: (keyof typeof beneficiaryField
     'minorChildren',
     'majorChildren',
     'subjects',
+    'referents',
     'created',
     'fileNumber'
   ]
@@ -334,6 +336,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     city: general.city || '',
     region: general.region || '',
     department: general.department || '',
+    district: general.district || '',
     phone1: general.phone1 || '',
     phone2: general.phone2 || '',
     email: general.email || '',
@@ -347,15 +350,20 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     fileNumber: beneficiary.fileNumber
   }
 
+  const referents = beneficiary.referents
+    .map(referent => formatUserDisplayName(referent))
+    .join(', ')
+
   if (userRole !== UserRole.StructureManager) {
-    return exported
+    return {
+      ...exported,
+      referents
+    }
   }
 
   return {
     ...exported,
-    referents: beneficiary.referents
-      .map(referent => formatUserDisplayName(referent))
-      .join(', '),
+    referents,
     aidantConnectAuthorized: getBooleanOrEmpty(
       beneficiary.aidantConnectAuthorized
     ),
@@ -363,7 +371,6 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     nationality: general.nationality
       ? nationalityKeys.byKey[general.nationality]
       : '',
-    district: general.district || '',
     qpv: getBooleanOrEmpty(general.qpv) || '',
     weddingDate: taxHouseholds?.weddingDate || '',
     divorceDate: taxHouseholds?.divorceDate || '',
