@@ -1,6 +1,6 @@
 <template>
   <h3 class="fr-h4">Contexte du dossier d'instruction</h3>
-  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
     <div class="fr-col-12">
       <VeeInput
         name="date"
@@ -120,19 +120,22 @@
               : undefined
           "
         />
-        <div class="fr-mt-2v">
-          <NuxtLink
-            v-if="application.edit.structure"
-            :to="routes.structure.AppStructureCustomObjects.path()"
-            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-            >Je personnalise les objets d'accompagnement de ma structure
-          </NuxtLink>
-        </div>
+      </div>
+
+      <div
+        class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right custom-object-link"
+      >
+        <NuxtLink
+          v-if="application.edit.structure"
+          :to="routes.structure.AppStructureCustomObjects.path()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+          >Je personnalise les objets d'accompagnement de ma structure
+        </NuxtLink>
       </div>
 
       <div
         v-if="hasSupportProgramNames"
-        class="fr-col-12 fr-col-lg-6"
+        class="fr-col-12 fr-col-lg-6 support-program"
       >
         <VeeSelect
           name="supportProgramId"
@@ -158,17 +161,18 @@
           :options="withEmptyValue(partnerOrganizationOptions)"
           @change-value="onPrescribingOrganization"
         />
-        <div class="fr-mt-2v">
-          <NuxtLink
-            :to="routes.structure.AppPartners.path()"
-            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-          >
-            Données issues de l'annuaire de partenaires
-          </NuxtLink>
-        </div>
       </div>
 
-      <div class="fr-col-12 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right partner-link">
+        <NuxtLink
+          :to="routes.structure.AppPartners.path()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+        >
+          Données issues de l'annuaire de partenaires
+        </NuxtLink>
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6 prescribing-organization-contact">
         <VeeSelect
           name="prescribingOrganizationContactId"
           :disabled="prescribingOrganizationContactIsDisabled"
@@ -385,6 +389,33 @@
 </script>
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
+  // Change link items order after LG breakpoint
+  @include dsfr-media-query.respond-from('lg') {
+    .custom-object-link {
+      order: 1;
+    }
+
+    .custom-object-link ~ * {
+      order: 2;
+    }
+
+    .support-program {
+      order: 0;
+    }
+
+    .partner-link {
+      order: 3;
+    }
+
+    .partner-link ~ * {
+      order: 4;
+    }
+
+    .prescribing-organization-contact {
+      order: 2;
+    }
+  }
 
   :deep(.combobox-wrapper.fr-input-group) {
     margin-bottom: 0;
