@@ -197,11 +197,12 @@ export const exportWorkbook = async ({
     }
   })
 
-  // 3 add the contributing partners worksheet
-  addContributingPartnersWorksheet(workbook, beneficiaries)
-
-  // 4 add the support programs worksheet
-  addSupportProgramsWorksheet(workbook, beneficiaries)
+  // 3 add the contributing partners and support programs worksheets,
+  // only available to structure managers
+  if (ctx.user.role === UserRole.StructureManager) {
+    addContributingPartnersWorksheet(workbook, beneficiaries)
+    addSupportProgramsWorksheet(workbook, beneficiaries)
+  }
 
   return workbook
 }
