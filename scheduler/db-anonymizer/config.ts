@@ -570,6 +570,7 @@ const configNotification: Record<
   structure_id: true,
   beneficiary_id: true,
   social_support_id: true,
+  support_program_id: true,
   item_created_by_id: true,
   document_id: true,
   comment_id: true,

@@ -48,3 +48,11 @@ export function getSocialSupportNotificationRecipientIds({
   }
   return ids
 }
+
+export function getSupportProgramNotificationRecipientIds({
+  referents
+}: {
+  referents: UserPayload[]
+}): Set<string> {
+  return getEligibleReferentIds(referents)
+}

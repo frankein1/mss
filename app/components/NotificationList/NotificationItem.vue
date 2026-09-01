@@ -147,6 +147,21 @@
         props.notification.beneficiary.id
       )
     }
+    if (
+      (props.notification.type === NotificationType.SupportProgramEndToday ||
+        props.notification.type ===
+          NotificationType.SupportProgramEndSixtyDays) &&
+      props.notification.beneficiary
+    ) {
+      return routes.file.AppFile.path(
+        props.notification.beneficiary.familyFile.id,
+        {
+          tab: BeneficiaryTab.Details,
+          beneficiaryId: props.notification.beneficiary.id,
+          originPage: routes.user.AppOverview.name
+        }
+      )
+    }
     if (props.notification.beneficiary) {
       return routes.file.AppFile.path(
         props.notification.beneficiary.familyFile.id,
