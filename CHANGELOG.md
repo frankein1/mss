@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.65.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.64.0...v1.65.0) (2026-09-01)
+
+
+### Features
+
+* **bénéficiaires:** export des partenaires intervenants ([afe930c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/afe930c47489a25ed6b85541a9f92af523c83921)), closes [#1165](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1165)
+* **dispositif:** gestion dispositifs dans les dossiers, accompagnements et statistiques ([d405ac2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d405ac225adcf2ec825ee1b14ac6d847ccf5152b)), closes [#889](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/889)
+* **dispositifs:** exports ([e14cdb8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e14cdb86a09c3e29f937e448f41e1edfa145db8a)), closes [#1176](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1176)
+* **statistiques:** ajout d'un filtre Employeur ([3b3bcff](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3b3bcff4cacd1268e3e5ee83feb1e20c38d66570)), closes [#1162](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1162)
+
+
+### Bug Fixes
+
+* **bénéficaires:** export quartier et référents à tous les rôles ([9570d2d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9570d2d146fc01c29a43156e22cdd041e3a9efcb))
+* **bénéficiaires:** formulaire Bénéficiaire > Partenaire ([7c21392](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c21392825de406e167182faa219693ea89d6840)), closes [#1174](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1174)
+* **dispositifs:** améliorations et résolutions de bugs UI ([c0fafd9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c0fafd946e004e8e83af30c661d0333e74e3c7a1)), closes [#1138](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1138)
+* **dispositifs:** améliorations UI ([a5b48da](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a5b48dafe90d1e88c59a69d2eccbae2adb4b2eb4)), closes [#1170](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1170)
+* **dispositifs:** améliorations UI ([dd3b76b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dd3b76b0f3787df5c460604d15c98678b36f8dd1)), closes [#1138](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1138)
+* **dispositifs:** améliorer l'ordonnancement ([62762c6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/62762c66f007ab596c4157adc36efe479a892e0d)), closes [#1171](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1171)
+* **dispositifs:** suppression des colonnes vides ([b05cf04](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b05cf04af1f998a0b395661fcf2aee2d2da48598))
+* **export bénéficiaires:** supprimer onglets innacessibles ([a0b056a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a0b056a625141dfa6b02ce3e704717fe2a24a157)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/work_items/1165#note_3761073760](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/work_items/1165/issues/note_3761073760)
+* **statistiques:** déplacement du filtre Employeur ([1e6e5cd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e6e5cdd831ef4e245ec268877f088b6e5c462f6)), closes [#1172](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1172)
+* **ui:** améliorations des formulaires accompagnement ([addae64](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/addae640e6888920930901c0488b280eb15d5d74)), closes [#1169](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1169)
+
 ## [1.64.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.63.0...v1.64.0) (2026-08-20)
 
 
