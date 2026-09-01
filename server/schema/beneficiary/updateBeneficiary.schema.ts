@@ -38,7 +38,8 @@ import {
   numeroPegaseContraint,
   dateOrEmpty,
   openText,
-  limitedStringConstraint
+  limitedStringConstraint,
+  uuidOrEmpty
 } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
@@ -233,16 +234,8 @@ export const updateBeneficiaryExternalOrganisationsSchema = z.object({
   representative: limitedStringConstraint(null, 100).nullish(),
   orientationType: withEmptyValueOptionalNativeEnum(BeneficiaryOrientationType),
   orientationStructure: limitedStringConstraint(null, 200).nullish(),
-  prescribingOrganizationId: z
-    .string()
-    .uuid()
-    .nullish()
-    .transform(v => v || null),
-  prescribingOrganizationContactId: z
-    .string()
-    .uuid()
-    .nullish()
-    .transform(v => v || null),
+  prescribingOrganizationId: uuidOrEmpty,
+  prescribingOrganizationContactId: uuidOrEmpty,
   contributingPartners: z
     .array(contributingPartnerSchema)
     .max(50, 'Veuillez renseigner au maximum 50 partenaires.')

@@ -15,8 +15,7 @@
           :label="beneficiaryFieldLabels.prescribingOrganizationId"
           hint="Issu de l'annuaire des partenaires de la structure"
           name="prescribingOrganizationId"
-          :options="withEmptyValue(partnerOrganizationOptions)"
-          @change-value="onPrescribingOrganizationChange"
+          :options="partnerOrganizationOptions"
         />
       </div>
       <div class="fr-col-12 fr-col-xl-6">
@@ -185,9 +184,9 @@
     return toOptions(selectedPrescribingOrg.value.contacts || [], 'id', 'name')
   })
 
-  const onPrescribingOrganizationChange = () => {
+  watch(prescribingOrganizationId, () => {
     setPrescribingContactId(null)
-  }
+  })
 
   /**
    * Contributing partner helpers
