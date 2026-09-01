@@ -1,3 +1,4 @@
+import { defineEventHandler, parseCookies, deleteCookie } from 'h3'
 import { validateSession } from '~~/server/lib/session'
 import { setUser } from '@sentry/node'
 

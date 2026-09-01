@@ -4,20 +4,24 @@ type CookieOptions = {
   path: string
   httpOnly: boolean
   secure: boolean
-  expires: Date
+  expires?: Date
   sameSite: boolean | 'strict' | 'lax' | 'none'
 }
 
-export const cookieOptions = ({
-  expiresInMinutes
-}: {
-  expiresInMinutes: number
-}): CookieOptions => {
+export const cookieOptions = (
+  {
+    expiresInMinutes
+  }: {
+    expiresInMinutes: number | undefined
+  } = { expiresInMinutes: undefined }
+): CookieOptions => {
   return {
     path: '/',
     httpOnly: true,
     secure: true,
-    expires: new Date(Date.now() + minutesToMillis(expiresInMinutes)),
+    ...(expiresInMinutes && {
+      expires: new Date(Date.now() + minutesToMillis(expiresInMinutes))
+    }),
     sameSite: 'lax'
   }
 }

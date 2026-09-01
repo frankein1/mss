@@ -275,7 +275,7 @@ export default defineNuxtConfig({
       appUrl: process.env.NUXT_PUBLIC_APP_URL,
       landingPageUrl: process.env.NUXT_PUBLIC_LANDING_PAGE_URL,
       auth: {
-        cookieKey: 'MSS_SESSION_TOKEN',
+        cookieKey: '__Host-MSS_SESSION_TOKEN',
         tokenValidationInMinutes: parseInt(
           process.env.TOKEN_VALIDATION_IN_MINUTES || '60'
         )

@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { UserStatus, UserActivityType } from '@prisma/client'
 import pkg from 'jsonwebtoken'
-import { signJwt } from '~~/server/lib/jwt'
+import { createSession } from '~~/server/lib/session'
 import { getProConnectClient } from '~~/server/lib/proconnect.client'
 import { structureContextSelect } from '~~/server/utils/fetchUserContext'
 import type {
@@ -27,8 +27,7 @@ const {
     proconnectProvider,
     proconnectIssuer,
     proconnectClientId,
-    proconnectSigningAlgorithm,
-    jwtKey
+    proconnectSigningAlgorithm
   },
   public: {
     mssEnvironment,
@@ -220,10 +219,13 @@ export default defineEventHandler(async event => {
     updateEmail(user.id, email)
   }
 
-  // Generate MSS token
   const { id, firstAccess } = user
 
-  const sessionToken = signJwt({ id }, jwtKey, tokenValidationInMinutes)
+  const { token } = await createSession({
+    userId: id,
+    userAgent: getHeader(event, 'user-agent') ?? null,
+    slidingExpiryMinutes: tokenValidationInMinutes
+  })
 
   const now = new Date()
   const data: Prisma.UserUpdateInput = {
@@ -249,12 +251,7 @@ export default defineEventHandler(async event => {
     data
   })
 
-  setCookie(
-    event,
-    cookieKey,
-    sessionToken,
-    cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
-  )
+  setCookie(event, cookieKey, token, cookieOptions())
 
   // The login activities are traced in the DB
   await addUserActivity({

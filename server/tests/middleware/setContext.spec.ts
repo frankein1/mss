@@ -48,7 +48,7 @@ describe('SetContext - Session Lookup', () => {
     })
     sessionIds.push(sessionId)
 
-    const event = createMockEvent(`MSS_SESSION_TOKEN=${token}`)
+    const event = createMockEvent(`__Host-MSS_SESSION_TOKEN=${token}`)
     await handler(event)
 
     expect(event.context.auth).toEqual({ userId })
@@ -68,7 +68,7 @@ describe('SetContext - Session Lookup', () => {
       data: { expiresAt: new Date(Date.now() - 1_000) }
     })
 
-    const event = createMockEvent(`MSS_SESSION_TOKEN=${token}`)
+    const event = createMockEvent(`__Host-MSS_SESSION_TOKEN=${token}`)
     await handler(event)
 
     expect(event.context.auth).toBeUndefined()
@@ -86,7 +86,7 @@ describe('SetContext - Session Lookup', () => {
   })
 
   test('an unknown token is rejected and the cookie is cleared', async () => {
-    const event = createMockEvent('MSS_SESSION_TOKEN=unknown-token')
+    const event = createMockEvent('__Host-MSS_SESSION_TOKEN=unknown-token')
     await handler(event)
 
     expect(event.context.auth).toBeUndefined()
