@@ -1,5 +1,7 @@
 <template>
-  <section class="sss">
+  <div class="feature-section bg-color-white">
+    <h2 class="fr-h4">Objets d'accompagnements</h2>
+
     <SocialSupportSubjectsEmpty v-if="subjects.length === 0" />
     <ul
       v-else
@@ -18,7 +20,7 @@
 
     <div
       v-if="application.edit.structure"
-      class="fr-grid-row fr-grid-row--right"
+      class="fr-grid-row fr-grid-row--right fr-mt-6v"
     >
       <NuxtLink
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
@@ -27,7 +29,7 @@
         Ajouter un accompagnement
       </NuxtLink>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">

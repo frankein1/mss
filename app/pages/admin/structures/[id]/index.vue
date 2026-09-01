@@ -1,5 +1,5 @@
 <template>
-  <PageContainer>
+  <PageContainer class="fr-p-5w">
     <PageTitle :title="title" />
 
     <AtomLoader
@@ -14,7 +14,6 @@
     />
     <div v-else-if="data">
       <StructureAdminInfo
-        class="fr-mb-5w"
         :structure="data.structure"
         @edit="editAdminInfo"
         @disable="disableStructure"
@@ -22,11 +21,13 @@
       />
 
       <StructureAdminUsers
+        class="fr-mb-5w"
         :structure-id="data.structure.id"
         :users="data.users"
-      ></StructureAdminUsers>
+      />
 
       <SocialSupportSubjects
+        class="fr-mb-5w"
         :subjects="data.socialSupportSubjects"
         :edit-path="routes.admin.AdminStructureSubjects.path(structureId)"
         @refresh="refresh"
@@ -64,7 +65,7 @@
     }
 
     modal.open(StructureDisableAlert, {
-      title: 'Désactiver une structure',
+      title: 'Désactiver la structure',
       structure: data.value.structure,
       finish: onDisable,
       cancel: onCancel
@@ -96,7 +97,7 @@
     }
 
     modal.open(StructureAdminInfoForm, {
-      title: 'Modifier les informations de ma structure',
+      title: 'Modifier les informations de la structure',
       structure: data.value.structure,
       validate: updateInfo
     })
