@@ -54,10 +54,10 @@ async function createNotifications(
       : dayjs().add(1, 'month').toDate()
 
   // endDate is nullable: the equality filter already excludes programs without an end date
-  const supportPrograms = await prismaClient.supportProgram.findMany({
+  const supportPrograms = (await prismaClient.supportProgram.findMany({
     select: supportProgramSelect,
     where: { endDate }
-  })
+  })) as SupportProgramForNotification[]
 
   const data = supportPrograms.flatMap(supportProgram =>
     Array.from(getRecipientIds(supportProgram)).map(recipientId => ({

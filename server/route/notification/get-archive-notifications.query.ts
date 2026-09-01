@@ -4,11 +4,7 @@ import type { ProtectedAppContext } from '~~/server/trpc'
 import { AllowSecurityCheck } from '~~/server/security/rules/types'
 import { NotificationRepo } from '~~/server/database'
 import { notificationTypeKeys } from '~~/client/options'
-import {
-  getDescription,
-  getDescriptionHint,
-  notificationInclude
-} from './utils'
+import { getDescription, getDescriptionHint, notificationSelect } from './utils'
 import { NotificationType } from '@prisma/client'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
@@ -23,7 +19,7 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
         ]
       }
     },
-    include: notificationInclude,
+    select: notificationSelect,
     orderBy: {
       created: 'desc'
     }

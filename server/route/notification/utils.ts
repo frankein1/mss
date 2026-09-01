@@ -1,9 +1,18 @@
-import type { Notification, SocialSupport, User } from '@prisma/client'
+import type { Notification, Prisma, SocialSupport, User } from '@prisma/client'
 import { SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUserDisplayName } from '~/utils/user'
 
-export const notificationInclude = {
+export const notificationSelect = {
+  id: true,
+  type: true,
+  created: true,
+  read: true,
+  detail: true,
+  archiveDate: true,
+  documentId: true,
+  socialSupportId: true,
+  supportProgramId: true,
   beneficiary: {
     select: {
       id: true,
@@ -34,9 +43,11 @@ export const notificationInclude = {
       content: true
     }
   }
-}
+} satisfies Prisma.NotificationSelect
 
-export function getDescription(notification: Notification) {
+export function getDescription(
+  notification: Pick<Notification, 'type' | 'created'>
+) {
   const created = dayjs(notification.created)
   const dateInAMonth = dayjs(notification.created).add(1, 'month')
 
@@ -93,7 +104,7 @@ export function getDescription(notification: Notification) {
 }
 
 export function getDescriptionHint(
-  notification: Notification & {
+  notification: Pick<Notification, 'type' | 'created' | 'archiveDate'> & {
     itemCreatedBy: Pick<User, 'firstName' | 'lastName'> | null
     socialSupport: Pick<SocialSupport, 'socialSupportType'> | null
     beneficiary: {
