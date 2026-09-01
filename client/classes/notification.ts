@@ -18,5 +18,5 @@ export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.ArchiveDueOneMonth]: 'ri-folder-close-line',
   [NotificationType.ArchiveDueSevenDays]: 'ri-folder-close-line',
   [NotificationType.SupportProgramEndToday]: 'fr-icon-calendar-event-line',
-  [NotificationType.SupportProgramEndOneMonth]: 'fr-icon-calendar-event-line'
+  [NotificationType.SupportProgramEndSixtyDays]: 'fr-icon-calendar-event-line'
 }

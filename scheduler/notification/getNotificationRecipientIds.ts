@@ -50,17 +50,9 @@ export function getSocialSupportNotificationRecipientIds({
 }
 
 export function getSupportProgramNotificationRecipientIds({
-  createdByIds,
   referents
 }: {
-  createdByIds: (string | null)[]
   referents: UserPayload[]
 }): Set<string> {
-  const ids = getEligibleReferentIds(referents)
-  for (const createdById of createdByIds) {
-    if (createdById !== null) {
-      ids.add(createdById)
-    }
-  }
-  return ids
+  return getEligibleReferentIds(referents)
 }

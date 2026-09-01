@@ -7,7 +7,7 @@
 
 
 ALTER TYPE "NotificationType" ADD VALUE 'SupportProgramEndToday';
-ALTER TYPE "NotificationType" ADD VALUE 'SupportProgramEndOneMonth';
+ALTER TYPE "NotificationType" ADD VALUE 'SupportProgramEndSixtyDays';
 
 -- AlterTable
 ALTER TABLE "notification" ADD COLUMN     "support_program_id" UUID;

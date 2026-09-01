@@ -150,11 +150,16 @@
     if (
       (props.notification.type === NotificationType.SupportProgramEndToday ||
         props.notification.type ===
-          NotificationType.SupportProgramEndOneMonth) &&
+          NotificationType.SupportProgramEndSixtyDays) &&
       props.notification.beneficiary
     ) {
-      return routes.beneficiary.AppBeneficiaryEditSupportPrograms.path(
-        props.notification.beneficiary.id
+      return routes.file.AppFile.path(
+        props.notification.beneficiary.familyFile.id,
+        {
+          tab: BeneficiaryTab.Details,
+          beneficiaryId: props.notification.beneficiary.id,
+          originPage: routes.user.AppOverview.name
+        }
       )
     }
     if (props.notification.beneficiary) {

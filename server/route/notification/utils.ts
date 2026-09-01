@@ -2,6 +2,7 @@ import type { Notification, Prisma, SocialSupport, User } from '@prisma/client'
 import { SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUserDisplayName } from '~/utils/user'
+import { formatUTCTimestamp } from '~~/server/utils/formatUTCTimestamp'
 
 export const notificationSelect = {
   id: true,
@@ -50,6 +51,7 @@ export function getDescription(
 ) {
   const created = dayjs(notification.created)
   const dateInAMonth = dayjs(notification.created).add(1, 'month')
+  const dateInSixtyDays = dayjs(notification.created).add(60, 'day')
 
   switch (notification.type) {
     case 'DueDateOneMonth':
@@ -95,8 +97,11 @@ export function getDescription(
       )
     case 'SupportProgramEndToday':
       return getDateNotificationDescription(created, 'Fin de dispositif')
-    case 'SupportProgramEndOneMonth':
-      return getDateNotificationDescription(dateInAMonth, 'Fin de dispositif')
+    case 'SupportProgramEndSixtyDays':
+      return getDateNotificationDescription(
+        dateInSixtyDays,
+        'Fin de dispositif'
+      )
 
     default:
       return ''
@@ -177,7 +182,7 @@ export function getDescriptionHint(
     case 'DocumentExpirationOneMonth':
       return 'sur le document'
     case 'SupportProgramEndToday':
-    case 'SupportProgramEndOneMonth':
+    case 'SupportProgramEndSixtyDays':
       return 'sur le dispositif'
     default:
       return ''

@@ -37,7 +37,7 @@ export const jobs = {
    * Runs daily at 02:30 */
   disableInactiveStructures,
 
-  /** Creates notifications for social support due dates (today / in 1 month), help request end-of-support (today / in 1 month), document expirations (today / in 1 month), and support program end dates (today / in 1 month).
+  /** Creates notifications for social support due dates (today / in 1 month), help request end-of-support (today / in 1 month), document expirations (today / in 1 month), and support program end dates (today / in 60 days).
    * Runs daily at 03:00 */
   notificationCreator: async () => {
     await socialSupportNotifications.createDueInAMonthSocialSupportNotifications()
@@ -46,7 +46,7 @@ export const jobs = {
     await socialSupportNotifications.createEndOfSupportInAMonthHelpRequestNotifications()
     await documentNotifications.createDueInAMonthDocumentNotifications()
     await documentNotifications.createDueTodayDocumentNotifications()
-    await supportProgramNotifications.createEndInAMonthSupportProgramNotifications()
+    await supportProgramNotifications.createEndInSixtyDaysSupportProgramNotifications()
     await supportProgramNotifications.createEndTodaySupportProgramNotifications()
 
     // TO BE UNCOMMENTED WHEN RuntimeConfig issue is solved and when lastActivity has been migrated
