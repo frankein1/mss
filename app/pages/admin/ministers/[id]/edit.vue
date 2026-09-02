@@ -1,7 +1,6 @@
 <template>
-  <PageContainer>
+  <PageContainer class="fr-p-5w">
     <PageTitle
-      class="fr-mt-4v"
       :title="minister ? minister.firstName + ' ' + minister.lastName : '-'"
     />
     <div class="fr-grid-row fr-grid-row--gutters">

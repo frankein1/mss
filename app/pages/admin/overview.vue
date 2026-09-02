@@ -1,33 +1,31 @@
 <template>
-  <PageContainer>
+  <PageContainer class="fr-p-5w">
     <PageTitle :title="routes.admin.AdminOverview.title" />
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-2">
+      <div class="fr-col-12 fr-col-md-6">
         <div class="fr-card">
           <div class="fr-card__body">
             <div class="fr-card__content">
-              <h3 class="fr-card__title">
-                <span>{{ data.users }}</span>
-              </h3>
-              <div>Utilisateurs</div>
+              <p class="fr-card__title">
+                {{ data.users }}
+              </p>
+              <h2 class="fr-text--lg">Utilisateurs</h2>
             </div>
           </div>
         </div>
       </div>
-      <div class="fr-col-2">
+      <div class="fr-col-12 fr-col-md-6">
         <div class="fr-card">
           <div class="fr-card__body">
             <div class="fr-card__content">
-              <h3 class="fr-card__title">
-                <span>{{ data.structures }}</span>
-              </h3>
-              <div>Structures</div>
+              <p class="fr-card__title">
+                {{ data.structures }}
+              </p>
+              <h2 class="fr-text--lg">Structures</h2>
             </div>
           </div>
         </div>
       </div>
-
-      <hr class="fr-col-12 fr-mt-5v" />
     </div>
   </PageContainer>
 </template>

@@ -22,7 +22,8 @@
         name: 'status',
         label: 'Statut',
         options: withEmptyValue(emailStatusKeys.options, 'Tous les statuts'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        alwaysExpanded: true
       }
     ]
     return filters

@@ -40,7 +40,9 @@
             <td>{{ structure.city }}</td>
             <td>{{ formatDate(structure.created) }}</td>
             <td>
-              <span :class="structure.isInactive ? 'fr-badge--error' : ''">
+              <span
+                :class="structure.isInactive ? 'fr-badge fr-badge--error' : ''"
+              >
                 {{ formatDate(structure.lastAccess) || 'Aucune' }}
               </span>
               <span v-if="structure.isInactive">

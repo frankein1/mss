@@ -1,12 +1,8 @@
 <template>
-  <PageContainer>
-    <PageTitle
-      class="fr-mt-4v"
-      title="Ajouter un ministre"
-    />
-    <div
-      class="fr-container fr-mt-6v fr-grid-row fr-grid-row--gutters fr-mt-3w"
-    >
+  <PageContainer class="fr-p-5w">
+    <PageTitle :title="routes.admin.AdminMinisterAdd.title" />
+
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <div class="main-container fr-p-5w">
           <AdminMinisterForm
