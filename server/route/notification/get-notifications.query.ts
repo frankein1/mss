@@ -7,11 +7,7 @@ import { AllowSecurityCheck } from '~~/server/security/rules/types'
 import { NotificationRepo } from '~~/server/database'
 import { takeAndSkipFromPagination } from '~/utils/table'
 import { notificationTypeKeys } from '~~/client/options'
-import {
-  getDescription,
-  getDescriptionHint,
-  notificationInclude
-} from './utils'
+import { getDescription, getDescriptionHint, notificationSelect } from './utils'
 
 const handler = async ({
   ctx: { user },
@@ -34,7 +30,7 @@ const handler = async ({
   const [notifications, totalCount] = await Promise.all([
     NotificationRepo.findMany(user, {
       where,
-      include: notificationInclude,
+      select: notificationSelect,
       orderBy: {
         created: 'desc'
       },
@@ -48,6 +44,7 @@ const handler = async ({
     id: n.id,
     documentId: n.documentId,
     socialSupportId: n.socialSupportId,
+    supportProgramId: n.supportProgramId,
     type: n.type,
     beneficiary: n.beneficiary,
     created: n.created,

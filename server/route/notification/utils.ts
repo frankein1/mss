@@ -1,9 +1,19 @@
-import type { Notification, SocialSupport, User } from '@prisma/client'
+import type { Notification, Prisma, SocialSupport, User } from '@prisma/client'
 import { SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { formatUserDisplayName } from '~/utils/user'
+import { formatUTCTimestamp } from '~~/server/utils/formatUTCTimestamp'
 
-export const notificationInclude = {
+export const notificationSelect = {
+  id: true,
+  type: true,
+  created: true,
+  read: true,
+  detail: true,
+  archiveDate: true,
+  documentId: true,
+  socialSupportId: true,
+  supportProgramId: true,
   beneficiary: {
     select: {
       id: true,
@@ -34,11 +44,14 @@ export const notificationInclude = {
       content: true
     }
   }
-}
+} satisfies Prisma.NotificationSelect
 
-export function getDescription(notification: Notification) {
+export function getDescription(
+  notification: Pick<Notification, 'type' | 'created'>
+) {
   const created = dayjs(notification.created)
   const dateInAMonth = dayjs(notification.created).add(1, 'month')
+  const dateInSixtyDays = dayjs(notification.created).add(60, 'day')
 
   switch (notification.type) {
     case 'DueDateOneMonth':
@@ -82,6 +95,13 @@ export function getDescription(notification: Notification) {
         'Expiration dans un mois',
         'Expiration'
       )
+    case 'SupportProgramEndToday':
+      return getDateNotificationDescription(created, 'Fin de dispositif')
+    case 'SupportProgramEndSixtyDays':
+      return getDateNotificationDescription(
+        dateInSixtyDays,
+        'Fin de dispositif'
+      )
 
     default:
       return ''
@@ -89,7 +109,7 @@ export function getDescription(notification: Notification) {
 }
 
 export function getDescriptionHint(
-  notification: Notification & {
+  notification: Pick<Notification, 'type' | 'created' | 'archiveDate'> & {
     itemCreatedBy: Pick<User, 'firstName' | 'lastName'> | null
     socialSupport: Pick<SocialSupport, 'socialSupportType'> | null
     beneficiary: {
@@ -161,6 +181,9 @@ export function getDescriptionHint(
     case 'DocumentExpirationToday':
     case 'DocumentExpirationOneMonth':
       return 'sur le document'
+    case 'SupportProgramEndToday':
+    case 'SupportProgramEndSixtyDays':
+      return 'sur le dispositif'
     default:
       return ''
   }
