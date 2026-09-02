@@ -3,7 +3,7 @@
     <AtomAlert
       v-if="!canBeDisabled(structure)"
       :alert-type="AlertType.Warning"
-      :message="`La structure a eu une activité dans les six derniers mois (dernière date d'activité ${formatDateToLocalTimezone(structure.lastAccess || structure.created)}). Vous ne pouvez donc pas la désactiver.`"
+      :message="`La structure est encore active (dernière date d'activité ${formatDateToLocalTimezone(structure.lastAccess || structure.created)}). Vous ne pouvez donc pas la désactiver.`"
     ></AtomAlert>
     <template v-else>
       <p class="fr-m-0">Cette structure sera désactivée.</p>

@@ -36,10 +36,17 @@ let beneficiaryId: string
 let beneficiaryFileNumber: string
 let familyFileId: string
 let documentContentIds: string[]
+let partnerOrganizationId: string
+let partnerOrganizationContactId: string
 
 beforeEach(async () => {
   const date = dayjs(dayjs()).subtract(7, 'month').toDate()
-  const structure = await createStructure(date)
+  // The structure must have gone through the whole alert email cycle to be disabled
+  // (see app/utils/structure/canBeDisabled.ts)
+  const structure = await createStructure(date, {
+    deactivationAlertEmail: 2,
+    deactivationAlertEmailDate: dayjs().subtract(5, 'week').toDate()
+  })
   const users = await createUsers(date, structure.id)
   const familyFile = await createFamilyFile(
     date,
@@ -76,7 +83,9 @@ beforeEach(async () => {
     users[TestFixtureUsers.Referent].id,
     users[TestFixtureUsers.StructureManager].id,
     franceTravailId,
-    franceTravailContactId
+    franceTravailContactId,
+    undefined,
+    beneficiary.documents.map(d => d.key)
   )
 
   structureId = structure.id
@@ -88,6 +97,8 @@ beforeEach(async () => {
   documentContentIds = beneficiary.documents.map(
     d => d.documentContent?.id || ''
   )
+  partnerOrganizationId = franceTravailId
+  partnerOrganizationContactId = franceTravailContactId
 })
 
 afterEach(async () => await resetDatabase(structureId))
@@ -95,6 +106,18 @@ afterEach(async () => await resetDatabase(structureId))
 test('Structure - Disable - Administrator should be able to deactivate structure and remove all personal data associated to it', async ({
   trpc
 }) => {
+  // Snapshot what the fixtures set up, so the assertions below cannot pass vacuously
+  const [linkedDocumentsBefore, subjectsBefore] = await Promise.all([
+    prismaClient.socialSupport.count({
+      where: { structureId, documents: { some: {} } }
+    }),
+    prismaClient.socialSupportSubject.count({
+      where: { ownedByStructureId: structureId }
+    })
+  ])
+  expect(linkedDocumentsBefore).toBeGreaterThan(0)
+  expect(subjectsBefore).toBeGreaterThan(0)
+
   await trpc.administrator.admin.disableStructure({ id: structureId })
 
   const structure = await prismaClient.structure.findUniqueOrThrow({
@@ -157,8 +180,13 @@ test('Structure - Disable - Administrator should be able to deactivate structure
       followup: {
         select: {
           duration: true,
-          updated: true
+          updated: true,
+          prescribingOrganizationId: true,
+          prescribingOrganizationContactId: true
         }
+      },
+      documents: {
+        select: { key: true }
       },
       fileInstruction: {
         select: {
@@ -166,19 +194,42 @@ test('Structure - Disable - Administrator should be able to deactivate structure
           refusalReason: true,
           type: true,
           updated: true,
+          instructorOrganizationId: true,
+          instructorOrganizationContactId: true,
           helpRequest: {
             select: {
               subjectId: true,
               financialSupport: true,
               askedAmount: true,
-              allocatedAmount: true
+              allocatedAmount: true,
+              prescribingOrganizationId: true,
+              prescribingOrganizationContactId: true
+            }
+          },
+          housingHelpRequest: {
+            select: {
+              prescribingOrganizationId: true,
+              prescribingOrganizationContactId: true,
+              isFirst: true,
+              firstOpeningDate: true,
+              askedHousing: true,
+              uniqueId: true,
+              taxHouseholdAdditionalInformation: true,
+              maxRent: true,
+              maxCharges: true,
+              housingType: true,
+              roomCount: true,
+              isPmr: true,
+              reason: true,
+              lowIncomeHousingType: true,
+              handlingDate: true
             }
           }
         }
       }
     }
   })
-  expect(socialSupports).toHaveLength(2)
+  expect(socialSupports).toHaveLength(3)
   socialSupports.map(ss => {
     expect(ss.privateSynthesis).toBeNull()
     expect(ss.status).toBeOneOf(['InProgress', 'Refused'])
@@ -197,12 +248,14 @@ test('Structure - Disable - Administrator should be able to deactivate structure
   const fileInstructions = socialSupports
     .filter(ss => ss.fileInstruction)
     .map(ss => ss.fileInstruction)
-  expect(fileInstructions).toHaveLength(1)
+  expect(fileInstructions).toHaveLength(2)
   fileInstructions.map(fi => {
     expect(fi?.externalStructure).toBe(false)
     expect(fi?.refusalReason).toBe(null)
-    expect(fi?.type).toBeOneOf(['Financial'])
+    expect(fi?.type).toBeOneOf(['Financial', 'Housing'])
     expect(fi?.updated).not.toBeNull()
+    expect(fi?.instructorOrganizationId).toBeNull()
+    expect(fi?.instructorOrganizationContactId).toBeNull()
   })
 
   const helpRequests = socialSupports
@@ -214,9 +267,55 @@ test('Structure - Disable - Administrator should be able to deactivate structure
     expect(hr?.financialSupport).toBe(true)
     expect(hr?.askedAmount).toBeNull()
     expect(hr?.allocatedAmount).toBeNull()
+    expect(hr?.prescribingOrganizationId).toBeNull()
+    expect(hr?.prescribingOrganizationContactId).toBeNull()
   })
 
-  // TODO add tests for housing help requests, social support subjects, partner organizatiosn and documents linked to social supports
+  const housingHelpRequests = socialSupports
+    .filter(ss => ss.fileInstruction?.housingHelpRequest)
+    .map(ss => ss.fileInstruction?.housingHelpRequest)
+  expect(housingHelpRequests).toHaveLength(1)
+  housingHelpRequests.map(hhr => {
+    expect(hhr?.prescribingOrganizationId).toBeNull()
+    expect(hhr?.prescribingOrganizationContactId).toBeNull()
+    expect(hhr?.isFirst).toBe(false)
+    expect(hhr?.firstOpeningDate).toBeNull()
+    expect(hhr?.askedHousing).toHaveLength(0)
+    expect(hhr?.uniqueId).toBeNull()
+    expect(hhr?.taxHouseholdAdditionalInformation).toBeNull()
+    expect(hhr?.maxRent).toBeNull()
+    expect(hhr?.maxCharges).toBeNull()
+    expect(hhr?.housingType).toHaveLength(0)
+    expect(hhr?.roomCount).toHaveLength(0)
+    expect(hhr?.isPmr).toBeNull()
+    expect(hhr?.reason).toBeNull()
+    expect(hhr?.lowIncomeHousingType).toHaveLength(0)
+    expect(hhr?.handlingDate).toBeNull()
+  })
+
+  // Documents are deleted, so the links to the social supports go with them
+  socialSupports.map(ss => expect(ss.documents).toHaveLength(0))
+
+  // Social support subjects and partner organizations carry no beneficiary data:
+  // they are kept, only the references from the social supports are cleared
+  const [
+    socialSupportSubjects,
+    partnerOrganization,
+    partnerOrganizationContact
+  ] = await Promise.all([
+    prismaClient.socialSupportSubject.findMany({
+      where: { ownedByStructureId: structureId }
+    }),
+    prismaClient.partnerOrganization.findUnique({
+      where: { id: partnerOrganizationId }
+    }),
+    prismaClient.partnerOrganizationContact.findUnique({
+      where: { id: partnerOrganizationContactId }
+    })
+  ])
+  expect(socialSupportSubjects).toHaveLength(subjectsBefore)
+  expect(partnerOrganization).not.toBeNull()
+  expect(partnerOrganizationContact).not.toBeNull()
 
   const beneficiaries = await prismaClient.beneficiary.findMany({
     where: { structureId }

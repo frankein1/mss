@@ -43,6 +43,8 @@ export const disableStructure = async ({
       id: true,
       created: true,
       lastAccess: true,
+      deactivationAlertEmail: true,
+      deactivationAlertEmailDate: true,
       name: true,
       users: {
         select: {
@@ -56,7 +58,7 @@ export const disableStructure = async ({
 
   if (!canBeDisabled(structure)) {
     throw forbiddenError(
-      `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}`
+      `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}, alert emails sent: ${structure.deactivationAlertEmail}, last alert email: ${formatDate(structure.deactivationAlertEmailDate) || 'none'}`
     )
   }
 
