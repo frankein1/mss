@@ -126,12 +126,6 @@ const adminMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
   })
 })
 
-/**
- * Auth procedure
- */
-
-export const authProcedure = t.procedure.use(userMiddleware)
-
 // FIXME: There is no way to infer the context type of protectedProcedure
 export type AuthContext = {
   event: H3Event

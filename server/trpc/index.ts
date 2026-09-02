@@ -7,7 +7,6 @@ export {
 export {
   protectedProcedure,
   adminProcedure,
-  authProcedure,
   router,
   type ProtectedAppContext,
   type AuthContext,
