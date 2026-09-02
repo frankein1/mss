@@ -3,7 +3,8 @@ import type { Prisma } from '@prisma/client'
 export enum FixtureStructure {
   Test = 0,
   Autun = 1,
-  Ministère = 2
+  Ministère = 2,
+  Inactive = 3
 }
 
 export const fixtureStructures = [
@@ -36,8 +37,22 @@ export const fixtureStructures = [
     city: 'Paris',
     zipcode: '75004',
     phone: '+33 1 22 33 44 56'
+  },
+  {
+    id: '9c1f2a44-0f3b-4c5d-9a11-7e8b6d4c3a20',
+    name: 'CCAS Inactif',
+    email: 'ccas-test-inactif@yopmail.com',
+    type: 'Ccas',
+    address: '2 rue Dormante',
+    city: 'Sommeil-les-Bains',
+    zipcode: '12345',
+    phone: '01 03 03 03 03',
+    lastAccess: new Date('2024-01-01'),
+    deactivationAlertEmail: 2,
+    deactivationAlertEmailDate: new Date('2024-07-01')
   }
 ] satisfies [
+  Prisma.StructureCreateManyInput,
   Prisma.StructureCreateManyInput,
   Prisma.StructureCreateManyInput,
   Prisma.StructureCreateManyInput
