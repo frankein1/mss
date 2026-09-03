@@ -12,6 +12,8 @@ import {
 } from '~~/test/server/fixtures'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { generateFileNumber } from '~/utils/generateFileNumber'
+import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import dayjs from 'dayjs'
 
 // Mock email sending context
@@ -381,3 +383,73 @@ async function resetDatabase(sid: string) {
     await prismaClient.structure.delete({ where: { id: sid } })
   }
 }
+
+test('Structure - Disable - Administrator cannot deactivate an active structure without a code', async ({
+  trpc
+}) => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: { lastAccess: new Date() }
+  })
+
+  await expect(() =>
+    trpc.administrator.admin.disableStructure({ id: structureId })
+  ).rejects.toThrow(/cannot disable/i)
+})
+
+test('Structure - Disable - Administrator cannot deactivate an active structure with a wrong code', async ({
+  trpc
+}) => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: { lastAccess: new Date() }
+  })
+  await trpc.administrator.admin.authorizeDisableStructure({ id: structureId })
+
+  await expect(() =>
+    trpc.administrator.admin.disableStructure({
+      id: structureId,
+      code: '00000000'
+    })
+  ).rejects.toThrow(/invalid code/i)
+
+  const structure = await prismaClient.structure.findUniqueOrThrow({
+    where: { id: structureId }
+  })
+  expect(structure.disabled).toBe(false)
+})
+
+test('Structure - Disable - Administrator can deactivate an active structure with the emailed code', async ({
+  trpc
+}) => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: { lastAccess: new Date() }
+  })
+
+  await trpc.administrator.admin.authorizeDisableStructure({ id: structureId })
+
+  const admin = await prismaClient.user.findUniqueOrThrow({
+    where: { id: fixturesUsers[FixtureUserRole.Administrator].id },
+    select: { authorizationCode: true, authorizationCodeValidity: true }
+  })
+  expect(admin.authorizationCode).toHaveLength(VALIDATION_CODE_LENGTH)
+  expect(admin.authorizationCodeValidity).not.toBeNull()
+
+  await trpc.administrator.admin.disableStructure({
+    id: structureId,
+    code: admin.authorizationCode!
+  })
+
+  const structure = await prismaClient.structure.findUniqueOrThrow({
+    where: { id: structureId }
+  })
+  expect(structure.disabled).toBe(true)
+
+  // The code is single use
+  const afterUse = await prismaClient.user.findUniqueOrThrow({
+    where: { id: fixturesUsers[FixtureUserRole.Administrator].id },
+    select: { authorizationCode: true }
+  })
+  expect(afterUse.authorizationCode).toBeNull()
+})

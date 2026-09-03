@@ -40,8 +40,11 @@
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import type { CreateStructureInput } from '~~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
+  import StructureDisableActiveModal from '~/components/Structure/StructureDisableActiveModal.vue'
+  import StructureDisableInactiveModal from '~/components/Structure/StructureDisableInactiveModal.vue'
   import { routes } from '~/utils/routes'
+  import type { AdminStructureInfo } from '~/components/Structure/types'
+  import { canBeDisabled } from '~/utils/structure'
 
   const title = routes.structure.AppStructure.title
 
@@ -60,14 +63,26 @@
     await trpcClient.admin.getStructure.useQuery({ id: structureId })
 
   function disableStructure() {
-    if (!data || !data.value) {
+    if (!data?.value?.structure) {
       return
     }
 
-    modal.open(StructureDisableAlert, {
-      title: 'Désactiver la structure',
-      structure: data.value.structure,
-      finish: onDisable,
+    const structure = data.value.structure
+
+    if (canBeDisabled(structure)) {
+      modal.open(StructureDisableInactiveModal, {
+        title: 'Désactiver une structure inactive',
+        structure,
+        disable: onDisable,
+        cancel: onCancel
+      })
+      return
+    }
+    modal.open(StructureDisableActiveModal, {
+      title: 'Désactiver une structure active',
+      structure,
+      disable: onDisable,
+      requestCode: onRequestCode,
       cancel: onCancel
     })
   }
@@ -76,17 +91,44 @@
     modal.close()
   }
 
-  function onDisable(id: string) {
+  /** An active structure can only be disabled with a code sent by email,
+   * see server/route/admin/authorizeDisableStructure.mutation.ts
+   */
+  async function onRequestCode(structure: AdminStructureInfo) {
+    let sent = false
+    await useTrpcMutation({
+      isSubmitting,
+      mutation: () =>
+        trpcClient.admin.authorizeDisableStructure.mutate({ id: structure.id }),
+      onSuccess: () => {
+        sent = true
+      },
+      onFailure: () => {
+        snackbar.error("L'envoi du code de confirmation a échoué.")
+      }
+    })
+    return sent
+  }
+
+  /** Disable structure
+   * see server/route/admin/disableStructure.mutation.ts
+   */
+  function onDisable(structure: AdminStructureInfo, code?: string) {
     useTrpcMutation({
       isSubmitting,
-      mutation: () => trpcClient.admin.disableStructure.mutate({ id }),
+      mutation: () =>
+        trpcClient.admin.disableStructure.mutate({ id: structure.id, code }),
       onSuccess: () => {
         modal.close()
-        snackbar.success('Structure désactivée')
+        snackbar.success('Structure désactivée.')
         navigateTo(routes.admin.AdminStructures.path())
       },
       onFailure: () => {
-        snackbar.error('La désactivation a échoué')
+        snackbar.error(
+          code
+            ? 'Le code de confirmation est invalide ou expiré.'
+            : 'La désactivation a échoué.'
+        )
       }
     })
   }

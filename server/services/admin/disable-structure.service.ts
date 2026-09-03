@@ -29,11 +29,13 @@ import { getDisabledStructureAlert } from '~~/server/email/disabledStructureAler
 export const disableStructure = async ({
   id,
   disabledById,
-  config
+  config,
+  confirmedByCode = false
 }: {
   id: string
   disabledById: string | null
   config: AppConfig
+  confirmedByCode?: boolean
 }) => {
   const structure = await StructureRepo.prisma.findUniqueOrThrow({
     where: {
@@ -56,7 +58,7 @@ export const disableStructure = async ({
     }
   })
 
-  if (!canBeDisabled(structure)) {
+  if (!confirmedByCode && !canBeDisabled(structure)) {
     throw forbiddenError(
       `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}, alert emails sent: ${structure.deactivationAlertEmail}, last alert email: ${formatDate(structure.deactivationAlertEmailDate) || 'none'}`
     )

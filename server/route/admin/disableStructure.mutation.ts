@@ -1,8 +1,8 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~~/server/route'
-import type { IdInput } from '~~/server/schema'
-import { idSchema } from '~~/server/schema'
-import { AdminService } from '~~/server/services'
+import type { DisableStructureInput } from '~~/server/schema'
+import { disableStructureSchema } from '~~/server/schema'
+import { AdminService, UserService } from '~~/server/services'
 import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({
@@ -10,13 +10,23 @@ const adminHandler = async ({
   input
 }: {
   ctx: AdminContext
-  input: IdInput
+  input: DisableStructureInput
 }) => {
+  // A still active structure can only be disabled with the code sent by
+  // `authorizeDisableStructure`, which lifts the inactivity check in the service.
+  if (input.code) {
+    await UserService.verifyAuthorizationCode({
+      ctx,
+      input: { code: input.code }
+    })
+  }
+
   const config = useRuntimeConfig()
   const structureDisabled = await AdminService.disableStructure({
     config,
     id: input.id,
-    disabledById: ctx.user.id
+    disabledById: ctx.user.id,
+    confirmedByCode: !!input.code
   })
   return {
     name: structureDisabled.name,
@@ -26,7 +36,7 @@ const adminHandler = async ({
 }
 
 export const disableStructure = createMutation({
-  inputValidation: idSchema,
+  inputValidation: disableStructureSchema,
   adminHandler,
   auditLog: {
     key: 'admin.structure.disable',
