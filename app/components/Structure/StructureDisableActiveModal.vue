@@ -3,8 +3,9 @@
     <p class="fr-text--bold">
       Structure <span class="text--uppercase">{{ structure.name }}</span>
       active&nbsp;: dernière activité le
-      {{ formatDate(structure.lastAccess || structure.created) }},
-      {{ structure.deactivationAlertEmail }}&nbsp;{{ alertEmailsLabel }}.
+      {{
+        formatDateToLocalTimezone(structure.lastAccess || structure.created)
+      }}, {{ structure.deactivationAlertEmail }}&nbsp;{{ alertEmailsLabel }}.
     </p>
     <p>
       Assurez-vous que vous souhaitez-bien désactiver cette structure, cette
@@ -141,7 +142,7 @@
           .string({ required_error: requiredErrorMessage })
           .length(
             VALIDATION_CODE_LENGTH,
-            'Le champ doit contenir 8 caractères.'
+            `Le champ doit contenir ${VALIDATION_CODE_LENGTH} caractères.`
           )
       })
     )

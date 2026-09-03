@@ -16,7 +16,7 @@
       <StructureAdminInfo
         :structure="data.structure"
         @edit="editAdminInfo"
-        @disable="disableStructure"
+        @disable="disableStructureOpenModal"
         @toggle-rdv="toggleRdvspIntegration"
       />
 
@@ -51,24 +51,20 @@
   useHead({ title })
 
   const route = useRoute()
-  const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
-
-  const isSubmitting = ref(false)
-
   const structureId = route.params.id as string
 
+  /* Get strcuture */
   const { data, pending, error, refresh } =
-    await trpcClient.admin.getStructure.useQuery({ id: structureId })
+    await useTrpcClient().admin.getStructure.useQuery({ id: structureId })
 
-  function disableStructure() {
+  /* Disable structure buton action */
+  function disableStructureOpenModal() {
     if (!data?.value?.structure) {
       return
     }
-
     const structure = data.value.structure
-
     if (canBeDisabled(structure)) {
       modal.open(StructureDisableInactiveModal, {
         title: 'Désactiver une structure inactive',
@@ -86,7 +82,6 @@
       cancel: onCancel
     })
   }
-
   function onCancel() {
     modal.close()
   }
@@ -94,46 +89,44 @@
   /** An active structure can only be disabled with a code sent by email,
    * see server/route/admin/authorizeDisableStructure.mutation.ts
    */
+  const {
+    mutate: authorizeDisableStructureMutate,
+    error: authorizeDisableStructureError
+  } = useTrpcClient().admin.authorizeDisableStructure.useMutation()
+
   async function onRequestCode(structure: AdminStructureInfo) {
     let sent = false
-    await useTrpcMutation({
-      isSubmitting,
-      mutation: () =>
-        trpcClient.admin.authorizeDisableStructure.mutate({ id: structure.id }),
-      onSuccess: () => {
-        sent = true
-      },
-      onFailure: () => {
-        snackbar.error("L'envoi du code de confirmation a échoué.")
-      }
-    })
+    await authorizeDisableStructureMutate({ id: structure.id })
+    if (authorizeDisableStructureError.value) {
+      snackbar.error("L'envoi du code de confirmation a échoué.")
+      return sent
+    }
+    sent = true
     return sent
   }
 
   /** Disable structure
    * see server/route/admin/disableStructure.mutation.ts
    */
-  function onDisable(structure: AdminStructureInfo, code?: string) {
-    useTrpcMutation({
-      isSubmitting,
-      mutation: () =>
-        trpcClient.admin.disableStructure.mutate({ id: structure.id, code }),
-      onSuccess: () => {
-        modal.close()
-        snackbar.success('Structure désactivée.')
-        navigateTo(routes.admin.AdminStructures.path())
-      },
-      onFailure: () => {
-        snackbar.error(
-          code
-            ? 'Le code de confirmation est invalide ou expiré.'
-            : 'La désactivation a échoué.'
-        )
-      }
-    })
+  const { mutate: disableStructureMutate, error: disableStructureError } =
+    useTrpcClient().admin.disableStructure.useMutation()
+
+  async function onDisable(structure: AdminStructureInfo, code?: string) {
+    const res = await disableStructureMutate({ id: structure.id, code })
+    if (disableStructureError.value || !res) {
+      snackbar.error(
+        code
+          ? 'Le code de confirmation est invalide ou expiré.'
+          : 'La désactivation a échoué.'
+      )
+      return
+    }
+    modal.close()
+    snackbar.success('Structure désactivée.')
+    navigateTo(routes.admin.AdminStructures.path())
   }
 
-  function editAdminInfo() {
+  async function editAdminInfo() {
     if (!data || !data.value) {
       return
     }
@@ -145,43 +138,46 @@
     })
   }
 
-  function updateInfo(values: CreateStructureInput) {
-    useTrpcMutation({
-      mutation: () =>
-        trpcClient.admin.updateStructureInfo.mutate({
-          id: structureId,
-          ...values
-        }),
-      isSubmitting,
-      onSuccess: () => {
-        modal.close()
-        refresh()
-        snackbar.success(
-          'Les informations de votre structure ont été mises à jour.'
-        )
-      },
-      onFailure: () => {
-        snackbar.error(
-          'La modification des informations de votre structure a échoué.'
-        )
-      }
+  /** Update structure
+   * see server/route/admin/updateStructureInfo.mutation.ts
+   */
+  const { mutate: updateStructureMutate, error: updateStructureError } =
+    useTrpcClient().admin.updateStructureInfo.useMutation()
+
+  async function updateInfo(values: CreateStructureInput) {
+    const res = await updateStructureMutate({
+      id: structureId,
+      ...values
     })
+    if (updateStructureError.value || !res) {
+      snackbar.error(
+        'La modification des informations de votre structure a échoué.'
+      )
+      return
+    }
+    modal.close()
+    refresh()
+    snackbar.success(
+      'Les informations de votre structure ont été mises à jour.'
+    )
   }
 
-  function toggleRdvspIntegration(externalRdvspActive: boolean) {
-    const values = { id: data.value?.structure?.id || '', externalRdvspActive }
+  /** Toggle structure RDVSP service
+   * see server/route/admin/toggleRdvsp.mutation.ts
+   */
+  const { mutate: toggleRdvspMutate, error: toggleRdvspError } =
+    useTrpcClient().admin.toggleRdvsp.useMutation()
 
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.toggleRdvsp.mutate(values),
-      onSuccess: () => {
-        const msg = externalRdvspActive
-          ? 'La fonctionnalité de prise de rendez-vous est maintenant disponible pour tous les agents de la structure'
-          : 'La fonctionnalité de prise de rendez-vous a été désactivée'
-        snackbar.success(msg)
-      },
-      onFailure: () => {
-        snackbar.error("L'activation de la fonctionnalité a échoué")
-      }
-    })
+  async function toggleRdvspIntegration(externalRdvspActive: boolean) {
+    const values = { id: data.value?.structure?.id || '', externalRdvspActive }
+    const res = await toggleRdvspMutate(values)
+    if (toggleRdvspError.value || !res) {
+      snackbar.error("L'activation de la fonctionnalité a échoué")
+      return
+    }
+    const msg = externalRdvspActive
+      ? 'La fonctionnalité de prise de rendez-vous est maintenant disponible pour tous les agents de la structure'
+      : 'La fonctionnalité de prise de rendez-vous a été désactivée'
+    snackbar.success(msg)
   }
 </script>

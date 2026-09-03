@@ -6,16 +6,16 @@
         <div class="fr-input-group">
           <label
             class="fr-label"
-            for="search-strucuture"
+            for="search-structure"
           >
             Recherche une structure
             <span class="fr-hint-text">Par nom ou code postal</span>
           </label>
           <div class="fr-input-wrap fr-input-wrap--addon">
             <input
-              id="search-strucuture"
+              id="search-structure"
               class="fr-input"
-              aria-describedby="search-strucuture-messages"
+              aria-describedby="search-structure-messages"
               type="text"
               @change="onSearch"
             />
@@ -28,7 +28,7 @@
           </div>
 
           <div
-            id="search-strucuture-messages"
+            id="search-structure-messages"
             class="fr-messages-group"
             aria-live="polite"
           ></div>
@@ -90,17 +90,16 @@
     })
   }
 
-  function addStructure(structure: CreateStructureInput) {
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.createStructure.mutate(structure),
-      isSubmitting,
-      onSuccess: ({ id }) => {
-        modal.close()
-        navigateTo(routes.admin.AdminStructure.path(id))
-      },
-      onFailure: () => {
-        snackbar.error("L'ajout de la structure a échoué.")
-      }
-    })
+  // Create structure mutation
+  const { mutate, error } = useTrpcClient().admin.createStructure.useMutation()
+
+  async function addStructure(structure: CreateStructureInput) {
+    const res = await mutate(structure)
+    if (error.value || !res) {
+      snackbar.error("L'ajout de la structure a échoué.")
+      return
+    }
+    modal.close()
+    navigateTo(routes.admin.AdminStructure.path(res.id))
   }
 </script>

@@ -3,8 +3,9 @@
     <p class="fr-text--bold">
       Structure <span class="text--uppercase">{{ structure.name }}</span>
       inactive&nbsp;: dernière activité le
-      {{ formatDate(structure.lastAccess || structure.created) }},
-      {{ structure.deactivationAlertEmail }}&nbsp;{{ alertEmailsLabel }}.
+      {{
+        formatDateToLocalTimezone(structure.lastAccess || structure.created)
+      }}, {{ structure.deactivationAlertEmail }}&nbsp;{{ alertEmailsLabel }}.
     </p>
     <p>
       Assurez-vous que vous souhaitez-bien désactiver cette structure, cette
