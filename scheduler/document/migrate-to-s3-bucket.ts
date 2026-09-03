@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import { generateBucketKeyForDocument } from '~/server/lib/s3/helper'
+import { generateBucketKeyForDocument } from '~~/server/lib/s3/helper'
 import { SCHEDULER_ENV } from '../env'
-import { deleteFile, uploadWithEncryption } from '~/server/lib/s3/file'
-import { prismaClient } from '~/server/prisma'
+import { deleteFile, uploadWithEncryption } from '~~/server/lib/s3/file'
+import { prismaClient } from '~~/server/prisma'
 
 type FailedId = { key: string; error: string }
 
@@ -79,6 +79,7 @@ async function migrateDocument(doc: DocumentToMigrate) {
     dataForEncryptionContext: { documentKey: doc.key }
   })
 
+  // DocumentContent rows are kept intentionally — cleaned up in a separate pass after migration is verified
   try {
     await prismaClient.document.update({
       select: { key: true },
@@ -125,7 +126,7 @@ export default async function migrateToS3Bucket() {
     }
 
     nMigrated++
-    sizeMigrated += doc.size || 0
+    sizeMigrated += doc.size ?? 0
     if (nMigrated % LOG_EVERY_N === 0) {
       console.log(
         `migrate-to-s3-bucket: ${nMigrated} documents migrated so far (${(sizeMigrated / 1_000_000).toFixed(1)} MB)`

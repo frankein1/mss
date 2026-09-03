@@ -63,8 +63,6 @@ export const jobs = {
    * Runs every Sunday at 06:00 */
   dataInclusionStructureImport: importDataInclusionStructures,
 
-  /** Imports structure data from the data.education API.
-   * Runs every Sunday at 03:00 */
   dataEducationSchoolImport: importDataEducationSchools,
 
   /** Run the DEK rewrap after having rotated the encryption key in Open Bao

@@ -6,7 +6,7 @@ import {
   fixturesUsers,
   FixtureUserRole
 } from './fixtures'
-import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~~/server/prisma'
 
 const N_DOCUMENTS = 1000
 
