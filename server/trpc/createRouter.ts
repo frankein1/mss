@@ -76,27 +76,28 @@ const userMiddleware = baseMiddleware(({ ctx, next }) => {
 })
 
 const loggingMiddleware = userMiddleware.unstable_pipe(async opts => {
+  const result = await opts.next()
+  if (!useRuntimeConfig().logs.activateRequestLogging) {
+    return result
+  }
   const log = opts.ctx.event.context.logger
-  try {
-    const result = await opts.next()
+  if (result.ok) {
     log.info(
       { path: opts.path, type: opts.type, ok: true },
       TRPC_REQUEST_LOG_MSG
     )
-    return result
-  } catch (error) {
+  } else {
     log.info(
       {
         path: opts.path,
         type: opts.type,
         ok: false,
-        err_code:
-          error instanceof TRPCError ? error.code : 'INTERNAL_SERVER_ERROR'
+        err_code: result.error.code
       },
       TRPC_REQUEST_LOG_MSG
     )
-    throw error
   }
+  return result
 })
 
 const structureMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {

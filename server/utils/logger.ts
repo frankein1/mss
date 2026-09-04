@@ -19,7 +19,7 @@ declare module 'h3' {
  * ```
  */
 export const logger = pino({
-  level: process.env.LOG_LEVEL ?? 'info',
+  level: process.env.NUXT_LOGS_LEVEL ?? 'info',
   formatters: {
     level(label: string) {
       return { level: label }

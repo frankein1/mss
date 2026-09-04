@@ -17,10 +17,13 @@ import type { SecurityRuleStructure } from '~~/server/security/rules/types'
 
 const setupFactory = t.createCallerFactory(appRouter)
 
-const dummy_logger = {
-  info: (_: unknown) => {},
-  warning: (_: unknown) => {},
-  error: (_: unknown) => {}
+const dummy_logger: Record<string, unknown> = {
+  info: () => {},
+  warn: () => {},
+  error: () => {},
+  debug: () => {},
+  trace: () => {},
+  child: () => dummy_logger
 }
 
 /**
