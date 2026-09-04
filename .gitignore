@@ -30,6 +30,7 @@ docs/*
 !docs/database-model.svg
 scripts/custom-pre-commit.sh
 # Local skills configuration
+CLAUDE.local.md
 CONTEXT.md 
 .agents
 skills-lock.json
