@@ -7,7 +7,7 @@
     "dev:scheduler": "tsx watch scheduler/index.ts",
     "build": "pnpm build:nuxt && pnpm build:scheduler",
     "build:nuxt": "nuxt build",
-    "build:scheduler": "tsdown --no-config scheduler/index.ts --out-dir .output-scheduler && tsdown --no-config scheduler/_caller.ts --out-dir .output-scheduler_caller",
+    "build:scheduler": "tsdown --tsconfig scheduler scheduler/index.ts --out-dir .output-scheduler && tsdown --tsconfig scheduler scheduler/_caller.ts --out-dir .output-scheduler_caller",
     "start": "nuxt start",
     "start:scheduler": "node .output-scheduler/index.mjs",
     "generate": "nuxt generate",
