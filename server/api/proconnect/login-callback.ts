@@ -166,6 +166,8 @@ export default defineEventHandler(async event => {
     throw forbidden('[ProConnect] Access denied: unknown user')
   }
 
+  enrichLogger(event, user)
+
   // If user deactivated, provide a logout link to retry in the error page
   if (user.status !== UserStatus.Active) {
     await provideLogoutUrl(session, idToken, state)

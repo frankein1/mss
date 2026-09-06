@@ -5,10 +5,8 @@ export {
   unauthorizedError
 } from './trpcErrors'
 export {
-  publicProcedure,
   protectedProcedure,
   adminProcedure,
-  authProcedure,
   router,
   type ProtectedAppContext,
   type AuthContext,

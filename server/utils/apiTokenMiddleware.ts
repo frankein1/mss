@@ -1,5 +1,6 @@
 import type { H3Event } from 'h3'
 import { prismaClient } from '~~/server/prisma'
+import { enrichPublicApiLogger } from './logger'
 
 const apiTokenMiddleware = async (event: H3Event) => {
   const authorization = getRequestHeader(event, 'authorization')
@@ -23,6 +24,7 @@ const apiTokenMiddleware = async (event: H3Event) => {
   }
 
   const apiToken = await prismaClient.apiToken.findUnique({
+    select: { id: true },
     where: {
       token,
       expirationDate: {
@@ -37,6 +39,8 @@ const apiTokenMiddleware = async (event: H3Event) => {
       message: 'Token is not valid'
     })
   }
+
+  enrichPublicApiLogger(event, apiToken.id)
 }
 
 export default apiTokenMiddleware
