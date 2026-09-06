@@ -43,6 +43,8 @@ export default defineEventHandler(async event => {
     return null
   }
 
+  enrichLogger(event, user)
+
   const {
     auth: { jwtKey }
   } = config

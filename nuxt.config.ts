@@ -250,6 +250,11 @@ export default defineNuxtConfig({
       apiUrl: process.env.NUXT_KMS_API_URL || '',
       keyId: process.env.NUXT_KMS_KEY_ID || ''
     },
+    logs: {
+      level: process.env.NUXT_LOGS_LEVEL || 'info',
+      activateRequestLogging:
+        (process.env.NUXT_LOGS_ACTIVATE_REQUEST_LOGGING ?? 'true') === 'true'
+    },
     document: {
       useS3Storage:
         (process.env.NUXT_DOCUMENT_USE_S3_STORAGE || 'false') === 'true',

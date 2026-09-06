@@ -10,6 +10,7 @@ export const createContext = async (event: H3Event) => {
 
   try {
     const user = await fetchUserContext(userId)
+    enrichLogger(event, user)
     return { event, user }
   } catch {
     return { event, user: null }

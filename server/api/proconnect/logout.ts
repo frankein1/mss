@@ -20,6 +20,7 @@ export default defineEventHandler(async event => {
 
   try {
     const user = await fetchUserContext(userId)
+    enrichLogger(event, user)
     addUserActivity({
       key: 'auth.logout',
       user,

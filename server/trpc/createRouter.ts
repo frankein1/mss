@@ -10,6 +10,7 @@ import type {
 import type { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
 import { shouldLog } from '~~/server/utils/logging'
+import { TRPC_REQUEST_LOG_MSG } from '~~/server/utils/constants'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson,
@@ -31,12 +32,7 @@ const t = initTRPC.context<AppContext>().create({
 
 export const { router, createCallerFactory } = t
 
-/**
- * Unprotected procedure
- * */
-export const publicProcedure = t.procedure
-
-export const loggingMidleware = t.middleware(async opts => {
+const localDevelopmentMiddleware = t.middleware(async opts => {
   const start = Date.now()
   const result = await opts.next()
   const durationMs = Date.now() - start
@@ -54,7 +50,7 @@ export const loggingMidleware = t.middleware(async opts => {
 })
 
 const baseMiddleware = shouldLog('trpc')
-  ? loggingMidleware.unstable_pipe
+  ? localDevelopmentMiddleware.unstable_pipe
   : t.middleware
 
 /**
@@ -79,7 +75,32 @@ const userMiddleware = baseMiddleware(({ ctx, next }) => {
   })
 })
 
-const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
+const loggingMiddleware = userMiddleware.unstable_pipe(async opts => {
+  const result = await opts.next()
+  if (!useRuntimeConfig().logs.activateRequestLogging) {
+    return result
+  }
+  const log = opts.ctx.event.context.logger
+  if (result.ok) {
+    log.info(
+      { path: opts.path, type: opts.type, ok: true },
+      TRPC_REQUEST_LOG_MSG
+    )
+  } else {
+    log.info(
+      {
+        path: opts.path,
+        type: opts.type,
+        ok: false,
+        err_code: result.error.code
+      },
+      TRPC_REQUEST_LOG_MSG
+    )
+  }
+  return result
+})
+
+const structureMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role === 'Administrator' || !ctx.user.structure?.id) {
     throw forbiddenError('User routes are not available to admins')
   }
@@ -95,7 +116,7 @@ const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
   })
 })
 
-const adminMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
+const adminMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role !== 'Administrator') {
     throw forbiddenError('User is not an administrator')
   }
@@ -105,12 +126,6 @@ const adminMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
     }
   })
 })
-
-/**
- * Auth procedure
- */
-
-export const authProcedure = t.procedure.use(userMiddleware)
 
 // FIXME: There is no way to infer the context type of protectedProcedure
 export type AuthContext = {

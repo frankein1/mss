@@ -17,13 +17,24 @@ import type { SecurityRuleStructure } from '~~/server/security/rules/types'
 
 const setupFactory = t.createCallerFactory(appRouter)
 
+const dummy_logger: Record<string, unknown> = {
+  info: () => {},
+  warn: () => {},
+  error: () => {},
+  debug: () => {},
+  trace: () => {},
+  child: () => dummy_logger
+}
+
 /**
  * Allow server side calls of trpc endpoints for integration tests
  * using a test context for tRPC with dummy event
  * see https://trpc.io/docs/server/server-side-calls
  */
 export const createCaller = (user: AppContext['user']) => {
-  const event = { context: { auth: null } } as any as H3Event
+  const event = {
+    context: { auth: null, logger: dummy_logger }
+  } as any as H3Event
   const ctx = { event, user }
 
   return setupFactory(ctx)

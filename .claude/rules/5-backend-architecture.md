@@ -22,8 +22,6 @@ Four procedure types, from least to most restrictive:
 
 | Procedure            | Who passes                                                       | Context provided      |
 | -------------------- | ---------------------------------------------------------------- | --------------------- |
-| `publicProcedure`    | Anyone                                                           | `event` only          |
-| `authProcedure`      | Authenticated active user (any role)                             | `user`                |
 | `protectedProcedure` | Authenticated user **with a structure** (rejects Administrators) | `user` + `structure`  |
 | `adminProcedure`     | Administrator only                                               | `user` (no structure) |
 

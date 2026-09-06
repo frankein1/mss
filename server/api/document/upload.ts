@@ -36,6 +36,7 @@ export default defineEventHandler(async event => {
 
   const user = await fetchUserContext(userId)
   checkUserIsAuthenticated(user)
+  enrichLogger(event, user)
 
   if (!user.structure) {
     throw forbidden('upload: not authorized')
