@@ -1,16 +1,43 @@
 <template>
-  <div class="fr-p-2w">
-    <div class="fr-grid-row">
-      <div class="fr-col-8">
-        <input
-          class="fr-input"
-          placeholder="nom, code postal"
-          @change="onSearch"
-        />
+  <PageContainer class="fr-p-5w">
+    <PageTitle title="Structures" />
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
+      <div class="fr-col-12 fr-col-lg-8 fr-col-xl-9">
+        <div class="fr-input-group">
+          <label
+            class="fr-label"
+            for="search-structure"
+          >
+            Recherche une structure
+            <span class="fr-hint-text">Par nom ou code postal</span>
+          </label>
+          <div class="fr-input-wrap fr-input-wrap--addon">
+            <input
+              id="search-structure"
+              class="fr-input"
+              aria-describedby="search-structure-messages"
+              type="text"
+              @change="onSearch"
+            />
+            <button
+              type="submit"
+              class="fr-btn"
+            >
+              Chercher
+            </button>
+          </div>
+
+          <div
+            id="search-structure-messages"
+            class="fr-messages-group"
+            aria-live="polite"
+          ></div>
+        </div>
       </div>
-      <div class="fr-col-3">
+
+      <div class="fr-col-12 fr-col-lg-4 fr-col-xl-3">
         <button
-          class="fr-btn fr-btn--secondary"
+          class="fr-btn fr-btn--icon-left fr-icon-add-line"
           data-fr-opened="false"
           aria-controls="global-modal"
           title="Ajouter une structure"
@@ -25,7 +52,7 @@
       v-show="!pending"
       :structures="structures"
     />
-  </div>
+  </PageContainer>
 </template>
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
@@ -63,17 +90,16 @@
     })
   }
 
-  function addStructure(structure: CreateStructureInput) {
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.createStructure.mutate(structure),
-      isSubmitting,
-      onSuccess: ({ id }) => {
-        modal.close()
-        navigateTo(routes.admin.AdminStructure.path(id))
-      },
-      onFailure: () => {
-        snackbar.error("L'ajout de la structure a échoué.")
-      }
-    })
+  // Create structure mutation
+  const { mutate, error } = useTrpcClient().admin.createStructure.useMutation()
+
+  async function addStructure(structure: CreateStructureInput) {
+    const res = await mutate(structure)
+    if (error.value || !res) {
+      snackbar.error("L'ajout de la structure a échoué.")
+      return
+    }
+    modal.close()
+    navigateTo(routes.admin.AdminStructure.path(res.id))
   }
 </script>

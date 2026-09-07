@@ -14,7 +14,33 @@ const adminHandler = async ({
 }) => {
   const { users, ...structure } = await StructureRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      address: true,
+      zipcode: true,
+      city: true,
+      phone: true,
+      email: true,
+      inhabitantsNumber: true,
+      inseeCode: true,
+      siret: true,
+      dpoFirstName: true,
+      dpoLastName: true,
+      dpoEmail: true,
+      externalRdvspActive: true,
+      created: true,
+      lastAccess: true,
+      deactivationAlertEmail: true,
+      deactivationAlertEmailDate: true,
+      _count: {
+        select: {
+          beneficiaries: true,
+          socialSupports: true,
+          users: true
+        }
+      },
       users: {
         select: {
           id: true,

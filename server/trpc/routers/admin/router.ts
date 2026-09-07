@@ -12,6 +12,9 @@ export const adminRouter = router({
   disableStructure: adminProcedure
     .input(adminRoutes.disableStructure.inputValidation)
     .mutation(adminRoutes.disableStructure.executeAsAdmin),
+  authorizeDisableStructure: adminProcedure
+    .input(adminRoutes.authorizeDisableStructure.inputValidation)
+    .mutation(adminRoutes.authorizeDisableStructure.executeAsAdmin),
   getStructure: adminProcedure
     .input(adminRoutes.getStructure.inputValidation)
     .query(adminRoutes.getStructure.executeAsAdmin),

@@ -148,12 +148,12 @@
 <script lang="ts" setup>
   import { structureTypeKeys } from '~~/client/options'
   import { structureFieldLabels } from '~~/client/labels'
-  import type { StructureInfo } from '~/components/Structure/types'
+  import type { AdminStructureInfo } from '~/components/Structure/types'
   import type { CreateStructureInput } from '~~/server/schema'
   import { createStructureSchema } from '~~/server/schema'
 
   const props = defineProps<{
-    structure?: StructureInfo
+    structure?: AdminStructureInfo
     validate: (values: CreateStructureInput) => void
   }>()
 

@@ -4,6 +4,7 @@ import { UserStatus } from '@prisma/client'
 import { withErrorCapture } from '../utils'
 import { createEmail, createEmailSubject } from './utils'
 import { routes } from '~/utils/routes'
+import { INACTIVITY_MONTHS } from '~/utils/structure'
 import { SCHEDULER_ENV } from '../env'
 
 export function getInactiveStructureAlert() {
@@ -41,18 +42,22 @@ A bientôt,
 }
 
 async function sendFirstEmail() {
+  const inactivityLimitDate = dayjs()
+    .subtract(INACTIVITY_MONTHS, 'month')
+    .toDate()
+
   const inactiveStructures = await StructureRepo.prisma.findMany({
     where: {
       OR: [
         {
           lastAccess: {
-            lte: dayjs().subtract(6, 'month').toDate()
+            lte: inactivityLimitDate
           }
         },
         {
           lastAccess: null,
           created: {
-            lte: dayjs().subtract(6, 'month').toDate()
+            lte: inactivityLimitDate
           }
         }
       ],

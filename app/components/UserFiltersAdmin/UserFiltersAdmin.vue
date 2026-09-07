@@ -22,7 +22,8 @@
         name: 'role',
         label: 'Rôle',
         options: withEmptyValue(userRoleKeys.options, 'Tous les rôles'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        alwaysExpanded: true
       }
     ]
     return filters

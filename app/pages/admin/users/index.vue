@@ -1,31 +1,63 @@
 <template>
-  <div class="fr-p-2w">
-    <div>
-      <div>
-        <label class="fr-label"> Recherche </label>
-        <input
-          class="fr-input"
-          placeholder="nom, email"
-          @change="onSearch"
-        />
+  <PageContainer class="fr-p-5w">
+    <PageTitle :title="routes.admin.AdminUsers.title" />
+
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-6v">
+      <div class="fr-col-12 fr-col-lg-8 fr-col-xl-9">
+        <div class="fr-input-group">
+          <label
+            class="fr-label"
+            for="search-strucuture"
+          >
+            Recherche un utilisateur
+            <span class="fr-hint-text">Par nom ou e-mail</span>
+          </label>
+          <div class="fr-input-wrap fr-input-wrap--addon">
+            <input
+              id="search-user"
+              class="fr-input"
+              aria-describedby="search-user-messages"
+              type="text"
+              @change="onSearch"
+            />
+            <button
+              type="submit"
+              class="fr-btn"
+            >
+              Chercher
+            </button>
+          </div>
+
+          <div
+            id="search-user-messages"
+            class="fr-messages-group"
+            aria-live="polite"
+          ></div>
+        </div>
       </div>
-      <NuxtLink
-        :to="routes.admin.AdminUsersAdd.path()"
-        class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
-      >
-        Ajouter un utilisateur
-      </NuxtLink>
+
+      <div class="fr-col-12 fr-col-lg-4 fr-col-xl-3">
+        <NuxtLink
+          :to="routes.admin.AdminUsersAdd.path()"
+          class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
+        >
+          Ajouter un utilisateur
+        </NuxtLink>
+      </div>
     </div>
-    <UserFiltersAdmin
-      class="fr-px-5v fr-mt-2w"
-      @filter="filters = $event"
-    />
-    <UserTableAdmin
-      v-show="!pending"
-      v-model:sort="orderBy"
-      :users="users"
-    />
-  </div>
+
+    <div class="feature-section">
+      <UserFiltersAdmin
+        class="fr-px-5v fr-mt-2w"
+        @filter="filters = $event"
+      />
+      <UserTableAdmin
+        v-show="!pending"
+        v-model:sort="orderBy"
+        :users="users"
+      />
+    </div>
+  </PageContainer>
 </template>
 <script lang="ts" setup>
   import type { UserAdminSort } from '~~/types/table'

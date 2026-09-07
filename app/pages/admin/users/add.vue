@@ -1,5 +1,7 @@
 <template>
-  <PageContainer>
+  <PageContainer class="fr-p-5w">
+    <PageTitle :title="routes.admin.AdminUsersAdd.title" />
+
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <div class="main-container fr-p-5w">

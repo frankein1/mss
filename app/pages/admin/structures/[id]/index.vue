@@ -1,5 +1,5 @@
 <template>
-  <PageContainer>
+  <PageContainer class="fr-p-5w">
     <PageTitle :title="title" />
 
     <AtomLoader
@@ -14,19 +14,20 @@
     />
     <div v-else-if="data">
       <StructureAdminInfo
-        class="fr-mb-5w"
         :structure="data.structure"
         @edit="editAdminInfo"
-        @disable="disableStructure"
+        @disable="disableStructureOpenModal"
         @toggle-rdv="toggleRdvspIntegration"
       />
 
       <StructureAdminUsers
+        class="fr-mb-5w"
         :structure-id="data.structure.id"
         :users="data.users"
-      ></StructureAdminUsers>
+      />
 
       <SocialSupportSubjects
+        class="fr-mb-5w"
         :subjects="data.socialSupportSubjects"
         :edit-path="routes.admin.AdminStructureSubjects.path(structureId)"
         @refresh="refresh"
@@ -39,106 +40,144 @@
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import type { CreateStructureInput } from '~~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
+  import StructureDisableActiveModal from '~/components/Structure/StructureDisableActiveModal.vue'
+  import StructureDisableInactiveModal from '~/components/Structure/StructureDisableInactiveModal.vue'
   import { routes } from '~/utils/routes'
+  import type { AdminStructureInfo } from '~/components/Structure/types'
+  import { canBeDisabled } from '~/utils/structure'
 
   const title = routes.structure.AppStructure.title
 
   useHead({ title })
 
   const route = useRoute()
-  const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
-
-  const isSubmitting = ref(false)
-
   const structureId = route.params.id as string
 
+  /* Get strcuture */
   const { data, pending, error, refresh } =
-    await trpcClient.admin.getStructure.useQuery({ id: structureId })
+    await useTrpcClient().admin.getStructure.useQuery({ id: structureId })
 
-  function disableStructure() {
-    if (!data || !data.value) {
+  /* Disable structure buton action */
+  function disableStructureOpenModal() {
+    if (!data?.value?.structure) {
       return
     }
-
-    modal.open(StructureDisableAlert, {
-      title: 'Désactiver une structure',
-      structure: data.value.structure,
-      finish: onDisable,
+    const structure = data.value.structure
+    if (canBeDisabled(structure)) {
+      modal.open(StructureDisableInactiveModal, {
+        title: 'Désactiver une structure inactive',
+        structure,
+        disable: onDisable,
+        cancel: onCancel
+      })
+      return
+    }
+    modal.open(StructureDisableActiveModal, {
+      title: 'Désactiver une structure active',
+      structure,
+      disable: onDisable,
+      requestCode: onRequestCode,
       cancel: onCancel
     })
   }
-
   function onCancel() {
     modal.close()
   }
 
-  function onDisable(id: string) {
-    useTrpcMutation({
-      isSubmitting,
-      mutation: () => trpcClient.admin.disableStructure.mutate({ id }),
-      onSuccess: () => {
-        modal.close()
-        snackbar.success('Structure désactivée')
-        navigateTo(routes.admin.AdminStructures.path())
-      },
-      onFailure: () => {
-        snackbar.error('La désactivation a échoué')
-      }
-    })
+  /** An active structure can only be disabled with a code sent by email,
+   * see server/route/admin/authorizeDisableStructure.mutation.ts
+   */
+  const {
+    mutate: authorizeDisableStructureMutate,
+    error: authorizeDisableStructureError
+  } = useTrpcClient().admin.authorizeDisableStructure.useMutation()
+
+  async function onRequestCode(structure: AdminStructureInfo) {
+    let sent = false
+    await authorizeDisableStructureMutate({ id: structure.id })
+    if (authorizeDisableStructureError.value) {
+      snackbar.error("L'envoi du code de confirmation a échoué.")
+      return sent
+    }
+    sent = true
+    return sent
   }
 
-  function editAdminInfo() {
+  /** Disable structure
+   * see server/route/admin/disableStructure.mutation.ts
+   */
+  const { mutate: disableStructureMutate, error: disableStructureError } =
+    useTrpcClient().admin.disableStructure.useMutation()
+
+  async function onDisable(structure: AdminStructureInfo, code?: string) {
+    const res = await disableStructureMutate({ id: structure.id, code })
+    if (disableStructureError.value || !res) {
+      snackbar.error(
+        code
+          ? 'Le code de confirmation est invalide ou expiré.'
+          : 'La désactivation a échoué.'
+      )
+      return
+    }
+    modal.close()
+    snackbar.success('Structure désactivée.')
+    navigateTo(routes.admin.AdminStructures.path())
+  }
+
+  async function editAdminInfo() {
     if (!data || !data.value) {
       return
     }
 
     modal.open(StructureAdminInfoForm, {
-      title: 'Modifier les informations de ma structure',
+      title: 'Modifier les informations de la structure',
       structure: data.value.structure,
       validate: updateInfo
     })
   }
 
-  function updateInfo(values: CreateStructureInput) {
-    useTrpcMutation({
-      mutation: () =>
-        trpcClient.admin.updateStructureInfo.mutate({
-          id: structureId,
-          ...values
-        }),
-      isSubmitting,
-      onSuccess: () => {
-        modal.close()
-        refresh()
-        snackbar.success(
-          'Les informations de votre structure ont été mises à jour.'
-        )
-      },
-      onFailure: () => {
-        snackbar.error(
-          'La modification des informations de votre structure a échoué.'
-        )
-      }
+  /** Update structure
+   * see server/route/admin/updateStructureInfo.mutation.ts
+   */
+  const { mutate: updateStructureMutate, error: updateStructureError } =
+    useTrpcClient().admin.updateStructureInfo.useMutation()
+
+  async function updateInfo(values: CreateStructureInput) {
+    const res = await updateStructureMutate({
+      id: structureId,
+      ...values
     })
+    if (updateStructureError.value || !res) {
+      snackbar.error(
+        'La modification des informations de votre structure a échoué.'
+      )
+      return
+    }
+    modal.close()
+    refresh()
+    snackbar.success(
+      'Les informations de votre structure ont été mises à jour.'
+    )
   }
 
-  function toggleRdvspIntegration(externalRdvspActive: boolean) {
-    const values = { id: data.value?.structure?.id || '', externalRdvspActive }
+  /** Toggle structure RDVSP service
+   * see server/route/admin/toggleRdvsp.mutation.ts
+   */
+  const { mutate: toggleRdvspMutate, error: toggleRdvspError } =
+    useTrpcClient().admin.toggleRdvsp.useMutation()
 
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.toggleRdvsp.mutate(values),
-      onSuccess: () => {
-        const msg = externalRdvspActive
-          ? 'La fonctionnalité de prise de rendez-vous est maintenant disponible pour tous les agents de la structure'
-          : 'La fonctionnalité de prise de rendez-vous a été désactivée'
-        snackbar.success(msg)
-      },
-      onFailure: () => {
-        snackbar.error("L'activation de la fonctionnalité a échoué")
-      }
-    })
+  async function toggleRdvspIntegration(externalRdvspActive: boolean) {
+    const values = { id: data.value?.structure?.id || '', externalRdvspActive }
+    const res = await toggleRdvspMutate(values)
+    if (toggleRdvspError.value || !res) {
+      snackbar.error("L'activation de la fonctionnalité a échoué")
+      return
+    }
+    const msg = externalRdvspActive
+      ? 'La fonctionnalité de prise de rendez-vous est maintenant disponible pour tous les agents de la structure'
+      : 'La fonctionnalité de prise de rendez-vous a été désactivée'
+    snackbar.success(msg)
   }
 </script>

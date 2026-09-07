@@ -1,5 +1,5 @@
 import { UserRepo } from '~~/server/database'
-import type { ProtectedAppContext } from '~~/server/trpc'
+import type { AuthContext } from '~~/server/trpc'
 import { forbiddenError } from '~~/server/trpc'
 import dayjs from 'dayjs'
 
@@ -7,7 +7,7 @@ export async function verifyAuthorizationCode({
   ctx,
   input
 }: {
-  ctx: ProtectedAppContext
+  ctx: AuthContext
   input: { code: string }
 }) {
   const user = await UserRepo.findUniqueOrThrow(ctx.user, {

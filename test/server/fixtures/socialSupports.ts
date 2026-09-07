@@ -30,7 +30,8 @@ export async function createSocialSupports(
   structureManagerId = defaultStructureManagerId,
   partnerOrganizationId = defaultPartnerOrganizationId,
   partnerOrganizationContactId = defaultPartnerOrganizationContactId,
-  socialSupportSubjectId = defaultSocialSupportSubjectId
+  socialSupportSubjectId = defaultSocialSupportSubjectId,
+  documentKeys: string[] = []
 ) {
   const createFollowup = prismaClient.socialSupport.create({
     select: {
@@ -38,6 +39,11 @@ export async function createSocialSupports(
       followup: {
         select: {
           id: true
+        }
+      },
+      documents: {
+        select: {
+          key: true
         }
       }
     },
@@ -58,6 +64,9 @@ export async function createSocialSupports(
       },
       status: 'InProgress',
       socialSupportType: 'Followup',
+      documents: {
+        connect: documentKeys.map(key => ({ key }))
+      },
       synthesis: 'Synthesis',
       privateSynthesis: 'Private synthesis',
       synthesisRichText: 'Synthesis rich text',
@@ -274,5 +283,99 @@ export async function createSocialSupports(
     }
   })
 
-  return await Promise.all([createFollowup, createFinancialHelpRequest])
+  const createHousingHelpRequest = prismaClient.socialSupport.create({
+    select: {
+      id: true,
+      fileInstruction: {
+        select: {
+          id: true,
+          housingHelpRequest: {
+            select: {
+              id: true
+            }
+          }
+        }
+      }
+    },
+    data: {
+      created: date,
+      updated: date,
+      date,
+      structure: {
+        connect: { id: structureId }
+      },
+      familyFile: { connect: { id: familyFileId } },
+      beneficiary: { connect: { id: beneficiaryId } },
+      createdBy: {
+        connect: { id: referentId }
+      },
+      lastUpdatedBy: {
+        connect: { id: structureManagerId }
+      },
+      status: 'InProgress',
+      socialSupportType: 'HelpRequest',
+      synthesis: 'Synthesis',
+      privateSynthesis: 'Private synthesis',
+      synthesisRichText: 'Synthesis rich text',
+      privateSynthesisRichText: 'Private synthesis rich text',
+      numeroPegase: '741852BDHL',
+      documents: {
+        connect: documentKeys.map(key => ({ key }))
+      },
+      fileInstruction: {
+        create: {
+          updated: date,
+          type: 'Housing',
+          instructorOrganization: {
+            connect: {
+              id: partnerOrganizationId
+            }
+          },
+          instructorOrganizationContact: {
+            connect: {
+              id: partnerOrganizationContactId
+            }
+          },
+          externalStructure: true,
+          examinationDate: date,
+          decisionDate: date,
+          dispatchDate: date,
+          fullFile: true,
+          housingHelpRequest: {
+            create: {
+              prescribingOrganization: {
+                connect: {
+                  id: partnerOrganizationId
+                }
+              },
+              prescribingOrganizationContact: {
+                connect: {
+                  id: partnerOrganizationContactId
+                }
+              },
+              isFirst: true,
+              firstOpeningDate: date,
+              askedHousing: ['ParcSocial', 'ParcPrive'],
+              uniqueId: 'NUR-123456789',
+              taxHouseholdAdditionalInformation: 'Foyer de 3 personnes',
+              maxRent: 550,
+              maxCharges: 80,
+              housingType: ['Appartement'],
+              roomCount: ['Two', 'Three'],
+              isPmr: true,
+              reason: 'Expulsion',
+              lowIncomeHousingType: ['PLAI', 'PLUS'],
+              handlingDate: date
+            }
+          }
+        }
+      }
+    }
+  })
+
+  return await Promise.all([
+    createFollowup,
+    createFinancialHelpRequest,
+    createHousingHelpRequest
+  ])
 }
