@@ -1,10 +1,14 @@
-import { UserService } from '../user'
-import { StructureRepo } from '~~/server/database'
+import { StructureRepo, UserRepo } from '~~/server/database'
+import { customAlphabet } from 'nanoid'
+import dayjs from 'dayjs'
 import { createEmail } from '~~/server/query'
 import { createEmailSubject } from '~~/server/email/createEmailSubject'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import { INACTIVITY_MONTHS } from '~/utils/structure'
 import { SUPPORT_EMAIL } from '~/utils/constants'
 import type { AdminContext } from '~~/server/trpc'
+
+const nanoid = customAlphabet('123456789', VALIDATION_CODE_LENGTH)
 
 /** An active structure can only be disabled after the administrator confirms
  * with a single use code sent to their own email address.
@@ -33,7 +37,17 @@ export async function sendDisableStructureCode({
     }
   })
 
-  const created = await UserService.createAuthorizationCode(ctx.user.id)
+  const created = await UserRepo.prisma.update({
+    where: { id: ctx.user.id },
+    data: {
+      authorizationCode: nanoid(),
+      authorizationCodeValidity: dayjs().add(10, 'minutes').toDate()
+    },
+    select: {
+      email: true,
+      authorizationCode: true
+    }
+  })
 
   const consequences = [
     'les bénéficiaires et leurs accompagnements seront anonymisés ;',

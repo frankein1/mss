@@ -2,15 +2,15 @@ import { UserRepo } from '~~/server/database'
 import { customAlphabet } from 'nanoid'
 import dayjs from 'dayjs'
 import { createEmail } from '~~/server/query'
-import type { AuthContext } from '~~/server/trpc'
+import type { ProtectedAppContext } from '~~/server/trpc'
 import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import { createEmailSubject } from '~~/server/email/createEmailSubject'
 
 const nanoid = customAlphabet('123456789', VALIDATION_CODE_LENGTH)
 
-export function createAuthorizationCode(userId: string) {
-  return UserRepo.prisma.update({
-    where: { id: userId },
+export async function sendAuthorizationCode(ctx: ProtectedAppContext) {
+  const created = await UserRepo.prisma.update({
+    where: { id: ctx.user.id },
     data: {
       authorizationCode: nanoid(),
       authorizationCodeValidity: dayjs().add(10, 'minutes').toDate()
@@ -20,10 +20,6 @@ export function createAuthorizationCode(userId: string) {
       authorizationCode: true
     }
   })
-}
-
-export async function sendAuthorizationCode(ctx: AuthContext) {
-  const created = await createAuthorizationCode(ctx.user.id)
 
   const config = useRuntimeConfig()
   await createEmail({
