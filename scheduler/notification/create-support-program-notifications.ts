@@ -6,8 +6,8 @@ import { getSupportProgramNotificationRecipientIds } from './getNotificationReci
 
 // Recipients for support program end notifications:
 // - Active family file referents with an allowed role:
-//   StructureManager, SocialWorker, Referent
-// - Excluded: ReceptionAgent, Instructor, disabled users
+//   StructureManager, SocialWorker, Referent, Instructor
+// - Excluded: ReceptionAgent, disabled users
 const supportProgramSelect = {
   id: true,
   beneficiaryId: true,
