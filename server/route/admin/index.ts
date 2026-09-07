@@ -16,6 +16,7 @@ import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
 import { getJobResults } from './getJobResults.query'
 import { launchStructureImport } from './launchStructureImport.mutation'
 import { disableStructure } from './disableStructure.mutation'
+import { authorizeDisableStructure } from './authorizeDisableStructure.mutation'
 import { toggleRdvsp } from './toggleRdvsp.mutation'
 import { getMinisters } from './getMinisters.query'
 import { getMinister } from './getMinister.query'
@@ -41,6 +42,7 @@ export const adminRoutes = {
   getJobResults,
   launchStructureImport,
   disableStructure,
+  authorizeDisableStructure,
   toggleRdvsp,
   getMinisters,
   getMinister,

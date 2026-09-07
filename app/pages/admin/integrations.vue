@@ -1,8 +1,9 @@
 <template>
-  <div class="fr-container--fluid fr-p-2w">
-    <div class="fr-grid-row">
+  <PageContainer class="fr-p-5w">
+    <PageTitle :title="routes.admin.AdminIntegrations.title" />
+    <div class="fr-grid-row fr-grid-row--gutter feature-section">
       <div class="fr-col-12">
-        <h1>Job</h1>
+        <h2>Job</h2>
       </div>
 
       <div class="fr-col-12">
@@ -52,7 +53,7 @@
         />
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -60,6 +61,7 @@
   import { SortOrder } from '~~/types/table'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import type { JobResultAdminFilterInput } from '~~/server/schema'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

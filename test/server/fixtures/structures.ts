@@ -1,6 +1,10 @@
+import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~~/server/prisma'
 
-export async function createStructure(date: Date) {
+export async function createStructure(
+  date: Date,
+  overrides?: Partial<Prisma.StructureCreateInput>
+) {
   return await prismaClient.structure.create({
     select: {
       id: true
@@ -27,7 +31,8 @@ export async function createStructure(date: Date) {
       deactivationAlertEmail: 0,
       deactivationAlertEmailDate: null,
       externalRdvspActive: false,
-      externalRdvspId: null
+      externalRdvspId: null,
+      ...overrides
     }
   })
 }

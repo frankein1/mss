@@ -151,4 +151,8 @@
   .fr-accordion__btn {
     padding: 2rem 2.5rem;
   }
+
+  .fr-container.content {
+    min-height: 90vh;
+  }
 </style>
