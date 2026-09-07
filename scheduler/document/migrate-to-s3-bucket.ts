@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { generateBucketKeyForDocument } from '~~/server/lib/s3/helper'
 import { SCHEDULER_ENV } from '../env'
-import { deleteFile, uploadWithEncryption } from '~~/server/lib/s3/file'
+import { uploadWithEncryption } from '~~/server/lib/s3/file'
 import { prismaClient } from '~~/server/prisma'
 
 type FailedId = { key: string; error: string }
@@ -26,12 +26,55 @@ function parseUploadConcurrency(): number {
   return value
 }
 
-const LOCAL_ENV = {
-  maxDurationHours: parseFloat(
+function parseMaxDuration() {
+  const maxDurationHours = parseFloat(
     process.env.NUXT_DOCUMENT_MIGRATION_MAX_DURATION_HOURS || '3'
-  ),
-  hasDocumentSizeLimit:
-    (process.env.NUXT_DOCUMENT_HAS_DOCUMENT_SIZE_LIMIT || 'true') === 'true',
+  )
+  if (!Number.isFinite(maxDurationHours) || maxDurationHours < 0) {
+    throw new Error(
+      'NUXT_DOCUMENT_MIGRATION_MAX_DURATION_HOURS must be finite and positive'
+    )
+  }
+
+  return maxDurationHours
+}
+
+function parseDocumentSizeLimit() {
+  if (!hasDocumentSizeLimit()) {
+    return undefined
+  }
+  const documentSizeLimit = parseFloat(
+    process.env.NUXT_DOCUMENT_MIGRATION_SIZE_LIMIT || '2000000' // default 2Mb
+  )
+  if (!Number.isFinite(documentSizeLimit) || documentSizeLimit < 0) {
+    throw new Error(
+      'NUXT_DOCUMENT_MIGRATION_SIZE_LIMIT must be finite and positive'
+    )
+  }
+
+  return documentSizeLimit
+}
+
+function hasDocumentSizeLimit() {
+  const value = process.env.NUXT_DOCUMENT_HAS_DOCUMENT_SIZE_LIMIT
+  if (value == undefined) {
+    return false
+  }
+  if (value === 'true') {
+    return true
+  }
+  if (value === 'false') {
+    return false
+  }
+  throw new Error(
+    'NUXT_DOCUMENT_HAS_DOCUMENT_SIZE_LIMIT must be "true" or "false"'
+  )
+}
+
+const LOCAL_ENV = {
+  maxDurationHours: parseMaxDuration(),
+  hasDocumentSizeLimit: hasDocumentSizeLimit(),
+  documentSizeLimit: parseDocumentSizeLimit(),
   uploadConcurrency: parseUploadConcurrency()
 }
 
@@ -41,7 +84,7 @@ function query(batchSize: number, excludeKeys: string[]) {
       migrated: false,
       ...(excludeKeys.length > 0 && { key: { notIn: excludeKeys } }),
       ...(LOCAL_ENV.hasDocumentSizeLimit && {
-        size: { gt: 0, lt: 2_000_000 }
+        size: { gt: 0, lt: LOCAL_ENV.documentSizeLimit }
       })
     },
     orderBy: [{ created: 'asc' }, { key: 'asc' }],
@@ -79,28 +122,25 @@ async function migrateDocument(doc: DocumentToMigrate) {
     dataForEncryptionContext: { documentKey: doc.key }
   })
 
-  // DocumentContent rows are kept intentionally — cleaned up in a separate pass after migration is verified
-  try {
-    await prismaClient.document.update({
-      select: { key: true },
-      where: { key: doc.key },
-      data: {
-        migrated: true,
-        encryptedDataKey,
-        filenameDisk: bucketKey
-      }
-    })
-  } catch (e: unknown) {
-    // If storing the document data in DB fails the document content won't be readable
-    // So it is cleaned and an error is sent.
-    await deleteFile(SCHEDULER_ENV, bucketKey).catch(s3e =>
-      console.error(
-        `migrate-to-s3-bucket: cleanup failed for ${bucketKey}`,
-        s3e
-      )
-    )
-    throw e
-  }
+  // DocumentContent rows are kept intentionally — cleaned up in a separate pass after migration is verified.
+  //
+  // The uploaded S3 object is intentionally not cleaned up if this update fails.
+  // The update can throw after PostgreSQL has already committed it (e.g. a
+  // connection reset): the row would then be migrated:true and download reads
+  // from S3, so deleting the object would break an already-migrated document.
+  // Leaving it is safe — the bucket key is deterministic, so a genuinely failed
+  // (still migrated:false) document is overwritten on retry, and download never
+  // reads S3 for a migrated:false row. A throw here is caught by the worker,
+  // which records the failure and continues; it does not stop the job.
+  await prismaClient.document.update({
+    select: { key: true },
+    where: { key: doc.key },
+    data: {
+      migrated: true,
+      encryptedDataKey,
+      filenameDisk: bucketKey
+    }
+  })
 }
 
 export default async function migrateToS3Bucket() {
