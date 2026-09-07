@@ -25,13 +25,15 @@
         :structure-id="data.structure.id"
         :users="data.users"
       />
-
-      <SocialSupportSubjects
-        class="fr-mb-5w"
-        :subjects="data.socialSupportSubjects"
-        :edit-path="routes.admin.AdminStructureSubjects.path(structureId)"
-        @refresh="refresh"
-      />
+      <div class="feature-section bg-color-white">
+        <h2 class="fr-h4">Objets d'accompagnements</h2>
+        <SocialSupportSubjects
+          class="fr-mb-5w"
+          :subjects="data.socialSupportSubjects"
+          :edit-path="routes.admin.AdminStructureSubjects.path(structureId)"
+          @refresh="refresh"
+        />
+      </div>
     </div>
   </PageContainer>
 </template>
