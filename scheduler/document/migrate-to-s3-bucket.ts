@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import type { Prisma } from '@prisma/client'
 import { generateBucketKeyForDocument } from '~~/server/lib/s3/helper'
 import { SCHEDULER_ENV } from '../env'
 import { uploadWithEncryption } from '~~/server/lib/s3/file'
@@ -71,22 +72,41 @@ function hasDocumentSizeLimit() {
   )
 }
 
+function parseDryRun() {
+  const value = process.env.NUXT_DOCUMENT_MIGRATION_DRY_RUN
+  if (value == undefined) {
+    return true // default is a dry run
+  }
+  if (value === 'true') {
+    return true
+  }
+  if (value === 'false') {
+    return false
+  }
+  throw new Error('NUXT_DOCUMENT_MIGRATION_DRY_RUN must be "true" or "false"')
+}
+
 const LOCAL_ENV = {
   maxDurationHours: parseMaxDuration(),
   hasDocumentSizeLimit: hasDocumentSizeLimit(),
   documentSizeLimit: parseDocumentSizeLimit(),
-  uploadConcurrency: parseUploadConcurrency()
+  uploadConcurrency: parseUploadConcurrency(),
+  dryRun: parseDryRun()
+}
+
+function queryFilter(excludeKeys: string[] = []): Prisma.DocumentWhereInput {
+  return {
+    migrated: false,
+    ...(excludeKeys.length > 0 && { key: { notIn: excludeKeys } }),
+    ...(LOCAL_ENV.hasDocumentSizeLimit && {
+      size: { gt: 0, lt: LOCAL_ENV.documentSizeLimit }
+    })
+  }
 }
 
 function query(batchSize: number, excludeKeys: string[]) {
   return prismaClient.document.findMany({
-    where: {
-      migrated: false,
-      ...(excludeKeys.length > 0 && { key: { notIn: excludeKeys } }),
-      ...(LOCAL_ENV.hasDocumentSizeLimit && {
-        size: { gt: 0, lt: LOCAL_ENV.documentSizeLimit }
-      })
-    },
+    where: queryFilter(excludeKeys),
     orderBy: [{ created: 'asc' }, { key: 'asc' }],
     skip: 0,
     take: batchSize,
@@ -143,7 +163,43 @@ async function migrateDocument(doc: DocumentToMigrate) {
   })
 }
 
+// Reports the scope of a real run without touching S3 or the database.
+// Uses aggregate queries over the same filter as the migration, so it never
+// enters the batch loop (the loop only advances because migrated rows drop out
+// of the filter — nothing does in a read-only pass).
+async function dryRunReport() {
+  const where = queryFilter()
+  const start = performance.now()
+  const [count, aggregate] = await Promise.all([
+    prismaClient.document.count({ where }),
+    prismaClient.document.aggregate({ where, _sum: { size: true } })
+  ])
+  const totalSize = aggregate._sum.size ?? 0
+  const duration = (performance.now() - start) / 1000
+
+  console.log(
+    'migrate-to-s3-bucket: ===== DRY RUN — no document will be modified ====='
+  )
+  console.log(
+    `migrate-to-s3-bucket: size limit ${
+      LOCAL_ENV.hasDocumentSizeLimit
+        ? `enabled (0 < size < ${LOCAL_ENV.documentSizeLimit} bytes)`
+        : 'disabled'
+    }`
+  )
+  console.log(
+    `migrate-to-s3-bucket: ${count} documents would be migrated (${(totalSize / 1_000_000).toFixed(1)} MB), computed in ${duration.toFixed(3)} s`
+  )
+}
+
 export default async function migrateToS3Bucket() {
+  console.log('migrate-to-s3-bucket: environment configuration', LOCAL_ENV)
+
+  if (LOCAL_ENV.dryRun) {
+    await dryRunReport()
+    return
+  }
+
   const deadline = Date.now() + LOCAL_ENV.maxDurationHours * 3600 * 1000
 
   let sizeMigrated = 0
