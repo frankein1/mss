@@ -9,8 +9,8 @@ import { getDocumentNotificationRecipientIds } from './getNotificationRecipientI
 // - Non-confidential document:
 //   - The document creator, regardless of their role
 //   - Active family file referents with an allowed role:
-//     StructureManager, SocialWorker, Referent
-//   - Excluded: ReceptionAgent, Instructor, disabled users
+//     StructureManager, SocialWorker, Referent, Instructor
+//   - Excluded: ReceptionAgent, disabled users
 const documentSelect = {
   key: true,
   name: true,

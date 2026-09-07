@@ -49,7 +49,7 @@ beforeEach(async () => {
 afterEach(async () => await deleteBeneficiary())
 
 describe('Notification - Document expiration today (referent filtering)', () => {
-  it('should notify creator and non-excluded referents (SocialWorker, StructureManager, Referent)', async () => {
+  it('should notify creator and eligible referents (SocialWorker, StructureManager, Referent, Instructor)', async () => {
     await documentNotifications.default.createDueTodayDocumentNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -59,8 +59,9 @@ describe('Notification - Document expiration today (referent filtering)', () => 
       }
     })
 
-    // Creator (Referent role) + SocialWorker + StructureManager + Second Referent
-    expect(notifs.length).toBe(4)
+    // Creator (Referent role) + SocialWorker + StructureManager
+    // + Second Referent + active Instructor
+    expect(notifs.length).toBe(5)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -78,9 +79,15 @@ describe('Notification - Document expiration today (referent filtering)', () => 
       )
     ).toBe(true)
     expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
+    expect(
+      notifs.some(
+        n =>
+          n.recipientId === fixturesUsers[FixtureUserRole.InstructorActive].id
+      )
+    ).toBe(true)
   })
 
-  it('should not notify ReceptionAgent nor Instructor', async () => {
+  it('should not notify ReceptionAgent nor disabled users', async () => {
     await documentNotifications.default.createDueTodayDocumentNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -95,6 +102,7 @@ describe('Notification - Document expiration today (referent filtering)', () => 
         n => n.recipientId === fixturesUsers[FixtureUserRole.ReceptionAgent].id
       )
     ).toBe(false)
+    // Instructor is an eligible role, but this fixture user is disabled
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
@@ -104,7 +112,7 @@ describe('Notification - Document expiration today (referent filtering)', () => 
 })
 
 describe('Notification - Document expiration in one month (referent filtering)', () => {
-  it('should notify creator and non-excluded referents (SocialWorker, StructureManager, Referent)', async () => {
+  it('should notify creator and eligible referents (SocialWorker, StructureManager, Referent, Instructor)', async () => {
     await documentNotifications.default.createDueInAMonthDocumentNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -114,8 +122,9 @@ describe('Notification - Document expiration in one month (referent filtering)',
       }
     })
 
-    // Creator (Referent role) + SocialWorker + StructureManager + Second Referent
-    expect(notifs.length).toBe(4)
+    // Creator (Referent role) + SocialWorker + StructureManager
+    // + Second Referent + active Instructor
+    expect(notifs.length).toBe(5)
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Referent].id
@@ -133,9 +142,15 @@ describe('Notification - Document expiration in one month (referent filtering)',
       )
     ).toBe(true)
     expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
+    expect(
+      notifs.some(
+        n =>
+          n.recipientId === fixturesUsers[FixtureUserRole.InstructorActive].id
+      )
+    ).toBe(true)
   })
 
-  it('should not notify ReceptionAgent nor Instructor', async () => {
+  it('should not notify ReceptionAgent nor disabled users', async () => {
     await documentNotifications.default.createDueInAMonthDocumentNotifications()
 
     const notifs = await NotificationRepo.prisma.findMany({
@@ -150,6 +165,7 @@ describe('Notification - Document expiration in one month (referent filtering)',
         n => n.recipientId === fixturesUsers[FixtureUserRole.ReceptionAgent].id
       )
     ).toBe(false)
+    // Instructor is an eligible role, but this fixture user is disabled
     expect(
       notifs.some(
         n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
@@ -245,6 +261,7 @@ const createBeneficiaryWithDocuments = async () => {
           { id: fixturesUsers[FixtureUserRole.SocialWorker].id },
           { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
           { id: fixturesUsers[FixtureUserRole.Instructor].id },
+          { id: fixturesUsers[FixtureUserRole.InstructorActive].id },
           { id: fixturesUsers[FixtureUserRole.Referent].id },
           { id: ID_SECOND_REFERENT },
           { id: ID_INACTIVE_SOCIAL_WORKER }
