@@ -3,6 +3,7 @@ import { UserRole } from '@prisma/client'
 type UserPayload = { id: string; role: UserRole }
 
 const ALLOWED_ROLES: ReadonlySet<UserRole> = new Set([
+  UserRole.Instructor,
   UserRole.StructureManager,
   UserRole.SocialWorker,
   UserRole.Referent

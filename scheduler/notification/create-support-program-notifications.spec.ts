@@ -26,6 +26,7 @@ import * as supportProgramNotifications from './create-support-program-notificat
 const ID_AGNES_VARDA = faker.string.uuid()
 const ID_SECOND_REFERENT = faker.string.uuid()
 const ID_INACTIVE_SOCIAL_WORKER = faker.string.uuid()
+const ID_NON_REFERENT_CREATOR = faker.string.uuid()
 const ID_PROGRAM_ENDING_TODAY = faker.string.uuid()
 const ID_PROGRAM_ENDING_IN_SIXTY_DAYS = faker.string.uuid()
 const ID_PROGRAM_WITHOUT_END_DATE = faker.string.uuid()
@@ -47,7 +48,7 @@ beforeEach(async () => await createBeneficiaryWithSupportPrograms())
 afterEach(async () => await deleteBeneficiary())
 
 describe('Notification - Support program ending in 60 days', () => {
-  it('should notify eligible referents (SocialWorker, StructureManager, Referent)', async () => {
+  it('should notify eligible referents (SocialWorker, StructureManager, Referent, Instructor)', async () => {
     await supportProgramNotifications.default.createEndInSixtyDaysSupportProgramNotifications()
 
     const notifs: Pick<Notification, 'recipientId'>[] =
@@ -78,6 +79,15 @@ describe('Notification - Support program ending in 60 days', () => {
       )
     ).toBe(true)
     expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
+    expect(
+      notifs.some(
+        n =>
+          n.recipientId === fixturesUsers[FixtureUserRole.InstructorActive].id
+      )
+    ).toBe(true)
+    // SocialWorker + StructureManager + Referent + Second Referent
+    // + active Instructor
+    expect(notifs.length).toBe(5)
   })
 
   it('should target the support program and carry its name as detail', async () => {
@@ -104,7 +114,7 @@ describe('Notification - Support program ending in 60 days', () => {
 })
 
 describe('Notification - Support program ending today', () => {
-  it('should notify eligible referents (SocialWorker, StructureManager, Referent)', async () => {
+  it('should notify eligible referents (SocialWorker, StructureManager, Referent, Instructor)', async () => {
     await supportProgramNotifications.default.createEndTodaySupportProgramNotifications()
 
     const notifs: Pick<Notification, 'recipientId'>[] =
@@ -135,9 +145,18 @@ describe('Notification - Support program ending today', () => {
       )
     ).toBe(true)
     expect(notifs.some(n => n.recipientId === ID_SECOND_REFERENT)).toBe(true)
+    expect(
+      notifs.some(
+        n =>
+          n.recipientId === fixturesUsers[FixtureUserRole.InstructorActive].id
+      )
+    ).toBe(true)
+    // SocialWorker + StructureManager + Referent + Second Referent
+    // + active Instructor
+    expect(notifs.length).toBe(5)
   })
 
-  it('should not notify the creator of an attached social support when their role is not eligible', async () => {
+  it('should not notify the creator of an attached social support when they are not a referent', async () => {
     await supportProgramNotifications.default.createEndTodaySupportProgramNotifications()
 
     const notifs: Pick<Notification, 'recipientId'>[] =
@@ -151,14 +170,12 @@ describe('Notification - Support program ending today', () => {
         }
       })
 
-    // This user created a social support attached to the program ending today,
-    // but only referents with an eligible role are notified
-    expect(
-      notifs.some(
-        n =>
-          n.recipientId === fixturesUsers[FixtureUserRole.InstructorActive].id
-      )
-    ).toBe(false)
+    // This user created a social support attached to the program ending today
+    // and has an eligible role, but only referents of the family file are
+    // notified
+    expect(notifs.some(n => n.recipientId === ID_NON_REFERENT_CREATOR)).toBe(
+      false
+    )
   })
 
   it('should not notify ReceptionAgent nor inactive users', async () => {
@@ -183,6 +200,12 @@ describe('Notification - Support program ending today', () => {
     expect(notifs.some(n => n.recipientId === ID_INACTIVE_SOCIAL_WORKER)).toBe(
       false
     )
+    // Instructor is an eligible role, but this fixture user is disabled
+    expect(
+      notifs.some(
+        n => n.recipientId === fixturesUsers[FixtureUserRole.Instructor].id
+      )
+    ).toBe(false)
   })
 })
 
@@ -224,6 +247,15 @@ const createBeneficiaryWithSupportPrograms = async () => {
         role: 'SocialWorker',
         status: 'Disabled',
         structureId: fixtureStructures[FixtureStructure.Test].id
+      },
+      {
+        id: ID_NON_REFERENT_CREATOR,
+        firstName: 'Non référent',
+        lastName: 'SocialWorker',
+        email: 'non.referent.support-program@yopmail.com',
+        role: 'SocialWorker',
+        status: 'Active',
+        structureId: fixtureStructures[FixtureStructure.Test].id
       }
     ]
   })
@@ -237,6 +269,7 @@ const createBeneficiaryWithSupportPrograms = async () => {
           { id: fixturesUsers[FixtureUserRole.StructureManager].id },
           { id: fixturesUsers[FixtureUserRole.SocialWorker].id },
           { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id },
+          { id: fixturesUsers[FixtureUserRole.Instructor].id },
           { id: fixturesUsers[FixtureUserRole.InstructorActive].id },
           { id: fixturesUsers[FixtureUserRole.Referent].id },
           { id: ID_SECOND_REFERENT },
@@ -286,7 +319,8 @@ const createBeneficiaryWithSupportPrograms = async () => {
     ]
   })
 
-  // Attached to the program ending today, created by a non-referent role
+  // Attached to the program ending today, created by an active user with an
+  // eligible role who is not a referent of the family file
   await prismaClient.socialSupport.create({
     data: {
       familyFileId: ff.id,
@@ -294,7 +328,7 @@ const createBeneficiaryWithSupportPrograms = async () => {
       structureId: fixtureStructures[FixtureStructure.Test].id,
       socialSupportType: SocialSupportType.Followup,
       status: SocialSupportStatus.InProgress,
-      createdById: fixturesUsers[FixtureUserRole.InstructorActive].id,
+      createdById: ID_NON_REFERENT_CREATOR,
       supportProgramId: ID_PROGRAM_ENDING_TODAY
     }
   })
@@ -312,6 +346,14 @@ const deleteBeneficiary = async () => {
     where: { id: ID_PROGRAM_NAME }
   })
   await prismaClient.user.deleteMany({
-    where: { id: { in: [ID_SECOND_REFERENT, ID_INACTIVE_SOCIAL_WORKER] } }
+    where: {
+      id: {
+        in: [
+          ID_SECOND_REFERENT,
+          ID_INACTIVE_SOCIAL_WORKER,
+          ID_NON_REFERENT_CREATOR
+        ]
+      }
+    }
   })
 }

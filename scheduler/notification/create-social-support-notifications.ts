@@ -19,8 +19,8 @@ function hasDefinedCreatedBy<
 // Recipients for social support notifications (DueDate, EndOfSupport):
 // - The social support creator, regardless of their role
 // - Active family file referents with an allowed role:
-//   StructureManager, SocialWorker, Referent
-// - Excluded: ReceptionAgent, Instructor, disabled users
+//   StructureManager, SocialWorker, Referent, Instructor
+// - Excluded: ReceptionAgent, disabled users
 const socialSupportSelect = {
   id: true,
   createdById: true,
