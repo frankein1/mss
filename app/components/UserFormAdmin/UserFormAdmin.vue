@@ -92,11 +92,11 @@
     v-if="props.user"
     class="admin-transfer-zone fr-mt-4w"
   >
-    <h2 class="fr-h6">Transférer vers une autre structure</h2>
+    <h2 class="fr-h6">Transfert vers une autre structure</h2>
     <p class="fr-text--sm fr-mb-2w">
-      Vous pouvez transférer cet utilisateur vers une autre structure. Cette
-      opération est sensible : son rôle pourra être modifié et elle devra être
-      confirmée par un code envoyé à votre boîte email.
+      Le transfert d'utilisateur vers une autre structure est une opération
+      sensible. Cette action devra être confirmée par un code envoyé à votre
+      adresse email.
     </p>
     <DsfrButton
       label="Transférer vers une autre structure"
@@ -105,13 +105,24 @@
       data-testid="open-transfer-modal"
       @click="onOpenTransfer"
     />
+    <DsfrAlert
+      v-if="canTransfer === false"
+      class="fr-mt-2v"
+      type="warning"
+      title="Le transfert est impossible"
+      :description="
+        check?.isLastStructureManager
+          ? 'L\'utilisateur est le ou la dernière responsable de structure'
+          : 'L\'utilisateur est encore référent de certains bénéficiaires de la structure. Un transfert de référent doit d\'abord être effectué par la structure.'
+      "
+    />
   </section>
 </template>
 
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import type { AdminUserOutput } from './types'
+  import type { AdminCheckTransferUserOutput, AdminUserOutput } from './types'
   import { userFieldLabels } from '~~/client/labels'
   import { userRoleKeys, userStatusKeys } from '~~/client/options'
   import type {
@@ -127,6 +138,7 @@
   const route = useRoute()
   const urlStructureId = route.query.structureId as string | undefined
   const modal = useModal()
+  const snackbar = useSnackbar()
 
   const props = defineProps<{
     user?: AdminUserOutput
@@ -158,17 +170,44 @@
     )
   })
 
-  function onOpenTransfer() {
+  const check = ref<AdminCheckTransferUserOutput | undefined>(undefined)
+  const validateCanTransfer = (c: AdminCheckTransferUserOutput | undefined) => {
+    return (
+      c !== undefined &&
+      c.isLastStructureManager === false &&
+      c.nBeneficiaries === 0
+    )
+  }
+  const canTransfer = computed(
+    () => check.value === undefined || validateCanTransfer(check.value)
+  )
+
+  async function onOpenTransfer() {
     if (!props.user?.structureId) {
       return
     }
+    try {
+      check.value = await trpcClient.admin.checkTransferUser.query({
+        id: props.user.id
+      })
+      if (!validateCanTransfer(check.value)) {
+        return
+      }
+    } catch {
+      snackbar.error('La vérification de la possibilité de transfert a échoué.')
+      return
+    }
+
+    const displayName = formatUserDisplayName(props.user)
+
     modal.open(AdminTransferUserForm, {
-      title: 'Transférer un utilisateur',
+      title: `Transférer ${displayName}`,
       size: 'lg',
       triggerOpen: true,
       user: {
         id: props.user.id,
-        displayName: formatUserDisplayName(props.user),
+        displayName,
+        email: props.user.email,
         currentStructureId: props.user.structureId,
         currentStructureName: currentStructureName.value
       },

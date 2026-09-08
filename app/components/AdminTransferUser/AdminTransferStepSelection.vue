@@ -1,9 +1,4 @@
 <template>
-  <p class="fr-text--sm fr-mb-2w">
-    Choisissez la structure de destination et le nouveau rôle. Cette action est
-    sensible : elle ne pourra être confirmée qu'avec un code envoyé à votre
-    boîte email.
-  </p>
   <AtomAlert
     v-if="topLevelError"
     :alert-type="AlertType.Error"
@@ -38,8 +33,11 @@
       required
     />
 
-    <template v-if="selectedStructureLocal && newRoleLabel">
-      <dl class="admin-transfer-user-form__preview fr-my-2w">
+    <div
+      v-if="selectedStructureLocal && newRoleLabel"
+      class="fr-alert fr-alert--warning fr-alert--sm fr-my-2w"
+    >
+      <dl class="admin-transfer-user-form__preview">
         <div>
           <dt>Utilisateur</dt>
           <dd data-testid="preview-user">{{ user.displayName }}</dd>
@@ -61,12 +59,21 @@
           <dd data-testid="preview-new-role">{{ newRoleLabel }}</dd>
         </div>
       </dl>
+    </div>
 
-      <VeeCheckbox
-        name="ackChecked"
-        label="J'ai bien pris connaissance des détails du transfert."
-      />
-    </template>
+    <VeeCheckbox
+      class="fr-mb-2w"
+      :disabled="!Boolean(selectedStructureLocal) || !Boolean(newRoleLabel)"
+      name="ackChecked"
+      label="J'ai bien pris connaissance des détails du transfert."
+    />
+
+    <hr />
+    <p>
+      Vous allez recevoir un code de confirmation unique sur votre adresse email
+      <span class="fr-text--bold">{{ user?.email }}</span
+      >. Ne fermez pas cette fenêtre.
+    </p>
 
     <DsfrButtonGroup
       inline-layout-when="always"
@@ -82,7 +89,7 @@
       </li>
       <li>
         <DsfrButton
-          label="Suivant"
+          label="Recevoir le code"
           type="submit"
           :disabled="sendingCode"
           data-testid="transfer-form-next"
@@ -107,6 +114,7 @@
     user: {
       id: string
       displayName: string
+      email: string
       currentStructureId: string
       currentStructureName: string
     }

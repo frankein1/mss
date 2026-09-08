@@ -75,5 +75,5 @@ Si vous n'êtes pas à l'origine de cette action, veuillez immédiatement contac
     }
   }
 
-  throw new Error('not implemented')
+  throw new Error('send-authorization-code: action not implemented')
 }

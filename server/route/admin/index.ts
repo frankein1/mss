@@ -3,6 +3,7 @@ import { createUser } from './createUser.mutation'
 import { editUser } from './editUser.mutation'
 import { authorizeUserTransfer } from './authorize-user-transfer.mutation'
 import { transferUser } from './transferUser.mutation'
+import { checkTransferUser } from './check-transfer-user.query'
 import { getEmails } from './getEmails.query'
 import { getOverview } from './getOverview.query'
 import { getStructure } from './getStructure.query'
@@ -31,6 +32,7 @@ export const adminRoutes = {
   editUser,
   authorizeUserTransfer,
   transferUser,
+  checkTransferUser,
   getEmails,
   getOverview,
   getStructure,

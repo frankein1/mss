@@ -1,6 +1,7 @@
 import { adminProcedure, router } from '~~/server/trpc'
 
 import { adminRoutes } from '~~/server/route'
+import { checkTransferUser } from '~~/server/route/admin/check-transfer-user.query'
 
 export const adminRouter = router({
   createStructure: adminProcedure
@@ -36,6 +37,9 @@ export const adminRouter = router({
   transferUser: adminProcedure
     .input(adminRoutes.transferUser.inputValidation)
     .mutation(adminRoutes.transferUser.executeAsAdmin),
+  checkTransferUser: adminProcedure
+    .input(adminRoutes.checkTransferUser.inputValidation)
+    .query(adminRoutes.checkTransferUser.executeAsAdmin),
   getEmails: adminProcedure
     .input(adminRoutes.getEmails.inputValidation)
     .query(adminRoutes.getEmails.executeAsAdmin),

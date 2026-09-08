@@ -25,6 +25,7 @@
     user: {
       id: string
       displayName: string
+      email: string
       currentStructureId: string
       currentStructureName: string
     }
