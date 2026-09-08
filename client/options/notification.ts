@@ -19,6 +19,8 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.ArchiveDueOneMonth]: 'Archive',
   [NotificationType.ArchiveDueSevenDays]: 'Archive',
   [NotificationType.SupportProgramEndToday]: 'Échéance',
+  [NotificationType.SupportProgramEndTwoMonths]: 'Échéance',
+  // Legacy: no longer created, kept so every enum value stays mapped
   [NotificationType.SupportProgramEndSixtyDays]: 'Échéance'
 })
 

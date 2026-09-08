@@ -2284,6 +2284,7 @@ enum NotificationType {
   ArchiveDueOneMonth
   SupportProgramEndToday
   SupportProgramEndSixtyDays
+  SupportProgramEndTwoMonths
 }
 
 model Notification {

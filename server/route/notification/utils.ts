@@ -51,7 +51,7 @@ export function getDescription(
 ) {
   const created = dayjs(notification.created)
   const dateInAMonth = dayjs(notification.created).add(1, 'month')
-  const dateInSixtyDays = dayjs(notification.created).add(60, 'day')
+  const dateInTwoMonths = dayjs(notification.created).add(2, 'month')
 
   switch (notification.type) {
     case 'DueDateOneMonth':
@@ -97,9 +97,9 @@ export function getDescription(
       )
     case 'SupportProgramEndToday':
       return getDateNotificationDescription(created, 'Fin de dispositif')
-    case 'SupportProgramEndSixtyDays':
+    case 'SupportProgramEndTwoMonths':
       return getDateNotificationDescription(
-        dateInSixtyDays,
+        dateInTwoMonths,
         'Fin de dispositif'
       )
 
@@ -182,7 +182,7 @@ export function getDescriptionHint(
     case 'DocumentExpirationOneMonth':
       return 'sur le document'
     case 'SupportProgramEndToday':
-    case 'SupportProgramEndSixtyDays':
+    case 'SupportProgramEndTwoMonths':
       return 'sur le dispositif'
     default:
       return ''
