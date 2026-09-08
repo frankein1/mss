@@ -28,7 +28,7 @@ const ID_SECOND_REFERENT = faker.string.uuid()
 const ID_INACTIVE_SOCIAL_WORKER = faker.string.uuid()
 const ID_NON_REFERENT_CREATOR = faker.string.uuid()
 const ID_PROGRAM_ENDING_TODAY = faker.string.uuid()
-const ID_PROGRAM_ENDING_IN_SIXTY_DAYS = faker.string.uuid()
+const ID_PROGRAM_ENDING_IN_TWO_MONTHS = faker.string.uuid()
 const ID_PROGRAM_WITHOUT_END_DATE = faker.string.uuid()
 const ID_PROGRAM_NAME = faker.string.uuid()
 const PROGRAM_NAME = 'Dispositif de test fin de parcours'
@@ -42,19 +42,19 @@ const beneficiary = {
   structureId: fixtureStructures[0].id
 }
 const TODAY = dayjs().toDate()
-const IN_SIXTY_DAYS = dayjs().add(60, 'day').toDate()
+const IN_TWO_MONTHS = dayjs().add(2, 'month').toDate()
 
 beforeEach(async () => await createBeneficiaryWithSupportPrograms())
 afterEach(async () => await deleteBeneficiary())
 
-describe('Notification - Support program ending in 60 days', () => {
+describe('Notification - Support program ending in 2 months', () => {
   it('should notify eligible referents (SocialWorker, StructureManager, Referent, Instructor)', async () => {
-    await supportProgramNotifications.default.createEndInSixtyDaysSupportProgramNotifications()
+    await supportProgramNotifications.default.createEndInTwoMonthsSupportProgramNotifications()
 
     const notifs: Pick<Notification, 'recipientId'>[] =
       await NotificationRepo.prisma.findMany({
         where: {
-          type: NotificationType.SupportProgramEndSixtyDays,
+          type: NotificationType.SupportProgramEndTwoMonths,
           beneficiaryId: ID_AGNES_VARDA
         },
         select: {
@@ -91,12 +91,12 @@ describe('Notification - Support program ending in 60 days', () => {
   })
 
   it('should target the support program and carry its name as detail', async () => {
-    await supportProgramNotifications.default.createEndInSixtyDaysSupportProgramNotifications()
+    await supportProgramNotifications.default.createEndInTwoMonthsSupportProgramNotifications()
 
     const notifs: Pick<Notification, 'supportProgramId' | 'detail'>[] =
       await NotificationRepo.prisma.findMany({
         where: {
-          type: NotificationType.SupportProgramEndSixtyDays,
+          type: NotificationType.SupportProgramEndTwoMonths,
           beneficiaryId: ID_AGNES_VARDA
         },
         select: {
@@ -107,7 +107,7 @@ describe('Notification - Support program ending in 60 days', () => {
 
     expect(notifs.length).toBeGreaterThan(0)
     expect(
-      notifs.every(n => n.supportProgramId === ID_PROGRAM_ENDING_IN_SIXTY_DAYS)
+      notifs.every(n => n.supportProgramId === ID_PROGRAM_ENDING_IN_TWO_MONTHS)
     ).toBe(true)
     expect(notifs.every(n => n.detail === PROGRAM_NAME)).toBe(true)
   })
@@ -212,7 +212,7 @@ describe('Notification - Support program ending today', () => {
 describe('Notification - Support program without end date', () => {
   it('should never be notified', async () => {
     await supportProgramNotifications.default.createEndTodaySupportProgramNotifications()
-    await supportProgramNotifications.default.createEndInSixtyDaysSupportProgramNotifications()
+    await supportProgramNotifications.default.createEndInTwoMonthsSupportProgramNotifications()
 
     const notifs: Pick<Notification, 'recipientId'>[] =
       await NotificationRepo.prisma.findMany({
@@ -305,10 +305,10 @@ const createBeneficiaryWithSupportPrograms = async () => {
         endDate: TODAY
       },
       {
-        id: ID_PROGRAM_ENDING_IN_SIXTY_DAYS,
+        id: ID_PROGRAM_ENDING_IN_TWO_MONTHS,
         beneficiaryId: b.id,
         supportProgramNameId: ID_PROGRAM_NAME,
-        endDate: IN_SIXTY_DAYS
+        endDate: IN_TWO_MONTHS
       },
       {
         id: ID_PROGRAM_WITHOUT_END_DATE,
