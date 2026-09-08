@@ -12,6 +12,7 @@ import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 import importDataEducationSchools from './data-education/import-schools'
 import { rotateKeyEncryptionKey } from './document/rotate-key-encryption-key'
+import migrateToS3Bucket from './document/migrate-to-s3-bucket'
 
 export const jobs = {
   /** Sends emails from the queue.
@@ -66,7 +67,11 @@ export const jobs = {
 
   /** Run the DEK rewrap after having rotated the encryption key in Open Bao
    * Manually launched */
-  rotateKEK: rotateKeyEncryptionKey
+  rotateKEK: rotateKeyEncryptionKey,
+
+  /** Batch job for document migration.
+   * Will only be activated manually via _caller for the time being */
+  documentS3Migration: migrateToS3Bucket
 } satisfies Record<string, () => Promise<unknown>>
 
 export type JobName = keyof typeof jobs
