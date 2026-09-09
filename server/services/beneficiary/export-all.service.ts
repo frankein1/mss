@@ -41,6 +41,10 @@ import {
   beneficiaryOrientationTypeKeys,
   supportProgramOutcomeKeys
 } from '~~/client/options'
+import type {
+  ActiveBeneficiaryMinistereDepartementServiceAc,
+  ActiveBeneficiaryMinistereStructure
+} from '~~/client/options'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import ExcelPkg from 'exceljs'
 import type { Column, Workbook } from 'exceljs'
@@ -385,11 +389,13 @@ function formatData(beneficiary: GetBeneficiaryOutput, userRole: UserRole) {
     ministereDepartementServiceAc:
       occupationIncome?.ministereDepartementServiceAc
         ? ministereDepartmentServiceAcKeys.byKey[
-            occupationIncome?.ministereDepartementServiceAc
+            occupationIncome?.ministereDepartementServiceAc as ActiveBeneficiaryMinistereDepartementServiceAc
           ]
         : '',
     ministereStructure: occupationIncome?.ministereStructure
-      ? ministereStructureKeys.byKey[occupationIncome?.ministereStructure]
+      ? ministereStructureKeys.byKey[
+          occupationIncome?.ministereStructure as ActiveBeneficiaryMinistereStructure
+        ]
       : '',
     socioProfessionalCategory: occupationIncome?.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryKeys.byKey[

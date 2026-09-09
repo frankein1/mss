@@ -1246,7 +1246,7 @@ enum BeneficiaryMinistereStructure {
   Ehesp
   // INTEFP
   Intefp
-  // MNC
+  // MNC - Obsolete
   Mnc
   // Retraites
   Retraites
@@ -1482,21 +1482,21 @@ enum BeneficiaryMinistereDepartementServiceAc {
   NouvelleCaledonie988
   // Agents en instance d'affectation
   AgentsEnInstanceDaffectation
-  // ARS-DD 75
+  // ARS-DD 75 – Obsolete
   ArsDd75
-  // ARS-DD 77
+  // ARS-DD 77 – Obsolete
   ArsDd77
-  // ARS-DD 78
+  // ARS-DD 78 – Obsolete
   ArsDd78
-  // ARS-DD 91
+  // ARS-DD 91 – Obsolete
   ArsDd91
-  // ARS-DD 92
+  // ARS-DD 92 – Obsolete
   ArsDd92
-  // ARS-DD 93
+  // ARS-DD 93 – Obsolete
   ArsDd93
-  // ARS-DD 94
+  // ARS-DD 94 – Obsolete
   ArsDd94
-  // ARS-DD 95
+  // ARS-DD 95 – Obsolete
   ArsDd95
   // Cabinet Ministériel Affaires Sociales / Santé
   CabinetMinisterielAffairesSocialesSante

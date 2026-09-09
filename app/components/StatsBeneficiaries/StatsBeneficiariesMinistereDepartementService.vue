@@ -45,6 +45,7 @@
     ministereDepartmentServiceAcKeys,
     getStatLabel
   } from '~~/client/options'
+  import type { ActiveBeneficiaryMinistereDepartementServiceAc } from '~~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const props = defineProps<{
@@ -62,9 +63,9 @@
     () =>
       data.value?.map(({ _count, ministereDepartementServiceAc }) => ({
         key: ministereDepartementServiceAc || 'null',
-        label: getStatLabel(
+        label: getStatLabel<ActiveBeneficiaryMinistereDepartementServiceAc>(
           ministereDepartmentServiceAcKeys.byKey,
-          ministereDepartementServiceAc
+          ministereDepartementServiceAc as ActiveBeneficiaryMinistereDepartementServiceAc | null
         ),
         count: _count
       })) || []
