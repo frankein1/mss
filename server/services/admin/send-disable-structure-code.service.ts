@@ -3,6 +3,7 @@ import { customAlphabet } from 'nanoid'
 import dayjs from 'dayjs'
 import { createEmail } from '~~/server/query'
 import { createEmailSubject } from '~~/server/email/createEmailSubject'
+import { formatUTCTimestamp } from '~~/server/utils/formatUTCTimestamp'
 import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import { INACTIVITY_MONTHS } from '~/utils/structure'
 import { SUPPORT_EMAIL } from '~/utils/constants'
@@ -27,6 +28,9 @@ export async function sendDisableStructureCode({
       name: true,
       zipcode: true,
       city: true,
+      lastAccess: true,
+      deactivationAlertEmail: true,
+      deactivationAlertEmailDate: true,
       _count: {
         select: {
           users: true,
@@ -49,11 +53,23 @@ export async function sendDisableStructureCode({
     }
   })
 
-  const consequences = [
-    'les bénéficiaires et leurs accompagnements seront anonymisés ;',
-    'les notifications, commentaires, documents, budgets et ateliers seront supprimés ;',
-    'les comptes utilisateurs seront anonymisés et désactivés, et leurs titulaires recevront un email les informant de la suppression de leur espace de travail.'
-  ]
+  const lastAccess = structure.lastAccess
+    ? formatUTCTimestamp(structure.lastAccess)
+    : 'jamais'
+  const isRecentlyActive =
+    !!structure.lastAccess &&
+    dayjs(structure.lastAccess).isAfter(
+      dayjs().subtract(INACTIVITY_MONTHS, 'month')
+    )
+  const lastAccessHtmlItem = isRecentlyActive
+    ? `<li style="color: red; font-weight: bold;">Dernière connexion : ${lastAccess}</li>`
+    : `<li>Dernière connexion : ${lastAccess}</li>`
+  const firstEmailDateTextLine = structure.deactivationAlertEmailDate
+    ? `Date du premier e-mail d'alerte : ${formatUTCTimestamp(structure.deactivationAlertEmailDate)}\n`
+    : ''
+  const firstEmailDateHtmlItem = structure.deactivationAlertEmailDate
+    ? `<li>Date du premier e-mail d'alerte : ${formatUTCTimestamp(structure.deactivationAlertEmailDate)}</li>\n`
+    : ''
 
   const config = useRuntimeConfig()
   await createEmail({
@@ -69,16 +85,22 @@ Vous venez de demander la désactivation d'une structure sur Mon Suivi Social.
 
 Nom de la structure : ${structure.name}
 Commune : ${structure.zipcode} ${structure.city}
+Dernière connexion : ${lastAccess}
 Comptes utilisateurs : ${structure._count.users}
 Bénéficiaires : ${structure._count.beneficiaries}
 Accompagnements : ${structure._count.socialSupports}
-
+E-mails d'alerte de désactivation envoyés : ${structure.deactivationAlertEmail}
+${firstEmailDateTextLine}
 Pour confirmer, saisissez ce code dans l'interface d'administration : ${created.authorizationCode}
 Ce code est valable 10 minutes.
 
-Attention, cette structure a eu une activité au cours des ${INACTIVITY_MONTHS} derniers mois et la désactivation est irréversible. Une fois confirmée :
+Attention, la désactivation d'une structure est irréversible. 
 
-${consequences.map(consequence => `- ${consequence}`).join('\n')}
+Une fois confirmée :
+
+- les bénéficiaires et leurs accompagnements seront anonymisés ;
+- les notifications, commentaires, documents, budgets et ateliers seront supprimés ;
+- les comptes utilisateurs seront anonymisés et désactivés, et leurs titulaires recevront un email les informant de la suppression de leur espace de travail.
 
 Vérifiez qu'il s'agit bien de la structure que vous souhaitez désactiver avant de saisir le code. Si vous n'êtes pas à l'origine de cette demande, ne communiquez ce code à personne et contactez-nous : ${SUPPORT_EMAIL}.
 
@@ -90,15 +112,20 @@ L'équipe Mon Suivi Social`,
 <ul>
 <li>Nom de la structure : <strong>${structure.name}</strong></li>
 <li>Commune : ${structure.zipcode} ${structure.city}</li>
+${lastAccessHtmlItem}
 <li>Comptes utilisateurs : ${structure._count.users}</li>
 <li>Bénéficiaires : ${structure._count.beneficiaries}</li>
 <li>Accompagnements : ${structure._count.socialSupports}</li>
-</ul>
+<li>E-mails d'alerte de désactivation envoyés : ${structure.deactivationAlertEmail}</li>
+${firstEmailDateHtmlItem}</ul>
 <p>Pour confirmer, saisissez ce code dans l'interface d'administration : <strong>${created.authorizationCode}</strong><br/>
 Ce code est valable 10 minutes.</p>
-<p>Attention, cette structure a eu une activité au cours des ${INACTIVITY_MONTHS} derniers mois et la désactivation est irréversible. Une fois confirmée :</p>
+<p style="color: red; font-weight: bold;">Attention, la désactivation d'une structure est irréversible.</p>
+<p>Une fois confirmée :</p>
 <ul>
-${consequences.map(consequence => `<li>${consequence}</li>`).join('\n')}
+<li>les bénéficiaires et leurs accompagnements seront anonymisés ;</li>
+<li>les notifications, commentaires, documents, budgets et ateliers seront supprimés ;</li>
+<li>les comptes utilisateurs seront anonymisés et désactivés, et leurs titulaires recevront un email les informant de la suppression de leur espace de travail.</li>
 </ul>
 <p>Vérifiez qu'il s'agit bien de la structure que vous souhaitez désactiver avant de saisir le code. Si vous n'êtes pas à l'origine de cette demande, ne communiquez ce code à personne et contactez-nous : ${SUPPORT_EMAIL}.</p>
 <p>Cordialement,</p>
