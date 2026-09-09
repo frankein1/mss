@@ -79,7 +79,7 @@ beforeEach(async () => {
   })
   secondaryManagerId = secondaryManager.id
 
-  await primeConfirmationCode('11111111')
+  await primeConfirmationCode('111111111111')
 })
 
 afterEach(async () => {
@@ -125,7 +125,7 @@ describe('Admin - Transfer User - Authorizations', () => {
         userId: transferableUserId,
         newStructureId: targetStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/user is not an administrator/i)
   })
@@ -139,7 +139,7 @@ describe('Admin - Transfer User - Happy path', () => {
       userId: transferableUserId,
       newStructureId: targetStructureId,
       newRole: 'Referent',
-      confirmationCode: '11111111'
+      confirmationCode: '111111111111'
     })
 
     expect(result).toMatchObject({
@@ -212,7 +212,7 @@ describe('Admin - Transfer User - Notification cleanup', () => {
       userId: transferableUserId,
       newStructureId: targetStructureId,
       newRole: 'SocialWorker',
-      confirmationCode: '11111111'
+      confirmationCode: '111111111111'
     })
 
     const remaining = await prismaClient.notification.findMany({
@@ -240,7 +240,7 @@ describe('Admin - Transfer User - Referent guardrail', () => {
         userId: transferableUserId,
         newStructureId: targetStructureId,
         newRole: 'Referent',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/still referent on 1 family file/i)
 
@@ -258,7 +258,7 @@ describe('Admin - Transfer User - Refusals', () => {
         userId: fixturesUsers[FixtureUserRole.Administrator].id,
         newStructureId: targetStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/cannot transfer an administrator/i)
   })
@@ -271,7 +271,7 @@ describe('Admin - Transfer User - Refusals', () => {
         userId: transferableUserId,
         newStructureId: sourceStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/user already belongs to structure/i)
   })
@@ -297,7 +297,7 @@ describe('Admin - Transfer User - Refusals', () => {
           userId: transferableUserId,
           newStructureId: disabledStructure.id,
           newRole: 'SocialWorker',
-          confirmationCode: '11111111'
+          confirmationCode: '111111111111'
         })
       ).rejects.toThrow(/cannot transfer a user to a disabled structure/i)
     } finally {
@@ -317,7 +317,7 @@ describe('Admin - Transfer User - Refusals', () => {
         userId: transferableUserId,
         newStructureId: targetStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/cannot transfer a disabled user/i)
   })
@@ -354,7 +354,7 @@ describe('Admin - Transfer User - Refusals', () => {
           userId: soloManager.id,
           newStructureId: targetStructureId,
           newRole: 'StructureManager',
-          confirmationCode: '11111111'
+          confirmationCode: '111111111111'
         })
       ).rejects.toThrow(/last structure manager/i)
     } finally {
@@ -395,7 +395,7 @@ describe('Admin - Transfer User - Confirmation code', () => {
         userId: transferableUserId,
         newStructureId: targetStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '11111111'
+        confirmationCode: '111111111111'
       })
     ).rejects.toThrow(/invalid code/i)
   })
@@ -409,7 +409,7 @@ describe('Admin - Transfer User - Degenerate case', () => {
       userId: transferableUserId,
       newStructureId: targetStructureId,
       newRole: 'SocialWorker',
-      confirmationCode: '11111111'
+      confirmationCode: '111111111111'
     })
     expect(result.structureId).toBe(targetStructureId)
   })
