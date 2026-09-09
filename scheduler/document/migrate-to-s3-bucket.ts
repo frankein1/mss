@@ -72,6 +72,19 @@ function hasDocumentSizeLimit() {
   )
 }
 
+function parseFetchBatchSize(): number {
+  const value = parseInt(
+    process.env.NUXT_DOCUMENT_MIGRATION_FETCH_BATCH_SIZE || '500',
+    10
+  )
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(
+      'NUXT_DOCUMENT_MIGRATION_FETCH_BATCH_SIZE must be a positive integer'
+    )
+  }
+  return value
+}
+
 function parseDryRun() {
   const value = process.env.NUXT_DOCUMENT_MIGRATION_DRY_RUN
   if (value == undefined) {
@@ -91,6 +104,7 @@ const LOCAL_ENV = {
   hasDocumentSizeLimit: hasDocumentSizeLimit(),
   documentSizeLimit: parseDocumentSizeLimit(),
   uploadConcurrency: parseUploadConcurrency(),
+  fetchBatchSize: parseFetchBatchSize(),
   dryRun: parseDryRun()
 }
 
@@ -104,41 +118,66 @@ function queryFilter(excludeKeys: string[] = []): Prisma.DocumentWhereInput {
   }
 }
 
-function query(batchSize: number, excludeKeys: string[]) {
+// The document content will be fetched separately
+//
+// Selecting `documentContent.content` forced Prisma (relationJoins is enabled)
+// to inline a LATERAL join whose JSONB projection sits in the SELECT list. That
+// made PostgreSQL detoast and JSON-encode the file bytes of every candidate row
+// before applying LIMIT, so a query returning a handful of rows touched the
+// content of the whole unmigrated set. Content is now fetched one chunk at a
+// time, in a single IN query, right before upload — see fetchChunkContents.
+//
+// No ORDER BY: a full drain needs no stable order (the migrated flag drops
+// processed rows out of the filter and the notIn excludes failures), so we
+// avoid sorting the unmigrated set on every batch and need no extra index.
+function queryDocumentMetadata(batchSize: number, excludeKeys: string[]) {
   return prismaClient.document.findMany({
     where: queryFilter(excludeKeys),
-    orderBy: [{ created: 'asc' }, { key: 'asc' }],
-    skip: 0,
     take: batchSize,
     select: {
       key: true,
-      size: true,
-      documentContent: { select: { content: true } }
+      size: true
     }
   })
 }
-type DocumentToMigrate = Awaited<ReturnType<typeof query>>[0]
+type DocumentToMigrate = Awaited<ReturnType<typeof queryDocumentMetadata>>[0]
 
 async function fetchDocumentBatch(excludeKeys: string[]) {
   const start = performance.now()
-  const docs = await query(LOCAL_ENV.uploadConcurrency, excludeKeys)
+  const docs = await queryDocumentMetadata(
+    LOCAL_ENV.fetchBatchSize,
+    excludeKeys
+  )
   console.debug(
-    `migrate-to-s3-bucket: fetching ${LOCAL_ENV.uploadConcurrency} documents in ${performance.now() - start} ms`
+    `migrate-to-s3-bucket: fetched ${docs.length} document metadata rows in ${performance.now() - start} ms`
   )
   return docs
 }
 
-async function migrateDocument(doc: DocumentToMigrate) {
-  const bucketKey = generateBucketKeyForDocument(doc.key)
-
-  if (!doc.documentContent?.content) {
-    throw new Error('migrate-to-s3-bucket: no content in document ' + doc.key)
+// Batch fetch for document content. A chunk holds at most uploadConcurrency blobs.
+async function fetchChunkContents(
+  keys: string[]
+): Promise<Map<string, Buffer>> {
+  const rows = await prismaClient.documentContent.findMany({
+    where: { documentKey: { in: keys } },
+    select: { documentKey: true, content: true }
+  })
+  const contents = new Map<string, Buffer>()
+  for (const row of rows) {
+    if (row.content) {
+      contents.set(row.documentKey, row.content as Buffer)
+    }
   }
+  return contents
+}
+
+async function migrateDocument(doc: DocumentToMigrate, content: Buffer) {
+  const bucketKey = generateBucketKeyForDocument(doc.key)
 
   const { encryptedDataKey } = await uploadWithEncryption({
     config: SCHEDULER_ENV,
     bucketKey,
-    plainData: doc.documentContent.content as Buffer<ArrayBufferLike>,
+    plainData: content as Buffer<ArrayBufferLike>,
     dataForEncryptionContext: { documentKey: doc.key }
   })
 
@@ -212,9 +251,18 @@ export default async function migrateToS3Bucket() {
   )
   const start = performance.now()
 
-  async function worker(doc: DocumentToMigrate, failedIds: FailedId[]) {
+  async function worker(
+    doc: DocumentToMigrate,
+    content: Buffer | undefined,
+    failedIds: FailedId[]
+  ) {
     try {
-      await migrateDocument(doc)
+      if (!content) {
+        throw new Error(
+          'migrate-to-s3-bucket: no content in document ' + doc.key
+        )
+      }
+      await migrateDocument(doc, content)
     } catch (e: unknown) {
       const error = e instanceof Error ? e.message : String(e)
       failedIds.push({ key: doc.key, error })
@@ -230,6 +278,26 @@ export default async function migrateToS3Bucket() {
     }
   }
 
+  // Processes a batch in chunks of `uploadConcurrency`. Each chunk does exactly
+  // one DB read (all its content in a single IN query) and then uploads its
+  // documents in parallel — S3/KMS work that never touches the DB pool. So DB
+  // read concurrency is capped at one connection while S3 upload concurrency is
+  // uploadConcurrency. Checks the deadline and failure circuit-breaker between
+  // chunks so a large batch stops promptly.
+  async function drainBatch(docs: DocumentToMigrate[]) {
+    const chunkSize = LOCAL_ENV.uploadConcurrency
+    for (let i = 0; i < docs.length; i += chunkSize) {
+      if (Date.now() >= deadline || failedIds.length >= 100) {
+        return
+      }
+      const chunk = docs.slice(i, i + chunkSize)
+      const contents = await fetchChunkContents(chunk.map(doc => doc.key))
+      await Promise.all(
+        chunk.map(doc => worker(doc, contents.get(doc.key), failedIds))
+      )
+    }
+  }
+
   while (Date.now() < deadline && failedIds.length < 100) {
     const docs = await fetchDocumentBatch(failedIds.map(f => f.key))
     if (!docs.length) {
@@ -239,7 +307,7 @@ export default async function migrateToS3Bucket() {
       break
     }
 
-    await Promise.all(docs.map(doc => worker(doc, failedIds)))
+    await drainBatch(docs)
   }
 
   duration = (performance.now() - start) / 1000
