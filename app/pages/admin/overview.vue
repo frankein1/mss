@@ -21,7 +21,7 @@
               <p class="fr-card__title">
                 {{ data.structures }}
               </p>
-              <h2 class="fr-text--lg">Structures</h2>
+              <h2 class="fr-text--lg">Structures actives</h2>
             </div>
           </div>
         </div>
@@ -37,5 +37,6 @@
     name: routes.admin.AdminOverview.name
   })
 
+  /* server/route/admin/getOverview.query.ts */
   const data = await useTrpcClient().admin.getOverview.query()
 </script>
