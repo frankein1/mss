@@ -38,6 +38,7 @@
   import { routes } from '~/utils/routes'
   import type { StatFilterInput } from '~~/server/schema'
   import { getStatLabel, ministereStructureKeys } from '~~/client/options'
+  import type { ActiveBeneficiaryMinistereStructure } from '~~/client/options'
   import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const props = defineProps<{
@@ -55,7 +56,10 @@
     () =>
       data.value?.map(({ _count, ministereStructure }) => ({
         key: ministereStructure || 'null',
-        label: getStatLabel(ministereStructureKeys.byKey, ministereStructure),
+        label: getStatLabel<ActiveBeneficiaryMinistereStructure>(
+          ministereStructureKeys.byKey,
+          ministereStructure as ActiveBeneficiaryMinistereStructure | null
+        ),
         count: _count
       })) || []
   )

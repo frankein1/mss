@@ -50,6 +50,10 @@ import {
   validIntNumber,
   requiredErrorMessage
 } from '~/utils/zod'
+import type {
+  ActiveBeneficiaryMinistereDepartementServiceAc,
+  ActiveBeneficiaryMinistereStructure
+} from '~~/client/options'
 
 export const updateBeneficiaryGeneralInformationSchema = z.object({
   id: z.string().uuid(),
@@ -201,12 +205,20 @@ export const updateBeneficiaryOccupationSchema = z.object({
   ministereCategorie: withEmptyValueOptionalNativeEnum(
     BeneficiaryMinistereCategorie
   ),
+  // Type-only narrowing (runtime still accepts the full native enum): the input
+  // type is the active subset so callers never handle the obsolete members.
   ministereDepartementServiceAc: withEmptyValueOptionalNativeEnum(
     BeneficiaryMinistereDepartementServiceAc
-  ),
+  ) as unknown as z.ZodType<
+    ActiveBeneficiaryMinistereDepartementServiceAc | null | undefined
+  >,
+  // Type-only narrowing (runtime still accepts the full native enum): the input
+  // type is the active subset so callers never handle the obsolete members.
   ministereStructure: withEmptyValueOptionalNativeEnum(
     BeneficiaryMinistereStructure
-  )
+  ) as unknown as z.ZodType<
+    ActiveBeneficiaryMinistereStructure | null | undefined
+  >
 })
 
 export type UpdateBeneficiaryOccupationInput = z.infer<
