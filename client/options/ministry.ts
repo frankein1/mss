@@ -64,6 +64,24 @@ export const ministerStatusKeys = buildKeys({
 //   [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)'
 // })
 
+/**
+ * The ARS-DD entries (75, 77, 78, 91-95) were disabled: no longer offered to
+ * users, but kept in the Postgres enum since existing beneficiary records may
+ * still reference them. App code therefore treats this field as the active
+ * subset below, even though Prisma and zod still surface the full union.
+ */
+export type ActiveBeneficiaryMinistereDepartementServiceAc = Exclude<
+  BeneficiaryMinistereDepartementServiceAc,
+  | 'ArsDd75'
+  | 'ArsDd77'
+  | 'ArsDd78'
+  | 'ArsDd91'
+  | 'ArsDd92'
+  | 'ArsDd93'
+  | 'ArsDd94'
+  | 'ArsDd95'
+>
+
 export const ministereDepartmentServiceAcKeys = buildKeys({
   [BeneficiaryMinistereDepartementServiceAc.Ain01]: '(01) Ain',
   [BeneficiaryMinistereDepartementServiceAc.Aisne02]: '(02) Aisne',
@@ -201,14 +219,6 @@ export const ministereDepartmentServiceAcKeys = buildKeys({
     '(988) Nouvelle-Calédonie',
   [BeneficiaryMinistereDepartementServiceAc.AgentsEnInstanceDaffectation]:
     "Agents en instance d'affectation",
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd75]: 'ARS-DD 75',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd77]: 'ARS-DD 77',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd78]: 'ARS-DD 78',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd91]: 'ARS-DD 91',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd92]: 'ARS-DD 92',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd93]: 'ARS-DD 93',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd94]: 'ARS-DD 94',
-  [BeneficiaryMinistereDepartementServiceAc.ArsDd95]: 'ARS-DD 95',
   [BeneficiaryMinistereDepartementServiceAc.CabinetMinisterielAffairesSocialesSante]:
     'Cabinet Ministériel Affaires Sociales / Santé',
   [BeneficiaryMinistereDepartementServiceAc.CabinetMinisterielTravail]:
@@ -262,6 +272,17 @@ export const ministereDepartmentServiceAcKeys = buildKeys({
   [BeneficiaryMinistereDepartementServiceAc.Sgmcas]: 'SGMCAS'
 })
 
+/**
+ * The `Mnc` entry was disabled: no longer offered to users, but kept in the
+ * Postgres enum since existing beneficiary records may still reference it.
+ * App code therefore treats this field as the active subset below, even
+ * though Prisma and zod still surface the full union.
+ */
+export type ActiveBeneficiaryMinistereStructure = Exclude<
+  BeneficiaryMinistereStructure,
+  'Mnc'
+>
+
 export const ministereStructureKeys = buildKeys({
   [BeneficiaryMinistereStructure.AdministrationCentrale]:
     'Administration centrale',
@@ -273,7 +294,6 @@ export const ministereStructureKeys = buildKeys({
   [BeneficiaryMinistereStructure.InjaInjs]: 'INJA/INJS',
   [BeneficiaryMinistereStructure.Ehesp]: 'EHESP',
   [BeneficiaryMinistereStructure.Intefp]: 'INTEFP',
-  [BeneficiaryMinistereStructure.Mnc]: 'MNC',
   [BeneficiaryMinistereStructure.Retraites]: 'Retraites',
   [BeneficiaryMinistereStructure.Other]: 'Autre'
 })

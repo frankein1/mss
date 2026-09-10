@@ -31,6 +31,10 @@
     UpdateBeneficiaryOccupationInput
   } from '~~/server/schema'
   import { updateBeneficiaryOccupationSchema } from '~~/server/schema'
+  import type {
+    ActiveBeneficiaryMinistereDepartementServiceAc,
+    ActiveBeneficiaryMinistereStructure
+  } from '~~/client/options'
   import { routes } from '~/utils/routes'
 
   definePageMeta({
@@ -67,6 +71,11 @@
       ...occupationIncome,
       socioProfessionalCategory: (occupationIncome?.socioProfessionalCategory ??
         null) as ActiveBeneficiarySocioProfessionalCategory | null,
+      ministereDepartementServiceAc:
+        (occupationIncome?.ministereDepartementServiceAc ??
+          null) as ActiveBeneficiaryMinistereDepartementServiceAc | null,
+      ministereStructure: (occupationIncome?.ministereStructure ??
+        null) as ActiveBeneficiaryMinistereStructure | null,
       schoolUai: occupationIncome?.schoolUai ?? null,
       school: occupationIncome?.school ?? null,
       schoolPrograms: occupationIncome?.schoolPrograms || [],
