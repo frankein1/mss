@@ -6,7 +6,11 @@ import type { AdminContext } from '~~/server/trpc'
 
 const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
   const users = await UserRepo.count(user, {})
-  const structures = await StructureRepo.count(user, {})
+  const structures = await StructureRepo.count(user, {
+    where: {
+      disabled: false
+    }
+  })
 
   return { users, structures }
 }
