@@ -409,7 +409,7 @@ test('Structure - Disable - Administrator cannot deactivate an active structure 
   await expect(() =>
     trpc.administrator.admin.disableStructure({
       id: structureId,
-      code: '00000000'
+      code: '000000000000'
     })
   ).rejects.toThrow(/invalid code/i)
 

@@ -371,7 +371,7 @@ describe('Admin - Transfer User - Confirmation code', () => {
         userId: transferableUserId,
         newStructureId: targetStructureId,
         newRole: 'SocialWorker',
-        confirmationCode: '99999999'
+        confirmationCode: '999999999999'
       })
     ).rejects.toThrow(/invalid code/i)
 
