@@ -1,13 +1,12 @@
 import { createQuery } from '~~/server/route'
-import type { ProtectedAppContext } from '~~/server/trpc'
+import { forbiddenError, type ProtectedAppContext } from '~~/server/trpc'
 import type { GetUserInput } from '~~/server/schema'
 import { getUserSchema } from '~~/server/schema'
 import { UserRepo } from '~~/server/database'
 import type { SecurityRuleContext } from '~~/server/security/rules/types'
 import { getAppContextPermissions } from '~~/server/security'
-import type { Prisma } from '@prisma/client'
+import { UserRole, type Prisma } from '@prisma/client'
 import type { UserBlockingRelation } from '~~/client/labels'
-import type { NonAdminUserRole } from '~~/types/user'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users
@@ -49,7 +48,14 @@ const handler = async ({
       select: userSelect
     })
 
-    return { ...user, role: user.role as NonAdminUserRole, _count: undefined }
+    if (user.role === UserRole.Administrator) {
+      throw forbiddenError(
+        'Cannot have an Administrator among user-managed users'
+      )
+    }
+
+    // Spread first, then the narrowed role, which the spread alone would widen
+    return { ...user, role: user.role, _count: undefined }
   }
 
   const { _count, ...user } = await UserRepo.findUniqueOrThrow(ctx.user, {
@@ -57,9 +63,15 @@ const handler = async ({
     select: { ...userSelect, _count: { select: blockingRelationsSelect } }
   })
 
+  if (user.role === UserRole.Administrator) {
+    throw forbiddenError(
+      'Cannot have an Administrator among user-managed users'
+    )
+  }
+
   return {
     ...user,
-    role: user.role as NonAdminUserRole,
+    role: user.role,
     _count: {
       referentFor: _count.referentFor,
       createdDocuments: _count.createdDocuments,
