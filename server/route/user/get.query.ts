@@ -34,7 +34,10 @@ const handler = async ({
           referentFor: true,
           createdDocuments: true,
           createdSocialSupports: true,
-          createdComments: true
+          createdComments: true,
+          archivedBeneficiaries2: true,
+          RedirectionReasons: true,
+          supportProgramNames: true
         }
       }
     }
@@ -69,11 +72,14 @@ const handler = async ({
     externalRdvspId: user.externalRdvspId,
     _count: {
       referentFor: user._count.referentFor,
-      createdDocuments: user._count.createdComments,
+      createdDocuments: user._count.createdDocuments,
       createdSocialSupports: user._count.createdSocialSupports,
       createdComments: user._count.createdComments,
       workshops: workshopCount,
-      workshopNames: workshopNamesCount
+      workshopNames: workshopNamesCount,
+      archivedBeneficiaries: user._count.archivedBeneficiaries2,
+      redirectionReasons: user._count.RedirectionReasons,
+      supportProgramNames: user._count.supportProgramNames
     }
   }
 }

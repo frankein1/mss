@@ -1,17 +1,22 @@
 import { UserActivityObject, UserActivityType } from '@prisma/client'
 import { createMutation } from '~~/server/route'
 import type { ProtectedAppContext } from '~~/server/trpc'
+import { notfoundError } from '~~/server/trpc'
 import type { DeleteUserInput } from '~~/server/schema'
 import { deleteUserShema } from '~~/server/schema'
 import type { SecurityRuleContext } from '~~/server/security'
 import { getAppContextPermissions } from '~~/server/security'
-import {
-  StructureRepo,
-  UserRepo,
-  WorkshopNameRepo,
-  WorkshopRepo
-} from '~~/server/database'
+import { StructureRepo, UserRepo } from '~~/server/database'
 import { TRPCError } from '@trpc/server'
+import {
+  userBlockingRelationLabels,
+  type UserBlockingRelation
+} from '~~/client/labels'
+import { userBlockingRelationCounts } from '~~/client/labels/user.labels'
+
+const blockingRelationsSelect = Object.fromEntries(
+  Object.values(userBlockingRelationCounts).map(count => [count, true])
+) as Record<(typeof userBlockingRelationCounts)[UserBlockingRelation], true>
 
 const handler = async ({
   ctx,
@@ -41,43 +46,36 @@ const throwIfUserIsNotAuthorized = async (
     })
   }
 
-  const [user, structure, workshopCount, workshopNameCount] = await Promise.all(
-    [
-      UserRepo.findUnique(ctx.user, {
-        select: {
-          id: true,
-          _count: {
-            select: {
-              referentFor: true,
-              createdDocuments: true,
-              createdSocialSupports: true,
-              createdComments: true
-            }
-          }
-        },
-        where: { id }
-      }),
-      StructureRepo.findUniqueOrThrow(ctx.user, {
-        select: { id: true, users: { select: { id: true, role: true } } },
-        where: { id: ctx.structure.id }
-      }),
-      WorkshopRepo.count(ctx.user, { where: { createdById: id } }),
-      WorkshopNameRepo.count(ctx.user, { where: { createdById: id } })
-    ]
-  )
+  const [user, structure] = await Promise.all([
+    UserRepo.findUnique(ctx.user, {
+      select: {
+        id: true,
+        _count: { select: blockingRelationsSelect }
+      },
+      where: { id }
+    }),
+    StructureRepo.findUniqueOrThrow(ctx.user, {
+      select: { id: true, users: { select: { id: true, role: true } } },
+      where: { id: ctx.structure.id }
+    })
+  ])
 
-  if (
-    (user?._count.referentFor ?? 0) > 0 ||
-    (user?._count.createdDocuments ?? 0) > 0 ||
-    (user?._count.createdSocialSupports ?? 0) > 0 ||
-    (user?._count.createdComments ?? 0) > 0 ||
-    workshopCount > 0 ||
-    workshopNameCount > 0
-  ) {
+  // Also covers a user of another structure, filtered out by the repository
+  if (!user) {
+    throw notfoundError("Cet utilisateur n'existe plus")
+  }
+
+  const blockingLabels = Object.entries(userBlockingRelationLabels)
+    .filter(([relation]) => {
+      const count = userBlockingRelationCounts[relation as UserBlockingRelation]
+      return user._count[count] > 0
+    })
+    .map(([, label]) => label)
+
+  if (blockingLabels.length > 0) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message:
-        'Cet utilisateur à des données liées et ne peut pas être supprimé'
+      message: `Cet utilisateur a des données liées et ne peut pas être supprimé : ${blockingLabels.join(', ')}`
     })
   }
 

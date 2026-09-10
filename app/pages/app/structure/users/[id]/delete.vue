@@ -19,89 +19,78 @@
         class="feature-section"
       >
         <template v-if="userHasFiles">
-          <h2 class="fr-h4 text--primary fr-mb-2v">
+          <p class="fr-h5 fr-mb-2v">
             Vous ne pouvez pas supprimer cet utilisateur car il a déjà des
             éléments saisis.
-          </h2>
+          </p>
           <p class="fr-text--bold">
             Rapprochez vous de l'équipe de Mon Suivi Social si besoin.
           </p>
+          <ul v-if="blockingCounts.length > 0">
+            <li
+              v-for="{ relation, label, count } in blockingCounts"
+              :key="relation"
+            >
+              {{ toFirstLetterUpperCase(label) }}&nbsp;: {{ count }}
+            </li>
+          </ul>
         </template>
-        <h2
+        <p
           v-else
           class="fr-h4 text--primary"
         >
           La suppression est définitive et a des impacts sur les suivis déjà
-          réalisés.
-        </h2>
-
-        <ul v-if="userHasFiles && user?._count">
-          <li>
-            Nombre de dossier dont la personne est référente&nbsp;:
-            {{ user._count.referentFor }}
-          </li>
-          <li>
-            Nombre d'accompagnements créés&nbsp;:
-            {{ user._count.createdSocialSupports }}
-          </li>
-          <li>
-            Nombre de documents créés&nbsp;: {{ user._count.createdDocuments }}
-          </li>
-          <li>
-            Nombre de commentaires créés&nbsp;:
-            {{ user._count.createdComments }}
-          </li>
-          <li>Nombre d'atelier créés&nbsp;: {{ user._count.workshops }}</li>
-          <li>
-            Nombre de nom d'atelier créés&nbsp;: {{ user._count.workshopNames }}
-          </li>
-        </ul>
+          réalisés
+        </p>
 
         <div class="image-text-container">
           <img
             src="/assets/img/innovation.svg"
             alt=""
           />
-          <p class="fr-mb-0">
+          <p class="fr-mb-0 fr-text--bold">
             Si vous souhaitez que cette personne n’ait plus accès à Mon Suivi
             Social, tout en conservant ses dossiers et suivis, utilisez plutôt
             la fonction «&nbsp;désactiver l’utilisateur&nbsp;». La désactivation
             est disponible depuis la page de modification du compte.
           </p>
         </div>
-        <div
-          v-if="!userHasFiles"
-          class="fr-checkbox-group fr-mt-6v"
-        >
-          <input
-            id="checkbox-delete-confirmation"
-            v-model="deleteValue"
-            name="checkbox"
-            type="checkbox"
-            aria-describedby="checkbox-delete-zone"
-          />
-          <label
-            class="fr-label"
-            for="checkbox-delete-confirmation"
-          >
-            Je confirme que je souhaite supprimer l’utilisateur et que l’action
-            est définitive.
-          </label>
-          <div
-            id="checkbox-delete-zone"
-            class="fr-messages-group"
-            aria-live="polite"
-          ></div>
-        </div>
+        <template v-if="!userHasFiles">
+          <div class="fr-checkbox-group fr-mt-6v">
+            <input
+              id="checkbox-delete-confirmation"
+              v-model="deleteValue"
+              name="checkbox"
+              type="checkbox"
+              aria-describedby="checkbox-delete-zone"
+            />
+            <label
+              class="fr-label"
+              for="checkbox-delete-confirmation"
+            >
+              Je confirme que je souhaite supprimer l’utilisateur et que
+              l’action est définitive.
+            </label>
+            <div
+              id="checkbox-delete-zone"
+              class="fr-messages-group"
+              aria-live="polite"
+            ></div>
+          </div>
 
-        <button
-          type="button"
-          :disabled="userHasFiles || !deleteValue"
-          class="fr-btn fr-icon-delete-bin-6-line fr-btn--icon-left fr-btn-primary btn-delete-action fr-mt-6v"
-          @click="deleteUser(userId)"
-        >
-          Supprimer l'utilisateur
-        </button>
+          <button
+            type="button"
+            :disabled="!deleteValue || isDeleting"
+            class="fr-btn fr-btn--icon-left fr-btn-primary btn-delete-action fr-mt-6v"
+            :class="{
+              'fr-icon-delete-bin-6-line': !isDeleting,
+              'btn-loading': isDeleting
+            }"
+            @click="deleteUser(userId)"
+          >
+            Supprimer l'utilisateur
+          </button>
+        </template>
       </section>
 
       <section
@@ -119,6 +108,10 @@
 </template>
 
 <script setup lang="ts">
+  import {
+    userBlockingRelationLabels,
+    type UserBlockingRelation
+  } from '~~/client/labels'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { AlertType } from '~/utils/constants/alert'
@@ -142,37 +135,54 @@
     id: userId
   })
 
-  const userHasFiles = computed(() => {
-    return (
-      user?.value &&
-      ((user.value._count.referentFor ?? 0) > 0 ||
-        (user.value._count.createdDocuments ?? 0) > 0 ||
-        (user.value._count.createdSocialSupports ?? 0) > 0 ||
-        (user.value._count.createdComments ?? 0) > 0 ||
-        (user.value._count.workshops ?? 0) > 0 ||
-        (user.value._count.workshopNames ?? 0) > 0)
-    )
+  /** Relations that still link data to the account, zero counts left out */
+  const blockingCounts = computed(() => {
+    const counts = user.value?._count
+    if (!counts) {
+      return []
+    }
+    return Object.entries(userBlockingRelationLabels)
+      .map(([relation, label]) => ({
+        relation,
+        label,
+        count: counts[relation as UserBlockingRelation] ?? 0
+      }))
+      .filter(({ count }) => count > 0)
   })
 
-  const title = routes.structure.AppStructureUserDelete.title(
-    `${user?.value?.firstName} ${user?.value?.lastName}`
+  const userHasFiles = computed(() => blockingCounts.value.length > 0)
+
+  const userName = computed(
+    () => `${user.value?.firstName} ${user.value?.lastName}`
+  )
+
+  const title = computed(() =>
+    routes.structure.AppStructureUserDelete.title(userName.value)
   )
   useHead({ title })
 
   const breadcrumbLinks = computed(() =>
-    breadcrumbs.structure.AppStructureUserDelete(
-      `${user?.value?.firstName} ${user?.value?.lastName}`
-    )
+    breadcrumbs.structure.AppStructureUserDelete(userName.value)
   )
 
-  const { mutate, error: deleteError } = trpcClient.user.delete.useMutation()
+  /* server/route/user/deleteUser.mutation.ts */
+  const {
+    mutate,
+    status: deleteStatus,
+    error: deleteError
+  } = trpcClient.user.delete.useMutation()
+  const isDeleting = computed(() => deleteStatus.value === 'pending')
+
   const deleteUser = async (id: string) => {
+    // The disabled attribute only applies on the next DOM update
+    if (isDeleting.value) {
+      return
+    }
     const userDeleted = await mutate({ id })
     if (deleteError.value || !userDeleted) {
       snackbar.error(
         deleteError.value?.message ||
-          "La suppression de l'utilisateur a échoué.",
-        () => snackbar.focus('form', 'select')
+          "La suppression de l'utilisateur a échoué."
       )
       return
     }

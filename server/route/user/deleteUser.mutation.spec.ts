@@ -71,7 +71,7 @@ describe('Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.structureManager.user.delete({ id: SOCIAL_WORKER_NEW_ID })
-    ).rejects.toThrow(/user[\s\S]*?no record/im)
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' })
   })
 
   test('User - Delete - A Structure Manager cannot delete their own account', async ({
@@ -215,6 +215,75 @@ describe('Linked data blocks deletion', () => {
       ).rejects.toMatchObject({ code: 'FORBIDDEN' })
     } finally {
       await prismaClient.workshopName.delete({ where: { id: workshopName.id } })
+    }
+  })
+
+  test('User - Delete - Cannot delete a user who has archived beneficiaries', async ({
+    trpc
+  }) => {
+    const archived = await prismaClient.archivedBeneficiary.create({
+      select: { id: true },
+      data: {
+        structureId: STRUCTURE_ID,
+        archivedById: sharedUserId,
+        oldBeneficiaryId: sharedBeneficiaryId
+      }
+    })
+
+    try {
+      await expect(() =>
+        trpc.structureManager.user.delete({ id: sharedUserId })
+      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    } finally {
+      await prismaClient.archivedBeneficiary.delete({
+        where: { id: archived.id }
+      })
+    }
+  })
+
+  test('User - Delete - Cannot delete a user who has created redirection reasons', async ({
+    trpc
+  }) => {
+    const redirectionReason = await prismaClient.redirectionReason.create({
+      select: { id: true },
+      data: {
+        name: `Redirection Reason Test ${Date.now()}`,
+        structureId: STRUCTURE_ID,
+        createdById: sharedUserId
+      }
+    })
+
+    try {
+      await expect(() =>
+        trpc.structureManager.user.delete({ id: sharedUserId })
+      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    } finally {
+      await prismaClient.redirectionReason.delete({
+        where: { id: redirectionReason.id }
+      })
+    }
+  })
+
+  test('User - Delete - Cannot delete a user who has created support program names', async ({
+    trpc
+  }) => {
+    const supportProgramName = await prismaClient.supportProgramName.create({
+      select: { id: true },
+      data: {
+        name: `Support Program Test ${Date.now()}`,
+        structureId: STRUCTURE_ID,
+        createdById: sharedUserId
+      }
+    })
+
+    try {
+      await expect(() =>
+        trpc.structureManager.user.delete({ id: sharedUserId })
+      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    } finally {
+      await prismaClient.supportProgramName.delete({
+        where: { id: supportProgramName.id }
+      })
     }
   })
 })
