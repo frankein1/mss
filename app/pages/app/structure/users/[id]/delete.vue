@@ -132,7 +132,8 @@
     status: initialUserStatus,
     error: initialUserError
   } = await trpcClient.user.get.useQuery({
-    id: userId
+    id: userId,
+    withCounts: true
   })
 
   /** Relations that still link data to the account, zero counts left out */
