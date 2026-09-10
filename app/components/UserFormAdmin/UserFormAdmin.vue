@@ -36,10 +36,13 @@
         v-if="props.user"
         class="fr-col-6"
       >
-        <VeeInput
+        <VeeSelect
           name="structureId"
           hint="Le changement de structure s'effectue via l'action de transfert."
           :label="userFieldLabels.structureId"
+          :options="[
+            { value: props.user.structureId!, label: currentStructureName }
+          ]"
           disabled
         />
       </div>
