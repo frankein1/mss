@@ -52,6 +52,7 @@
   import { NotificationType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { NotificationTypeFilterValue } from '~~/client/options'
+  import type { ActiveNotificationType } from '~~/client/options'
   import { NOTIFICATIONS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import ArchiveNotificationModal from '~/components/Archive/ArchiveNotificationModal.vue'
   import { routes } from '~/utils/routes'
@@ -66,7 +67,7 @@
   const page = ref(1)
   const queryfilter = route.query.filter as string
 
-  const notificationTypes = computed<NotificationType[] | null>(() => {
+  const notificationTypes = computed<ActiveNotificationType[] | null>(() => {
     switch (filters.value.type) {
       case NotificationTypeFilterValue.DueDate:
         return [
