@@ -1,4 +1,5 @@
 import { describe, expect, afterEach } from 'vitest'
+import { NotificationType } from '@prisma/client'
 import { test } from '~~/test/server/test-utils'
 import { prismaClient } from '~~/server/prisma'
 import { fixtureStructures, FixtureStructure } from '~~/prisma/fixtures'
@@ -8,6 +9,13 @@ afterEach(async () => {
     where: {
       name: { startsWith: 'USS-' },
       ownedByStructureId: fixtureStructures[FixtureStructure.Test].id
+    }
+  })
+
+  await prismaClient.notification.deleteMany({
+    where: {
+      type: NotificationType.NewSocialSupportSubject,
+      detail: { startsWith: 'USS-' }
     }
   })
 })

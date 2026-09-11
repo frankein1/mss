@@ -150,7 +150,7 @@
     if (
       (props.notification.type === NotificationType.SupportProgramEndToday ||
         props.notification.type ===
-          NotificationType.SupportProgramEndSixtyDays) &&
+          NotificationType.SupportProgramEndTwoMonths) &&
       props.notification.beneficiary
     ) {
       return routes.file.AppFile.path(
