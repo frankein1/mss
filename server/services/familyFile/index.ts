@@ -5,7 +5,8 @@ import type { FamilyFileSecurityTarget } from './permission.service'
 import {
   getCreationPermissions,
   getEditionPermissions,
-  getFamilyFileSecurityTarget
+  getFamilyFileSecurityTarget,
+  validateCanChangeReferents
 } from './permission.service'
 import { split } from './split.service'
 import { addReferentToFamilyFile } from './add-referent.service'
@@ -20,7 +21,8 @@ export const FamilyFileService = {
   getMembersAccommodation,
   split,
   addReferentToFamilyFile,
-  deleteReferentFromFamilyfile
+  deleteReferentFromFamilyfile,
+  validateCanChangeReferents
 }
 
 export type { FamilyFileSecurityTarget }
