@@ -183,7 +183,8 @@
     if (deleteError.value || !userDeleted) {
       snackbar.error(
         deleteError.value?.message ||
-          "La suppression de l'utilisateur a échoué."
+          "La suppression de l'utilisateur a échoué.",
+        snackbar.focus('.feature-section', '.btn-delete-action')
       )
       return
     }
