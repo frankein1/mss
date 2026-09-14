@@ -8,10 +8,18 @@ import {
 } from '~~/prisma/fixtures'
 import { describe, expect, beforeEach, afterEach } from 'vitest'
 import { fakerFR as faker } from '@faker-js/faker'
+import {
+  userBlockingRelationLabels,
+  type UserBlockingRelation
+} from '~~/client/labels'
 
 const STRUCTURE_ID = fixtureStructures[FixtureStructure.Test].id
 const STRUCTURE_MANAGER_ID = fixturesUsers[FixtureUserRole.StructureManager].id
 const SOCIAL_WORKER_NEW_ID = fixturesUsers[FixtureUserRole.SocialWorkerNew].id
+const TEST_PREFIX = 'DELETE-TEST'
+
+const blockedByMessage = (relation: UserBlockingRelation) =>
+  `Cet utilisateur a des données liées et ne peut pas être supprimé : ${userBlockingRelationLabels[relation]}`
 
 let sharedFamilyFileId = ''
 let sharedBeneficiaryId = ''
@@ -22,7 +30,7 @@ beforeEach(async () => {
     select: { id: true },
     data: {
       firstName: faker.person.firstName(),
-      lastName: 'DELETE-TEST',
+      lastName: TEST_PREFIX,
       email: `delete-test-${Date.now()}@yopmail.com`,
       role: 'SocialWorker',
       status: 'Active',
@@ -41,7 +49,7 @@ beforeEach(async () => {
     select: { id: true },
     data: {
       structureId: STRUCTURE_ID,
-      fileNumber: `DELETE-TEST-${Date.now()}`,
+      fileNumber: `${TEST_PREFIX}-${Date.now()}`,
       status: 'Active',
       familyFileId: sharedFamilyFileId
     }
@@ -50,6 +58,23 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
+  // Rows referencing the shared user must go first: their foreign keys are
+  // restricting, which is exactly what the mutation guards against
+  await prismaClient.workshop.deleteMany({
+    where: { createdById: sharedUserId }
+  })
+  await prismaClient.workshopName.deleteMany({
+    where: { name: { startsWith: TEST_PREFIX } }
+  })
+  await prismaClient.archivedBeneficiary.deleteMany({
+    where: { archivedById: sharedUserId }
+  })
+  await prismaClient.redirectionReason.deleteMany({
+    where: { name: { startsWith: TEST_PREFIX } }
+  })
+  await prismaClient.supportProgramName.deleteMany({
+    where: { name: { startsWith: TEST_PREFIX } }
+  })
   // Cascade-deletes: beneficiary, documents, social supports, comments
   await prismaClient.familyFile.deleteMany({
     where: { id: sharedFamilyFileId }
@@ -71,7 +96,7 @@ describe('Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.structureManager.user.delete({ id: SOCIAL_WORKER_NEW_ID })
-    ).rejects.toMatchObject({ code: 'NOT_FOUND' })
+    ).rejects.toThrow("Cet utilisateur n'existe plus")
   })
 
   test('User - Delete - A Structure Manager cannot delete their own account', async ({
@@ -79,7 +104,7 @@ describe('Authorizations', () => {
   }) => {
     await expect(() =>
       trpc.structureManager.user.delete({ id: STRUCTURE_MANAGER_ID })
-    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    ).rejects.toThrow('Vous ne pouvez pas supprimer votre propre compte')
   })
 })
 
@@ -94,7 +119,7 @@ describe('Linked data blocks deletion', () => {
 
     await expect(() =>
       trpc.structureManager.user.delete({ id: sharedUserId })
-    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    ).rejects.toThrow(blockedByMessage('referentFor'))
   })
 
   test('User - Delete - Cannot delete a user who has created documents', async ({
@@ -116,7 +141,7 @@ describe('Linked data blocks deletion', () => {
 
     await expect(() =>
       trpc.structureManager.user.delete({ id: sharedUserId })
-    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    ).rejects.toThrow(blockedByMessage('createdDocuments'))
   })
 
   test('User - Delete - Cannot delete a user who has created social supports', async ({
@@ -136,7 +161,7 @@ describe('Linked data blocks deletion', () => {
 
     await expect(() =>
       trpc.structureManager.user.delete({ id: sharedUserId })
-    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    ).rejects.toThrow(blockedByMessage('createdSocialSupports'))
   })
 
   test('User - Delete - Cannot delete a user who has created comments', async ({
@@ -164,7 +189,7 @@ describe('Linked data blocks deletion', () => {
 
     await expect(() =>
       trpc.structureManager.user.delete({ id: sharedUserId })
-    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+    ).rejects.toThrow(blockedByMessage('createdComments'))
   })
 
   test('User - Delete - Cannot delete a user who has created workshops', async ({
@@ -173,12 +198,12 @@ describe('Linked data blocks deletion', () => {
     const workshopName = await prismaClient.workshopName.create({
       select: { id: true },
       data: {
-        name: `Workshop Test ${Date.now()}`,
+        name: `${TEST_PREFIX} Workshop ${Date.now()}`,
         structureId: STRUCTURE_ID,
         createdById: STRUCTURE_MANAGER_ID
       }
     })
-    const workshop = await prismaClient.workshop.create({
+    await prismaClient.workshop.create({
       select: { id: true },
       data: {
         workshopNameId: workshopName.id,
@@ -188,40 +213,32 @@ describe('Linked data blocks deletion', () => {
       }
     })
 
-    try {
-      await expect(() =>
-        trpc.structureManager.user.delete({ id: sharedUserId })
-      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
-    } finally {
-      await prismaClient.workshop.delete({ where: { id: workshop.id } })
-      await prismaClient.workshopName.delete({ where: { id: workshopName.id } })
-    }
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(blockedByMessage('workshops'))
   })
 
   test('User - Delete - Cannot delete a user who has created workshop names', async ({
     trpc
   }) => {
-    const workshopName = await prismaClient.workshopName.create({
+    await prismaClient.workshopName.create({
       select: { id: true },
       data: {
-        name: `Workshop Test ${Date.now()}`,
+        name: `${TEST_PREFIX} Workshop ${Date.now()}`,
         structureId: STRUCTURE_ID,
         createdById: sharedUserId
       }
     })
-    try {
-      await expect(() =>
-        trpc.structureManager.user.delete({ id: sharedUserId })
-      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
-    } finally {
-      await prismaClient.workshopName.delete({ where: { id: workshopName.id } })
-    }
+
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(blockedByMessage('workshopNames'))
   })
 
   test('User - Delete - Cannot delete a user who has archived beneficiaries', async ({
     trpc
   }) => {
-    const archived = await prismaClient.archivedBeneficiary.create({
+    await prismaClient.archivedBeneficiary.create({
       select: { id: true },
       data: {
         structureId: STRUCTURE_ID,
@@ -230,61 +247,43 @@ describe('Linked data blocks deletion', () => {
       }
     })
 
-    try {
-      await expect(() =>
-        trpc.structureManager.user.delete({ id: sharedUserId })
-      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
-    } finally {
-      await prismaClient.archivedBeneficiary.delete({
-        where: { id: archived.id }
-      })
-    }
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(blockedByMessage('archivedBeneficiaries'))
   })
 
   test('User - Delete - Cannot delete a user who has created redirection reasons', async ({
     trpc
   }) => {
-    const redirectionReason = await prismaClient.redirectionReason.create({
+    await prismaClient.redirectionReason.create({
       select: { id: true },
       data: {
-        name: `Redirection Reason Test ${Date.now()}`,
+        name: `${TEST_PREFIX} Redirection Reason ${Date.now()}`,
         structureId: STRUCTURE_ID,
         createdById: sharedUserId
       }
     })
 
-    try {
-      await expect(() =>
-        trpc.structureManager.user.delete({ id: sharedUserId })
-      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
-    } finally {
-      await prismaClient.redirectionReason.delete({
-        where: { id: redirectionReason.id }
-      })
-    }
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(blockedByMessage('redirectionReasons'))
   })
 
   test('User - Delete - Cannot delete a user who has created support program names', async ({
     trpc
   }) => {
-    const supportProgramName = await prismaClient.supportProgramName.create({
+    await prismaClient.supportProgramName.create({
       select: { id: true },
       data: {
-        name: `Support Program Test ${Date.now()}`,
+        name: `${TEST_PREFIX} Support Program ${Date.now()}`,
         structureId: STRUCTURE_ID,
         createdById: sharedUserId
       }
     })
 
-    try {
-      await expect(() =>
-        trpc.structureManager.user.delete({ id: sharedUserId })
-      ).rejects.toMatchObject({ code: 'FORBIDDEN' })
-    } finally {
-      await prismaClient.supportProgramName.delete({
-        where: { id: supportProgramName.id }
-      })
-    }
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(blockedByMessage('supportProgramNames'))
   })
 })
 
