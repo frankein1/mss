@@ -54,11 +54,20 @@ const handler = async ({
       )
     }
 
-    // Spread first, then the narrowed role, which the spread alone would widen
-    return { ...user, role: user.role, _count: undefined }
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      aidantConnectAuthorisation: user.aidantConnectAuthorisation,
+      externalRdvspId: user.externalRdvspId,
+      _count: undefined
+    }
   }
 
-  const { _count, ...user } = await UserRepo.findUniqueOrThrow(ctx.user, {
+  const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
     select: { ...userSelect, _count: { select: blockingRelationsSelect } }
   })
@@ -70,18 +79,24 @@ const handler = async ({
   }
 
   return {
-    ...user,
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
     role: user.role,
+    status: user.status,
+    aidantConnectAuthorisation: user.aidantConnectAuthorisation,
+    externalRdvspId: user.externalRdvspId,
     _count: {
-      referentFor: _count.referentFor,
-      createdDocuments: _count.createdDocuments,
-      createdSocialSupports: _count.createdSocialSupports,
-      createdComments: _count.createdComments,
-      workshops: _count.Workshop,
-      workshopNames: _count.WorkshopName,
-      archivedBeneficiaries: _count.archivedBeneficiaries2,
-      redirectionReasons: _count.RedirectionReasons,
-      supportProgramNames: _count.supportProgramNames
+      referentFor: user._count.referentFor,
+      createdDocuments: user._count.createdDocuments,
+      createdSocialSupports: user._count.createdSocialSupports,
+      createdComments: user._count.createdComments,
+      workshops: user._count.Workshop,
+      workshopNames: user._count.WorkshopName,
+      archivedBeneficiaries: user._count.archivedBeneficiaries2,
+      redirectionReasons: user._count.RedirectionReasons,
+      supportProgramNames: user._count.supportProgramNames
     } satisfies Record<UserBlockingRelation, number>
   }
 }
