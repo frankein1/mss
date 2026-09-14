@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.66.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.65.0...v1.66.0) (2026-09-14)
+
+
+### Features
+
+* **dispositifs:** notifications ([fb26190](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fb261902243b8011a7a10b8ad55067abdf16c180)), closes [#1177](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1177)
+* **document:** script de migration des documents ([cf6ecbe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cf6ecbe796a334c5df0d97a7abea61f32513ed0b)), closes [#937](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/937)
+* **logs:** meilleurs logs serveur pour compléter les logs routeur ([51eb157](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/51eb157f9a1a591bfc761c84be5be951c2d924aa))
+
+
+### Bug Fixes
+
+* **admin:** afficher le nombre de structures actives ([685131c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/685131caa5e40323f0b9853fc6e3b37114ede7e0))
+* **admin:** amélioration de l'e-mail d'alerte de désactivation de structure ([b7bdf60](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b7bdf60adb0e59bf3acd304920a1b92ec06bd635)), closes [#1097](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1097)
+* **bénéficiaire:** ajout tests et gestion transfert de référent pour le rôle de référent ([abc1c0d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/abc1c0de9ce72aa76dfd584cd5331783219b2ee1))
+* **document:** adapt document migration with better query ([aa733d2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/aa733d2ab68df312adc7a9c26bc36bf8b452ce33))
+* **ministères:** suppression de départements et services en doublons ([dd4d41d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dd4d41db701e505f28e1e034faa477b503f28847)), closes [#1182](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1182)
+* **notifications:** ajout du rôle Instructeur ([c57e499](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c57e49904a70b5add6a48bf7d463467c0c68e420))
+* **notifications:** dispositifs 2 mois ([ade6da4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ade6da414f2956704755d73e24abf8889f19791f))
+* régression UI ([b42b456](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b42b456a4aaa8d3fe12e53afffb1e6a662ca61eb)), closes [#1097](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1097)
+* **structure:** correction d'un bug lors de la suppression d'utilisateur ([d88d947](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d88d94738884c57140b26a4c48e464e1cca0f020)), closes [#1183](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1183)
+
 ## [1.65.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.64.0...v1.65.0) (2026-09-01)
 
 
