@@ -41,12 +41,12 @@ const getRecipientIds = (
   })
 
 async function createNotifications(
-  type: 'SupportProgramEndToday' | 'SupportProgramEndSixtyDays'
+  type: 'SupportProgramEndToday' | 'SupportProgramEndTwoMonths'
 ) {
   const endDate =
     type === 'SupportProgramEndToday'
       ? new Date()
-      : dayjs().add(60, 'day').toDate()
+      : dayjs().add(2, 'months').toDate()
 
   // endDate is nullable: the equality filter already excludes programs without an end date
   const supportPrograms = await prismaClient.supportProgram.findMany({
@@ -69,14 +69,14 @@ async function createNotifications(
   console.log(
     `create-support-program-notifications [${new Date().toISOString()}]: ` +
       `${res.count} notifications created for support programs ending ` +
-      `${type === 'SupportProgramEndToday' ? 'today' : 'in 60 days'}`
+      `${type === 'SupportProgramEndToday' ? 'today' : 'in 2 months'}`
   )
 }
 
 export default {
-  createEndInSixtyDaysSupportProgramNotifications: async () =>
+  createEndInTwoMonthsSupportProgramNotifications: async () =>
     await withErrorCapture(() =>
-      createNotifications('SupportProgramEndSixtyDays')
+      createNotifications('SupportProgramEndTwoMonths')
     ),
   createEndTodaySupportProgramNotifications: async () =>
     await withErrorCapture(() => createNotifications('SupportProgramEndToday'))

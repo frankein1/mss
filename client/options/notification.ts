@@ -1,6 +1,18 @@
 import { NotificationType } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
+/**
+ * The `SupportProgramEndSixtyDays` entry was disabled: no longer created since
+ * the 60-day reminder became a 2-month one, but kept in the Postgres enum
+ * since existing notification records may still reference it. App code
+ * therefore treats this field as the active subset below, even though Prisma
+ * and zod still surface the full union.
+ */
+export type ActiveNotificationType = Exclude<
+  NotificationType,
+  'SupportProgramEndSixtyDays'
+>
+
 export const notificationTypeKeys = buildKeys({
   [NotificationType.DueDateToday]: 'Échéance',
   [NotificationType.DueDateOneMonth]: 'Échéance',
@@ -19,6 +31,8 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.ArchiveDueOneMonth]: 'Archive',
   [NotificationType.ArchiveDueSevenDays]: 'Archive',
   [NotificationType.SupportProgramEndToday]: 'Échéance',
+  [NotificationType.SupportProgramEndTwoMonths]: 'Échéance',
+  // Legacy: no longer created, kept so every enum value stays mapped
   [NotificationType.SupportProgramEndSixtyDays]: 'Échéance'
 })
 

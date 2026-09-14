@@ -1,5 +1,9 @@
 import dayjs from 'dayjs'
-import { BeneficiaryRepo, FamilyFileRepo } from '~~/server/database'
+import {
+  BeneficiaryRepo,
+  FamilyFileRepo,
+  NotificationRepo
+} from '~~/server/database'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
@@ -200,6 +204,9 @@ const createBeneficiary = async () => {
 }
 
 const deleteBeneficiary = async () => {
+  await NotificationRepo.prisma.deleteMany({
+    where: { beneficiaryId: { in: [ID_TESSON, ID_INACTIVE] } }
+  })
   await FamilyFileRepo.prisma.deleteMany({
     where: {
       id: {
