@@ -28,7 +28,7 @@ const securityCheck = async (
 }
 
 const handler = ({
-  ctx: { user },
+  ctx: { user, structure },
   input
 }: {
   ctx: ProtectedAppContext
@@ -39,17 +39,31 @@ const handler = ({
   return DocumentRepo.prisma.update({
     where: { key },
     data,
-    include: {
+    select: {
+      key: true,
+      created: true,
+      confidential: true,
+      beneficiaryId: true,
+      createdById: true,
       createdBy: {
         select: {
           firstName: true,
           lastName: true
         }
       },
+      name: true,
+      type: true,
+      tags: true,
+      expirationDate: true,
+      mimeType: true,
       _count: {
         select: {
           notifications: {
-            where: { read: false, recipientId: user.id }
+            where: {
+              structureId: structure.id,
+              recipientId: user.id,
+              read: false
+            }
           }
         }
       }
