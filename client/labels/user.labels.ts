@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import type { FieldLabels } from '~~/types/fieldLabels'
 
 export const userFieldLabels: FieldLabels<User> = {
@@ -19,3 +19,37 @@ export const userFieldLabels: FieldLabels<User> = {
   authorizationCodeValidity: "Validité du code d'autorisation",
   accountReminderEmail: "Nombre d'e-mail de rappel de création de compte"
 }
+
+/**
+ * Prisma `_count` key behind each blocking relation. Every restricting foreign
+ * key pointing to `user` must be listed here, otherwise the delete fails with
+ * an internal error instead of a clear refusal.
+ */
+export const userBlockingRelationCounts = {
+  referentFor: 'referentFor',
+  createdDocuments: 'createdDocuments',
+  createdSocialSupports: 'createdSocialSupports',
+  createdComments: 'createdComments',
+  workshops: 'Workshop',
+  workshopNames: 'WorkshopName',
+  archivedBeneficiaries: 'archivedBeneficiaries2',
+  redirectionReasons: 'RedirectionReasons',
+  supportProgramNames: 'supportProgramNames'
+} as const satisfies Record<
+  UserBlockingRelation,
+  keyof Prisma.UserCountOutputTypeSelect
+>
+
+export const userBlockingRelationLabels = {
+  referentFor: 'dossiers dont la personne est référente',
+  createdDocuments: 'documents créés',
+  createdSocialSupports: 'accompagnements créés',
+  createdComments: 'commentaires créés',
+  workshops: 'ateliers créés',
+  workshopNames: "noms d'atelier créés",
+  archivedBeneficiaries: 'bénéficiaires archivés',
+  redirectionReasons: 'motifs de réorientation créés',
+  supportProgramNames: "dispositifs ou axes d'intervention créés"
+} as const
+
+export type UserBlockingRelation = keyof typeof userBlockingRelationLabels

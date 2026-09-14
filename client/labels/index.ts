@@ -3,7 +3,11 @@ export {
   beneficiaryContributingPartnerFieldLabels,
   beneficiaryExportFieldLabels
 } from './beneficiary.labels'
-export { userFieldLabels } from './user.labels'
+export {
+  userFieldLabels,
+  userBlockingRelationLabels,
+  type UserBlockingRelation
+} from './user.labels'
 export { socialSupportSubjectFieldLabels } from './social-support-subject.labels'
 export { supportProgramFieldLabels } from './support-program.labels'
 export { followupFieldLabels } from './followup.labels'
