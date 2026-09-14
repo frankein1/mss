@@ -115,11 +115,11 @@ export default defineNuxtConfig({
       { name: 'AsyncDataOptions', type: true, from: '#app' }
     ]
   },
-  // app: {
-  //   head: {
-  //     meta: [{ name: 'robots', content: 'noindex' }]
-  //   }
-  // },
+  app: {
+    head: {
+      meta: [{ name: 'robots', content: 'noindex' }]
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
     server: {
