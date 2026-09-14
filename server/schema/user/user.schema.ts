@@ -33,7 +33,8 @@ const editUserSchema = createUserSchema.extend({
 type UpdateUserInput = z.infer<typeof editUserSchema>
 
 const getUserSchema = z.object({
-  id: z.string().uuid()
+  id: z.string().uuid(),
+  withCounts: z.boolean().default(false)
 })
 type GetUserInput = z.infer<typeof getUserSchema>
 
