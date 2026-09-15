@@ -1,34 +1,41 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.gir"
-      :value="beneficiaryGirKeys.value(health.gir)"
-      class="fr-col-12 fr-col-lg-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.doctor"
-      :value="health.doctor"
-      class="fr-col-12 fr-col-lg-6"
-    />
+    <div class="fr-col-12 fr-col-lg-6 fr-pb-1w">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.gir"
+        :value="beneficiaryGirKeys.value(health.gir)"
+      />
+    </div>
+
+    <div class="fr-col-12 fr-col-lg-6 fr-pb-1w">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.doctor"
+        :value="health.doctor"
+      />
+    </div>
   </div>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.socialSecurityNumber"
-      :value="health.socialSecurityNumber"
-      class="fr-col-12 fr-col-lg-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.insurance"
-      :value="health.insurance"
-      class="fr-col-12 fr-col-lg-6"
-    />
+    <div class="fr-col-12 fr-col-lg-6 fr-pb-1w">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.socialSecurityNumber"
+        :value="health.socialSecurityNumber"
+      />
+    </div>
+
+    <div class="fr-col-12 fr-col-lg-6 fr-pb-1w">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.insurance"
+        :value="health.insurance"
+      />
+    </div>
   </div>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.healthAdditionalInformation"
-      :value="health.healthAdditionalInformation"
-      class="fr-col-12"
-    />
+    <div class="fr-col-12 fr-pb-1w">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.healthAdditionalInformation"
+        :value="health.healthAdditionalInformation"
+      />
+    </div>
   </div>
 </template>
 

@@ -447,7 +447,6 @@ function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
     orientationStructure: beneficiary.orientationStructure,
     serviceProviders: beneficiary.serviceProviders,
     involvedPartners: beneficiary.involvedPartners,
-    additionalInformation: beneficiary.additionalInformation,
     prescribingOrganization: beneficiary.prescribingOrganization,
     prescribingOrganizationContact: beneficiary.prescribingOrganizationContact,
     contributingPartners: beneficiary.contributingPartners

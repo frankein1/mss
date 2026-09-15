@@ -66,7 +66,6 @@
   }
 
   .fr-accordion__btn {
-    color: var(--text-title-blue-france);
     padding: 1.5rem 2.5rem;
     border-radius: 0.5rem;
 

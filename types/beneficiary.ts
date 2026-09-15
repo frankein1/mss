@@ -96,7 +96,6 @@ export type GetBeneficiaryExternalOrganisations = Pick<
   | 'orientationStructure'
   | 'serviceProviders'
   | 'involvedPartners'
-  | 'additionalInformation'
 > & {
   prescribingOrganization: { id: string; name: string } | null
   prescribingOrganizationContact: { id: string; name: string } | null
