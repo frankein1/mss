@@ -35,6 +35,18 @@ function startScheduler() {
     name: 'disableInactiveStructures'
   })
 
+  const at45past2am = '45 2 * * *'
+  new Cron(at45past2am, jobs.archiveDueOneMonthNotifications, {
+    timezone,
+    name: 'archiveDueOneMonthNotifications'
+  })
+
+  const at55past2am = '55 2 * * *'
+  new Cron(at55past2am, jobs.archiveRemindersNotifications, {
+    timezone,
+    name: 'archiveRemindersNotifications'
+  })
+
   const at3am = '0 3 * * *'
   new Cron(at3am, jobs.notificationCreator, {
     timezone,

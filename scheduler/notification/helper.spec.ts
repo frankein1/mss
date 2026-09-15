@@ -4,7 +4,7 @@ import {
   getInactiveBeneficiaries,
   getInactiveBeneficiariesWithOneMonthNotification
 } from './helper'
-import { createArchiveDueOneMonthNotifications } from './create-archive-due-one-month-notifications.service'
+import createArchiveDueOneMonthNotifications from './create-archive-due-one-month-notifications'
 
 beforeAll(async () => await test.createBeneficiary())
 

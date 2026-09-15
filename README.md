@@ -160,6 +160,16 @@ Démarrage du serveur de gestion de tâches
 scalingo --app my-app scale scheduler:1
 ```
 
+### Lancement manuel des tâches planifiées
+
+Un lancement en ligne de commande peut être effectué à des fins de test ou de debug depuis un container one-off scalingo.
+
+```
+node .output-scheduler_caller/_caller.mjs <nom_tâche>
+```
+
+`node .output-scheduler_caller/_caller.mjs` permet d'afficher la liste des tâches disponibles.
+
 ## Antisèche
 
 - Générer une migration Prisma suite à une modification du schéma

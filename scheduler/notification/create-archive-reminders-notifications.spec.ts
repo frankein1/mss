@@ -3,8 +3,8 @@ import { NotificationRepo } from '~~/server/database'
 import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
 import { NotificationType } from '@prisma/client'
 import { test } from './__fixtures__'
-import { createArchiveDueRemindersNotifications } from './create-archive-reminders-notifications.service'
-import { createArchiveDueOneMonthNotifications } from './create-archive-due-one-month-notifications.service'
+import createArchiveDueRemindersNotifications from './create-archive-reminders-notifications'
+import createArchiveDueOneMonthNotifications from './create-archive-due-one-month-notifications'
 
 beforeAll(async () => await test.createBeneficiary())
 
