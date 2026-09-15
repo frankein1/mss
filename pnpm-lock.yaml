@@ -50,11 +50,11 @@ importers:
         specifier: ^3.27.3
         version: 3.27.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)(vue@3.5.40(typescript@5.9.2))
       '@trpc/client':
-        specifier: ^11.12.0
-        version: 11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)
+        specifier: ^11.18.0
+        version: 11.18.0(@trpc/server@11.18.0(typescript@5.9.2))(typescript@5.9.2)
       '@trpc/server':
-        specifier: ^11.12.0
-        version: 11.12.0(typescript@5.9.2)
+        specifier: ^11.18.0
+        version: 11.18.0(typescript@5.9.2)
       '@turf/helpers':
         specifier: ^7.3.5
         version: 7.3.5
@@ -146,11 +146,11 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       superjson:
-        specifier: ^2.2.2
-        version: 2.2.2
+        specifier: ^2.2.6
+        version: 2.2.6
       trpc-nuxt:
-        specifier: ^2.0.1
-        version: 2.0.1(@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.12.0(typescript@5.9.2))
+        specifier: ^2.1.3
+        version: 2.1.3(@trpc/client@11.18.0(@trpc/server@11.18.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.18.0(typescript@5.9.2))
       tsdown:
         specifier: ^0.20.3
         version: 0.20.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(typescript@5.9.2)(vue-tsc@3.2.6(typescript@5.9.2))
@@ -3250,14 +3250,16 @@ packages:
       '@tiptap/pm': 3.27.3
       vue: ^3.0.0
 
-  '@trpc/client@11.12.0':
-    resolution: {integrity: sha512-zTwFKQdE99pvNm7kXFdHo5xIQpGqpQJHtqVkT9o+i8h/0fbDOUBEEbFVICiMsNA+GiXskoaDRX2l+z6ir+Ug3w==}
+  '@trpc/client@11.18.0':
+    resolution: {integrity: sha512-wOqeg3Fvl25V1ZisQhUD3K8G60ZJDlSGJNSyeXrLH24xAo5w6GSR2Kzb1cSNY9Y+IQ2YZvYGZstBU+V/ulo/ow==}
+    hasBin: true
     peerDependencies:
-      '@trpc/server': 11.12.0
+      '@trpc/server': 11.18.0
       typescript: '>=5.7.2'
 
-  '@trpc/server@11.12.0':
-    resolution: {integrity: sha512-rpZnf5FUjNndE/AjGIy+FvEHR52iBd0u0wySqWCwXj67wraj3qCuBr5Opcf0Te/g67C/YztqceFkLoG0r4mp4Q==}
+  '@trpc/server@11.18.0':
+    resolution: {integrity: sha512-JAvXOuNTxgXjIDfQaOvDq1j66LMNfDJUH1IU7Slfn8EvRv2EkH6ehu3A7zpYhjO0syHHiYg77v2lG2JFJgvw7Q==}
+    hasBin: true
     peerDependencies:
       typescript: '>=5.7.2'
 
@@ -4728,9 +4730,9 @@ packages:
   cookie-es@3.1.1:
     resolution: {integrity: sha512-UaXxwISYJPTr9hwQxMFYZ7kNhSXboMXP+Z3TRX6f1/NyaGPfuNUZOWP1pUEb75B2HjfklIYLVRfWiFZJyC6Npg==}
 
-  copy-anything@3.0.5:
-    resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
-    engines: {node: '>=12.13'}
+  copy-anything@4.1.0:
+    resolution: {integrity: sha512-ufbM3smX/Jbnpk5wcQjzd1MgBpzmqfNETUAyZNrGwU9foRlyHoGzMMBBCRzEhQLBjZfFDE1W2ufPXX2vdWkV8Q==}
+    engines: {node: '>=18'}
 
   core-js-compat@3.50.0:
     resolution: {integrity: sha512-XGpFGbMLHwSt74YLTKho7Ib242qi6O8MSX+sRokV4oz7iKXvQWGYZthjIhjRGMxjzVkAubBO512dKGYcefmX3Q==}
@@ -5973,10 +5975,6 @@ packages:
   is-text-path@1.0.1:
     resolution: {integrity: sha512-xFuJpne9oFz5qDaodwmmG08e3CawH/2ZV8Qqza1Ko7Sk8POWbkRdwIoAWVhqvq0XeUzANEhKo2n0IXUGBm7A/w==}
     engines: {node: '>=0.10.0'}
-
-  is-what@4.1.16:
-    resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
-    engines: {node: '>=12.13'}
 
   is-wsl@3.1.1:
     resolution: {integrity: sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==}
@@ -7888,8 +7886,8 @@ packages:
     resolution: {integrity: sha512-WHkws2ZflZe41zj6AolvvmaTrWds/VuyeYr9iPVv/oQeaIoVxMKaushfFWpOGDT+GuBrM/sVqF8KUCYQlSSTdQ==}
     engines: {node: '>=18'}
 
-  superjson@2.2.2:
-    resolution: {integrity: sha512-5JRxVqC8I8NuOUjzBbvVJAKNM8qoVuH0O77h4WInc/qC2q5IreqKxYwgkga3PfA22OayK2ikceb/B26dztPl+Q==}
+  superjson@2.2.6:
+    resolution: {integrity: sha512-H+ue8Zo4vJmV2nRjpx86P35lzwDT3nItnIsocgumgr0hHMQ+ZGq5vrERg9kJBo5AWGmxZDhzDo+WVIJqkB0cGA==}
     engines: {node: '>=16'}
 
   supports-color@10.2.2:
@@ -8059,8 +8057,8 @@ packages:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
     engines: {node: '>=8'}
 
-  trpc-nuxt@2.0.1:
-    resolution: {integrity: sha512-tqxLkT8m4ehtcPbupCDSdgTJ8VEckye6snIxX16mno+mH2zB05zgHMmp6SgbUha6m7+oFhEXaijoHUkDbKPABg==}
+  trpc-nuxt@2.1.3:
+    resolution: {integrity: sha512-x5eO8B6GDkJO2278l2kK3IM4tZMc4wKRW1tevot3HA+nP8aK2hyCypzHTa8jT6ONu+IQba+IHNMDXFoCNZOkOA==}
     engines: {node: '>=22'}
     peerDependencies:
       '@trpc/client': ^11.0.0
@@ -12394,12 +12392,12 @@ snapshots:
       '@tiptap/extension-bubble-menu': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
       '@tiptap/extension-floating-menu': 3.27.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
 
-  '@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)':
+  '@trpc/client@11.18.0(@trpc/server@11.18.0(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
-      '@trpc/server': 11.12.0(typescript@5.9.2)
+      '@trpc/server': 11.18.0(typescript@5.9.2)
       typescript: 5.9.2
 
-  '@trpc/server@11.12.0(typescript@5.9.2)':
+  '@trpc/server@11.18.0(typescript@5.9.2)':
     dependencies:
       typescript: 5.9.2
 
@@ -14089,7 +14087,7 @@ snapshots:
       mitt: 3.0.1
       perfect-debounce: 1.0.0
       speakingurl: 14.0.1
-      superjson: 2.2.2
+      superjson: 2.2.6
 
   '@vue/devtools-kit@8.2.1':
     dependencies:
@@ -14811,9 +14809,7 @@ snapshots:
 
   cookie-es@3.1.1: {}
 
-  copy-anything@3.0.5:
-    dependencies:
-      is-what: 4.1.16
+  copy-anything@4.1.0: {}
 
   core-js-compat@3.50.0:
     dependencies:
@@ -16105,8 +16101,6 @@ snapshots:
   is-text-path@1.0.1:
     dependencies:
       text-extensions: 1.9.0
-
-  is-what@4.1.16: {}
 
   is-wsl@3.1.1:
     dependencies:
@@ -18329,9 +18323,9 @@ snapshots:
       make-asynchronous: 1.1.0
       time-span: 5.1.0
 
-  superjson@2.2.2:
+  superjson@2.2.6:
     dependencies:
-      copy-anything: 3.0.5
+      copy-anything: 4.1.0
 
   supports-color@10.2.2: {}
 
@@ -18506,11 +18500,10 @@ snapshots:
 
   trim-newlines@3.0.1: {}
 
-  trpc-nuxt@2.0.1(@trpc/client@11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.12.0(typescript@5.9.2)):
+  trpc-nuxt@2.1.3(@trpc/client@11.18.0(@trpc/server@11.18.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.18.0(typescript@5.9.2)):
     dependencies:
-      '@trpc/client': 11.12.0(@trpc/server@11.12.0(typescript@5.9.2))(typescript@5.9.2)
-      '@trpc/server': 11.12.0(typescript@5.9.2)
-      h3: 1.15.11
+      '@trpc/client': 11.18.0(@trpc/server@11.18.0(typescript@5.9.2))(typescript@5.9.2)
+      '@trpc/server': 11.18.0(typescript@5.9.2)
       ofetch: 1.5.1
       ohash: 2.0.11
 
