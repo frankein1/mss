@@ -257,7 +257,7 @@
     display: grid;
     grid-template-columns: var(--checkbox-size) repeat(2, auto);
     grid-template-rows: repeat(2, auto);
-    grid-gap: 0.5rem;
+    gap: 0.5rem;
     align-items: center;
 
     .item-checkbox {

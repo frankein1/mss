@@ -73,7 +73,7 @@
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: repeat(2, auto);
-    grid-gap: 1rem;
+    gap: 1rem;
 
     .page-title-image {
       grid-area: 1 / 1 / 3 / 2;

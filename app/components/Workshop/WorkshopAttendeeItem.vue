@@ -285,7 +285,7 @@
     display: grid;
     grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(6, auto);
-    grid-gap: 0.25rem 1.5rem;
+    gap: 0.25rem 1.5rem;
     border: 1px solid var(--border-default-grey);
     border-left: 3px solid var(--color-workshop);
     border-radius: 8px;

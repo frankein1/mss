@@ -243,7 +243,6 @@ export default async function migrateToS3Bucket() {
 
   let sizeMigrated = 0
   let nMigrated = 0
-  let duration: number | undefined = undefined
   const failedIds: FailedId[] = []
 
   console.log(
@@ -310,7 +309,7 @@ export default async function migrateToS3Bucket() {
     await drainBatch(docs)
   }
 
-  duration = (performance.now() - start) / 1000
+  const duration = (performance.now() - start) / 1000
   failedIds.forEach(f =>
     console.log(`migrate-to-s3-bucket:  error ${f.key}: ${f.error}`)
   )

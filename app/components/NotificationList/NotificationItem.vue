@@ -216,7 +216,7 @@
     display: grid;
     grid-template-columns: 3rem auto 2rem;
     grid-template-rows: repeat(3, auto);
-    grid-gap: 1rem;
+    gap: 1rem;
     align-items: center;
 
     &:not(.notificationitem__read) {

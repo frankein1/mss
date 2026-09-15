@@ -156,7 +156,7 @@
     display: grid;
     grid-template-columns: fit-content(100%) auto fit-content(100%);
     grid-template-rows: repeat(3, auto);
-    grid-gap: 0.5rem 1rem;
+    gap: 0.5rem 1rem;
 
     @include dsfr-media-query.respond-from('md') {
       // grid

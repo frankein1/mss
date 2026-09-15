@@ -168,9 +168,7 @@
     gap: 1rem;
 
     @include dsfr-media-query.respond-from('sm') {
-      & {
-        gap: 0;
-      }
+      gap: 0;
     }
 
     &.no-limit {
