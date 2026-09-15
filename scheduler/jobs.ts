@@ -8,6 +8,8 @@ import anonymizeArchivedBeneficiaries from './archived-beneficiary/anonymize-arc
 import socialSupportNotifications from './notification/create-social-support-notifications'
 import documentNotifications from './notification/create-document-notifications'
 import supportProgramNotifications from './notification/create-support-program-notifications'
+import archiveDueOneMonthNotifications from './notification/create-archive-due-one-month-notifications'
+import archiveRemindersNotifications from './notification/create-archive-reminders-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 import importDataEducationSchools from './data-education/import-schools'
@@ -38,6 +40,15 @@ export const jobs = {
    * Runs daily at 02:30 */
   disableInactiveStructures,
 
+  /** Notifies referents that an inactive beneficiary is due to be archived in 1 month.
+   * Runs daily at 02:45 */
+  archiveDueOneMonthNotifications,
+
+  /** Notifies referents of the archive reminders (in 7 days, then today) for
+   * inactive beneficiaries that already received the 1-month notice.
+   * Runs daily at 02:55 */
+  archiveRemindersNotifications,
+
   /** Creates notifications for social support due dates (today / in 1 month), help request end-of-support (today / in 1 month), document expirations (today / in 1 month), and support program end dates (today / in 2 months).
    * Runs daily at 03:00 */
   notificationCreator: async () => {
@@ -49,10 +60,6 @@ export const jobs = {
     await documentNotifications.createDueTodayDocumentNotifications()
     await supportProgramNotifications.createEndInTwoMonthsSupportProgramNotifications()
     await supportProgramNotifications.createEndTodaySupportProgramNotifications()
-
-    // TO BE UNCOMMENTED WHEN RuntimeConfig issue is solved and when lastActivity has been migrated
-    // await beneficiaryToBeArchivedNotifications.createArchiveDueRemindersNotifications()
-    // await beneficiaryToBeArchivedNotifications.createArchiveDueOneMonthNotifications()
   },
 
   /** Exports an anonymized copy of the database for Metabase analytics.

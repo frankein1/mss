@@ -24,10 +24,7 @@
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
     "prisma": "prisma",
     "release": "commit-and-tag-version",
-    "prepare": "husky",
-    "scheduler:archive-notifications": "tsx server/scheduler/notifications/archive-notifications.ts",
-    "scheduler:archive-reminders-notifications": "tsx server/scheduler/notifications/archive-reminders-notifications.ts",
-    "scheduler:import-schools": "tsx scheduler/_caller.ts dataEducationSchoolImport"
+    "prepare": "husky"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1019.0",

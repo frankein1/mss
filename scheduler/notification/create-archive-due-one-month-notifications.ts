@@ -1,23 +1,11 @@
 import { NotificationType } from '@prisma/client'
 import { NotificationRepo } from '~~/server/database'
 import { prismaClient } from '~~/server/prisma'
-import { performance } from 'node:perf_hooks'
+import { withErrorCapture } from '../utils'
 import { getInactiveBeneficiaries } from './helper'
 
 /** Notifications for inactive beneficiaries due to be archived in 1 month */
-export const createArchiveDueOneMonthNotifications = async () => {
-  const start = performance.now()
-
-  const number = await handleCreation()
-
-  const end = performance.now()
-  const duration = (end - start) / 1000
-  console.log(
-    `createArchiveDueOneMonthNotifications [${new Date()}]: notifications created: ${number} - time: ${duration}s`
-  )
-}
-
-async function handleCreation() {
+async function createArchiveDueOneMonthNotifications() {
   const mustBeArchivedBeneficiaries = await getInactiveBeneficiaries()
 
   const archiveNotifications = mustBeArchivedBeneficiaries
@@ -37,7 +25,9 @@ async function handleCreation() {
     data: filteredNotifications
   })
 
-  return filteredNotifications.length
+  console.log(
+    `createArchiveDueOneMonthNotifications [${new Date().toISOString()}]: notifications created: ${filteredNotifications.length}`
+  )
 }
 
 type ArchiveNotification = {
@@ -77,4 +67,8 @@ const compareAndFilterNotifications = async (
     }
   })
   return filtered
+}
+
+export default async function handler() {
+  return await withErrorCapture(createArchiveDueOneMonthNotifications)
 }

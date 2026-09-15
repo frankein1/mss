@@ -2,7 +2,7 @@ import { NotificationType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { NotificationRepo } from '~~/server/database'
 import { getInactiveBeneficiariesWithOneMonthNotification } from './helper'
-import { performance } from 'node:perf_hooks'
+import { withErrorCapture } from '../utils'
 
 /** Reminder notifications for inactive beneficiaries :
  * - due to be archived in 7 days
@@ -10,19 +10,7 @@ import { performance } from 'node:perf_hooks'
  *
  * Only beneficiaries that have already received a 1-month notification
  * can receive a reminder */
-export const createArchiveDueRemindersNotifications = async () => {
-  const start = performance.now()
-
-  const number = await handleCreation()
-
-  const end = performance.now()
-  const duration = (end - start) / 1000
-  console.log(
-    `createArchiveDueRemindersNotifications [${new Date()}]: notifications created: ${number} - time: ${duration}s`
-  )
-}
-
-async function handleCreation() {
+async function createArchiveDueRemindersNotifications() {
   // Filter all beneficiaries that must be archived in less than 7 days
   const mustBeArchivedBeneficiaries = (
     await getInactiveBeneficiariesWithOneMonthNotification()
@@ -51,7 +39,9 @@ async function handleCreation() {
     data: filteredNotifications
   })
 
-  return filteredNotifications.length
+  console.log(
+    `createArchiveDueRemindersNotifications [${new Date().toISOString()}]: notifications created: ${filteredNotifications.length}`
+  )
 }
 
 /** Select archive dates between now and now + N days */
@@ -102,4 +92,8 @@ const compareAndFilterNotifications = async (
     }
   })
   return filtered
+}
+
+export default async function handler() {
+  return await withErrorCapture(createArchiveDueRemindersNotifications)
 }

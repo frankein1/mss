@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
 import { NotificationRepo } from '~~/server/database'
 import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
 import { NotificationType } from '@prisma/client'
-import { createArchiveDueOneMonthNotifications } from './create-archive-due-one-month-notifications.service'
+import createArchiveDueOneMonthNotifications from './create-archive-due-one-month-notifications'
 import { test } from './__fixtures__'
 
 beforeAll(async () => await test.createBeneficiary())
