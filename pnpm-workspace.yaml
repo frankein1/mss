@@ -1,7 +1,7 @@
 overrides:
   uuid: '14.0.0'
   tmp: '0.2.7'
-  flatted: '^3.4.2'
+  deepmerge-ts: '8.0.2'
 
 engineStrict: true
 #  Only packages released at least 15 days ago can be installed
