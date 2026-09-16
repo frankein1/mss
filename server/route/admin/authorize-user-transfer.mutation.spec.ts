@@ -32,7 +32,7 @@ afterEach(async () => {
     }
   })
   await prismaClient.userActivity.deleteMany({
-    where: { key: 'admin.user.transfer.confirmation-code' }
+    where: { key: 'admin.user.authorize-user-transfer' }
   })
   await prismaClient.user.update({
     where: { id: adminUserId },

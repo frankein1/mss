@@ -95,16 +95,30 @@ beforeEach(async () => {
   })
   soloManagerStructureId = soloManagerStructure.id
 
-  const soloManager = await prismaClient.user.create({
-    data: {
-      email: `${structurePrefix}solo-manager@test.com`,
-      firstName: 'Solo',
-      lastName: 'Manager',
-      role: 'StructureManager',
-      status: 'Active',
-      structureId: soloManagerStructureId
-    }
-  })
+  const [soloManager] = await Promise.all([
+    prismaClient.user.create({
+      data: {
+        email: `${structurePrefix}solo-manager@test.com`,
+        firstName: 'Solo',
+        lastName: 'Manager',
+        role: 'StructureManager',
+        status: 'Active',
+        structureId: soloManagerStructureId
+      }
+    }),
+    // A disabled StructureManager must not count towards the active-manager
+    // total, matching the transfer mutation's `status: Active` predicate.
+    prismaClient.user.create({
+      data: {
+        email: `${structurePrefix}solo-manager-disabled@test.com`,
+        firstName: 'Solo',
+        lastName: 'Disabled',
+        role: 'StructureManager',
+        status: 'Disabled',
+        structureId: soloManagerStructureId
+      }
+    })
+  ])
   soloManagerId = soloManager.id
 })
 
@@ -165,6 +179,19 @@ describe('Admin - Check Transfer User - Last structure manager', () => {
     expect(result).toEqual({
       nBeneficiaries: 0,
       isLastStructureManager: false
+    })
+  })
+
+  test('A disabled StructureManager does not count, so the sole active manager is flagged as the last one', async ({
+    trpc
+  }) => {
+    const result = await trpc.administrator.admin.checkTransferUser({
+      id: soloManagerId
+    })
+
+    expect(result).toEqual({
+      nBeneficiaries: 0,
+      isLastStructureManager: true
     })
   })
 

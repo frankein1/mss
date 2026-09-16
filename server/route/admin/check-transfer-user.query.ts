@@ -3,7 +3,7 @@ import type { IdInput } from '~~/server/schema'
 import { idSchema } from '~~/server/schema'
 import { UserRepo } from '~~/server/database'
 import type { AdminContext } from '~~/server/trpc'
-import { UserRole } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
@@ -18,7 +18,7 @@ const adminHandler = async ({
       structure: {
         select: {
           users: {
-            select: { id: true, role: true }
+            select: { id: true, role: true, status: true }
           }
         }
       },
@@ -27,7 +27,7 @@ const adminHandler = async ({
   })
   const userRole = userInfo.structure?.users.find(u => u.id === input.id)?.role
   const nStructureManagers = (userInfo.structure?.users || []).filter(
-    u => u.role === UserRole.StructureManager
+    u => u.role === UserRole.StructureManager && u.status === UserStatus.Active
   ).length
 
   return {
