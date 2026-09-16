@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>nuxt/renovate-config-nuxt", "schedule:daily"],
+  "extends": [
+    "github>nuxt/renovate-config-nuxt"
+  ],
   "docker-compose": {
     "enabled": false
   },
@@ -17,17 +19,26 @@
   "timezone": "Europe/Paris",
   "updateNotScheduled": false,
   "prConcurrentLimit": 5,
-  "ignoreDeps": ["pnpm", "h3", "html-to-image", "@nuxt/test-utils"],
+  "ignoreDeps": [
+    "pnpm",
+    "html-to-image"
+  ],
   "packageRules": [
     {
       "groupName": "nuxt",
       "description": "nuxt and @nuxt/kit must be bumped together and stay on the exact same version, otherwise two copies of @nuxt/kit end up in the lockfile. Versions are pinned exactly (no caret) because the minimumReleaseAge policy in pnpm-workspace.yaml makes pnpm install fail on a too-recent version that a caret range would resolve to.",
-      "matchPackageNames": ["nuxt", "@nuxt/kit"],
+      "matchPackageNames": [
+        "nuxt",
+        "@nuxt/kit"
+      ],
       "rangeStrategy": "pin"
     },
     {
       "groupName": "Playwright",
-      "matchPackageNames": ["/@playwright/test/", "/@axe-core/playwright/"]
+      "matchPackageNames": [
+        "/@playwright/test/",
+        "/@axe-core/playwright/"
+      ]
     },
     {
       "groupName": "dsfr",
@@ -39,11 +50,18 @@
     },
     {
       "groupName": "vue-tsc",
-      "matchPackageNames": ["/vue-tsc/"]
+      "matchPackageNames": [
+        "/vue-tsc/"
+      ]
     },
     {
       "groupName": "tRPC",
-      "matchPackageNames": ["/@trpc/client/", "/@trpc/server/", "/trpc-nuxt/"]
+      "matchPackageNames": [
+        "/@trpc/client/",
+        "/@trpc/server/",
+        "/trpc-nuxt/",
+        "/superjson/"
+      ]
     },
     {
       "groupName": "vee-validate",
@@ -55,7 +73,17 @@
     },
     {
       "groupName": "nuxt-dev",
-      "matchPackageNames": ["/@nuxt/eslint/", "/@nuxt/test-utils/"]
+      "matchPackageNames": [
+        "/@nuxt/eslint/",
+        "/@nuxt/test-utils/"
+      ]
+    },
+    {
+      "groupName": "tiptap",
+      "matchPackageNames": [
+        "/@tiptap/.*/",
+        "/prosemirror-model/"
+      ]
     }
   ]
 }
