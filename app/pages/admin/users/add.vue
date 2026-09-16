@@ -7,6 +7,7 @@
         <div class="main-container fr-p-5w">
           <UserFormAdmin
             :is-submitting="isSubmitting"
+            :structure-options="structureOptions"
             @update-user="onAddUser($event as AdminCreateUserInput)"
           />
         </div>
@@ -20,11 +21,20 @@
   import type { AdminCreateUserInput } from '~~/server/schema'
   import { routes } from '~/utils/routes'
   import { getUserCreationMessage } from '~/utils/user'
+  import { toOptions } from '~/utils/options'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
+
+  const { data: structures } = await trpcClient.admin.getStructures.useQuery()
+
+  const structureOptions = computed(() =>
+    structures.value?.structures.length
+      ? toOptions(structures.value.structures, 'id', 'name')
+      : []
+  )
 
   function onAddUser(user: AdminCreateUserInput) {
     useTrpcMutation({

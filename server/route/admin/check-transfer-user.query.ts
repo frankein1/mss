@@ -1,7 +1,7 @@
 import { createQuery } from '~~/server/route'
 import type { IdInput } from '~~/server/schema'
 import { idSchema } from '~~/server/schema'
-import { StructureRepo, UserRepo } from '~~/server/database'
+import { UserRepo } from '~~/server/database'
 import type { AdminContext } from '~~/server/trpc'
 import { UserRole } from '@prisma/client'
 
@@ -13,7 +13,7 @@ const adminHandler = async ({
   input: IdInput
 }) => {
   const userInfo = await UserRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.id },
+    where: { id: input.id, role: { not: UserRole.Administrator } },
     select: {
       structure: {
         select: {
@@ -25,7 +25,7 @@ const adminHandler = async ({
       _count: { select: { referentFor: true } }
     }
   })
-  const userRole = userInfo.structure?.users.find(u => (u.id = input.id))?.role
+  const userRole = userInfo.structure?.users.find(u => u.id === input.id)?.role
   const nStructureManagers = (userInfo.structure?.users || []).filter(
     u => u.role === UserRole.StructureManager
   ).length
@@ -33,7 +33,7 @@ const adminHandler = async ({
   return {
     nBeneficiaries: userInfo._count.referentFor,
     isLastStructureManager:
-      userRole == UserRole.StructureManager && nStructureManagers <= 1
+      userRole === UserRole.StructureManager && nStructureManagers <= 1
   }
 }
 

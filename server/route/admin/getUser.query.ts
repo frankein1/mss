@@ -18,6 +18,7 @@ const adminHandler = async ({
       firstName: true,
       lastName: true,
       structureId: true,
+      structure: { select: { name: true } },
       role: true,
       status: true,
       aidantConnectAuthorisation: true

@@ -88,7 +88,7 @@ export function getSupportTransferEmailContent({
 Utilisateur : ${userDisplayName} (${userEmail})
 Structure d'origine : ${fromStructureName}
 Structure de destination : ${toStructureName}
-Nouveau rôle : ${newRoleLabel}
+Rôle : ${newRoleLabel}
 Administrateur : ${adminDisplayName} (${adminEmail})`
   const html = `Un transfert d'utilisateur vient d'être effectué sur Mon Suivi Social.
 <br/><br/>
@@ -96,7 +96,7 @@ Administrateur : ${adminDisplayName} (${adminEmail})`
 <li><strong>Utilisateur</strong> : ${userDisplayName} (${userEmail})</li>
 <li><strong>Structure d'origine</strong> : ${fromStructureName}</li>
 <li><strong>Structure de destination</strong> : ${toStructureName}</li>
-<li><strong>Nouveau rôle</strong> : ${newRoleLabel}</li>
+<li><strong>Rôle</strong> : ${newRoleLabel}</li>
 <li><strong>Administrateur</strong> : ${adminDisplayName} (${adminEmail})</li>
 </ul>`
   return { text, html }

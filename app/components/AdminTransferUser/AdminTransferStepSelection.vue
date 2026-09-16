@@ -28,7 +28,7 @@
 
     <VeeSelect
       name="newRole"
-      label="Nouveau rôle"
+      label="Rôle"
       :options="withEmptyValue(nonAdminUserRoleKeys.options)"
       required
     />
@@ -55,7 +55,7 @@
           </dd>
         </div>
         <div>
-          <dt>Nouveau rôle</dt>
+          <dt>Rôle</dt>
           <dd data-testid="preview-new-role">{{ newRoleLabel }}</dd>
         </div>
       </dl>
@@ -206,7 +206,7 @@
 
   const { errors } = useDisplayFormErrors(formRef, caughtErrors, {
     newStructureId: 'Structure de destination',
-    newRole: 'Nouveau rôle',
+    newRole: 'Rôle',
     ackChecked: 'Confirmation'
   })
 </script>

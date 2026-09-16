@@ -38,7 +38,7 @@
   const currentStep = ref(1)
 
   const stepLabels = [
-    'Choisir la structure de destination et le nouveau rôle',
+    'Choisir la structure de destination et le rôle',
     "Valider le code d'autorisation"
   ]
 

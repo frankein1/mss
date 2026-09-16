@@ -1,6 +1,9 @@
 <template>
   <PageContainer class="fr-p-5w">
-    <PageTitle :title="user ? formatUserDisplayName(user) : '-'" />
+    <PageTitle
+      :title="user ? formatUserDisplayName(user) : '-'"
+      :subtitle="user?.structure?.name"
+    />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <div

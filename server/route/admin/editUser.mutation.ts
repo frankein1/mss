@@ -54,7 +54,22 @@ const adminHandler = async ({
     where: { id },
     data: {
       email: cleanEmail(email),
-      ...user
+      firstName: user.firstName,
+      lastName: user.lastName,
+      status: user.status,
+      role: user.role,
+      aidantConnectAuthorisation: user.aidantConnectAuthorisation
+    },
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      structureId: true,
+      structure: { select: { name: true } },
+      role: true,
+      status: true,
+      aidantConnectAuthorisation: true
     }
   })
   createOrUpdateUser(updatedUser.id).catch(error => {
