@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { UserStatus, UserActivityType } from '@prisma/client'
+import { UserStatus, UserActivityType, UserRole } from '@prisma/client'
 import pkg from 'jsonwebtoken'
 import { signJwt } from '~~/server/lib/jwt'
 import { getProConnectClient } from '~~/server/lib/proconnect.client'
@@ -9,6 +9,7 @@ import type {
   ProConnectClient
 } from '~~/server/lib/proconnect.client'
 import { addUserActivity } from '~~/server/query/userActivity/addUserActivity'
+import { attachDecisionMakerStructure } from '~~/server/services/decisionMaker/attach-structure.service'
 import { UserRepo } from '~~/server/database'
 import { prismaClient } from '~~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
@@ -172,6 +173,17 @@ export default defineEventHandler(async event => {
   if (user.status !== UserStatus.Active) {
     await provideLogoutUrl(session, idToken, state)
     throw forbidden('[ProConnect] Access denied: deactivated user')
+  }
+
+  // A decision maker is created without structure by the inviting structure.
+  // Their own organisation is deduced from the ProConnect SIRET on first login.
+  // No other role goes through this branch.
+  if (user.role === UserRole.DecisionMaker && !user.structureId) {
+    await attachDecisionMakerStructure(user.id, validatedUserInfo)
+    const attachedUser = await getUser(email)
+    if (attachedUser) {
+      user = attachedUser
+    }
   }
 
   // If structure disabled, provide a logout link to retry in the error page

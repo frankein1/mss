@@ -8,6 +8,7 @@ import { routes as file } from './file'
 import { routes as followup } from './followup'
 import { routes as helpRequest } from './help-request'
 import { routes as landing } from './landing'
+import { routes as decisionMaker } from './decision-maker'
 import { routes as stats } from './stats'
 import { routes as structure } from './structure'
 import { routes as user } from './user'
@@ -26,6 +27,7 @@ export const routes = {
   helpRequest,
   landing,
   structure,
+  decisionMaker,
   stats,
   user,
   rdvsp,

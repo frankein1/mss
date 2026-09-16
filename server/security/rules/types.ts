@@ -8,7 +8,17 @@ export type SecurityRuleStructure = Pick<
 export type SecurityRuleGrantee = Pick<
   User,
   'id' | 'status' | 'role' | 'structureId'
->
+> & {
+  /**
+   * Structures qu'un décideur est autorisé à consulter. Renseigné uniquement
+   * pour le rôle DecisionMaker, par decisionMakerProcedure, à partir des
+   * autorisations de partage en base — jamais depuis une entrée client.
+   *
+   * Les contraintes s'en servent pour élargir le filtrage à plusieurs
+   * structures, là où les autres rôles sont limités à `structureId`.
+   */
+  authorizedStructureIds?: string[]
+}
 
 export type SecurityRuleContext = {
   user: SecurityRuleGrantee

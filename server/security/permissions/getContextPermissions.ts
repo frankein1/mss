@@ -5,6 +5,8 @@ import { getGranteRole } from '../rules/helpers'
 export type AppContextPermissions = {
   view: {
     admin: boolean
+    /** Espace décideur : statistiques agrégées multi-structures */
+    decisionMaker: boolean
     cgu: {
       asManager: boolean
     }
@@ -49,16 +51,71 @@ export function getAppContextPermissions({
   user: SecurityRuleGrantee
   structure: SecurityRuleStructure | null | undefined
 }) {
+  if (user.role === 'DecisionMaker') {
+    return getDecisionMakerContextPermissions()
+  }
   if (structure && user.role !== 'Administrator') {
     return getUserContextPermissions({ user, structure })
   }
   return getAdminContextPermissions()
 }
 
+/**
+ * Un décideur n'a aucune capacité applicative : il ne consulte que les
+ * statistiques agrégées des structures qui l'ont autorisé, via des routes
+ * dédiées en lecture seule.
+ *
+ * Tout est explicitement à false plutôt que déduit de son rôle, car plusieurs
+ * capacités de getUserContextPermissions sont construites par exclusion
+ * (`!receptionAgent`, `health: true`…) et seraient donc accordées par défaut
+ * à un rôle qu'elles n'avaient pas prévu.
+ */
+function getDecisionMakerContextPermissions(): AppContextPermissions {
+  return {
+    view: {
+      admin: false,
+      decisionMaker: true,
+      cgu: {
+        asManager: false
+      }
+    },
+    export: {
+      history: false
+    },
+    edit: {
+      structure: false,
+      health: {
+        nir: false
+      },
+      beneficiary: {
+        referent: false
+      }
+    },
+    archiveBeforeDelay: {
+      beneficiary: false
+    },
+    module: {
+      users: false,
+      statsByReferent: false,
+      health: false,
+      ministere: false,
+      helpRequest: false,
+      partner: false,
+      vulnerablePerson: false,
+      budget: false,
+      rdv: false
+    },
+    workshop: {
+      duplicateParticipants: false
+    }
+  }
+}
+
 function getAdminContextPermissions(): AppContextPermissions {
   return {
     view: {
       admin: true,
+      decisionMaker: false,
       cgu: {
         asManager: false
       }
@@ -116,6 +173,7 @@ function getUserContextPermissions(
   return {
     view: {
       admin: false,
+      decisionMaker: false,
       cgu: {
         asManager: manager
       }

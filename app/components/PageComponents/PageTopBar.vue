@@ -21,13 +21,19 @@
   import { routes, apiRoutes } from '~/utils/routes'
   import type { MenuItem } from '~~/types/menu'
 
-  const { isAuthenticated, getUserName } = useAuthState()
+  const { isAuthenticated, getUserName, isDecisionMaker } = useAuthState()
 
   const menus = computed(() => {
+    // Un décideur n'a pas accès aux pages de structure : sa configuration
+    // est celle de son propre espace.
+    const configurationRoute = isDecisionMaker()
+      ? routes.decisionMaker.AppDecisionMakerConfiguration.path()
+      : routes.structure.AppStructureUsers.path()
+
     const menus: MenuItem[] = [
       {
         label: 'Configuration',
-        to: routes.structure.AppStructureUsers.path(),
+        to: configurationRoute,
         icon: 'fr-icon-settings-4-line'
       }
     ]

@@ -9,8 +9,10 @@ export const nonAdminUserRoleKeys = buildKeys({
   [UserRole.StructureManager]: 'Responsable de structure'
 })
 
+/** Tous les rôles, y compris ceux que seule l'équipe MSS peut attribuer */
 export const userRoleKeys = buildKeys({
   ...nonAdminUserRoleKeys.byKey,
+  [UserRole.DecisionMaker]: 'Élu / Décideur',
   [UserRole.Administrator]: 'Administrateur'
 })
 

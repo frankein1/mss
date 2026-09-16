@@ -59,6 +59,22 @@ const statFilterSchema = z
     ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish(),
     createdById: z.array(z.string().uuid()).nullish(),
     supportProgramNameIds: z.array(z.string().uuid()).nullish(),
+    /**
+     * Filtre par nom d'objet d'accompagnement, utilisé par le tableau de bord
+     * décideur. Un même intitulé existe en une ligne par structure
+     * (contrainte d'unicité `[ownedByStructureId, name]`) : le décideur
+     * choisit donc un nom, que le serveur résout en identifiants dans son
+     * périmètre. Voir resolveSocialSupportSubjectNames.
+     */
+    socialSupportSubjectNames: z.array(stringConstraint.max(200)).nullish(),
+    /**
+     * Filtre par structure, utilisé par le tableau de bord décideur.
+     * Il ne peut que restreindre le périmètre autorisé, jamais l'élargir :
+     * l'intersection est faite côté serveur (voir scopeToAuthorizedStructures).
+     * Sans effet pour les autres rôles, dont les contraintes sont déjà
+     * limitées à leur propre structure.
+     */
+    structureIds: z.array(z.string().uuid()).nullish(),
     beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish(),
     qpv: kindOfBooleanSchema(),
     ageGroup: z.nativeEnum(AgeGroup).nullish(),

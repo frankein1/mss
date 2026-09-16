@@ -43,6 +43,9 @@ export function useAuthState() {
   function isAdmin(): boolean {
     return role.value === UserRole.Administrator
   }
+  function isDecisionMaker(): boolean {
+    return role.value === UserRole.DecisionMaker
+  }
   function isStructureManager(): boolean {
     return role.value === UserRole.StructureManager
   }
@@ -68,6 +71,7 @@ export function useAuthState() {
     isAuthenticated,
     isReferent,
     isAdmin,
+    isDecisionMaker,
     isActive,
     isStructureManager,
     isReceptionAgent,

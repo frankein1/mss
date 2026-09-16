@@ -9,6 +9,7 @@ import type {
 } from '../security/rules/types'
 import type { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
+import { getAuthorizedStructureIds } from '~~/server/query/statisticsSharing/getAuthorizedStructureIds'
 import { shouldLog } from '~~/server/utils/logging'
 import { TRPC_REQUEST_LOG_MSG } from '~~/server/utils/constants'
 
@@ -104,6 +105,12 @@ const structureMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role === 'Administrator' || !ctx.user.structure?.id) {
     throw forbiddenError('User routes are not available to admins')
   }
+  // A decision maker only reads aggregated statistics of the structures that
+  // authorized them. They must never reach an operational route, even though
+  // they are attached to a structure of their own.
+  if (ctx.user.role === UserRole.DecisionMaker) {
+    throw forbiddenError('User routes are not available to decision makers')
+  }
   if (!ctx.user.structure?.id) {
     throw forbiddenError('User is not part of any structure')
   }
@@ -115,6 +122,29 @@ const structureMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
     }
   })
 })
+
+const decisionMakerMiddleware = loggingMiddleware.unstable_pipe(
+  async ({ ctx, next }) => {
+    if (ctx.user.role !== UserRole.DecisionMaker) {
+      throw forbiddenError('User is not a decision maker')
+    }
+    // Le périmètre est lu en base à chaque requête, jamais reçu du client.
+    const authorizedStructureIds = await getAuthorizedStructureIds(ctx.user.id)
+
+    return next({
+      ctx: {
+        // Le périmètre est porté par le grantee pour que les contraintes des
+        // repositories puissent filtrer sur plusieurs structures.
+        user: {
+          ...ctx.user,
+          role: UserRole.DecisionMaker,
+          authorizedStructureIds
+        },
+        authorizedStructureIds
+      }
+    })
+  }
+)
 
 const adminMiddleware = loggingMiddleware.unstable_pipe(({ ctx, next }) => {
   if (ctx.user.role !== 'Administrator') {
@@ -141,6 +171,23 @@ export const protectedProcedure = t.procedure.use(structureMiddleware)
 
 export type ProtectedAppContext = AuthContext & {
   structure: SecurityRuleStructure
+}
+
+/**
+ * Decision maker procedure
+ *
+ * Réservée aux routes de consultation de statistiques agrégées. Le routeur
+ * qu'elle alimente ne doit contenir que des queries : la lecture seule est
+ * une propriété du câblage, pas une règle à se rappeler.
+ */
+
+export const decisionMakerProcedure = t.procedure.use(decisionMakerMiddleware)
+
+export type DecisionMakerContext = {
+  event: H3Event
+  user: SecurityRuleGrantee & { role: (typeof UserRole)['DecisionMaker'] }
+  /** Structures que ce décideur est autorisé à consulter */
+  authorizedStructureIds: string[]
 }
 
 /**

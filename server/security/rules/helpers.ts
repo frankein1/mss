@@ -31,6 +31,26 @@ export const isStructureManager = (grantee: SecurityRuleGrantee) => {
   return grantee.role === 'StructureManager'
 }
 
+/**
+ * Élu / décideur : consulte les statistiques agrégées des structures qui
+ * l'ont autorisé. Son périmètre vient de ses autorisations de partage, pas
+ * de sa structure de rattachement.
+ */
+export const isDecisionMaker = (grantee: SecurityRuleGrantee) => {
+  return grantee.role === 'DecisionMaker'
+}
+
+/**
+ * Filtre de structures à appliquer dans les contraintes d'un décideur.
+ *
+ * Un tableau vide est renvoyé tel quel : `structureId: { in: [] }` ne remonte
+ * aucune ligne, ce qui est le comportement voulu pour un décideur qui n'a
+ * encore aucune autorisation. Ne jamais remplacer par une absence de filtre.
+ */
+export const decisionMakerStructureFilter = (grantee: SecurityRuleGrantee) => {
+  return { in: grantee.authorizedStructureIds ?? [] }
+}
+
 export const getGranteRole = (ctx: SecurityRuleContext) => {
   const { user, structure } = ctx
   return {

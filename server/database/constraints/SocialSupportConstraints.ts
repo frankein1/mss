@@ -1,6 +1,11 @@
 import type { Prisma } from '@prisma/client'
 import type { SecurityRuleGrantee } from '~~/server/security'
-import { isAdmin, isReferent } from '~~/server/security/rules/helpers'
+import {
+  decisionMakerStructureFilter,
+  isAdmin,
+  isDecisionMaker,
+  isReferent
+} from '~~/server/security/rules/helpers'
 import { TRPCError } from '@trpc/server'
 
 const get = (user: SecurityRuleGrantee) => {
@@ -10,6 +15,15 @@ const get = (user: SecurityRuleGrantee) => {
       code: 'NOT_IMPLEMENTED',
       message: 'social-support-constraints: get not implemented for admin'
     })
+  }
+
+  // A decision maker reads the structures that authorized them, not their own.
+  if (isDecisionMaker(user)) {
+    Object.assign<
+      Prisma.SocialSupportWhereInput,
+      Prisma.SocialSupportWhereInput
+    >(where, { structureId: decisionMakerStructureFilter(user) })
+    return where
   }
 
   if (!user.structureId) {

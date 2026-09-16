@@ -68,6 +68,9 @@ enum UserRole {
   Instructor
   ReceptionAgent
   Referent
+  /// Consulte les statistiques agrégées des structures qui l'ont autorisé.
+  /// N'a accès à aucune route opérationnelle ni à aucune donnée nominative.
+  DecisionMaker
 }
 
 model User {
@@ -119,6 +122,11 @@ model User {
   createdRedirectionReasons    RedirectionReason[]
   createdSupportProgramNames   SupportProgramName[]
 
+  /// Statistiques que des structures ont autorisé ce décideur à consulter
+  statisticsSharedWith      StatisticsSharing[] @relation(name: "statistics_shared_with")
+  /// Autorisations accordées par cet utilisateur au nom de sa structure
+  createdStatisticsSharings StatisticsSharing[] @relation(name: "created_statistics_sharings")
+
   @@map("user")
 }
 
@@ -128,6 +136,9 @@ enum StructureType {
   Commune
   Association
   Ministere
+  /// Structure de rattachement d'un décideur (préfecture, département,
+  /// tête de réseau). Ne suit aucun bénéficiaire.
+  Decideur
 }
 
 model Structure {
@@ -171,8 +182,38 @@ model Structure {
   WorkshopName          WorkshopName[]
   RedirectionReasons    RedirectionReason[]
   supportProgramNames   SupportProgramName[]
+  statisticsSharings    StatisticsSharing[]
 
   @@map("structure")
+}
+
+/// Autorisation donnée par une structure à un décideur de consulter ses
+/// statistiques agrégées. L'autorisation vise une personne et non sa
+/// structure : deux agents d'une même préfecture sont invités séparément.
+/// Une autorisation est active si elle n'est ni révoquée ni expirée.
+model StatisticsSharing {
+  id String @id @default(uuid()) @db.Uuid
+
+  /// Structure qui partage ses statistiques
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  structureId String    @map("structure_id") @db.Uuid
+
+  /// Décideur autorisé à les consulter
+  decisionMaker   User   @relation(name: "statistics_shared_with", fields: [decisionMakerId], references: [id], onDelete: Cascade)
+  decisionMakerId String @map("decision_maker_id") @db.Uuid
+
+  /// Membre de la structure ayant accordé l'autorisation. Conservé même si
+  /// le compte est supprimé, pour garder la trace de qui a partagé.
+  createdBy   User?   @relation(name: "created_statistics_sharings", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String? @map("created_by_id") @db.Uuid
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  expiresAt DateTime? @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  @@unique([structureId, decisionMakerId])
+  @@index(fields: [decisionMakerId], map: "statistics_sharing_decision_maker_id_idx")
+  @@map("statistics_sharing")
 }
 
 enum DocumentType {

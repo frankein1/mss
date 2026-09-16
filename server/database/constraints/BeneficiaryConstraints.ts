@@ -1,11 +1,25 @@
 import type { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import type { SecurityRuleGrantee } from '~~/server/security'
-import { isAdmin, isReferent } from '~~/server/security/rules/helpers'
+import {
+  decisionMakerStructureFilter,
+  isAdmin,
+  isDecisionMaker,
+  isReferent
+} from '~~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.BeneficiaryWhereInput = {}
   if (isAdmin(user)) {
+    return where
+  }
+
+  // A decision maker reads the structures that authorized them, not their own.
+  if (isDecisionMaker(user)) {
+    Object.assign<Prisma.BeneficiaryWhereInput, Prisma.BeneficiaryWhereInput>(
+      where,
+      { structureId: decisionMakerStructureFilter(user) }
+    )
     return where
   }
 

@@ -1,7 +1,12 @@
 import type { Prisma } from '@prisma/client'
 import { WorkshopConstraints } from './WorkshopConstraints'
 import type { SecurityRuleGrantee } from '~~/server/security'
-import { isAdmin, isReferent } from '~~/server/security/rules/helpers'
+import {
+  decisionMakerStructureFilter,
+  isAdmin,
+  isDecisionMaker,
+  isReferent
+} from '~~/server/security/rules/helpers'
 
 const get = (user: SecurityRuleGrantee) => {
   const where: Prisma.WorkshopAttendeeWhereInput = {}
@@ -39,6 +44,15 @@ const get = (user: SecurityRuleGrantee) => {
 const count = (user: SecurityRuleGrantee) => {
   const where: Prisma.WorkshopAttendeeCountArgs['where'] = {}
   if (isAdmin(user)) {
+    return where
+  }
+
+  // A decision maker reads the structures that authorized them, not their own.
+  if (isDecisionMaker(user)) {
+    Object.assign<
+      Prisma.WorkshopAttendeeWhereInput,
+      Prisma.WorkshopAttendeeWhereInput
+    >(where, { workshop: { structureId: decisionMakerStructureFilter(user) } })
     return where
   }
 

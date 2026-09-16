@@ -48,9 +48,12 @@ const handler = async ({
       select: userSelect
     })
 
-    if (user.role === UserRole.Administrator) {
+    if (
+      user.role === UserRole.Administrator ||
+      user.role === UserRole.DecisionMaker
+    ) {
       throw forbiddenError(
-        'Cannot have an Administrator among user-managed users'
+        'Cannot have an Administrator or a DecisionMaker among user-managed users'
       )
     }
 
@@ -72,9 +75,12 @@ const handler = async ({
     select: { ...userSelect, _count: { select: blockingRelationsSelect } }
   })
 
-  if (user.role === UserRole.Administrator) {
+  if (
+    user.role === UserRole.Administrator ||
+    user.role === UserRole.DecisionMaker
+  ) {
     throw forbiddenError(
-      'Cannot have an Administrator among user-managed users'
+      'Cannot have an Administrator or a DecisionMaker among user-managed users'
     )
   }
 

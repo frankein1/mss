@@ -68,7 +68,7 @@
               </li>
             </NuxtLink>
             <li
-              v-if="!application.view.admin"
+              v-if="!application.view.admin && !application.view.decisionMaker"
               class="fr-mt-3w"
             >
               <NuxtLink
@@ -204,6 +204,15 @@
         to: routes.admin.AdminMinisters.path(),
         label: 'Ministres',
         icon: 'fr-icon-shield-user-line'
+      })
+    } else if (application.value.view.decisionMaker) {
+      // Un décideur ne dispose que des statistiques : sa configuration est
+      // accessible depuis le menu en haut à droite, comme pour les autres
+      // rôles, et n'a donc pas sa place ici.
+      items.push({
+        to: routes.decisionMaker.AppDecisionMakerStatisticsBeneficiaries.path(),
+        label: 'Statistiques',
+        icon: 'fr-icon-line-chart-line'
       })
     } else {
       items.push({

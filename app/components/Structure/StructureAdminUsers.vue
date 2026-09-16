@@ -37,7 +37,7 @@
               <td>{{ user.firstName }}</td>
               <td>{{ user.email }}</td>
               <td>
-                {{ nonAdminUserRoleKeys.value(user.role as NonAdminUserRole) }}
+                {{ userRoleKeys.value(user.role) }}
               </td>
               <td>
                 <span
@@ -89,9 +89,8 @@
   import { UserStatus } from '@prisma/client'
   import type { StructureUsers } from './types'
   import { userFieldLabels } from '~~/client/labels'
-  import { nonAdminUserRoleKeys } from '~~/client/options'
+  import { userRoleKeys } from '~~/client/options'
   import { routes } from '~/utils/routes'
-  import type { NonAdminUserRole } from '~~/types/user'
 
   defineProps<{
     structureId: string

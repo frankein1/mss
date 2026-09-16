@@ -10,6 +10,14 @@ export default defineNuxtRouteMiddleware(to => {
       query: { redirectUrl }
     })
   }
+  // POC tableau de bord décideur : les CGU actuelles décrivent le suivi de
+  // dossiers bénéficiaires et le secret professionnel, ce qui ne correspond
+  // pas à un usage de consultation de statistiques agrégées.
+  // À remplacer par des CGU dédiées avant toute mise en production.
+  if (authState.isDecisionMaker()) {
+    return
+  }
+
   const {
     public: { cguVersion }
   } = useRuntimeConfig()

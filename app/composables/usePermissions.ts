@@ -3,6 +3,7 @@ import type { AppContextPermissions } from '~~/server/security'
 export const defaultPermissions = (): AppContextPermissions => ({
   view: {
     admin: false,
+    decisionMaker: false,
     cgu: { asManager: false }
   },
   export: {

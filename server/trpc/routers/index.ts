@@ -22,6 +22,8 @@ import { partnerRouter } from './partnerRouter/router'
 import { dataInclusionRouter } from './dataInclusionRouter'
 import { fileRouter } from './familyFile/router'
 import { supportProgramRouter } from './supportProgram/router'
+import { statisticsSharingRouter } from './statisticsSharing/router'
+import { decisionMakerRouter } from './decisionMaker/router'
 import { rdvspRouter } from './rdvspRouter'
 import { router } from '~~/server/trpc'
 import { workshopRouter } from './workshop/router'
@@ -51,6 +53,8 @@ export const appRouter = router({
   housingHelpRequest: housingHelpRequestRouter,
   file: fileRouter,
   supportProgram: supportProgramRouter,
+  statisticsSharing: statisticsSharingRouter,
+  decisionMaker: decisionMakerRouter,
   rdvsp: rdvspRouter,
   workshop: workshopRouter,
   minister: ministerRouter,

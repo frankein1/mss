@@ -1,16 +1,25 @@
 <template>
-  <AtomLazyComponent
-    :error="Boolean(error)"
-    message="Les informations de votre stucture n'ont pas pu être chargées."
-    :pending="status === 'pending'"
-  >
-    <StructureInfo
-      v-if="data"
+  <div>
+    <AtomLazyComponent
+      :error="Boolean(error)"
+      message="Les informations de votre stucture n'ont pas pu être chargées."
+      :pending="status === 'pending'"
+    >
+      <StructureInfo
+        v-if="data"
+        class="fr-mb-5w"
+        :structure="data.structure"
+        @edit="onEdit"
+      />
+    </AtomLazyComponent>
+
+    <!-- Le partage de statistiques relève de la configuration de la structure,
+         au même titre que ses informations : réservé au responsable. -->
+    <StructureStatisticsSharing
+      v-if="application.edit.structure"
       class="fr-mb-5w"
-      :structure="data.structure"
-      @edit="onEdit"
     />
-  </AtomLazyComponent>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +29,7 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
+  const { application } = usePermissions()
   const isSubmitting = ref(false)
 
   const { data, error, status, refresh } =
