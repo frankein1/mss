@@ -148,7 +148,7 @@
     ackChecked: boolean
   }
 
-  const { handleSubmit } = useForm<SelectionFormValues>({
+  const { handleSubmit, setFieldValue } = useForm<SelectionFormValues>({
     validationSchema: toTypedSchema(selectionSchema),
     initialValues: {
       newStructureId: selectedStructure.value?.id ?? '',
@@ -167,6 +167,10 @@
       ? (nonAdminUserRoleKeys.value(newRoleValue.value) ?? '')
       : ''
   )
+
+  watch([selectedStructureLocal, newRoleValue], () => {
+    setFieldValue('ackChecked', false, false)
+  })
 
   function onStructureSelected(structure: StructureOption) {
     selectedStructureLocal.value = structure
