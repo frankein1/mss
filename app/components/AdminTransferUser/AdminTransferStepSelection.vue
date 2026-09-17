@@ -202,7 +202,7 @@
       emit('next')
     } catch {
       topLevelError.value =
-        "La génération du code d'autorisation a échoué. Si vous avez effectué beaucoup d'appels à l'export, veuillez attendre une ou deux minutes."
+        "La génération du code d'autorisation a échoué. Si vous avez effectué beaucoup d'appels, veuillez attendre une ou deux minutes."
     } finally {
       sendingCode.value = false
     }
