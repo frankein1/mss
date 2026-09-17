@@ -1,4 +1,3 @@
-import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import { StructureType } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -6,7 +5,8 @@ import {
   stringConstraint,
   siretConstraint,
   stringOrEmpty,
-  phoneConstraint
+  phoneConstraint,
+  validationCodeConstraint
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -67,7 +67,7 @@ export type AdminGetStructuresInput = z.infer<typeof adminGetStructuresSchema>
 
 export const disableStructureSchema = z.object({
   id: z.string().uuid(),
-  code: z.string().length(VALIDATION_CODE_LENGTH).optional()
+  code: validationCodeConstraint.optional()
 })
 
 export type DisableStructureInput = z.infer<typeof disableStructureSchema>

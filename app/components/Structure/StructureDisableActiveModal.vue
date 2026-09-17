@@ -57,7 +57,7 @@
       <VeeInput
         name="code"
         required
-        label="Code de validation"
+        label="Code de validation (obligatoire)"
       />
     </form>
   </template>
@@ -103,7 +103,7 @@
 <script lang="ts" setup>
   import { z } from 'zod'
   import type { AdminStructureInfo } from './types'
-  import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+  import { validationCodeConstraint } from '~~/server/schema'
 
   const authState = useAuthState()
 
@@ -137,14 +137,7 @@
 
   const { handleSubmit } = useForm<{ code: string }>({
     validationSchema: toTypedSchema(
-      z.object({
-        code: z
-          .string({ required_error: requiredErrorMessage })
-          .length(
-            VALIDATION_CODE_LENGTH,
-            `Le champ doit contenir ${VALIDATION_CODE_LENGTH} caractères.`
-          )
-      })
+      z.object({ code: validationCodeConstraint })
     )
   })
 

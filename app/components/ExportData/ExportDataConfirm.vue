@@ -32,7 +32,7 @@
         name="code"
         required
         :disabled="isExporting"
-        label="Code de validation"
+        label="Code de validation (obligatoire)"
       />
 
       <div
@@ -62,7 +62,7 @@
 <script lang="ts" setup>
   import { z } from 'zod'
   import { AlertType } from '~/utils/constants/alert'
-  import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+  import { validationCodeConstraint } from '~~/server/schema'
 
   const props = defineProps<{
     hasFilters?: boolean
@@ -87,14 +87,7 @@
 
   const { handleSubmit } = useForm<{ code: string }>({
     validationSchema: toTypedSchema(
-      z.object({
-        code: z
-          .string({ required_error: requiredErrorMessage })
-          .length(
-            VALIDATION_CODE_LENGTH,
-            'Le champ doit contenir 8 caractères.'
-          )
-      })
+      z.object({ code: validationCodeConstraint })
     )
   })
 

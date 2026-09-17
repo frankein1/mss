@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+import { validationCodeConstraint } from '../helpers.schema'
 import { workshopFilterSchema } from '../filter.schema'
 
 export const exportWorkshopsSchema = z.object({
-  code: z.string().length(VALIDATION_CODE_LENGTH),
+  code: validationCodeConstraint,
   filter: workshopFilterSchema
 })
 

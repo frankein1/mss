@@ -10,6 +10,7 @@ import {
   validDate
 } from '~/utils/zod'
 import { sanitizeUrl } from '@braintree/sanitize-url'
+import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 
 export const paginatedSchema = z.object({
   page: z.number().int().gte(1),
@@ -175,6 +176,14 @@ export const openRichText = () => {
     'Les caractères spéciaux < et > ne sont pas acceptés.'
   )
 }
+
+export const validationCodeConstraint = z
+  .string(errorMessages)
+  .length(
+    VALIDATION_CODE_LENGTH,
+    `Le code de validation doit contenir ${VALIDATION_CODE_LENGTH} chiffres.`
+  )
+  .regex(/^\d+$/, 'Le code de validation ne doit contenir que des chiffres.')
 
 export const beneficiaryIdSchema = z.object({
   beneficiaryId: z.string().uuid()

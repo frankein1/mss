@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+import { validationCodeConstraint } from '../helpers.schema'
 
 export const exportAttendanceSchema = z.object({
-  code: z.string().length(VALIDATION_CODE_LENGTH),
+  code: validationCodeConstraint,
   workshopId: z.string().uuid()
 })
 

@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { followupFilterSchema } from '../filter.schema'
-import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
+import { validationCodeConstraint } from '../helpers.schema'
 
 export const exportFollowupsSchema = z.object({
-  code: z.string().length(VALIDATION_CODE_LENGTH),
+  code: validationCodeConstraint,
   orderBy: z.object({
     socialSupport: z
       .object({
