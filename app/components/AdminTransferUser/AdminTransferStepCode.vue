@@ -48,10 +48,9 @@
 <script setup lang="ts">
   import { z } from 'zod'
   import type { UserRole } from '@prisma/client'
-  import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
-  import { errorMessages } from '~/utils/zod'
   import { isTRPCClientError } from '~/utils/error'
+  import { validationCodeConstraint } from '~~/server/schema'
 
   const props = defineProps<{
     user: {
@@ -64,11 +63,7 @@
     transferred: []
   }>()
 
-  const codeSchema = z.object({
-    confirmationCode: z.string(errorMessages).length(VALIDATION_CODE_LENGTH, {
-      message: `Le code de confirmation doit contenir ${VALIDATION_CODE_LENGTH} chiffres.`
-    })
-  })
+  const codeSchema = z.object({ confirmationCode: validationCodeConstraint })
 
   const { handleSubmit } = useForm<{ confirmationCode: string }>({
     validationSchema: toTypedSchema(codeSchema)
