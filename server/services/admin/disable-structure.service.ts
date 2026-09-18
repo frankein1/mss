@@ -20,7 +20,7 @@ import { customAlphabet } from 'nanoid'
 import { deleteFiles } from '~~/server/lib/s3/file'
 import { createEmail } from '~~/server/query/email'
 import { createEmailSubject } from '~~/server/email/createEmailSubject'
-import { canBeDisabled } from '~/utils/structure'
+import { hasCompletedDeactivationWarnings } from '~/utils/structure'
 import { formatDate } from '~/utils/formatDate'
 import { forbiddenError } from '~~/server/trpc'
 import type { AppConfig } from '~~/types/appConfig'
@@ -58,7 +58,7 @@ export const disableStructure = async ({
     }
   })
 
-  if (!confirmedByCode && !canBeDisabled(structure)) {
+  if (!confirmedByCode && !hasCompletedDeactivationWarnings(structure)) {
     throw forbiddenError(
       `disable-structure: cannot disable, lastAccess: ${formatDate(structure.lastAccess || structure.created)}, alert emails sent: ${structure.deactivationAlertEmail}, last alert email: ${formatDate(structure.deactivationAlertEmailDate) || 'none'}`
     )

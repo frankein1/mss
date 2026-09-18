@@ -42,11 +42,10 @@
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import type { CreateStructureInput } from '~~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import StructureDisableActiveModal from '~/components/Structure/StructureDisableActiveModal.vue'
-  import StructureDisableInactiveModal from '~/components/Structure/StructureDisableInactiveModal.vue'
+  import StructureDisableModal from '~/components/Structure/StructureDisableModal.vue'
   import { routes } from '~/utils/routes'
   import type { AdminStructureInfo } from '~/components/Structure/types'
-  import { canBeDisabled } from '~/utils/structure'
+  import { hasCompletedDeactivationWarnings } from '~/utils/structure'
 
   const title = routes.structure.AppStructure.title
 
@@ -67,17 +66,10 @@
       return
     }
     const structure = data.value.structure
-    if (canBeDisabled(structure)) {
-      modal.open(StructureDisableInactiveModal, {
-        title: 'Désactiver une structure inactive',
-        structure,
-        disable: onDisable,
-        cancel: onCancel
-      })
-      return
-    }
-    modal.open(StructureDisableActiveModal, {
-      title: 'Désactiver une structure active',
+    modal.open(StructureDisableModal, {
+      title: hasCompletedDeactivationWarnings(structure)
+        ? 'Désactiver une structure inactive'
+        : 'Désactiver une structure active',
       structure,
       disable: onDisable,
       requestCode: onRequestCode,
@@ -88,7 +80,7 @@
     modal.close()
   }
 
-  /** An active structure can only be disabled with a code sent by email,
+  /** A structure can only be disabled with a code sent by email,
    * see server/route/admin/authorizeDisableStructure.mutation.ts
    */
   const {
@@ -113,14 +105,10 @@
   const { mutate: disableStructureMutate, error: disableStructureError } =
     useTrpcClient().admin.disableStructure.useMutation()
 
-  async function onDisable(structure: AdminStructureInfo, code?: string) {
+  async function onDisable(structure: AdminStructureInfo, code: string) {
     const res = await disableStructureMutate({ id: structure.id, code })
     if (disableStructureError.value || !res) {
-      snackbar.error(
-        code
-          ? 'Le code de confirmation est invalide ou expiré.'
-          : 'La désactivation a échoué.'
-      )
+      snackbar.error('Le code de confirmation est invalide ou expiré.')
       return
     }
     modal.close()

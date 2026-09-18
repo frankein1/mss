@@ -67,7 +67,7 @@ export type AdminGetStructuresInput = z.infer<typeof adminGetStructuresSchema>
 
 export const disableStructureSchema = z.object({
   id: z.string().uuid(),
-  code: validationCodeConstraint.optional()
+  code: validationCodeConstraint
 })
 
 export type DisableStructureInput = z.infer<typeof disableStructureSchema>

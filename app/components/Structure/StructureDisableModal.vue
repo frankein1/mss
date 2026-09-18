@@ -1,8 +1,11 @@
 <template>
-  <div class="fr-alert fr-alert--warning fr-alert--sm fr-mb-4v">
+  <div
+    class="fr-alert fr-alert--sm fr-mb-4v"
+    :class="inactive ? 'fr-alert--info' : 'fr-alert--warning'"
+  >
     <p class="fr-text--bold">
       Structure <span class="text--uppercase">{{ structure.name }}</span>
-      active&nbsp;: dernière activité le
+      {{ inactive ? 'inactive' : 'active' }}&nbsp;: dernière activité le
       {{
         formatDateToLocalTimezone(structure.lastAccess || structure.created)
       }}, {{ structure.deactivationAlertEmail }}&nbsp;{{ alertEmailsLabel }}.
@@ -56,10 +59,14 @@
       </p>
       <VeeInput
         name="code"
-        required
         label="Code de validation (obligatoire)"
       />
     </form>
+
+    <p class="fr-text--sm fr-mt-4v fr-mb-0">
+      La désactivation peut prendre quelques secondes, merci de ne pas fermer
+      cette fenêtre.
+    </p>
   </template>
 
   <div class="fr-mt-8v">
@@ -88,9 +95,14 @@
       </li>
       <li v-else>
         <button
-          class="fr-btn fr-btn--icon-left fr-icon-delete-line btn-delete-action"
+          class="fr-btn fr-btn--icon-left btn-delete-action"
+          :class="{
+            'fr-icon-delete-line': !isDisabling,
+            'btn-loading': isDisabling
+          }"
           title="Désactiver la structure"
           type="button"
+          :disabled="isDisabling"
           @click="onSubmitCode"
         >
           Désactiver la structure
@@ -104,17 +116,23 @@
   import { z } from 'zod'
   import type { AdminStructureInfo } from './types'
   import { validationCodeConstraint } from '~~/server/schema'
+  import { hasCompletedDeactivationWarnings } from '~/utils/structure'
 
   const authState = useAuthState()
 
   const props = defineProps<{
     structure: AdminStructureInfo
     requestCode: (structure: AdminStructureInfo) => Promise<boolean>
-    disable: (structure: AdminStructureInfo, code: string) => void
+    disable: (structure: AdminStructureInfo, code: string) => Promise<void>
     cancel: () => void
   }>()
 
   const user = computed(() => authState.user.value)
+
+  /** Only changes the wording: a code is required in both cases */
+  const inactive = computed(() =>
+    hasCompletedDeactivationWarnings(props.structure)
+  )
 
   const alertEmailsLabel = computed(() =>
     props.structure.deactivationAlertEmail > 1
@@ -141,7 +159,19 @@
     )
   })
 
-  const onSubmitCode = handleSubmit(({ code }) => {
-    props.disable(props.structure, code)
+  const isDisabling = ref(false)
+
+  const onSubmitCode = handleSubmit(async ({ code }) => {
+    // The disabled attribute only applies on the next DOM update, and the form
+    // can also be submitted with the Enter key
+    if (isDisabling.value) {
+      return
+    }
+    isDisabling.value = true
+    try {
+      await props.disable(props.structure, code)
+    } finally {
+      isDisabling.value = false
+    }
   })
 </script>

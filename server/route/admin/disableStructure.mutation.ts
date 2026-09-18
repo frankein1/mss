@@ -12,21 +12,20 @@ const adminHandler = async ({
   ctx: AdminContext
   input: DisableStructureInput
 }) => {
-  // A still active structure can only be disabled with the code sent by
-  // `authorizeDisableStructure`, which lifts the inactivity check in the service.
-  if (input.code) {
-    await UserService.verifyAuthorizationCode({
-      ctx,
-      input: { code: input.code }
-    })
-  }
+  // Whether the structure is active or not, an administrator can only disable it
+  // with the code sent by `authorizeDisableStructure`, which lifts the inactivity
+  // check in the service (still applied to the scheduled job).
+  await UserService.verifyAuthorizationCode({
+    ctx,
+    input: { code: input.code }
+  })
 
   const config = useRuntimeConfig()
   const structureDisabled = await AdminService.disableStructure({
     config,
     id: input.id,
     disabledById: ctx.user.id,
-    confirmedByCode: !!input.code
+    confirmedByCode: true
   })
   return {
     name: structureDisabled.name,

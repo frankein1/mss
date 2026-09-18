@@ -15,6 +15,8 @@ import { generateFileNumber } from '~/utils/generateFileNumber'
 import { fixturesUsers, FixtureUserRole } from '~~/prisma/fixtures'
 import { VALIDATION_CODE_LENGTH } from '~~/server/utils/constants'
 import dayjs from 'dayjs'
+import { AdminService } from '~~/server/services'
+import type { AppConfig } from '~~/types/appConfig'
 
 // Mock email sending context
 mockNuxtImport('useRuntimeConfig', () => {
@@ -26,6 +28,9 @@ mockNuxtImport('useRuntimeConfig', () => {
       },
       document: {
         useS3Storage: true
+      },
+      logs: {
+        activateRequestLogging: false
       }
     }
   }
@@ -44,7 +49,8 @@ let partnerOrganizationContactId: string
 beforeEach(async () => {
   const date = dayjs(dayjs()).subtract(7, 'month').toDate()
   // The structure must have gone through the whole alert email cycle to be disabled
-  // (see app/utils/structure/canBeDisabled.ts)
+  // without a code
+  // (see app/utils/structure/hasCompletedDeactivationWarnings.ts)
   const structure = await createStructure(date, {
     deactivationAlertEmail: 2,
     deactivationAlertEmailDate: dayjs().subtract(5, 'week').toDate()
@@ -120,7 +126,10 @@ test('Structure - Disable - Administrator should be able to deactivate structure
   expect(linkedDocumentsBefore).toBeGreaterThan(0)
   expect(subjectsBefore).toBeGreaterThan(0)
 
-  await trpc.administrator.admin.disableStructure({ id: structureId })
+  await trpc.administrator.admin.disableStructure({
+    id: structureId,
+    code: await requestCode(trpc)
+  })
 
   const structure = await prismaClient.structure.findUniqueOrThrow({
     where: { id: structureId }
@@ -347,63 +356,23 @@ test('Structure - Disable - Administrator should be able to deactivate structure
   })
 })
 
-test('Structure - Disable - Administrator cannot deactivate structure with activity in the last 6 months', async ({
+test('Structure - Disable - Administrator cannot deactivate a structure without a code', async ({
   trpc
 }) => {
-  await prismaClient.structure.update({
-    where: { id: structureId },
-    data: { lastAccess: dayjs(dayjs()).subtract(5, 'month').toDate() }
-  })
-
   await expect(() =>
+    // @ts-expect-error the code is required by the input schema
     trpc.administrator.admin.disableStructure({ id: structureId })
-  ).rejects.toThrow(/cannot disable/i)
+  ).rejects.toThrow()
+
+  const structure = await prismaClient.structure.findUniqueOrThrow({
+    where: { id: structureId }
+  })
+  expect(structure.disabled).toBe(false)
 })
 
-test('Structure - Disable - Administrator cannot deactivate structure created in the last 6 months', async ({
+test('Structure - Disable - Administrator cannot deactivate a structure with a wrong code', async ({
   trpc
 }) => {
-  await prismaClient.structure.update({
-    where: { id: structureId },
-    data: {
-      created: dayjs(dayjs()).subtract(5, 'month').toDate(),
-      lastAccess: null
-    }
-  })
-
-  await expect(() =>
-    trpc.administrator.admin.disableStructure({ id: structureId })
-  ).rejects.toThrow(/cannot disable/i)
-})
-
-async function resetDatabase(sid: string) {
-  if (sid) {
-    await prismaClient.familyFile.deleteMany({ where: { structureId: sid } })
-    await prismaClient.user.deleteMany({ where: { structureId: sid } })
-    await prismaClient.structure.delete({ where: { id: sid } })
-  }
-}
-
-test('Structure - Disable - Administrator cannot deactivate an active structure without a code', async ({
-  trpc
-}) => {
-  await prismaClient.structure.update({
-    where: { id: structureId },
-    data: { lastAccess: new Date() }
-  })
-
-  await expect(() =>
-    trpc.administrator.admin.disableStructure({ id: structureId })
-  ).rejects.toThrow(/cannot disable/i)
-})
-
-test('Structure - Disable - Administrator cannot deactivate an active structure with a wrong code', async ({
-  trpc
-}) => {
-  await prismaClient.structure.update({
-    where: { id: structureId },
-    data: { lastAccess: new Date() }
-  })
   await trpc.administrator.admin.authorizeDisableStructure({ id: structureId })
 
   await expect(() =>
@@ -427,19 +396,8 @@ test('Structure - Disable - Administrator can deactivate an active structure wit
     data: { lastAccess: new Date() }
   })
 
-  await trpc.administrator.admin.authorizeDisableStructure({ id: structureId })
-
-  const admin = await prismaClient.user.findUniqueOrThrow({
-    where: { id: fixturesUsers[FixtureUserRole.Administrator].id },
-    select: { authorizationCode: true, authorizationCodeValidity: true }
-  })
-  expect(admin.authorizationCode).toHaveLength(VALIDATION_CODE_LENGTH)
-  expect(admin.authorizationCodeValidity).not.toBeNull()
-
-  await trpc.administrator.admin.disableStructure({
-    id: structureId,
-    code: admin.authorizationCode!
-  })
+  const code = await requestCode(trpc)
+  await trpc.administrator.admin.disableStructure({ id: structureId, code })
 
   const structure = await prismaClient.structure.findUniqueOrThrow({
     where: { id: structureId }
@@ -453,3 +411,65 @@ test('Structure - Disable - Administrator can deactivate an active structure wit
   })
   expect(afterUse.authorizationCode).toBeNull()
 })
+
+// Without a code, the service still refuses active structures: this is the guard
+// of the scheduled job (see scheduler/structure/disable-inactive-structures.ts)
+test('Structure - Disable - Service cannot deactivate structure with activity in the last 6 months without a code', async () => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: { lastAccess: dayjs(dayjs()).subtract(5, 'month').toDate() }
+  })
+
+  await expect(() => disableWithoutCode(structureId)).rejects.toThrow(
+    /cannot disable/i
+  )
+})
+
+test('Structure - Disable - Service cannot deactivate structure created in the last 6 months without a code', async () => {
+  await prismaClient.structure.update({
+    where: { id: structureId },
+    data: {
+      created: dayjs(dayjs()).subtract(5, 'month').toDate(),
+      lastAccess: null
+    }
+  })
+
+  await expect(() => disableWithoutCode(structureId)).rejects.toThrow(
+    /cannot disable/i
+  )
+})
+
+/** Ask for a disable code and read it from the administrator account, as it
+ * is only sent by email */
+async function requestCode(trpc: {
+  administrator: {
+    admin: {
+      authorizeDisableStructure: (input: { id: string }) => Promise<unknown>
+    }
+  }
+}) {
+  await trpc.administrator.admin.authorizeDisableStructure({ id: structureId })
+  const admin = await prismaClient.user.findUniqueOrThrow({
+    where: { id: fixturesUsers[FixtureUserRole.Administrator].id },
+    select: { authorizationCode: true, authorizationCodeValidity: true }
+  })
+  expect(admin.authorizationCode).toHaveLength(VALIDATION_CODE_LENGTH)
+  expect(admin.authorizationCodeValidity).not.toBeNull()
+  return admin.authorizationCode!
+}
+
+function disableWithoutCode(id: string) {
+  return AdminService.disableStructure({
+    id,
+    disabledById: null,
+    config: useRuntimeConfig() as unknown as AppConfig
+  })
+}
+
+async function resetDatabase(sid: string) {
+  if (sid) {
+    await prismaClient.familyFile.deleteMany({ where: { structureId: sid } })
+    await prismaClient.user.deleteMany({ where: { structureId: sid } })
+    await prismaClient.structure.delete({ where: { id: sid } })
+  }
+}

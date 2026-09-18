@@ -5,7 +5,7 @@ import { idSchema } from '~~/server/schema'
 import { AdminService } from '~~/server/services'
 import type { AdminContext } from '~~/server/trpc'
 
-/** First step of the deactivation of a still active structure: send a single use
+/** First step of the deactivation of a structure: send a single use
  * code to the administrator's email address. The code is then passed to
  * `disableStructure` to confirm.
  */

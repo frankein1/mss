@@ -1,2 +1,2 @@
-export * from './canBeDisabled'
+export * from './hasCompletedDeactivationWarnings'
 export * from './isInactive'

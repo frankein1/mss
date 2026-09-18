@@ -4,7 +4,7 @@ import type { AdminGetStructuresInput } from '~~/server/schema'
 import { adminGetStructuresSchema } from '~~/server/schema'
 import { StructureRepo } from '~~/server/database'
 import type { AdminContext } from '~~/server/trpc'
-import { canBeDisabled, isInactive } from '~/utils/structure'
+import { isInactive } from '~/utils/structure'
 
 const adminHandler = async ({
   ctx: { user },
@@ -63,8 +63,7 @@ const adminHandler = async ({
   return {
     structures: structures.map(structure => ({
       ...structure,
-      isInactive: isInactive(structure),
-      canBeDisabled: canBeDisabled(structure)
+      isInactive: isInactive(structure)
     }))
   }
 }

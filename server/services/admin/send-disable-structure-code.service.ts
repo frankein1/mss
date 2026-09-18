@@ -11,8 +11,8 @@ import type { AdminContext } from '~~/server/trpc'
 
 const nanoid = customAlphabet('123456789', VALIDATION_CODE_LENGTH)
 
-/** An active structure can only be disabled after the administrator confirms
- * with a single use code sent to their own email address.
+/** An administrator can only disable a structure after confirming with a single
+ * use code sent to their own email address.
  * (see server/services/admin/disable-structure.service.ts)
  */
 export async function sendDisableStructureCode({
