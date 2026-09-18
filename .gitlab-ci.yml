@@ -12,8 +12,8 @@ variables:
   # To be synced with engines.node constraint in package.json
   NODE_VERSION: 24.17.0
   NODE_SHA: ab343a1b747c7cbf3630dfd7dbf818c5423fab2eb4f5ad1afc896f6bd121a917
-  # NODE_DOCKER_VERSION: 24.17.0-alpine
-  NODE_DOCKER_SHA: sha256:156b55f92e98ccd5ef49578a8cea0df4679826564bad1c9d4ef04462b9f0ded6
+  # NODE_DOCKER_VERSION: 24.17.0-bookworm-slim
+  NODE_DOCKER_SHA: sha256:862263c612aa437e3037674b85419622a9d93bff80aa1eee5398dfe686375532
   # To be synced with version in package.json
   # PLAYWRIGHT_VERSION: v1.60.0-noble
   PLAYWRIGHT_SHA: sha256:9bd26ad900bb5e0f4dee75839e957a89ae89c2b7ab1e76050e559790e946b948
@@ -100,7 +100,6 @@ pnpm:test:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     NUXT_PUBLIC_APP_URL: http://localhost:3000
   script:
-    - if [[ ! -e /lib/libssl.so.3 ]]; then ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3; else echo "Link already exists"; fi
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
     - pnpm run --if-present test --coverage
