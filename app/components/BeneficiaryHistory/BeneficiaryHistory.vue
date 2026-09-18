@@ -16,9 +16,7 @@
         !isRdvspAlertHidden
       "
       :alert-type="AlertType.Error"
-      closeable
       message="Connexion à Rendez-vous Service Public impossible"
-      @close="isRdvspAlertHidden = true"
       ><template #detailedMessage>
         <template v-if="rdvspAuthStatus === 'no_account'">
           <p>

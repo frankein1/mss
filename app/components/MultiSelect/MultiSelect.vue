@@ -5,6 +5,7 @@
       'fr-select-group--error': error,
       'fr-select-group--disabled': disabled
     }"
+    @focusout="handleFocusOut"
   >
     <label
       :id="labelId"
@@ -100,6 +101,7 @@
               <fieldset
                 class="fieldset"
                 style="min-inline-size: auto"
+                @focusin="handleCheckboxFocus"
               >
                 <legend class="fr-sr-only">
                   {{ label }}
@@ -118,6 +120,7 @@
                     :disabled="
                       disabled ? true : isDisabled(disabledOptions, option)
                     "
+                    :tabindex="option.value === tabbableOptionValue ? 0 : -1"
                     @change-value="handleOptionToggle(option)"
                     @handle-key-down="handleFocusNextCheckbox"
                     @handle-key-up="handleFocusPreviousCheckbox"
@@ -204,7 +207,9 @@
   const optionQuery = ref<any>(null)
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
-  const target = ref(null)
+  const target = ref<HTMLElement | null>(null)
+  // Last focused checkbox, used to keep a single checkbox in the tab sequence
+  const focusedOptionValue = ref<string | null>(null)
   const name = toRef(() => props.name)
   const labelSearchId = useId()
 
@@ -296,6 +301,7 @@
         )
     )
     filteredOptions.value = filteredOptionsArray
+    focusedOptionValue.value = null
   }
 
   const isOptionChecked = (
@@ -319,16 +325,50 @@
   }
 
   // Keyboard interactions on the expanded listbox
+  // Roving tabindex: Tab reaches only one checkbox (the last focused one, or
+  // the first enabled one), arrow keys move between checkboxes.
+  const tabbableOptionValue = computed(() => {
+    const enabledOptions = displayedOptions.value.filter(
+      option => !props.disabled && !isDisabled(props.disabledOptions, option)
+    )
+    const focusedOption = enabledOptions.find(
+      option => option.value === focusedOptionValue.value
+    )
+    return (focusedOption ?? enabledOptions[0])?.value ?? null
+  })
+
+  const handleCheckboxFocus = (event: FocusEvent) => {
+    const element = event.target as HTMLElement
+    if (element.matches('input.input-checkbox')) {
+      focusedOptionValue.value = element.id
+    }
+  }
+
+  watch(isOpen, open => {
+    if (open) {
+      focusedOptionValue.value = null
+    }
+  })
+
+  // Close when focus moves to another element of the page (e.g. Tab out).
+  // A null relatedTarget (click on a non-focusable area, window blur) is
+  // ignored: outside clicks are already handled by onClickOutside.
+  const handleFocusOut = (event: FocusEvent) => {
+    const root = event.currentTarget as HTMLElement
+    const nextFocused = event.relatedTarget as Node | null
+    if (nextFocused && !root.contains(nextFocused)) {
+      isOpen.value = false
+    }
+  }
+
   const handleSearchInputKeyDown = () => {
-    document
-      .querySelector<HTMLElement>(`#${displayedOptions.value[0]?.value}`)
-      ?.focus()
+    getAllCheckbox()[0]?.focus()
   }
 
   const handleFocusNextCheckbox = () => {
     const checkboxes = getAllCheckbox()
     const activeElement = document.activeElement as HTMLElement
-    const currentIndex = Array.from(checkboxes).indexOf(activeElement)
+    const currentIndex = checkboxes.indexOf(activeElement)
 
     if (currentIndex !== -1) {
       const nextIndex = (currentIndex + 1) % checkboxes.length
@@ -339,7 +379,7 @@
   const handleFocusPreviousCheckbox = () => {
     const checkboxes = getAllCheckbox()
     const activeElement = document.activeElement as HTMLElement
-    const currentIndex = Array.from(checkboxes).indexOf(activeElement)
+    const currentIndex = checkboxes.indexOf(activeElement)
 
     if (currentIndex !== -1) {
       const previousIndex =
@@ -348,8 +388,12 @@
     }
   }
 
-  const getAllCheckbox = (): NodeListOf<HTMLElement> =>
-    document.querySelectorAll(`input.input-checkbox:not([disabled])`)
+  const getAllCheckbox = (): HTMLElement[] =>
+    Array.from(
+      target.value?.querySelectorAll<HTMLElement>(
+        'input.input-checkbox:not([disabled])'
+      ) ?? []
+    )
 
   /** Trigger the selection of an option through the parent component */
   const triggerSelectValue = (value: string) => {

@@ -224,8 +224,6 @@ main form .content {
   }
 }
 
-// It seems incredibly horrible but is necessary to be able to override DSFR when programmatically focusing an element
-.force-focus-visible:focus:not(:focus-visible),
 input:focus:not(:focus-visible),
 select:focus:not(:focus-visible) {
   outline-style: solid !important;

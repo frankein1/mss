@@ -167,11 +167,6 @@
     if (hash) {
       activeHash.value = hash.slice(1)
       hashJustChanged.value = true
-
-      const firstSubSectionField = document.querySelector<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >(`${hash} input, ${hash} select,  ${hash} textarea`)
-      firstSubSectionField?.focus()
     }
   }
 

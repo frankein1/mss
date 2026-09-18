@@ -1,9 +1,18 @@
 <template>
-  <ul>
+  <ul
+    ref="toolbar"
+    role="toolbar"
+    aria-label="Mise en forme du texte"
+    @keydown="onKeydown"
+    @focusin="onFocusin"
+    @focusout="onFocusout"
+  >
     <!-- Titles -->
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 0 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
         @click.prevent="
@@ -16,9 +25,11 @@
         />
       </button>
     </li>
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 1 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
         @click.prevent="
@@ -31,9 +42,14 @@
         />
       </button>
     </li>
-    <li class="break">
+    <li
+      role="none"
+      class="break"
+    >
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 2 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         @click.prevent="
@@ -48,9 +64,11 @@
     </li>
 
     <!-- emphasis -->
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 3 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('bold') }"
         title="Gras"
@@ -62,9 +80,14 @@
         />
       </button>
     </li>
-    <li class="break">
+    <li
+      role="none"
+      class="break"
+    >
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 4 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('italic') }"
         @click.prevent="editor.chain().focus().toggleItalic().run()"
@@ -77,9 +100,11 @@
     </li>
 
     <!-- List -->
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 5 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('bulletList') }"
         @click.prevent="editor.chain().focus().toggleBulletList().run()"
@@ -90,9 +115,14 @@
         />
       </button>
     </li>
-    <li class="break">
+    <li
+      role="none"
+      class="break"
+    >
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 6 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('orderedList') }"
         @click.prevent="editor.chain().focus().toggleOrderedList().run()"
@@ -105,9 +135,11 @@
     </li>
 
     <!-- link -->
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 7 ? 0 : -1"
         class="menubar__button"
         :class="{ 'is-active': editor.isActive('link') }"
         @click.prevent="setLink"
@@ -118,9 +150,11 @@
         />
       </button>
     </li>
-    <li>
+    <li role="none">
       <button
         v-if="editor"
+        type="button"
+        :tabindex="focusedIndex === 8 ? 0 : -1"
         class="menubar__button"
         @click.prevent="unsetLink"
       >
@@ -140,6 +174,62 @@
   const props = defineProps<{
     editor?: Editor
   }>()
+
+  // Roving tabindex: only one button is reachable with Tab, arrows move between buttons
+  const toolbar = useTemplateRef<HTMLUListElement>('toolbar')
+  const focusedIndex = ref(0)
+
+  function getButtons() {
+    return Array.from(
+      toolbar.value?.querySelectorAll<HTMLButtonElement>('button') ?? []
+    )
+  }
+
+  function focusButton(index: number) {
+    const buttons = getButtons()
+    if (!buttons.length) {
+      return
+    }
+    focusedIndex.value = (index + buttons.length) % buttons.length
+    buttons[focusedIndex.value]?.focus()
+  }
+
+  function onKeydown(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        focusButton(focusedIndex.value + 1)
+        break
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        focusButton(focusedIndex.value - 1)
+        break
+      case 'Home':
+        focusButton(0)
+        break
+      case 'End':
+        focusButton(getButtons().length - 1)
+        break
+      default:
+        return
+    }
+    event.preventDefault()
+  }
+
+  // Keep the roving index in sync when a button gets focus by mouse click
+  function onFocusin(event: FocusEvent) {
+    const index = getButtons().indexOf(event.target as HTMLButtonElement)
+    if (index !== -1) {
+      focusedIndex.value = index
+    }
+  }
+
+  // Tabbing back into the toolbar always lands on the first button
+  function onFocusout(event: FocusEvent) {
+    if (!toolbar.value?.contains(event.relatedTarget as Node | null)) {
+      focusedIndex.value = 0
+    }
+  }
 
   const setLink = () => {
     const previousUrl = props.editor?.getAttributes('link').href

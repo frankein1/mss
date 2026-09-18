@@ -2,7 +2,7 @@
   <li
     :id="`history-${socialSupportId}`"
     ref="$el"
-    class="beneficiary-history-details-collapse force-focus-visible"
+    class="beneficiary-history-details-collapse"
     :class="[typeClass, expanded ? 'expanded' : '']"
   >
     <BeneficiaryHistoryDetailsHeader

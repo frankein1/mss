@@ -21,7 +21,7 @@
       </li>
       <li>
         <button
-          class="fr-btn submit-btn force-focus-visible"
+          class="fr-btn submit-btn"
           type="submit"
           :data-submitting="isSubmitting"
           :disabled="isSubmitting"

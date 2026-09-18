@@ -6,8 +6,6 @@
       class="fr-mb-8v"
       :alert-type="AlertType.Warning"
       message="La modification d’un nom ou d’un prénom écrase le précédent."
-      closeable
-      @close="alertVisible = false"
     >
       <template #detailedMessage>
         <p>

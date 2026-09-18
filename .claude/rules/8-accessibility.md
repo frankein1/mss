@@ -58,7 +58,7 @@ The composable waits for `nextTick`, finds the **last** element matching `sectio
 
 ### Anti-patterns
 
-- **`v-autofocus` directive** — fires on every mount, including non-user-triggered re-renders. Keep focus control in the parent.
+- **`v-autofocus` directive** on dynamically revealed form fields — fires on every mount, including non-user-triggered re-renders. Keep focus control in the parent.
 - **Manual DOM focus** (`querySelector` + `.focus()`) in the parent's click handler — use the composable instead.
 
 ## Automatic testing

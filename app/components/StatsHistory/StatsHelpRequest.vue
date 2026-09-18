@@ -31,10 +31,7 @@
           </p>
         </template>
       </StatsHeader>
-      <StatsExportAlert
-        v-if="!alertClose"
-        @close-alert="alertClose = true"
-      />
+      <StatsExportAlert v-if="!alertClose" />
 
       <!-- Alert + Loader -->
       <AtomAlert

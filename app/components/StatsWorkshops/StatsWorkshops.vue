@@ -27,10 +27,7 @@
           </p>
         </template>
       </StatsHeader>
-      <StatsExportAlert
-        v-if="!alertClose"
-        @close-alert="alertClose = true"
-      />
+      <StatsExportAlert v-if="!alertClose" />
       <AtomAlert
         v-if="error"
         :alert-type="AlertType.Error"

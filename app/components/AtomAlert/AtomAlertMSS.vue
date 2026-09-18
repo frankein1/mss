@@ -18,7 +18,7 @@
         v-if="closeable"
         v-autofocus
         type="button"
-        class="fr-btn--close fr-btn force-focus-visible"
+        class="fr-btn--close fr-btn"
         @click="emit('close')"
       >
         Masquer le message

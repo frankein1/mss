@@ -4,50 +4,24 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { defineComponent } from 'vue'
 
 describe('v-autofocus directive', () => {
-  it('focuses the first input when mounted without arguments', async () => {
-    const Wrapper = defineComponent({
-      template: '<div v-autofocus><span>text</span><input type="text" /></div>'
-    })
-
-    const wrapper = await mountSuspended(Wrapper, {
-      attachTo: document.body
-    })
-
-    expect(document.activeElement).toBe(wrapper.find('input').element)
-    wrapper.unmount()
-  })
-
-  it('focuses the first select when no input precedes it', async () => {
+  it('focuses the element itself when mounted without arguments', async () => {
     const Wrapper = defineComponent({
       template:
-        '<div v-autofocus><span>text</span><select><option>a</option></select></div>'
+        '<div><input type="text" /><button v-autofocus>ok</button></div>'
     })
 
     const wrapper = await mountSuspended(Wrapper, {
       attachTo: document.body
     })
 
-    expect(document.activeElement).toBe(wrapper.find('select').element)
-    wrapper.unmount()
-  })
-
-  it('focuses the first textarea when no input or select precedes it', async () => {
-    const Wrapper = defineComponent({
-      template: '<div v-autofocus><span>text</span><textarea></textarea></div>'
-    })
-
-    const wrapper = await mountSuspended(Wrapper, {
-      attachTo: document.body
-    })
-
-    expect(document.activeElement).toBe(wrapper.find('textarea').element)
+    expect(document.activeElement).toBe(wrapper.find('button').element)
     wrapper.unmount()
   })
 
   it('focuses the element matching a custom selector argument', async () => {
     const Wrapper = defineComponent({
       template:
-        '<div v-autofocus="\'textarea\'"><input type="text" /><textarea></textarea></div>'
+        '<div v-autofocus="\'textarea\'"><input type="text" /><textarea /></div>'
     })
 
     const wrapper = await mountSuspended(Wrapper, {
@@ -58,9 +32,10 @@ describe('v-autofocus directive', () => {
     wrapper.unmount()
   })
 
-  it('does not throw when no focusable child exists', async () => {
+  it('does not throw when the selector matches no child', async () => {
     const Wrapper = defineComponent({
-      template: '<div v-autofocus><span>no focusable here</span></div>'
+      template:
+        '<div v-autofocus="\'input\'"><span>no focusable here</span></div>'
     })
 
     const wrapper = await mountSuspended(Wrapper, {

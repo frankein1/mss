@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryDocumentAddButton
-    class="fr-mb-3w force-focus-visible"
+    class="fr-mb-3w"
     :beneficiary-id="beneficiaryId"
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"

@@ -4,8 +4,6 @@
       <AtomAlert
         :alert-type="AlertType.Success"
         :message="alertContent"
-        :closeable="true"
-        @close="emit('closeAlert')"
       />
     </div>
   </div>
@@ -17,10 +15,6 @@
   const alertContent = ref<string>(
     'Export en cours... Le téléchargement peut prendre plusieurs secondes avant de démarrer.'
   )
-
-  const emit = defineEmits<{
-    closeAlert: []
-  }>()
 </script>
 
 <style lang="scss" scoped>

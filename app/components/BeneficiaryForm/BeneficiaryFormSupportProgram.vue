@@ -6,6 +6,7 @@
   </div>
 
   <div
+    ref="supportProgramNameGroup"
     data-field-group
     class="fr-col-12 fr-col-lg-6"
   >
@@ -138,6 +139,10 @@
     () => `supportPrograms[${props.index}].endDate`
   )
 
+  const supportProgramNameGroup = useTemplateRef<HTMLElement>(
+    'supportProgramNameGroup'
+  )
+
   const dismissed = ref(false)
   const showDuplicateAlert = ref(false)
 
@@ -156,5 +161,6 @@
   function closeDuplicateAlert() {
     showDuplicateAlert.value = false
     dismissed.value = true
+    supportProgramNameGroup.value?.querySelector<HTMLElement>('select')?.focus()
   }
 </script>

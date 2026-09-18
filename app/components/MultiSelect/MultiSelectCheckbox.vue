@@ -7,6 +7,7 @@
     :label="option.label"
     :checked
     :disabled
+    :tabindex
     @change="onchange(option)"
     @keydown.prevent.space="onchange(option)"
     @keydown.prevent.down="emit('handleKeyDown')"
@@ -30,6 +31,7 @@
     option: OptionType
     checked: boolean
     disabled: boolean
+    tabindex: number
   }>()
 
   const emit = defineEmits<{
