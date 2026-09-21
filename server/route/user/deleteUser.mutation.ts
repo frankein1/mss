@@ -13,6 +13,7 @@ import {
   type UserBlockingRelation
 } from '~~/client/labels'
 import { userBlockingRelationCounts } from '~~/client/labels/user.labels'
+import { hasTransferredStructureInfo } from '~~/server/schema/user/structureTransferHistory.schema'
 
 const blockingRelationsSelect = Object.fromEntries(
   Object.values(userBlockingRelationCounts).map(count => [count, true])
@@ -50,6 +51,7 @@ const throwIfUserIsNotAuthorized = async (
     UserRepo.findUnique(ctx.user, {
       select: {
         id: true,
+        structureTransferHistory: true,
         _count: { select: blockingRelationsSelect }
       },
       where: { id }
@@ -73,6 +75,13 @@ const throwIfUserIsNotAuthorized = async (
     .map(([, label]) => label)
 
   if (blockingLabels.length > 0) {
+    if (hasTransferredStructureInfo(user.structureTransferHistory)) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message:
+          'Cet utilisateur a des données liées et ne peut pas être supprimé'
+      })
+    }
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: `Cet utilisateur a des données liées et ne peut pas être supprimé : ${blockingLabels.join(', ')}`

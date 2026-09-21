@@ -98,6 +98,8 @@ model User {
 
   externalRdvspId String? @map("external_rdvsp_id")
 
+  structureTransferHistory Json? @map("structure_transfer_history")
+
   createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
   lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
   createdDocuments             Document[]

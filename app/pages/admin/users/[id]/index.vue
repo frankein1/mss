@@ -27,6 +27,11 @@
             @update-user="onUpdateUser($event as AdminEditUserInput)"
             @transferred="onTransferred"
           />
+
+          <AdminFormerStructures
+            v-if="user?.formerStructures"
+            :former-structures="user.formerStructures"
+          />
         </div>
       </div>
     </div>

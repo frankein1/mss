@@ -1,5 +1,4 @@
-import type { Prisma } from '@prisma/client'
-import { UserStatus } from '@prisma/client'
+import { Prisma, UserStatus } from '@prisma/client'
 import { prismaClient } from '~~/server/prisma'
 import {
   BeneficiaryRelativeRepo,
@@ -378,7 +377,8 @@ export const disableStructure = async ({
       externalRdvspId: null,
       authorizationCode: null,
       authorizationCodeValidity: null,
-      accountReminderEmail: 0
+      accountReminderEmail: 0,
+      structureTransferHistory: Prisma.DbNull
     }
     const updateUser = () =>
       UserRepo.prisma.update({

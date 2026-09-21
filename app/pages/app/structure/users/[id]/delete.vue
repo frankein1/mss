@@ -18,13 +18,13 @@
         v-if="authUserId !== userId"
         class="feature-section"
       >
-        <template v-if="userHasFiles">
+        <template v-if="hasBlockingContent">
           <p class="fr-h5 fr-mb-2v">
             Vous ne pouvez pas supprimer cet utilisateur car il a déjà des
             éléments saisis.
           </p>
           <p class="fr-text--bold">
-            Rapprochez vous de l'équipe de Mon Suivi Social si besoin.
+            Rapprochez vous de l’équipe de Mon Suivi Social si besoin.
           </p>
           <ul v-if="blockingCounts.length > 0">
             <li
@@ -55,7 +55,7 @@
             est disponible depuis la page de modification du compte.
           </p>
         </div>
-        <template v-if="!userHasFiles">
+        <template v-if="!hasBlockingContent">
           <div class="fr-checkbox-group fr-mt-6v">
             <input
               id="checkbox-delete-confirmation"
@@ -136,6 +136,10 @@
     withCounts: true
   })
 
+  const hasBlockingContent = computed(
+    () => user.value?.hasBlockingContent === true
+  )
+
   /** Relations that still link data to the account, zero counts left out */
   const blockingCounts = computed(() => {
     const counts = user.value?._count
@@ -150,8 +154,6 @@
       }))
       .filter(({ count }) => count > 0)
   })
-
-  const userHasFiles = computed(() => blockingCounts.value.length > 0)
 
   const userName = computed(
     () => `${user.value?.firstName} ${user.value?.lastName}`

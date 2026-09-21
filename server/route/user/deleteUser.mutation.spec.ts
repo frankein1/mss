@@ -287,6 +287,71 @@ describe('Linked data blocks deletion', () => {
   })
 })
 
+describe('Transferred user delete guard', () => {
+  test('User - Delete - A transferred blocked user gets a generic message without counts', async ({
+    trpc
+  }) => {
+    await prismaClient.user.update({
+      where: { id: sharedUserId },
+      data: {
+        structureTransferHistory: [
+          {
+            structureId: STRUCTURE_ID,
+            role: 'SocialWorker',
+            leftAt: new Date()
+          }
+        ]
+      }
+    })
+
+    await prismaClient.document.create({
+      select: { key: true },
+      data: {
+        mimeType: 'application/pdf',
+        name: 'test.pdf',
+        filenameDisk: `test-transfer-guard-${Date.now()}`,
+        type: 'Cerfa',
+        confidential: false,
+        familyFileId: sharedFamilyFileId,
+        beneficiaryId: sharedBeneficiaryId,
+        createdById: sharedUserId
+      }
+    })
+
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(
+      'Cet utilisateur a des données liées et ne peut pas être supprimé'
+    )
+
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(/^(?!.*:).*Cet utilisateur a des données liées/)
+  })
+
+  test('User - Delete - A never-transferred blocked user gets the detailed message with labels', async ({
+    trpc
+  }) => {
+    await prismaClient.document.create({
+      select: { key: true },
+      data: {
+        mimeType: 'application/pdf',
+        name: 'test.pdf',
+        filenameDisk: `test-no-transfer-guard-${Date.now()}`,
+        type: 'Cerfa',
+        confidential: false,
+        familyFileId: sharedFamilyFileId,
+        beneficiaryId: sharedBeneficiaryId,
+        createdById: sharedUserId
+      }
+    })
+
+    await expect(() =>
+      trpc.structureManager.user.delete({ id: sharedUserId })
+    ).rejects.toThrow(/documents créés/)
+  })
+})
+
 describe('No linked data deletion', () => {
   test('User - Delete - A Structure Manager can delete a user with no linked data', async ({
     trpc

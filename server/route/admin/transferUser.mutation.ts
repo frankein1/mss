@@ -17,6 +17,10 @@ import { userRoleKeys } from '~~/client/options'
 import { formatUserDisplayName } from '~/utils/user'
 import { SUPPORT_EMAIL } from '~/utils/constants'
 import { NotificationRepo, UserRepo } from '~~/server/database'
+import {
+  parseStructureTransferHistory,
+  type StructureTransferHistoryEntry
+} from '~~/server/schema/user/structureTransferHistory.schema'
 
 const adminHandler = async ({
   ctx,
@@ -42,6 +46,7 @@ const adminHandler = async ({
       role: true,
       status: true,
       structureId: true,
+      structureTransferHistory: true,
       structure: { select: { id: true, name: true, disabled: true } }
     }
   })
@@ -119,12 +124,23 @@ const adminHandler = async ({
     })
   }
 
+  const existingHistory = parseStructureTransferHistory(
+    targetUser.structureTransferHistory
+  )
+  const newEntry: StructureTransferHistoryEntry = {
+    structureId: fromStructure.id,
+    role: fromRole,
+    leftAt: new Date()
+  }
+  const updatedHistory = [...existingHistory, newEntry]
+
   const [updatedUser, _] = await prismaClient.$transaction([
     UserRepo.update(ctx.user, {
       where: { id: targetUser.id },
       data: {
         structureId: newStructureId,
-        role: newRole
+        role: newRole,
+        structureTransferHistory: updatedHistory
       },
       select: {
         id: true,

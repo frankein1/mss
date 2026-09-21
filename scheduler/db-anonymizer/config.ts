@@ -22,6 +22,7 @@ const configUser: Record<
   structure_id: true,
   external_rdvsp_id: true,
   aidant_connect_authorisation: true,
+  structure_transfer_history: true,
   // -- BEGIN ANONYMIZED
   first_name: false,
   last_name: false,

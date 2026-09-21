@@ -8,6 +8,9 @@ import { adminEditUserSchema } from '~~/server/schema'
 import type { AdminContext } from '~~/server/trpc'
 import { cleanEmail } from '~/utils/user'
 import { MSS_ERROR_CODES } from '~/utils/error'
+import { prismaClient } from '~~/server/prisma'
+import { parseStructureTransferHistory } from '~~/server/schema/user/structureTransferHistory.schema'
+import { userRoleKeys } from '~~/client/options'
 
 const adminHandler = async ({
   ctx,
@@ -69,14 +72,68 @@ const adminHandler = async ({
       structure: { select: { name: true } },
       role: true,
       status: true,
-      aidantConnectAuthorisation: true
+      aidantConnectAuthorisation: true,
+      structureTransferHistory: true
     }
   })
   createOrUpdateUser(updatedUser.id).catch(error => {
     console.error(error)
   })
 
-  return updatedUser
+  const history = parseStructureTransferHistory(
+    updatedUser.structureTransferHistory
+  )
+
+  let formerStructures: {
+    structureName: string
+    roleLabel: string
+    leftAt: Date
+    disabled: boolean
+  }[] = []
+
+  if (history.length > 0) {
+    const structureIds = [...new Set(history.map(e => e.structureId))]
+    const structures = await prismaClient.structure.findMany({
+      where: { id: { in: structureIds } },
+      select: { id: true, name: true, disabled: true }
+    })
+    const structureMap = new Map(structures.map(s => [s.id, s]))
+
+    formerStructures = history
+      .map(entry => {
+        const s = structureMap.get(entry.structureId)
+        let structureName: string
+        let disabled = false
+        if (!s) {
+          structureName = 'Structure inconnue'
+        } else if (s.disabled || s.name === '') {
+          structureName = 'Structure désactivée'
+          disabled = true
+        } else {
+          structureName = s.name
+        }
+        return {
+          structureName,
+          roleLabel: userRoleKeys.value(entry.role) ?? entry.role,
+          leftAt: entry.leftAt,
+          disabled
+        }
+      })
+      .sort((a, b) => b.leftAt.getTime() - a.leftAt.getTime())
+  }
+
+  return {
+    id: updatedUser.id,
+    email: updatedUser.email,
+    firstName: updatedUser.firstName,
+    lastName: updatedUser.lastName,
+    structureId: updatedUser.structureId,
+    structure: updatedUser.structure,
+    role: updatedUser.role,
+    status: updatedUser.status,
+    aidantConnectAuthorisation: updatedUser.aidantConnectAuthorisation,
+    formerStructures
+  }
 }
 
 export const editUser = createMutation({

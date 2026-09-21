@@ -401,6 +401,66 @@ describe('Admin - Transfer User - Confirmation code', () => {
   })
 })
 
+describe('Admin - Transfer User - Structure transfer history', () => {
+  test('Transfer appends exactly one history entry for the left structure', async ({
+    trpc
+  }) => {
+    await trpc.administrator.admin.transferUser({
+      userId: transferableUserId,
+      newStructureId: targetStructureId,
+      newRole: 'Referent',
+      confirmationCode: '111111111111'
+    })
+
+    const persisted = await prismaClient.user.findUniqueOrThrow({
+      where: { id: transferableUserId },
+      select: { structureTransferHistory: true }
+    })
+    const history = persisted.structureTransferHistory as any[]
+    expect(history).toHaveLength(1)
+    expect(history[0]).toMatchObject({
+      structureId: sourceStructureId,
+      role: 'SocialWorker'
+    })
+    expect(new Date(history[0].leftAt)).toBeInstanceOf(Date)
+  })
+
+  test('Repeated transfers accumulate history entries (append-only, no dedup)', async ({
+    trpc
+  }) => {
+    await trpc.administrator.admin.transferUser({
+      userId: transferableUserId,
+      newStructureId: targetStructureId,
+      newRole: 'SocialWorker',
+      confirmationCode: '111111111111'
+    })
+
+    await primeConfirmationCode('111111111111')
+
+    await trpc.administrator.admin.transferUser({
+      userId: transferableUserId,
+      newStructureId: sourceStructureId,
+      newRole: 'Referent',
+      confirmationCode: '111111111111'
+    })
+
+    const persisted = await prismaClient.user.findUniqueOrThrow({
+      where: { id: transferableUserId },
+      select: { structureTransferHistory: true }
+    })
+    const history = persisted.structureTransferHistory as any[]
+    expect(history).toHaveLength(2)
+    expect(history[0]).toMatchObject({
+      structureId: sourceStructureId,
+      role: 'SocialWorker'
+    })
+    expect(history[1]).toMatchObject({
+      structureId: targetStructureId,
+      role: 'SocialWorker'
+    })
+  })
+})
+
 describe('Admin - Transfer User - Degenerate case', () => {
   test('Transfer succeeds when the user has no notifications and no referent memberships', async ({
     trpc

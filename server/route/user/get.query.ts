@@ -7,6 +7,7 @@ import type { SecurityRuleContext } from '~~/server/security/rules/types'
 import { getAppContextPermissions } from '~~/server/security'
 import { UserRole, type Prisma } from '@prisma/client'
 import type { UserBlockingRelation } from '~~/client/labels'
+import { hasTransferredStructureInfo } from '~~/server/schema/user/structureTransferHistory.schema'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).module.users
@@ -69,7 +70,11 @@ const handler = async ({
 
   const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    select: { ...userSelect, _count: { select: blockingRelationsSelect } }
+    select: {
+      ...userSelect,
+      structureTransferHistory: true,
+      _count: { select: blockingRelationsSelect }
+    }
   })
 
   if (user.role === UserRole.Administrator) {
@@ -77,6 +82,23 @@ const handler = async ({
       'Cannot have an Administrator among user-managed users'
     )
   }
+
+  const counts = {
+    referentFor: user._count.referentFor,
+    createdDocuments: user._count.createdDocuments,
+    createdSocialSupports: user._count.createdSocialSupports,
+    createdComments: user._count.createdComments,
+    workshops: user._count.Workshop,
+    workshopNames: user._count.WorkshopName,
+    archivedBeneficiaries: user._count.archivedBeneficiaries2,
+    redirectionReasons: user._count.RedirectionReasons,
+    supportProgramNames: user._count.supportProgramNames
+  } satisfies Record<UserBlockingRelation, number>
+
+  const hasBlocking = Object.values(counts).some(c => c > 0)
+  const hasTransferred = hasTransferredStructureInfo(
+    user.structureTransferHistory
+  )
 
   return {
     id: user.id,
@@ -87,17 +109,9 @@ const handler = async ({
     status: user.status,
     aidantConnectAuthorisation: user.aidantConnectAuthorisation,
     externalRdvspId: user.externalRdvspId,
-    _count: {
-      referentFor: user._count.referentFor,
-      createdDocuments: user._count.createdDocuments,
-      createdSocialSupports: user._count.createdSocialSupports,
-      createdComments: user._count.createdComments,
-      workshops: user._count.Workshop,
-      workshopNames: user._count.WorkshopName,
-      archivedBeneficiaries: user._count.archivedBeneficiaries2,
-      redirectionReasons: user._count.RedirectionReasons,
-      supportProgramNames: user._count.supportProgramNames
-    } satisfies Record<UserBlockingRelation, number>
+    hasBlockingContent: hasBlocking,
+    hasTransferredStructureInfo: hasTransferred,
+    _count: hasTransferred ? undefined : counts
   }
 }
 

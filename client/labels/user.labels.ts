@@ -17,7 +17,8 @@ export const userFieldLabels: FieldLabels<User> = {
   externalRdvspId: 'Identifiant Rendez-vous Service Public',
   authorizationCode: "Code d'autorisation",
   authorizationCodeValidity: "Validité du code d'autorisation",
-  accountReminderEmail: "Nombre d'e-mail de rappel de création de compte"
+  accountReminderEmail: "Nombre d'e-mail de rappel de création de compte",
+  structureTransferHistory: 'Historique de transfert de structure'
 }
 
 /**
