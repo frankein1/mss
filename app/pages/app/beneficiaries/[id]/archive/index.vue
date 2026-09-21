@@ -300,6 +300,7 @@
   }
 
   const router = trpcClient.beneficiary
+  /* server/route/beneficiary/update-archive-date.mutation.ts */
   const updateBeneficiary = router.updateArchiveDate.useMutation()
 
   const onDelayArchive = () => {
