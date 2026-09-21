@@ -8,7 +8,6 @@ import {
   DocumentType,
   EmailStatus,
   FileInstructionType,
-  JobStatus,
   BeneficiaryMinistereDepartementServiceAc,
   BeneficiaryMinistereStructure
 } from '@prisma/client'
@@ -275,12 +274,6 @@ const emailAdminFilterSchema = z.object({
 
 type EmailAdminFilterInput = z.infer<typeof emailAdminFilterSchema>
 
-const jobResultAdminFilterSchema = z.object({
-  status: z.nativeEnum(JobStatus).nullish()
-})
-
-type JobResultAdminFilterInput = z.infer<typeof jobResultAdminFilterSchema>
-
 const workshopFilterSchema = z.object({
   timeDirection: z.nativeEnum(FilterWorkshopTimeDirection).optional(),
   workshopNameIds: z.array(z.string().uuid()).optional(),
@@ -299,7 +292,6 @@ export {
   userAdminFilterSchema,
   beneficiaryDocumentFilterSchema,
   emailAdminFilterSchema,
-  jobResultAdminFilterSchema,
   workshopFilterSchema,
   workshopStatFilterSchema,
   socialSupportFilterSchema
@@ -314,7 +306,6 @@ export type {
   UserAdminFilterInput,
   BeneficiaryDocumentFilterInput,
   EmailAdminFilterInput,
-  JobResultAdminFilterInput,
   WorkshopFilterInput,
   WorkshopStatFilterInput,
   SocialSupportFilterInput

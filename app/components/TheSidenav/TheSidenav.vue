@@ -201,11 +201,6 @@
         icon: 'fr-icon-mail-line'
       })
       items.push({
-        to: routes.admin.AdminIntegrations.path(),
-        label: 'Integrations',
-        icon: 'fr-icon-discuss-line'
-      })
-      items.push({
         to: routes.admin.AdminMinisters.path(),
         label: 'Ministres',
         icon: 'fr-icon-shield-user-line'

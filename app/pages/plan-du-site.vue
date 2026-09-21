@@ -52,10 +52,6 @@
         to: routes.admin.AdminEmails.path(),
         label: routes.admin.AdminEmails.title
       })
-      items.push({
-        to: routes.admin.AdminIntegrations.path(),
-        label: routes.admin.AdminIntegrations.title
-      })
     } else {
       // Non-admin only
       items.push({

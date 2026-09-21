@@ -54,12 +54,6 @@ export const adminRouter = router({
   updateSocialSupportSubject: adminProcedure
     .input(adminRoutes.updateStructureSubject.inputValidation)
     .mutation(adminRoutes.updateStructureSubject.executeAsAdmin),
-  getJobResults: adminProcedure
-    .input(adminRoutes.getJobResults.inputValidation)
-    .query(adminRoutes.getJobResults.executeAsAdmin),
-  launchStructureImport: adminProcedure
-    .input(adminRoutes.launchStructureImport.inputValidation)
-    .mutation(adminRoutes.launchStructureImport.executeAsAdmin),
   toggleRdvsp: adminProcedure
     .input(adminRoutes.toggleRdvsp.inputValidation)
     .mutation(adminRoutes.toggleRdvsp.executeAsAdmin),

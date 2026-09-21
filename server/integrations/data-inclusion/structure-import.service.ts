@@ -128,8 +128,3 @@ export async function handleStructuresImport() {
 export const DataInclusionIntegrationService = {
   importStructures
 }
-
-// FIXME: this will be deleted when the endpoint in admin panel is deleted
-export const DataInclusionIntegrationHandler = {
-  handleStructuresImport
-}

@@ -46,10 +46,6 @@ describe('admin routes', () => {
     expect(routes.AdminEmails.path()).toBe('/admin/emails')
   })
 
-  test('AdminIntegrations path returns /admin/integrations', () => {
-    expect(routes.AdminIntegrations.path()).toBe('/admin/integrations')
-  })
-
   test('AdminMinisters path returns /admin/ministers', () => {
     expect(routes.AdminMinisters.path()).toBe('/admin/ministers')
   })

@@ -1,12 +1,5 @@
 import { z } from 'zod'
 import type { JobStatus } from '@prisma/client'
-import { Prisma } from '@prisma/client'
-import { maxStringLengthMessage } from '~/utils/zod'
-import {
-  paginatedSchema,
-  stringConstraint
-} from '~~/server/schema/helpers.schema'
-import { jobResultAdminFilterSchema } from '~~/server/schema/filter.schema'
 
 const jobInternalResultSchema = z.object({
   nImported: z.number().optional(),
@@ -82,16 +75,3 @@ export interface JobResult {
   errors: JobError[]
   result: JobInternalResult
 }
-
-export const adminGetJobResultsSchema = z
-  .object({
-    name: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-    // search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
-    filters: jobResultAdminFilterSchema,
-    orderBy: z.object({
-      startDate: z.nativeEnum(Prisma.SortOrder).optional()
-    })
-  })
-  .merge(paginatedSchema)
-
-export type AdminGetJobResultsInput = z.infer<typeof adminGetJobResultsSchema>

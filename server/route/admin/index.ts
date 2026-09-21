@@ -13,8 +13,6 @@ import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutat
 import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
 import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
-import { getJobResults } from './getJobResults.query'
-import { launchStructureImport } from './launchStructureImport.mutation'
 import { disableStructure } from './disableStructure.mutation'
 import { authorizeDisableStructure } from './authorizeDisableStructure.mutation'
 import { toggleRdvsp } from './toggleRdvsp.mutation'
@@ -39,8 +37,6 @@ export const adminRoutes = {
   getSocialSupportSubjects,
   makeInactiveSocialSupportSubject,
   updateStructureSubject,
-  getJobResults,
-  launchStructureImport,
   disableStructure,
   authorizeDisableStructure,
   toggleRdvsp,

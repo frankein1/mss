@@ -52,11 +52,6 @@ export const routes = {
     title: 'E-mails',
     path: () => `${AdminRoute}/emails`
   },
-  AdminIntegrations: {
-    name: 'AdminIntegrations',
-    title: 'Intégrations',
-    path: () => `${AdminRoute}/integrations`
-  },
   AdminMinisters: {
     name: 'AdminMinisters',
     title: 'Ministres',
