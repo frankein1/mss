@@ -3,22 +3,33 @@ import { prismaClient } from '~~/server/prisma'
 import dayjs from 'dayjs'
 import { NotificationRepo } from '~~/server/database'
 
-// Find beneficiary with no archive due date or past due date (means delay hasnt been set or is past due)
-// They must be inactive for more than 23 months (beacause notification 1 month before the 2 years of inactivity)
+// Find beneficiaries whose effective archive date (see getArchiveDate) is due within a month.
+// The database filter is a superset: the archive date depends on both lastActivity and
+// archiveDueDate, so the exact comparison is done in memory.
+// - without archive due date, the archive date is lastActivity + 2 years, so it is due within
+//   a month once the beneficiary has been inactive for 23 months
+// - with an archive due date, the archive date is either that due date, or lastActivity + 2 years
+//   when there has been activity since the due date was set
 export const getInactiveBeneficiaries = async () => {
+  const archiveDateLimit = dayjs().add(1, 'month')
+  const inactivityLimit = dayjs().subtract(23, 'months').toDate()
+
   return await prismaClient.beneficiary
     .findMany({
       where: {
         OR: [
           {
             archiveDueDate: null,
-            lastActivity: {
-              lt: dayjs().subtract(23, 'months').toDate()
-            }
+            lastActivity: { lte: inactivityLimit }
+          },
+          {
+            archiveDueDate: null,
+            lastActivity: null,
+            created: { lte: inactivityLimit }
           },
           {
             archiveDueDate: {
-              gte: dayjs().subtract(1, 'month').toDate()
+              lte: archiveDateLimit.toDate()
             }
           }
         ]
@@ -27,21 +38,22 @@ export const getInactiveBeneficiaries = async () => {
     })
     .then(beneficiaries =>
       beneficiaries
-        .filter(
-          b =>
-            b.archiveDueDate == null ||
-            (b.archiveDueDate != null &&
-              dayjs(b.lastActivity).isBefore(
-                dayjs(b.archiveDueDate).subtract(1, 'year')
-              ))
-        )
+        .map(b => {
+          // beneficiaries without any activity fall back to their creation date
+          const lastActivity = b.lastActivity ?? b.created
+          return {
+            ...b,
+            lastActivity,
+            archiveDate: getArchiveDate(lastActivity, b.archiveDueDate)
+          }
+        })
+        .filter(b => !dayjs(b.archiveDate).isAfter(archiveDateLimit))
         .map(b => {
           return {
             ...b,
             structure: {
               name: b.structure.name
             },
-            archiveDate: getArchiveDate(b.lastActivity, b.archiveDueDate),
             referentIds: [
               ...new Set([
                 // family file referents except reception agents
@@ -79,13 +91,16 @@ export const getInactiveBeneficiariesWithOneMonthNotification = async () => {
     .then(notifications =>
       notifications.map(n => {
         if (n.beneficiary) {
+          // beneficiaries without any activity fall back to their creation date
+          const lastActivity =
+            n.beneficiary.lastActivity ?? n.beneficiary.created
           return {
             id: n.beneficiary.id,
             structure: {
               name: n.beneficiary.structure?.name
             },
             archiveDate: getArchiveDate(
-              n.beneficiary.lastActivity,
+              lastActivity,
               n.beneficiary.archiveDueDate
             ),
             referentIds: [
@@ -93,7 +108,7 @@ export const getInactiveBeneficiariesWithOneMonthNotification = async () => {
                 // family file referents except reception agents
                 ...n.beneficiary.familyFile.referents
                   .filter(referent =>
-                    getArchivePermission(referent, n.beneficiary!.lastActivity)
+                    getArchivePermission(referent, lastActivity)
                   )
                   .map(r => r.id),
                 // structure managers
@@ -156,6 +171,7 @@ export const select = () => {
   return {
     id: true,
     lastActivity: true,
+    created: true,
     archiveDueDate: true,
     structure: {
       select: {
