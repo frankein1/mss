@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.66.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.66.0...v1.66.1) (2026-09-22)
+
+
+### Bug Fixes
+
+* **notifications:** archivage et conserver un an supplémentaire ([3afff1a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3afff1a0bddc5587f672c903427f59e59d0d86b8)), closes [#1191](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1191)
+
 ## [1.66.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.65.0...v1.66.0) (2026-09-14)
 
 
