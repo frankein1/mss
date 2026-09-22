@@ -9,11 +9,7 @@ export function useSnackbar() {
 
   const openSnackbar =
     (snackbarType: AlertType): OpenSnackbar =>
-    (
-      message,
-      closeCallback = () => {},
-      duration = DEFAULT_SNACKBAR_DURATION
-    ): void =>
+    (message, closeCallback, duration = DEFAULT_SNACKBAR_DURATION): void =>
       $globalEventEmitter.emit('openSnackbar', {
         snackbarType,
         message,

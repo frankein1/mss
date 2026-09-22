@@ -49,10 +49,7 @@
     const workshopCreated = await mutate(input)
 
     if (error.value || !workshopCreated) {
-      snackbar.error(
-        "La création de l'atelier a échoué.",
-        snackbar.focus('form', 'select')
-      )
+      snackbar.error("La création de l'atelier a échoué.")
       return
     }
     const workshopRoute = routes.workshop.AppWorkshop.path(workshopCreated.id)

@@ -99,13 +99,10 @@
         MSS_ERROR_CODES.WORKSHOP_MIN_ATTENDEE_LIMIT
       ) {
         snackbar.error(
-          `L’atelier a déjà ${workshop.value?._count.mainAttendees} participants. Supprimez-en si vous souhaitez réduire le nombre de participants maximum.`,
-          () => snackbar.focus('form', 'select')
+          `L’atelier a déjà ${workshop.value?._count.mainAttendees} participants. Supprimez-en si vous souhaitez réduire le nombre de participants maximum.`
         )
       } else {
-        snackbar.error("La modification de l'atelier a échoué.", () =>
-          snackbar.focus('form', 'select')
-        )
+        snackbar.error("La modification de l'atelier a échoué.")
       }
       return
     }

@@ -239,10 +239,7 @@
         snackbar.success('Les revenus mensuels ont été mis à jour avec succès')
       },
       onFailure: () => {
-        snackbar.error(
-          'La mise à jour des revenus mensuels a échoué.',
-          snackbar.focus()
-        )
+        snackbar.error('La mise à jour des revenus mensuels a échoué.')
       }
     })
   })
@@ -287,10 +284,7 @@
             snackbar.success('Les revenus mensuels ont été supprimés.')
           },
           onFailure: () => {
-            snackbar.error(
-              'La suppression des revenus mensuels a échoué.',
-              snackbar.focus()
-            )
+            snackbar.error('La suppression des revenus mensuels a échoué.')
           }
         })
       },

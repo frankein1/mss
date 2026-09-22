@@ -202,10 +202,7 @@
     async values => {
       const attendeesRegistered = await mutate(values)
       if (error.value || !attendeesRegistered) {
-        snackbar.error(
-          "L'inscription a échoué.",
-          snackbar.focus('form', 'select')
-        )
+        snackbar.error("L'inscription a échoué.")
         return
       }
       if (

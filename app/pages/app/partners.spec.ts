@@ -269,8 +269,8 @@ describe('page partners', () => {
     })
   })
 
-  describe('Mutations — failure path with focus reset', () => {
-    it('finishCreation failure: snackbar error + focus reset to submit button', async () => {
+  describe('Mutations — failure path', () => {
+    it('finishCreation failure: snackbar error', async () => {
       fakeTrpcClient.partner.create.mutate.mockRejectedValueOnce(
         new Error('fail')
       )
@@ -298,12 +298,11 @@ describe('page partners', () => {
 
       expect(snackbarEvents[0]!.message).toBe("L'ajout a échoué")
       expect(fakeModal.close).not.toHaveBeenCalled()
-      expect(typeof snackbarEvents[0]!.closeCallback).toBe('function')
 
       $globalEventEmitter.off('openSnackbar')
     })
 
-    it('finishEdition failure: snackbar error + focus reset to submit button', async () => {
+    it('finishEdition failure: snackbar error', async () => {
       fakeTrpcClient.partner.update.mutate.mockRejectedValueOnce(
         new Error('fail')
       )
@@ -333,12 +332,11 @@ describe('page partners', () => {
 
       expect(snackbarEvents[0]!.message).toBe('La mise à jour a échoué')
       expect(fakeModal.close).not.toHaveBeenCalled()
-      expect(typeof snackbarEvents[0]!.closeCallback).toBe('function')
 
       $globalEventEmitter.off('openSnackbar')
     })
 
-    it('finishDeletion failure: snackbar error + focus reset to submit button', async () => {
+    it('finishDeletion failure: snackbar error', async () => {
       fakeTrpcClient.partner.remove.mutate.mockRejectedValueOnce(
         new Error('fail')
       )
@@ -363,7 +361,6 @@ describe('page partners', () => {
 
       expect(snackbarEvents[0]!.message).toBe('La suppression a échoué')
       expect(fakeModal.close).not.toHaveBeenCalled()
-      expect(typeof snackbarEvents[0]!.closeCallback).toBe('function')
 
       $globalEventEmitter.off('openSnackbar')
     })

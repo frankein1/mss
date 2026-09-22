@@ -8,7 +8,7 @@
         v-if="open && alertType"
         :alert-type="alertType"
         :message="message"
-        closeable
+        :closeable="isCloseable"
         @close="onClose"
       />
     </div>
@@ -24,7 +24,13 @@
   const open = ref(false)
   const alertType = ref<AlertType | null>(null)
   const message = ref('')
-  const closeCallback = ref(() => {})
+  const closeCallback = ref<(() => void) | undefined>()
+
+  /**
+   * Only offer a close button when the caller gave something to run on close,
+   * typically restoring focus. Otherwise the snackbar just auto-dismisses.
+   */
+  const isCloseable = computed(() => closeCallback.value !== undefined)
 
   onMounted(() => {
     $globalEventEmitter.on('openSnackbar', onOpen)
@@ -47,11 +53,11 @@
   }
 
   function onClose() {
-    closeCallback.value()
+    closeCallback.value?.()
     open.value = false
     alertType.value = null
     message.value = ''
-    closeCallback.value = function () {}
+    closeCallback.value = undefined
   }
 </script>
 

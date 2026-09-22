@@ -99,9 +99,7 @@
   const onUpdateUser = async (input: UpdateUserInput) => {
     const userUpdated = await mutate(input)
     if (error.value || !userUpdated) {
-      snackbar.error("La modification de l'utilisateur a échoué.", () =>
-        snackbar.focus('form', 'select')
-      )
+      snackbar.error("La modification de l'utilisateur a échoué.")
       return
     }
     snackbar.success("L'utilisateur a été modifié avec succès.")

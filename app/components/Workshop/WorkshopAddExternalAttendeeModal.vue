@@ -166,10 +166,7 @@
   async function onCreateExternalAttendee(values: CreateExternalAttendeeInput) {
     const res = await mutate(values)
     if (error.value || !res) {
-      snackbar.error(
-        "L'ajout d'un participant extérieur à échoué.",
-        snackbar.focus()
-      )
+      snackbar.error("L'ajout d'un participant extérieur à échoué.")
       return
     }
     snackbar.success('Participant ajouté')

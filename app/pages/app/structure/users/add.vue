@@ -60,9 +60,7 @@
   const onUpdateUser = async (input: CreateUserInput) => {
     const user = await mutate(input)
     if (error.value || !user) {
-      snackbar.error("La création de l'utilisateur a échoué.", () =>
-        snackbar.focus('form', 'select')
-      )
+      snackbar.error("La création de l'utilisateur a échoué.")
       return
     }
     snackbar.success("L'utilisateur a été créé avec succès.")

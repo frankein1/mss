@@ -131,10 +131,7 @@
         currentStep.value = 2
       },
       onFailure: () => {
-        snackbar.error(
-          'La dissociation du membre du foyer a échoué',
-          snackbar.focus()
-        )
+        snackbar.error('La dissociation du membre du foyer a échoué')
       }
     })
   }
@@ -146,9 +143,7 @@
     snackbar.success(
       `${props.beneficiaryName} a bien été retiré du dossier.
       Pensez à mettre à jour le statut du dossier, les agents référents
-      et le budget si nécessaire.`,
-      () => {},
-      10000
+      et le budget si nécessaire.`
     )
 
     // Beneficiary details are cached per beneficiary id: the cache must be
@@ -188,8 +183,7 @@
       onSuccess: ({ familyFileId }) => goToNewFile(familyFileId),
       onFailure: () => {
         snackbar.error(
-          'La mise à jour de la situation familiale du bénéficiaire a échoué',
-          snackbar.focus('form', 'select')
+          'La mise à jour de la situation familiale du bénéficiaire a échoué'
         )
       }
     })

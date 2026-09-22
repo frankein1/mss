@@ -128,17 +128,11 @@
     })
 
     if (error.value || !created) {
-      snackbar.error(
-        "L'ajout de la personne participante à échoué.",
-        snackbar.focus('.combobox-wrapper')
-      )
+      snackbar.error("L'ajout de la personne participante à échoué.")
       return
     }
     emit('refresh')
-    snackbar.success(
-      'Personne ajoutée avec succès',
-      snackbar.focus('.combobox-wrapper')
-    )
+    snackbar.success('Personne ajoutée avec succès')
     if (isWorkshopFull.value) {
       modal.open(WorkshopCapacityModal, {
         triggerOpen: true,

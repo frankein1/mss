@@ -152,9 +152,7 @@
         })
         props.newDocument(key, file.name)
       } catch {
-        useSnackbar().error("L'ajout du document a échoué.", () =>
-          form.value?.querySelector('select')?.focus()
-        )
+        useSnackbar().error("L'ajout du document a échoué.")
       } finally {
         isSubmitting.value = false
       }

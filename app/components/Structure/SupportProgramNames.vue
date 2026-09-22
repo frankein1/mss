@@ -137,8 +137,7 @@
         isSubmitting: false
       })
       snackbar.error(
-        "La suppression du dispositif ou axe d'intervention a échoué.",
-        snackbar.focus('form', 'button[type="submit"]')
+        "La suppression du dispositif ou axe d'intervention a échoué."
       )
     }
   }

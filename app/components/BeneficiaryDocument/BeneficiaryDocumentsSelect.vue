@@ -49,9 +49,7 @@
   function onNewDocument(key: string, name: string) {
     documentOptions.value.push({ value: key, label: name })
     selectDocInput.value?.triggerSelectValue(key)
-    snackbar.success(props.snackbarSuccessMessage, () =>
-      document?.querySelector<HTMLElement>('#documentAddButton')?.focus()
-    )
+    snackbar.success(props.snackbarSuccessMessage)
   }
 </script>
 

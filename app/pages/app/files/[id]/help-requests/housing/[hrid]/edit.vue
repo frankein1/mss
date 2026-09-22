@@ -132,10 +132,7 @@
         )
       },
       onFailure: () => {
-        snackbar.error(
-          "La mise à jour de l'instruction de dossier a échoué.",
-          () => formContainer.value?.querySelector('input')?.focus()
-        )
+        snackbar.error("La mise à jour de l'instruction de dossier a échoué.")
       }
     })
   }

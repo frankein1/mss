@@ -100,10 +100,7 @@
     height: number
   }) => {
     const node = document.getElementById(props.cardId)
-    const onfail = () =>
-      useSnackbar().error("L'image n'a pas pu être copiée.", () =>
-        copyButton.value?.focus()
-      )
+    const onfail = () => useSnackbar().error("L'image n'a pas pu être copiée.")
 
     if (!node) {
       onfail()
@@ -146,9 +143,7 @@
     setTimeout(() => {
       imageCopied.value = false
     }, 2000)
-    useSnackbar().success("L'image est copiée dans votre presse-papier.", () =>
-      copyButton.value?.focus()
-    )
+    useSnackbar().success("L'image est copiée dans votre presse-papier.")
   }
 </script>
 

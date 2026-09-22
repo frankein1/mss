@@ -9,6 +9,6 @@ export type OpenSnackbar = (
 export type OpenSnackbarEvent = {
   snackbarType: AlertType
   message: string
-  closeCallback: () => void
+  closeCallback?: () => void
   duration: number
 }

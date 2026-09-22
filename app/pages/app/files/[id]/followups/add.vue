@@ -111,10 +111,7 @@
         )
       },
       onFailure: () => {
-        snackbar.error(
-          "La création de la synthèse d'entretien a échoué.",
-          snackbar.focus(formContainer?.value || undefined)
-        )
+        snackbar.error("La création de la synthèse d'entretien a échoué.")
       }
     })
   }

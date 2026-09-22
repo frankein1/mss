@@ -138,10 +138,7 @@
         )
       },
       onFailure: () => {
-        snackbar.error(
-          "La création de l'instruction de dossier a échoué.",
-          () => formContainer.value?.querySelector('input')?.focus()
-        )
+        snackbar.error("La création de l'instruction de dossier a échoué.")
       }
     })
   }

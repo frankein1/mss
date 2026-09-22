@@ -165,8 +165,7 @@
       },
       onFailure: () => {
         snackbar.error(
-          'La mise à jour des informations générales du budget a échoué.',
-          snackbar.focus()
+          'La mise à jour des informations générales du budget a échoué.'
         )
       }
     })

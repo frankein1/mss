@@ -198,8 +198,7 @@
       },
       onFailure: () => {
         useSnackbar().error(
-          "L'état de la notification n'a pas pu être mis à jour.",
-          () => form.value?.querySelector('input')?.focus()
+          "L'état de la notification n'a pas pu être mis à jour."
         )
       }
     })

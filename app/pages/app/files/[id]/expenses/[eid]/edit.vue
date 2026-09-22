@@ -179,10 +179,7 @@
         )
       },
       onFailure: () => {
-        snackbar.error(
-          'La mise à jour des charges mensuelles a échoué.',
-          snackbar.focus()
-        )
+        snackbar.error('La mise à jour des charges mensuelles a échoué.')
       }
     })
   })

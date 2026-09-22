@@ -93,10 +93,7 @@
       })
 
       if (error.value || !workshopCreated) {
-        snackbar.error(
-          "La duplication de l'atelier a échoué.",
-          snackbar.focus('form', 'select')
-        )
+        snackbar.error("La duplication de l'atelier a échoué.")
         return
       }
       matomo.trackEvent(

@@ -165,10 +165,7 @@
         refresh()
       },
       onFailure: () => {
-        snackbar.error(
-          'La suppression a échoué',
-          snackbar.focus('form', 'button[type="submit"]')
-        )
+        snackbar.error('La suppression a échoué')
       }
     })
   }
@@ -183,10 +180,7 @@
         refresh()
       },
       onFailure: () => {
-        snackbar.error(
-          'La mise à jour a échoué',
-          snackbar.focus('form', 'button[type="submit"]')
-        )
+        snackbar.error('La mise à jour a échoué')
       }
     })
   }
@@ -201,7 +195,7 @@
         refresh()
       },
       onFailure: () => {
-        snackbar.error("L'ajout a échoué", snackbar.focus('form', 'button'))
+        snackbar.error("L'ajout a échoué")
       }
     })
   }

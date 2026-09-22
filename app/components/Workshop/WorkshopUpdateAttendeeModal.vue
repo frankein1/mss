@@ -160,10 +160,7 @@
   async function onUpdateAttendee(values: UpdateAttendeeInput) {
     const res = await mutate(values)
     if (error.value || !res) {
-      snackbar.error(
-        'La modification du participant à échoué.',
-        snackbar.focus()
-      )
+      snackbar.error('La modification du participant à échoué.')
       return
     }
     snackbar.success('Participant mis-à-jour avec succès.')

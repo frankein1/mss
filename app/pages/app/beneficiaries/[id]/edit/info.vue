@@ -149,10 +149,7 @@
     const updated = await mutate(ben)
 
     if (error.value || !updated) {
-      snackbar.error(
-        'La mise à jour de la fiche bénéficiaire a échoué.',
-        snackbar.focus('.actions-bar', "button[type='submit']" as FocusHTMLTag)
-      )
+      snackbar.error('La mise à jour de la fiche bénéficiaire a échoué.')
       return
     }
 

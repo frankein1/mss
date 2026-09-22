@@ -239,7 +239,7 @@
       beneficiaryId: selectedBeneficiary.value?.id || '',
       cancel: fn,
       failure: () => {
-        snackbar.error('La suppression a échoué.', fn)
+        snackbar.error('La suppression a échoué.')
       },
       success: async () => {
         const beneficiaryCount = familyFileIdentification.value?.length ?? 0
