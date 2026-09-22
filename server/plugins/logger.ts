@@ -24,9 +24,12 @@ export default defineNitroPlugin(nitroApp => {
   nitroApp.hooks.hook('request', event => {
     const requestId = getHeader(event, 'x-request-id') ?? crypto.randomUUID()
 
+    // Trust the nginx-forwarded X-Real-IP (set from $remote_addr in servers.conf.erb)
+    // Fall back to the socket peer (getRequestIP without xForwardedFor) when the header is
+    // absent, e.g. local dev with no reverse proxy.
     event.context.logger = logger.child({
       request_id: requestId,
-      ip_address: getRequestIP(event, { xForwardedFor: true }) ?? ''
+      ip_address: getHeader(event, 'x-real-ip') ?? getRequestIP(event) ?? ''
     })
   })
 

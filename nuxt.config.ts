@@ -328,7 +328,14 @@ export default defineNuxtConfig({
           : false,
       crossOriginEmbedderPolicy: false
     },
-    rateLimiter: { tokensPerInterval: 600, interval: 300000 },
+    // Resolve the client IP from the nginx-forwarded X-Real-IP (set from
+    // $remote_addr) instead of the default X-Forwarded-For entry which is spoofable.
+    // Also applies into the per-route limiters below.
+    rateLimiter: {
+      tokensPerInterval: 600,
+      interval: 300000,
+      ipHeader: 'x-real-ip'
+    },
     requestSizeLimiter: {
       // 1M
       maxRequestSizeInBytes: 1048576,
