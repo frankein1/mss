@@ -53,16 +53,6 @@
     emit('newDocument', key, name)
     modal.close()
   }
-
-  // reset focus on button
-  const stopWatchingIsOpen = watch(modal.isOpen, value => {
-    if (!value) {
-      document?.querySelector<HTMLElement>('#documentAddButton')?.focus()
-    }
-  })
-  onUnmounted(() => {
-    stopWatchingIsOpen()
-  })
 </script>
 
 <style scoped>

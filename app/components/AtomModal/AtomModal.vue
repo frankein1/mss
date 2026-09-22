@@ -100,10 +100,13 @@
 
   const stopWatch = watch(isOpen, value => {
     if (!value) {
-      dsfrModal.value?.modal.conceal()
+      // conceal(withhold, preventFocus): preventFocus defaults to true, so DSFR
+      // would leave the focus on the destroyed modal content. Passing false lets
+      // it restore the focus on the element that opened the modal.
+      dsfrModal.value?.modal?.conceal(false, false)
     }
     if (value && triggerOpen.value) {
-      dsfrModal.value?.modal.disclose()
+      dsfrModal.value?.modal?.disclose()
     }
   })
 

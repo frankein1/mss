@@ -395,7 +395,6 @@
   ) {
     if (fromModal) {
       modal.close()
-      setFocusAfterClose('#action-rdv', 'button')
     }
     if (e.data.code) {
       switch (e.data.code) {

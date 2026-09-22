@@ -6,7 +6,7 @@
   >
     <section class="fr-mb-2w">
       <VeeRadioButtons
-        :label="''"
+        label="Séléctionnez le bénéficiaire (obligatoire)"
         name="beneficiaryId"
         :options="beneficiaryOptions"
         :inline="false"
@@ -69,6 +69,5 @@
 
   function cancel() {
     modal.close()
-    setFocusAfterClose('#action-rdv', 'button')
   }
 </script>
