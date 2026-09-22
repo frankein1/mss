@@ -102,4 +102,17 @@ describe('MultiSelect component', () => {
 
     expect(input.attributes('value')).toBe('Ain, Aisne')
   })
+
+  test('keeps the dropdown open when a click starts on a checkbox label', async () => {
+    // Pressing a label moves the focus to the closest focusable ancestor before
+    // the click reaches the checkbox
+    await wrapper.find('input[name="documents"]').trigger('click')
+
+    await wrapper.find('.multiselect').trigger('pointerdown')
+    await wrapper.find('.multiselect').trigger('focusout', {
+      relatedTarget: outside.element
+    })
+
+    expect(wrapper.find('.multiselect-content').exists()).toBe(true)
+  })
 })

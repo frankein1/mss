@@ -5,6 +5,7 @@
       'fr-select-group--error': error,
       'fr-select-group--disabled': disabled
     }"
+    @pointerdown="isPointerDownInside = true"
     @focusout="handleFocusOut"
   >
     <label
@@ -164,7 +165,7 @@
 
 <script lang="ts" setup>
   import type { Options, OptionType } from '~/utils/options'
-  import { onClickOutside } from '@vueuse/core'
+  import { onClickOutside, useEventListener } from '@vueuse/core'
   import { useField } from 'vee-validate'
   import { formatSearchPattern } from '~/utils'
 
@@ -208,8 +209,11 @@
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
   const target = ref<HTMLElement | null>(null)
+  const input = useTemplateRef<HTMLInputElement>('input')
   // Last focused checkbox, used to keep a single checkbox in the tab sequence
   const focusedOptionValue = ref<string | null>(null)
+  // True while a click started inside the component, see handleFocusOut
+  const isPointerDownInside = ref<boolean>(false)
   const name = toRef(() => props.name)
   const labelSearchId = useId()
 
@@ -274,6 +278,9 @@
 
   // Functions
   const handleOptionToggle = (option: any) => {
+    // Toggling reorders the list, which moves the checkbox in the DOM and makes
+    // the browser drop the focus: put it back on the toggled option
+    const keepsFocus = document.activeElement?.id === option.value
     const index = selectedOptions.value.findIndex(
       selectedOption => selectedOption.value === option.value
     )
@@ -291,6 +298,14 @@
       )
     }
     handleChange(convertOptionsToValues(selectedOptions.value))
+
+    if (keepsFocus) {
+      nextTick(() => {
+        getAllCheckbox()
+          .find(checkbox => checkbox.id === option.value)
+          ?.focus()
+      })
+    }
   }
 
   const handleChangeSearchValues = (optionQuery: string) => {
@@ -351,15 +366,27 @@
   })
 
   // Close when focus moves to another element of the page (e.g. Tab out).
-  // A null relatedTarget (click on a non-focusable area, window blur) is
-  // ignored: outside clicks are already handled by onClickOutside.
+  // Ignored in two cases:
+  // - a click started inside the component: pressing a non-focusable area such
+  //   as a checkbox label moves focus to the closest focusable ancestor before
+  //   the click reaches the checkbox
+  // - a null relatedTarget (window blur): outside clicks are already handled by
+  //   onClickOutside
   const handleFocusOut = (event: FocusEvent) => {
     const root = event.currentTarget as HTMLElement
     const nextFocused = event.relatedTarget as Node | null
-    if (nextFocused && !root.contains(nextFocused)) {
+    if (
+      !isPointerDownInside.value &&
+      nextFocused &&
+      !root.contains(nextFocused)
+    ) {
       isOpen.value = false
     }
   }
+
+  useEventListener(document, 'pointerup', () => {
+    isPointerDownInside.value = false
+  })
 
   const handleSearchInputKeyDown = () => {
     getAllCheckbox()[0]?.focus()
@@ -405,9 +432,15 @@
 
   defineExpose({ triggerSelectValue })
 
-  onClickOutside(target, _event => {
-    isOpen.value = false
-  })
+  // The field itself is outside the dropdown: ignore it here so that its own
+  // click handler can toggle the dropdown instead of reopening it right after
+  onClickOutside(
+    target,
+    _event => {
+      isOpen.value = false
+    },
+    { ignore: [input] }
+  )
 </script>
 
 <style lang="scss" scoped>
