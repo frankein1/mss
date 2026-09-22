@@ -13,7 +13,8 @@ const adminHandler = async ({
   ctx: AdminContext
   input: ToggleRdvspInput
 }) => {
-  await StructureRepo.prisma.update({
+  const res = await StructureRepo.prisma.update({
+    select: { externalRdvspActive: true },
     where: { id: input.id },
     data: { externalRdvspActive: input.externalRdvspActive }
   })
@@ -24,6 +25,8 @@ const adminHandler = async ({
       id: input.id
     }).catch(error => console.error(error))
   }
+
+  return res
 }
 
 export const toggleRdvsp = createMutation({
