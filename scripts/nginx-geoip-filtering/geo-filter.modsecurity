@@ -1,0 +1,43 @@
+# Geo IP allowlist filter for the Scalingo nginx buildpack.
+#
+# Loaded from servers.conf.erb ONLY when the Scalingo env var
+# ENABLE_GEO_FILTER is set (see the guard there). It is gated behind its own
+# env var — separate from ENABLE_MODSECURITY — so the app never boots this rule
+# until the GeoIP database below is actually present in the slug; otherwise
+# `SecGeoLookupDB` fails to open the file at config-parse time and nginx refuses
+# to start, taking the whole app down.
+#
+# ── PREREQUISITES (must both hold before you set ENABLE_GEO_FILTER) ────────────
+#   1. A MaxMind GeoIP2/GeoLite2 *Country* database must exist at the path in
+#      SecGeoLookupDB below..
+#   2. The buildpack's libmodsecurity must have been built with MaxMindDB
+#      support (`--with-maxmind`).
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# Behaviour: fail-OPEN on indeterminate. If the lookup fails (private/unknown
+# IP, DB miss) the `@geoLookup` operator returns false, the chain short-circuits
+# and the request is allowed — locking out a legitimate agent is worse than the
+# residual risk for a CRM.
+SecGeoLookupDB /app/scripts/nginx-geoip-filtering/GeoLite2-Country.mmdb
+
+# One chained rule:
+#   - `@geoLookup` on the client IP populates the GEO collection and matches
+#     only when the lookup succeeds.
+#   - the chained condition denies (403) when the resolved country code is NOT
+#     in allowed-countries.txt. `@pmFromFile` matches a pattern that is a
+#     substring of the target; since COUNTRY_CODE is exactly 2 chars and every
+#     pattern is a 2-char code, the match is effectively exact.
+# The client IP is the real client address: servers.conf.erb already sets
+# `real_ip_header X-Forwarded-For`, so REMOTE_ADDR is the end user, not the
+# Scalingo load balancer.
+SecRule REMOTE_ADDR "@geoLookup" \
+    "id:1000,\
+    phase:1,\
+    deny,\
+    status:403,\
+    t:none,\
+    msg:'Geo IP filter: country not in allowlist',\
+    logdata:'country=%{geo.country_code} ip=%{remote_addr}',\
+    tag:'geo-filter',\
+    chain"
+    SecRule GEO:COUNTRY_CODE "!@pmFromFile /app/scripts/nginx-geoip-filtering/allowed-countries.txt" "t:none"

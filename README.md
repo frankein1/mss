@@ -134,15 +134,20 @@ sbx exec $SANDBOX_NAME bash -lc "pnpm lint-staged && talisman --githook pre-comm
 
 ## Déploiement
 
-Mon Suivi Social est hébergé sur Scalingo. Le déploiement d'effectue en local depuis la branche main à jour.
+Mon Suivi Social est hébergé sur Scalingo. La création d'une nouvelle version s'effectue en local depuis la branche main à jour. La CI déploie ensuite cette version.
 
 ```
 pnpm release --no-verify
 git push --follow-tags origin main
 ```
 
-La création d'un tag génère une action de de déploiement sur l'environnement de demo. Le
-déploiement en production est une action manuelle à réaliser depuis le pipeline de CI.
+### Environnements
+
+L'application de Mon Suivi Social est déployée sur plusieurs environnements :
+
+- production : déploiement manuel depuis la CI lors de génération d'un tag selon semantic-release `pnpm release`
+- démo : déploiement automatique depuis la CI lors de la génération d'un tag selon semantic-release `pnpm release`
+- développement : déploiement automatique depuis la CI la branche `main`
 
 ## Exécutions planifiées
 
@@ -180,20 +185,4 @@ node .output-scheduler_caller/_caller.mjs <nom_tâche>
 
 ## Conventions de code
 
-Au-delà des conventions définies grâce aux _linters_ et _formatters_ ESLint, Stylelint et Prettier, le projet suis les [conventions de code proposées par la communauté de Vue.js](https://vuejs.org/style-guide/).
-
-En supplément, deux choix ont été faits sur le nommage des composants :
-
-- Le préfixe `Atom` a été choisi pour les [composants de base](https://vuejs.org/style-guide/rules-strongly-recommended.html#base-component-names),
-- Le préfixe `The` a été choisi pour les [composants à instance unique](https://vuejs.org/style-guide/rules-strongly-recommended.html#single-instance-component-names).
-
-## Environnements
-
-L'application de Mon Suivi Social existe sur plusieurs environnements :
-
-- production :
-  - Lien d'accès : https://monsuivisocial-app.incubateur.anct.gouv.fr/
-  - Mode de déploiement : `pnpm release`
-- développement :
-  - Lien d'accès : https://monsuivisocial-app.dev.incubateur.anct.gouv.fr/
-  - Mode de déploiement : Poussée sur la branche `main`
+Les conventions de code à destination des humains et des agents sont décrites dans le répertoire `.claude/rules`

@@ -24,7 +24,8 @@
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
     "prisma": "prisma",
     "release": "commit-and-tag-version",
-    "prepare": "husky"
+    "prepare": "husky",
+    "scalingo-prebuild": "./scripts/nginx-geoip-filtering/fetch-db-ip.sh"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1121.0",

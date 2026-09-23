@@ -18,8 +18,24 @@ server {
   # Deactivate request logs since the scalingo router already prints them
   access_log off;
 
+  <% if ENV['ENABLE_MODSECURITY'] %>
+  modsecurity_rules_file /app/scripts/nginx-geoip-filtering/custom-rules.modsecurity;
+  <% if ENV['MODSECURITY_RULE_ENGINE'] == 'DetectionOnly' %>
+  modsecurity_rules_file /app/scripts/nginx-geoip-filtering/detection-only.modsecurity;
+  <% end %>
+  # Geo IP allowlist filter. Gated behind its own env var (not just
+  # ENABLE_MODSECURITY) because geo-filter.modsecurity references a GeoIP DB via
+  # SecGeoLookupDB — if that file is missing, nginx fails to boot. Only turn on
+  # ENABLE_GEO_FILTER once the .mmdb is in the slug. See geo-filter.modsecurity.
+  <% if ENV['ENABLE_GEO_FILTER'] %>
+  modsecurity_rules_file /app/scripts/nginx-geoip-filtering/geo-filter.modsecurity;
+  <% end %>
+  <% end %>
+
   # Override max payload size to match limit for document upload
-  client_max_body_size 20m;
+  # Kept slightly above the 20MB app cap (MAX_UPLOAD_SIZE_BYTES) so the multipart envelope (boundaries +
+  # metadata fields) around a genuine 20MB file is not rejected at the boundary.
+  client_max_body_size 21m;
 
   # Common proxy headers, inherited by every proxied location below
   proxy_set_header Host $host;

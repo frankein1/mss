@@ -1,0 +1,16 @@
+# App-owned ModSecurity overrides for the Scalingo nginx buildpack.
+
+# Remove every rule the buildpack loads, so ONLY our own custom rules run.
+#
+# The buildpack (which owns the http-level include, with no env var to tune it)
+# loads two rule sets in blocking mode: its base modsecurity.conf rules in the
+# 200000-200999 range, and the full OWASP CRS in the 900000-999999 range. This
+# file is parsed AFTER that include, so the rules exist by the time we strip
+# them. `SecRuleRemoveById` only affects rules parsed BEFORE it, so our custom
+# rules — the geo IP filter (id:1000) lives in geo-filter.modsecurity, wired in
+# AFTER this file — are untouched and still evaluated.
+SecRuleRemoveById "200000-200999" "900000-999999"
+
+# Disable request/response body inspection.
+SecRequestBodyAccess Off
+SecResponseBodyAccess Off

@@ -1,0 +1,32 @@
+# ISO 3166-1 alpha-2 country codes allowed to reach the app.
+# Read by geo-filter.modsecurity via `@pmFromFile`.
+# Edit this list to change the allowlist.
+
+# France (hexagonale)
+FR
+# Guadeloupe
+GP
+# Martinique
+MQ
+# Guyane Française
+GF
+# Réunion
+RE
+# Mayotte
+YT
+# Saint-Pierre-et-Miquelon
+PM
+# Saint-Barthélemy
+BL
+# Saint-Martin (partie française)
+MF
+# Nouvelle Calédonie
+NC
+# Polynésie Française
+PF
+# Wallis-et-Futuna
+WF
+# Terres australes et antarctiques françaises: intentionally excluded — no
+# permanent civilian population (research/military only), so no legitimate user
+# base to allow. Uncomment TF if that ever changes.
+# TF
