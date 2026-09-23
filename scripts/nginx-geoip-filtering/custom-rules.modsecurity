@@ -9,7 +9,10 @@
 # them. `SecRuleRemoveById` only affects rules parsed BEFORE it, so our custom
 # rules — the geo IP filter (id:1000) lives in geo-filter.modsecurity, wired in
 # AFTER this file — are untouched and still evaluated.
-SecRuleRemoveById "200000-200999" "900000-999999"
+# NB: the v3 lexer rejects double quotes here (FREE_TEXT_NEW_LINE excludes ");
+# IDs/ranges must be unquoted, one directive per range.
+SecRuleRemoveById 200000-200999
+SecRuleRemoveById 900000-999999
 
 # Disable request/response body inspection.
 SecRequestBodyAccess Off
