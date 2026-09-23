@@ -5,7 +5,12 @@
 
 set -uo pipefail
 
-target_dir="/app/scripts/nginx-geoip-filtering"
+# Write the DB next to this script rather than a hardcoded /app path: during
+# scalingo-prebuild the build root is NOT yet mounted at /app, so /app/... does
+# not exist. This resolves to the script's build-time dir, which Scalingo then
+# ships to /app/scripts/nginx-geoip-filtering in the slug — the absolute path
+# geo-filter.modsecurity (SecGeoLookupDB) reads at runtime.
+target_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 target_db_path="${target_dir}/GeoLite2-Country.mmdb"
 
 if [ -z "${MODSECURITY_GEOIP_DB_URL:-}" ]; then
