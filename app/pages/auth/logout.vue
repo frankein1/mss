@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <div class="fr-container fr-pt-4w">
-      <TheLandingBreadcrumb :text="routes.auth.AuthLogout.title" />
-
-      <AuthLogout :inactive></AuthLogout>
-    </div>
-
-    <div class="fr-container">
-      <p>
-        Un problème ? Contactez notre équipe support :
-        <NuxtLink :to="`mailto:${SUPPORT_EMAIL}`">{{ SUPPORT_EMAIL }}</NuxtLink>
-      </p>
+  <div class="fr-container">
+    <div class="fr-grid-row">
+      <div class="fr-col-12">
+        <TheLandingBreadcrumb :text="routes.auth.AuthLogout.title" />
+        <AuthLogout :inactive></AuthLogout>
+        <p>
+          Un problème ? Contactez notre équipe support :
+          <NuxtLink :to="`mailto:${SUPPORT_EMAIL}`">{{
+            SUPPORT_EMAIL
+          }}</NuxtLink>
+        </p>
+      </div>
     </div>
   </div>
 </template>

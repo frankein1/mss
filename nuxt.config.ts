@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/callout/callout.min.css',
     '@gouvfr/dsfr/dist/component/card/card.min.css',
     '@gouvfr/dsfr/dist/component/checkbox/checkbox.min.css',
+    '@gouvfr/dsfr/dist/component/connect/connect.min.css',
     '@gouvfr/dsfr/dist/component/content/content.min.css',
     '@gouvfr/dsfr/dist/component/download/download.min.css',
     '@gouvfr/dsfr/dist/component/footer/footer.min.css',
