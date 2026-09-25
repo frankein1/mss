@@ -47,12 +47,11 @@ const securityCheck = async (
 function toSupportProgramData(
   sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number]
 ) {
-  const endDate = sp.endDate ?? null
   return {
     id: sp.id,
     startDate: sp.startDate ?? null,
-    endDate,
-    outcome: endDate ? (sp.outcome ?? null) : null,
+    endDate: sp.endDate ?? null,
+    outcome: sp.outcome ?? null,
     exitReason: sp.exitReason ?? null,
     supportProgramNameId: sp.supportProgramNameId
   }
@@ -64,7 +63,7 @@ async function throwBadRequestIfInvalidLifecycleData(
 ) {
   const hasLifecycleData = (
     sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number]
-  ) => !!(sp.startDate || sp.endDate || sp.exitReason || sp.outcome)
+  ) => !!(sp.startDate || sp.endDate || sp.exitReason)
 
   const nameIds = [
     ...new Set(supportPrograms.map(sp => sp.supportProgramNameId))

@@ -30,9 +30,5 @@ export const supportProgramSchema = z
       path: ['endDate']
     }
   )
-  .transform(sp => ({
-    ...sp,
-    outcome: sp.endDate ? sp.outcome : null
-  }))
 
 export type SupportProgramInput = z.input<typeof supportProgramSchema>

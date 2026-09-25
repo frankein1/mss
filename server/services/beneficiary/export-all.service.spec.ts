@@ -51,7 +51,7 @@ afterEach(async () => {
 
 /**
  * Enroll the beneficiary in two support programs: one with a lifecycle
- * (dates and outcome are exported) and one without (they are not).
+ * (dates is exported) and one without.
  * Returns the ids of the created program names, to be cleaned up afterwards.
  */
 async function createSupportPrograms(beneficiaryId: string) {
@@ -187,13 +187,13 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
         outcome: 'Partiel'
       },
       {
-        // the program name has no lifecycle: dates and outcome are empty
+        // the program name has no lifecycle: dates are empty
         fileNumber: FILE_NUMBER,
         name: 'Portage de repas ponctuel',
         partnerOrganisations: '',
         startDate: '',
         endDate: '',
-        outcome: ''
+        outcome: 'Atteint'
       }
     ])
   })

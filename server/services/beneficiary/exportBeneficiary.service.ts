@@ -728,7 +728,7 @@ const getBeneficiaryInfoData = (
           precisions: contributingPartner.precisions,
           hasDetails: Boolean(
             contributingPartner.partnerOrganizationContact ||
-              contributingPartner.precisions
+            contributingPartner.precisions
           )
         })
       )
@@ -740,25 +740,23 @@ const getBeneficiaryInfoData = (
             `${b.firstName ?? ''} ${b.lastName ?? ''}`
           )
         )
-        .map(
-          (relative, idx): BeneficiaryRelativeData => ({
-            index: idx + 1,
-            additionalInformation: relative.additionalInformation,
-            birthDate: relative.birthDate
-              ? relative.birthDate.toLocaleDateString('fr-FR')
-              : null,
-            caregiver: relative.caregiver,
-            city: relative.city,
-            email: relative.email,
-            firstName: relative.firstName,
-            lastName: relative.lastName,
-            hosted: relative.hosted,
-            phone: relative.phone,
-            relationship: relative.relationship
-              ? relativeRelationshipKeys.value(relative.relationship)
-              : null
-          })
-        )
+        .map((relative, idx): BeneficiaryRelativeData => ({
+          index: idx + 1,
+          additionalInformation: relative.additionalInformation,
+          birthDate: relative.birthDate
+            ? relative.birthDate.toLocaleDateString('fr-FR')
+            : null,
+          caregiver: relative.caregiver,
+          city: relative.city,
+          email: relative.email,
+          firstName: relative.firstName,
+          lastName: relative.lastName,
+          hosted: relative.hosted,
+          phone: relative.phone,
+          relationship: relative.relationship
+            ? relativeRelationshipKeys.value(relative.relationship)
+            : null
+        }))
     : null
 
   const supportPrograms: SupportProgramData[] = beneficiary.supportPrograms.map(
@@ -773,10 +771,9 @@ const getBeneficiaryInfoData = (
           ? sp.endDate?.toLocaleDateString('fr-FR') || null
           : null,
         exitReason: hasLifecycle ? sp.exitReason : null,
-        outcome:
-          hasLifecycle && sp.outcome
-            ? supportProgramOutcomeKeys.byKey[sp.outcome]
-            : null,
+        outcome: sp.outcome
+          ? supportProgramOutcomeKeys.byKey[sp.outcome]
+          : null,
         partnerOrganisation: sp.partnerOrganisations.map(o => o.name).join(', ')
       }
     }

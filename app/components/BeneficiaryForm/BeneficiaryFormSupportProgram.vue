@@ -88,18 +88,15 @@
         hint="Bientôt disponible"
       />
     </div>
-
-    <div
-      v-if="endDate"
-      class="fr-col-12"
-    >
-      <VeeSelect
-        :name="`supportPrograms[${index}].outcome`"
-        :label="supportProgramFieldLabels.outcome"
-        :options="withEmptyValue(supportProgramOutcomeKeys.options)"
-      />
-    </div>
   </template>
+
+  <div class="fr-col-12">
+    <VeeSelect
+      :name="`supportPrograms[${index}].outcome`"
+      :label="supportProgramFieldLabels.outcome"
+      :options="withEmptyValue(supportProgramOutcomeKeys.options)"
+    />
+  </div>
 
   <div class="fr-col-12">
     <button
@@ -117,7 +114,6 @@
 </template>
 
 <script setup lang="ts">
-  import { useFieldValue } from 'vee-validate'
   import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { supportProgramFieldLabels } from '~~/client/labels'
@@ -134,10 +130,6 @@
     supportProgramNameOptions: Options
     partnerOrganisationOptions: Options
   }>()
-
-  const endDate = useFieldValue<string | null | undefined>(
-    () => `supportPrograms[${props.index}].endDate`
-  )
 
   const supportProgramNameGroup = useTemplateRef<HTMLElement>(
     'supportProgramNameGroup'

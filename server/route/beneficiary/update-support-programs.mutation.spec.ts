@@ -439,9 +439,7 @@ describe('Support Programs - Update - Outcome', () => {
     expect(program?.outcome).toBe(SupportProgramOutcome.Achieved)
   })
 
-  test('Outcome is silently nulled when endDate is absent', async ({
-    trpc
-  }) => {
+  test('Outcome is persisted when endDate is absent', async ({ trpc }) => {
     const programId = crypto.randomUUID()
     await trpc.structureManager.beneficiary.updateSupportPrograms({
       ...baseInput(),
@@ -461,7 +459,8 @@ describe('Support Programs - Update - Outcome', () => {
       supportPrograms: [
         {
           id: programId,
-          supportProgramNameId: supportProgramNameIds[0]!
+          supportProgramNameId: supportProgramNameIds[0]!,
+          outcome: SupportProgramOutcome.Exceeded
         }
       ]
     })
@@ -469,7 +468,8 @@ describe('Support Programs - Update - Outcome', () => {
     const program = await prismaClient.supportProgram.findUnique({
       where: { id: programId }
     })
-    expect(program?.outcome).toBeNull()
+    expect(program?.endDate).toBeNull()
+    expect(program?.outcome).toBe(SupportProgramOutcome.Exceeded)
   })
 
   test('Outcome is optional when endDate is present', async ({ trpc }) => {
@@ -572,6 +572,27 @@ describe('Support Programs - Update - Lifecycle Enforcement', () => {
     })
     expect(program?.startDate).toBeNull()
     expect(program?.endDate).toBeNull()
+  })
+
+  test('Outcome is accepted for a non-lifecycle name', async ({ trpc }) => {
+    const nonLifecycleNameId = supportProgramNameIds[7]!
+    const supportProgramId = crypto.randomUUID()
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        {
+          id: supportProgramId,
+          supportProgramNameId: nonLifecycleNameId,
+          outcome: SupportProgramOutcome.Achieved
+        }
+      ]
+    })
+
+    const program = await prismaClient.supportProgram.findUnique({
+      where: { id: supportProgramId }
+    })
+    expect(program?.outcome).toBe(SupportProgramOutcome.Achieved)
   })
 
   test('Lifecycle name with lifecycle data is accepted', async ({ trpc }) => {

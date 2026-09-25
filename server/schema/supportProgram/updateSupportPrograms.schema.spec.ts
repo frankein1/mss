@@ -8,14 +8,14 @@ const validBase = {
 }
 
 describe('Support Program Schema - Outcome validation', () => {
-  test('Schema clears outcome when endDate is absent', () => {
+  test('Schema keeps outcome when dates are absent', () => {
     const result = supportProgramSchema.safeParse({
       ...validBase,
       outcome: SupportProgramOutcome.Achieved
     })
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.outcome).toBeNull()
+      expect(result.data.outcome).toBe(SupportProgramOutcome.Achieved)
     }
   })
 
@@ -105,18 +105,6 @@ describe('Support Program Schema - Date validation', () => {
       startDate: new Date('2024-01-01')
     })
     expect(result.success).toBe(true)
-  })
-
-  test('Schema clears outcome when only startDate is provided', () => {
-    const result = supportProgramSchema.safeParse({
-      ...validBase,
-      startDate: new Date('2024-01-01'),
-      outcome: SupportProgramOutcome.Achieved
-    })
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.outcome).toBeNull()
-    }
   })
 })
 

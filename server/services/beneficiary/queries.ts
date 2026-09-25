@@ -461,7 +461,7 @@ function getSupportPrograms(beneficiary: BeneficiaryOutput) {
       startDate: hasLifecycle ? d.startDate : null,
       endDate: hasLifecycle ? d.endDate : null,
       exitReason: hasLifecycle ? d.exitReason : null,
-      outcome: hasLifecycle ? d.outcome : null,
+      outcome: d.outcome,
       supportProgramName: {
         id: d.supportProgramName.id,
         name: d.supportProgramName.name,
