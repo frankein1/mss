@@ -26,6 +26,7 @@ const handler = async ({
     helpRequests,
     followups,
     firstFollowups,
+    walkInSessionFollowups,
     followupBeneficiaries,
     helpRequestBeneficiaries
   ] = await Promise.all([
@@ -37,6 +38,12 @@ const handler = async ({
         socialSupport: prepareSocialSupportStatFilters(input)
       }
     }),
+    FollowupRepo.count(user, {
+      where: {
+        isDuringWalkInSession: true,
+        socialSupport: prepareSocialSupportStatFilters(input)
+      }
+    }),
     getFollowupBeneficiaryNumberQuery(user, input),
     getHelpRequestBeneficiaryNumberQuery(user, input)
   ])
@@ -45,6 +52,7 @@ const handler = async ({
     helpRequests,
     followups,
     firstFollowups,
+    walkInSessionFollowups,
     followupBeneficiaries,
     helpRequestBeneficiaries
   }

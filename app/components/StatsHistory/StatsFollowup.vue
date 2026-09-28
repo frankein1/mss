@@ -30,15 +30,33 @@
         <template #title>
           <p class="fr-mb-0 fr-h3 title-blue">
             {{ followupCountLabel }}
+          </p>
+          <p
+            v-if="firstFollowupCount > 0 || walkInSessionFollowupCount > 0"
+            class="fr-mb-0"
+          >
+            <span class="fr-text--sm">Dont </span>
             <span
-              v-if="
-                historyCounts?.firstFollowups &&
-                historyCounts.firstFollowups > 0
-              "
+              v-if="firstFollowupCount > 0"
               class="fr-text--sm"
             >
-              dont {{ firstFollowupCountLabel }}
+              {{ firstFollowupCountLabel }}
             </span>
+            <template
+              v-if="
+                historyCounts?.firstFollowups &&
+                historyCounts?.firstFollowups > 0 &&
+                walkInSessionFollowupCount
+              "
+            >
+              <span class="fr-text--sm"> et </span>
+            </template>
+            <template v-if="walkInSessionFollowupCount > 0">
+              <span class="fr-text--sm">
+                {{ walkInSessionFollowupCountLabel }}
+              </span>
+            </template>
+            <span class="fr-text--sm">.</span>
           </p>
         </template>
       </StatsHeader>
@@ -231,12 +249,28 @@
       }`
   )
 
+  const firstFollowupCount = computed(
+    () => historyCounts.value?.firstFollowups || 0
+  )
   const firstFollowupCountLabel = computed(
     () =>
-      `${historyCounts.value?.firstFollowups || 0} ${
-        historyCounts.value?.firstFollowups || 0 > 1
+      `${firstFollowupCount.value} ${
+        firstFollowupCount.value > 1
           ? 'premiers entretiens'
-          : 'Premier entretien'
+          : 'premier entretien'
+      }`
+  )
+
+  const walkInSessionFollowupCount = computed(
+    () => historyCounts.value?.walkInSessionFollowups || 0
+  )
+
+  const walkInSessionFollowupCountLabel = computed(
+    () =>
+      `${walkInSessionFollowupCount.value} ${
+        walkInSessionFollowupCount.value > 1
+          ? 'entretiens réalisés en permanence'
+          : 'entretien réalisé en permanence'
       }`
   )
 
