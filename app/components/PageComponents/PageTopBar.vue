@@ -11,9 +11,9 @@
       class="topbar__menu"
       dropdown-btn-class="fr-btn--tertiary-no-outline"
     />
-    <client-only>
+    <!-- <client-only>
       <DisconnectHandler />
-    </client-only>
+    </client-only> -->
   </nav>
 </template>
 
