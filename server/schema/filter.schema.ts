@@ -27,8 +27,18 @@ import {
 } from '~/utils/constants/filters'
 import { WorkshopPeriodFilter } from '~~/types/workshop'
 
+const statFilterOptionsInputSchema = z
+  .object({
+    structureIds: z.array(z.string().uuid()).nullish()
+  })
+  .optional()
+  .default({})
+
+type StatFilterOptionsInput = z.infer<typeof statFilterOptionsInputSchema>
+
 const statFilterSchema = z
   .object({
+    structureIds: z.array(z.string().uuid()).nullish(),
     helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
     period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
     fromDate: z.coerce.date().nullish(),
@@ -128,8 +138,7 @@ type StatFilterInput = Omit<
   'helpRequestSubject'
 > & {
   helpRequestSubject?:
-    | z.infer<typeof statFilterSchema>['helpRequestSubject']
-    | ''
+    z.infer<typeof statFilterSchema>['helpRequestSubject'] | ''
 }
 
 const beneficiaryFilterSchema = z
@@ -285,6 +294,7 @@ const workshopFilterSchema = z.object({
 type WorkshopFilterInput = z.infer<typeof workshopFilterSchema>
 
 export {
+  statFilterOptionsInputSchema,
   statFilterSchema,
   beneficiaryFilterSchema,
   followupFilterSchema,
@@ -298,6 +308,7 @@ export {
 }
 
 export type {
+  StatFilterOptionsInput,
   StatFilterInput,
   BeneficiaryFilterInput,
   BeneficiaryFilterServerInput,
