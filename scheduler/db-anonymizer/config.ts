@@ -23,12 +23,12 @@ const configUser: Record<
   external_rdvsp_id: true,
   aidant_connect_authorisation: true,
   // -- BEGIN ANONYMIZED
-  first_name: false,
-  last_name: false,
-  email: false,
-  account_reminder_email: true,
-  authorization_code: false,
-  authorization_code_validity: false
+  // first_name: false,
+  // last_name: false,
+  // email: false,
+  account_reminder_email: true
+  // authorization_code: false,
+  // authorization_code_validity: false
 }
 
 const configStructure: Record<
@@ -53,12 +53,12 @@ const configStructure: Record<
   external_rdvsp_id: true,
   deactivation_alert_email: true,
   deactivation_alert_email_date: true,
-  phone: true,
+  phone: true
   // -- BEGIN ANONYMIZED
-  email: false,
-  dpo_email: false,
-  dpo_first_name: false,
-  dpo_last_name: false
+  // email: false,
+  // dpo_email: false,
+  // dpo_first_name: false,
+  // dpo_last_name: false
 }
 
 // Adaptation needed because of typo in column name
@@ -156,32 +156,32 @@ const configBeneficiary: Record<BeneficiaryColumnName, boolean> = {
   employer: true,
   activity_status: true,
   prescribing_organization_id: true,
-  prescribing_organization_contact_id: true,
+  prescribing_organization_contact_id: true
   // -- BEGIN ANONYMIZED
-  employer_siret: false,
-  first_name: false,
-  usual_name: false,
-  birth_name: false,
-  usual_name_normalized: false,
-  first_name_normalized: false,
-  birth_name_normalized: false,
-  social_security_number: false,
-  birth_place: false,
-  email: false,
-  street: false,
-  file_number: false,
-  address_complement: false,
-  phone1: false,
-  phone2: false,
-  no_phone: false,
-  gir: false,
-  doctor: false,
-  additional_information: false,
-  unemployment_number: false,
-  caf_number: false,
-  health_additional_information: false,
-  numero_pegase: false,
-  representative: false
+  // employer_siret: false,
+  // first_name: false,
+  // usual_name: false,
+  // birth_name: false,
+  // usual_name_normalized: false,
+  // first_name_normalized: false,
+  // birth_name_normalized: false,
+  // social_security_number: false,
+  // birth_place: false,
+  // email: false,
+  // street: false,
+  // file_number: false,
+  // address_complement: false,
+  // phone1: false,
+  // phone2: false,
+  // no_phone: false,
+  // gir: false,
+  // doctor: false,
+  // additional_information: false,
+  // unemployment_number: false,
+  // caf_number: false,
+  // health_additional_information: false,
+  // numero_pegase: false,
+  // representative: false
 }
 
 const configBeneficiaryContributingPartner: Record<
@@ -192,9 +192,9 @@ const configBeneficiaryContributingPartner: Record<
   beneficiary_id: true,
   partner_organization_id: true,
   partner_organization_contact_id: true,
-  created_at: true,
+  created_at: true
   // -- BEGIN ANONYMIZED
-  precisions: false
+  // precisions: false
 }
 
 const configDocument: Record<
@@ -212,12 +212,12 @@ const configDocument: Record<
   beneficiary_id: true,
   tags: true,
   confidential: true,
-  expiration_date: true,
+  expiration_date: true
   // -- BEGIN ANONYMIZED
-  name: false,
-  filename_disk: false,
-  filename_download: false,
-  encrypted_data_key: false
+  // name: false,
+  // filename_disk: false,
+  // filename_download: false,
+  // encrypted_data_key: false
 }
 
 const configFamilyFileToReferent = {
@@ -245,11 +245,11 @@ const configSocialSupport: Record<
   subtype: true,
   end_of_social_support: true,
   // -- BEGIN ANONYMIZED
-  synthesis: false,
-  synthesis_rich_text: false,
-  private_synthesis: false,
-  private_synthesis_rich_text: false,
-  numero_pegase: false,
+  // synthesis: false,
+  // synthesis_rich_text: false,
+  // private_synthesis: false,
+  // private_synthesis_rich_text: false,
+  // numero_pegase: false,
   support_program_id: true
 }
 
@@ -283,9 +283,9 @@ const configPartnerOrganization: Record<
   phone1: true,
   phone2: true,
   working_hours: true,
-  website: true,
+  website: true
   // -- BEGIN ANONYMIZED
-  email: false
+  // email: false
 }
 
 const configPartnerOrganizationContact: Record<
@@ -315,9 +315,9 @@ const configFollowup: Record<
   forwarded_to_justice: true,
   is_during_walk_in_session: true,
   duration: true,
-  social_support_id: true,
+  social_support_id: true
   // -- BEGIN ANONYMIZED
-  third_person_name: false
+  // third_person_name: false
 }
 
 const configFileInstruction: Record<
@@ -393,11 +393,11 @@ const configAccount: Record<
   created: true,
   updated: true,
   user_id: true,
-  provider: true,
+  provider: true
   // -- BEGIN ANONYMIZED
-  provider_account_id: false,
-  id_token: false,
-  session_state: false
+  // provider_account_id: false,
+  // id_token: false,
+  // session_state: false
 }
 
 const configBeneficiaryRelative: Record<
@@ -415,15 +415,15 @@ const configBeneficiaryRelative: Record<
   hosted: true,
   caregiver: true,
   beneficiary_id: true,
-  beneficiary_link_id: true,
+  beneficiary_link_id: true
   // -- BEGIN ANONYMIZED
-  last_name: false,
-  first_name: false,
-  birth_date: false,
-  email: false,
-  phone: false,
-  city: false,
-  additional_information: false
+  // last_name: false,
+  // first_name: false,
+  // birth_date: false,
+  // email: false,
+  // phone: false,
+  // city: false,
+  // additional_information: false
 }
 
 const configArchivedBeneficiary: Record<
@@ -449,10 +449,10 @@ const configArchivedBeneficiary: Record<
   event_date_reason: true,
   structure_type: true,
   // -- BEGIN ANONYMIZED
-  title: false,
-  first_name: false,
-  usual_name: false,
-  birth_name: false,
+  // title: false,
+  // first_name: false,
+  // usual_name: false,
+  // birth_name: false,
   old_beneficiary_id: true
 }
 
@@ -490,10 +490,10 @@ const configWorkshop: Record<
   date: true,
   start_time: true,
   end_time: true,
-  session_name: true,
+  session_name: true
   // -- BEGIN ANONYMIZED
-  host: false,
-  description: false
+  // host: false,
+  // description: false
 }
 
 const configWorkshopName: Record<
@@ -534,13 +534,13 @@ const configWorkshopExternalAttendee: Record<
   updated: true,
   is_anonymized: true,
   city: true,
-  gender: true,
+  gender: true
   // -- BEGIN ANONYMIZED
-  first_name: false,
-  last_name: false,
-  email: false,
-  phone: false,
-  birth_date: false
+  // first_name: false,
+  // last_name: false,
+  // email: false,
+  // phone: false,
+  // birth_date: false
 }
 
 const configUserActivity: Record<
@@ -554,10 +554,10 @@ const configUserActivity: Record<
   key: true,
   object: true,
   object_id: true,
-  activity: true,
+  activity: true
   // -- BEGIN ANONYMIZED
-  content: false,
-  diff: false
+  // content: false,
+  // diff: false
 }
 
 const configNotification: Record<
@@ -576,9 +576,9 @@ const configNotification: Record<
   comment_id: true,
   archive_date: true,
   read: true,
-  type: true,
+  type: true
   // -- BEGIN ANONYMIZED
-  detail: false
+  // detail: false
 }
 
 const configBudgetIncome: Record<
@@ -606,10 +606,10 @@ const configBudgetIncome: Record<
   type: true,
   beneficiary_id: true,
   relationship: true,
-  budget_id: true,
+  budget_id: true
   // -- BEGIN ANONYMIZED
-  first_name: false,
-  last_name: false
+  // first_name: false,
+  // last_name: false
 }
 
 const configBudgetIncomeCustom: Record<
@@ -726,15 +726,15 @@ const configExternalAccount: Record<
   created: true,
   updated: true,
   user_id: true,
-  provider: true,
+  provider: true
   // -- BEGIN ANONYMIZED
-  provider_account_id: false,
-  refresh_token: false,
-  access_token: false,
-  expires_at: false,
-  scope: false,
-  id_token: false,
-  session_state: false
+  // provider_account_id: false,
+  // refresh_token: false,
+  // access_token: false,
+  // expires_at: false,
+  // scope: false,
+  // id_token: false,
+  // session_state: false
 }
 
 const configRedirection: Record<
