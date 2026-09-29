@@ -24,6 +24,7 @@ import { fileRouter } from './familyFile/router'
 import { supportProgramRouter } from './supportProgram/router'
 import { statisticsSharingRouter } from './statisticsSharing/router'
 import { decisionMakerRouter } from './decisionMaker/router'
+import { decisionMakerAccountRouter } from './decisionMakerAccount/router'
 import { rdvspRouter } from './rdvspRouter'
 import { router } from '~~/server/trpc'
 import { workshopRouter } from './workshop/router'
@@ -55,6 +56,7 @@ export const appRouter = router({
   supportProgram: supportProgramRouter,
   statisticsSharing: statisticsSharingRouter,
   decisionMaker: decisionMakerRouter,
+  decisionMakerAccount: decisionMakerAccountRouter,
   rdvsp: rdvspRouter,
   workshop: workshopRouter,
   minister: ministerRouter,

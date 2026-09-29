@@ -37,5 +37,15 @@ export const routes = {
     name: 'AppDecisionMakerConfiguration',
     title: 'Configuration',
     path: () => `${DecisionMakerRoute}/configuration`
+  },
+  AppDecisionMakerConfigurationAccount: {
+    name: 'AppDecisionMakerConfigurationAccount',
+    title: 'Infos du compte',
+    path: () => `${DecisionMakerRoute}/configuration/compte`
+  },
+  AppDecisionMakerConfigurationStructures: {
+    name: 'AppDecisionMakerConfigurationStructures',
+    title: 'Structures associées',
+    path: () => `${DecisionMakerRoute}/configuration/structures`
   }
 } as const
