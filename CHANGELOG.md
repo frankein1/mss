@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.67.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.66.0...v1.67.0) (2026-09-29)
+
+
+### Features
+
+* **admin:** simplification du flow de désactivation ([be48dcf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/be48dcfd6e33364a2bfceb07c60fb845f764c923)), closes [#1097](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1097) [#1194](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1194)
+* **dispositifs:** atteinte des objectifs disponible pour tout type de dispositif ([62e72cb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/62e72cb3580a73280f96e6f78b7df871937472a5)), closes [#1197](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1197)
+* **statistiques:** affiche le nombre d'entretien réalisés en permanence ([1e273ac](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e273ac1d4cff25672b5f75bccfb3dffe72924d6)), closes [#1195](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1195)
+
+
+### Bug Fixes
+
+* **accessibilité:** meilleure gestion des focus ([db21f11](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/db21f1139113ad338071ac989718453e7dfacae2)), closes [#1158](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1158)
+* **accessibilité:** repositionement du focus à la fermeture des modales ([4bea055](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4bea05512dbbd7a69a00589b59ce5d577ac36cbf)), closes [#1158](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1158)
+* **accessibilité:** suppression du bouton de fermeture de la snackbar ([c6bca74](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c6bca745ca0eb76233926782b19b15e0e620536b)), closes [#1158](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1158) [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/work_items/1158#note_3843481873](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/work_items/1158/issues/note_3843481873)
+* **bénéficiaire:** retirer la section "Partenaire" quand elle est vide ([351ef37](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/351ef37c2e681ae3fdb1e96e0f864bf9718c0f71)), closes [#1181](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1181)
+* composant multiselect séléction au clique sur texte ([8c96598](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8c96598a68fa86ec050fdea9cecf7b98f8e00d27)), closes [#1158](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1158)
+* **login:** utilisation du logo DSFR ([ad7f4d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ad7f4d6100223a841026c273fac0723f0d2b1c14))
+* **logs:** ip correcte dans les logs et le rate limiter ([c5fba58](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c5fba5865dc74879912a812548be9461800aa48e)), closes [#1180](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1180)
+* **notifications:** archivage et conserver un an supplémentaire ([621fe32](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/621fe323c8c943f3c45e5f5e2210e8a179e13ddc)), closes [#1191](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1191)
+* **rdvsp:** add return value for toggleRdv ([15b9eb3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/15b9eb3269bbe55796a0e228a97a679acfeb4d81)), closes [#1189](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/1189)
+
 ## [1.66.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.65.0...v1.66.0) (2026-09-14)
 
 
