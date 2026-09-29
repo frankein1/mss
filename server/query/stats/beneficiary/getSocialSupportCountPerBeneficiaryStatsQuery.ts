@@ -1,5 +1,4 @@
 import type { Prisma } from '@prisma/client'
-import { SocialSupportType } from '@prisma/client'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import { BeneficiaryRepo } from '~~/server/database'
 import type { StatFilterInput } from '~~/server/schema'
@@ -19,8 +18,7 @@ export async function getSocialSupportCountPerBeneficiaryStatsQuery(
   const filters = prepareBeneficiaryStatFilters(input)
 
   const socialSupportsFilter: Prisma.SocialSupportWhereInput = {
-    ...filters.socialSupports?.some,
-    socialSupportType: { not: SocialSupportType.Appointment }
+    ...filters.socialSupports?.some
   }
 
   const beneficiaries = await BeneficiaryRepo.findMany(user, {
