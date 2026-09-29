@@ -19,8 +19,8 @@ export async function getSocialSupportCountPerBeneficiaryStatsQuery(
   const filters = prepareBeneficiaryStatFilters(input)
 
   const socialSupportsFilter: Prisma.SocialSupportWhereInput = {
-    ...filters.socialSupports?.some,
-    socialSupportType: { not: SocialSupportType.Appointment }
+    ...filters.socialSupports?.some
+    // socialSupportType: { not: SocialSupportType.Appointment }
   }
 
   const beneficiaries = await BeneficiaryRepo.findMany(user, {
