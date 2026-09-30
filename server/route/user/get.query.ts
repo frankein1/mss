@@ -28,11 +28,11 @@ const blockingRelationsSelect = {
   createdDocuments: true,
   createdSocialSupports: true,
   createdComments: true,
-  Workshop: true,
-  WorkshopName: true,
-  archivedBeneficiaries2: true,
-  RedirectionReasons: true,
-  supportProgramNames: true
+  createdWorkshops: true,
+  createdWorkshopNames: true,
+  archivedBeneficiaries: true,
+  createdRedirectionReasons: true,
+  createdSupportProgramNames: true
 } as const satisfies Prisma.UserCountOutputTypeSelect
 
 const handler = async ({
@@ -92,11 +92,11 @@ const handler = async ({
       createdDocuments: user._count.createdDocuments,
       createdSocialSupports: user._count.createdSocialSupports,
       createdComments: user._count.createdComments,
-      workshops: user._count.Workshop,
-      workshopNames: user._count.WorkshopName,
-      archivedBeneficiaries: user._count.archivedBeneficiaries2,
-      redirectionReasons: user._count.RedirectionReasons,
-      supportProgramNames: user._count.supportProgramNames
+      workshops: user._count.createdWorkshops,
+      workshopNames: user._count.createdWorkshopNames,
+      archivedBeneficiaries: user._count.archivedBeneficiaries,
+      redirectionReasons: user._count.createdRedirectionReasons,
+      supportProgramNames: user._count.createdSupportProgramNames
     } satisfies Record<UserBlockingRelation, number>
   }
 }

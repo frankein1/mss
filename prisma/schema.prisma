@@ -98,29 +98,26 @@ model User {
 
   externalRdvspId String? @map("external_rdvsp_id")
 
+  accountReminderEmail Int? @default(0) @map("account_reminder_email")
+
   createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
   lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
   createdDocuments             Document[]
   createdSocialSupportSubjects SocialSupportSubject[]
   receivedNotifications        Notification[]         @relation(name: "received_notifications")
   itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
-
-  createdBeneficiaries       Beneficiary[]         @relation(name: "created_beneficiaries")
-  disabledBeneficiaries      Beneficiary[]         @relation(name: "disabled_beneficiaries")
-  referentFor                FamilyFile[]          @relation(name: "family_file_referents")
-  splitFromFileBeneficiaries Beneficiary[]         @relation(name: "split_from_file_beneficiaries")
-  archivedBeneficiaries2     ArchivedBeneficiary[] @relation(name: "archived_beneficiaries_2")
-
-  createdPartnerOrganizations PartnerOrganization[]
-
-  accountReminderEmail Int? @default(0) @map("account_reminder_email")
-
-  CGUHistory          CGUHistory[]
-  userActivities      UserActivity[]
-  WorkshopName        WorkshopName[]
-  Workshop            Workshop[]
-  RedirectionReasons  RedirectionReason[]
-  supportProgramNames SupportProgramName[]
+  createdBeneficiaries         Beneficiary[]          @relation(name: "created_beneficiaries")
+  disabledBeneficiaries        Beneficiary[]          @relation(name: "disabled_beneficiaries")
+  referentFor                  FamilyFile[]           @relation(name: "family_file_referents")
+  splitFromFileBeneficiaries   Beneficiary[]          @relation(name: "split_from_file_beneficiaries")
+  archivedBeneficiaries        ArchivedBeneficiary[]  @relation(name: "archived_beneficiaries_2")
+  createdPartnerOrganizations  PartnerOrganization[]
+  CGUHistory                   CGUHistory[]
+  userActivities               UserActivity[]
+  createdWorkshopNames         WorkshopName[]
+  createdWorkshops             Workshop[]
+  createdRedirectionReasons    RedirectionReason[]
+  createdSupportProgramNames   SupportProgramName[]
 
   @@map("user")
 }

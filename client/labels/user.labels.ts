@@ -30,11 +30,11 @@ export const userBlockingRelationCounts = {
   createdDocuments: 'createdDocuments',
   createdSocialSupports: 'createdSocialSupports',
   createdComments: 'createdComments',
-  workshops: 'Workshop',
-  workshopNames: 'WorkshopName',
-  archivedBeneficiaries: 'archivedBeneficiaries2',
-  redirectionReasons: 'RedirectionReasons',
-  supportProgramNames: 'supportProgramNames'
+  workshops: 'createdWorkshops',
+  workshopNames: 'createdWorkshopNames',
+  archivedBeneficiaries: 'archivedBeneficiaries',
+  redirectionReasons: 'createdRedirectionReasons',
+  supportProgramNames: 'createdSupportProgramNames'
 } as const satisfies Record<
   UserBlockingRelation,
   keyof Prisma.UserCountOutputTypeSelect
