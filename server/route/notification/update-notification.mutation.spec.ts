@@ -10,7 +10,7 @@ describe('Notification - Update - Authorizations', () => {
   afterEach(async () => {
     await prismaClient.notification.update({
       where: { id: notificationId },
-      data: { read: false }
+      data: { read: false, readAt: null }
     })
   })
 
@@ -24,6 +24,24 @@ describe('Notification - Update - Authorizations', () => {
       where: { id: notificationId }
     })
     expect(notification.read).toBe(true)
+    expect(notification.readAt).toBeInstanceOf(Date)
+  })
+
+  test('Marking a notification as unread resets readAt', async ({ trpc }) => {
+    await trpc.referent.notification.update({
+      id: notificationId,
+      read: true
+    })
+    await trpc.referent.notification.update({
+      id: notificationId,
+      read: false
+    })
+
+    const notification = await prismaClient.notification.findUniqueOrThrow({
+      where: { id: notificationId }
+    })
+    expect(notification.read).toBe(false)
+    expect(notification.readAt).toBeNull()
   })
 
   test('A user cannot mark another user notification as read', async ({
@@ -38,5 +56,6 @@ describe('Notification - Update - Authorizations', () => {
       where: { id: notificationId }
     })
     expect(notification.read).toBe(false)
+    expect(notification.readAt).toBeNull()
   })
 })

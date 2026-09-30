@@ -1,7 +1,7 @@
 <template>
   <li
     class="notification-item-container"
-    :class="{ notificationitem__read: notification.read }"
+    :class="{ notificationitem__read: isRead }"
   >
     <div class="notification-item-icon">
       <div
@@ -70,7 +70,7 @@
     </div>
     <div class="notification-item-checkbox">
       <form
-        v-if="notification.read != null"
+        v-if="!notification.onClick"
         ref="form"
         class="notificationitem__read-form"
       >
@@ -102,8 +102,10 @@
 
   const form = useTemplateRef('form')
 
+  const isRead = computed(() => !!props.notification.readAt)
+
   const { controlledValues } = useForm<{ read: boolean }>({
-    initialValues: { read: !!props.notification.read }
+    initialValues: { read: isRead.value }
   })
 
   const notificationIcon = computed(() => {
@@ -177,11 +179,11 @@
   })
 
   const toggleLabel = computed(() =>
-    props.notification.read ? 'Marquer comme non lu' : 'Marquer comme lu'
+    isRead.value ? 'Marquer comme non lu' : 'Marquer comme lu'
   )
 
   watch(controlledValues, ({ read }) => {
-    if (read !== props.notification.read) {
+    if (read !== isRead.value) {
       updateReadState(read)
     }
   })

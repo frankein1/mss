@@ -15,7 +15,7 @@ const handler = async ({
 }) => {
   await NotificationRepo.prisma.updateMany({
     where: { id, recipientId: user.id },
-    data: { read }
+    data: { read, readAt: read ? new Date() : null }
   })
 }
 

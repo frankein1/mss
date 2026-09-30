@@ -62,7 +62,7 @@ const handler = ({
             where: {
               structureId: structure.id,
               recipientId: user.id,
-              read: false
+              readAt: null
             }
           }
         }

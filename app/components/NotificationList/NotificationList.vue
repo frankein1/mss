@@ -159,7 +159,6 @@
   ) => {
     const moreNotification: NotificationItemType = {
       id: 'MORE_ARCHIVE',
-      read: null,
       type: NotificationType.ArchiveDueToday,
       title: 'Archive',
       description: 'Voir toutes les notifications',
@@ -179,7 +178,7 @@
         if (showReadNotifications) {
           return notif
         }
-        return !notif.read
+        return !notif.readAt
       })
       .slice(0, 3)
     if (archiveNotifications.length > 3) {
@@ -251,7 +250,7 @@
         totalCount: data.value.totalCount,
         notifications: data.value.notifications.map(notification =>
           notification.id === notificationId
-            ? { ...notification, read }
+            ? { ...notification, readAt: read ? new Date() : null }
             : notification
         )
       }
@@ -269,7 +268,7 @@
     if (archiveData.value) {
       archiveData.value = archiveData.value.map(notification =>
         notification.id === notificationId
-          ? { ...notification, read }
+          ? { ...notification, readAt: read ? new Date() : null }
           : notification
       )
 
@@ -293,7 +292,7 @@
           const today = new Date().getTime()
           return archiveDate < today
         })
-        .filter(notification => !notification.read)
+        .filter(notification => !notification.readAt)
         .map(notification => ({
           archiveDate: notification.archiveDate,
           archiveDueDate: notification.beneficiary?.archiveDueDate,

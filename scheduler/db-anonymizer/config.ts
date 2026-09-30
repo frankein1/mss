@@ -576,6 +576,7 @@ const configNotification: Record<
   comment_id: true,
   archive_date: true,
   read: true,
+  read_at: true,
   type: true,
   // -- BEGIN ANONYMIZED
   detail: false

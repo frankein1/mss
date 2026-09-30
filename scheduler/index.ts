@@ -53,6 +53,12 @@ function startScheduler() {
     name: 'notificationCreator'
   })
 
+  const at30past3am = '30 3 * * *'
+  new Cron(at30past3am, jobs.readNotificationsCleanup, {
+    timezone,
+    name: 'readNotificationsCleanup'
+  })
+
   const at5am = '0 5 * * *'
   new Cron(at5am, jobs.metabaseAnonymization, {
     timezone,

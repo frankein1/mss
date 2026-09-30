@@ -6,7 +6,7 @@ export type NotificationItemType = {
   type: NotificationType
   description: string
   descriptionHint: string
-  read?: boolean | null
+  readAt?: Date | null
   documentId?: string | null
   socialSupportId?: string | null
   supportProgramId?: string | null

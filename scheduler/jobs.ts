@@ -10,6 +10,7 @@ import documentNotifications from './notification/create-document-notifications'
 import supportProgramNotifications from './notification/create-support-program-notifications'
 import archiveDueOneMonthNotifications from './notification/create-archive-due-one-month-notifications'
 import archiveRemindersNotifications from './notification/create-archive-reminders-notifications'
+import cleanupReadNotifications from './notification/cleanup-read-notifications'
 import disableInactiveStructures from './structure/disable-inactive-structures'
 import importDataInclusionStructures from './data-inclusion/import-structures'
 import importDataEducationSchools from './data-education/import-schools'
@@ -61,6 +62,10 @@ export const jobs = {
     await supportProgramNotifications.createEndInTwoMonthsSupportProgramNotifications()
     await supportProgramNotifications.createEndTodaySupportProgramNotifications()
   },
+
+  /** Deletes notifications read more than 1 month ago, except archive notifications.
+   * Runs daily at 03:30 */
+  readNotificationsCleanup: cleanupReadNotifications,
 
   /** Exports an anonymized copy of the database for Metabase analytics.
    * Runs daily at 05:00 */

@@ -8,7 +8,7 @@ export const notificationSelect = {
   id: true,
   type: true,
   created: true,
-  read: true,
+  readAt: true,
   detail: true,
   archiveDate: true,
   documentId: true,

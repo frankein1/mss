@@ -43,7 +43,7 @@ describe('Notification - Get - Data', () => {
     })
     expect(unreadResult.totalCount).toBeLessThanOrEqual(allResult.totalCount)
     for (const n of unreadResult.notifications) {
-      expect(n.read).toBe(false)
+      expect(n.readAt).toBeNull()
     }
   })
 

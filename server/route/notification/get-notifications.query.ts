@@ -21,7 +21,7 @@ const handler = async ({
   const where: Prisma.NotificationWhereInput = {}
 
   if (onlyUnread) {
-    where.read = false
+    where.readAt = null
   }
   if (types?.length) {
     where.type = { in: types }
@@ -48,7 +48,7 @@ const handler = async ({
     type: n.type,
     beneficiary: n.beneficiary,
     created: n.created,
-    read: n.read,
+    readAt: n.readAt,
     title: notificationTypeKeys.byKey[n.type],
     description: getDescription(n),
     descriptionHint: getDescriptionHint(n),

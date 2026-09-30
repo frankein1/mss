@@ -78,7 +78,7 @@ export async function getPageDocuments({
               where: {
                 structureId: ctx.structure.id,
                 recipientId: ctx.user.id,
-                read: false
+                readAt: null
               }
             }
           }

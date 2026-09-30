@@ -2318,7 +2318,9 @@ model Notification {
 
   archiveDate DateTime? @map("archive_date")
 
-  read Boolean? @default(false)
+  // TODO: remove once readAt is deployed, read state now relies on readAt
+  read   Boolean?  @default(false)
+  readAt DateTime? @map("read_at")
 
   type NotificationType
 

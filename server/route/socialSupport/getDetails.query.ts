@@ -194,7 +194,7 @@ async function getSocialSupportDetail({
       _count: {
         select: {
           notifications: {
-            where: { read: false, recipientId: ctx.user.id }
+            where: { readAt: null, recipientId: ctx.user.id }
           }
         }
       }
