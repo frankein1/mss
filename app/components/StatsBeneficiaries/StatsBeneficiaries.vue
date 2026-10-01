@@ -13,10 +13,10 @@
       :validation-schema="statFilterSchema"
     />
 
-    <section class="fr-grid-row fr-grid-row--gutters">
+    <section>
       <h3 class="fr-sr-only">Résultats</h3>
       <StatsHeader
-        class="fr-mt-3w"
+        class="fr-mb-1w fr-mt-3w"
         :menus="menus"
       >
         <template #header>
@@ -69,209 +69,220 @@
       />
 
       <!-- Cards -->
-      <div class="fr-col-12">
-        <StatsBeneficiariesFamilyFileNumber
-          v-if="
-            Object.keys(filters).length === 0 ||
-            filters.period ||
-            filters.referent ||
-            filters.beneficiaryStatus
-          "
-          history-type="beneficiary"
-          :filters="filters"
-        />
+      <div class="fr-container--no-max">
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12">
+            <StatsBeneficiariesFamilyFileNumber
+              v-if="
+                Object.keys(filters).length === 0 ||
+                filters.period ||
+                filters.referent ||
+                filters.beneficiaryStatus
+              "
+              history-type="beneficiary"
+              :filters="filters"
+            />
+          </div>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.gender.id"
+            :card-name="beneficiariesCardConfig.gender.name"
+          >
+            <StatsBeneficiariesGender
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.ages.id"
+            :card-name="beneficiariesCardConfig.ages.name"
+          >
+            <StatsBeneficiariesAgeGroups
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.familySituations.id"
+            :card-name="beneficiariesCardConfig.familySituations.name"
+          >
+            <StatsBeneficiariesFamilySituations
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.cities.id"
+            :card-name="beneficiariesCardConfig.cities.name"
+          >
+            <StatsBeneficiariesCities
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.counties.id"
+            :card-name="beneficiariesCardConfig.counties.name"
+          >
+            <StatsBeneficiariesDepartments
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.region.id"
+            :card-name="beneficiariesCardConfig.region.name"
+          >
+            <StatsBeneficiariesRegions
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="application.module.ministere"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
+            :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
+          >
+            <StatsBeneficiariesAccommodationZone
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.accomodationMode.id"
+            :card-name="beneficiariesCardConfig.accomodationMode.name"
+          >
+            <StatsBeneficiariesAccommodationMode
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.mobility.id"
+            :card-name="beneficiariesCardConfig.mobility.name"
+          >
+            <StatsBeneficiariesMobility
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.csp.id"
+            :card-name="beneficiariesCardConfig.csp.name"
+          >
+            <StatsBeneficiariesCSP
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+          /></StatsCard>
+
+          <!-- ↓ SCHOOLS ↓ -->
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.schoolClass.id"
+            :card-name="beneficiariesCardConfig.schoolClass.name"
+          >
+            <StatsBeneficiariesSchoolClass
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.repClassification.id"
+            :card-name="beneficiariesCardConfig.repClassification.name"
+          >
+            <StatsBeneficiariesRepClassification
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="beneficiariesCardConfig.socialSupportCount.id"
+            :card-name="beneficiariesCardConfig.socialSupportCount.name"
+          >
+            <StatsBeneficiariesSocialSupportCount
+              :beneficiary-count="beneficiaryCount?.count || 0"
+              :filters="filters"
+          /></StatsCard>
+
+          <!-- ↓ MINISTERES ↓ -->
+
+          <template v-if="application.module.ministere">
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
+              :card-name="
+                beneficiariesCardMinistereConfig.ministereStructures.name
+              "
+            >
+              <StatsBeneficiariesMinistereStructure
+                :beneficiary-count="beneficiaryCount?.count || 0"
+                :filters="filters"
+            /></StatsCard>
+
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="
+                beneficiariesCardMinistereConfig.ministereDepartementServices.id
+              "
+              :card-name="
+                beneficiariesCardMinistereConfig.ministereDepartementServices
+                  .name
+              "
+            >
+              <StatsBeneficiariesMinistereDepartementService
+                :beneficiary-count="beneficiaryCount?.count || 0"
+                :filters="filters"
+            /></StatsCard>
+
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="beneficiariesCardMinistereConfig.ministereCategorie.id"
+              :card-name="
+                beneficiariesCardMinistereConfig.ministereCategorie.name
+              "
+            >
+              <StatsBeneficiariesMinistereCategorie
+                :beneficiary-count="beneficiaryCount?.count || 0"
+                :filters="filters"
+            /></StatsCard>
+
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="
+                beneficiariesCardMinistereConfig.ministereInterpellation.id
+              "
+              :card-name="
+                beneficiariesCardMinistereConfig.ministereInterpellation.name
+              "
+            >
+              <StatsBeneficiariesMinistereInterpellation
+                :beneficiary-count="beneficiaryCount?.count || 0"
+                :filters="filters"
+            /></StatsCard>
+          </template>
+        </div>
       </div>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.gender.id"
-        :card-name="beneficiariesCardConfig.gender.name"
-      >
-        <StatsBeneficiariesGender
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.ages.id"
-        :card-name="beneficiariesCardConfig.ages.name"
-      >
-        <StatsBeneficiariesAgeGroups
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.familySituations.id"
-        :card-name="beneficiariesCardConfig.familySituations.name"
-      >
-        <StatsBeneficiariesFamilySituations
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.cities.id"
-        :card-name="beneficiariesCardConfig.cities.name"
-      >
-        <StatsBeneficiariesCities
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.counties.id"
-        :card-name="beneficiariesCardConfig.counties.name"
-      >
-        <StatsBeneficiariesDepartments
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.region.id"
-        :card-name="beneficiariesCardConfig.region.name"
-      >
-        <StatsBeneficiariesRegions
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        v-if="application.module.ministere"
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardMinistereConfig.accomodationZone.id"
-        :card-name="beneficiariesCardMinistereConfig.accomodationZone.name"
-      >
-        <StatsBeneficiariesAccommodationZone
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-      /></StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.accomodationMode.id"
-        :card-name="beneficiariesCardConfig.accomodationMode.name"
-      >
-        <StatsBeneficiariesAccommodationMode
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-      /></StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.mobility.id"
-        :card-name="beneficiariesCardConfig.mobility.name"
-      >
-        <StatsBeneficiariesMobility
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-      /></StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.csp.id"
-        :card-name="beneficiariesCardConfig.csp.name"
-      >
-        <StatsBeneficiariesCSP
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-      /></StatsCard>
-
-      <!-- ↓ SCHOOLS ↓ -->
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.schoolClass.id"
-        :card-name="beneficiariesCardConfig.schoolClass.name"
-      >
-        <StatsBeneficiariesSchoolClass
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.repClassification.id"
-        :card-name="beneficiariesCardConfig.repClassification.name"
-      >
-        <StatsBeneficiariesRepClassification
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-        />
-      </StatsCard>
-
-      <StatsCard
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-        :card-id="beneficiariesCardConfig.socialSupportCount.id"
-        :card-name="beneficiariesCardConfig.socialSupportCount.name"
-      >
-        <StatsBeneficiariesSocialSupportCount
-          :beneficiary-count="beneficiaryCount?.count || 0"
-          :filters="filters"
-      /></StatsCard>
-
-      <!-- ↓ MINISTERES ↓ -->
-
-      <template v-if="application.module.ministere">
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardMinistereConfig.ministereStructures.id"
-          :card-name="beneficiariesCardMinistereConfig.ministereStructures.name"
-        >
-          <StatsBeneficiariesMinistereStructure
-            :beneficiary-count="beneficiaryCount?.count || 0"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="
-            beneficiariesCardMinistereConfig.ministereDepartementServices.id
-          "
-          :card-name="
-            beneficiariesCardMinistereConfig.ministereDepartementServices.name
-          "
-        >
-          <StatsBeneficiariesMinistereDepartementService
-            :beneficiary-count="beneficiaryCount?.count || 0"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardMinistereConfig.ministereCategorie.id"
-          :card-name="beneficiariesCardMinistereConfig.ministereCategorie.name"
-        >
-          <StatsBeneficiariesMinistereCategorie
-            :beneficiary-count="beneficiaryCount?.count || 0"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-          :card-id="beneficiariesCardMinistereConfig.ministereInterpellation.id"
-          :card-name="
-            beneficiariesCardMinistereConfig.ministereInterpellation.name
-          "
-        >
-          <StatsBeneficiariesMinistereInterpellation
-            :beneficiary-count="beneficiaryCount?.count || 0"
-            :filters="filters"
-        /></StatsCard>
-      </template>
     </section>
   </div>
 </template>

@@ -15,7 +15,7 @@
       :is-history="true"
     />
 
-    <section class="fr-grid-row fr-grid-row--gutters">
+    <section>
       <h3 class="fr-sr-only">Résultats</h3>
       <StatsHeader
         :menus="menus"
@@ -71,124 +71,125 @@
         v-if="status === 'pending'"
         class="fr-mx-auto"
       />
-
       <!-- Cards -->
-      <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-        <!-- ROW -->
-        <div class="fr-col-12">
-          <StatsFollowupBeneficiaryNumber
-            :beneficiary-total-count="followupBeneficiaryCount"
-          />
+      <div class="fr-container--no-max">
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <!-- ROW -->
+          <div class="fr-col-12">
+            <StatsFollowupBeneficiaryNumber
+              :beneficiary-total-count="followupBeneficiaryCount"
+            />
+          </div>
+
+          <!-- ROW -->
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.subject.id"
+            :card-name="followupCardsConfig.subject.name"
+          >
+            <StatsFollowupSubject
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.medium.id"
+            :card-name="followupCardsConfig.medium.name"
+          >
+            <StatsFollowupMedium
+              :total-count="followupCount"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            v-if="application.module.ministere"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="ministereConfig.minister.id"
+            :card-name="ministereConfig.minister.name"
+          >
+            <StatsFollowupMinistre
+              :total-count="followupCount"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.status.id"
+            :card-name="followupCardsConfig.status.name"
+          >
+            <StatsFollowupStatus
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.actions.id"
+            :card-name="followupCardsConfig.actions.name"
+          >
+            <StatsFollowupActionsEntreprises
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.redirections.id"
+            :card-name="followupCardsConfig.redirections.name"
+          >
+            <StatsFollowupRedirections
+              :total-count="followupCount"
+              :beneficiary-total-count="followupBeneficiaryCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.redirectionReasons.id"
+            :card-name="followupCardsConfig.redirectionReasons.name"
+          >
+            <StatsFollowupRedirectionReasons
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.prescribingOrganizations.id"
+            :card-name="followupCardsConfig.prescribingOrganizations.name"
+          >
+            <StatsFollowupPrescribingOrganizations
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.followupDuration.id"
+            :card-name="followupCardsConfig.followupDuration.name"
+          >
+            <StatsFollowupDuration
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.followupMeanTime.id"
+            :card-name="followupCardsConfig.followupMeanTime.name"
+          >
+            <StatsFollowupMeanTime
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
         </div>
-
-        <!-- ROW -->
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.subject.id"
-          :card-name="followupCardsConfig.subject.name"
-        >
-          <StatsFollowupSubject
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.medium.id"
-          :card-name="followupCardsConfig.medium.name"
-        >
-          <StatsFollowupMedium
-            :total-count="followupCount"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          v-if="application.module.ministere"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="ministereConfig.minister.id"
-          :card-name="ministereConfig.minister.name"
-        >
-          <StatsFollowupMinistre
-            :total-count="followupCount"
-            :filters="filters"
-        /></StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.status.id"
-          :card-name="followupCardsConfig.status.name"
-        >
-          <StatsFollowupStatus
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.actions.id"
-          :card-name="followupCardsConfig.actions.name"
-        >
-          <StatsFollowupActionsEntreprises
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.redirections.id"
-          :card-name="followupCardsConfig.redirections.name"
-        >
-          <StatsFollowupRedirections
-            :total-count="followupCount"
-            :beneficiary-total-count="followupBeneficiaryCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.redirectionReasons.id"
-          :card-name="followupCardsConfig.redirectionReasons.name"
-        >
-          <StatsFollowupRedirectionReasons
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.prescribingOrganizations.id"
-          :card-name="followupCardsConfig.prescribingOrganizations.name"
-        >
-          <StatsFollowupPrescribingOrganizations
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.followupDuration.id"
-          :card-name="followupCardsConfig.followupDuration.name"
-        >
-          <StatsFollowupDuration
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="followupCardsConfig.followupMeanTime.id"
-          :card-name="followupCardsConfig.followupMeanTime.name"
-        >
-          <StatsFollowupMeanTime
-            :total-count="followupCount"
-            :filters="filters"
-          />
-        </StatsCard>
       </div>
     </section>
   </div>

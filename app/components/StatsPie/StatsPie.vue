@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="pie-container">
-      <canvas ref="chart">
+      <canvas
+        ref="chart"
+        aria-hidden="true"
+      >
         <p>{{ pieLabel }}</p>
       </canvas>
     </div>
@@ -15,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Chart, ChartItem } from 'chart.js'
+  import type { Chart } from 'chart.js'
   import type { StatsPiePropType } from '~~/types/stat'
 
   const { $buildChart } = useNuxtApp()

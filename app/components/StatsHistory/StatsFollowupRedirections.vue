@@ -18,6 +18,7 @@
     <hr />
     <StatsList
       v-if="beneficiariesWithRedirections?.length"
+      caption="Bénéficiaires avec au moins une réorientation"
       :total-count="beneficiaryTotalCount"
       :stats="beneficiariesWithRedirections"
       :display-total="false"
@@ -28,13 +29,18 @@
       v-if="redirectionTypes.length"
       class="fr-text--xs text--muted"
     >
-      <span class="fr-text--bold">RÉPARTITION DES RÉORIENTATIONS</span>
+      <span
+        :id="headingId"
+        class="fr-text--bold text--uppercase"
+        >Répartition des réorientations</span
+      >
       <br />
       Pourcentage calculé sur le total de synthèses d’entretiens. Une synthèse
       d’entretien pouvant donner lieu à plusieurs réorientations, la somme des
       pourcentages peut être supérieure à 100&nbsp;%.
     </p>
     <StatsList
+      :labelledby="headingId"
       :total-count="totalCount"
       :stats="redirectionTypes"
       :with-sum="false"
@@ -56,6 +62,8 @@
     beneficiaryTotalCount: number
     filters: StatFilterInput
   }>()
+
+  const headingId = useId()
 
   const trpcClient = useTrpcClient()
   const { data, error, status } =

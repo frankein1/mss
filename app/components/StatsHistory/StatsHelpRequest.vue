@@ -13,7 +13,7 @@
       :is-history="true"
     />
 
-    <section class="fr-grid-row fr-grid-row--gutters">
+    <section>
       <h3 class="fr-sr-only">Résultats</h3>
       <StatsHeader
         :menus="menus"
@@ -45,141 +45,143 @@
       />
 
       <!-- Cards -->
-      <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-        <!-- ROW -->
-        <div class="fr-col-12">
-          <StatsHelpRequestBeneficiaryNumber
-            :beneficiary-total-count="helpRequestBeneficiaryCount"
-          />
+      <div class="fr-container--no-max">
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <!-- ROW -->
+          <div class="fr-col-12">
+            <StatsHelpRequestBeneficiaryNumber
+              :beneficiary-total-count="helpRequestBeneficiaryCount"
+            />
+          </div>
+
+          <!-- ROW -->
+          <StatsCard
+            v-if="displayed.instructionType"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="instructionTypeConfig.instructionType.id"
+            :card-name="instructionTypeConfig.instructionType.name"
+          >
+            <StatsFileInstructionType
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.socialSupportSubjects"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="subjectConfig.subjects.id"
+            :card-name="subjectConfig.subjects.name"
+          >
+            <StatsHelpRequestSubject
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="baseConfig.status.id"
+            :card-name="baseConfig.status.name"
+          >
+            <StatsHelpRequestStatus
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            v-if="displayed.ministere"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="ministereConfig.minister.id"
+            :card-name="ministereConfig.minister.name"
+          >
+            <StatsHelpRequestMinistre
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="baseConfig.prescribingOrganizations.id"
+            :card-name="baseConfig.prescribingOrganizations.name"
+          >
+            <StatsHelpRequestPrescribingOrganizations
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="baseConfig.instructions.id"
+            :card-name="baseConfig.instructions.name"
+          >
+            <StatsHelpRequestInstructions
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="baseConfig.redirections.id"
+            :card-name="baseConfig.redirections.name"
+          >
+            <StatsHelpRequestRedirections
+              :total-count="helpRequestCount"
+              :beneficiary-total-count="helpRequestBeneficiaryCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="baseConfig.redirectionReasons.id"
+            :card-name="baseConfig.redirectionReasons.name"
+          >
+            <StatsHelpRequestRedirectionReasons
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <template v-if="displayed.financial">
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="financialConfig.amountAllocated.id"
+              :card-name="financialConfig.amountAllocated.name"
+            >
+              <StatsHelpRequestAmountsAllocated :filters />
+            </StatsCard>
+
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="financialConfig.amountsBySubject.id"
+              :card-name="financialConfig.amountsBySubject.name"
+            >
+              <StatsHelpRequestAmountsBySubject :filters="filters" />
+            </StatsCard>
+
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="financialConfig.amountByInstructorOrganization.id"
+              :card-name="financialConfig.amountByInstructorOrganization.name"
+            >
+              <StatsHelpRequestAmountsByInstructorOrganization :filters />
+            </StatsCard>
+          </template>
+
+          <StatsCard
+            v-if="displayed.housing"
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="housingConfig.housingHelpRequest.id"
+            :card-name="housingConfig.housingHelpRequest.name"
+          >
+            <StatsHousingHelpRequests :filters="filters" />
+          </StatsCard>
         </div>
-
-        <!-- ROW -->
-        <StatsCard
-          v-if="displayed.instructionType"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="instructionTypeConfig.instructionType.id"
-          :card-name="instructionTypeConfig.instructionType.name"
-        >
-          <StatsFileInstructionType
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.socialSupportSubjects"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="subjectConfig.subjects.id"
-          :card-name="subjectConfig.subjects.name"
-        >
-          <StatsHelpRequestSubject
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="baseConfig.status.id"
-          :card-name="baseConfig.status.name"
-        >
-          <StatsHelpRequestStatus
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          v-if="displayed.ministere"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="ministereConfig.minister.id"
-          :card-name="ministereConfig.minister.name"
-        >
-          <StatsHelpRequestMinistre
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="baseConfig.prescribingOrganizations.id"
-          :card-name="baseConfig.prescribingOrganizations.name"
-        >
-          <StatsHelpRequestPrescribingOrganizations
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="baseConfig.instructions.id"
-          :card-name="baseConfig.instructions.name"
-        >
-          <StatsHelpRequestInstructions
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="baseConfig.redirections.id"
-          :card-name="baseConfig.redirections.name"
-        >
-          <StatsHelpRequestRedirections
-            :total-count="helpRequestCount"
-            :beneficiary-total-count="helpRequestBeneficiaryCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <StatsCard
-          class="fr-col-12 fr-col-md-6"
-          :card-id="baseConfig.redirectionReasons.id"
-          :card-name="baseConfig.redirectionReasons.name"
-        >
-          <StatsHelpRequestRedirectionReasons
-            :total-count="helpRequestCount"
-            :filters="filters"
-          />
-        </StatsCard>
-
-        <template v-if="displayed.financial">
-          <StatsCard
-            class="fr-col-12 fr-col-md-6"
-            :card-id="financialConfig.amountAllocated.id"
-            :card-name="financialConfig.amountAllocated.name"
-          >
-            <StatsHelpRequestAmountsAllocated :filters />
-          </StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-md-6"
-            :card-id="financialConfig.amountsBySubject.id"
-            :card-name="financialConfig.amountsBySubject.name"
-          >
-            <StatsHelpRequestAmountsBySubject :filters="filters" />
-          </StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-md-6"
-            :card-id="financialConfig.amountByInstructorOrganization.id"
-            :card-name="financialConfig.amountByInstructorOrganization.name"
-          >
-            <StatsHelpRequestAmountsByInstructorOrganization :filters />
-          </StatsCard>
-        </template>
-
-        <StatsCard
-          v-if="displayed.housing"
-          class="fr-col-12 fr-col-md-6"
-          :card-id="housingConfig.housingHelpRequest.id"
-          :card-name="housingConfig.housingHelpRequest.name"
-        >
-          <StatsHousingHelpRequests :filters="filters" />
-        </StatsCard>
       </div>
     </section>
   </div>

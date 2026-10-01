@@ -12,11 +12,11 @@
     <StatsList
       :stats="count"
       :display-total="false"
-      :big-text="true"
       :stats-percentage="false"
     />
     <hr />
     <StatsList
+      caption="Montants délivrés et montants demandés"
       :stats
       :to-fixed="2"
       with-sub-count

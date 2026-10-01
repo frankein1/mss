@@ -25,13 +25,16 @@
 
     <hr />
     <p class="fr-text--xs text--muted">
-      <span class="fr-text--bold"
-        >RÉPARTITION DES ORGANISMES PRESCRIPTEURS</span
+      <span
+        :id="headingId"
+        class="fr-text--bold text--uppercase"
+        >Répartition des organismes prescripteurs</span
       >
       <br />
       Pourcentage calculé sur le nombre total de synthèses d'entretien.
     </p>
     <StatsList
+      :labelledby="headingId"
       :total-count="totalCount"
       :stats="prescribingOrganizationStats"
       :not-filled-route="
@@ -59,6 +62,8 @@
     totalCount: number
     filters: StatFilterInput
   }>()
+
+  const headingId = useId()
 
   const trpcClient = useTrpcClient()
   const { data, error, status } =

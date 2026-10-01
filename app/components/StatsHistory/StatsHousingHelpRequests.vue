@@ -22,6 +22,7 @@
       logement.
     </p>
     <StatsList
+      caption="Premières demandes et renouvellements"
       :total-count="housingHelpRequestCount"
       :stats="housingHelpRequestContextStats"
       :not-filled-route="
@@ -30,8 +31,14 @@
         })
       "
     />
-    <p class="fr-text--bold">Motif des demandes de logement</p>
+    <p
+      :id="headingId"
+      class="fr-text--bold"
+    >
+      Motif des demandes de logement
+    </p>
     <StatsList
+      :labelledby="headingId"
       :total-count="housingHelpRequestCount"
       :stats="housingHelpRequestReasonStats"
       :not-filled-route="
@@ -63,6 +70,8 @@
   const props = defineProps<{
     filters: StatFilterInput
   }>()
+
+  const headingId = useId()
 
   const trpcClient = useTrpcClient()
   const { data, error, status } =

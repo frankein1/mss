@@ -17,7 +17,10 @@
     />
 
     <hr />
-    <p class="fr-text--xs text--muted fr-text--bold fr-mb-0 text--uppercase">
+    <p
+      :id="headingId"
+      class="fr-text--xs text--muted fr-text--bold fr-mb-0 text--uppercase"
+    >
       Répartition des motifs de réorientation
     </p>
     <p class="fr-text--xs text--muted">
@@ -26,6 +29,7 @@
       pourcentages peut être supérieure à 100&nbsp;%.
     </p>
     <StatsList
+      :labelledby="headingId"
       :total-count="totalCount"
       :stats="reasonStats"
       :with-sum="false"
@@ -47,6 +51,8 @@
     totalCount: number
     filters: StatFilterInput
   }>()
+
+  const headingId = useId()
 
   const trpcClient = useTrpcClient()
   const { data, error, status } =

@@ -34,6 +34,7 @@
       :with-sum="false"
     />
     <StatsList
+      caption="Durée moyenne par objet d’accompagnement"
       :total-count="totalCount"
       :stats="meanTimeStats"
       :stats-percentage="false"

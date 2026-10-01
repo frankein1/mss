@@ -20,20 +20,23 @@
       :total-count="totalCount"
       :stats="distribution"
       :display-total="false"
-      :big-text="true"
     />
     <template v-if="externalTotalCount">
       <hr />
       <p class="fr-text--xs text--muted">
-        <span class="fr-text--bold">RÉPARTITION DES INSTRUCTIONS EXTERNES</span>
+        <span
+          :id="headingId"
+          class="fr-text--bold text--uppercase"
+          >Répartition des instructions externes</span
+        >
         <br />
         Pourcentage calculé sur le nombre de dossiers instruits en externe.
       </p>
       <StatsList
+        :labelledby="headingId"
         :total-count="externalTotalCount"
         :stats="externalInstructions"
         :display-total="true"
-        :big-text="true"
         :not-filled-route="
           routes.file.AppHistoryFileInstructions.path({
             notFilled: FilterFileInstructionNotFilled.InstructorOrganization
@@ -60,6 +63,8 @@
     totalCount: number
     filters: StatFilterInput
   }>()
+
+  const headingId = useId()
 
   const trpcClient = useTrpcClient()
 
