@@ -19,7 +19,12 @@ type StatPie = StatBase & {
   count: number
 }
 
+export type StatArrayRow = [label: string, ...values: (number | null)[]]
+
 export type StatsListPropType = Array<StatList>
+
+export type StatsArrayPropType = Array<StatArrayRow>
+
 export type StatsPiePropType = Array<StatPie>
 
 export type AgeGroupsFilter = { lower?: Dayjs; upper?: Dayjs }

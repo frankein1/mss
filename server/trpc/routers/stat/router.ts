@@ -168,5 +168,20 @@ export const statRouter = router({
     .query(routes.getWorkshopAttendeeCityStatsQuery.execute),
   exportWorkshopStats: protectedProcedure
     .input(routes.exportWorkshopStatsQuery.inputValidation)
-    .mutation(routes.exportWorkshopStatsQuery.execute)
+    .mutation(routes.exportWorkshopStatsQuery.execute),
+  getSupportProgramCountStats: protectedProcedure
+    .input(routes.getSupportProgramCountStatsQuery.inputValidation)
+    .query(routes.getSupportProgramCountStatsQuery.execute),
+  getSupportProgramMeanDurationStats: protectedProcedure
+    .input(routes.getSupportProgramMeanDurationStatsQuery.inputValidation)
+    .query(routes.getSupportProgramMeanDurationStatsQuery.execute),
+  getSupportProgramOutcomeStats: protectedProcedure
+    .input(routes.getSupportProgramOutcomeStatsQuery.inputValidation)
+    .query(routes.getSupportProgramOutcomeStatsQuery.execute),
+  getSupportProgramPartnerStats: protectedProcedure
+    .input(routes.getSupportProgramPartnerStatsQuery.inputValidation)
+    .query(routes.getSupportProgramPartnerStatsQuery.execute),
+  getSupportProgramEntriesExitsStats: protectedProcedure
+    .input(routes.getSupportProgramEntriesExitsStatsQuery.inputValidation)
+    .query(routes.getSupportProgramEntriesExitsStatsQuery.execute)
 })

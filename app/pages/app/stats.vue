@@ -81,6 +81,13 @@
       title: 'Ateliers',
       icon: 'fr-icon-calendar-line',
       to: routes.stats.AppStatsWorkshops.path()
+    },
+    {
+      tabId: 'ParcoursEtDispositifs',
+      panelId: panelId('ParcoursEtDispositifs'),
+      title: 'Parcours et dispositifs',
+      icon: 'fr-icon-file-user-line',
+      to: routes.stats.AppStatsSupportPrograms.path()
     }
   ]
 

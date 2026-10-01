@@ -2,7 +2,11 @@ import type { Prisma, SocialSupportRedirectionType } from '@prisma/client'
 import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
-import type { StatFilterInput, WorkshopStatFilterInput } from '~~/server/schema'
+import type {
+  StatFilterInput,
+  SupportProgramStatFilterInput,
+  WorkshopStatFilterInput
+} from '~~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~~/types/stat'
 import { AgeGroup } from '~~/client/options'
@@ -65,6 +69,27 @@ export function prepareWorkshopStatFilters(filters: WorkshopStatFilterInput) {
     workshopFilters.date = prepareDateFilters(filters)
   }
   return workshopFilters
+}
+
+export function prepareSupportProgramStatFilters(
+  filters: SupportProgramStatFilterInput
+) {
+  const supportProgramFilters: Prisma.SupportProgramWhereInput = {}
+
+  if (filters.supportProgramNameId) {
+    supportProgramFilters.supportProgramNameId = filters.supportProgramNameId
+  }
+
+  // A support program matches the period when it started within the period
+  // and is either still ongoing or also ended within the period.
+  // Support programs without start date are excluded.
+  const dateFilters = prepareDateFilters(filters)
+  if (dateFilters && (dateFilters.gte || dateFilters.lte)) {
+    supportProgramFilters.startDate = dateFilters
+    supportProgramFilters.OR = [{ endDate: null }, { endDate: dateFilters }]
+  }
+
+  return supportProgramFilters
 }
 
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
