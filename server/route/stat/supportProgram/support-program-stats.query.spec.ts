@@ -320,3 +320,25 @@ describe('Statistics - Support programs - Period filter', () => {
     expect(withPeriod).toContainEqual({ outcome: null, _count: 1 })
   })
 })
+
+describe('Statistics - Support programs - Beneficiaries per support program', () => {
+  test('should count distinct beneficiaries per support program', async ({
+    trpc
+  }) => {
+    const stats = await trpc.structureManager.stat.getSupportProgramNameStats({
+      supportProgramNameId
+    })
+
+    // First beneficiary has two support programs but is counted once
+    expect(stats).toEqual({
+      total: 3,
+      supportProgramNames: [
+        {
+          id: supportProgramNameId,
+          name: expect.stringMatching(/^SPSTATS-/),
+          _count: 3
+        }
+      ]
+    })
+  })
+})

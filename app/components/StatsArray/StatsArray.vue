@@ -1,57 +1,59 @@
 <template>
   <div>
-    <table
-      :id="STATS_ID"
-      class="stats-table fr-mb-4v"
-      :aria-labelledby="caption ? undefined : labelledby || cardTitleId"
+    <div
+      id="stats-array-component"
+      class="fr-table fr-table--no-caption"
     >
-      <caption
-        v-if="caption"
-        class="fr-sr-only"
-      >
-        {{
-          caption
-        }}
-      </caption>
-      <thead v-if="headers?.length">
-        <tr>
-          <th
-            v-for="(header, index) in headers"
-            :key="index"
-            :class="index === 0 ? 'header-col' : 'count-col'"
-            scope="col"
-          >
-            {{ header }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="([label, ...values], rowIndex) in displayedStatsArray"
-          :key="`${rowIndex}-${label}`"
-        >
-          <th
-            class="header-col"
-            scope="row"
-          >
-            {{ label }}
-          </th>
-          <td
-            v-for="(value, columnIndex) in values"
-            :key="columnIndex"
-            class="count-col fr-text--bold"
-          >
-            <template v-if="value === null">
-              <span aria-hidden="true">-</span>
-              <span class="fr-sr-only">{{ STATS_NULL_LABEL }}</span>
-            </template>
-            <template v-else>
-              {{ toFixed != null ? value.toFixed(toFixed) : value }}
-            </template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="fr-table__wrapper">
+        <div class="fr-table__container">
+          <div class="fr-table__content">
+            <table
+              :id="STATS_ID"
+              :aria-labelledby="caption ? undefined : labelledby || cardTitleId"
+            >
+              <caption>
+                {{
+                  caption
+                }}
+              </caption>
+              <thead v-if="headers?.length">
+                <tr>
+                  <th
+                    v-for="(header, index) in headers"
+                    :key="index"
+                    scope="col"
+                  >
+                    {{ header }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="([label, ...values], rowIndex) in displayedStatsArray"
+                  :key="`${rowIndex}-${label}`"
+                >
+                  <th scope="row">
+                    {{ label }}
+                  </th>
+                  <td
+                    v-for="(value, columnIndex) in values"
+                    :key="columnIndex"
+                  >
+                    <template v-if="value === null">
+                      <span aria-hidden="true">-</span>
+                      <span class="fr-sr-only">{{ STATS_NULL_LABEL }}</span>
+                    </template>
+                    <template v-else>
+                      {{ toFixed != null ? value.toFixed(toFixed) : value }}
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <button
       v-if="statsArray.length > STATS_COLLAPSED_LIMIT"
@@ -103,38 +105,13 @@
 </script>
 
 <style lang="scss" scoped>
-  .stats-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-      border: none;
-      padding: 6px 0;
+  .fr-table {
+    tbody th {
+      background-color: var(--background-default-grey);
     }
 
-    th {
+    tbody td {
       font-weight: normal;
-    }
-
-    thead th {
-      font-weight: bold;
-    }
-
-    .header-col {
-      width: auto;
-      text-align: left;
-      word-break: normal;
-      overflow-wrap: anywhere;
-    }
-
-    .count-col {
-      // Shrinks to content: 1% is smaller than the content, so the
-      // browser falls back to the minimal width without wrapping
-      width: 1%;
-      white-space: nowrap;
-      text-align: right;
-      padding-left: 1rem;
     }
   }
 </style>

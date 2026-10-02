@@ -14,11 +14,11 @@
           <h4 class="fr-sr-only">Nombre de dispositifs</h4>
         </template>
         <template #icon>
-          <AtomPictogram :path="signDocumentPictogram" />
+          <AtomPictogram :path="userPictogram" />
         </template>
         <template #title>
           <p class="fr-mb-0 fr-h3 title-blue">
-            {{ supportProgramCountLabel }}
+            {{ beneficiaryCountLabel }}
           </p>
         </template>
       </StatsHeader>
@@ -31,15 +31,19 @@
       <div class="fr-container--no-max">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12">
-            <StatsSupportProgramBeneficiaryNumber
-              :beneficiary-total-count="count?.beneficiary ?? 0"
-            />
-          </div>
-
-          <div class="fr-col-12">
             <StatsSupportProgramMeanDuration :filters="filters" />
           </div>
 
+          <!-- Nombre d’entrées et sorties -->
+          <StatsCard
+            class="fr-col-12"
+            :card-id="supportProgramCardConfig.entriesExits.id"
+            :card-name="supportProgramCardConfig.entriesExits.name"
+          >
+            <StatsSupportProgramEntriesExits :filters="filters" />
+          </StatsCard>
+
+          <!-- Atteinte des objectifs -->
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
             :card-id="supportProgramCardConfig.outcome.id"
@@ -48,6 +52,19 @@
             <StatsSupportProgramOutcome :filters="filters" />
           </StatsCard>
 
+          <!-- Nombre de bénéficiaires par dispositif -->
+          <StatsCard
+            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+            :card-id="supportProgramCardConfig.supportProgramNames.id"
+            :card-name="supportProgramCardConfig.supportProgramNames.name"
+            :card-subtitle="
+              supportProgramCardConfig.supportProgramNames.subtitle
+            "
+          >
+            <StatsSupportProgramNames :filters="filters" />
+          </StatsCard>
+
+          <!-- Nombre de bénéficiaires par partenaire -->
           <StatsCard
             class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
             :card-id="supportProgramCardConfig.partners.id"
@@ -55,14 +72,6 @@
             :card-subtitle="supportProgramCardConfig.partners.subtitle"
           >
             <StatsSupportProgramPartners :filters="filters" />
-          </StatsCard>
-
-          <StatsCard
-            class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-            :card-id="supportProgramCardConfig.entriesExits.id"
-            :card-name="supportProgramCardConfig.entriesExits.name"
-          >
-            <StatsSupportProgramEntriesExits :filters="filters" />
           </StatsCard>
         </div>
       </div>
@@ -73,7 +82,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
   import type { SupportProgramStatFilterInput } from '~~/server/schema'
-  import signDocumentPictogram from '@gouvfr/dsfr/dist/artwork/pictograms/document/sign-document.svg?url&no-inline'
+  import userPictogram from '@gouvfr/dsfr/dist/artwork/pictograms/digital/avatar.svg?url&no-inline'
 
   const trpcClient = useTrpcClient()
 
@@ -85,9 +94,9 @@
   const plural = (word: string, q: number, end = 's') =>
     q > 1 ? `${word}${end}` : word
 
-  const supportProgramCountLabel = computed(() => {
-    const supportProgramCount = count.value?.supportProgram ?? 0
-    return `${supportProgramCount} ${plural('dispositif', supportProgramCount)}`
+  const beneficiaryCountLabel = computed(() => {
+    const beneficiaryCount = count?.value?.beneficiary ?? 0
+    return `${beneficiaryCount} ${plural('bénéficaire', beneficiaryCount)} ${plural('concerné', beneficiaryCount)} `
   })
 
   const supportProgramCardConfig = {
@@ -103,6 +112,11 @@
     entriesExits: {
       id: 'stats-support-program-entries-exits',
       name: 'Nombre d’entrées et sorties'
+    },
+    supportProgramNames: {
+      id: 'stats-support-program-names',
+      name: 'Nombre de bénéficiaires par dispositif',
+      subtitle: 'Un bénéficiaire peut être compté pour plusieurs dispositifs.'
     }
   }
 </script>
