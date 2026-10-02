@@ -76,8 +76,10 @@ export function prepareSupportProgramStatFilters(
 ) {
   const supportProgramFilters: Prisma.SupportProgramWhereInput = {}
 
-  if (filters.supportProgramNameId) {
-    supportProgramFilters.supportProgramNameId = filters.supportProgramNameId
+  if (filters.supportProgramNameIds?.length) {
+    supportProgramFilters.supportProgramNameId = {
+      in: filters.supportProgramNameIds
+    }
   }
 
   // A support program matches the period when it started within the period

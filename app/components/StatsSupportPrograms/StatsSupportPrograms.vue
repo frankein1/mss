@@ -6,7 +6,7 @@
     <AtomLazyComponent
       :pending="status === 'pending'"
       :error="error != null"
-      message="Impossible de charger les statistiques parcours et dispositifs"
+      message="Impossible de charger les statistiques parcours et dispositifs."
     >
       <section>
         <h3 class="fr-sr-only">Résultats</h3>
@@ -15,7 +15,7 @@
           :menus="[]"
         >
           <template #header>
-            <h4 class="fr-sr-only">Nombre de dispositifs</h4>
+            <h4 class="fr-sr-only">Nombre de bénéficiaires concernés</h4>
           </template>
           <template #icon>
             <AtomPictogram :path="userPictogram" />
@@ -26,11 +26,6 @@
             </p>
           </template>
         </StatsHeader>
-        <AtomAlert
-          v-if="error"
-          :alert-type="AlertType.Error"
-          message="Le nombre de dispositifs n'a pas pu être chargé."
-        />
 
         <div class="fr-container--no-max">
           <div class="fr-grid-row fr-grid-row--gutters">
@@ -104,7 +99,7 @@
 
   const beneficiaryCountLabel = computed(() => {
     const beneficiaryCount = count?.value?.beneficiary ?? 0
-    return `${beneficiaryCount} ${plural('bénéficaire', beneficiaryCount)} ${plural('concerné', beneficiaryCount)} `
+    return `${beneficiaryCount} ${plural('bénéficiaire', beneficiaryCount)} ${plural('concerné', beneficiaryCount)}`
   })
 
   const supportProgramCardConfig = {

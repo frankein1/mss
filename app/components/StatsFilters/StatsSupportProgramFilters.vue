@@ -44,16 +44,13 @@
 
     if (supportProgramNameList.value) {
       statsFilters.push({
-        name: 'supportProgramNameId',
-        label: "Dispositif ou axe d'intervention",
-        type: FilterType.SelectOne,
-        options: withEmptyValue(
-          supportProgramNameList.value.map(({ id, name }) => ({
-            label: name,
-            value: id
-          })),
-          ''
-        ),
+        name: 'supportProgramNameIds',
+        label: "Dispositifs ou axes d'intervention",
+        type: FilterType.SelectMultiple,
+        options: supportProgramNameList.value.map(({ id, name }) => ({
+          label: name,
+          value: id
+        })),
         alwaysExpanded: true
       })
     }

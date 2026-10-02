@@ -14,7 +14,6 @@ import {
 import {
   kindOfBooleanSchema,
   stringConstraint,
-  uuidOrEmpty,
   withEmptyValueOptionalNativeEnum
 } from './helpers.schema'
 import { maxStringLengthMessage, validIntNumber } from '~/utils/zod'
@@ -136,7 +135,7 @@ const supportProgramStatFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  supportProgramNameId: uuidOrEmpty
+  supportProgramNameIds: z.array(z.string().uuid()).nullish()
 })
 
 type SupportProgramStatFilterInput = z.infer<

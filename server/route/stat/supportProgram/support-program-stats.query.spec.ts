@@ -103,11 +103,52 @@ describe('Statistics - Support programs - Count', () => {
     trpc
   }) => {
     const stats = await trpc.structureManager.stat.getSupportProgramCountStats({
-      supportProgramNameId
+      supportProgramNameIds: [supportProgramNameId]
     })
 
     // First beneficiary has two support programs
     expect(stats).toEqual({ supportProgram: 4, beneficiary: 3 })
+  })
+
+  test('should count support programs of several support program names', async ({
+    trpc
+  }) => {
+    const otherName = await prismaClient.supportProgramName.create({
+      data: {
+        name: `SPSTATS-other-${crypto.randomUUID()}`,
+        structureId,
+        createdById: socialWorkerId
+      }
+    })
+    try {
+      const [beneficiary, newBeneficiary] = await Promise.all([
+        prismaClient.beneficiary.findFirstOrThrow({
+          where: { supportPrograms: { some: { supportProgramNameId } } }
+        }),
+        createBeneficiary(`other-${crypto.randomUUID()}`)
+      ])
+      await prismaClient.supportProgram.createMany({
+        data: [
+          // Already counted with the first support program name
+          { beneficiaryId: beneficiary.id, supportProgramNameId: otherName.id },
+          {
+            beneficiaryId: newBeneficiary.id,
+            supportProgramNameId: otherName.id
+          }
+        ]
+      })
+
+      const stats =
+        await trpc.structureManager.stat.getSupportProgramCountStats({
+          supportProgramNameIds: [supportProgramNameId, otherName.id]
+        })
+
+      expect(stats).toEqual({ supportProgram: 6, beneficiary: 4 })
+    } finally {
+      await prismaClient.supportProgramName.delete({
+        where: { id: otherName.id }
+      })
+    }
   })
 })
 
@@ -117,7 +158,7 @@ describe('Statistics - Support programs - Mean duration', () => {
   }) => {
     const stats =
       await trpc.structureManager.stat.getSupportProgramMeanDurationStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       })
 
     expect(stats).toEqual({ meanDurationInDays: 20, supportProgramCount: 3 })
@@ -130,7 +171,7 @@ describe('Statistics - Support programs - Outcome', () => {
   }) => {
     const stats =
       await trpc.structureManager.stat.getSupportProgramOutcomeStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       })
 
     expect(stats).toEqual([
@@ -192,7 +233,7 @@ describe('Statistics - Support programs - Partners', () => {
 
     const stats =
       await trpc.structureManager.stat.getSupportProgramPartnerStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       })
 
     expect(stats).toEqual({
@@ -216,7 +257,7 @@ describe('Statistics - Support programs - Partners', () => {
 
     const stats =
       await trpc.structureManager.stat.getSupportProgramPartnerStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       })
 
     expect(stats.partners).toEqual([
@@ -233,7 +274,7 @@ describe('Statistics - Support programs - Entries and exits', () => {
   }) => {
     const stats =
       await trpc.structureManager.stat.getSupportProgramEntriesExitsStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       })
 
     // First beneficiary entered twice and is counted twice,
@@ -258,7 +299,10 @@ describe('Statistics - Support programs - Period filter', () => {
     // First beneficiary: both programs started and ended last year
     // Second beneficiary: started last year, still ongoing
     // Third beneficiary: three years ago, excluded
-    const input = { supportProgramNameId, period: StatPeriodFilter.LastYear }
+    const input = {
+      supportProgramNameIds: [supportProgramNameId],
+      period: StatPeriodFilter.LastYear
+    }
 
     const [count, meanDuration] = await Promise.all([
       trpc.structureManager.stat.getSupportProgramCountStats(input),
@@ -278,7 +322,7 @@ describe('Statistics - Support programs - Period filter', () => {
     // Only the first program of the first beneficiary (February) fits:
     // the June one ends after the period, the November one starts after it
     const input = {
-      supportProgramNameId,
+      supportProgramNameIds: [supportProgramNameId],
       period: StatPeriodFilter.Custom,
       fromDate: lastYear.startOf('year').toDate(),
       toDate: lastYear.month(5).date(15).toDate()
@@ -306,10 +350,10 @@ describe('Statistics - Support programs - Period filter', () => {
 
     const [withoutPeriod, withPeriod] = await Promise.all([
       trpc.structureManager.stat.getSupportProgramOutcomeStats({
-        supportProgramNameId
+        supportProgramNameIds: [supportProgramNameId]
       }),
       trpc.structureManager.stat.getSupportProgramOutcomeStats({
-        supportProgramNameId,
+        supportProgramNameIds: [supportProgramNameId],
         period: StatPeriodFilter.LastYear
       })
     ])
@@ -326,7 +370,7 @@ describe('Statistics - Support programs - Beneficiaries per support program', ()
     trpc
   }) => {
     const stats = await trpc.structureManager.stat.getSupportProgramNameStats({
-      supportProgramNameId
+      supportProgramNameIds: [supportProgramNameId]
     })
 
     // First beneficiary has two support programs but is counted once
