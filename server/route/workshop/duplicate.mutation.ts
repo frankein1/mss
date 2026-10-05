@@ -92,6 +92,9 @@ const handler = async ({
   const sourceAttendees = canDuplicateParticipants
     ? await WorkshopAttendeeRepo.findMany(ctx.user, {
         where: { workshopId: sourceWorkshopId },
+        // Deterministic order so the copied attendees preserve the source
+        // arrival order; matches the detail-list ordering.
+        orderBy: [{ created: 'asc' }, { id: 'asc' }],
         select: {
           type: true,
           beneficiaryId: true,
@@ -151,36 +154,58 @@ const handler = async ({
       return newWorkshop
     }
 
-    const beneficiariesToDuplicate = sourceAttendees.filter(
-      a => a.type === WorkshopAttendeeType.Beneficiary
+    // All rows inserted in one transaction would otherwise share the same
+    // `created` (now() = transaction start), making the attendee order
+    // undefined. Stagger `created` by 1ms per row (the TIMESTAMP(3) resolution)
+    // so the copied list keeps a stable, meaningful order.
+    const duplicationBase = Date.now()
+    const staggeredCreated = (index: number) =>
+      new Date(duplicationBase + index)
+
+    // Tag each attendee with its position in the sorted source list, so both
+    // insert passes stamp `created` by global order. This keeps beneficiaries
+    // and externals interleaved exactly as in the source instead of grouping
+    // all beneficiaries ahead of all externals.
+    const orderedAttendees = sourceAttendees.map(
+      (attendee, sourceOrderIndex) => ({
+        attendee,
+        sourceOrderIndex
+      })
+    )
+
+    const beneficiariesToDuplicate = orderedAttendees.filter(
+      ({ attendee }) => attendee.type === WorkshopAttendeeType.Beneficiary
     )
 
     if (beneficiariesToDuplicate.length > 0) {
       await tx.workshopAttendee.createMany({
-        data: beneficiariesToDuplicate.map(beneficiary => ({
-          workshopId: newWorkshop.id,
-          type: WorkshopAttendeeType.Beneficiary,
-          listType: beneficiary.listType,
-          beneficiaryId: beneficiary.beneficiaryId,
-          comment: beneficiary.comment,
-          paymentReceived: beneficiary.paymentReceived,
-          paymentAmount: beneficiary.paymentAmount
-        }))
+        data: beneficiariesToDuplicate.map(
+          ({ attendee, sourceOrderIndex }) => ({
+            workshopId: newWorkshop.id,
+            type: WorkshopAttendeeType.Beneficiary,
+            listType: attendee.listType,
+            beneficiaryId: attendee.beneficiaryId,
+            comment: attendee.comment,
+            paymentReceived: attendee.paymentReceived,
+            paymentAmount: attendee.paymentAmount,
+            created: staggeredCreated(sourceOrderIndex)
+          })
+        )
       })
     }
 
-    const externalAttendees = sourceAttendees.filter(
-      a =>
-        a.type === WorkshopAttendeeType.External &&
-        a.workshopExternalAttendee &&
-        !a.workshopExternalAttendee.isAnonymized
+    const externalAttendees = orderedAttendees.filter(
+      ({ attendee }) =>
+        attendee.type === WorkshopAttendeeType.External &&
+        attendee.workshopExternalAttendee &&
+        !attendee.workshopExternalAttendee.isAnonymized
     )
 
     if (externalAttendees.length > 0) {
       const createdExternals =
         await tx.workshopExternalAttendee.createManyAndReturn({
-          data: externalAttendees.map(a => {
-            const ext = a.workshopExternalAttendee!
+          data: externalAttendees.map(({ attendee }) => {
+            const ext = attendee.workshopExternalAttendee!
             return {
               firstName: ext.firstName,
               lastName: ext.lastName,
@@ -194,14 +219,15 @@ const handler = async ({
         })
 
       await tx.workshopAttendee.createMany({
-        data: externalAttendees.map((attendee, i) => ({
+        data: externalAttendees.map(({ attendee, sourceOrderIndex }, i) => ({
           workshopId: newWorkshop.id,
           type: WorkshopAttendeeType.External,
           listType: attendee.listType,
           comment: attendee.comment,
           paymentReceived: attendee.paymentReceived,
           paymentAmount: attendee.paymentAmount,
-          workshopExternalAttendeeId: createdExternals[i]?.id
+          workshopExternalAttendeeId: createdExternals[i]?.id,
+          created: staggeredCreated(sourceOrderIndex)
         }))
       })
     }
