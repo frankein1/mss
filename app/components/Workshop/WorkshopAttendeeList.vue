@@ -53,8 +53,8 @@
         class="attendee-list"
       >
         <li
-          v-for="(attendee, idx) in attendeeLists.Main"
-          :key="idx"
+          v-for="attendee in attendeeLists.Main"
+          :key="attendee.id"
           class="fr-mb-1w"
         >
           <WorkshopAttendeeItem
@@ -89,8 +89,8 @@
         class="attendee-list"
       >
         <li
-          v-for="(attendee, idx) in attendeeLists.Waiting"
-          :key="idx"
+          v-for="attendee in attendeeLists.Waiting"
+          :key="attendee.id"
           class="fr-mb-1w"
         >
           <WorkshopAttendeeItem

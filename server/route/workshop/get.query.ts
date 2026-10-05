@@ -146,7 +146,10 @@ export const getOneWithAttendees = async (
               ]
             }
           }),
-          orderBy: { created: 'asc' }
+          // `id` is a deterministic tiebreaker: attendees duplicated in one
+          // transaction share the same `created` timestamp, so without it the
+          // order is undefined and can reshuffle after any attendee update.
+          orderBy: [{ created: 'asc' }, { id: 'asc' }]
         }
       }
     }),
