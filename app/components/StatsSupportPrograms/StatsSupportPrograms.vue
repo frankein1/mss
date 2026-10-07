@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- Filters -->
-    <StatsSupportProgramFilters v-model:filters="filters" />
+    <StatsSupportProgramFilters
+      v-model:filters="filters"
+      :support-program-name-options="supportProgramNameOptions"
+    />
 
     <AtomLazyComponent
       :pending="status === 'pending'"
@@ -80,9 +83,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
   import type { SupportProgramStatFilterInput } from '~~/server/schema'
+  import type { Options } from '~/utils/options'
   import userPictogram from '@gouvfr/dsfr/dist/artwork/pictograms/digital/avatar.svg?url&no-inline'
+
+  defineProps<{
+    supportProgramNameOptions?: Options
+  }>()
 
   const trpcClient = useTrpcClient()
 

@@ -1,12 +1,7 @@
 <template>
   <section class="feature-section">
     <h3 class="fr-sr-only">Filtres</h3>
-    <AtomLoader
-      v-if="isLoading"
-      class="fr-mx-auto"
-    />
     <AtomFilters
-      v-else
       :filters="statsFilters"
       :expanded-by-default="true"
       @filter="emit('update:filters', $event)"
@@ -18,39 +13,29 @@
   import { periodKeys } from '~~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { withEmptyValue } from '~/utils/options'
+  import type { Options } from '~/utils/options'
   import type { SupportProgramStatFilterInput } from '~~/server/schema'
   import type { FilterProp } from '~~/types/filter'
   import { StatPeriodFilter } from '~~/types/stat'
 
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     filters: SupportProgramStatFilterInput
+    supportProgramNameOptions?: Options
   }>()
 
   const emit = defineEmits<{
     'update:filters': [filters: SupportProgramStatFilterInput]
   }>()
 
-  const { data: supportProgramNameList, status: supportProgramNameListStatus } =
-    trpcClient.supportProgram.getNameList.useQuery()
-
-  const isLoading = computed(
-    () => supportProgramNameListStatus.value === 'pending'
-  )
-
   const statsFilters = computed(() => {
     const statsFilters: FilterProp[] = []
 
-    if (supportProgramNameList.value) {
+    if (props.supportProgramNameOptions?.length) {
       statsFilters.push({
         name: 'supportProgramNameIds',
         label: "Dispositifs ou axes d'intervention",
         type: FilterType.SelectMultiple,
-        options: supportProgramNameList.value.map(({ id, name }) => ({
-          label: name,
-          value: id
-        })),
+        options: props.supportProgramNameOptions,
         alwaysExpanded: true
       })
     }
