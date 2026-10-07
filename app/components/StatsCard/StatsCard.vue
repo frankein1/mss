@@ -51,7 +51,7 @@
         </div>
         <p
           v-if="cardSubtitle"
-          class="fr-text--xs text--muted"
+          class="fr-text--xs text--muted fr-mb-0"
         >
           {{ cardSubtitle }}
         </p>

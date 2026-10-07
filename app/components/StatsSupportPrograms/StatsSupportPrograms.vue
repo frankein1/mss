@@ -26,6 +26,22 @@
           <template #title>
             <p class="fr-mb-0 fr-h3 title-blue">
               {{ beneficiaryCountLabel }}
+              <template v-if="filters.period != null">
+                <button
+                  aria-describedby="tooltip-beneficiary-count-label"
+                  type="button"
+                  class="fr-btn--tooltip fr-btn"
+                >
+                  infobulle
+                </button>
+                <span
+                  id="tooltip-beneficiary-count-label"
+                  class="fr-tooltip fr-placement"
+                  role="tooltip"
+                  >Ne sont concernés, que les bénéficiaires ayant au moins une
+                  date d'entrée ou de sortie renseignée.</span
+                ></template
+              >
             </p>
           </template>
         </StatsHeader>
@@ -42,6 +58,7 @@
               :card-id="supportProgramCardConfig.entriesExits.id"
               :card-name="supportProgramCardConfig.entriesExits.name"
             >
+              <StatsSupportProgramPeriodMention :filters="filters" />
               <StatsSupportProgramEntriesExits :filters="filters" />
             </StatsCard>
 
@@ -51,6 +68,7 @@
               :card-id="supportProgramCardConfig.outcome.id"
               :card-name="supportProgramCardConfig.outcome.name"
             >
+              <StatsSupportProgramPeriodMention :filters="filters" />
               <StatsSupportProgramOutcome :filters="filters" />
             </StatsCard>
 
@@ -63,6 +81,7 @@
                 supportProgramCardConfig.supportProgramNames.subtitle
               "
             >
+              <StatsSupportProgramPeriodMention :filters="filters" />
               <StatsSupportProgramNames :filters="filters" />
             </StatsCard>
 
@@ -73,6 +92,7 @@
               :card-name="supportProgramCardConfig.partners.name"
               :card-subtitle="supportProgramCardConfig.partners.subtitle"
             >
+              <StatsSupportProgramPeriodMention :filters="filters" />
               <StatsSupportProgramPartners :filters="filters" />
             </StatsCard>
           </div>
