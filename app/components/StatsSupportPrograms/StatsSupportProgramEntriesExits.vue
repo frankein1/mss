@@ -8,9 +8,9 @@
     :alert-type="AlertType.Error"
     message="Le nombre d’entrées et de sorties n’a pas pu être chargé."
   />
-  <StatsArray
-    v-else-if="statsArray.length"
-    :stats-array="statsArray"
+  <StatsTable
+    v-else-if="stats.length"
+    :stats="stats"
     :headers="['Dispositifs', 'Entrées', 'Sorties']"
   />
   <p v-else>Aucun dispositif ne correspond aux filtres sélectionnés.</p>
@@ -19,7 +19,7 @@
 <script lang="ts" setup>
   import type { SupportProgramStatFilterInput } from '~~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import type { StatsArrayPropType } from '~~/types/stat'
+  import type { StatsTablePropType } from '~~/types/stat'
 
   const props = defineProps<{
     filters: SupportProgramStatFilterInput
@@ -31,7 +31,7 @@
       toRef(() => props.filters)
     )
 
-  const statsArray = computed<StatsArrayPropType>(
+  const stats = computed<StatsTablePropType>(
     () =>
       data.value?.map(({ name, entries, exits }) => [name, entries, exits]) ??
       []

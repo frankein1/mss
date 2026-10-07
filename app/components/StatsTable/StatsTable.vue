@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      id="stats-array-component"
-      class="fr-table fr-table--no-caption"
-    >
+    <div class="fr-table fr-table--no-caption">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
@@ -29,7 +26,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="([label, ...values], rowIndex) in displayedStatsArray"
+                  v-for="([label, ...values], rowIndex) in displayedStats"
                   :key="`${rowIndex}-${label}`"
                 >
                   <th scope="row">
@@ -56,7 +53,7 @@
     </div>
 
     <button
-      v-if="statsArray.length > STATS_COLLAPSED_LIMIT"
+      v-if="stats.length > STATS_COLLAPSED_LIMIT"
       class="fr-btn fr-btn--secondary"
       :class="expandStats ? 'btn-expanded' : 'btn-unexpanded'"
       :aria-expanded="expandStats"
@@ -69,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { StatsArrayPropType } from '~~/types/stat'
+  import type { StatsTablePropType } from '~~/types/stat'
   import {
     STATS_COLLAPSED_LIMIT,
     STATS_NULL_LABEL,
@@ -77,13 +74,13 @@
   } from '~/utils/constants/stats'
 
   const {
-    statsArray,
+    stats,
     caption = undefined,
     labelledby = undefined,
     toFixed = undefined,
     headers = undefined
   } = defineProps<{
-    statsArray: StatsArrayPropType
+    stats: StatsTablePropType
     caption?: string
     labelledby?: string
     toFixed?: number
@@ -95,8 +92,8 @@
   const cardTitleId = inject(statsCardTitleIdInjectionKey, undefined)
   const expandStats = ref<boolean>(false)
 
-  const displayedStatsArray = computed(() =>
-    expandStats.value ? statsArray : statsArray.slice(0, STATS_COLLAPSED_LIMIT)
+  const displayedStats = computed(() =>
+    expandStats.value ? stats : stats.slice(0, STATS_COLLAPSED_LIMIT)
   )
 
   const expandBtnLabel = computed(() =>

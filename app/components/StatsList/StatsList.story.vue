@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <h3 class="fr-mt-6w">Stats Array</h3>
+    <h3 class="fr-mt-6w">Stats Table</h3>
 
     <p>
       Chaque ligne commence par son libellé, suivi d’une valeur par colonne. Une
@@ -80,12 +80,12 @@
       <div class="fr-grid-row fr-grid-row--gutters bg-color-grey-light">
         <div class="fr-col-6">
           <div class="main-container fr-p-2w">
-            <h4 :id="statsArrayHeadingId">Entrées et sorties par ville</h4>
+            <h4 :id="statsTableHeadingId">Entrées et sorties par ville</h4>
 
-            <StatsArray
-              :stats-array="statsArray"
+            <StatsTable
+              :stats="statsTable"
               :headers="['Ville', 'Entrées', 'Sorties']"
-              :labelledby="statsArrayHeadingId"
+              :labelledby="statsTableHeadingId"
             />
           </div>
         </div>
@@ -94,8 +94,8 @@
           <div class="main-container fr-p-2w">
             <h4>Arrondi à la seconde décimale, nommé par une caption</h4>
 
-            <StatsArray
-              :stats-array="statsArray"
+            <StatsTable
+              :stats="statsTable"
               :headers="['Ville', 'Entrées', 'Sorties']"
               caption="Entrées et sorties par ville"
               :to-fixed="2"
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { StatsArrayPropType, StatsListPropType } from '~~/types/stat'
+  import type { StatsTablePropType, StatsListPropType } from '~~/types/stat'
 
   const countNoPercentage: StatsListPropType = [
     {
@@ -217,9 +217,9 @@
     return acc + cur.count
   }, 0)
 
-  const statsArrayHeadingId = useId()
+  const statsTableHeadingId = useId()
 
-  const statsArray: StatsArrayPropType = [
+  const statsTable: StatsTablePropType = [
     ['Paris', 10, 22],
     ['Marseille', 5, 0],
     ['Lyon', 35, null],
