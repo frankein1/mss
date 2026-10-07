@@ -293,7 +293,7 @@ describe('Statistics - Support programs - Entries and exits', () => {
 describe('Statistics - Support programs - Period filter', () => {
   const lastYear = dayjs().subtract(1, 'year')
 
-  test('should keep support programs started in the period, ongoing or ended in the period', async ({
+  test('should keep support programs started or ended in the period', async ({
     trpc
   }) => {
     // First beneficiary: both programs started and ended last year
@@ -316,11 +316,12 @@ describe('Statistics - Support programs - Period filter', () => {
     })
   })
 
-  test('should exclude support programs ended after the period', async ({
+  test('should keep support programs started in the period and ended after it', async ({
     trpc
   }) => {
-    // Only the first program of the first beneficiary (February) fits:
-    // the June one ends after the period, the November one starts after it
+    // February program: started and ended in the period
+    // June program: started in the period, ended after it
+    // November program: started after the period, excluded
     const input = {
       supportProgramNameIds: [supportProgramNameId],
       period: StatPeriodFilter.Custom,
@@ -333,9 +334,32 @@ describe('Statistics - Support programs - Period filter', () => {
       trpc.structureManager.stat.getSupportProgramMeanDurationStats(input)
     ])
 
+    expect(count).toEqual({ supportProgram: 2, beneficiary: 1 })
+    expect(meanDuration).toEqual({
+      meanDurationInDays: 15,
+      supportProgramCount: 2
+    })
+  })
+
+  test('should keep support programs started before the period and ended in it', async ({
+    trpc
+  }) => {
+    // Only the June program (June 1st to June 21st) ends in the period
+    const input = {
+      supportProgramNameIds: [supportProgramNameId],
+      period: StatPeriodFilter.Custom,
+      fromDate: lastYear.month(5).date(15).toDate(),
+      toDate: lastYear.month(5).date(30).toDate()
+    }
+
+    const [count, meanDuration] = await Promise.all([
+      trpc.structureManager.stat.getSupportProgramCountStats(input),
+      trpc.structureManager.stat.getSupportProgramMeanDurationStats(input)
+    ])
+
     expect(count).toEqual({ supportProgram: 1, beneficiary: 1 })
     expect(meanDuration).toEqual({
-      meanDurationInDays: 10,
+      meanDurationInDays: 20,
       supportProgramCount: 1
     })
   })

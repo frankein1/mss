@@ -82,13 +82,14 @@ export function prepareSupportProgramStatFilters(
     }
   }
 
-  // A support program matches the period when it started within the period
-  // and is either still ongoing or also ended within the period.
-  // Support programs without start date are excluded.
+  // A support program matches the period when it started or ended within it.
+  // Support programs without dates are excluded.
   const dateFilters = prepareDateFilters(filters)
   if (dateFilters && (dateFilters.gte || dateFilters.lte)) {
-    supportProgramFilters.startDate = dateFilters
-    supportProgramFilters.OR = [{ endDate: null }, { endDate: dateFilters }]
+    supportProgramFilters.OR = [
+      { startDate: dateFilters },
+      { endDate: dateFilters }
+    ]
   }
 
   return supportProgramFilters
