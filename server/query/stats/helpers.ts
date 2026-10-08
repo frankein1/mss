@@ -82,13 +82,17 @@ export function prepareSupportProgramStatFilters(
     }
   }
 
-  // A support program matches the period when it started or ended within it.
-  // Support programs without dates are excluded.
+  // A support program matches the period when it was active during it:
+  // started before the end of the period and not ended before its start.
+  // A missing start or end date is treated as an open bound, but support
+  // programs without any date are excluded.
   const dateFilters = prepareDateFilters(filters)
   if (dateFilters && (dateFilters.gte || dateFilters.lte)) {
-    supportProgramFilters.OR = [
-      { startDate: dateFilters },
-      { endDate: dateFilters }
+    const { gte, lte } = dateFilters
+    supportProgramFilters.AND = [
+      { OR: [{ startDate: { not: null } }, { endDate: { not: null } }] },
+      ...(lte ? [{ OR: [{ startDate: null }, { startDate: { lte } }] }] : []),
+      ...(gte ? [{ OR: [{ endDate: null }, { endDate: { gte } }] }] : [])
     ]
   }
 

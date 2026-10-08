@@ -1,4 +1,5 @@
 import { PrismaClient, SupportProgramOutcome } from '@prisma/client'
+import dayjs from 'dayjs'
 import {
   FixtureBeneficiary,
   fixturesBeneficiaries,
@@ -37,10 +38,10 @@ const supportProgramNameInputs = [
   { name: 'Chantier d’insertion', hasLifecycle: true },
   { name: 'Accompagnement numérique', hasLifecycle: true },
   // Without lifecycle
-  { name: 'Portage de repas', hasLifecycle: false },
-  { name: 'Aide à domicile', hasLifecycle: false },
-  { name: 'Téléassistance', hasLifecycle: false },
-  { name: 'Épicerie solidaire', hasLifecycle: false }
+  { name: 'Portage de repas - pas de date', hasLifecycle: false },
+  { name: 'Aide à domicile - pas de date', hasLifecycle: false },
+  { name: 'Téléassistance - pas de date', hasLifecycle: false },
+  { name: 'Épicerie solidaire - pas de date', hasLifecycle: false }
 ] as const
 
 type SupportProgramNameLabel = (typeof supportProgramNameInputs)[number]['name']
@@ -64,7 +65,16 @@ const {
   Exceeded
 } = SupportProgramOutcome
 
-// Dates between 2024-01-01 and 2026-08-31.
+// Date of the given day in the previous month, as YYYY-MM-DD
+const lastMonth = (day: number) =>
+  dayjs().subtract(1, 'month').date(day).format('YYYY-MM-DD')
+
+// Date of the given day in the current month, as YYYY-MM-DD
+const thisMonth = (day: number) => dayjs().date(day).format('YYYY-MM-DD')
+
+// Fixed dates between 2024-01-01 and 2026-08-31, plus a few dates in the
+// previous and current months to test the "Le mois dernier" and "Ce mois-ci"
+// period filters.
 // Support programs without lifecycle have no dates.
 const supportProgramInputs: SupportProgramInput[] = [
   // COURSOR: 4 support programs
@@ -89,7 +99,10 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2025-05-05',
     partners: [FranceTravail]
   },
-  { beneficiary: FixtureBeneficiary.COURSOR, name: 'Portage de repas' },
+  {
+    beneficiary: FixtureBeneficiary.COURSOR,
+    name: 'Portage de repas - pas de date'
+  },
 
   // WONFAR: 3 support programs, twice in the same one
   {
@@ -113,7 +126,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     partners: [MairieValence]
   },
 
-  // PISCOPO: 2 support programs
+  // PISCOPO: 3 support programs
   {
     beneficiary: FixtureBeneficiary.PISCOPO,
     name: 'Contrat d’engagement jeune',
@@ -127,11 +140,31 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement numérique',
     startDate: '2026-03-16'
   },
+  // Started and ended last month
+  {
+    beneficiary: FixtureBeneficiary.PISCOPO,
+    name: 'Accompagnement santé',
+    startDate: lastMonth(3),
+    endDate: lastMonth(24),
+    outcome: PartiallyAchieved
+  },
 
-  // APFELMANN: 1 support program
-  { beneficiary: FixtureBeneficiary.APFELMANN, name: 'Aide à domicile' },
+  // APFELMANN: 2 support programs
+  {
+    beneficiary: FixtureBeneficiary.APFELMANN,
+    name: 'Aide à domicile - pas de date'
+  },
+  // Started in 2024, ended last month
+  {
+    beneficiary: FixtureBeneficiary.APFELMANN,
+    name: 'Fonds de solidarité logement',
+    startDate: '2024-10-07',
+    endDate: lastMonth(20),
+    outcome: Achieved,
+    partners: [CAF26]
+  },
 
-  // PENBERTHY: 3 support programs
+  // PENBERTHY: 4 support programs
   {
     beneficiary: FixtureBeneficiary.PENBERTHY,
     name: 'Fonds de solidarité logement',
@@ -148,9 +181,20 @@ const supportProgramInputs: SupportProgramInput[] = [
     outcome: SubjectToConditions,
     partners: [MairieValence, V0ATDQuartMonde]
   },
-  { beneficiary: FixtureBeneficiary.PENBERTHY, name: 'Téléassistance' },
+  {
+    beneficiary: FixtureBeneficiary.PENBERTHY,
+    name: 'Téléassistance - pas de date'
+  },
+  // Started and ended this month
+  {
+    beneficiary: FixtureBeneficiary.PENBERTHY,
+    name: 'Soutien à la parentalité',
+    startDate: thisMonth(1),
+    endDate: thisMonth(22),
+    outcome: SubjectToConditions
+  },
 
-  // DOWNER: 2 support programs
+  // DOWNER: 3 support programs
   {
     beneficiary: FixtureBeneficiary.DOWNER,
     name: 'Soutien à la parentalité',
@@ -158,7 +202,16 @@ const supportProgramInputs: SupportProgramInput[] = [
     endDate: '2026-06-26',
     outcome: Achieved
   },
-  { beneficiary: FixtureBeneficiary.DOWNER, name: 'Épicerie solidaire' },
+  {
+    beneficiary: FixtureBeneficiary.DOWNER,
+    name: 'Épicerie solidaire - pas de date'
+  },
+  // Started this month, still ongoing
+  {
+    beneficiary: FixtureBeneficiary.DOWNER,
+    name: 'Accompagnement numérique',
+    startDate: thisMonth(2)
+  },
 
   // TESSON: 4 support programs
   {
@@ -180,9 +233,12 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement santé',
     startDate: '2026-02-02'
   },
-  { beneficiary: FixtureBeneficiary.TESSON, name: 'Épicerie solidaire' },
+  {
+    beneficiary: FixtureBeneficiary.TESSON,
+    name: 'Épicerie solidaire - pas de date'
+  },
 
-  // MAILLARD: 2 support programs
+  // MAILLARD: 3 support programs
   {
     beneficiary: FixtureBeneficiary.MAILLARD,
     name: 'Mesure d’accompagnement social personnalisé',
@@ -196,12 +252,27 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2026-04-14',
     partners: [MairieValence]
   },
+  // Started in January 2026, ended this month
+  {
+    beneficiary: FixtureBeneficiary.MAILLARD,
+    name: 'Chantier d’insertion',
+    startDate: '2026-01-12',
+    endDate: thisMonth(16),
+    outcome: Achieved,
+    partners: [FranceTravail]
+  },
 
-  // FERRAND: 1 support program
+  // FERRAND: 2 support programs
   {
     beneficiary: FixtureBeneficiary.FERRAND,
     name: 'Contrat d’engagement jeune',
     startDate: '2026-01-05'
+  },
+  // Started last month, still ongoing
+  {
+    beneficiary: FixtureBeneficiary.FERRAND,
+    name: 'Accompagnement budgétaire',
+    startDate: lastMonth(5)
   },
 
   // DUBOIS: 3 support programs
@@ -220,7 +291,10 @@ const supportProgramInputs: SupportProgramInput[] = [
     outcome: Achieved,
     partners: [MairieValence]
   },
-  { beneficiary: FixtureBeneficiary.DUBOIS, name: 'Portage de repas' }
+  {
+    beneficiary: FixtureBeneficiary.DUBOIS,
+    name: 'Portage de repas - pas de date'
+  }
 ]
 
 async function main() {

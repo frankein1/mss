@@ -42,7 +42,7 @@
 
     statsFilters.push({
       name: 'period',
-      label: "Période d'entrée ou de sortie d'un dispositif",
+      label: "Période d'activité du dispositif",
       type: FilterType.SelectOne,
       options: withEmptyValue(periodKeys.options, ''),
       alwaysExpanded: true

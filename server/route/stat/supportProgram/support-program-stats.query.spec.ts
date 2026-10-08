@@ -293,7 +293,7 @@ describe('Statistics - Support programs - Entries and exits', () => {
 describe('Statistics - Support programs - Period filter', () => {
   const lastYear = dayjs().subtract(1, 'year')
 
-  test('should keep support programs started or ended in the period', async ({
+  test('should keep support programs active during the period', async ({
     trpc
   }) => {
     // First beneficiary: both programs started and ended last year
@@ -362,6 +362,52 @@ describe('Statistics - Support programs - Period filter', () => {
       meanDurationInDays: 20,
       supportProgramCount: 1
     })
+  })
+
+  test('should keep support programs started before the period and ended after it', async ({
+    trpc
+  }) => {
+    const third = await prismaClient.beneficiary.findFirstOrThrow({
+      where: {
+        supportPrograms: {
+          some: {
+            supportProgramNameId,
+            startDate: {
+              lt: lastYear.subtract(1, 'year').endOf('year').toDate()
+            }
+          }
+        }
+      }
+    })
+    await prismaClient.supportProgram.createMany({
+      data: [
+        // Covers the whole period
+        {
+          beneficiaryId: third.id,
+          supportProgramNameId,
+          startDate: lastYear.subtract(1, 'year').month(5).date(1).toDate(),
+          endDate: lastYear
+            .add(1, 'year')
+            .startOf('year')
+            .add(1, 'day')
+            .toDate()
+        },
+        // Started before the period, still ongoing
+        {
+          beneficiaryId: third.id,
+          supportProgramNameId,
+          startDate: lastYear.subtract(1, 'year').month(8).date(1).toDate()
+        }
+      ]
+    })
+
+    const count = await trpc.structureManager.stat.getSupportProgramCountStats({
+      supportProgramNameIds: [supportProgramNameId],
+      period: StatPeriodFilter.LastYear
+    })
+
+    // 3 support programs of the first and second beneficiaries, plus the 2 new ones
+    expect(count).toEqual({ supportProgram: 5, beneficiary: 3 })
   })
 
   test('should exclude support programs without dates', async ({ trpc }) => {

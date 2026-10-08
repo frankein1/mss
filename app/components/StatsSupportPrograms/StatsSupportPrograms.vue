@@ -26,7 +26,7 @@
           <template #title>
             <p class="fr-mb-0 fr-h3 title-blue">
               {{ beneficiaryCountLabel }}
-              <template v-if="filters.period != null">
+              <template v-if="isSupportProgramPeriodFiltered(filters)">
                 <button
                   aria-describedby="tooltip-beneficiary-count-label"
                   type="button"
@@ -38,8 +38,8 @@
                   id="tooltip-beneficiary-count-label"
                   class="fr-tooltip fr-placement"
                   role="tooltip"
-                  >Ne sont concernés, que les bénéficiaires ayant au moins une
-                  date d'entrée ou de sortie renseignée.</span
+                  >Seuls sont concernés les bénéficiaires ayant au moins un
+                  dispositif en cours pendant la période sélectionnée.</span
                 ></template
               >
             </p>
@@ -104,6 +104,7 @@
 
 <script lang="ts" setup>
   import type { SupportProgramStatFilterInput } from '~~/server/schema'
+  import { isSupportProgramPeriodFiltered } from '~/utils/stats'
   import type { Options } from '~/utils/options'
   import userPictogram from '@gouvfr/dsfr/dist/artwork/pictograms/digital/avatar.svg?url&no-inline'
 
