@@ -37,6 +37,7 @@ const supportProgramNameInputs = [
   { name: 'Soutien à la parentalité', hasLifecycle: true },
   { name: 'Chantier d’insertion', hasLifecycle: true },
   { name: 'Accompagnement numérique', hasLifecycle: true },
+  { name: 'Dispositif non terminé', hasLifecycle: true },
   // Without lifecycle
   { name: 'Portage de repas - pas de date', hasLifecycle: false },
   { name: 'Aide à domicile - pas de date', hasLifecycle: false },
@@ -197,9 +198,9 @@ const supportProgramInputs: SupportProgramInput[] = [
   // DOWNER: 3 support programs
   {
     beneficiary: FixtureBeneficiary.DOWNER,
-    name: 'Soutien à la parentalité',
+    name: 'Dispositif non terminé',
     startDate: '2025-09-08',
-    endDate: '2026-06-26',
+    endDate: dayjs().add(3, 'months').format('YYYY-MM-DD'), // in three months
     outcome: Achieved
   },
   {

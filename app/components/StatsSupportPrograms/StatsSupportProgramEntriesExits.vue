@@ -11,7 +11,7 @@
   <StatsTable
     v-else-if="stats.length"
     :stats="stats"
-    :headers="['Dispositifs', 'Entrées', 'Sorties']"
+    :headers="['Dispositifs', 'Entrées', 'Sorties', 'En cours']"
   />
   <p v-else>Aucun dispositif ne correspond aux filtres sélectionnés.</p>
 </template>
@@ -33,7 +33,11 @@
 
   const stats = computed<StatsTablePropType>(
     () =>
-      data.value?.map(({ name, entries, exits }) => [name, entries, exits]) ??
-      []
+      data.value?.map(({ name, entries, exits, ongoing }) => [
+        name,
+        entries,
+        exits,
+        ongoing
+      ]) ?? []
   )
 </script>

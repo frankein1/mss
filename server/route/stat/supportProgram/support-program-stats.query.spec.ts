@@ -278,14 +278,59 @@ describe('Statistics - Support programs - Entries and exits', () => {
       })
 
     // First beneficiary entered twice and is counted twice,
-    // second beneficiary has no end date
+    // second beneficiary has no end date and is ongoing
     expect(stats).toEqual([
       {
         id: supportProgramNameId,
         name: expect.stringMatching(/^SPSTATS-/),
         entries: 4,
-        exits: 3
+        exits: 3,
+        ongoing: 1
       }
+    ])
+  })
+
+  test('should count a support program with a future end date as ongoing', async ({
+    trpc
+  }) => {
+    const beneficiary = await prismaClient.beneficiary.findFirstOrThrow({
+      where: { supportPrograms: { some: { supportProgramNameId } } }
+    })
+    await prismaClient.supportProgram.create({
+      data: {
+        beneficiaryId: beneficiary.id,
+        supportProgramNameId,
+        startDate: dayjs().subtract(1, 'month').toDate(),
+        endDate: dayjs().add(1, 'month').toDate()
+      }
+    })
+
+    const stats =
+      await trpc.structureManager.stat.getSupportProgramEntriesExitsStats({
+        supportProgramNameIds: [supportProgramNameId]
+      })
+
+    expect(stats).toEqual([
+      expect.objectContaining({ entries: 5, exits: 3, ongoing: 2 })
+    ])
+  })
+
+  test('should count a support program ended after the period as ongoing', async ({
+    trpc
+  }) => {
+    const lastYear = dayjs().subtract(1, 'year')
+    // February program ended in the period, June program (June 1st to
+    // June 21st) ends after it
+    const stats =
+      await trpc.structureManager.stat.getSupportProgramEntriesExitsStats({
+        supportProgramNameIds: [supportProgramNameId],
+        period: StatPeriodFilter.Custom,
+        fromDate: lastYear.startOf('year').toDate(),
+        toDate: lastYear.month(5).date(15).toDate()
+      })
+
+    expect(stats).toEqual([
+      expect.objectContaining({ entries: 2, exits: 1, ongoing: 1 })
     ])
   })
 })
