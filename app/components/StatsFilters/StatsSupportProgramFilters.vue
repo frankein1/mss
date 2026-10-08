@@ -1,5 +1,8 @@
 <template>
-  <section class="feature-section">
+  <section
+    v-if="supportProgramNameOptions?.length"
+    class="feature-section"
+  >
     <h3 class="fr-sr-only">Filtres</h3>
     <AtomFilters
       :filters="statsFilters"
