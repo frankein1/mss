@@ -810,6 +810,33 @@ const configPartnerOrganizationToSupportProgram = {
   B: true
 } as Record<'A' | 'B', boolean>
 
+const configDataEducationSchool: Record<
+  SnakeCase<keyof typeof Prisma.DataEducationSchoolScalarFieldEnum>,
+  boolean
+> = {
+  uai: true,
+  name: true,
+  type: true,
+  nature: true,
+  address: true,
+  zipcode: true,
+  city: true,
+  citycode: true,
+  department: true,
+  region: true,
+  academy: true,
+  status: true,
+  latitude: true,
+  longitude: true,
+  rep_classification: true,
+  qpv_code: true,
+  qpv_name: true,
+  qpv_revised: true,
+  created: true,
+  updated: true,
+  last_imported_at: true
+}
+
 export const CONFIG = {
   user: configUser,
   structure: configStructure,
@@ -852,7 +879,8 @@ export const CONFIG = {
   support_program_name: configSupportProgramName,
   support_program: configSupportProgram,
   _partner_organization_to_support_program:
-    configPartnerOrganizationToSupportProgram
+    configPartnerOrganizationToSupportProgram,
+  data_education_school: configDataEducationSchool
 }
 
 export type TableName = keyof typeof CONFIG
