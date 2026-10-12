@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.68.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/compare/v1.67.0...v1.68.0) (2026-10-12)
+
+### Features
+
+* **notifications:** suppression des notifs lues ([4128797](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/4128797a4ffb5dcc90aeebbcc7900c0b5225d7d9)), references [#1104](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1104)
+
+### Bug Fixes
+
+* **accessibilité:** structure les cartes statistiques en table ([7eea1c1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/7eea1c16bea7dae63d163a0c5641a227613434ac))
+* **ateliers:** stabilise ordre participants ([04ea208](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/04ea208d0e2909f7eb3303ba0366c775db4fbebc))
+
 ## [1.67.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.66.0...v1.67.0) (2026-09-29)
 
 
