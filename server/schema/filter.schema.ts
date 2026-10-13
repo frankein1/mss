@@ -123,13 +123,31 @@ const workshopStatFilterSchema = z.object({
 
 type WorkshopStatFilterInput = z.infer<typeof workshopStatFilterSchema>
 
+const supportProgramStatFilterSchema = z.object({
+  period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
+  fromDate: z.coerce.date().nullish(),
+  toDate: z.coerce
+    .date()
+    .nullish()
+    .transform(v => {
+      if (v === undefined || v === null) {
+        return v
+      }
+      return dayjs(v).hour(23).minute(59).second(59).toDate()
+    }),
+  supportProgramNameIds: z.array(z.string().uuid()).nullish()
+})
+
+type SupportProgramStatFilterInput = z.infer<
+  typeof supportProgramStatFilterSchema
+>
+
 type StatFilterInput = Omit<
   z.infer<typeof statFilterSchema>,
   'helpRequestSubject'
 > & {
   helpRequestSubject?:
-    | z.infer<typeof statFilterSchema>['helpRequestSubject']
-    | ''
+    z.infer<typeof statFilterSchema>['helpRequestSubject'] | ''
 }
 
 const beneficiaryFilterSchema = z
@@ -294,6 +312,7 @@ export {
   emailAdminFilterSchema,
   workshopFilterSchema,
   workshopStatFilterSchema,
+  supportProgramStatFilterSchema,
   socialSupportFilterSchema
 }
 
@@ -308,5 +327,6 @@ export type {
   EmailAdminFilterInput,
   WorkshopFilterInput,
   WorkshopStatFilterInput,
+  SupportProgramStatFilterInput,
   SocialSupportFilterInput
 }

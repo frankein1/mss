@@ -5,7 +5,7 @@
       class="feature-section fr-p-2w"
     >
       <div class="fr-mb-3w">
-        <div class="card-title">
+        <div class="card-title fr-mb-2v">
           <h4
             :id="titleId"
             class="fr-h5 card-title-text fr-mb-0"
@@ -51,7 +51,7 @@
         </div>
         <p
           v-if="cardSubtitle"
-          class="fr-text--xs text--muted"
+          class="fr-text--xs text--muted fr-mb-0"
         >
           {{ cardSubtitle }}
         </p>

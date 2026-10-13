@@ -2,7 +2,11 @@ import type { Prisma, SocialSupportRedirectionType } from '@prisma/client'
 import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
-import type { StatFilterInput, WorkshopStatFilterInput } from '~~/server/schema'
+import type {
+  StatFilterInput,
+  SupportProgramStatFilterInput,
+  WorkshopStatFilterInput
+} from '~~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { StatPeriodFilter } from '~~/types/stat'
 import { AgeGroup } from '~~/client/options'
@@ -65,6 +69,34 @@ export function prepareWorkshopStatFilters(filters: WorkshopStatFilterInput) {
     workshopFilters.date = prepareDateFilters(filters)
   }
   return workshopFilters
+}
+
+export function prepareSupportProgramStatFilters(
+  filters: SupportProgramStatFilterInput
+) {
+  const supportProgramFilters: Prisma.SupportProgramWhereInput = {}
+
+  if (filters.supportProgramNameIds?.length) {
+    supportProgramFilters.supportProgramNameId = {
+      in: filters.supportProgramNameIds
+    }
+  }
+
+  // A support program matches the period when it was active during it:
+  // started before the end of the period and not ended before its start.
+  // A missing start or end date is treated as an open bound, but support
+  // programs without any date are excluded.
+  const dateFilters = prepareDateFilters(filters)
+  if (dateFilters && (dateFilters.gte || dateFilters.lte)) {
+    const { gte, lte } = dateFilters
+    supportProgramFilters.AND = [
+      { OR: [{ startDate: { not: null } }, { endDate: { not: null } }] },
+      ...(lte ? [{ OR: [{ startDate: null }, { startDate: { lte } }] }] : []),
+      ...(gte ? [{ OR: [{ endDate: null }, { endDate: { gte } }] }] : [])
+    ]
+  }
+
+  return supportProgramFilters
 }
 
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {

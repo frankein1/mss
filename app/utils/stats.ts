@@ -1,4 +1,6 @@
 import { getOptionLabel, type Options } from '~/utils/options'
+import type { SupportProgramStatFilterInput } from '~~/server/schema'
+import { StatPeriodFilter } from '~~/types/stat'
 
 export function labelOrUnprovided(value: string, options: Options) {
   if (!value) {
@@ -29,3 +31,16 @@ export const getCustomAgeGroupLabel = (
   }
   return `${fromAge} ans - ${toAge} ans`
 }
+
+/**
+ * Whether the period filter restricts the support program stats.
+ * Same condition as prepareSupportProgramStatFilters: a custom period
+ * without any date does not filter anything.
+ */
+export const isSupportProgramPeriodFiltered = (
+  filters: SupportProgramStatFilterInput
+) =>
+  !!filters.period &&
+  (filters.period !== StatPeriodFilter.Custom ||
+    !!filters.fromDate ||
+    !!filters.toDate)

@@ -7,7 +7,7 @@
     <section>
       <h3 class="fr-sr-only">Résultats</h3>
       <StatsHeader
-        class="fr-mb-1w fr-mt-3w"
+        class="fr-my-2w"
         :menus="menus"
       >
         <template #header>
@@ -106,7 +106,6 @@
 
   const trpcClient = useTrpcClient()
   const matomo = useMatomo()
-  const { application } = usePermissions()
 
   const isDownloading = ref(false)
   const filters = ref<WorkshopStatFilterInput>({})

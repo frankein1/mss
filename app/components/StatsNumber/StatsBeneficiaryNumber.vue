@@ -42,7 +42,7 @@
   defineProps<{
     beneficiaryCounts: number
     familyCounts?: number
-    historyType?: 'followup' | 'helprequest' | 'beneficiary'
+    historyType?: 'followup' | 'helprequest' | 'beneficiary' | 'supportprogram'
   }>()
 
   const plural = (word: string, q: number) => (q > 1 ? `${word}s` : word)
@@ -61,7 +61,8 @@
     color: var(--color-help-request);
   }
 
-  .beneficiary {
+  .beneficiary,
+  .supportprogram {
     color: var(--primary);
   }
 </style>
