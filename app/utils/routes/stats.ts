@@ -27,5 +27,10 @@ export const routes = {
     name: 'AppStatsWorkshops',
     title: 'Ateliers',
     path: () => `${StatsRoute}/workshops`
+  },
+  AppStatsSupportPrograms: {
+    name: 'AppStatsSupportPrograms',
+    title: 'Parcours et dispositifs',
+    path: () => `${StatsRoute}/support-programs`
   }
 } as const

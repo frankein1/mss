@@ -19,7 +19,7 @@
       <h3 class="fr-sr-only">Résultats</h3>
       <StatsHeader
         :menus="menus"
-        class="fr-mb-1w fr-mt-3w"
+        class="fr-my-2w"
       >
         <template #header>
           <h4 class="fr-sr-only">Nombre d'entretiens</h4>

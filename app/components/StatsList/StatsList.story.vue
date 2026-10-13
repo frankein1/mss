@@ -67,11 +67,48 @@
         </div>
       </div>
     </div>
+
+    <h3 class="fr-mt-6w">Stats Table</h3>
+
+    <p>
+      Chaque ligne commence par son libellé, suivi d’une valeur par colonne. Une
+      valeur à null s’affiche « - » (« Non renseigné » pour les lecteurs
+      d’écran).
+    </p>
+
+    <div class="fr-container--fluid">
+      <div class="fr-grid-row fr-grid-row--gutters bg-color-grey-light">
+        <div class="fr-col-6">
+          <div class="main-container fr-p-2w">
+            <h4 :id="statsTableHeadingId">Entrées et sorties par ville</h4>
+
+            <StatsTable
+              :stats="statsTable"
+              :headers="['Ville', 'Entrées', 'Sorties']"
+              :labelledby="statsTableHeadingId"
+            />
+          </div>
+        </div>
+
+        <div class="fr-col-6">
+          <div class="main-container fr-p-2w">
+            <h4>Arrondi à la seconde décimale, nommé par une caption</h4>
+
+            <StatsTable
+              :stats="statsTable"
+              :headers="['Ville', 'Entrées', 'Sorties']"
+              caption="Entrées et sorties par ville"
+              :to-fixed="2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { StatsListPropType } from '~~/types/stat'
+  import type { StatsTablePropType, StatsListPropType } from '~~/types/stat'
 
   const countNoPercentage: StatsListPropType = [
     {
@@ -179,4 +216,13 @@
   const totalCount = countPercentagePictoColor.reduce((acc, cur) => {
     return acc + cur.count
   }, 0)
+
+  const statsTableHeadingId = useId()
+
+  const statsTable: StatsTablePropType = [
+    ['Paris', 10, 22],
+    ['Marseille', 5, 0],
+    ['Lyon', 35, null],
+    ['Toulouse', 8, 8]
+  ]
 </script>
