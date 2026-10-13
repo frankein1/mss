@@ -1,5 +1,4 @@
 import { UserActivityType } from '@prisma/client'
-import { TRPCError } from '@trpc/server'
 import { createMutation } from '~~/server/route'
 import type { SecurityRuleContext } from '~~/server/security'
 import {
@@ -10,7 +9,7 @@ import { invalidError, type ProtectedAppContext } from '~~/server/trpc'
 import type { UpdateBeneficiarySupportProgramsServerInput } from '~~/server/schema'
 import { updateBeneficiarySupportProgramsSchema } from '~~/server/schema'
 import { BeneficiaryRepo, SupportProgramNameRepo } from '~~/server/database'
-import { BeneficiaryService } from '~~/server/services'
+import { BeneficiaryService, SupportProgramService } from '~~/server/services'
 import { prepareRelationUpdates } from '~/utils/prisma'
 
 const securityCheck = async (
@@ -45,14 +44,18 @@ const securityCheck = async (
 }
 
 function toSupportProgramData(
-  sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number]
+  sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number],
+  exitReasonIds: Map<string, string>
 ) {
+  const exitReasonName = sp.exitReason?.trim()
   return {
     id: sp.id,
     startDate: sp.startDate ?? null,
     endDate: sp.endDate ?? null,
     outcome: sp.outcome ?? null,
-    exitReason: sp.exitReason ?? null,
+    exitReasonId: exitReasonName
+      ? (exitReasonIds.get(exitReasonName) ?? null)
+      : null,
     supportProgramNameId: sp.supportProgramNameId
   }
 }
@@ -105,9 +108,14 @@ const handler = async ({
     }
   ).then(b => b.supportPrograms)
 
+  const exitReasonIds = await SupportProgramService.resolveExitReasonIds(
+    ctx,
+    supportPrograms.map(sp => sp.exitReason)
+  )
+
   // Relation updates must manage many-to-many relation for partner organization
   const relationUpdates = prepareRelationUpdates(
-    supportPrograms.map(toSupportProgramData),
+    supportPrograms.map(sp => toSupportProgramData(sp, exitReasonIds)),
     previousSupportPrograms
   )
 
@@ -143,6 +151,8 @@ const handler = async ({
       }
     }
   })
+
+  await SupportProgramService.deleteUnusedExitReasons(ctx)
 
   return updatedBeneficiary
 }

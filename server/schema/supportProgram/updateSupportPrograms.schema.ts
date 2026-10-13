@@ -14,7 +14,12 @@ export const supportProgramSchema = z
     endDate: dateOrEmpty,
     partnerOrganisationIds: z.array(z.string().uuid()).default([]),
     outcome: withEmptyValueOptionalNativeEnum(SupportProgramOutcome),
-    exitReason: limitedStringConstraint(2, 500).nullish()
+    // Exit reason name: an existing one of the structure or a new one
+    exitReason: z
+      .literal('')
+      .transform(() => null)
+      .or(limitedStringConstraint(2, 500))
+      .nullish()
   })
   .refine(data => !data.endDate || !!data.startDate, {
     message: "Veuillez saisir une date d'entrée également",

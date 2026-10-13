@@ -799,10 +799,21 @@ const configSupportProgram: Record<
   support_program_name_id: true,
   start_date: true,
   end_date: true,
-  exit_reason: true,
+  exit_reason_id: true,
   created_at: true,
   updated_at: true,
   outcome: true
+}
+
+const configSupportProgramExitReason: Record<
+  SnakeCase<keyof typeof Prisma.SupportProgramExitReasonScalarFieldEnum>,
+  boolean
+> = {
+  id: true,
+  name: true,
+  structure_id: true,
+  created_by_id: true,
+  created_at: true
 }
 
 const configPartnerOrganizationToSupportProgram = {
@@ -877,6 +888,7 @@ export const CONFIG = {
   redirection_reason: configRedirectionReason,
   minister: configMinister,
   support_program_name: configSupportProgramName,
+  support_program_exit_reason: configSupportProgramExitReason,
   support_program: configSupportProgram,
   _partner_organization_to_support_program:
     configPartnerOrganizationToSupportProgram,

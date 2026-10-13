@@ -9,7 +9,7 @@ import {
   DocumentRepo,
   FamilyFileRepo
 } from '~~/server/database'
-import { BeneficiaryService } from '~~/server/services'
+import { BeneficiaryService, SupportProgramService } from '~~/server/services'
 import { prismaClient } from '~~/server/prisma'
 import { deleteFiles } from '~~/server/lib/s3/file'
 
@@ -69,6 +69,9 @@ const handler = async ({
   } else {
     await prismaClient.$transaction([deleteBeneficiary(), deleteFamilyFile()])
   }
+
+  // Support programs are deleted in cascade, their exit reasons may be unused
+  await SupportProgramService.deleteUnusedExitReasons(ctx)
 
   // If fails, will result in orphan documents to be cleaned by a scheduled job
   if (beneficiaryDocumentKeys?.length) {

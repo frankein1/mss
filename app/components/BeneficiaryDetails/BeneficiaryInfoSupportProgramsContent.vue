@@ -38,7 +38,6 @@
             "
           />
           <BeneficiaryInfoLabel
-            v-if="supportProgram.endDate"
             :label="supportProgramFieldLabels.exitReason"
             :value="supportProgram.exitReason ?? undefined"
           />

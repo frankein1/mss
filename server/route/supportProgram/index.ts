@@ -6,6 +6,7 @@ import { upsertNameMutation } from './upsert-name.mutation'
 import { deleteNameMutation } from './delete-name.mutation'
 import { countNameUsageQuery } from './count-name-usage.query'
 import { countLinkedSocialSupportsQuery } from './count-linked-social-supports.query'
+import { getExitReasonListQuery } from './get-exit-reason-list.query'
 
 export const supportProgramRoutes = {
   getSupportProgramNameListQuery,
@@ -15,5 +16,6 @@ export const supportProgramRoutes = {
   upsertNameMutation,
   deleteNameMutation,
   countNameUsageQuery,
-  countLinkedSocialSupportsQuery
+  countLinkedSocialSupportsQuery,
+  getExitReasonListQuery
 }

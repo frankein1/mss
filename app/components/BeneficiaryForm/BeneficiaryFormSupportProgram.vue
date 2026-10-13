@@ -81,11 +81,11 @@
     </div>
 
     <div class="fr-col-12">
-      <VeeInput
+      <VeeCombobox
         :name="`supportPrograms[${index}].exitReason`"
         :label="supportProgramFieldLabels.exitReason"
-        disabled
-        hint="Bientôt disponible"
+        :options="exitReasonOptions"
+        :with-creation="true"
       />
     </div>
   </template>
@@ -129,6 +129,7 @@
     hasLifecycle: boolean
     supportProgramNameOptions: Options
     partnerOrganisationOptions: Options
+    exitReasonOptions: Options
   }>()
 
   const supportProgramNameGroup = useTemplateRef<HTMLElement>(
