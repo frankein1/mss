@@ -268,6 +268,7 @@ const SUPPORT_PROGRAM_EXPORTED_COLUMNS = [
   },
   { key: 'startDate', header: supportProgramFieldLabels.startDate },
   { key: 'endDate', header: supportProgramFieldLabels.endDate },
+  { key: 'exitReason', header: supportProgramFieldLabels.exitReason },
   { key: 'outcome', header: supportProgramFieldLabels.outcome }
 ]
 
@@ -298,6 +299,7 @@ const addSupportProgramsWorksheet = (
           .join(' / '),
         startDate: supportProgram.startDate || '',
         endDate: supportProgram.endDate || '',
+        exitReason: supportProgram.exitReason || '',
         outcome: supportProgram.outcome
           ? supportProgramOutcomeKeys.byKey[supportProgram.outcome]
           : ''

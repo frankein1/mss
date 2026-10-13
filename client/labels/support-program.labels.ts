@@ -3,9 +3,10 @@ import type { FieldLabels } from '~~/types/fieldLabels'
 
 type SupportProgramFieldLabels = Pick<
   SupportProgram,
-  'outcome' | 'startDate' | 'endDate' | 'exitReason'
+  'outcome' | 'startDate' | 'endDate'
 > & {
   name: string
+  exitReason: string
   partnerOrganisationIds: string
 }
 

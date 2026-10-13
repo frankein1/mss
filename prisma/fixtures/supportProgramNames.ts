@@ -9,7 +9,8 @@ import {
 export enum FixtureProgramName {
   PortageRepas = 0,
   AideDomicile = 1,
-  Externe = 2
+  Externe = 2,
+  GratuiteTransport = 3
 }
 
 export const fixturesSupportProgramNames = [
@@ -30,8 +31,16 @@ export const fixturesSupportProgramNames = [
     name: 'Programme externe',
     structureId: fixtureStructures[FixtureStructure.Ministère].id,
     createdById: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id
+  },
+  {
+    id: 'd4e5f6a7-b8c9-0123-def0-234567890123',
+    name: 'Gratuité des transports',
+    hasLifecycle: true,
+    structureId: fixtureStructures[FixtureStructure.Test].id,
+    createdById: fixturesUsers[FixtureUserRole.StructureManager].id
   }
 ] satisfies [
+  Prisma.SupportProgramNameCreateManyInput,
   Prisma.SupportProgramNameCreateManyInput,
   Prisma.SupportProgramNameCreateManyInput,
   Prisma.SupportProgramNameCreateManyInput

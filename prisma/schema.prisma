@@ -100,24 +100,25 @@ model User {
 
   accountReminderEmail Int? @default(0) @map("account_reminder_email")
 
-  createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
-  lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
-  createdDocuments             Document[]
-  createdSocialSupportSubjects SocialSupportSubject[]
-  receivedNotifications        Notification[]         @relation(name: "received_notifications")
-  itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
-  createdBeneficiaries         Beneficiary[]          @relation(name: "created_beneficiaries")
-  disabledBeneficiaries        Beneficiary[]          @relation(name: "disabled_beneficiaries")
-  referentFor                  FamilyFile[]           @relation(name: "family_file_referents")
-  splitFromFileBeneficiaries   Beneficiary[]          @relation(name: "split_from_file_beneficiaries")
-  archivedBeneficiaries        ArchivedBeneficiary[]  @relation(name: "archived_beneficiaries_2")
-  createdPartnerOrganizations  PartnerOrganization[]
-  CGUHistory                   CGUHistory[]
-  userActivities               UserActivity[]
-  createdWorkshopNames         WorkshopName[]
-  createdWorkshops             Workshop[]
-  createdRedirectionReasons    RedirectionReason[]
-  createdSupportProgramNames   SupportProgramName[]
+  createdSocialSupports            SocialSupport[]            @relation(name: "created_social_supports")
+  lastUpdatedSocialSupports        SocialSupport[]            @relation(name: "last_updated_social_supports")
+  createdDocuments                 Document[]
+  createdSocialSupportSubjects     SocialSupportSubject[]
+  receivedNotifications            Notification[]             @relation(name: "received_notifications")
+  itemCreatedByNotifications       Notification[]             @relation(name: "item_created_by_notifications")
+  createdBeneficiaries             Beneficiary[]              @relation(name: "created_beneficiaries")
+  disabledBeneficiaries            Beneficiary[]              @relation(name: "disabled_beneficiaries")
+  referentFor                      FamilyFile[]               @relation(name: "family_file_referents")
+  splitFromFileBeneficiaries       Beneficiary[]              @relation(name: "split_from_file_beneficiaries")
+  archivedBeneficiaries            ArchivedBeneficiary[]      @relation(name: "archived_beneficiaries_2")
+  createdPartnerOrganizations      PartnerOrganization[]
+  CGUHistory                       CGUHistory[]
+  userActivities                   UserActivity[]
+  createdWorkshopNames             WorkshopName[]
+  createdWorkshops                 Workshop[]
+  createdRedirectionReasons        RedirectionReason[]
+  createdSupportProgramNames       SupportProgramName[]
+  createdSupportProgramExitReasons SupportProgramExitReason[]
 
   @@map("user")
 }
@@ -166,11 +167,12 @@ model Structure {
   externalRdvspActive Boolean? @map("external_rdvsp_active")
   externalRdvspId     String?  @map("external_rdvsp_id")
 
-  archivedBeneficiaries ArchivedBeneficiary[]
-  Workshop              Workshop[]
-  WorkshopName          WorkshopName[]
-  RedirectionReasons    RedirectionReason[]
-  supportProgramNames   SupportProgramName[]
+  archivedBeneficiaries     ArchivedBeneficiary[]
+  Workshop                  Workshop[]
+  WorkshopName              WorkshopName[]
+  RedirectionReasons        RedirectionReason[]
+  supportProgramNames       SupportProgramName[]
+  supportProgramExitReasons SupportProgramExitReason[]
 
   @@map("structure")
 }
@@ -1996,7 +1998,8 @@ model SupportProgram {
 
   outcome SupportProgramOutcome?
 
-  exitReason String? @map("exit_reason")
+  exitReason   SupportProgramExitReason? @relation(fields: [exitReasonId], references: [id], onDelete: SetNull)
+  exitReasonId String?                   @map("exit_reason_id") @db.Uuid
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -2007,7 +2010,24 @@ model SupportProgram {
   @@index(fields: [beneficiaryId], map: "support_program_beneficiary_id_idx")
   // vérifier l'utilité de cet index
   @@index(fields: [supportProgramNameId], map: "support_program_support_program_name_id_idx")
+  @@index(fields: [exitReasonId], map: "support_program_exit_reason_id_idx")
   @@map("support_program")
+}
+
+/// Exit reason of a beneficiary support program, shared within a structure
+model SupportProgramExitReason {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdById String    @map("created_by_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  supportPrograms SupportProgram[]
+
+  @@unique([structureId, name])
+  @@map("support_program_exit_reason")
 }
 
 enum SupportProgramOutcome {
