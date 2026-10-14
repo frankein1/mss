@@ -13,7 +13,7 @@ CREATE TABLE "support_program_exit_reason" (
 CREATE UNIQUE INDEX "support_program_exit_reason_structure_id_name_key" ON "support_program_exit_reason"("structure_id", "name");
 
 -- AddForeignKey
-ALTER TABLE "support_program_exit_reason" ADD CONSTRAINT "support_program_exit_reason_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "support_program_exit_reason" ADD CONSTRAINT "support_program_exit_reason_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "support_program_exit_reason" ADD CONSTRAINT "support_program_exit_reason_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
