@@ -13,12 +13,9 @@ export async function resolveExitReasonIds(
   ctx: SecurityRuleContext,
   exitReasonNames: (string | null | undefined)[]
 ): Promise<Map<string, string>> {
+  // Names are already trimmed by the input schema
   const names = [
-    ...new Set(
-      exitReasonNames
-        .map(name => name?.trim())
-        .filter((name): name is string => !!name)
-    )
+    ...new Set(exitReasonNames.filter((name): name is string => !!name))
   ]
 
   if (names.length === 0) {

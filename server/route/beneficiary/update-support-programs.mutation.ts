@@ -47,14 +47,13 @@ function toSupportProgramData(
   sp: UpdateBeneficiarySupportProgramsServerInput['supportPrograms'][number],
   exitReasonIds: Map<string, string>
 ) {
-  const exitReasonName = sp.exitReason?.trim()
   return {
     id: sp.id,
     startDate: sp.startDate ?? null,
     endDate: sp.endDate ?? null,
     outcome: sp.outcome ?? null,
-    exitReasonId: exitReasonName
-      ? (exitReasonIds.get(exitReasonName) ?? null)
+    exitReasonId: sp.exitReason
+      ? (exitReasonIds.get(sp.exitReason) ?? null)
       : null,
     supportProgramNameId: sp.supportProgramNameId
   }

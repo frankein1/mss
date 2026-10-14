@@ -2018,7 +2018,7 @@ model SupportProgram {
 model SupportProgramExitReason {
   id          String    @id @default(uuid()) @db.Uuid
   name        String
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
   createdBy   User      @relation(fields: [createdById], references: [id])
   createdById String    @map("created_by_id") @db.Uuid
