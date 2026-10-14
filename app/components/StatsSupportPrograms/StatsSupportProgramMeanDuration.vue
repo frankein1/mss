@@ -54,6 +54,6 @@
     if (count === 0) {
       return 'Aucun dispositif renseigné avec une date d’entrée et une date de sortie.'
     }
-    return `Calculée sur ${count} ${plural('dispositif', count)} ${plural('renseigné', count)} avec une date d’entrée et une date de sortie.`
+    return `Calculée sur ${count} ${plural('dispositif', count)} ${plural('renseigné', count)} avec une date d’entrée et une date de sortie, toutes les deux comprises dans la période séléctionnée.`
   })
 </script>

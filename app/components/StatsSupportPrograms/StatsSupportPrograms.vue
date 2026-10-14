@@ -147,7 +147,7 @@
     supportProgramNames: {
       id: 'stats-support-program-names',
       name: 'Nombre de bénéficiaires par dispositif',
-      subtitle: 'Un bénéficiaire peut être compté pour plusieurs dispositifs.'
+      subtitle: 'Un bénéficiaire peut être compté dans plusieurs dispositifs.'
     }
   }
 </script>
