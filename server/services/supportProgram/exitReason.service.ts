@@ -23,6 +23,7 @@ export async function resolveExitReasonIds(
   }
 
   const structureId = ctx.structure.id
+  // TODO: optimize in case of large ExitReason number in structure
   const reasons = await prismaClient.$transaction(
     names.map(name =>
       SupportProgramExitReasonRepo.prisma.upsert({
