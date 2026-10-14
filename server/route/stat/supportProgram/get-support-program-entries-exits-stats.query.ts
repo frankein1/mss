@@ -24,9 +24,11 @@ const handler = async ({
 
 /**
  * Entries, exits and ongoing support programs per support program name.
- * An exit is an end date reached on the reference date: today, or the end of
- * the filtered period when it is earlier. Otherwise (no end date, or an end
- * date after the reference date) the support program is ongoing.
+ * An entry is a start date within the filtered period.
+ * An exit is an end date within the filtered period and reached on the
+ * reference date: today, or the end of the filtered period when it is earlier.
+ * Otherwise (no end date, or an end date after the reference date) the support
+ * program is ongoing.
  * Each enrollment is counted: a beneficiary entering a support program twice counts twice.
  */
 export const getSupportProgramEntriesExits = async (
@@ -48,7 +50,7 @@ export const getSupportProgramEntriesExits = async (
   })
 
   const endOfToday = dayjs().endOf('day').toDate()
-  const periodEnd = prepareDateFilters(input)?.lte
+  const { gte: periodStart, lte: periodEnd } = prepareDateFilters(input) ?? {}
   const referenceDate =
     periodEnd && periodEnd < endOfToday ? periodEnd : endOfToday
 
@@ -70,10 +72,18 @@ export const getSupportProgramEntriesExits = async (
       exits: 0,
       ongoing: 0
     }
-    if (startDate) {
+    if (
+      startDate &&
+      (!periodStart || startDate >= periodStart) &&
+      (!periodEnd || startDate <= periodEnd)
+    ) {
       item.entries++
     }
-    if (endDate && endDate <= referenceDate) {
+    if (
+      endDate &&
+      (!periodStart || endDate >= periodStart) &&
+      endDate <= referenceDate
+    ) {
       item.exits++
     } else {
       item.ongoing++
