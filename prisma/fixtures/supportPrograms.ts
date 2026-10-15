@@ -3,8 +3,21 @@ import {
   fixturesBeneficiaries,
   FixtureBeneficiary,
   fixturesSupportProgramNames,
-  FixtureProgramName
+  FixtureProgramName,
+  fixtureStructures,
+  FixtureStructure,
+  fixturesUsers,
+  FixtureUserRole
 } from '.'
+
+export const fixturesSupportProgramExitReasons = [
+  {
+    id: 'e5f6a7b8-c9d0-1234-ef01-345678901234',
+    name: 'Fin de prise en charge par la région',
+    structureId: fixtureStructures[FixtureStructure.Test].id,
+    createdById: fixturesUsers[FixtureUserRole.StructureManager].id
+  }
+] satisfies [Prisma.SupportProgramExitReasonCreateManyInput]
 
 export const fixturesSupportPrograms: Prisma.SupportProgramCreateManyInput[] = [
   {
@@ -50,5 +63,13 @@ export const fixturesSupportPrograms: Prisma.SupportProgramCreateManyInput[] = [
       fixturesSupportProgramNames[FixtureProgramName.AideDomicile].id,
     startDate: new Date('2024-01-01'),
     endDate: new Date('2025-08-01')
+  },
+  {
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    supportProgramNameId:
+      fixturesSupportProgramNames[FixtureProgramName.GratuiteTransport].id,
+    startDate: new Date('2024-09-01'),
+    endDate: new Date('2025-06-30'),
+    exitReasonId: fixturesSupportProgramExitReasons[0].id
   }
 ]

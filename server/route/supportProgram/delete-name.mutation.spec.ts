@@ -30,6 +30,9 @@ afterEach(async () => {
   await prismaClient.socialSupportSubject.deleteMany({
     where: { id: { in: subjectIds } }
   })
+  await prismaClient.supportProgramExitReason.deleteMany({
+    where: { name: { startsWith: 'UDN-' } }
+  })
   nameIds.length = 0
   beneficiaryIds.length = 0
   familyFileIds.length = 0
@@ -286,5 +289,91 @@ describe('SupportProgram - Delete Name - Cascade Effects', () => {
     })
     expect(updatedSocialSupport).not.toBeNull()
     expect(updatedSocialSupport?.supportProgramId).toBeNull()
+  })
+})
+
+describe('SupportProgram - Delete Name - Exit reasons', () => {
+  async function createBeneficiaryWithProgram(
+    nameId: string,
+    exitReasonId: string
+  ) {
+    const familyFile = await prismaClient.familyFile.create({
+      data: {
+        structure: { connect: { id: structureId } },
+        referents: { connect: [{ id: referentId }] }
+      }
+    })
+    familyFileIds.push(familyFile.id)
+
+    const beneficiary = await prismaClient.beneficiary.create({
+      data: {
+        familyFile: { connect: { id: familyFile.id } },
+        structure: { connect: { id: structureId } },
+        createdBy: { connect: { id: managerId } },
+        fileNumber: `UDN-EXIT-${crypto.randomUUID()}`,
+        status: 'Active'
+      }
+    })
+    beneficiaryIds.push(beneficiary.id)
+
+    await prismaClient.supportProgram.create({
+      data: {
+        beneficiaryId: beneficiary.id,
+        supportProgramNameId: nameId,
+        exitReasonId
+      }
+    })
+  }
+
+  async function createName() {
+    const { id } = await prismaClient.supportProgramName.create({
+      data: {
+        name: `UDN-ExitName-${crypto.randomUUID()}`,
+        hasLifecycle: true,
+        structureId,
+        createdById: managerId
+      },
+      select: { id: true }
+    })
+    nameIds.push(id)
+    return id
+  }
+
+  test('Deleting a name deletes the exit reasons no longer used', async ({
+    trpc
+  }) => {
+    const nameId = await createName()
+    const exitReason = await prismaClient.supportProgramExitReason.create({
+      data: { name: 'UDN-Unused-exit', structureId, createdById: managerId }
+    })
+    await createBeneficiaryWithProgram(nameId, exitReason.id)
+
+    await trpc.structureManager.supportProgram.deleteName({ id: nameId })
+
+    const record = await prismaClient.supportProgramExitReason.findUnique({
+      where: { id: exitReason.id }
+    })
+    expect(record).toBeNull()
+  })
+
+  test('Deleting a name keeps the exit reasons still used by another support program', async ({
+    trpc
+  }) => {
+    const deletedNameId = await createName()
+    const keptNameId = await createName()
+    const exitReason = await prismaClient.supportProgramExitReason.create({
+      data: { name: 'UDN-Shared-exit', structureId, createdById: managerId }
+    })
+    await createBeneficiaryWithProgram(deletedNameId, exitReason.id)
+    await createBeneficiaryWithProgram(keptNameId, exitReason.id)
+
+    await trpc.structureManager.supportProgram.deleteName({
+      id: deletedNameId
+    })
+
+    const record = await prismaClient.supportProgramExitReason.findUnique({
+      where: { id: exitReason.id }
+    })
+    expect(record).not.toBeNull()
   })
 })

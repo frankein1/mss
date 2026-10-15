@@ -46,6 +46,12 @@ afterEach(async () => {
   await prismaClient.supportProgramName.deleteMany({
     where: { id: { in: supportProgramNameIds } }
   })
+  await prismaClient.supportProgramExitReason.deleteMany({
+    where: {
+      structureId: fixtureStructures[FixtureStructure.Test].id,
+      supportPrograms: { none: {} }
+    }
+  })
   supportProgramNameIds.length = 0
 })
 
@@ -63,13 +69,20 @@ async function createSupportPrograms(beneficiaryId: string) {
     'Portage de repas ponctuel',
     false
   )
+  const exitReason = await prismaClient.supportProgramExitReason.create({
+    data: {
+      name: 'Déménagement',
+      structureId: fixtureStructures[FixtureStructure.Test].id,
+      createdById: fixturesUsers[FixtureUserRole.StructureManager].id
+    }
+  })
   await prismaClient.supportProgram.create({
     data: {
       beneficiaryId,
       supportProgramNameId: supportProgramName.id,
       startDate: new Date('2025-03-01'),
       endDate: new Date('2025-09-15'),
-      exitReason: 'Déménagement',
+      exitReasonId: exitReason.id,
       outcome: 'PartiallyAchieved',
       partnerOrganisations: {
         connect: [
@@ -171,6 +184,7 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
       'Organismes partenaires',
       "Date d'entrée",
       'Date de sortie',
+      'Motif de sortie',
       'Atteinte des objectifs'
     ])
     expect(
@@ -184,6 +198,7 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
         partnerOrganisations: 'France Travail / Mairie de Valence',
         startDate: new Date('2025-03-01'),
         endDate: new Date('2025-09-15'),
+        exitReason: 'Déménagement',
         outcome: 'Partiel'
       },
       {
@@ -193,6 +208,7 @@ describe('Beneficiary - Export All Service - Support programs worksheet', () => 
         partnerOrganisations: '',
         startDate: '',
         endDate: '',
+        exitReason: '',
         outcome: 'Atteint'
       }
     ])
@@ -298,6 +314,7 @@ const readSupportProgramRows = (worksheet: Worksheet | undefined) => {
     partnerOrganisations: unknown
     startDate: unknown
     endDate: unknown
+    exitReason: unknown
     outcome: unknown
   }[] = []
   worksheet?.eachRow((row, rowNumber) => {
@@ -310,6 +327,7 @@ const readSupportProgramRows = (worksheet: Worksheet | undefined) => {
       partnerOrganisations: row.getCell('partnerOrganisations').value,
       startDate: row.getCell('startDate').value,
       endDate: row.getCell('endDate').value,
+      exitReason: row.getCell('exitReason').value,
       outcome: row.getCell('outcome').value
     })
   })

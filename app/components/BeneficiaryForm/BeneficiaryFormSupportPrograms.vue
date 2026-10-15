@@ -25,6 +25,7 @@
       :has-lifecycle="programNameHasLifecycle(field)"
       :support-program-name-options="supportProgramNameOptions"
       :partner-organisation-options="partnerOrganisationOptions"
+      :exit-reason-options="exitReasonOptions"
       @remove-support-program="onClickRemove(field, idx)"
     />
 
@@ -80,6 +81,14 @@
         label: name,
         value: id
       })) ?? []
+  )
+
+  const { data: exitReasons } =
+    await trpcClient.supportProgram.getExitReasonList.useQuery()
+
+  const exitReasonOptions: Ref<Options> = computed(
+    () =>
+      exitReasons.value?.map(({ name }) => ({ label: name, value: name })) ?? []
   )
 
   const { fields, push, remove } =

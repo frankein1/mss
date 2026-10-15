@@ -42,4 +42,7 @@ export {
   fixturesSupportProgramNames,
   FixtureProgramName
 } from './supportProgramNames'
-export { fixturesSupportPrograms } from './supportPrograms'
+export {
+  fixturesSupportPrograms,
+  fixturesSupportProgramExitReasons
+} from './supportPrograms'
