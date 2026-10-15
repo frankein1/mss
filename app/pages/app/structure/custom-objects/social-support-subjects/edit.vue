@@ -30,60 +30,56 @@
         </div>
       </AtomCallout>
 
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-
-      <AtomAlert
-        v-else-if="error"
-        :alert-type="AlertType.Error"
+      <AtomLazyComponent
+        :pending
+        :error="error != null || !data"
         message="Les informations de votre structure n'ont pas pu être chargées."
-      />
-
-      <div
-        v-else-if="data"
-        class="fr-accordions-group"
       >
-        <section class="feature-section fr-accordion fr-mb-1w">
-          <h2 class="fr-accordion__title">
-            <button
-              class="fr-accordion__btn fr-h4"
+        <div
+          v-if="data"
+          data-fr-group="false"
+          class="fr-accordions-group"
+        >
+          <section class="feature-section fr-accordion fr-mb-1w">
+            <h2 class="fr-accordion__title">
+              <button
+                class="fr-accordion__btn fr-h4"
+                type="button"
+                aria-expanded="true"
+                aria-controls="accordion-selection"
+              >
+                Sélectionner parmi une suggestion d'objets
+              </button>
+            </h2>
+            <div
+              id="accordion-selection"
               type="button"
-              aria-expanded="false"
-              aria-controls="accordion-selection"
+              class="fr-collapse"
             >
-              Sélectionner parmi une suggestion d'objets
-            </button>
-          </h2>
-          <div
-            id="accordion-selection"
-            type="button"
-            class="fr-collapse"
-          >
-            <SocialSupportSubjectsSelection :subjects="data" />
-          </div>
-        </section>
-        <section class="feature-section fr-accordion">
-          <h2 class="fr-accordion__title">
-            <button
-              class="fr-accordion__btn fr-h4"
-              type="button"
-              aria-expanded="false"
-              aria-controls="accordion-customization"
-            >
-              Créer un objet personnalisé
-            </button>
-          </h2>
+              <SocialSupportSubjectsSelection :subjects="data" />
+            </div>
+          </section>
+          <section class="feature-section fr-accordion">
+            <h2 class="fr-accordion__title">
+              <button
+                class="fr-accordion__btn fr-h4"
+                type="button"
+                aria-expanded="true"
+                aria-controls="accordion-customization"
+              >
+                Créer un objet personnalisé
+              </button>
+            </h2>
 
-          <div
-            id="accordion-customization"
-            class="fr-collapse"
-          >
-            <SocialSupportSubjectsCustomCreation />
-          </div>
-        </section>
-      </div>
+            <div
+              id="accordion-customization"
+              class="fr-collapse"
+            >
+              <SocialSupportSubjectsCustomCreation />
+            </div>
+          </section>
+        </div>
+      </AtomLazyComponent>
     </div>
     <AtomActionsBar>
       <ul
@@ -114,7 +110,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
   import type { UpdateSocialSupportSubjectsInput } from '~~/server/schema'
   import { updateSocialSupportSubjectsSchema } from '~~/server/schema'
   import { routes } from '~/utils/routes'
@@ -194,6 +189,8 @@
 </script>
 
 <style scoped lang="scss">
+  @use '@gouvfr/dsfr/src/module/media-query' as dsfr-media-query;
+
   .note {
     display: flex;
     align-items: center;
@@ -203,5 +200,18 @@
 
   .fr-accordion__btn {
     padding: 2rem 2.5rem;
+
+    &[aria-expanded='true'] {
+      background: none;
+      border-bottom: 1px solid var(--border-default-grey);
+    }
+  }
+
+  form > .fr-container {
+    min-height: calc(100vh - 6rem - 145px);
+
+    @include dsfr-media-query.respond-from('md') {
+      min-height: calc(100vh - 3rem - 97px);
+    }
   }
 </style>
