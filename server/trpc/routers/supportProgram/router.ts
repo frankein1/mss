@@ -25,5 +25,8 @@ export const supportProgramRouter = router({
     .query(routes.countNameUsageQuery.execute),
   countLinkedSocialSupports: protectedProcedure
     .input(routes.countLinkedSocialSupportsQuery.inputValidation)
-    .query(routes.countLinkedSocialSupportsQuery.execute)
+    .query(routes.countLinkedSocialSupportsQuery.execute),
+  getExitReasonList: protectedProcedure
+    .input(routes.getExitReasonListQuery.inputValidation)
+    .query(routes.getExitReasonListQuery.execute)
 })

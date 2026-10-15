@@ -73,6 +73,9 @@ afterEach(async () => {
     where: { name: { startsWith: 'USP-' } }
   })
   await prismaClient.familyFile.deleteMany({ where: { id: familyFileId } })
+  await prismaClient.supportProgramExitReason.deleteMany({
+    where: { name: { startsWith: 'USP-' } }
+  })
   await prismaClient.partnerOrganization.deleteMany({
     where: { name: { startsWith: 'USP-' } }
   })
@@ -290,7 +293,7 @@ describe('Support Programs - Update - CRUD', () => {
           supportProgramNameId: supportProgramNameIds[4]!,
           startDate,
           endDate,
-          exitReason: 'Fin de prise en charge',
+          exitReason: 'USP-Fin de prise en charge',
           partnerOrganisationIds: [partnerOrganisation.id],
           outcome: SupportProgramOutcome.SubjectToConditions
         }
@@ -302,14 +305,14 @@ describe('Support Programs - Update - CRUD', () => {
       select: {
         startDate: true,
         endDate: true,
-        exitReason: true,
+        exitReason: { select: { name: true } },
         outcome: true,
         partnerOrganisations: { select: { id: true } }
       }
     })
     expect(supportProgram?.startDate).toEqual(startDate)
     expect(supportProgram?.endDate).toEqual(endDate)
-    expect(supportProgram?.exitReason).toBe('Fin de prise en charge')
+    expect(supportProgram?.exitReason?.name).toBe('USP-Fin de prise en charge')
     expect(supportProgram?.partnerOrganisations).toEqual([
       { id: partnerOrganisation.id }
     ])
@@ -618,5 +621,171 @@ describe('Support Programs - Update - Lifecycle Enforcement', () => {
     expect(program?.startDate).toEqual(new Date('2024-01-01'))
     expect(program?.endDate).toEqual(new Date('2024-12-31'))
     expect(program?.outcome).toBe(SupportProgramOutcome.Achieved)
+  })
+})
+
+describe('Support Programs - Update - Exit reasons', () => {
+  const lifecycleProgram = (exitReason?: string | null) => ({
+    id: crypto.randomUUID(),
+    supportProgramNameId: supportProgramNameIds[0]!,
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2024-06-30'),
+    exitReason
+  })
+
+  const findExitReasons = (name: string) =>
+    prismaClient.supportProgramExitReason.findMany({
+      where: { name },
+      select: { id: true, structureId: true }
+    })
+
+  test('A new exit reason name creates an exit reason for the structure', async ({
+    trpc
+  }) => {
+    const program = lifecycleProgram('USP-Déménagement')
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [program]
+    })
+
+    const exitReasons = await findExitReasons('USP-Déménagement')
+    expect(exitReasons).toEqual([{ id: expect.any(String), structureId }])
+
+    const supportProgram = await prismaClient.supportProgram.findUnique({
+      where: { id: program.id },
+      select: { exitReasonId: true }
+    })
+    expect(supportProgram?.exitReasonId).toBe(exitReasons[0]!.id)
+  })
+
+  test('An existing exit reason name is reused', async ({ trpc }) => {
+    const existing = await prismaClient.supportProgramExitReason.create({
+      data: { name: 'USP-Abandon', structureId, createdById: socialWorkerId }
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [
+        lifecycleProgram('USP-Abandon'),
+        lifecycleProgram('  USP-Abandon ')
+      ]
+    })
+
+    const exitReasons = await findExitReasons('USP-Abandon')
+    expect(exitReasons).toEqual([{ id: existing.id, structureId }])
+
+    const supportPrograms = await prismaClient.supportProgram.findMany({
+      where: { beneficiaryId },
+      select: { exitReasonId: true }
+    })
+    expect(supportPrograms).toEqual([
+      { exitReasonId: existing.id },
+      { exitReasonId: existing.id }
+    ])
+  })
+
+  test('An empty exit reason is saved as null', async ({ trpc }) => {
+    const program = lifecycleProgram('')
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [program]
+    })
+
+    const supportProgram = await prismaClient.supportProgram.findUnique({
+      where: { id: program.id },
+      select: { exitReasonId: true }
+    })
+    expect(supportProgram?.exitReasonId).toBeNull()
+  })
+
+  test('Removing the last support program using an exit reason deletes it', async ({
+    trpc
+  }) => {
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [lifecycleProgram('USP-Réorientation')]
+    })
+    expect(await findExitReasons('USP-Réorientation')).toHaveLength(1)
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: []
+    })
+    expect(await findExitReasons('USP-Réorientation')).toHaveLength(0)
+  })
+
+  test('Changing the exit reason deletes the previous one if unused', async ({
+    trpc
+  }) => {
+    const program = lifecycleProgram('USP-Ancien motif')
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [program]
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [{ ...program, exitReason: 'USP-Nouveau motif' }]
+    })
+
+    expect(await findExitReasons('USP-Ancien motif')).toHaveLength(0)
+    expect(await findExitReasons('USP-Nouveau motif')).toHaveLength(1)
+  })
+
+  test('An exit reason still used by another beneficiary is kept', async ({
+    trpc
+  }) => {
+    const otherBeneficiary = await prismaClient.beneficiary.create({
+      data: {
+        familyFile: { connect: { id: familyFileId } },
+        structure: { connect: { id: structureId } },
+        createdBy: { connect: { id: socialWorkerId } },
+        fileNumber: 'TEST-USP-002',
+        status: 'Active'
+      }
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [lifecycleProgram('USP-Partagé')]
+    })
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      id: otherBeneficiary.id,
+      supportPrograms: [lifecycleProgram('USP-Partagé')]
+    })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: []
+    })
+
+    expect(await findExitReasons('USP-Partagé')).toHaveLength(1)
+  })
+
+  test('Exit reasons are scoped to the structure', async ({ trpc }) => {
+    const otherStructureExitReason =
+      await prismaClient.supportProgramExitReason.create({
+        data: {
+          name: 'USP-Hors structure',
+          structureId: otherStructureId,
+          createdById:
+            fixturesUsers[FixtureUserRole.StructureManagerMinistere].id
+        }
+      })
+
+    await trpc.structureManager.beneficiary.updateSupportPrograms({
+      ...baseInput(),
+      supportPrograms: [lifecycleProgram('USP-Hors structure')]
+    })
+
+    const exitReasons = await findExitReasons('USP-Hors structure')
+    expect(exitReasons).toHaveLength(2)
+    expect(exitReasons).toContainEqual({
+      id: otherStructureExitReason.id,
+      structureId: otherStructureId
+    })
+    expect(exitReasons).toContainEqual({ id: expect.any(String), structureId })
   })
 })

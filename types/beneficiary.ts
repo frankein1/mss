@@ -81,8 +81,9 @@ export type ContributingPartnerOutput =
 
 export type GetSupportProgramItem = Pick<
   SupportProgram,
-  'id' | 'startDate' | 'endDate' | 'exitReason' | 'outcome'
+  'id' | 'startDate' | 'endDate' | 'outcome'
 > & {
+  exitReason: string | null
   supportProgramName: { id: string; name: string; hasLifecycle: boolean }
   partnerOrganisations: { id: string; name: string }[]
 }

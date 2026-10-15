@@ -185,7 +185,7 @@ const select = {
       id: true,
       startDate: true,
       endDate: true,
-      exitReason: true,
+      exitReason: { select: { name: true } },
       outcome: true,
       supportProgramName: {
         select: { id: true, name: true, hasLifecycle: true }
@@ -460,7 +460,7 @@ function getSupportPrograms(beneficiary: BeneficiaryOutput) {
       id: d.id,
       startDate: hasLifecycle ? d.startDate : null,
       endDate: hasLifecycle ? d.endDate : null,
-      exitReason: hasLifecycle ? d.exitReason : null,
+      exitReason: hasLifecycle ? (d.exitReason?.name ?? null) : null,
       outcome: d.outcome,
       supportProgramName: {
         id: d.supportProgramName.id,

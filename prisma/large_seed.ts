@@ -169,27 +169,36 @@ function randomSupportProgramOutcome(): SupportProgramOutcome {
   return equiRandomEnum(Object.values(SupportProgramOutcome))
 }
 
+const supportProgramExitReasonNames = [
+  'Fin de prise en charge',
+  'Déménagement',
+  'Abandon',
+  'Objectifs atteints',
+  'Réorientation'
+]
+
 function randomSupportProgramLifecycle(
   hasLifecycle: boolean,
-  endedRate: number
+  endedRate: number,
+  exitReasonIds: string[]
 ): {
   startDate: Date | null
   endDate: Date | null
   outcome: SupportProgramOutcome | null
-  exitReason: string | null
+  exitReasonId: string | null
 } {
   if (!hasLifecycle) {
-    return { startDate: null, endDate: null, outcome: null, exitReason: null }
+    return { startDate: null, endDate: null, outcome: null, exitReasonId: null }
   }
   const startDate = faker.date.between({ from: '2022-01-01', to: new Date() })
   if (Math.random() >= endedRate) {
-    return { startDate, endDate: null, outcome: null, exitReason: null }
+    return { startDate, endDate: null, outcome: null, exitReasonId: null }
   }
   return {
     startDate,
     endDate: faker.date.between({ from: startDate, to: new Date() }),
     outcome: randomSupportProgramOutcome(),
-    exitReason: faker.lorem.sentence()
+    exitReasonId: faker.helpers.arrayElement(exitReasonIds)
   }
 }
 
@@ -411,6 +420,17 @@ async function main(config: Config) {
           }))
         })
 
+      const exitReasons =
+        await prismaClient.supportProgramExitReason.createManyAndReturn({
+          select: { id: true },
+          data: supportProgramExitReasonNames.map(name => ({
+            name,
+            structureId: structure.id,
+            createdById
+          }))
+        })
+      const exitReasonIds = exitReasons.map(r => r.id)
+
       // Build the support program rows, remembering which partners each should
       // be linked to (the M2M relation cannot be set through createMany).
       const programData: Prisma.SupportProgramCreateManyInput[] = []
@@ -428,7 +448,8 @@ async function main(config: Config) {
             supportProgramNameId: name.id,
             ...randomSupportProgramLifecycle(
               name.hasLifecycle,
-              config.supportProgramEndedRate
+              config.supportProgramEndedRate,
+              exitReasonIds
             )
           })
           programPartnerIds.push(

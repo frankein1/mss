@@ -770,7 +770,7 @@ const getBeneficiaryInfoData = (
         endDate: hasLifecycle
           ? sp.endDate?.toLocaleDateString('fr-FR') || null
           : null,
-        exitReason: hasLifecycle ? sp.exitReason : null,
+        exitReason: hasLifecycle ? (sp.exitReason?.name ?? null) : null,
         outcome: sp.outcome
           ? supportProgramOutcomeKeys.byKey[sp.outcome]
           : null,
@@ -1040,7 +1040,7 @@ const getBeneficaryDetails = async (id: string, user: SecurityRuleGrantee) => {
           id: true,
           startDate: true,
           endDate: true,
-          exitReason: true,
+          exitReason: { select: { name: true } },
           outcome: true,
           supportProgramName: { select: { name: true, hasLifecycle: true } },
           partnerOrganisations: { select: { name: true } }
