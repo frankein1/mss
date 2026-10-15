@@ -18,13 +18,16 @@
       />
 
       <div v-else-if="data">
-        <div class="fr-accordions-group">
+        <div
+          class="fr-accordions-group"
+          data-fr-group="false"
+        >
           <section class="feature-section fr-accordion fr-mb-1w">
             <h3 class="fr-accordion__title">
               <button
                 class="fr-accordion__btn fr-h4"
                 type="button"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="accordion-selection"
               >
                 Sélectionner parmi une suggestion d’objets
@@ -43,7 +46,7 @@
               <button
                 class="fr-accordion__btn fr-h4"
                 type="button"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="accordion-customization"
               >
                 Créer un objet personnalisé

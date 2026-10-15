@@ -67,8 +67,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-height: 66px;
     padding: 20px 0;
     border-bottom: solid 1px var(--border-default-grey);
+
+    ul {
+      flex-wrap: nowrap;
+    }
   }
 </style>
