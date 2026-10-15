@@ -1,12 +1,9 @@
 import { z } from 'zod'
-import { stringConstraint } from '../helpers.schema'
-import { maxStringLengthMessage, minStringLengthMessage } from '~/utils/zod'
+import { socialSupportSubjectNameConstraint } from './name.schema'
 
 export const updateSocialSupportSubjectSchema = z.object({
   id: z.string().uuid(),
-  name: stringConstraint
-    .max(50, maxStringLengthMessage(50))
-    .min(2, minStringLengthMessage(2))
+  name: socialSupportSubjectNameConstraint
 })
 
 export type UpdateSocialSupportSubjectNameInput = z.infer<
