@@ -139,6 +139,8 @@ export const beneficiaryContractTypeKeys = buildKeys({
   [BeneficiaryContractType.Volontariat]: 'Volontariat',
   [BeneficiaryContractType.Titulaire]: 'Titulaire (FP)',
   [BeneficiaryContractType.Contractuel]: 'Contractuel (FP)',
+  [BeneficiaryContractType.Stagiaire]: 'Stagiaire (FP)',
+  [BeneficiaryContractType.Eleve]: 'Élève (FP)',
   [BeneficiaryContractType.Fonctionnaire]: 'Fonctionnaire'
 })
 
