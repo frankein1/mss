@@ -1039,6 +1039,8 @@ enum BeneficiaryContractType {
   Volontariat
   Titulaire
   Contractuel
+  Stagiaire
+  Eleve
   Fonctionnaire
 }
 
