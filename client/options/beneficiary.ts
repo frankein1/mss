@@ -140,8 +140,7 @@ export const beneficiaryContractTypeKeys = buildKeys({
   [BeneficiaryContractType.Titulaire]: 'Titulaire (FP)',
   [BeneficiaryContractType.Contractuel]: 'Contractuel (FP)',
   [BeneficiaryContractType.Stagiaire]: 'Stagiaire (FP)',
-  [BeneficiaryContractType.Eleve]: 'Élève (FP)',
-  [BeneficiaryContractType.Fonctionnaire]: 'Fonctionnaire'
+  [BeneficiaryContractType.Eleve]: 'Élève (FP)'
 })
 
 export const beneficiaryStudyLevelKeys = buildKeys({

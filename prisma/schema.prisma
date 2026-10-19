@@ -1041,7 +1041,6 @@ enum BeneficiaryContractType {
   Contractuel
   Stagiaire
   Eleve
-  Fonctionnaire
 }
 
 enum BeneficiaryStudyLevel {
