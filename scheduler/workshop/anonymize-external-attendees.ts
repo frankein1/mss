@@ -2,11 +2,23 @@ import dayjs from 'dayjs'
 import { prismaClient } from '~~/server/prisma'
 import { withErrorCapture } from '../utils'
 
-async function anonymizeExternalAttendees() {
+export async function anonymizeExternalAttendees() {
+  const threeMonthsAgo = dayjs().subtract(3, 'month').toDate()
+
   const res = await prismaClient.workshopExternalAttendee.updateMany({
     where: {
       isAnonymized: false,
-      created: { lte: dayjs().subtract(3, 'month').toDate() }
+      OR: [
+        {
+          workshopAttendee: {
+            workshop: { date: { lte: threeMonthsAgo } }
+          }
+        },
+        {
+          workshopAttendee: null,
+          created: { lte: threeMonthsAgo }
+        }
+      ]
     },
     data: {
       firstName: null,
@@ -21,7 +33,7 @@ async function anonymizeExternalAttendees() {
   )
 }
 
-/** Workshop external attendees are anonymized after 3 months (age, city and gender are kept) */
+/** Workshop external attendees are anonymized 3 months after the workshop date (age, city and gender are kept) */
 export default async function handler() {
   return await withErrorCapture(anonymizeExternalAttendees)
 }
