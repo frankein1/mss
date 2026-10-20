@@ -186,5 +186,8 @@ export const statRouter = router({
     .query(routes.getSupportProgramEntriesExitsStatsQuery.execute),
   getSupportProgramNameStats: protectedProcedure
     .input(routes.getSupportProgramNameStatsQuery.inputValidation)
-    .query(routes.getSupportProgramNameStatsQuery.execute)
+    .query(routes.getSupportProgramNameStatsQuery.execute),
+  getSupportProgramExitReasonStats: protectedProcedure
+    .input(routes.getSupportProgramExitReasonStatsQuery.inputValidation)
+    .query(routes.getSupportProgramExitReasonStatsQuery.execute)
 })
