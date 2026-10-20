@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.69.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/compare/v1.68.0...v1.69.0) (2026-10-20)
+
+### Features
+
+* **activité bénéficiaire:** 2 nouveaux type de contrat FP ([69295ea](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/69295ea1738a243c497a413f1bba0a11aa6180a9)), references [#1208](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1208)
+* **dispositif:** ajout des motifs de sortie de dispositif ([2059479](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/20594796bdb79cf9aca7e1bd11e0ef588553a362)), references [#1198](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1198)
+* **statistiques:** parcours et dispositifs ([95a4581](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/95a458148133143aabfa40ea75046993aad36d2b)), references [#1179](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1179)
+
+### Bug Fixes
+
+* **activité bénéficiaire:** migration de la donnée Fonctionnaire > Titulaire SP ([613b156](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/613b1563338b5955897dc2ba223e2e2f42114798)), references [#1208](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1208)
+* **ateliers:** anonymisation des participants extérieurs 3 mois après date atelier ([77a8dfa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/77a8dfadd52a9756479fcedb84af9bdc3ba3b5a2)), closes [#1209](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1209)
+* **objets d'accompagnement:** augmente le nombre de caractères autorisés ([2cc123e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/2cc123e4d558d4e0cb1ef450cd1e3c9094dad251)), references [#1208](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1208)
+* **statistiques:** dispositifs dates d'entrée et de sortie sur la période ([a5fdec5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/a5fdec593e4bd06e19d35fa69f797ba7040ea5d5)), references [#1179](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1179)
+
 ## [1.68.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/compare/v1.67.0...v1.68.0) (2026-10-12)
 
 ### Features
