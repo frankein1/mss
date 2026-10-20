@@ -1,7 +1,11 @@
 // @vitest-environment nuxt
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
-import { setPermissions, withForm } from '~~/test/components/helpers'
+import { withForm } from '~~/test/components/helpers'
+import {
+  setPermissions,
+  resetPermissions
+} from '~~/test/components/fake-permissions'
 import {
   createFakeTrpcClientBeneficiary,
   createFakeFamilyFilePermissions
@@ -30,10 +34,10 @@ function mountGeneralInfo(
   )
 }
 
+afterEach(resetPermissions)
+
 describe('BeneficiaryFormGeneralInformation - module.ministere', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('hides numeroPegase and accommodationZone when module.ministere is false', async () => {
     const wrapper = await mountGeneralInfo()
@@ -50,9 +54,7 @@ describe('BeneficiaryFormGeneralInformation - module.ministere', () => {
 })
 
 describe('BeneficiaryFormGeneralInformation - module.vulnerablePerson', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('hides vulnerablePerson checkbox when module.vulnerablePerson is false', async () => {
     const wrapper = await mountGeneralInfo()
@@ -67,9 +69,7 @@ describe('BeneficiaryFormGeneralInformation - module.vulnerablePerson', () => {
 })
 
 describe('BeneficiaryFormGeneralInformation - permissions.changeReferent', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('referents select is disabled when changeReferent is false', async () => {
     const wrapper = await mountGeneralInfo({ changeReferent: false })

@@ -31,6 +31,6 @@ export default defineVitestConfig({
     // so you must provide isolation yourself
     maxWorkers: 1,
     isolate: false,
-    setupFiles: 'test/server/setup.ts'
+    setupFiles: ['test/server/setup.ts', 'test/components/setup.ts']
   }
 })

@@ -1,8 +1,12 @@
 // @vitest-environment nuxt
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { flushPromises } from '@vue/test-utils'
-import { setPermissions, submitForm } from '~~/test/components/helpers'
+import { submitForm } from '~~/test/components/helpers'
+import {
+  setPermissions,
+  resetPermissions
+} from '~~/test/components/fake-permissions'
 import {
   createFakeTrpcClientBeneficiary,
   createFakeAgent
@@ -23,10 +27,10 @@ function mountCreationForm(agents = [createFakeAgent()]) {
   })
 }
 
+afterEach(resetPermissions)
+
 describe('BeneficiaryCreationForm - permissions', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('hides numeroPegase when module.ministere is false', async () => {
     const wrapper = await mountCreationForm()
@@ -41,9 +45,7 @@ describe('BeneficiaryCreationForm - permissions', () => {
 })
 
 describe('BeneficiaryCreationForm - module.vulnerablePerson', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('hides vulnerablePerson checkbox when module.vulnerablePerson is false', async () => {
     const wrapper = await mountCreationForm()
@@ -58,9 +60,7 @@ describe('BeneficiaryCreationForm - module.vulnerablePerson', () => {
 })
 
 describe('BeneficiaryCreationForm - submission', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('does not emit saveBeneficiary when required fields are missing', async () => {
     const wrapper = await mountCreationForm([])
