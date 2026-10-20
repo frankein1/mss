@@ -1,35 +1,19 @@
 // @vitest-environment nuxt
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mockNuxtImport, registerEndpoint } from '@nuxt/test-utils/runtime'
 import { getRequestHeaders } from 'h3'
 import type { H3Event } from 'h3'
 import { ref } from 'vue'
+import { fakeRequest, resetFakeRequest } from '~~/test/components/fake-request'
 import { useAuth } from './useAuth'
 
 const SESSION_COOKIE = 'MSS_SESSION_TOKEN=token'
 
-const { fakeRequest } = vi.hoisted(() => ({
-  fakeRequest: {
-    // Undefined on the client, the H3 event during SSR
-    event: undefined as object | undefined,
-    headers: {} as Record<string, string>,
-    sessionCookie: undefined as string | undefined
-  }
+const { fakeCookie } = vi.hoisted(() => ({
+  fakeCookie: { session: undefined as string | undefined }
 }))
 
-mockNuxtImport('useRequestEvent', () => () => fakeRequest.event)
-
-mockNuxtImport(
-  'useRequestHeaders',
-  () => (include: string[]) =>
-    Object.fromEntries(
-      Object.entries(fakeRequest.headers).filter(([key]) =>
-        include.includes(key)
-      )
-    )
-)
-
-mockNuxtImport('useCookie', () => () => ref(fakeRequest.sessionCookie))
+mockNuxtImport('useCookie', () => () => ref(fakeCookie.session))
 
 const getSessionHandler = vi.fn()
 
@@ -40,15 +24,21 @@ registerEndpoint('/api/auth/get-session', (event: H3Event) =>
 function simulateSsrRequest(headers: Record<string, string>) {
   fakeRequest.event = {}
   fakeRequest.headers = headers
-  fakeRequest.sessionCookie = headers.cookie ? 'token' : undefined
+  fakeCookie.session = headers.cookie ? 'token' : undefined
 }
 
 describe('useAuth getSession', () => {
   beforeEach(() => {
     getSessionHandler.mockReset().mockReturnValue(null)
-    fakeRequest.event = undefined
-    fakeRequest.headers = {}
-    fakeRequest.sessionCookie = undefined
+    resetFakeRequest()
+    fakeCookie.session = undefined
+  })
+
+  // The Nuxt app is shared across spec files: a leftover user without an
+  // active status makes the auth middleware throw in later page specs
+  afterEach(() => {
+    useAuthState().user.value = undefined
+    usePermissions().reset()
   })
 
   it('makes no call during SSR without the session cookie', async () => {
@@ -87,7 +77,10 @@ describe('useAuth getSession', () => {
   it('stores the session user', async () => {
     simulateSsrRequest({ cookie: SESSION_COOKIE })
     const user = { id: 'user-id', firstName: 'Jeanne' }
-    getSessionHandler.mockReturnValue({ user, permissions: {} })
+    getSessionHandler.mockReturnValue({
+      user,
+      permissions: defaultPermissions()
+    })
 
     await useAuth().getSession()
 
