@@ -6,21 +6,6 @@ import { flushPromises } from '@vue/test-utils'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import type { ZodSchema } from 'zod'
-import merge from 'lodash.merge'
-import type { AppContextPermissions } from '~~/server/security'
-import { defaultPermissions } from '~/composables/usePermissions'
-
-type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
-}
-
-export function setPermissions(overrides: DeepPartial<AppContextPermissions>) {
-  const state = useState<AppContextPermissions>(
-    'permissions:app',
-    defaultPermissions
-  )
-  state.value = merge(defaultPermissions(), overrides)
-}
 
 export function withForm(
   component: Component,

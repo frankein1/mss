@@ -1,7 +1,11 @@
 // @vitest-environment nuxt
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import { setPermissions, withForm } from '~~/test/components/helpers'
+import { withForm } from '~~/test/components/helpers'
+import {
+  setPermissions,
+  resetPermissions
+} from '~~/test/components/fake-permissions'
 import { updateBeneficiaryOccupationSchema } from '~~/server/schema'
 import BeneficiaryFormOccupationIncome from './BeneficiaryFormOccupationIncome.vue'
 
@@ -17,10 +21,10 @@ function mountOccupationForm() {
   )
 }
 
+afterEach(resetPermissions)
+
 describe('BeneficiaryFormOccupationIncome - module.ministere', () => {
-  beforeEach(() => {
-    setPermissions({})
-  })
+  beforeEach(resetPermissions)
 
   it('hides ministere fields when module.ministere is false', async () => {
     const wrapper = await mountOccupationForm()
