@@ -95,6 +95,17 @@
               <StatsSupportProgramPeriodMention :filters="filters" />
               <StatsSupportProgramPartners :filters="filters" />
             </StatsCard>
+
+            <!-- Motif de sortie -->
+            <StatsCard
+              class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+              :card-id="supportProgramCardConfig.exitReasons.id"
+              :card-name="supportProgramCardConfig.exitReasons.name"
+              :card-subtitle="supportProgramCardConfig.exitReasons.subtitle"
+            >
+              <StatsSupportProgramPeriodMention :filters="filters" />
+              <StatsSupportProgramExitReasons :filters="filters" />
+            </StatsCard>
           </div>
         </div>
       </section>
@@ -148,6 +159,11 @@
       id: 'stats-support-program-names',
       name: 'Nombre de bénéficiaires par dispositif',
       subtitle: 'Un bénéficiaire peut être compté dans plusieurs dispositifs.'
+    },
+    exitReasons: {
+      id: 'stats-support-program-exit-reasons',
+      name: 'Motif de sortie',
+      subtitle: 'Seuls les dispositifs avec dates sont comptés.'
     }
   }
 </script>

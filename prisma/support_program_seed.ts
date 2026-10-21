@@ -47,12 +47,25 @@ const supportProgramNameInputs = [
 
 type SupportProgramNameLabel = (typeof supportProgramNameInputs)[number]['name']
 
+const exitReasonNames = [
+  'Objectifs atteints',
+  'Déménagement',
+  'Abandon du bénéficiaire',
+  'Réorientation vers un autre dispositif',
+  'Reprise d’emploi',
+  'Fin de droits'
+] as const
+
+type ExitReasonName = (typeof exitReasonNames)[number]
+
 type SupportProgramInput = {
   beneficiary: FixtureBeneficiary
   name: SupportProgramNameLabel
   startDate?: string
   endDate?: string
   outcome?: SupportProgramOutcome
+  // Only for support programs with lifecycle
+  exitReason?: ExitReasonName
   partners?: FixturePartnerOrganization[]
 }
 
@@ -85,6 +98,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2024-01-15',
     endDate: '2025-03-31',
     outcome: Achieved,
+    exitReason: 'Reprise d’emploi',
     partners: [CAF26, FranceTravail]
   },
   {
@@ -92,7 +106,8 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement budgétaire',
     startDate: '2024-04-02',
     endDate: '2024-10-15',
-    outcome: PartiallyAchieved
+    outcome: PartiallyAchieved,
+    exitReason: 'Abandon du bénéficiaire'
   },
   {
     beneficiary: FixtureBeneficiary.COURSOR,
@@ -111,14 +126,16 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement budgétaire',
     startDate: '2024-02-01',
     endDate: '2024-06-30',
-    outcome: NotAchieved
+    outcome: NotAchieved,
+    exitReason: 'Abandon du bénéficiaire'
   },
   {
     beneficiary: FixtureBeneficiary.WONFAR,
     name: 'Accompagnement budgétaire',
     startDate: '2025-01-06',
     endDate: '2025-09-30',
-    outcome: Achieved
+    outcome: Achieved,
+    exitReason: 'Objectifs atteints'
   },
   {
     beneficiary: FixtureBeneficiary.WONFAR,
@@ -134,6 +151,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2024-09-02',
     endDate: '2025-09-01',
     outcome: Exceeded,
+    exitReason: 'Reprise d’emploi',
     partners: [FranceTravail]
   },
   {
@@ -147,7 +165,8 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement santé',
     startDate: lastMonth(3),
     endDate: lastMonth(24),
-    outcome: PartiallyAchieved
+    outcome: PartiallyAchieved,
+    exitReason: 'Réorientation vers un autre dispositif'
   },
 
   // APFELMANN: 2 support programs
@@ -162,6 +181,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2024-10-07',
     endDate: lastMonth(20),
     outcome: Achieved,
+    exitReason: 'Objectifs atteints',
     partners: [CAF26]
   },
 
@@ -172,6 +192,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2024-03-11',
     endDate: '2024-05-31',
     outcome: Achieved,
+    exitReason: 'Fin de droits',
     partners: [CAF26]
   },
   {
@@ -180,6 +201,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2024-06-03',
     endDate: '2025-12-19',
     outcome: SubjectToConditions,
+    exitReason: 'Déménagement',
     partners: [MairieValence, V0ATDQuartMonde]
   },
   {
@@ -245,7 +267,8 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Mesure d’accompagnement social personnalisé',
     startDate: '2024-07-01',
     endDate: '2026-01-30',
-    outcome: NotAchieved
+    outcome: NotAchieved,
+    exitReason: 'Déménagement'
   },
   {
     beneficiary: FixtureBeneficiary.MAILLARD,
@@ -260,6 +283,7 @@ const supportProgramInputs: SupportProgramInput[] = [
     startDate: '2026-01-12',
     endDate: thisMonth(16),
     outcome: Achieved,
+    exitReason: 'Objectifs atteints',
     partners: [FranceTravail]
   },
 
@@ -282,7 +306,8 @@ const supportProgramInputs: SupportProgramInput[] = [
     name: 'Accompagnement santé',
     startDate: '2024-05-21',
     endDate: '2024-12-20',
-    outcome: Exceeded
+    outcome: Exceeded,
+    exitReason: 'Objectifs atteints'
   },
   {
     beneficiary: FixtureBeneficiary.DUBOIS,
@@ -321,6 +346,13 @@ async function main() {
       supportProgramNames.map(({ id, name }) => [name, id])
     )
 
+    // Support programs referencing them were deleted in cascade above
+    await tx.supportProgramExitReason.deleteMany({ where: { structureId } })
+    const exitReasons = await tx.supportProgramExitReason.createManyAndReturn({
+      data: exitReasonNames.map(name => ({ name, structureId, createdById }))
+    })
+    const exitReasonIds = new Map(exitReasons.map(({ id, name }) => [name, id]))
+
     for (const input of supportProgramInputs) {
       const supportProgramNameId = supportProgramNameIds.get(input.name)
       const beneficiary = fixturesBeneficiaries[input.beneficiary]
@@ -335,6 +367,9 @@ async function main() {
           startDate: input.startDate ? new Date(input.startDate) : null,
           endDate: input.endDate ? new Date(input.endDate) : null,
           outcome: input.outcome ?? null,
+          exitReasonId: input.exitReason
+            ? exitReasonIds.get(input.exitReason)
+            : null,
           partnerOrganisations: {
             connect: (input.partners ?? []).map(partner => ({
               id: fixturesPartnerOrganizations[partner].id
@@ -346,7 +381,7 @@ async function main() {
   })
 
   console.log(
-    `${supportProgramNameInputs.length} support program names and ${supportProgramInputs.length} support programs created`
+    `${supportProgramNameInputs.length} support program names, ${exitReasonNames.length} exit reasons and ${supportProgramInputs.length} support programs created`
   )
 }
 
