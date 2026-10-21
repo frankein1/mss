@@ -2,15 +2,23 @@ import { httpBatchLink, createTRPCNuxtClient } from 'trpc-nuxt/client'
 import superjson from 'superjson'
 import type { AppRouter } from '~~/server/trpc/routers'
 import { splitLink } from '@trpc/client'
+import { headerAllowlist } from '~/utils/api/header-allowlist'
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig()
-  const headers = useRequestHeaders()
+  // Read once here, in the plugin's synchronous Nuxt context. The batch link calls
+  // headers() from a setTimeout, where useRequestHeaders() would throw NUXT_E1001
+  // during SSR since the Nuxt instance is no longer available (no asyncContext).
+  const headers = headerAllowlist()
+
   const batchLinkOptions = {
-    url: `${config.public.appUrl}/api/trpc`,
+    // Relative URL so that SSR calls stay in-process instead of leaving the dyno
+    // and coming back through the router under the shared egress IP
+    url: '/api/trpc',
     transformer: superjson,
+    // Allowlist only: forwarding every request header would also pass a stale
+    // host / content-length / client x-forwarded-for to the in-process SSR call.
+    // x-real-ip keeps SSR calls rate-limited per client.
     headers() {
-      // You can add more custom headers here
       return headers
     }
   }
