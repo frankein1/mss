@@ -501,3 +501,93 @@ describe('Statistics - Support programs - Beneficiaries per support program', ()
     })
   })
 })
+
+describe('Statistics - Support programs - Exit reasons', () => {
+  test('should count support programs with lifecycle by exit reason, sorted by count with not filled last', async ({
+    trpc
+  }) => {
+    const suffix = crypto.randomUUID()
+    const [moved, completed] = await Promise.all([
+      prismaClient.supportProgramExitReason.create({
+        data: {
+          name: `Déménagement ${suffix}`,
+          structureId,
+          createdById: socialWorkerId
+        }
+      }),
+      prismaClient.supportProgramExitReason.create({
+        data: {
+          name: `Fin de parcours ${suffix}`,
+          structureId,
+          createdById: socialWorkerId
+        }
+      })
+    ])
+    const withoutLifecycleName = await prismaClient.supportProgramName.create({
+      data: {
+        name: `SPSTATS-no-lifecycle-${suffix}`,
+        hasLifecycle: false,
+        structureId,
+        createdById: socialWorkerId
+      }
+    })
+    try {
+      const supportPrograms = await prismaClient.supportProgram.findMany({
+        where: { supportProgramNameId },
+        orderBy: { startDate: 'asc' }
+      })
+      // Two programs ended with "Fin de parcours", one with "Déménagement", one not filled
+      await Promise.all([
+        prismaClient.supportProgram.update({
+          where: { id: supportPrograms[0]!.id },
+          data: { exitReasonId: completed.id }
+        }),
+        prismaClient.supportProgram.update({
+          where: { id: supportPrograms[1]!.id },
+          data: { exitReasonId: completed.id }
+        }),
+        prismaClient.supportProgram.update({
+          where: { id: supportPrograms[2]!.id },
+          data: { exitReasonId: moved.id }
+        }),
+        // Without lifecycle: never counted, even with an exit reason
+        prismaClient.supportProgram.create({
+          data: {
+            beneficiaryId: supportPrograms[0]!.beneficiaryId,
+            supportProgramNameId: withoutLifecycleName.id,
+            exitReasonId: moved.id
+          }
+        })
+      ])
+
+      const stats =
+        await trpc.structureManager.stat.getSupportProgramExitReasonStats({
+          supportProgramNameIds: [supportProgramNameId, withoutLifecycleName.id]
+        })
+
+      expect(stats).toEqual([
+        { id: completed.id, name: completed.name, _count: 2 },
+        { id: moved.id, name: moved.name, _count: 1 },
+        { id: null, name: null, _count: 1 }
+      ])
+    } finally {
+      await prismaClient.supportProgramName.delete({
+        where: { id: withoutLifecycleName.id }
+      })
+      await prismaClient.supportProgramExitReason.deleteMany({
+        where: { id: { in: [moved.id, completed.id] } }
+      })
+    }
+  })
+
+  test('should apply the period filter', async ({ trpc }) => {
+    const stats =
+      await trpc.structureManager.stat.getSupportProgramExitReasonStats({
+        supportProgramNameIds: [supportProgramNameId],
+        period: StatPeriodFilter.LastYear
+      })
+
+    // The program ended three years ago is excluded
+    expect(stats).toEqual([{ id: null, name: null, _count: 3 }])
+  })
+})
