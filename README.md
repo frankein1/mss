@@ -12,7 +12,7 @@ Pour lancer le projet, vous avez besoin de :
 
 - [Node.js](https://nodejs.org/en) v24
 - [Docker](https://www.docker.com/)
-- [pnpm](https://pnpm.io/) voir version dans `/package.json > "engines"`
+- [pnpm](https://pnpm.io/) voir version dans `/package.json > "packageManager"`
 
 ## Technologies
 
@@ -92,8 +92,6 @@ identifiants utilisateurs fournis par mailtrap.
 
 ## Tests
 
-La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
-
 On part d'une base de données vide pour les tests (si besoin on
 supprime son contenu avec `docker compose -f docker-compose.dev.yml down -v`)
 
@@ -106,7 +104,7 @@ pnpm test
 
 ### Tests end-to-end
 
-La version de playwright et de pnpm doit être précisée dans `.gitlab-ci.yml`.
+La version de playwright doit être précisée dans `.gitlab-ci.yml`.
 
 ```
 pnpm dev:db:start
