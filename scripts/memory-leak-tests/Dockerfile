@@ -19,7 +19,7 @@ ENV NUXT_AUTH_PROCONNECT_ISSUER_URL=${NUXT_AUTH_PROCONNECT_ISSUER_URL}
 # Dummy DATABASE_URL for prisma generate (no actual DB connection needed at build)
 ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
 
-RUN corepack enable && corepack prepare pnpm@11.1.3 --activate
+RUN corepack enable && corepack prepare pnpm@12.14.0 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY prisma/ ./prisma/
