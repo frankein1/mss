@@ -18,6 +18,7 @@
     />
     <AtomAlert
       v-if="isDuplicate"
+      size="sm"
       :alert-type="AlertType.Info"
       message="Attention, cet organisme est déjà présent dans la liste."
       class="fr-mt-1v"
@@ -28,7 +29,7 @@
       :label="contributingPartnerFieldLabels.partnerOrganizationContactId"
       :name="`contributingPartners[${index}].partnerOrganizationContactId`"
       hint="Issu de l'annuaire des partenaires de la structure"
-      :disabled="row.partnerOrganizationContactId == null"
+      :disabled="contactOptions.length === 0"
       :options="withEmptyValue(contactOptions)"
     />
   </div>

@@ -228,11 +228,7 @@ export type UpdateBeneficiaryOccupationInput = z.infer<
 const contributingPartnerSchema = z.object({
   id: z.string().uuid().optional(),
   partnerOrganizationId: z.string().uuid(),
-  partnerOrganizationContactId: z
-    .string()
-    .uuid()
-    .nullish()
-    .transform(v => v || null),
+  partnerOrganizationContactId: uuidOrEmpty.transform(v => v ?? null),
   precisions: limitedStringConstraint(null, 200).nullish()
 })
 
