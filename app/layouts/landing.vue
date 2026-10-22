@@ -13,7 +13,7 @@
       :service-title="APP_NAME"
       :service-description="APP_DESCRIPTION"
       :home-to="landingPageUrl"
-      :quick-links
+      :quick-links="hideMenu ? [] : quickLinks"
     >
       <template #operator>
         <img
@@ -23,7 +23,10 @@
           alt="Mon Suivi Social"
         />
       </template>
-      <template #mainnav>
+      <template
+        v-if="!hideMenu"
+        #mainnav
+      >
         <DsfrNavigation
           id="landing-nav"
           :nav-items
@@ -70,6 +73,10 @@
   const {
     public: { landingPageUrl, mssEnvironment }
   } = useRuntimeConfig()
+
+  // Pages displayed to authenticated users can hide the landing navigation
+  const route = useRoute()
+  const hideMenu = computed(() => !!route.meta.hideLandingMenu)
 
   const quickLinks: DsfrHeaderProps['quickLinks'] = [
     {
