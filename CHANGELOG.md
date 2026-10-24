@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.70.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/compare/v1.69.0...v1.70.0) (2026-10-24)
+
+### Features
+
+* **statistiques:** ajoute les motifs de sortie des dispositifs ([38f47c9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/38f47c939e61eae0916a09185e4c3f33397d6e2d)), references [#1179](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1179)
+
+### Bug Fixes
+
+* **beneficaire:** ré-activation du contact partenaire ([e2bfee5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/e2bfee5260446df6bb3e2eb804133b08d28db115)), closes [#1212](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1212)
+* **rate-limiter:** corrige les headers envoyés au back (IP) et utilise une url tprc relative ([9e2b0d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/9e2b0d64674579fd17f384a521114e65dd9565f8)), references [#1159](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1159)
+* **statistiques:** suppression du filtre Appointment dans les stats bénéficiaire ([575e675](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/commit/575e675a8190c234650349964feb86bfe1851d01)), closes [#1202](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/issues/1202)
+
 ## [1.69.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/compare/v1.68.0...v1.69.0) (2026-10-20)
 
 ### Features
